@@ -8,34 +8,42 @@ if (pageData) {
       <button class="nav__dropdown-toggle" type="button" data-href="${prefix}repairs.html" aria-expanded="false">Repairs</button>
       <div class="nav__dropdown-menu">
         <div class="nav__dropdown-group">
-          <strong>Phones</strong>
-          <a href="${prefix}repair-services/phones/apple.html">Apple</a>
-          <a href="${prefix}repair-services/phones/samsung.html">Samsung</a>
-          <a href="${prefix}repair-services/phones/oppo.html">Oppo</a>
-          <a href="${prefix}repair-services/phones/huawei.html">Huawei</a>
-          <a href="${prefix}repair-services/phones/xiaomi.html">Xiaomi</a>
-          <a href="${prefix}repair-services/phones/google.html">Google</a>
-          <a href="${prefix}repair-services/phones/oneplus.html">OnePlus</a>
-          <a href="${prefix}repair-services/phones/others.html">Others</a>
+          <button class="nav__submenu-toggle" type="button" aria-expanded="false">Phones</button>
+          <div class="nav__submenu-panel">
+            <a href="${prefix}repair-services/phones/apple.html">Apple</a>
+            <a href="${prefix}repair-services/phones/samsung.html">Samsung</a>
+            <a href="${prefix}repair-services/phones/oppo.html">Oppo</a>
+            <a href="${prefix}repair-services/phones/huawei.html">Huawei</a>
+            <a href="${prefix}repair-services/phones/xiaomi.html">Xiaomi</a>
+            <a href="${prefix}repair-services/phones/google.html">Google</a>
+            <a href="${prefix}repair-services/phones/oneplus.html">OnePlus</a>
+            <a href="${prefix}repair-services/phones/others.html">Others</a>
+          </div>
         </div>
         <div class="nav__dropdown-group">
-          <strong>Tablets</strong>
-          <a href="${prefix}repair-services/tablets/apple.html">Apple</a>
-          <a href="${prefix}repair-services/tablets/samsung.html">Samsung</a>
-          <a href="${prefix}repair-services/tablets/other.html">Other Tablets</a>
+          <button class="nav__submenu-toggle" type="button" aria-expanded="false">Tablets</button>
+          <div class="nav__submenu-panel">
+            <a href="${prefix}repair-services/tablets/apple.html">Apple</a>
+            <a href="${prefix}repair-services/tablets/samsung.html">Samsung</a>
+            <a href="${prefix}repair-services/tablets/other.html">Other Tablets</a>
+          </div>
         </div>
         <div class="nav__dropdown-group">
-          <strong>Computers</strong>
-          <a href="${prefix}repair-services/computers/pc-tower.html">PC Tower</a>
-          <a href="${prefix}repair-services/computers/all-in-one.html">All in One</a>
-          <a href="${prefix}repair-services/computers/laptop.html">Laptop</a>
-          <a href="${prefix}repair-services/computers/small-pc.html">Small PC</a>
+          <button class="nav__submenu-toggle" type="button" aria-expanded="false">Computers</button>
+          <div class="nav__submenu-panel">
+            <a href="${prefix}repair-services/computers/pc-tower.html">PC Tower</a>
+            <a href="${prefix}repair-services/computers/all-in-one.html">All in One</a>
+            <a href="${prefix}repair-services/computers/laptop.html">Laptop</a>
+            <a href="${prefix}repair-services/computers/small-pc.html">Small PC</a>
+          </div>
         </div>
         <div class="nav__dropdown-group">
-          <strong>Game Consoles</strong>
-          <a href="${prefix}repair-services/consoles/sony.html">Sony</a>
-          <a href="${prefix}repair-services/consoles/xbox.html">Xbox</a>
-          <a href="${prefix}repair-services/consoles/nintendo.html">Nintendo</a>
+          <button class="nav__submenu-toggle" type="button" aria-expanded="false">Game Consoles</button>
+          <div class="nav__submenu-panel">
+            <a href="${prefix}repair-services/consoles/sony.html">Sony</a>
+            <a href="${prefix}repair-services/consoles/xbox.html">Xbox</a>
+            <a href="${prefix}repair-services/consoles/nintendo.html">Nintendo</a>
+          </div>
         </div>
       </div>
     </div>
@@ -175,6 +183,10 @@ if (pageData) {
         delete toggle.dataset.navReady;
       }
     });
+
+    if (!exceptDropdown) {
+      closeAllSubmenus();
+    }
   };
 
   const armDropdownNavigation = (toggle) => {
@@ -230,76 +242,40 @@ if (pageData) {
     }
   };
 
-  const decorateRepairSubmenus = () => {
-    document.querySelectorAll(".nav__dropdown-group").forEach((group) => {
-      if (group.querySelector(".nav__submenu-toggle")) return;
-
-      const heading = group.querySelector("strong");
-      if (!heading) return;
-
-      const label = heading.textContent.trim();
-      const links = Array.from(group.querySelectorAll("a"));
-
-      const toggle = document.createElement("button");
-      toggle.type = "button";
-      toggle.className = "nav__submenu-toggle";
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.textContent = label;
-
-      const panel = document.createElement("div");
-      panel.className = "nav__submenu-panel";
-
-      links.forEach((link) => {
-        panel.append(link);
-      });
-
-      heading.replaceWith(toggle);
-      group.append(panel);
-
-      toggle.addEventListener("click", () => {
-        const isOpen = group.classList.contains("is-open");
-        closeAllSubmenus(group);
-        group.classList.toggle("is-open", !isOpen);
-        toggle.setAttribute("aria-expanded", String(!isOpen));
-      });
-    });
-  };
-
   const handleDropdownToggle = (event, dropdownToggle) => {
     const dropdown = dropdownToggle.closest(".nav__dropdown");
     if (!dropdown) return;
 
-    const isMobileView = window.innerWidth <= 960;
     const destination = dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
     const alreadyOpen = dropdown.classList.contains("is-open");
     const readyToNavigate = dropdownToggle.dataset.navReady === "true";
-    closeAllDropdowns(dropdown);
 
     if (!alreadyOpen || !readyToNavigate) {
       event.preventDefault();
+      closeAllDropdowns(dropdown);
       dropdown.classList.add("is-open");
       dropdownToggle.setAttribute("aria-expanded", "true");
       armDropdownNavigation(dropdownToggle);
       return;
     }
 
-    if (isMobileView && destination) {
+    if (destination) {
       event.preventDefault();
       window.location.href = destination;
       return;
     }
 
-    delete dropdownToggle.dataset.navReady;
-    dropdownToggle.setAttribute("aria-expanded", "true");
+    event.preventDefault();
   };
 
   decorateMobileMenu();
-  decorateRepairSubmenus();
 
   const mobileInput = document.querySelector(".nav__mobile-input");
   const navMenu = document.querySelector(".nav__menu");
   const navToggle = document.querySelector(".nav__toggle--open, .nav__toggle");
+  const navDropdowns = document.querySelectorAll(".nav__dropdown");
   const dropdownToggles = document.querySelectorAll(".nav__dropdown-toggle");
+  const submenuToggles = document.querySelectorAll(".nav__submenu-toggle");
 
   if (mobileInput && navMenu) {
     mobileInput.addEventListener("change", () => {
@@ -308,13 +284,53 @@ if (pageData) {
       navToggle?.setAttribute("aria-expanded", String(isOpen));
       if (!isOpen) {
         closeAllDropdowns();
+        closeAllSubmenus();
       }
     });
   }
 
+  navDropdowns.forEach((dropdown) => {
+    let closeTimer;
+
+    dropdown.addEventListener("mouseenter", () => {
+      if (window.innerWidth <= 960) return;
+
+      window.clearTimeout(closeTimer);
+      closeAllDropdowns(dropdown);
+      dropdown.classList.add("is-open");
+      dropdown.querySelector(".nav__dropdown-toggle")?.setAttribute("aria-expanded", "true");
+    });
+
+    dropdown.addEventListener("mouseleave", () => {
+      if (window.innerWidth <= 960) return;
+
+      closeTimer = window.setTimeout(() => {
+        dropdown.classList.remove("is-open");
+        dropdown.querySelector(".nav__dropdown-toggle")?.setAttribute("aria-expanded", "false");
+        delete dropdown.querySelector(".nav__dropdown-toggle")?.dataset.navReady;
+        closeAllSubmenus();
+      }, 180);
+    });
+  });
+
   dropdownToggles.forEach((dropdownToggle) => {
     dropdownToggle.addEventListener("click", (event) => {
       handleDropdownToggle(event, dropdownToggle);
+    });
+  });
+
+  submenuToggles.forEach((toggle) => {
+    toggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const group = toggle.closest(".nav__dropdown-group");
+      if (!group) return;
+
+      const isOpen = group.classList.contains("is-open");
+      closeAllSubmenus(group);
+      group.classList.toggle("is-open", !isOpen);
+      toggle.setAttribute("aria-expanded", String(!isOpen));
     });
   });
 
