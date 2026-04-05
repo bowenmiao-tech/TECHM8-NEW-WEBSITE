@@ -187,6 +187,43 @@ if (pageData) {
     toggle.dataset.navReady = "true";
   };
 
+  const decorateMobileMenu = () => {
+    const nav = document.querySelector(".nav");
+    const navMenu = nav?.querySelector(".nav__menu");
+    const mobileInput = nav?.querySelector(".nav__mobile-input");
+    const openToggle = nav?.querySelector(".nav__toggle");
+    const brand = nav?.querySelector(".brand");
+
+    if (!nav || !navMenu || !mobileInput || !openToggle || !brand) return;
+
+    openToggle.classList.add("nav__toggle--open");
+
+    if (!nav.querySelector(".nav__overlay")) {
+      const overlay = document.createElement("label");
+      overlay.className = "nav__overlay";
+      overlay.setAttribute("for", mobileInput.id);
+      overlay.setAttribute("aria-label", "Close menu");
+      openToggle.insertAdjacentElement("afterend", overlay);
+    }
+
+    if (!navMenu.querySelector(".nav__menu-header")) {
+      const menuHeader = document.createElement("div");
+      menuHeader.className = "nav__menu-header";
+
+      const brandClone = brand.cloneNode(true);
+      brandClone.classList.add("brand--menu");
+
+      const closeToggle = document.createElement("label");
+      closeToggle.className = "nav__toggle nav__toggle--close";
+      closeToggle.setAttribute("for", mobileInput.id);
+      closeToggle.setAttribute("aria-label", "Close menu");
+      closeToggle.innerHTML = "<span></span><span></span>";
+
+      menuHeader.append(brandClone, closeToggle);
+      navMenu.prepend(menuHeader);
+    }
+  };
+
   const handleDropdownToggle = (event, dropdownToggle) => {
     const dropdown = dropdownToggle.closest(".nav__dropdown");
     if (!dropdown) return;
@@ -215,6 +252,8 @@ if (pageData) {
     dropdownToggle.setAttribute("aria-expanded", "true");
   };
 
+  decorateMobileMenu();
+
   const mobileInput = document.querySelector(".nav__mobile-input");
   const navMenu = document.querySelector(".nav__menu");
   const navToggle = document.querySelector(".nav__toggle");
@@ -225,6 +264,9 @@ if (pageData) {
       const isOpen = mobileInput.checked;
       navMenu.classList.toggle("is-open", isOpen);
       navToggle?.setAttribute("aria-expanded", String(isOpen));
+      if (!isOpen) {
+        closeAllDropdowns();
+      }
     });
   }
 
@@ -238,14 +280,7 @@ if (pageData) {
     const target = event.target;
     if (!(target instanceof Element)) return;
 
-    const navToggle = target.closest(".nav__toggle");
-    if (navToggle) {
-      const nav = navToggle.closest(".nav");
-      const navMenu = nav?.querySelector(".nav__menu");
-      if (!navMenu) return;
-
-      const isOpen = navMenu.classList.toggle("is-open");
-      navToggle.setAttribute("aria-expanded", String(isOpen));
+    if (target.closest(".nav__toggle")) {
       return;
     }
 
