@@ -23,10 +23,14 @@
       <a class="brand" href="index.html">
         <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
       </a>
-      <nav class="nav__menu">
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav__menu" id="primary-menu">
         <a href="index.html">Home</a>
         <a href="repairs.html">Repairs</a>
         <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
         <a href="store-policy.html">Store Policy</a>
         <a class="nav__shop-link" href="shop.html">Online Store</a>
       </nav>
@@ -56,5 +60,45 @@
       </div>
     </section>
   </main>
+  <footer class="site-footer">
+    <div class="container footer footer--rich">
+      <div class="footer-brand">
+        <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+        <p>Products, accessories and replacement parts for phones, tablets, computers and laptops.</p>
+      </div>
+      <div>
+        <h4>Popular Products</h4>
+        <a href="products.html">Phone Cases</a>
+        <a href="products.html">Screen Protectors</a>
+        <a href="products.html">Chargers & Cables</a>
+        <a href="products.html">Computer Accessories</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="repairs.html">Repairs</a>
+        <a href="stores.html">Stores</a>
+        <a href="shop.html">Online Store</a>
+        <a href="store-policy.html">Store Policy</a>
+      </div>
+      <div>
+        <h4>Stay Updated</h4>
+        <p>Use this area later for newsletter signup, offers, local store news or new product releases.</p>
+        <div class="footer-subscribe">
+          <input type="email" placeholder="Email">
+          <button type="button">Subscribe</button>
+        </div>
+        <div class="footer-socials">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">ig</a>
+          <span>Stay Connected</span>
+        </div>
+      </div>
+    </div>
+    <div class="container footer footer--bottom">
+      <p>Copyright © 2026 TECHM8. All rights reserved.</p>
+      <a href="store-policy.html">Repair Terms & Conditions</a>
+    </div>
+  </footer>
+  <script src="script.js"></script>
 </body>
 </html>

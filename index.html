@@ -24,11 +24,14 @@
       <a class="brand" href="index.html" aria-label="TECHM8 home">
         <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
       </a>
-      <nav class="nav__menu" aria-label="Primary navigation">
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav__menu" id="primary-menu" aria-label="Primary navigation">
         <a href="index.html">Home</a>
         <a href="repairs.html">Repairs</a>
         <a href="products.html">Products</a>
-        <a href="stores/cbd-store.html">Stores</a>
+        <a href="stores.html">Stores</a>
         <a href="store-policy.html">Store Policy</a>
         <a class="nav__shop-link" href="shop.html">Online Store</a>
       </nav>
@@ -153,26 +156,45 @@
   </main>
 
   <footer class="site-footer">
-    <div class="container footer">
-      <div>
-        <strong>TECHM8</strong>
-        <p>Phone, tablet, computer, laptop and console repairs, plus parts and accessories.</p>
+    <div class="container footer footer--rich">
+      <div class="footer-brand">
+        <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+        <p>TECHM8 repairs phones, tablets, computers, laptops and game consoles, and also supplies parts, accessories and everyday tech products.</p>
       </div>
       <div>
-        <h4>Quick links</h4>
-        <a href="index.html">Home</a>
+        <h4>Services</h4>
         <a href="repairs.html">Repairs</a>
-        <a href="products.html">Products</a>
-        <a href="shop.html">Online Store</a>
+        <a href="repairs.html">Phone Repairs</a>
+        <a href="repairs.html">Laptop Repairs</a>
+        <a href="repairs.html">Console Repairs</a>
       </div>
       <div>
-        <h4>More pages</h4>
+        <h4>Explore</h4>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="shop.html">Online Store</a>
         <a href="store-policy.html">Store Policy</a>
-        <a href="stores/cbd-store.html">CBD Store</a>
-        <a href="stores/southside-store.html">Southside Store</a>
-        <a href="stores/northside-store.html">Northside Store</a>
+      </div>
+      <div>
+        <h4>Stay Updated</h4>
+        <p>Use this area later for newsletter signup, offers, local store news or new product releases.</p>
+        <div class="footer-subscribe">
+          <input type="email" placeholder="Email">
+          <button type="button">Subscribe</button>
+        </div>
+        <div class="footer-socials">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">ig</a>
+          <span>Stay Connected</span>
+        </div>
       </div>
     </div>
+    <div class="container footer footer--bottom">
+      <p>Copyright © 2026 TECHM8. All rights reserved.</p>
+      <a href="store-policy.html">Repair Terms & Conditions</a>
+    </div>
   </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>

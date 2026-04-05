@@ -1,5 +1,7 @@
 const filterButtons = document.querySelectorAll("[data-filter]");
 const productCards = document.querySelectorAll(".product-card");
+const navToggle = document.querySelector(".nav__toggle");
+const navMenu = document.querySelector(".nav__menu");
 
 filterButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -14,3 +16,10 @@ filterButtons.forEach((button) => {
     });
   });
 });
+
+if (navToggle && navMenu) {
+  navToggle.addEventListener("click", () => {
+    const isOpen = navMenu.classList.toggle("is-open");
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+}
