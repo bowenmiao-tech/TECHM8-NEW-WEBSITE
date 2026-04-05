@@ -191,6 +191,8 @@ if (pageData) {
     const dropdown = dropdownToggle.closest(".nav__dropdown");
     if (!dropdown) return;
 
+    const isMobileView = window.innerWidth <= 960;
+    const destination = dropdownToggle.getAttribute("href");
     const alreadyOpen = dropdown.classList.contains("is-open");
     const readyToNavigate = dropdownToggle.dataset.navReady === "true";
     closeAllDropdowns(dropdown);
@@ -200,6 +202,12 @@ if (pageData) {
       dropdown.classList.add("is-open");
       dropdownToggle.setAttribute("aria-expanded", "true");
       armDropdownNavigation(dropdownToggle);
+      return;
+    }
+
+    if (isMobileView && destination) {
+      event.preventDefault();
+      window.location.href = destination;
       return;
     }
 
