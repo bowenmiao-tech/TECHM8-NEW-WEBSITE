@@ -5,7 +5,7 @@ if (pageData) {
 
   const storeDropdown = `
     <div class="nav__dropdown nav__dropdown--stores">
-      <button class="nav__dropdown-toggle" type="button" data-href="${prefix}stores.html" aria-expanded="false" onclick="return toggleRepairsMenu(this, event)">Stores</button>
+      <button class="nav__dropdown-toggle" type="button" data-href="${prefix}stores.html" aria-expanded="false" onclick="return toggleMainDropdown(this, event)">Stores</button>
       <div class="nav__dropdown-menu nav__dropdown-menu--stores">
         <div class="store-switcher">
           <div class="store-switcher__top">
@@ -26,7 +26,7 @@ if (pageData) {
 
   const navDropdown = `
     <div class="nav__dropdown">
-      <button class="nav__dropdown-toggle" type="button" data-href="${prefix}repairs.html" aria-expanded="false" onclick="return toggleRepairsMenu(this, event)">Repairs</button>
+      <button class="nav__dropdown-toggle" type="button" data-href="${prefix}repairs.html" aria-expanded="false" onclick="return toggleMainDropdown(this, event)">Repairs</button>
       <div class="nav__dropdown-menu">
         <div class="nav__dropdown-group">
           <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Phones</button>
@@ -194,6 +194,8 @@ if (pageData) {
     </footer>
   `;
 
+  const isMobileNavigation = () => window.innerWidth <= 960;
+
   const closeAllDropdowns = (exceptDropdown) => {
     document.querySelectorAll(".nav__dropdown.is-open").forEach((item) => {
       if (item === exceptDropdown) return;
@@ -303,12 +305,14 @@ if (pageData) {
     return false;
   };
 
-  window.toggleRepairsMenu = (button, event) => {
+  window.toggleMainDropdown = (button, event) => {
     if (event) {
       handleDropdownToggle(event, button);
     }
     return false;
   };
+
+  window.toggleRepairsMenu = window.toggleMainDropdown;
 
   window.toggleNavSubmenu = (button, event) => {
     if (event) {
@@ -360,16 +364,20 @@ if (pageData) {
     let closeTimer;
 
     dropdown.addEventListener("mouseenter", () => {
-      if (window.innerWidth <= 960) return;
+      if (isMobileNavigation()) return;
 
       window.clearTimeout(closeTimer);
       closeAllDropdowns(dropdown);
       dropdown.classList.add("is-open");
-      dropdown.querySelector(".nav__dropdown-toggle")?.setAttribute("aria-expanded", "true");
+      const toggle = dropdown.querySelector(".nav__dropdown-toggle");
+      toggle?.setAttribute("aria-expanded", "true");
+      if (toggle) {
+        delete toggle.dataset.navReady;
+      }
     });
 
     dropdown.addEventListener("mouseleave", () => {
-      if (window.innerWidth <= 960) return;
+      if (isMobileNavigation()) return;
 
       closeTimer = window.setTimeout(() => {
         dropdown.classList.remove("is-open");

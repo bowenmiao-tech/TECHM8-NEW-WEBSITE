@@ -17,6 +17,10 @@ function initFilters() {
   });
 }
 
+function isMobileNavigation() {
+  return window.innerWidth <= 960;
+}
+
 function closeAllDropdowns(exceptDropdown) {
   document.querySelectorAll(".nav__dropdown.is-open").forEach((item) => {
     if (item === exceptDropdown) return;
@@ -90,7 +94,6 @@ function handleDropdownToggle(event, dropdownToggle) {
   const dropdown = dropdownToggle.closest(".nav__dropdown");
   if (!dropdown) return;
 
-  const isMobileView = window.innerWidth <= 960;
   const destination = dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
   const alreadyOpen = dropdown.classList.contains("is-open");
   const readyToNavigate = dropdownToggle.dataset.navReady === "true";
@@ -110,9 +113,7 @@ function handleDropdownToggle(event, dropdownToggle) {
     return;
   }
 
-  if (isMobileView) {
-    event.preventDefault();
-  }
+  event.preventDefault();
 }
 
 function handleSubmenuToggle(event, toggle) {
@@ -129,12 +130,14 @@ function handleSubmenuToggle(event, toggle) {
   return false;
 }
 
-window.toggleRepairsMenu = function toggleRepairsMenu(button, event) {
+window.toggleMainDropdown = function toggleMainDropdown(button, event) {
   if (event) {
     handleDropdownToggle(event, button);
   }
   return false;
 };
+
+window.toggleRepairsMenu = window.toggleMainDropdown;
 
 window.toggleNavSubmenu = function toggleNavSubmenu(button, event) {
   if (event) {
@@ -187,16 +190,20 @@ function initNavigation() {
     let closeTimer;
 
     dropdown.addEventListener("mouseenter", () => {
-      if (window.innerWidth <= 960) return;
+      if (isMobileNavigation()) return;
 
       window.clearTimeout(closeTimer);
       closeAllDropdowns(dropdown);
       dropdown.classList.add("is-open");
-      dropdown.querySelector(".nav__dropdown-toggle")?.setAttribute("aria-expanded", "true");
+      const toggle = dropdown.querySelector(".nav__dropdown-toggle");
+      toggle?.setAttribute("aria-expanded", "true");
+      if (toggle) {
+        delete toggle.dataset.navReady;
+      }
     });
 
     dropdown.addEventListener("mouseleave", () => {
-      if (window.innerWidth <= 960) return;
+      if (isMobileNavigation()) return;
 
       closeTimer = window.setTimeout(() => {
         dropdown.classList.remove("is-open");

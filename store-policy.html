@@ -30,7 +30,7 @@
       <nav class="nav__menu" id="primary-menu">
         <a href="index.html">Home</a>
         <div class="nav__dropdown">
-          <button class="nav__dropdown-toggle" type="button" data-href="repairs.html" aria-expanded="false" onclick="return toggleRepairsMenu(this, event)">Repairs</button>
+          <button class="nav__dropdown-toggle" type="button" data-href="repairs.html" aria-expanded="false" onclick="return toggleMainDropdown(this, event)">Repairs</button>
           <div class="nav__dropdown-menu">
             <div class="nav__dropdown-group">
               <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Phones</button>
@@ -73,7 +73,24 @@
           </div>
         </div>
         <a href="products.html">Products</a>
-        <a href="stores.html">Stores</a>
+        <div class="nav__dropdown nav__dropdown--stores">
+          <button class="nav__dropdown-toggle" type="button" data-href="stores.html" aria-expanded="false" onclick="return toggleMainDropdown(this, event)">Stores</button>
+          <div class="nav__dropdown-menu nav__dropdown-menu--stores">
+            <div class="store-switcher">
+              <div class="store-switcher__top">
+                <strong>Stores</strong>
+                <input class="store-switcher__search" type="search" placeholder="Search store">
+              </div>
+              <div class="store-switcher__grid">
+                <a class="store-switcher__link" href="stores/brassall.html">Brassall</a>
+                <a class="store-switcher__link" href="stores/fairfield.html">Fairfield</a>
+                <a class="store-switcher__link" href="stores/north-lakes.html">North Lakes</a>
+                <a class="store-switcher__link" href="stores/park-ridge.html">Park Ridge</a>
+                <a class="store-switcher__link" href="stores/toowong.html">Toowong</a>
+              </div>
+            </div>
+          </div>
+        </div>
         <a href="store-policy.html">Store Policy</a>
         <a class="nav__shop-link" href="shop.html">Online Store</a>
       </nav>
