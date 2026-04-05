@@ -39,6 +39,14 @@ function armDropdownNavigation(toggle) {
   toggle.dataset.navReady = "true";
 }
 
+function closeAllSubmenus(exceptGroup) {
+  document.querySelectorAll(".nav__dropdown-group.is-open").forEach((group) => {
+    if (group === exceptGroup) return;
+    group.classList.remove("is-open");
+    group.querySelector(".nav__submenu-toggle")?.setAttribute("aria-expanded", "false");
+  });
+}
+
 function decorateMobileMenu() {
   const nav = document.querySelector(".nav");
   const navMenu = nav?.querySelector(".nav__menu");
@@ -74,12 +82,47 @@ function decorateMobileMenu() {
   }
 }
 
+function decorateRepairSubmenus() {
+  document.querySelectorAll(".nav__dropdown-group").forEach((group) => {
+    if (group.querySelector(".nav__submenu-toggle")) return;
+
+    const heading = group.querySelector("strong");
+    if (!heading) return;
+
+    const label = heading.textContent.trim();
+    const links = Array.from(group.querySelectorAll("a"));
+
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "nav__submenu-toggle";
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.textContent = label;
+
+    const panel = document.createElement("div");
+    panel.className = "nav__submenu-panel";
+
+    links.forEach((link) => {
+      panel.append(link);
+    });
+
+    heading.replaceWith(toggle);
+    group.append(panel);
+
+    toggle.addEventListener("click", () => {
+      const isOpen = group.classList.contains("is-open");
+      closeAllSubmenus(group);
+      group.classList.toggle("is-open", !isOpen);
+      toggle.setAttribute("aria-expanded", String(!isOpen));
+    });
+  });
+}
+
 function handleDropdownToggle(event, dropdownToggle) {
   const dropdown = dropdownToggle.closest(".nav__dropdown");
   if (!dropdown) return;
 
   const isMobileView = window.innerWidth <= 960;
-  const destination = dropdownToggle.getAttribute("href");
+  const destination = dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
   const alreadyOpen = dropdown.classList.contains("is-open");
   const readyToNavigate = dropdownToggle.dataset.navReady === "true";
   closeAllDropdowns(dropdown);
@@ -104,10 +147,11 @@ function handleDropdownToggle(event, dropdownToggle) {
 
 function initNavigation() {
   decorateMobileMenu();
+  decorateRepairSubmenus();
 
   const mobileInput = document.querySelector(".nav__mobile-input");
   const navMenu = document.querySelector(".nav__menu");
-  const navToggle = document.querySelector(".nav__toggle");
+  const navToggle = document.querySelector(".nav__toggle--open, .nav__toggle");
   const dropdownToggles = document.querySelectorAll(".nav__dropdown-toggle");
 
   if (mobileInput && navMenu) {
@@ -136,10 +180,12 @@ function initNavigation() {
     }
 
     if (target.closest(".nav__dropdown-toggle")) return;
+    if (target.closest(".nav__submenu-toggle")) return;
 
     if (target.closest(".nav__dropdown")) return;
 
     closeAllDropdowns();
+    closeAllSubmenus();
   });
 }
 
