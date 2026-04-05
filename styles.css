@@ -843,6 +843,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   }
 
   .nav__menu.is-open,
+  .nav__mobile-input:checked + .nav__toggle + .nav__menu,
   .nav__mobile-input:checked + .nav__toggle + .nav__overlay + .nav__menu {
     transform: translateX(0);
   }
