@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TECHM8 Repairs | What We Repair</title>
-  <meta name="description" content="TECHM8 repairs phones, tablets, computers, laptops and game consoles, with support for common brands and everyday repair issues.">
+  <title>TECHM8 Repairs | Phones, Tablets, Computers and Consoles</title>
+  <meta name="description" content="Browse TECHM8 repair categories for phones, tablets, computers and game consoles.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,8 +13,8 @@
 <body>
   <div class="promo-banner">
     <div class="container promo-banner__inner">
-      <span>Phones, tablets, laptops, computers and consoles repaired with parts, diagnostics and practical support.</span>
-      <a href="stores/cbd-store.html">Find a store</a>
+      <span>Choose a repair category to see the brands, device types and faults we work with.</span>
+      <a href="stores.html">Find a store</a>
     </div>
   </div>
 
@@ -28,7 +28,41 @@
       </button>
       <nav class="nav__menu" id="primary-menu">
         <a href="index.html">Home</a>
-        <a href="repairs.html">Repairs</a>
+        <div class="nav__dropdown is-open">
+          <button class="nav__dropdown-toggle" type="button" aria-expanded="true">Repairs</button>
+          <div class="nav__dropdown-menu">
+            <div class="nav__dropdown-group">
+              <strong>Phones</strong>
+              <a href="repair-services/phones/apple.html">Apple</a>
+              <a href="repair-services/phones/samsung.html">Samsung</a>
+              <a href="repair-services/phones/oppo.html">Oppo</a>
+              <a href="repair-services/phones/huawei.html">Huawei</a>
+              <a href="repair-services/phones/xiaomi.html">Xiaomi</a>
+              <a href="repair-services/phones/google.html">Google</a>
+              <a href="repair-services/phones/oneplus.html">OnePlus</a>
+              <a href="repair-services/phones/others.html">Others</a>
+            </div>
+            <div class="nav__dropdown-group">
+              <strong>Tablets</strong>
+              <a href="repair-services/tablets/apple.html">Apple</a>
+              <a href="repair-services/tablets/samsung.html">Samsung</a>
+              <a href="repair-services/tablets/other.html">Other Tablets</a>
+            </div>
+            <div class="nav__dropdown-group">
+              <strong>Computers</strong>
+              <a href="repair-services/computers/pc-tower.html">PC Tower</a>
+              <a href="repair-services/computers/all-in-one.html">All in One</a>
+              <a href="repair-services/computers/laptop.html">Laptop</a>
+              <a href="repair-services/computers/small-pc.html">Small PC</a>
+            </div>
+            <div class="nav__dropdown-group">
+              <strong>Game Consoles</strong>
+              <a href="repair-services/consoles/sony.html">Sony</a>
+              <a href="repair-services/consoles/xbox.html">Xbox</a>
+              <a href="repair-services/consoles/nintendo.html">Nintendo</a>
+            </div>
+          </div>
+        </div>
         <a href="products.html">Products</a>
         <a href="stores.html">Stores</a>
         <a href="store-policy.html">Store Policy</a>
@@ -38,217 +72,114 @@
   </header>
 
   <main>
-    <section class="hero hero--service hero--repairs">
-      <div class="container hero__grid">
-        <div class="hero__content">
-          <p class="eyebrow">What we repair</p>
-          <h1>Device repair support across the electronics people use every day.</h1>
-          <p class="hero__lead">
-            TECHM8 repairs more than just phones. We help customers with mobile phones, tablets,
-            desktop computers, laptops and selected game consoles, and we handle many of the common
-            faults that stop devices from working properly.
-          </p>
-          <div class="hero__actions">
-            <a class="button button--primary" href="stores/cbd-store.html">Find a store</a>
-            <a class="button button--secondary" href="shop.html">Shop parts and accessories</a>
-          </div>
-          <ul class="hero__stats">
-            <li><strong>5</strong><span>major device groups supported</span></li>
-            <li><strong>10+</strong><span>common repair types</span></li>
-            <li><strong>Brand-ready</strong><span>page structure for model-specific SEO later</span></li>
-          </ul>
-        </div>
-
-        <div class="repairs-hero-panel">
-          <article class="repair-spotlight repair-spotlight--phone">
-            <div class="repair-spotlight__icon"></div>
-            <div>
-              <span>Fast-moving repairs</span>
-              <strong>Phone and tablet screens</strong>
-              <p>Cracked glass, touch issues, display faults, batteries and charging problems.</p>
-            </div>
-          </article>
-          <article class="repair-spotlight repair-spotlight--computer">
-            <div class="repair-spotlight__icon"></div>
-            <div>
-              <span>Workshop repairs</span>
-              <strong>Laptops and computers</strong>
-              <p>Power faults, damaged screens, storage upgrades, thermal issues and diagnostics.</p>
-            </div>
-          </article>
-          <article class="repair-spotlight repair-spotlight--console">
-            <div class="repair-spotlight__icon"></div>
-            <div>
-              <span>Specialty support</span>
-              <strong>Game console servicing</strong>
-              <p>HDMI issues, overheating, boot faults and hardware-related troubleshooting.</p>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Device categories</p>
-          <h2>Clear categories so customers know immediately what we fix</h2>
-          <p>This section is inspired by large repair sites that group services by device type and brand, but the content here is written specifically for TECHM8.</p>
-        </div>
-
-        <div class="device-grid">
-          <article class="device-card">
-            <div class="device-card__art device-card__art--phone"></div>
-            <h3>Mobile Phones</h3>
-            <p>Repair support for popular smartphones including screen issues, batteries, charging ports, camera faults and back glass damage.</p>
-          </article>
-          <article class="device-card">
-            <div class="device-card__art device-card__art--tablet"></div>
-            <h3>Tablets</h3>
-            <p>Tablet display repairs, battery replacement, charging problems and internal diagnostics for work and entertainment devices.</p>
-          </article>
-          <article class="device-card">
-            <div class="device-card__art device-card__art--desktop"></div>
-            <h3>Desktop Computers</h3>
-            <p>Hardware upgrades, component replacement, storage issues, software faults and workshop diagnostics for desktop systems.</p>
-          </article>
-          <article class="device-card">
-            <div class="device-card__art device-card__art--laptop"></div>
-            <h3>Laptops</h3>
-            <p>Screen replacement, charging faults, keyboard problems, battery wear, heat issues and everyday notebook repair work.</p>
-          </article>
-          <article class="device-card">
-            <div class="device-card__art device-card__art--console"></div>
-            <h3>Game Consoles</h3>
-            <p>Console fault finding for HDMI issues, no power symptoms, overheating, storage upgrades and common hardware failures.</p>
-          </article>
-          <article class="device-card">
-            <div class="device-card__art device-card__art--wearable"></div>
-            <h3>Accessories & Related Items</h3>
-            <p>Protection products, replacement accessories and service-related items that support repaired devices after pickup.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section--muted">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Common faults</p>
-          <h2>The repair issues customers ask about most often</h2>
-        </div>
-
-        <div class="issue-grid">
-          <article class="issue-card"><h3>Screen Replacement</h3><p>Cracked glass, black displays, dead pixels, ghost touch and touch-response faults.</p></article>
-          <article class="issue-card"><h3>Battery Replacement</h3><p>Short battery life, random shutdowns, slow charging and swelling batteries.</p></article>
-          <article class="issue-card"><h3>Charging Port Repair</h3><p>Loose connections, no charging, damaged ports and debris-related problems.</p></article>
-          <article class="issue-card"><h3>Water or Liquid Damage</h3><p>Moisture-related issues, corrosion checks, cleaning and damage diagnosis.</p></article>
-          <article class="issue-card"><h3>Camera & Audio Faults</h3><p>Rear camera problems, blurry images, broken microphones, speakers and earpiece faults.</p></article>
-          <article class="issue-card"><h3>Performance & Hardware Checks</h3><p>Overheating, no power, boot issues, storage upgrades and internal part replacement.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Brands we work with</p>
-          <h2>Structured like a repair brand page, but ready for your own store and service area</h2>
-          <p>You can later expand each brand into its own SEO page, such as iPhone repair, Samsung repair, iPad repair or laptop repair.</p>
-        </div>
-
-        <div class="brand-showcase">
-          <article class="brand-panel">
-            <h3>Apple</h3>
-            <p>iPhone, iPad, MacBook and related device repairs for screen, battery, charging and hardware issues.</p>
-            <ul class="brand-list">
-              <li>iPhone repairs</li>
-              <li>iPad repairs</li>
-              <li>MacBook repairs</li>
-            </ul>
-          </article>
-          <article class="brand-panel">
-            <h3>Samsung</h3>
-            <p>Samsung phone and tablet support across screen repairs, batteries, ports and component replacement.</p>
-            <ul class="brand-list">
-              <li>Galaxy S and A series</li>
-              <li>Galaxy Note devices</li>
-              <li>Samsung tablets</li>
-            </ul>
-          </article>
-          <article class="brand-panel">
-            <h3>Google & Android</h3>
-            <p>Google Pixel plus other Android brands for day-to-day faults, charging issues and display repairs.</p>
-            <ul class="brand-list">
-              <li>Google Pixel</li>
-              <li>Oppo and Xiaomi</li>
-              <li>Other Android devices</li>
-            </ul>
-          </article>
-          <article class="brand-panel">
-            <h3>Computers & Laptops</h3>
-            <p>Support for common Windows laptops, desktop systems and selected Apple notebook repairs.</p>
-            <ul class="brand-list">
-              <li>Windows laptops</li>
-              <li>Desktop computers</li>
-              <li>Mac notebooks</li>
-            </ul>
-          </article>
-          <article class="brand-panel">
-            <h3>Gaming Devices</h3>
-            <p>Selected game console repair support for hardware symptoms, display output issues and thermal faults.</p>
-            <ul class="brand-list">
-              <li>HDMI faults</li>
-              <li>No power issues</li>
-              <li>Cooling and fan problems</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section--muted">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Why choose TECHM8</p>
-          <h2>Strong reassurance section with icons and supporting copy</h2>
-        </div>
-
-        <div class="trust-grid">
-          <article class="trust-card">
-            <div class="trust-card__icon">30</div>
-            <h3>Fast turnaround on common repairs</h3>
-            <p>For simple repairs, this area can later display your actual same-day or express turnaround message.</p>
-          </article>
-          <article class="trust-card">
-            <div class="trust-card__icon">AU</div>
-            <h3>Local service with store pages</h3>
-            <p>Customers can find their nearest location and read a page tailored to that suburb or service area.</p>
-          </article>
-          <article class="trust-card">
-            <div class="trust-card__icon">QC</div>
-            <h3>Qualified diagnostics and practical support</h3>
-            <p>Ideal for explaining how you inspect devices, confirm the fault and recommend the best next step.</p>
-          </article>
-          <article class="trust-card">
-            <div class="trust-card__icon">WR</div>
-            <h3>Warranty-ready messaging</h3>
-            <p>This can later be replaced with your real repair warranty terms once you confirm the business policy.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section--cta">
-      <div class="container cta">
+    <section class="hero hero--service">
+      <div class="container repair-detail-hero">
         <div>
-          <p class="eyebrow">Next step</p>
-          <h2>Need a repair, parts or accessories?</h2>
-          <p>Use this page to show what you repair now, then later we can create individual brand and model pages for stronger SEO and better quote conversion.</p>
+          <p class="eyebrow">Repairs overview</p>
+          <h1>Choose the exact repair category your customer is looking for.</h1>
+          <p class="hero__lead">This page is now structured by category so customers can quickly drill down into phones, tablets, computers or game consoles and then choose the exact brand or device type.</p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="stores.html">Find a store</a>
+            <a class="button button--secondary" href="shop.html">Products and accessories</a>
+          </div>
         </div>
-        <div class="cta__actions">
-          <a class="button button--primary" href="stores/cbd-store.html">Find a store</a>
-          <a class="button button--secondary" href="products.html">Browse products</a>
+        <div class="repair-detail-panel">
+          <div class="repair-detail-panel__icon vector-phone"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Repair categories</p>
+          <h2>Every category has its own detail pages</h2>
+        </div>
+
+        <div class="repair-category-grid">
+          <article class="repair-category-card">
+            <div class="repair-category-card__top">
+              <div>
+                <p class="eyebrow">Phones</p>
+                <h3>Mobile Phone Repairs</h3>
+              </div>
+              <div class="repair-category-card__icon repair-category-card__icon--phone"></div>
+            </div>
+            <p>Choose the exact phone brand to see a dedicated repair page in a format similar to major repair websites.</p>
+            <div class="repair-subgrid">
+              <a class="repair-link-card" href="repair-services/phones/apple.html">Apple</a>
+              <a class="repair-link-card" href="repair-services/phones/samsung.html">Samsung</a>
+              <a class="repair-link-card" href="repair-services/phones/oppo.html">Oppo</a>
+              <a class="repair-link-card" href="repair-services/phones/huawei.html">Huawei</a>
+              <a class="repair-link-card" href="repair-services/phones/xiaomi.html">Xiaomi</a>
+              <a class="repair-link-card" href="repair-services/phones/google.html">Google</a>
+              <a class="repair-link-card" href="repair-services/phones/oneplus.html">OnePlus</a>
+              <a class="repair-link-card" href="repair-services/phones/others.html">Others</a>
+            </div>
+          </article>
+
+          <article class="repair-category-card">
+            <div class="repair-category-card__top">
+              <div>
+                <p class="eyebrow">Tablets</p>
+                <h3>Tablet Repairs</h3>
+              </div>
+              <div class="repair-category-card__icon repair-category-card__icon--tablet"></div>
+            </div>
+            <p>Separate tablet pages are ready for Apple iPad, Samsung tablets and other tablet brands.</p>
+            <div class="repair-subgrid">
+              <a class="repair-link-card" href="repair-services/tablets/apple.html">Apple</a>
+              <a class="repair-link-card" href="repair-services/tablets/samsung.html">Samsung</a>
+              <a class="repair-link-card" href="repair-services/tablets/other.html">Other Tablets</a>
+            </div>
+          </article>
+
+          <article class="repair-category-card">
+            <div class="repair-category-card__top">
+              <div>
+                <p class="eyebrow">Computers</p>
+                <h3>Computer Repairs</h3>
+              </div>
+              <div class="repair-category-card__icon repair-category-card__icon--computer"></div>
+            </div>
+            <p>Computer pages are separated by hardware type so desktop and laptop customers see the right information quickly.</p>
+            <div class="repair-subgrid">
+              <a class="repair-link-card" href="repair-services/computers/pc-tower.html">PC Tower</a>
+              <a class="repair-link-card" href="repair-services/computers/all-in-one.html">All in One</a>
+              <a class="repair-link-card" href="repair-services/computers/laptop.html">Laptop</a>
+              <a class="repair-link-card" href="repair-services/computers/small-pc.html">Small PC</a>
+            </div>
+          </article>
+
+          <article class="repair-category-card">
+            <div class="repair-category-card__top">
+              <div>
+                <p class="eyebrow">Game Consoles</p>
+                <h3>Console Repairs</h3>
+              </div>
+              <div class="repair-category-card__icon repair-category-card__icon--console"></div>
+            </div>
+            <p>Console repair pages are split by Sony, Xbox and Nintendo with fault examples and workshop-style service messaging.</p>
+            <div class="repair-subgrid">
+              <a class="repair-link-card" href="repair-services/consoles/sony.html">Sony</a>
+              <a class="repair-link-card" href="repair-services/consoles/xbox.html">Xbox</a>
+              <a class="repair-link-card" href="repair-services/consoles/nintendo.html">Nintendo</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--muted">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Page strategy</p>
+          <h2>Built for customer clarity and future SEO expansion</h2>
+        </div>
+        <div class="repair-content-grid">
+          <article class="info-card"><h2>Better navigation</h2><p>Customers can now open Repairs in the menu and choose their exact category and brand instead of reading one long mixed page.</p></article>
+          <article class="info-card"><h2>Consistent page format</h2><p>Every detail page follows the same layout so the website feels unified across desktop and mobile.</p></article>
+          <article class="info-card"><h2>SEO-ready structure</h2><p>These pages can later be expanded with suburb keywords, model lists and more specific issue pages.</p></article>
         </div>
       </div>
     </section>
@@ -258,21 +189,21 @@
     <div class="container footer footer--rich">
       <div class="footer-brand">
         <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
-        <p>Repairs across phones, tablets, computers, laptops and game consoles, plus related products and accessories.</p>
+        <p>TECHM8 repairs phones, tablets, computers, laptops and game consoles with category pages that are easier for both customers and search engines to understand.</p>
       </div>
       <div>
-        <h4>Services</h4>
-        <a href="repairs.html">Phone Repairs</a>
-        <a href="repairs.html">Tablet Repairs</a>
-        <a href="repairs.html">Laptop Repairs</a>
-        <a href="repairs.html">Console Repairs</a>
+        <h4>Phone Repairs</h4>
+        <a href="repair-services/phones/apple.html">Apple</a>
+        <a href="repair-services/phones/samsung.html">Samsung</a>
+        <a href="repair-services/phones/oppo.html">Oppo</a>
+        <a href="repair-services/phones/google.html">Google</a>
       </div>
       <div>
-        <h4>Explore</h4>
-        <a href="stores.html">Find a Store</a>
-        <a href="products.html">Products</a>
-        <a href="shop.html">Online Store</a>
-        <a href="store-policy.html">Store Policy</a>
+        <h4>Other Categories</h4>
+        <a href="repair-services/tablets/apple.html">Tablet Repairs</a>
+        <a href="repair-services/computers/laptop.html">Laptop Repairs</a>
+        <a href="repair-services/consoles/xbox.html">Xbox Repairs</a>
+        <a href="stores.html">Stores</a>
       </div>
       <div>
         <h4>Stay Updated</h4>
@@ -293,6 +224,7 @@
       <a href="store-policy.html">Repair Terms & Conditions</a>
     </div>
   </footer>
+
   <script src="script.js"></script>
 </body>
 </html>
