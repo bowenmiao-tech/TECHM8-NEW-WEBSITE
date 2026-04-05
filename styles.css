@@ -135,6 +135,12 @@ a { color: inherit; text-decoration: none; }
   display: grid;
 }
 
+@media (min-width: 961px) {
+  .nav__dropdown:hover .nav__dropdown-menu {
+    display: grid;
+  }
+}
+
 .nav__dropdown-group {
   display: grid;
   gap: 0.5rem;

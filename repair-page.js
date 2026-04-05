@@ -187,6 +187,19 @@ if (pageData) {
     toggle.dataset.navReady = "true";
   };
 
+  document.querySelectorAll(".nav__dropdown").forEach((dropdown) => {
+    dropdown.addEventListener("mouseleave", () => {
+      if (window.innerWidth <= 960) return;
+
+      dropdown.classList.remove("is-open");
+      const toggle = dropdown.querySelector(".nav__dropdown-toggle");
+      toggle?.setAttribute("aria-expanded", "false");
+      if (toggle) {
+        delete toggle.dataset.navReady;
+      }
+    });
+  });
+
   document.addEventListener("click", (event) => {
     const target = event.target;
     if (!(target instanceof Element)) return;

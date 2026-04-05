@@ -39,6 +39,21 @@ function armDropdownNavigation(toggle) {
   toggle.dataset.navReady = "true";
 }
 
+function initDesktopDropdownReset() {
+  document.querySelectorAll(".nav__dropdown").forEach((dropdown) => {
+    dropdown.addEventListener("mouseleave", () => {
+      if (window.innerWidth <= 960) return;
+
+      dropdown.classList.remove("is-open");
+      const toggle = dropdown.querySelector(".nav__dropdown-toggle");
+      toggle?.setAttribute("aria-expanded", "false");
+      if (toggle) {
+        delete toggle.dataset.navReady;
+      }
+    });
+  });
+}
+
 function toggleMainMenu(button) {
   const nav = button.closest(".nav");
   const navMenu = nav?.querySelector(".nav__menu");
@@ -92,6 +107,7 @@ function initNavigation() {
 function initPage() {
   initFilters();
   initNavigation();
+  initDesktopDropdownReset();
 }
 
 if (document.readyState === "loading") {
