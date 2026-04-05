@@ -4,25 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TECHM8 Store Policy</title>
-  <meta name="description" content="Store policy page for TECHM8 covering ordering, payments, dispatch and returns.">
+  <meta name="description" content="Store policy page for TECHM8 covering ordering, payments, repair handling and returns.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="promo-banner">
+    <div class="container promo-banner__inner">
+      <span>Clear policy information for walk-in repairs, product purchases and collection.</span>
+      <a href="stores.html">Find a store</a>
+    </div>
+  </div>
+
   <header class="site-header">
     <div class="container nav">
-      <a class="brand" href="index.html">
+      <a class="brand" href="index.html" aria-label="TECHM8 home">
         <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
       </a>
       <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
       <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
         <span></span><span></span><span></span>
       </label>
-            <nav class="nav__menu" id="primary-menu">
+      <nav class="nav__menu" id="primary-menu">
         <a href="index.html">Home</a>
-                <div class="nav__dropdown">
+        <div class="nav__dropdown">
           <button class="nav__dropdown-toggle" type="button" data-href="repairs.html" aria-expanded="false" onclick="return toggleRepairsMenu(this, event)">Repairs</button>
           <div class="nav__dropdown-menu">
             <div class="nav__dropdown-group">
@@ -65,7 +72,60 @@
             </div>
           </div>
         </div>
-                <a href="products.html">Products</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="store-policy.html">Store Policy</a>
+        <a class="nav__shop-link" href="shop.html">Online Store</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="inner-page">
+    <section class="container inner-page__hero">
+      <p class="eyebrow">Store policy</p>
+      <h1>Important information for repairs, purchases and collections.</h1>
+      <p>Use this page to explain how repairs are checked in, how payments work, how long collections are held and what the return process looks like.</p>
+    </section>
+
+    <section class="section section--tight">
+      <div class="container policy-grid">
+        <article class="policy-card">
+          <h3>Repair check-in</h3>
+          <p>Devices are booked in for inspection, testing and quotation where required. Repair timing can vary depending on parts availability and device condition.</p>
+        </article>
+        <article class="policy-card">
+          <h3>Payments</h3>
+          <p>Payments for products, deposits or completed repairs can be collected in store using your standard payment methods.</p>
+        </article>
+        <article class="policy-card">
+          <h3>Collection and contact</h3>
+          <p>Customers are contacted when devices are ready for pickup. Collection windows and uncollected device handling can be listed here later.</p>
+        </article>
+        <article class="policy-card">
+          <h3>Returns and warranty</h3>
+          <p>Product return conditions, repair workmanship coverage and exclusions can be expanded on this page as your final business policy is confirmed.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer footer--rich">
+      <div class="footer-brand">
+        <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+        <p>TECHM8 repairs phones, tablets, computers, laptops and game consoles, and also supplies parts, accessories and everyday tech products.</p>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <a href="repair-services/phones/apple.html">Phone Repairs</a>
+        <a href="repair-services/tablets/apple.html">Tablet Repairs</a>
+        <a href="repair-services/computers/laptop.html">Laptop Repairs</a>
+        <a href="repair-services/consoles/xbox.html">Console Repairs</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="repairs.html">Repairs Overview</a>
+        <a href="products.html">Products</a>
         <a href="stores.html">Stores</a>
         <a href="shop.html">Online Store</a>
       </div>
@@ -84,21 +144,11 @@
       </div>
     </div>
     <div class="container footer footer--bottom">
-      <p>Copyright ? 2026 TECHM8. All rights reserved.</p>
+      <p>Copyright 2026 TECHM8. All rights reserved.</p>
       <a href="store-policy.html">Repair Terms & Conditions</a>
     </div>
   </footer>
+
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
