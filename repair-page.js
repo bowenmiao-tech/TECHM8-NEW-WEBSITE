@@ -5,7 +5,7 @@ if (pageData) {
 
   const navDropdown = `
     <div class="nav__dropdown">
-      <button class="nav__dropdown-toggle" type="button" aria-expanded="false">Repairs</button>
+      <a class="nav__dropdown-toggle" href="${prefix}repairs.html" aria-expanded="false">Repairs</a>
       <div class="nav__dropdown-menu">
         <div class="nav__dropdown-group">
           <strong>Phones</strong>

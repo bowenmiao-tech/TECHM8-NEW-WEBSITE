@@ -26,11 +26,38 @@ if (navToggle && navMenu) {
 }
 
 dropdownToggles.forEach((toggle) => {
-  toggle.addEventListener("click", () => {
+  toggle.addEventListener("click", (event) => {
     const dropdown = toggle.closest(".nav__dropdown");
     if (!dropdown) return;
 
-    const isOpen = dropdown.classList.toggle("is-open");
-    toggle.setAttribute("aria-expanded", String(isOpen));
+    document.querySelectorAll(".nav__dropdown.is-open").forEach((item) => {
+      if (item !== dropdown) {
+        item.classList.remove("is-open");
+        item.querySelector(".nav__dropdown-toggle")?.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    const alreadyOpen = dropdown.classList.contains("is-open");
+
+    if (!alreadyOpen) {
+      event.preventDefault();
+      dropdown.classList.add("is-open");
+      toggle.setAttribute("aria-expanded", "true");
+      return;
+    }
+
+    toggle.setAttribute("aria-expanded", "true");
+  });
+});
+
+document.addEventListener("click", (event) => {
+  const target = event.target;
+  if (!(target instanceof Element)) return;
+
+  if (target.closest(".nav__dropdown")) return;
+
+  document.querySelectorAll(".nav__dropdown.is-open").forEach((item) => {
+    item.classList.remove("is-open");
+    item.querySelector(".nav__dropdown-toggle")?.setAttribute("aria-expanded", "false");
   });
 });
