@@ -25,6 +25,17 @@ function closeAllDropdowns(exceptDropdown) {
   });
 }
 
+function toggleMainMenu(button) {
+  const nav = button.closest(".nav");
+  const navMenu = nav?.querySelector(".nav__menu");
+  if (!navMenu) return;
+
+  const isOpen = navMenu.classList.toggle("is-open");
+  button.setAttribute("aria-expanded", String(isOpen));
+}
+
+window.toggleMainMenu = toggleMainMenu;
+
 function initNavigation() {
   document.addEventListener("click", (event) => {
     const target = event.target;
@@ -32,12 +43,7 @@ function initNavigation() {
 
     const navToggle = target.closest(".nav__toggle");
     if (navToggle) {
-      const nav = navToggle.closest(".nav");
-      const navMenu = nav?.querySelector(".nav__menu");
-      if (!navMenu) return;
-
-      const isOpen = navMenu.classList.toggle("is-open");
-      navToggle.setAttribute("aria-expanded", String(isOpen));
+      toggleMainMenu(navToggle);
       return;
     }
 

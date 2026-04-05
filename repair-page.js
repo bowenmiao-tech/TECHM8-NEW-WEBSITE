@@ -66,7 +66,7 @@ if (pageData) {
         <a class="brand" href="${prefix}index.html">
           <img class="brand__logo" src="${prefix}assets/logo-techm8.png" alt="TECHM8 logo">
         </a>
-        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open menu">
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open menu" onclick="toggleMainMenu(this)">
           <span></span><span></span><span></span>
         </button>
         <nav class="nav__menu" id="primary-menu">
