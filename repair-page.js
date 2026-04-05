@@ -187,16 +187,42 @@ if (pageData) {
     toggle.dataset.navReady = "true";
   };
 
-  document.querySelectorAll(".nav__dropdown").forEach((dropdown) => {
-    dropdown.addEventListener("mouseleave", () => {
-      if (window.innerWidth <= 960) return;
+  const handleDropdownToggle = (event, dropdownToggle) => {
+    const dropdown = dropdownToggle.closest(".nav__dropdown");
+    if (!dropdown) return;
 
-      dropdown.classList.remove("is-open");
-      const toggle = dropdown.querySelector(".nav__dropdown-toggle");
-      toggle?.setAttribute("aria-expanded", "false");
-      if (toggle) {
-        delete toggle.dataset.navReady;
-      }
+    const alreadyOpen = dropdown.classList.contains("is-open");
+    const readyToNavigate = dropdownToggle.dataset.navReady === "true";
+    closeAllDropdowns(dropdown);
+
+    if (!alreadyOpen || !readyToNavigate) {
+      event.preventDefault();
+      dropdown.classList.add("is-open");
+      dropdownToggle.setAttribute("aria-expanded", "true");
+      armDropdownNavigation(dropdownToggle);
+      return;
+    }
+
+    delete dropdownToggle.dataset.navReady;
+    dropdownToggle.setAttribute("aria-expanded", "true");
+  };
+
+  const mobileInput = document.querySelector(".nav__mobile-input");
+  const navMenu = document.querySelector(".nav__menu");
+  const navToggle = document.querySelector(".nav__toggle");
+  const dropdownToggles = document.querySelectorAll(".nav__dropdown-toggle");
+
+  if (mobileInput && navMenu) {
+    mobileInput.addEventListener("change", () => {
+      const isOpen = mobileInput.checked;
+      navMenu.classList.toggle("is-open", isOpen);
+      navToggle?.setAttribute("aria-expanded", String(isOpen));
+    });
+  }
+
+  dropdownToggles.forEach((dropdownToggle) => {
+    dropdownToggle.addEventListener("click", (event) => {
+      handleDropdownToggle(event, dropdownToggle);
     });
   });
 
@@ -215,27 +241,7 @@ if (pageData) {
       return;
     }
 
-    const dropdownToggle = target.closest(".nav__dropdown-toggle");
-    if (dropdownToggle) {
-      const dropdown = dropdownToggle.closest(".nav__dropdown");
-      if (!dropdown) return;
-
-      const alreadyOpen = dropdown.classList.contains("is-open");
-      const readyToNavigate = dropdownToggle.dataset.navReady === "true";
-      closeAllDropdowns(dropdown);
-
-      if (!alreadyOpen || !readyToNavigate) {
-        event.preventDefault();
-        dropdown.classList.add("is-open");
-        dropdownToggle.setAttribute("aria-expanded", "true");
-        armDropdownNavigation(dropdownToggle);
-        return;
-      }
-
-      delete dropdownToggle.dataset.navReady;
-      dropdownToggle.setAttribute("aria-expanded", "true");
-      return;
-    }
+    if (target.closest(".nav__dropdown-toggle")) return;
 
     if (target.closest(".nav__dropdown")) return;
 

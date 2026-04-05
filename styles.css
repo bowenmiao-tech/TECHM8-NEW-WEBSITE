@@ -117,7 +117,7 @@ a { color: inherit; text-decoration: none; }
 
 .nav__dropdown-menu {
   position: absolute;
-  top: calc(100% + 0.9rem);
+  top: calc(100% + 0.15rem);
   left: 0;
   z-index: 30;
   display: none;
@@ -136,7 +136,20 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (min-width: 961px) {
+  .nav__dropdown::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    height: 1rem;
+  }
+
   .nav__dropdown:hover .nav__dropdown-menu {
+    display: grid;
+  }
+
+  .nav__dropdown:focus-within .nav__dropdown-menu {
     display: grid;
   }
 }
