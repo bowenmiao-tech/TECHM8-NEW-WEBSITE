@@ -66,9 +66,10 @@ if (pageData) {
         <a class="brand" href="${prefix}index.html">
           <img class="brand__logo" src="${prefix}assets/logo-techm8.png" alt="TECHM8 logo">
         </a>
-        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Open menu" onclick="toggleMainMenu(this)">
+        <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
+        <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
           <span></span><span></span><span></span>
-        </button>
+        </label>
         <nav class="nav__menu" id="primary-menu">
           <a href="${prefix}index.html">Home</a>
           ${navDropdown}
