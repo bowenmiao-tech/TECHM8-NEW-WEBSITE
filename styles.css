@@ -70,6 +70,7 @@ a { color: inherit; text-decoration: none; }
 .nav__shop-link { padding: 0.8rem 1.1rem; border-radius: 999px; background: var(--text); color: white; }
 
 .hero, .inner-page { padding: 4rem 0 2rem; }
+.hero--service { padding-top: 4.5rem; }
 .hero__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2rem; align-items: center; }
 
 .eyebrow {
@@ -133,8 +134,9 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
 .hero__stats strong { display: block; font-size: 1.35rem; }
 .hero__visual { display: grid; gap: 1rem; }
+.hero__visual--split { grid-template-rows: repeat(2, minmax(0, 1fr)); }
 
-.hero-card, .category-tile, .product-card, .store-card, .policy-card, .store-details article {
+.hero-card, .category-tile, .product-card, .store-card, .policy-card, .store-details article, .landing-card, .service-card, .info-card {
   padding: 1.4rem;
   border-radius: 1.5rem;
   background: rgba(255, 255, 255, 0.75);
@@ -163,12 +165,16 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 .section-heading { display: grid; gap: 0.7rem; margin-bottom: 2rem; }
 .section-heading--split { grid-template-columns: 1fr auto; align-items: end; }
 
-.category-grid, .product-grid, .store-grid, .policy-grid { display: grid; gap: 1rem; }
+.category-grid, .product-grid, .store-grid, .policy-grid, .landing-grid, .service-grid, .info-grid { display: grid; gap: 1rem; }
 .category-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .store-grid, .policy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.landing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.service-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.info-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.product-grid--simple { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
-.category-tile h3, .product-card h3, .store-card h3 { margin-bottom: 0.8rem; font-size: 1.35rem; }
+.category-tile h3, .product-card h3, .store-card h3, .landing-card h3, .service-card h3, .info-card h2 { margin-bottom: 0.8rem; font-size: 1.35rem; }
 .filter-bar { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 
 .filter-chip {
@@ -183,8 +189,26 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
 .filter-chip.is-active { background: var(--text); color: white; }
 .product-card__meta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0 1.2rem; color: var(--muted); font-size: 0.95rem; }
-.product-card a, .store-card a { color: var(--brand-dark); font-weight: 700; }
+.product-card a, .store-card a, .landing-card a { color: var(--brand-dark); font-weight: 700; }
 .product-card.is-hidden { display: none; }
+
+.landing-card span {
+  display: inline-flex;
+  margin-bottom: 1rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(20, 91, 110, 0.1);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.service-card p,
+.landing-card p,
+.info-card p {
+  color: var(--muted);
+  line-height: 1.7;
+}
 
 .section--cta { color: white; }
 .cta {
@@ -212,11 +236,12 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 .footer a { display: block; margin-bottom: 0.55rem; color: rgba(255, 255, 255, 0.72); }
 
 .inner-page__hero, .store-hero { padding-bottom: 3rem; }
+.section--tight { padding-top: 0; }
 .policy-grid, .store-details { margin-top: 2rem; }
 .store-details { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
 @media (max-width: 960px) {
-  .hero__grid, .section-heading--split, .cta, .footer, .category-grid, .product-grid, .store-grid, .policy-grid, .store-details {
+  .hero__grid, .section-heading--split, .cta, .footer, .category-grid, .product-grid, .store-grid, .policy-grid, .store-details, .landing-grid, .service-grid, .info-grid {
     grid-template-columns: 1fr;
   }
 
