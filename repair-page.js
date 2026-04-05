@@ -5,10 +5,10 @@ if (pageData) {
 
   const navDropdown = `
     <div class="nav__dropdown">
-      <button class="nav__dropdown-toggle" type="button" data-href="${prefix}repairs.html" aria-expanded="false">Repairs</button>
+      <button class="nav__dropdown-toggle" type="button" data-href="${prefix}repairs.html" aria-expanded="false" onclick="return toggleRepairsMenu(this, event)">Repairs</button>
       <div class="nav__dropdown-menu">
         <div class="nav__dropdown-group">
-          <button class="nav__submenu-toggle" type="button" aria-expanded="false">Phones</button>
+          <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Phones</button>
           <div class="nav__submenu-panel">
             <a href="${prefix}repair-services/phones/apple.html">Apple</a>
             <a href="${prefix}repair-services/phones/samsung.html">Samsung</a>
@@ -21,7 +21,7 @@ if (pageData) {
           </div>
         </div>
         <div class="nav__dropdown-group">
-          <button class="nav__submenu-toggle" type="button" aria-expanded="false">Tablets</button>
+          <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Tablets</button>
           <div class="nav__submenu-panel">
             <a href="${prefix}repair-services/tablets/apple.html">Apple</a>
             <a href="${prefix}repair-services/tablets/samsung.html">Samsung</a>
@@ -29,7 +29,7 @@ if (pageData) {
           </div>
         </div>
         <div class="nav__dropdown-group">
-          <button class="nav__submenu-toggle" type="button" aria-expanded="false">Computers</button>
+          <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Computers</button>
           <div class="nav__submenu-panel">
             <a href="${prefix}repair-services/computers/pc-tower.html">PC Tower</a>
             <a href="${prefix}repair-services/computers/all-in-one.html">All in One</a>
@@ -38,7 +38,7 @@ if (pageData) {
           </div>
         </div>
         <div class="nav__dropdown-group">
-          <button class="nav__submenu-toggle" type="button" aria-expanded="false">Game Consoles</button>
+          <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Game Consoles</button>
           <div class="nav__submenu-panel">
             <a href="${prefix}repair-services/consoles/sony.html">Sony</a>
             <a href="${prefix}repair-services/consoles/xbox.html">Xbox</a>
@@ -268,14 +268,40 @@ if (pageData) {
     event.preventDefault();
   };
 
+  const handleSubmenuToggle = (event, toggle) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const group = toggle.closest(".nav__dropdown-group");
+    if (!group) return false;
+
+    const isOpen = group.classList.contains("is-open");
+    closeAllSubmenus(group);
+    group.classList.toggle("is-open", !isOpen);
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+    return false;
+  };
+
+  window.toggleRepairsMenu = (button, event) => {
+    if (event) {
+      handleDropdownToggle(event, button);
+    }
+    return false;
+  };
+
+  window.toggleNavSubmenu = (button, event) => {
+    if (event) {
+      handleSubmenuToggle(event, button);
+    }
+    return false;
+  };
+
   decorateMobileMenu();
 
   const mobileInput = document.querySelector(".nav__mobile-input");
   const navMenu = document.querySelector(".nav__menu");
   const navToggle = document.querySelector(".nav__toggle--open, .nav__toggle");
   const navDropdowns = document.querySelectorAll(".nav__dropdown");
-  const dropdownToggles = document.querySelectorAll(".nav__dropdown-toggle");
-  const submenuToggles = document.querySelectorAll(".nav__submenu-toggle");
 
   if (mobileInput && navMenu) {
     mobileInput.addEventListener("change", () => {
@@ -306,31 +332,13 @@ if (pageData) {
 
       closeTimer = window.setTimeout(() => {
         dropdown.classList.remove("is-open");
-        dropdown.querySelector(".nav__dropdown-toggle")?.setAttribute("aria-expanded", "false");
-        delete dropdown.querySelector(".nav__dropdown-toggle")?.dataset.navReady;
+        const toggle = dropdown.querySelector(".nav__dropdown-toggle");
+        toggle?.setAttribute("aria-expanded", "false");
+        if (toggle) {
+          delete toggle.dataset.navReady;
+        }
         closeAllSubmenus();
       }, 180);
-    });
-  });
-
-  dropdownToggles.forEach((dropdownToggle) => {
-    dropdownToggle.addEventListener("click", (event) => {
-      handleDropdownToggle(event, dropdownToggle);
-    });
-  });
-
-  submenuToggles.forEach((toggle) => {
-    toggle.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      const group = toggle.closest(".nav__dropdown-group");
-      if (!group) return;
-
-      const isOpen = group.classList.contains("is-open");
-      closeAllSubmenus(group);
-      group.classList.toggle("is-open", !isOpen);
-      toggle.setAttribute("aria-expanded", String(!isOpen));
     });
   });
 

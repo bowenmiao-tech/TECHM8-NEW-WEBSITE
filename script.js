@@ -115,6 +115,34 @@ function handleDropdownToggle(event, dropdownToggle) {
   }
 }
 
+function handleSubmenuToggle(event, toggle) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const group = toggle.closest(".nav__dropdown-group");
+  if (!group) return false;
+
+  const isOpen = group.classList.contains("is-open");
+  closeAllSubmenus(group);
+  group.classList.toggle("is-open", !isOpen);
+  toggle.setAttribute("aria-expanded", String(!isOpen));
+  return false;
+}
+
+window.toggleRepairsMenu = function toggleRepairsMenu(button, event) {
+  if (event) {
+    handleDropdownToggle(event, button);
+  }
+  return false;
+};
+
+window.toggleNavSubmenu = function toggleNavSubmenu(button, event) {
+  if (event) {
+    handleSubmenuToggle(event, button);
+  }
+  return false;
+};
+
 function initNavigation() {
   decorateMobileMenu();
 
@@ -122,8 +150,6 @@ function initNavigation() {
   const navMenu = document.querySelector(".nav__menu");
   const navToggle = document.querySelector(".nav__toggle--open, .nav__toggle");
   const navDropdowns = document.querySelectorAll(".nav__dropdown");
-  const dropdownToggles = document.querySelectorAll(".nav__dropdown-toggle");
-  const submenuToggles = document.querySelectorAll(".nav__submenu-toggle");
 
   if (mobileInput && navMenu) {
     mobileInput.addEventListener("change", () => {
@@ -154,31 +180,13 @@ function initNavigation() {
 
       closeTimer = window.setTimeout(() => {
         dropdown.classList.remove("is-open");
-        dropdown.querySelector(".nav__dropdown-toggle")?.setAttribute("aria-expanded", "false");
-        delete dropdown.querySelector(".nav__dropdown-toggle")?.dataset.navReady;
+        const toggle = dropdown.querySelector(".nav__dropdown-toggle");
+        toggle?.setAttribute("aria-expanded", "false");
+        if (toggle) {
+          delete toggle.dataset.navReady;
+        }
         closeAllSubmenus();
       }, 180);
-    });
-  });
-
-  dropdownToggles.forEach((dropdownToggle) => {
-    dropdownToggle.addEventListener("click", (event) => {
-      handleDropdownToggle(event, dropdownToggle);
-    });
-  });
-
-  submenuToggles.forEach((toggle) => {
-    toggle.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      const group = toggle.closest(".nav__dropdown-group");
-      if (!group) return;
-
-      const isOpen = group.classList.contains("is-open");
-      closeAllSubmenus(group);
-      group.classList.toggle("is-open", !isOpen);
-      toggle.setAttribute("aria-expanded", String(!isOpen));
     });
   });
 

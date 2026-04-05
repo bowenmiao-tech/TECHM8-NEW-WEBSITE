@@ -164,9 +164,8 @@ a { color: inherit; text-decoration: none; }
   gap: 0.5rem;
 }
 
-.nav__dropdown-group strong {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 0.98rem;
+.nav__dropdown-group > a {
+  display: none;
 }
 
 .nav__submenu-toggle {
