@@ -815,7 +815,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     align-items: flex-start;
   }
 
-  .nav__toggle--open {
+  .nav > .nav__toggle {
     display: inline-flex;
     align-self: center;
     margin-left: auto;

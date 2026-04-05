@@ -196,8 +196,6 @@ if (pageData) {
 
     if (!nav || !navMenu || !mobileInput || !openToggle || !brand) return;
 
-    openToggle.classList.add("nav__toggle--open");
-
     if (!nav.querySelector(".nav__overlay")) {
       const overlay = document.createElement("label");
       overlay.className = "nav__overlay";
