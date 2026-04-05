@@ -805,6 +805,10 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     display: flex;
   }
 
+  .nav__toggle[aria-expanded="true"] + .nav__menu {
+    display: flex;
+  }
+
   .nav__dropdown {
     width: 100%;
   }

@@ -164,10 +164,6 @@ if (pageData) {
     </footer>
   `;
 
-  const navToggle = document.querySelector(".nav__toggle");
-  const navMenu = document.querySelector(".nav__menu");
-  const dropdownToggles = document.querySelectorAll(".nav__dropdown-toggle");
-
   const closeAllDropdowns = (exceptDropdown) => {
     document.querySelectorAll(".nav__dropdown.is-open").forEach((item) => {
       if (item === exceptDropdown) return;
@@ -176,16 +172,24 @@ if (pageData) {
     });
   };
 
-  if (navToggle && navMenu) {
-    navToggle.addEventListener("click", () => {
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const navToggle = target.closest(".nav__toggle");
+    if (navToggle) {
+      const nav = navToggle.closest(".nav");
+      const navMenu = nav?.querySelector(".nav__menu");
+      if (!navMenu) return;
+
       const isOpen = navMenu.classList.toggle("is-open");
       navToggle.setAttribute("aria-expanded", String(isOpen));
-    });
-  }
+      return;
+    }
 
-  dropdownToggles.forEach((toggle) => {
-    toggle.addEventListener("click", (event) => {
-      const dropdown = toggle.closest(".nav__dropdown");
+    const dropdownToggle = target.closest(".nav__dropdown-toggle");
+    if (dropdownToggle) {
+      const dropdown = dropdownToggle.closest(".nav__dropdown");
       if (!dropdown) return;
 
       const alreadyOpen = dropdown.classList.contains("is-open");
@@ -194,19 +198,15 @@ if (pageData) {
       if (!alreadyOpen) {
         event.preventDefault();
         dropdown.classList.add("is-open");
-        toggle.setAttribute("aria-expanded", "true");
+        dropdownToggle.setAttribute("aria-expanded", "true");
         return;
       }
 
-      toggle.setAttribute("aria-expanded", "true");
-    });
-  });
+      dropdownToggle.setAttribute("aria-expanded", "true");
+      return;
+    }
 
-  document.addEventListener("click", (event) => {
-    const target = event.target;
-    if (!(target instanceof Element)) return;
-
-    if (target.closest(".nav__dropdown") || target.closest(".nav__toggle")) return;
+    if (target.closest(".nav__dropdown")) return;
 
     closeAllDropdowns();
   });
