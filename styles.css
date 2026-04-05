@@ -161,6 +161,10 @@ a { color: inherit; text-decoration: none; }
     width: 18rem;
   }
 
+  .nav__dropdown--stores .nav__dropdown-menu {
+    width: 30rem;
+  }
+
   .nav__dropdown-group {
     position: relative;
     width: 100%;
@@ -292,6 +296,72 @@ a { color: inherit; text-decoration: none; }
 
 .nav__dropdown-group a:hover {
   color: var(--accent);
+}
+
+.nav__dropdown--stores .nav__dropdown-menu {
+  min-width: 30rem;
+  padding: 0.95rem;
+}
+
+.store-switcher {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.store-switcher__top {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.store-switcher__top strong {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.store-switcher__search {
+  width: 100%;
+  min-height: 2.9rem;
+  padding: 0 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+}
+
+.store-switcher__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.store-switcher__link {
+  display: flex;
+  align-items: center;
+  min-height: 3.8rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(7, 39, 45, 0.08);
+  border-radius: 0.95rem;
+  background: rgba(7, 39, 45, 0.04);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.store-switcher__link:hover {
+  background: rgba(22, 200, 186, 0.14);
+  border-color: rgba(17, 141, 149, 0.18);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.store-switcher__link.is-hidden {
+  display: none;
 }
 
 .hero, .inner-page { padding: 4rem 0 2rem; }
@@ -1056,6 +1126,11 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     box-shadow: none;
   }
 
+  .nav__dropdown--stores .nav__dropdown-menu {
+    width: 100%;
+    padding: 0.6rem 1rem 1rem;
+  }
+
   .nav__dropdown-group {
     gap: 0;
     width: 100%;
@@ -1087,6 +1162,21 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     padding: 1rem 1.25rem;
     font-size: 1.05rem;
     border-bottom: 1px solid rgba(7, 39, 45, 0.08);
+  }
+
+  .store-switcher__top {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  .store-switcher__grid {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .store-switcher__link {
+    min-height: 3.2rem;
+    text-transform: none;
   }
 
   .nav__shop-link {

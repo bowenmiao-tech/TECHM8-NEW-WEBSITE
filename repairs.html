@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="promo-banner">
+<div class="promo-banner">
     <div class="container promo-banner__inner">
       <span>Choose a repair category to see the brands, device types and faults we work with.</span>
       <a href="stores.html">Find a store</a>
@@ -20,7 +20,7 @@
 
   <header class="site-header">
     <div class="container nav">
-      <a class="brand" href="index.html">
+      <a class="brand" href="index.html" aria-label="TECHM8 home">
         <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
       </a>
       <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
@@ -29,7 +29,7 @@
       </label>
       <nav class="nav__menu" id="primary-menu">
         <a href="index.html">Home</a>
-                <div class="nav__dropdown">
+        <div class="nav__dropdown">
           <button class="nav__dropdown-toggle" type="button" data-href="repairs.html" aria-expanded="false" onclick="return toggleRepairsMenu(this, event)">Repairs</button>
           <div class="nav__dropdown-menu">
             <div class="nav__dropdown-group">
@@ -73,14 +73,31 @@
           </div>
         </div>
         <a href="products.html">Products</a>
-        <a href="stores.html">Stores</a>
+        <div class="nav__dropdown nav__dropdown--stores">
+          <button class="nav__dropdown-toggle" type="button" data-href="stores.html" aria-expanded="false" onclick="return toggleRepairsMenu(this, event)">Stores</button>
+          <div class="nav__dropdown-menu nav__dropdown-menu--stores">
+            <div class="store-switcher">
+              <div class="store-switcher__top">
+                <strong>Stores</strong>
+                <input class="store-switcher__search" type="search" placeholder="Search store">
+              </div>
+              <div class="store-switcher__grid">
+                <a class="store-switcher__link" href="stores/brassall.html">Brassall</a>
+                <a class="store-switcher__link" href="stores/fairfield.html">Fairfield</a>
+                <a class="store-switcher__link" href="stores/north-lakes.html">North Lakes</a>
+                <a class="store-switcher__link" href="stores/park-ridge.html">Park Ridge</a>
+                <a class="store-switcher__link" href="stores/toowong.html">Toowong</a>
+              </div>
+            </div>
+          </div>
+        </div>
         <a href="store-policy.html">Store Policy</a>
         <a class="nav__shop-link" href="shop.html">Online Store</a>
       </nav>
     </div>
   </header>
 
-  <main>
+<main>
     <section class="hero hero--service">
       <div class="container repair-detail-hero">
         <div>
@@ -198,21 +215,21 @@
     <div class="container footer footer--rich">
       <div class="footer-brand">
         <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
-        <p>TECHM8 repairs phones, tablets, computers, laptops and game consoles with category pages that are easier for visitors to browse and easier for search engines to understand.</p>
+        <p>TECHM8 repairs phones, tablets, computers, laptops and game consoles, and also supplies parts, accessories and everyday tech products.</p>
       </div>
       <div>
-        <h4>Phone Repairs</h4>
-        <a href="repair-services/phones/apple.html">Apple</a>
-        <a href="repair-services/phones/samsung.html">Samsung</a>
-        <a href="repair-services/phones/oppo.html">Oppo</a>
-        <a href="repair-services/phones/google.html">Google</a>
-      </div>
-      <div>
-        <h4>Other Categories</h4>
+        <h4>Services</h4>
+        <a href="repair-services/phones/apple.html">Phone Repairs</a>
         <a href="repair-services/tablets/apple.html">Tablet Repairs</a>
         <a href="repair-services/computers/laptop.html">Laptop Repairs</a>
-        <a href="repair-services/consoles/xbox.html">Xbox Repairs</a>
+        <a href="repair-services/consoles/xbox.html">Console Repairs</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="repairs.html">Repairs Overview</a>
+        <a href="products.html">Products</a>
         <a href="stores.html">Stores</a>
+        <a href="shop.html">Online Store</a>
       </div>
       <div>
         <h4>Stay Updated</h4>
@@ -237,13 +254,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-

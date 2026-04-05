@@ -3,6 +3,27 @@ const pageData = window.REPAIR_PAGE_DATA;
 if (pageData) {
   const prefix = pageData.prefix || "../../";
 
+  const storeDropdown = `
+    <div class="nav__dropdown nav__dropdown--stores">
+      <button class="nav__dropdown-toggle" type="button" data-href="${prefix}stores.html" aria-expanded="false" onclick="return toggleRepairsMenu(this, event)">Stores</button>
+      <div class="nav__dropdown-menu nav__dropdown-menu--stores">
+        <div class="store-switcher">
+          <div class="store-switcher__top">
+            <strong>Stores</strong>
+            <input class="store-switcher__search" type="search" placeholder="Search store">
+          </div>
+          <div class="store-switcher__grid">
+            <a class="store-switcher__link" href="${prefix}stores/brassall.html">Brassall</a>
+            <a class="store-switcher__link" href="${prefix}stores/fairfield.html">Fairfield</a>
+            <a class="store-switcher__link" href="${prefix}stores/north-lakes.html">North Lakes</a>
+            <a class="store-switcher__link" href="${prefix}stores/park-ridge.html">Park Ridge</a>
+            <a class="store-switcher__link" href="${prefix}stores/toowong.html">Toowong</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
   const navDropdown = `
     <div class="nav__dropdown">
       <button class="nav__dropdown-toggle" type="button" data-href="${prefix}repairs.html" aria-expanded="false" onclick="return toggleRepairsMenu(this, event)">Repairs</button>
@@ -82,7 +103,7 @@ if (pageData) {
           <a href="${prefix}index.html">Home</a>
           ${navDropdown}
           <a href="${prefix}products.html">Products</a>
-          <a href="${prefix}stores.html">Stores</a>
+          ${storeDropdown}
           <a href="${prefix}store-policy.html">Store Policy</a>
           <a class="nav__shop-link" href="${prefix}shop.html">Online Store</a>
         </nav>
@@ -296,7 +317,27 @@ if (pageData) {
     return false;
   };
 
+  const initStoreSearch = () => {
+    document.querySelectorAll(".store-switcher").forEach((switcher) => {
+      const input = switcher.querySelector(".store-switcher__search");
+      if (!(input instanceof HTMLInputElement)) return;
+
+      const links = Array.from(switcher.querySelectorAll(".store-switcher__link"));
+
+      input.addEventListener("input", () => {
+        const query = input.value.trim().toLowerCase();
+
+        links.forEach((link) => {
+          const text = link.textContent?.trim().toLowerCase() || "";
+          const match = !query || text.includes(query);
+          link.classList.toggle("is-hidden", !match);
+        });
+      });
+    });
+  };
+
   decorateMobileMenu();
+  initStoreSearch();
 
   const mobileInput = document.querySelector(".nav__mobile-input");
   const navMenu = document.querySelector(".nav__menu");

@@ -143,8 +143,28 @@ window.toggleNavSubmenu = function toggleNavSubmenu(button, event) {
   return false;
 };
 
+function initStoreSearch() {
+  document.querySelectorAll(".store-switcher").forEach((switcher) => {
+    const input = switcher.querySelector(".store-switcher__search");
+    if (!(input instanceof HTMLInputElement)) return;
+
+    const links = Array.from(switcher.querySelectorAll(".store-switcher__link"));
+
+    input.addEventListener("input", () => {
+      const query = input.value.trim().toLowerCase();
+
+      links.forEach((link) => {
+        const text = link.textContent?.trim().toLowerCase() || "";
+        const match = !query || text.includes(query);
+        link.classList.toggle("is-hidden", !match);
+      });
+    });
+  });
+}
+
 function initNavigation() {
   decorateMobileMenu();
+  initStoreSearch();
 
   const mobileInput = document.querySelector(".nav__mobile-input");
   const navMenu = document.querySelector(".nav__menu");
