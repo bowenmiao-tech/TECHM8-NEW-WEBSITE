@@ -1,6 +1,6 @@
 # TECHM8 website starter
 
-This is a lightweight static starter for the TECHM8 homepage, store landing pages, online store entry page and store policy page.
+This is a lightweight Vite starter for the TECHM8 homepage, store landing pages, online store entry page and store policy page.
 
 ## Included
 
@@ -12,6 +12,7 @@ This is a lightweight static starter for the TECHM8 homepage, store landing page
 - Footer
 - SEO-ready independent store pages
 - Starter MySQL schema for Hostinger
+- Vite project structure so Hostinger can recognize the repository
 
 ## Files
 
@@ -26,9 +27,10 @@ This is a lightweight static starter for the TECHM8 homepage, store landing page
 ## Hostinger deployment
 
 1. Upload these files to your website root with File Manager or Git deployment.
-2. Set your real online shop link by editing `shop.html` and the `Online Store` menu links.
-3. Replace placeholder store names with your real branch names, addresses and contact details.
-4. Import `database/schema.sql` into Hostinger phpMyAdmin when you are ready for backend data.
+2. If deploying from Git in Hostinger, use the detected Vite app and let Hostinger run `npm install` and `npm run build`.
+3. Set your real online shop link by editing `shop.html` and the `Online Store` menu links.
+4. Replace placeholder store names with your real branch names, addresses and contact details.
+5. Import `database/schema.sql` into Hostinger phpMyAdmin when you are ready for backend data.
 
 ## Backend data plan
 
