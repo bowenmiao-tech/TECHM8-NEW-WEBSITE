@@ -33,7 +33,7 @@ if (pageData) {
           </div>
           <div class="store-switcher__grid store-switcher__grid--repairs">
             <div class="nav__dropdown-group">
-              <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)"><span class="nav__submenu-copy"><span class="nav__submenu-label">Phones</span><span class="nav__submenu-meta">Apple, Samsung, Oppo, Huawei, Xiaomi, Google, OnePlus and more</span></span></button>
+              <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Phones</button>
               <div class="nav__submenu-panel">
                 <a href="${prefix}repair-services/phones/apple.html">Apple</a>
                 <a href="${prefix}repair-services/phones/samsung.html">Samsung</a>
@@ -46,7 +46,7 @@ if (pageData) {
               </div>
             </div>
             <div class="nav__dropdown-group">
-              <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)"><span class="nav__submenu-copy"><span class="nav__submenu-label">Tablets</span><span class="nav__submenu-meta">Apple, Samsung and other tablet brands</span></span></button>
+              <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Tablets</button>
               <div class="nav__submenu-panel">
                 <a href="${prefix}repair-services/tablets/apple.html">Apple</a>
                 <a href="${prefix}repair-services/tablets/samsung.html">Samsung</a>
@@ -54,7 +54,7 @@ if (pageData) {
               </div>
             </div>
             <div class="nav__dropdown-group">
-              <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)"><span class="nav__submenu-copy"><span class="nav__submenu-label">Computers</span><span class="nav__submenu-meta">PC Tower, All in One, Laptop and Small PC</span></span></button>
+              <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Computers</button>
               <div class="nav__submenu-panel">
                 <a href="${prefix}repair-services/computers/pc-tower.html">PC Tower</a>
                 <a href="${prefix}repair-services/computers/all-in-one.html">All in One</a>
@@ -63,7 +63,7 @@ if (pageData) {
               </div>
             </div>
             <div class="nav__dropdown-group">
-              <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)"><span class="nav__submenu-copy"><span class="nav__submenu-label">Game Consoles</span><span class="nav__submenu-meta">Sony, Xbox and Nintendo repairs</span></span></button>
+              <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Game Consoles</button>
               <div class="nav__submenu-panel">
                 <a href="${prefix}repair-services/consoles/sony.html">Sony</a>
                 <a href="${prefix}repair-services/consoles/xbox.html">Xbox</a>
