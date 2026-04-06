@@ -279,6 +279,24 @@ a { color: inherit; text-decoration: none; }
   display: none;
 }
 
+.nav__panel-link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.78rem 0.85rem;
+  border-radius: 0.8rem;
+  color: var(--text);
+  font-size: 0.97rem;
+  font-weight: 700;
+  line-height: 1.2;
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.nav__panel-link:hover {
+  background: rgba(17, 141, 149, 0.08);
+  color: var(--accent);
+}
+
 .nav__submenu-toggle {
   display: inline-flex;
   align-items: center;
@@ -338,37 +356,50 @@ a { color: inherit; text-decoration: none; }
 
 .store-switcher {
   display: grid;
-  gap: 0.75rem;
-}
-
-.store-switcher__top {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.65rem;
-  align-items: center;
+  gap: 0.35rem;
 }
 
 .store-switcher__top strong {
   font-family: "Space Grotesk", sans-serif;
   font-size: 0.95rem;
   text-transform: uppercase;
-}
-
-.store-switcher__search {
-  width: 100%;
-  min-height: 2.75rem;
-  padding: 0 0.9rem;
-  border: var(--nav-panel-border);
-  border-radius: 0.8rem;
-  background: #fff;
-  color: var(--text);
-  font: inherit;
+  padding: 0.18rem 0.2rem 0.4rem;
 }
 
 .store-switcher__grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.45rem;
+}
+
+.store-switcher--repairs .store-switcher__grid {
+  gap: 0.35rem;
+}
+
+.store-switcher--repairs .nav__dropdown-group {
+  gap: 0;
+}
+
+.store-switcher--repairs .nav__submenu-toggle {
+  padding: 0.82rem 0.9rem;
+  border-radius: 0.8rem;
+  background: transparent;
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+.store-switcher--repairs .nav__submenu-toggle:hover,
+.store-switcher--repairs .nav__dropdown-group:hover > .nav__submenu-toggle,
+.store-switcher--repairs .nav__dropdown-group:focus-within > .nav__submenu-toggle,
+.store-switcher--repairs .nav__dropdown-group.is-open > .nav__submenu-toggle {
+  background: rgba(17, 141, 149, 0.08);
+  color: var(--accent);
+}
+
+.store-switcher--repairs .nav__submenu-toggle::after {
+  width: 0.46rem;
+  height: 0.46rem;
+  margin-left: 0.28rem;
 }
 
 .store-switcher__link {
@@ -378,8 +409,8 @@ a { color: inherit; text-decoration: none; }
   padding: 0.82rem 0.9rem;
   border: 1px solid transparent;
   border-radius: 0.8rem;
-  background: rgba(7, 39, 45, 0.045);
-  font-family: "Space Grotesk", sans-serif;
+  background: transparent;
+  font-family: inherit;
   font-size: 0.96rem;
   font-weight: 700;
   text-transform: none;
@@ -1220,14 +1251,13 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     border-bottom: 1px solid rgba(7, 39, 45, 0.08);
   }
 
-  .store-switcher__top {
-    grid-template-columns: 1fr;
-    gap: 0.7rem;
-  }
-
   .store-switcher__grid {
     grid-template-columns: 1fr;
     gap: 0.55rem;
+  }
+
+  .store-switcher--repairs .store-switcher__grid {
+    gap: 0.15rem;
   }
 
   .store-switcher__link {
