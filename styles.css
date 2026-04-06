@@ -502,6 +502,33 @@ a { color: inherit; text-decoration: none; }
   background: linear-gradient(135deg, #0a2946 0%, #154a7c 50%, #1c79a9 100%);
 }
 
+.home-banner__slide--anniversary {
+  background:
+    linear-gradient(90deg, rgba(3, 24, 28, 0.66) 0%, rgba(3, 24, 28, 0.38) 34%, rgba(3, 24, 28, 0.1) 58%, rgba(3, 24, 28, 0.06) 100%),
+    url("assets/banner-park-ridge-anniversary.png") center/cover no-repeat;
+}
+
+.home-banner__slide--anniversary::before,
+.home-banner__slide--anniversary::after {
+  display: none;
+}
+
+.home-banner__slide--anniversary .home-banner__inner {
+  grid-template-columns: 1fr;
+}
+
+.home-banner__slide--anniversary .home-banner__copy {
+  max-width: 34rem;
+}
+
+.home-banner__slide--anniversary .home-banner__copy h1 {
+  max-width: 10ch;
+}
+
+.home-banner__slide--anniversary .home-banner__copy p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 .home-banner__slide--stores {
   background: linear-gradient(135deg, #042729 0%, #0b4640 48%, #11846c 100%);
 }
@@ -678,8 +705,8 @@ a { color: inherit; text-decoration: none; }
   padding: 0 0.95rem;
   margin-bottom: 1.2rem;
   border-radius: 999px;
-  background: rgba(37, 104, 217, 0.08);
-  color: #2568d9;
+  background: rgba(22, 200, 186, 0.12);
+  color: var(--accent);
   font-size: 0.84rem;
   font-weight: 700;
 }
@@ -743,7 +770,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 .home-product-card strong {
-  color: #2568d9;
+  color: var(--accent);
   font-family: "Space Grotesk", sans-serif;
   font-size: 1.9rem;
   line-height: 1;
@@ -756,8 +783,8 @@ a { color: inherit; text-decoration: none; }
   min-height: 1.9rem;
   padding: 0 0.7rem;
   border-radius: 999px;
-  background: rgba(37, 104, 217, 0.08);
-  color: #2568d9;
+  background: rgba(22, 200, 186, 0.12);
+  color: var(--accent);
   font-size: 0.74rem;
   font-weight: 700;
   white-space: nowrap;
@@ -776,10 +803,10 @@ a { color: inherit; text-decoration: none; }
   min-height: 3.9rem;
   padding: 0 1.9rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #2568d9, #1d58bc);
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
   color: #fff;
   font-weight: 700;
-  box-shadow: 0 18px 28px rgba(37, 104, 217, 0.2);
+  box-shadow: 0 18px 28px rgba(15, 151, 155, 0.22);
 }
 
 .home-products-showcase__cta p {
@@ -954,8 +981,8 @@ a { color: inherit; text-decoration: none; }
   padding: 0 0.9rem;
   margin-bottom: 1.1rem;
   border-radius: 999px;
-  background: rgba(98, 93, 255, 0.08);
-  color: #5e63ff;
+  background: rgba(22, 200, 186, 0.12);
+  color: var(--accent);
   font-size: 0.8rem;
   font-weight: 700;
 }
@@ -997,7 +1024,7 @@ a { color: inherit; text-decoration: none; }
   width: 4rem;
   height: 4rem;
   margin: 0 auto 1rem;
-  color: #2568d9;
+  color: var(--accent);
 }
 
 .home-repair-category-card__icon svg {
@@ -1065,23 +1092,23 @@ a { color: inherit; text-decoration: none; }
 }
 
 .home-repair-store-card__top--blue {
-  background: linear-gradient(135deg, #2254eb, #2344b5);
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
 }
 
 .home-repair-store-card__top--indigo {
-  background: linear-gradient(135deg, #5f3bf5, #3d2da4);
+  background: linear-gradient(135deg, #13bcb2, #0f8f9d);
 }
 
 .home-repair-store-card__top--purple {
-  background: linear-gradient(135deg, #b313ff, #7619c0);
+  background: linear-gradient(135deg, #19d6c2, #118d95);
 }
 
 .home-repair-store-card__top--teal {
-  background: linear-gradient(135deg, #089c91, #0d6f6a);
+  background: linear-gradient(135deg, #0f979b, #0b6d74);
 }
 
 .home-repair-store-card__top--cyan {
-  background: linear-gradient(135deg, #0d91bf, #0f6a92);
+  background: linear-gradient(135deg, #25cfc2, #12949b);
 }
 
 .home-repair-store-card__rating {
@@ -1112,7 +1139,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 .home-repair-store-card__body span[aria-hidden="true"] {
-  color: #2568d9;
+  color: var(--accent);
   font-size: 0.95rem;
 }
 
@@ -1124,7 +1151,7 @@ a { color: inherit; text-decoration: none; }
   min-height: 3rem;
   margin-top: 0.3rem;
   border-radius: 999px;
-  background: #2466d9;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
   color: #fff;
   font-weight: 700;
 }
@@ -1136,12 +1163,12 @@ a { color: inherit; text-decoration: none; }
   margin-top: 0;
   border-radius: 0;
   background: transparent;
-  color: #2568d9;
+  color: var(--accent);
   font-weight: 700;
 }
 
 .home-repair-store-card__body a.home-repair-store-card__inline-link:hover {
-  color: #1d58bc;
+  color: var(--brand-dark);
   text-decoration: underline;
 }
 
@@ -2151,6 +2178,16 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     line-height: 1.7;
   }
 
+  .home-banner__slide--anniversary {
+    background:
+      linear-gradient(180deg, rgba(3, 24, 28, 0.48) 0%, rgba(3, 24, 28, 0.3) 38%, rgba(3, 24, 28, 0.52) 100%),
+      url("assets/banner-park-ridge-anniversary.png") 62% center/cover no-repeat;
+  }
+
+  .home-banner__slide--anniversary .home-banner__copy {
+    max-width: 18rem;
+  }
+
   .home-banner__actions,
   .home-section__cta {
     flex-direction: row;
@@ -2361,7 +2398,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 }
 
 .store-profile__hero {
-  background: linear-gradient(135deg, #2047d7 0%, #2738b8 55%, #2f34a5 100%);
+  background: linear-gradient(135deg, #0c5960 0%, var(--brand-dark) 52%, var(--accent) 100%);
   color: #fff;
   padding: 3rem 0 0;
 }
@@ -2447,7 +2484,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
 .store-profile__hero .button--primary {
   background: #fff;
-  color: #2344b5;
+  color: var(--brand-dark);
   box-shadow: none;
 }
 
@@ -2539,7 +2576,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   gap: 0.55rem;
   padding: 0.8rem 0.95rem;
   border-radius: 1rem;
-  background: rgba(36, 102, 217, 0.06);
+  background: rgba(22, 200, 186, 0.08);
   font-weight: 600;
 }
 
@@ -2551,8 +2588,8 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   width: 1.2rem;
   height: 1.2rem;
   border-radius: 999px;
-  background: rgba(36, 102, 217, 0.12);
-  color: #2466d9;
+  background: rgba(22, 200, 186, 0.16);
+  color: var(--accent);
   font-size: 0.78rem;
   font-weight: 700;
 }
@@ -2588,7 +2625,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 }
 
 .store-profile__contact-icon {
-  color: #2466d9;
+  color: var(--accent);
   min-width: 1rem;
 }
 
@@ -2614,8 +2651,8 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   height: 3rem;
   margin-bottom: 1rem;
   border-radius: 1rem;
-  background: rgba(36, 102, 217, 0.08);
-  color: #2466d9;
+  background: rgba(22, 200, 186, 0.12);
+  color: var(--accent);
   font-size: 1.15rem;
 }
 
@@ -2635,7 +2672,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 }
 
 .store-profile__service-link {
-  color: #2466d9;
+  color: var(--accent);
   font-weight: 700;
 }
 
@@ -2643,7 +2680,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   margin-top: 1.5rem;
   padding: 1.9rem;
   text-align: center;
-  background: linear-gradient(135deg, #2453eb 0%, #4b2fdd 100%);
+  background: linear-gradient(135deg, var(--brand-dark) 0%, var(--accent) 100%);
   color: #fff;
 }
 
@@ -2667,7 +2704,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
 .store-profile__cta .button--primary {
   background: #fff;
-  color: #2453eb;
+  color: var(--brand-dark);
   box-shadow: none;
 }
 
@@ -2714,7 +2751,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
 .store-profile__hero {
   padding: 3.5rem 0 0;
-  background: linear-gradient(135deg, #2047d7 0%, #2640c4 48%, #2d32a3 100%);
+  background: linear-gradient(135deg, #0c5960 0%, var(--brand-dark) 48%, var(--accent) 100%);
 }
 
 .store-profile__hero-inner {
@@ -2778,9 +2815,9 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   gap: 0.7rem;
   align-items: flex-start;
   padding: 0.85rem 1rem;
-  border: 1px solid rgba(36, 102, 217, 0.12);
+  border: 1px solid rgba(22, 200, 186, 0.16);
   border-radius: 1rem;
-  background: rgba(244, 248, 255, 0.95);
+  background: rgba(241, 255, 252, 0.96);
   color: var(--muted);
   line-height: 1.65;
 }
@@ -2794,8 +2831,8 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   height: 1.3rem;
   margin-top: 0.1rem;
   border-radius: 999px;
-  background: rgba(36, 102, 217, 0.12);
-  color: #2466d9;
+  background: rgba(22, 200, 186, 0.16);
+  color: var(--accent);
   font-size: 0.82rem;
   font-weight: 900;
   flex: 0 0 auto;
@@ -2810,7 +2847,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 }
 
 .store-profile__sidebar-card--rating {
-  background: linear-gradient(135deg, #2453eb 0%, #4338ca 100%);
+  background: linear-gradient(135deg, var(--brand-dark) 0%, var(--accent) 100%);
   color: #fff;
 }
 
@@ -2852,9 +2889,9 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   display: grid;
   gap: 1rem;
   padding: 1.55rem;
-  border: 1px solid rgba(36, 102, 217, 0.12);
+  border: 1px solid rgba(22, 200, 186, 0.16);
   border-radius: 1.4rem;
-  background: linear-gradient(180deg, rgba(236, 242, 255, 0.98), rgba(247, 250, 255, 0.98));
+  background: linear-gradient(180deg, rgba(236, 255, 252, 0.98), rgba(247, 255, 253, 0.98));
   box-shadow: 0 18px 44px rgba(3, 24, 28, 0.05);
 }
 
