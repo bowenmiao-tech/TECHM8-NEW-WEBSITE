@@ -165,6 +165,58 @@ function initStoreSearch() {
   });
 }
 
+function initHomeBanner() {
+  const banner = document.querySelector("[data-home-banner]");
+  if (!(banner instanceof HTMLElement)) return;
+
+  const slides = Array.from(banner.querySelectorAll("[data-banner-slide]"));
+  const dots = Array.from(banner.querySelectorAll("[data-banner-dot]"));
+  const prev = banner.querySelector("[data-banner-prev]");
+  const next = banner.querySelector("[data-banner-next]");
+
+  if (!slides.length) return;
+
+  let current = 0;
+  let timer;
+
+  const render = (index) => {
+    current = (index + slides.length) % slides.length;
+    slides.forEach((slide, slideIndex) => {
+      slide.classList.toggle("is-active", slideIndex === current);
+    });
+    dots.forEach((dot, dotIndex) => {
+      dot.classList.toggle("is-active", dotIndex === current);
+    });
+  };
+
+  const restart = () => {
+    window.clearInterval(timer);
+    timer = window.setInterval(() => {
+      render(current + 1);
+    }, 5000);
+  };
+
+  dots.forEach((dot, index) => {
+    dot.addEventListener("click", () => {
+      render(index);
+      restart();
+    });
+  });
+
+  prev?.addEventListener("click", () => {
+    render(current - 1);
+    restart();
+  });
+
+  next?.addEventListener("click", () => {
+    render(current + 1);
+    restart();
+  });
+
+  render(0);
+  restart();
+}
+
 function initNavigation() {
   decorateMobileMenu();
   initStoreSearch();
@@ -237,6 +289,7 @@ function initNavigation() {
 function initPage() {
   initFilters();
   initNavigation();
+  initHomeBanner();
 }
 
 if (document.readyState === "loading") {
