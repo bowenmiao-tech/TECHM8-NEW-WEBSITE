@@ -1571,58 +1571,6 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 .footer a { display: block; margin-bottom: 0.55rem; color: rgba(255, 255, 255, 0.72); }
 .footer p { margin: 0; line-height: 1.7; color: rgba(255, 255, 255, 0.72); }
 
-.footer-subscribe {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.75rem;
-  margin-top: 1rem;
-}
-
-.footer-subscribe input {
-  min-height: 3rem;
-  padding: 0 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 0.9rem;
-  background: rgba(255, 255, 255, 0.94);
-  color: var(--text);
-  font: inherit;
-}
-
-.footer-subscribe button {
-  min-height: 3rem;
-  padding: 0 1.2rem;
-  border: 0;
-  border-radius: 0.9rem;
-  background: linear-gradient(135deg, var(--brand), var(--accent));
-  color: white;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.footer-socials {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-top: 1rem;
-}
-
-.footer-socials a {
-  display: inline-grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  margin: 0;
-  border-radius: 999px;
-  background: white;
-  color: var(--accent);
-  font-weight: 700;
-}
-
-.footer-socials span {
-  color: white;
-  font-weight: 700;
-}
 
 .repair-category-grid {
   display: grid;
@@ -2153,10 +2101,6 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   .brand__logo {
     height: 3.4rem;
     max-width: min(16rem, 60vw);
-  }
-
-  .footer-subscribe {
-    grid-template-columns: 1fr;
   }
 
   .footer--bottom {
