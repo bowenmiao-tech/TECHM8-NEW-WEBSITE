@@ -3132,6 +3132,81 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   border: 1px solid rgba(220, 70, 70, 0.2);
 }
 
+.has-booking-modal {
+  overflow: hidden;
+}
+
+.booking-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+}
+
+.booking-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 24, 28, 0.55);
+}
+
+.booking-modal__dialog {
+  position: relative;
+  width: min(32rem, calc(100% - 2rem));
+  margin: min(12vh, 5rem) auto 0;
+  padding: 1.6rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(7, 39, 45, 0.12);
+  background: #fff;
+  box-shadow: 0 28px 60px rgba(3, 24, 28, 0.18);
+}
+
+.booking-modal__close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(7, 39, 45, 0.06);
+  color: var(--text);
+  font-size: 1.45rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.booking-modal__eyebrow {
+  margin: 0 0 0.7rem;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.booking-modal__dialog h3 {
+  margin-bottom: 0.7rem;
+}
+
+.booking-modal__text {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.booking-modal__actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 1.3rem;
+}
+
+.booking-modal.is-success .booking-modal__dialog {
+  border-color: rgba(22, 200, 186, 0.25);
+}
+
+.booking-modal.is-error .booking-modal__dialog {
+  border-color: rgba(220, 70, 70, 0.24);
+}
+
 .booking-sidebar {
   display: grid;
   gap: 1rem;
@@ -3179,5 +3254,10 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
   .booking-form__actions {
     flex-direction: column;
+  }
+
+  .booking-modal__dialog {
+    margin-top: 4.5rem;
+    padding: 1.3rem;
   }
 }

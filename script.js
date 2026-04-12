@@ -224,6 +224,11 @@ function initBookingForm() {
   const submitButton = form.querySelector("[data-booking-submit]");
   const messageBox = form.querySelector("[data-booking-message]");
   const storeField = form.elements.namedItem("store_slug");
+  const modal = document.querySelector("[data-booking-modal]");
+  const modalType = modal?.querySelector("[data-booking-modal-type]");
+  const modalTitle = modal?.querySelector("[data-booking-modal-title]");
+  const modalText = modal?.querySelector("[data-booking-modal-text]");
+  const modalCloseButtons = modal?.querySelectorAll("[data-booking-modal-close]");
 
   const setMessage = (type, text) => {
     if (!(messageBox instanceof HTMLElement)) return;
@@ -234,6 +239,48 @@ function initBookingForm() {
     }
     messageBox.textContent = text;
   };
+
+  const openModal = (type, title, text) => {
+    if (!(modal instanceof HTMLElement)) {
+      window.alert(text);
+      return;
+    }
+
+    modal.hidden = false;
+    modal.className = "booking-modal";
+    modal.classList.add(`is-${type}`);
+
+    if (modalType instanceof HTMLElement) {
+      modalType.textContent = type === "success" ? "Booking submitted" : "Submission failed";
+    }
+
+    if (modalTitle instanceof HTMLElement) {
+      modalTitle.textContent = title;
+    }
+
+    if (modalText instanceof HTMLElement) {
+      modalText.textContent = text;
+    }
+
+    document.body.classList.add("has-booking-modal");
+  };
+
+  const closeModal = () => {
+    if (!(modal instanceof HTMLElement)) return;
+    modal.hidden = true;
+    modal.className = "booking-modal";
+    document.body.classList.remove("has-booking-modal");
+  };
+
+  modalCloseButtons?.forEach((button) => {
+    button.addEventListener("click", closeModal);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeModal();
+    }
+  });
 
   const params = new URLSearchParams(window.location.search);
   const storeParam = params.get("store");
@@ -246,6 +293,7 @@ function initBookingForm() {
 
     if (!form.reportValidity()) {
       setMessage("error", "Please complete the required fields before submitting.");
+      openModal("error", "Required fields missing", "Please complete the required fields before submitting your repair request.");
       return;
     }
 
@@ -262,10 +310,20 @@ function initBookingForm() {
     try {
       const response = await fetch("api/book-repair.php", {
         method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
         body: new FormData(form),
       });
 
-      const result = await response.json();
+      const raw = await response.text();
+      let result;
+
+      try {
+        result = JSON.parse(raw);
+      } catch (parseError) {
+        throw new Error(raw || "The server returned an invalid response.");
+      }
 
       if (!response.ok || !result.ok) {
         throw new Error(result.error || "Repair request could not be submitted.");
@@ -281,8 +339,17 @@ function initBookingForm() {
         "success",
         `Repair request submitted successfully. Booking code: ${result.booking_code}. A confirmation email has been sent.`
       );
+      openModal(
+        "success",
+        "Repair request submitted",
+        `Your repair request has been submitted successfully. Booking code: ${result.booking_code}.`
+      );
+      messageBox?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     } catch (error) {
-      setMessage("error", error instanceof Error ? error.message : "Repair request could not be submitted.");
+      const errorText = error instanceof Error ? error.message : "Repair request could not be submitted.";
+      setMessage("error", errorText);
+      openModal("error", "Repair request failed", errorText);
+      messageBox?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     } finally {
       if (submitButton instanceof HTMLButtonElement) {
         submitButton.disabled = false;
