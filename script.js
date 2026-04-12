@@ -217,6 +217,81 @@ function initHomeBanner() {
   restart();
 }
 
+function initBookingForm() {
+  const form = document.querySelector("[data-booking-form]");
+  if (!(form instanceof HTMLFormElement)) return;
+
+  const submitButton = form.querySelector("[data-booking-submit]");
+  const messageBox = form.querySelector("[data-booking-message]");
+  const storeField = form.elements.namedItem("store_slug");
+
+  const setMessage = (type, text) => {
+    if (!(messageBox instanceof HTMLElement)) return;
+    messageBox.hidden = false;
+    messageBox.className = "booking-message";
+    if (type) {
+      messageBox.classList.add(`is-${type}`);
+    }
+    messageBox.textContent = text;
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  const storeParam = params.get("store");
+  if (storeField instanceof HTMLSelectElement && storeParam) {
+    storeField.value = storeParam;
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!form.reportValidity()) {
+      setMessage("error", "Please complete the required fields before submitting.");
+      return;
+    }
+
+    if (submitButton instanceof HTMLButtonElement) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Submitting...";
+    }
+
+    setMessage("", "");
+    if (messageBox instanceof HTMLElement) {
+      messageBox.hidden = true;
+    }
+
+    try {
+      const response = await fetch("api/book-repair.php", {
+        method: "POST",
+        body: new FormData(form),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error || "Repair request could not be submitted.");
+      }
+
+      form.reset();
+
+      if (storeField instanceof HTMLSelectElement && storeParam) {
+        storeField.value = storeParam;
+      }
+
+      setMessage(
+        "success",
+        `Repair request submitted successfully. Booking code: ${result.booking_code}. A confirmation email has been sent.`
+      );
+    } catch (error) {
+      setMessage("error", error instanceof Error ? error.message : "Repair request could not be submitted.");
+    } finally {
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit repair request";
+      }
+    }
+  });
+}
+
 function initNavigation() {
   decorateMobileMenu();
   initStoreSearch();
@@ -290,6 +365,7 @@ function initPage() {
   initFilters();
   initNavigation();
   initHomeBanner();
+  initBookingForm();
 }
 
 if (document.readyState === "loading") {

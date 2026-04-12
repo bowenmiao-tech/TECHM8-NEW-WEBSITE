@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book A Repair | TECHM8</title>
+  <meta name="description" content="Book a repair with TECHM8. Choose your device category, preferred store, describe the issue and leave your contact details for follow-up.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="promo-banner">
+    <div class="container promo-banner__inner">
+      <span>Send your repair request online and the nearest TECHM8 team will follow up with the next step.</span>
+      <a href="repairs.html">Explore repair services</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="TECHM8 home">
+        <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+      </a>
+      <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
+      <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="nav__menu" id="primary-menu">
+        <a href="index.html">Home</a>
+        <div class="nav__dropdown">
+          <button class="nav__dropdown-toggle" type="button" data-href="repairs.html" aria-expanded="false" onclick="return toggleMainDropdown(this, event)">Repairs</button>
+          <div class="nav__dropdown-menu">
+            <div class="store-switcher store-switcher--repairs">
+              <div class="store-switcher__top">
+                <strong>Repairs</strong>
+              </div>
+              <div class="store-switcher__grid store-switcher__grid--repairs">
+                <div class="nav__dropdown-group">
+                  <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Phones</button>
+                  <div class="nav__submenu-panel">
+                    <a href="repair-services/phones/apple.html">Apple</a>
+                    <a href="repair-services/phones/samsung.html">Samsung</a>
+                    <a href="repair-services/phones/oppo.html">Oppo</a>
+                    <a href="repair-services/phones/huawei.html">Huawei</a>
+                    <a href="repair-services/phones/xiaomi.html">Xiaomi</a>
+                    <a href="repair-services/phones/google.html">Google</a>
+                    <a href="repair-services/phones/oneplus.html">OnePlus</a>
+                    <a href="repair-services/phones/others.html">Others</a>
+                  </div>
+                </div>
+                <div class="nav__dropdown-group">
+                  <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Tablets</button>
+                  <div class="nav__submenu-panel">
+                    <a href="repair-services/tablets/apple.html">Apple</a>
+                    <a href="repair-services/tablets/samsung.html">Samsung</a>
+                    <a href="repair-services/tablets/other.html">Other Tablets</a>
+                  </div>
+                </div>
+                <div class="nav__dropdown-group">
+                  <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Computers</button>
+                  <div class="nav__submenu-panel">
+                    <a href="repair-services/computers/pc-tower.html">PC Tower</a>
+                    <a href="repair-services/computers/all-in-one.html">All in One</a>
+                    <a href="repair-services/computers/laptop.html">Laptop</a>
+                    <a href="repair-services/computers/small-pc.html">Small PC</a>
+                  </div>
+                </div>
+                <div class="nav__dropdown-group">
+                  <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Game Consoles</button>
+                  <div class="nav__submenu-panel">
+                    <a href="repair-services/consoles/sony.html">Sony</a>
+                    <a href="repair-services/consoles/xbox.html">Xbox</a>
+                    <a href="repair-services/consoles/nintendo.html">Nintendo</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="products.html">Products</a>
+        <div class="nav__dropdown nav__dropdown--stores">
+          <button class="nav__dropdown-toggle" type="button" data-href="stores.html" aria-expanded="false" onclick="return toggleMainDropdown(this, event)">Stores</button>
+          <div class="nav__dropdown-menu nav__dropdown-menu--stores">
+            <div class="store-switcher">
+              <div class="store-switcher__top">
+                <strong>Stores</strong>
+              </div>
+              <div class="store-switcher__grid">
+                <a class="store-switcher__link" href="stores/park-ridge.html">Park Ridge</a>
+                <a class="store-switcher__link" href="stores/fairfield.html">Fairfield</a>
+                <a class="store-switcher__link" href="stores/north-lakes.html">North Lakes</a>
+                <a class="store-switcher__link" href="stores/toowong.html">Toowong</a>
+                <a class="store-switcher__link" href="stores/brassall.html">Brassall</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="store-policy.html">Store Policy</a>
+        <a class="nav__shop-link" href="shop.html">Online Store</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero hero--service booking-hero">
+      <div class="container booking-hero__inner">
+        <div class="booking-hero__copy">
+          <p class="eyebrow">Repair Booking</p>
+          <h1>Send a repair request before you visit.</h1>
+          <p class="hero__lead">Choose the repair type, select the store, tell us the model and the fault, then leave your contact details. The team will review the request and contact you directly.</p>
+          <div class="booking-hero__points">
+            <span>Phones, tablets, computers and gaming consoles</span>
+            <span>Five store locations</span>
+            <span>Email confirmation after submission</span>
+          </div>
+        </div>
+        <div class="booking-hero__panel">
+          <strong>What to include</strong>
+          <ul>
+            <li>Exact model number if you know it</li>
+            <li>Clear fault description</li>
+            <li>Preferred store and callback method</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container booking-layout">
+        <div class="booking-card">
+          <div class="section-heading">
+            <p class="eyebrow">Booking Form</p>
+            <h2>Repair request details</h2>
+          </div>
+
+          <form class="booking-form" data-booking-form novalidate>
+            <div class="booking-form__grid">
+              <label class="booking-field">
+                <span>Repair category *</span>
+                <select name="repair_category" required>
+                  <option value="">Select category</option>
+                  <option value="phone">Phone</option>
+                  <option value="tablet">Tablet</option>
+                  <option value="computer">Computer</option>
+                  <option value="gaming_console">Gaming Console</option>
+                </select>
+              </label>
+
+              <label class="booking-field">
+                <span>Store *</span>
+                <select name="store_slug" required>
+                  <option value="">Select store</option>
+                  <option value="park-ridge">Park Ridge</option>
+                  <option value="fairfield">Fairfield</option>
+                  <option value="north-lakes">North Lakes</option>
+                  <option value="toowong">Toowong</option>
+                  <option value="brassall">Brassall</option>
+                </select>
+              </label>
+
+              <label class="booking-field">
+                <span>Brand</span>
+                <input type="text" name="brand" placeholder="Apple, Samsung, HP, Lenovo, Xbox...">
+              </label>
+
+              <label class="booking-field">
+                <span>Exact model *</span>
+                <input type="text" name="device_model" required placeholder="iPhone 13 Pro, iPad Air 5, Dell Inspiron, PS5...">
+              </label>
+
+              <label class="booking-field booking-field--full">
+                <span>Issue description *</span>
+                <textarea name="issue_description" rows="6" required placeholder="Describe the problem clearly. Example: screen cracked, battery drains fast, not charging, HDMI port damaged."></textarea>
+              </label>
+
+              <label class="booking-field">
+                <span>Preferred date</span>
+                <input type="date" name="preferred_date">
+              </label>
+
+              <label class="booking-field">
+                <span>Preferred time</span>
+                <input type="text" name="preferred_time" placeholder="Morning, after 3pm, lunch break...">
+              </label>
+
+              <label class="booking-field">
+                <span>Your name *</span>
+                <input type="text" name="customer_name" required placeholder="Full name">
+              </label>
+
+              <label class="booking-field">
+                <span>Phone *</span>
+                <input type="tel" name="phone" required placeholder="Best phone number">
+              </label>
+
+              <label class="booking-field">
+                <span>Email *</span>
+                <input type="email" name="email" required placeholder="Email for confirmation">
+              </label>
+
+              <label class="booking-field">
+                <span>Preferred contact method *</span>
+                <select name="preferred_contact_method" required>
+                  <option value="phone">Phone call</option>
+                  <option value="email">Email</option>
+                  <option value="sms">SMS</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="booking-checkbox">
+              <input type="checkbox" name="privacy_consent" value="yes" required>
+              <span>I agree that TECHM8 can contact me about this repair request and store the submitted details.</span>
+            </label>
+
+            <div class="booking-form__actions">
+              <button class="button button--primary" type="submit" data-booking-submit>Submit repair request</button>
+              <a class="button button--secondary" href="repairs.html">Back to repair categories</a>
+            </div>
+
+            <div class="booking-message" data-booking-message hidden></div>
+          </form>
+        </div>
+
+        <aside class="booking-sidebar">
+          <article class="booking-sidebar__card">
+            <h3>What happens next</h3>
+            <ol class="booking-sidebar__steps">
+              <li>Your request is saved in the booking database.</li>
+              <li>The selected store receives the booking details.</li>
+              <li>An email confirmation is sent to you.</li>
+              <li>The team contacts you to confirm the next step.</li>
+            </ol>
+          </article>
+
+          <article class="booking-sidebar__card">
+            <h3>Direct store pages</h3>
+            <div class="booking-sidebar__links">
+              <a href="stores/park-ridge.html">Park Ridge</a>
+              <a href="stores/fairfield.html">Fairfield</a>
+              <a href="stores/north-lakes.html">North Lakes</a>
+              <a href="stores/toowong.html">Toowong</a>
+              <a href="stores/brassall.html">Brassall</a>
+            </div>
+          </article>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer footer--rich">
+      <div class="footer-brand">
+        <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+        <p>TECHM8 handles repair requests for phones, tablets, computers, laptops and gaming consoles across five stores.</p>
+      </div>
+      <div>
+        <h4>Repairs</h4>
+        <a href="repair-services/phones/apple.html">Phone Repairs</a>
+        <a href="repair-services/tablets/apple.html">Tablet Repairs</a>
+        <a href="repair-services/computers/laptop.html">Laptop Repairs</a>
+        <a href="repair-services/consoles/xbox.html">Console Repairs</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="repairs.html">Repairs Overview</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="shop.html">Online Store</a>
+      </div>
+      <div>
+        <h4>Need Help?</h4>
+        <p>Choose your nearest store for repairs, product advice and walk-in support.</p>
+        <a href="stores.html">Find your nearest store</a>
+        <a href="repairs.html">View repair categories</a>
+      </div>
+    </div>
+    <div class="container footer footer--bottom">
+      <p>&copy; 2026 TECHM8. All rights reserved.</p>
+      <a href="store-policy.html">Repair Terms &amp; Conditions</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -124,7 +124,7 @@ if (pageData) {
             <h1>${pageData.title}</h1>
             <p class="hero__lead">${pageData.intro}</p>
             <div class="hero__actions">
-              <a class="button button--primary" href="${prefix}stores.html">Book via store</a>
+              <a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>
               <a class="button button--secondary" href="${prefix}repairs.html">Back to repairs</a>
             </div>
           </div>

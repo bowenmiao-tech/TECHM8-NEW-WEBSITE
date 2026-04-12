@@ -110,3 +110,27 @@ CREATE TABLE price_history (
   changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_price_history_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
+
+CREATE TABLE repair_bookings (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  booking_code VARCHAR(40) NOT NULL UNIQUE,
+  store_slug VARCHAR(120) NOT NULL,
+  repair_category ENUM('phone', 'computer', 'tablet', 'gaming_console') NOT NULL,
+  brand VARCHAR(120),
+  device_model VARCHAR(180) NOT NULL,
+  issue_description TEXT NOT NULL,
+  preferred_date DATE NULL,
+  preferred_time VARCHAR(60),
+  customer_name VARCHAR(180) NOT NULL,
+  phone VARCHAR(50) NOT NULL,
+  email VARCHAR(190) NOT NULL,
+  preferred_contact_method ENUM('phone', 'email', 'sms') NOT NULL DEFAULT 'phone',
+  status ENUM('new', 'contacted', 'in_progress', 'completed', 'cancelled') NOT NULL DEFAULT 'new',
+  admin_notes TEXT,
+  ip_address VARCHAR(64),
+  user_agent VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_repair_bookings_store_status (store_slug, status),
+  INDEX idx_repair_bookings_created_at (created_at)
+);
