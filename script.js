@@ -221,6 +221,12 @@ function initBookingForm() {
   const form = document.querySelector("[data-booking-form]");
   if (!(form instanceof HTMLFormElement)) return;
 
+  const supabaseAnonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
+  const bookingEndpoint =
+    window.TECHM8_CONFIG?.bookingEndpoint ||
+    "api/book-repair.php";
+  const isSupabaseEndpoint = /^https:\/\/.+\.supabase\.co\/functions\/v1\//.test(bookingEndpoint);
+
   const submitButton = form.querySelector("[data-booking-submit]");
   const messageBox = form.querySelector("[data-booking-message]");
   const storeField = form.elements.namedItem("store_slug");
@@ -308,13 +314,28 @@ function initBookingForm() {
     }
 
     try {
-      const response = await fetch("api/book-repair.php", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
-        body: new FormData(form),
-      });
+      const formData = new FormData(form);
+      const response = await fetch(
+        bookingEndpoint,
+        isSupabaseEndpoint
+          ? {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${supabaseAnonKey}`,
+                apikey: supabaseAnonKey,
+              },
+              body: JSON.stringify(Object.fromEntries(formData.entries())),
+            }
+          : {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+              },
+              body: formData,
+            }
+      );
 
       const raw = await response.text();
       let result;
