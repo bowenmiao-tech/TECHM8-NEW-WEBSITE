@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TECHM8 Online Store | Products and Accessories</title>
-  <meta name="description" content="TECHM8 online store page prepared for products, accessories and parts catalog integration.">
+  <title>TECHM8 Online Store | Gaming Controllers, Accessories and More</title>
+  <meta name="description" content="Browse the TECHM8 online store for controllers, accessories and retail products. Connected to the catalog database and ready for future POS use.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,8 +13,8 @@
 <body>
   <div class="promo-banner">
     <div class="container promo-banner__inner">
-      <span>Separate online store page ready for live products, accessories and parts catalog connection.</span>
-      <a href="products.html">Browse featured products</a>
+      <span>Database-connected online store page for products, pricing, stock and future POS-ready catalog management.</span>
+      <a href="products.html">View product categories</a>
     </div>
   </div>
 
@@ -103,34 +103,119 @@
     </div>
   </header>
 
-  <main class="inner-page">
-    <section class="container inner-page__hero">
-      <p class="eyebrow">Online store</p>
-      <h1>Shop products and accessories in a dedicated store area.</h1>
-      <p>This page is ready for the next stage where we connect live products, prices, images and stock from your backend database.</p>
+  <main class="storefront-page" data-storefront>
+    <section class="storefront-hero">
+      <div class="container storefront-hero__grid">
+        <div class="storefront-hero__content">
+          <p class="eyebrow">TECHM8 online store</p>
+          <h1>Shop a dedicated catalog page with live products, pricing and future POS-ready stock structure.</h1>
+          <p class="storefront-hero__lead">
+            This page is designed as a standalone store experience. It can read products from Supabase, display retail pricing,
+            images and categories, and keep backend-only fields ready for cost price, inventory and shelf location.
+          </p>
+          <div class="storefront-hero__actions">
+            <a class="button button--primary" href="#catalog">Browse catalog</a>
+            <a class="button button--ghost" href="stores.html">Visit a store</a>
+          </div>
+          <div class="storefront-hero__notes">
+            <span>Live category filters</span>
+            <span>Database-ready product cards</span>
+            <span>POS-compatible stock structure</span>
+          </div>
+        </div>
+
+        <div class="storefront-hero__panel">
+          <div class="storefront-hero__stat">
+            <span>Current launch batch</span>
+            <strong>5 PS5 controllers</strong>
+            <p>First products sourced from the current TECHM8 website catalog and prepared for database insert.</p>
+          </div>
+          <div class="storefront-hero__stat">
+            <span>Backend fields ready</span>
+            <strong>Cost, stock, location</strong>
+            <p>The database already supports cost price, total stock, and per-store shelf locations for later POS use.</p>
+          </div>
+          <div class="storefront-hero__stat">
+            <span>Catalog source</span>
+            <strong data-store-source>Checking database...</strong>
+            <p data-store-source-note>The page will read live product rows from Supabase when available.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="section section--tight">
-      <div class="container">
-        <div class="product-grid product-grid--simple">
-          <article class="product-card">
-            <span class="product-card__badge">Featured</span>
-            <h3>Phone Accessories</h3>
-            <p>Cases, cables, charging products, glass protection and everyday add-ons.</p>
-            <a href="products.html">See products page</a>
-          </article>
-          <article class="product-card">
-            <span class="product-card__badge">Workshop</span>
-            <h3>Replacement Parts</h3>
-            <p>Screens, batteries, charging ports and service-ready repair components.</p>
-            <a href="products.html">See products page</a>
-          </article>
-          <article class="product-card">
-            <span class="product-card__badge">Computer</span>
-            <h3>Computer Essentials</h3>
-            <p>Desktop accessories, laptop chargers, storage accessories and useful office tech.</p>
-            <a href="products.html">See products page</a>
-          </article>
+    <section class="section section--tight storefront-feature-strip">
+      <div class="container storefront-feature-strip__grid">
+        <article class="storefront-feature-card">
+          <span>Gaming essentials</span>
+          <h2>Controllers and accessories</h2>
+          <p>Start with popular console products, then expand into chargers, cables, mobile accessories and repair parts.</p>
+        </article>
+        <article class="storefront-feature-card">
+          <span>Simple rollout</span>
+          <h2>Clean catalog, not overbuilt</h2>
+          <p>The structure stays simple now, but the data model is already aligned for later POS, inventory and supplier workflows.</p>
+        </article>
+        <article class="storefront-feature-card">
+          <span>Store support</span>
+          <h2>Online to in-store flow</h2>
+          <p>Customers can browse products online, then continue into your physical store pages for purchase or support.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="catalog">
+      <div class="container storefront-layout">
+        <aside class="storefront-sidebar">
+          <div class="storefront-sidebar__panel">
+            <p class="eyebrow">Catalog</p>
+            <h2>Filter products</h2>
+            <p>Use category filters and search to move through the catalog quickly.</p>
+          </div>
+
+          <div class="storefront-sidebar__panel">
+            <h3>Categories</h3>
+            <div class="storefront-category-list" data-store-categories></div>
+          </div>
+
+          <div class="storefront-sidebar__panel">
+            <h3>Backend structure</h3>
+            <ul class="storefront-backend-list">
+              <li>Retail price and compare-at price</li>
+              <li>Cost price for internal margin control</li>
+              <li>Total stock quantity</li>
+              <li>Per-store inventory rows</li>
+              <li>Shelf or position code for POS lookup</li>
+            </ul>
+          </div>
+        </aside>
+
+        <div class="storefront-content">
+          <div class="storefront-toolbar">
+            <div>
+              <p class="eyebrow">Online catalog</p>
+              <h2>Products loaded for store display</h2>
+            </div>
+            <label class="storefront-search">
+              <span class="storefront-search__label">Search</span>
+              <input type="search" placeholder="Search by name, brand or model" data-store-search>
+            </label>
+          </div>
+
+          <div class="storefront-meta">
+            <p data-store-count>Loading products...</p>
+            <a href="products.html">View general products page</a>
+          </div>
+
+          <div class="storefront-grid" data-store-products>
+            <article class="storefront-card storefront-card--loading">
+              <div class="storefront-card__body">
+                <span class="storefront-card__pill">Loading</span>
+                <h3>Loading catalog...</h3>
+                <p>Please wait while the page checks the live product database.</p>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
     </section>
@@ -160,7 +245,7 @@
         <h4>Need Help?</h4>
         <p>Choose your nearest store for repairs, product advice and walk-in support.</p>
         <a href="stores.html">Find your nearest store</a>
-        <a href="repairs.html">View repair categories</a>
+        <a href="book-repair.html">Book a repair</a>
       </div>
     </div>
     <div class="container footer footer--bottom">
@@ -169,6 +254,7 @@
     </div>
   </footer>
 
+  <script src="site-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
