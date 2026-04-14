@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TECHM8 Product</title>
+  <meta name="description" content="TECHM8 product detail page.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="promo-banner">
+    <div class="container promo-banner__inner">
+      <span>TECHM8 product detail page powered by the online catalog.</span>
+      <a href="shop.html">Back to online store</a>
+    </div>
+  </div>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="TECHM8 home">
+        <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+      </a>
+      <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
+      <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="nav__menu" id="primary-menu">
+        <a href="index.html">Home</a>
+        <a href="repairs.html">Repairs</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="store-policy.html">Store Policy</a>
+        <a class="nav__shop-link" href="shop.html">Online Store</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="storefront-page storefront-page--detail" data-product-page>
+    <section class="section storefront-detail">
+      <div class="container">
+        <div class="storefront-breadcrumbs">
+          <a href="index.html">Home</a>
+          <span>/</span>
+          <a href="shop.html">Online Store</a>
+          <span>/</span>
+          <span data-product-breadcrumb>Product</span>
+        </div>
+        <div class="storefront-detail__layout">
+          <div class="storefront-detail__gallery">
+            <div class="storefront-detail__image-frame" data-product-image></div>
+          </div>
+          <div class="storefront-detail__summary">
+            <p class="eyebrow">Product detail</p>
+            <div class="storefront-detail__category" data-product-category></div>
+            <h1 data-product-title>Loading product...</h1>
+            <p class="storefront-detail__description" data-product-description>Checking the live product database.</p>
+            <div class="storefront-detail__price-block">
+              <span class="storefront-detail__compare" data-product-compare></span>
+              <strong data-product-price></strong>
+              <span class="storefront-detail__saving" data-product-saving></span>
+            </div>
+            <p class="storefront-detail__stock" data-product-stock></p>
+            <div class="storefront-detail__actions">
+              <a class="button button--primary" href="stores.html">Find in store</a>
+              <a class="button button--ghost" href="shop.html">Back to catalog</a>
+            </div>
+            <div class="storefront-detail__meta" data-product-meta></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-heading section-heading--split">
+          <div>
+            <p class="eyebrow">Related products</p>
+            <h2>More products from this category</h2>
+          </div>
+          <a href="shop.html">View full catalog</a>
+        </div>
+        <div class="storefront-grid storefront-grid--dense" data-product-related></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer footer--bottom">
+      <p>&copy; 2026 TECHM8. All rights reserved.</p>
+      <a href="store-policy.html">Repair Terms & Conditions</a>
+    </div>
+  </footer>
+
+  <script src="site-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

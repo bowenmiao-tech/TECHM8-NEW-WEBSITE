@@ -265,9 +265,8 @@ function initStorefront() {
       short_description: "Official PS5 DualSense controller in Sterling Silver finish.",
       retail_price: 115,
       compare_at_price: 124,
-      image_url: "https://static.wixstatic.com/media/ff60a8_44b8629acec14e089b265c9c134f3dcd~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
-      supplier_image_url: "https://static.wixstatic.com/media/ff60a8_44b8629acec14e089b265c9c134f3dcd~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
-      supplier_product_url: "https://www.techm8australia.com/product-page/dualsense-wireless-controller-sterling-silver-playstation-5",
+      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
+      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -286,9 +285,8 @@ function initStorefront() {
       short_description: "Official PS5 DualSense controller in Cosmic Red finish.",
       retail_price: 109,
       compare_at_price: null,
-      image_url: "https://static.wixstatic.com/media/ff60a8_3d6c59b7f9844dce9cddba30391438aa~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
-      supplier_image_url: "https://static.wixstatic.com/media/ff60a8_3d6c59b7f9844dce9cddba30391438aa~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
-      supplier_product_url: "https://www.techm8australia.com/product-page/dualsense-wireless-controller-cosmic-red-playstation-5",
+      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
+      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -307,9 +305,8 @@ function initStorefront() {
       short_description: "Official PS5 DualSense controller in Gray Camouflage finish.",
       retail_price: 109,
       compare_at_price: null,
-      image_url: "https://static.wixstatic.com/media/ff60a8_e970ca83b1cb486aaae98a2172e07cbc~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
-      supplier_image_url: "https://static.wixstatic.com/media/ff60a8_e970ca83b1cb486aaae98a2172e07cbc~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
-      supplier_product_url: "https://www.techm8australia.com/product-page/dualsense-wireless-controller-gray-camouflage",
+      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
+      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -328,9 +325,8 @@ function initStorefront() {
       short_description: "Official PS5 DualSense controller in Black finish.",
       retail_price: 109,
       compare_at_price: null,
-      image_url: "https://static.wixstatic.com/media/ff60a8_8b5310c0258a420ea7f0e18e943a501d~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
-      supplier_image_url: "https://static.wixstatic.com/media/ff60a8_8b5310c0258a420ea7f0e18e943a501d~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
-      supplier_product_url: "https://www.techm8australia.com/product-page/copy-of-dualsense-wireless-controller-playstation-5-black",
+      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
+      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -349,9 +345,8 @@ function initStorefront() {
       short_description: "Official PS5 DualSense controller in White finish.",
       retail_price: 109,
       compare_at_price: null,
-      image_url: "https://static.wixstatic.com/media/ff60a8_997f0a93bc8e4b9a907efb21027b37f0~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
-      supplier_image_url: "https://static.wixstatic.com/media/ff60a8_997f0a93bc8e4b9a907efb21027b37f0~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
-      supplier_product_url: "https://www.techm8australia.com/product-page/dualsense-wireless-controller-playstation-5-white",
+      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
+      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -485,19 +480,25 @@ function initStorefront() {
           Number(product.stock_quantity) > 0
             ? `${escapeHtml(String(product.stock_quantity))} in network stock`
             : "Stock to be updated";
-        const imageMarkup = product.display_image
+      const imageMarkup = product.display_image
           ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(product.name)}" loading="lazy">`
           : `<div class="storefront-card__image storefront-card__image--placeholder" aria-hidden="true">TECHM8</div>`;
+        const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
+        const categoryUrl = `category.html?slug=${encodeURIComponent(product.category_slug)}`;
 
         return `
           <article class="storefront-card">
-            <div class="storefront-card__media">${imageMarkup}</div>
+            <a class="storefront-card__media-link" href="${detailUrl}">
+              <div class="storefront-card__media">${imageMarkup}</div>
+            </a>
             <div class="storefront-card__body">
               <div class="storefront-card__top">
-                <span class="storefront-card__pill">${escapeHtml(product.category_name)}</span>
+                <a class="storefront-card__pill storefront-card__pill--link" href="${categoryUrl}">${escapeHtml(product.category_name)}</a>
                 ${product.is_featured ? '<span class="storefront-card__tag">Featured</span>' : ""}
               </div>
-              <h3>${escapeHtml(product.name)}</h3>
+              <a class="storefront-card__title-link" href="${detailUrl}">
+                <h3>${escapeHtml(product.name)}</h3>
+              </a>
               <p>${escapeHtml(product.short_description || "Retail catalog product.")}</p>
               <div class="storefront-card__price-row">
                 ${comparePrice}
@@ -510,6 +511,7 @@ function initStorefront() {
                 <span>${escapeHtml(stockLabel)}</span>
               </div>
               <div class="storefront-card__actions">
+                <a href="${detailUrl}">View details</a>
                 <a href="stores.html">Find in store</a>
               </div>
             </div>
@@ -588,6 +590,354 @@ function initStorefront() {
   }
 
   loadStorefrontData();
+}
+
+function getFallbackCatalogProducts() {
+  return [
+    {
+      id: "sample-1",
+      sku: "TM8-PS5-DS-STERLING-SILVER",
+      slug: "dualsense-wireless-controller-sterling-silver-playstation-5",
+      name: "DualSense Wireless Controller - Sterling Silver - PlayStation 5",
+      brand: "Sony",
+      model: "DualSense Wireless Controller",
+      short_description: "Official PS5 DualSense controller in Sterling Silver finish.",
+      description: "Official PlayStation 5 DualSense wireless controller in Sterling Silver finish.",
+      retail_price: 115,
+      compare_at_price: 124,
+      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
+      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
+      stock_quantity: 0,
+      is_featured: true,
+      condition_label: "New",
+      compatibility: "PlayStation 5",
+      category_id: "sample-ps5",
+      category_name: "PS5 Controllers",
+      category_slug: "ps5-controllers",
+      category_description: "PlayStation 5 wireless controller range.",
+    },
+    {
+      id: "sample-2",
+      sku: "TM8-PS5-DS-COSMIC-RED",
+      slug: "dualsense-wireless-controller-cosmic-red-playstation-5",
+      name: "DualSense Wireless Controller - Cosmic Red - PlayStation 5",
+      brand: "Sony",
+      model: "DualSense Wireless Controller",
+      short_description: "Official PS5 DualSense controller in Cosmic Red finish.",
+      description: "Official PlayStation 5 DualSense wireless controller in Cosmic Red finish.",
+      retail_price: 109,
+      compare_at_price: 129,
+      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
+      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
+      stock_quantity: 0,
+      is_featured: true,
+      condition_label: "New",
+      compatibility: "PlayStation 5",
+      category_id: "sample-ps5",
+      category_name: "PS5 Controllers",
+      category_slug: "ps5-controllers",
+      category_description: "PlayStation 5 wireless controller range.",
+    },
+    {
+      id: "sample-3",
+      sku: "TM8-PS5-DS-GRAY-CAMO",
+      slug: "dualsense-wireless-controller-gray-camouflage",
+      name: "DualSense Wireless Controller - Gray Camouflage",
+      brand: "Sony",
+      model: "DualSense Wireless Controller",
+      short_description: "Official PS5 DualSense controller in Gray Camouflage finish.",
+      description: "Official PlayStation 5 DualSense wireless controller in Gray Camouflage finish.",
+      retail_price: 109,
+      compare_at_price: 129,
+      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
+      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
+      stock_quantity: 0,
+      is_featured: true,
+      condition_label: "New",
+      compatibility: "PlayStation 5",
+      category_id: "sample-ps5",
+      category_name: "PS5 Controllers",
+      category_slug: "ps5-controllers",
+      category_description: "PlayStation 5 wireless controller range.",
+    },
+    {
+      id: "sample-4",
+      sku: "TM8-PS5-DS-BLACK",
+      slug: "copy-of-dualsense-wireless-controller-playstation-5-black",
+      name: "DualSense Wireless Controller - PlayStation 5 - Black",
+      brand: "Sony",
+      model: "DualSense Wireless Controller",
+      short_description: "Official PS5 DualSense controller in Black finish.",
+      description: "Official PlayStation 5 DualSense wireless controller in Black finish.",
+      retail_price: 109,
+      compare_at_price: 129,
+      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
+      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
+      stock_quantity: 0,
+      is_featured: true,
+      condition_label: "New",
+      compatibility: "PlayStation 5",
+      category_id: "sample-ps5",
+      category_name: "PS5 Controllers",
+      category_slug: "ps5-controllers",
+      category_description: "PlayStation 5 wireless controller range.",
+    },
+    {
+      id: "sample-5",
+      sku: "TM8-PS5-DS-WHITE",
+      slug: "dualsense-wireless-controller-playstation-5-white",
+      name: "DualSense Wireless Controller - PlayStation 5 - White",
+      brand: "Sony",
+      model: "DualSense Wireless Controller",
+      short_description: "Official PS5 DualSense controller in White finish.",
+      description: "Official PlayStation 5 DualSense wireless controller in White finish.",
+      retail_price: 109,
+      compare_at_price: 129,
+      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
+      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
+      stock_quantity: 0,
+      is_featured: true,
+      condition_label: "New",
+      compatibility: "PlayStation 5",
+      category_id: "sample-ps5",
+      category_name: "PS5 Controllers",
+      category_slug: "ps5-controllers",
+      category_description: "PlayStation 5 wireless controller range.",
+    },
+  ];
+}
+
+async function loadSharedCatalogData() {
+  const { supabaseUrl, supabaseAnonKey } = window.TECHM8_CONFIG || {};
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    const products = getFallbackCatalogProducts();
+    return {
+      products,
+      categories: [
+        { slug: "ps5-controllers", name: "PS5 Controllers", description: "PlayStation 5 wireless controller range." },
+      ],
+    };
+  }
+
+  try {
+    const headers = {
+      Accept: "application/json",
+      apikey: supabaseAnonKey,
+      Authorization: `Bearer ${supabaseAnonKey}`,
+    };
+    const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
+    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,supplier_image_url,stock_quantity,is_featured,condition_label,compatibility,category_id&is_visible=eq.true&order=created_at.desc`;
+    const [categoriesResponse, productsResponse] = await Promise.all([
+      fetch(categoriesUrl, { headers }),
+      fetch(productsUrl, { headers }),
+    ]);
+
+    if (!categoriesResponse.ok || !productsResponse.ok) {
+      throw new Error("Catalog request failed");
+    }
+
+    const categories = await categoriesResponse.json();
+    const products = await productsResponse.json();
+    const categoriesMap = new Map(categories.map((category) => [category.id, category]));
+    const normalizedProducts = products.map((product) => {
+      const category = categoriesMap.get(product.category_id) || null;
+      const retailPrice = Number(product.retail_price);
+      const compareAtPrice = Number(product.compare_at_price);
+      return {
+        ...product,
+        retail_price: retailPrice,
+        compare_at_price:
+          Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice
+            ? compareAtPrice
+            : Math.ceil(retailPrice * 1.18),
+        display_image: product.image_url || product.supplier_image_url || "",
+        category_slug: category?.slug || "other-products",
+        category_name: category?.name || "Other Products",
+        category_description: category?.description || "",
+      };
+    });
+
+    return {
+      products: normalizedProducts.length ? normalizedProducts : getFallbackCatalogProducts(),
+      categories: categories.length
+        ? categories
+        : [{ slug: "ps5-controllers", name: "PS5 Controllers", description: "PlayStation 5 wireless controller range." }],
+    };
+  } catch (error) {
+    const products = getFallbackCatalogProducts();
+    return {
+      products,
+      categories: [{ slug: "ps5-controllers", name: "PS5 Controllers", description: "PlayStation 5 wireless controller range." }],
+    };
+  }
+}
+
+function createCatalogCard(product) {
+  const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
+  const categoryUrl = `category.html?slug=${encodeURIComponent(product.category_slug)}`;
+  const comparePrice =
+    Number.isFinite(Number(product.compare_at_price)) && Number(product.compare_at_price) > Number(product.retail_price)
+      ? `<span class="storefront-card__compare">${escapeHtml(formatMoney(product.compare_at_price))}</span>`
+      : "";
+  const savingsAmount =
+    Number.isFinite(Number(product.compare_at_price)) && Number(product.compare_at_price) > Number(product.retail_price)
+      ? Number(product.compare_at_price) - Number(product.retail_price)
+      : 0;
+  const savingsPill =
+    savingsAmount > 0
+      ? `<span class="storefront-card__saving">Save ${escapeHtml(formatMoney(savingsAmount))}</span>`
+      : "";
+  const stockLabel =
+    Number(product.stock_quantity) > 0
+      ? `${escapeHtml(String(product.stock_quantity))} in network stock`
+      : "Stock to be updated";
+  const imageMarkup = product.display_image
+    ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(product.name)}" loading="lazy">`
+    : `<div class="storefront-card__image storefront-card__image--placeholder" aria-hidden="true">TECHM8</div>`;
+
+  return `
+    <article class="storefront-card">
+      <a class="storefront-card__media-link" href="${detailUrl}">
+        <div class="storefront-card__media">${imageMarkup}</div>
+      </a>
+      <div class="storefront-card__body">
+        <div class="storefront-card__top">
+          <a class="storefront-card__pill storefront-card__pill--link" href="${categoryUrl}">${escapeHtml(product.category_name)}</a>
+          ${product.is_featured ? '<span class="storefront-card__tag">Featured</span>' : ""}
+        </div>
+        <a class="storefront-card__title-link" href="${detailUrl}">
+          <h3>${escapeHtml(product.name)}</h3>
+        </a>
+        <p>${escapeHtml(product.short_description || "Retail catalog product.")}</p>
+        <div class="storefront-card__price-row">
+          ${comparePrice}
+          <strong>${escapeHtml(formatMoney(product.retail_price))}</strong>
+          ${savingsPill}
+        </div>
+        <div class="storefront-card__meta">
+          <span>${escapeHtml(product.brand || "TECHM8")}</span>
+          <span>${escapeHtml(product.compatibility || "Store product")}</span>
+          <span>${escapeHtml(stockLabel)}</span>
+        </div>
+        <div class="storefront-card__actions">
+          <a href="${detailUrl}">View details</a>
+          <a href="stores.html">Find in store</a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function initCategoryPage() {
+  const root = document.querySelector("[data-category-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const titleTarget = root.querySelector("[data-category-title]");
+  const descriptionTarget = root.querySelector("[data-category-description]");
+  const countTarget = root.querySelector("[data-category-count]");
+  const productsTarget = root.querySelector("[data-category-products]");
+  const linksTarget = root.querySelector("[data-category-links]");
+  const searchField = root.querySelector("[data-category-search]");
+  const breadcrumbTarget = root.querySelector("[data-category-breadcrumb]");
+  if (!(productsTarget instanceof HTMLElement)) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get("slug") || "";
+
+  loadSharedCatalogData().then(({ products, categories }) => {
+    const category = categories.find((item) => item.slug === slug);
+
+    if (!category) {
+      productsTarget.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing category</span><h3>Category not found</h3><p>Return to the online store and choose another category.</p><div class="storefront-card__actions"><a href="shop.html">Back to online store</a></div></div></article>`;
+      return;
+    }
+
+    if (titleTarget instanceof HTMLElement) titleTarget.textContent = category.name;
+    if (descriptionTarget instanceof HTMLElement) descriptionTarget.textContent = category.description || `Browse all products in ${category.name}.`;
+    if (breadcrumbTarget instanceof HTMLElement) breadcrumbTarget.textContent = category.name;
+    if (linksTarget instanceof HTMLElement) {
+      linksTarget.innerHTML = categories
+        .map((item) => `<a class="storefront-category-link ${item.slug === slug ? "is-active" : ""}" href="category.html?slug=${encodeURIComponent(item.slug)}">${escapeHtml(item.name)}</a>`)
+        .join("");
+    }
+
+    const render = () => {
+      const query = searchField instanceof HTMLInputElement ? searchField.value.trim().toLowerCase() : "";
+      const visibleProducts = products.filter((product) => {
+        const haystack = [product.name, product.brand, product.model, product.short_description].join(" ").toLowerCase();
+        return product.category_slug === slug && (!query || haystack.includes(query));
+      });
+
+      if (countTarget instanceof HTMLElement) {
+        countTarget.textContent = `${visibleProducts.length} product${visibleProducts.length === 1 ? "" : "s"}`;
+      }
+
+      productsTarget.innerHTML = visibleProducts.length
+        ? visibleProducts.map((product) => createCatalogCard(product)).join("")
+        : `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">No results</span><h3>No products matched this search</h3><p>Try another keyword or return to the full online store.</p></div></article>`;
+    };
+
+    if (searchField instanceof HTMLInputElement) {
+      searchField.addEventListener("input", render);
+    }
+
+    render();
+  });
+}
+
+function initProductDetailPage() {
+  const root = document.querySelector("[data-product-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get("slug") || "";
+
+  loadSharedCatalogData().then(({ products }) => {
+    const product = products.find((item) => item.slug === slug);
+    const titleTarget = root.querySelector("[data-product-title]");
+    const categoryTarget = root.querySelector("[data-product-category]");
+    const descriptionTarget = root.querySelector("[data-product-description]");
+    const imageTarget = root.querySelector("[data-product-image]");
+    const priceTarget = root.querySelector("[data-product-price]");
+    const compareTarget = root.querySelector("[data-product-compare]");
+    const savingsTarget = root.querySelector("[data-product-saving]");
+    const stockTarget = root.querySelector("[data-product-stock]");
+    const metaTarget = root.querySelector("[data-product-meta]");
+    const breadcrumbTarget = root.querySelector("[data-product-breadcrumb]");
+    const relatedTarget = root.querySelector("[data-product-related]");
+
+    if (!product || !(titleTarget instanceof HTMLElement) || !(relatedTarget instanceof HTMLElement)) {
+      if (relatedTarget instanceof HTMLElement) {
+        relatedTarget.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing product</span><h3>Product not found</h3><p>Return to the online store and select another item.</p></div></article>`;
+      }
+      return;
+    }
+
+    document.title = `${product.name} | TECHM8 Online Store`;
+    titleTarget.textContent = product.name;
+    if (categoryTarget instanceof HTMLElement) categoryTarget.innerHTML = `<a href="category.html?slug=${encodeURIComponent(product.category_slug)}">${escapeHtml(product.category_name)}</a>`;
+    if (descriptionTarget instanceof HTMLElement) descriptionTarget.textContent = product.description || product.short_description || "";
+    if (imageTarget instanceof HTMLElement) imageTarget.innerHTML = `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(product.name)}">`;
+    if (priceTarget instanceof HTMLElement) priceTarget.textContent = formatMoney(product.retail_price);
+    if (compareTarget instanceof HTMLElement) compareTarget.textContent = formatMoney(product.compare_at_price);
+    if (savingsTarget instanceof HTMLElement) savingsTarget.textContent = `Save ${formatMoney(Number(product.compare_at_price) - Number(product.retail_price))}`;
+    if (stockTarget instanceof HTMLElement) stockTarget.textContent = Number(product.stock_quantity) > 0 ? `${product.stock_quantity} in network stock` : "Stock to be updated";
+    if (breadcrumbTarget instanceof HTMLElement) breadcrumbTarget.textContent = product.name;
+    if (metaTarget instanceof HTMLElement) {
+      metaTarget.innerHTML = `
+        <div class="storefront-detail__meta-item"><span>Brand</span><strong>${escapeHtml(product.brand || "TECHM8")}</strong></div>
+        <div class="storefront-detail__meta-item"><span>Model</span><strong>${escapeHtml(product.model || "Store product")}</strong></div>
+        <div class="storefront-detail__meta-item"><span>Category</span><strong>${escapeHtml(product.category_name)}</strong></div>
+        <div class="storefront-detail__meta-item"><span>Compatibility</span><strong>${escapeHtml(product.compatibility || "General use")}</strong></div>
+      `;
+    }
+
+    const relatedProducts = products.filter((item) => item.category_slug === product.category_slug && item.slug !== product.slug).slice(0, 4);
+    relatedTarget.innerHTML = relatedProducts.length
+      ? relatedProducts.map((item) => createCatalogCard(item)).join("")
+      : `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">No related items</span><h3>No more products in this category yet</h3><p>More items can be added from the database later.</p></div></article>`;
+  });
 }
 
 function initBookingForm() {
@@ -827,6 +1177,8 @@ function initPage() {
   initNavigation();
   initHomeBanner();
   initStorefront();
+  initCategoryPage();
+  initProductDetailPage();
   initBookingForm();
 }
 

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TECHM8 Category</title>
+  <meta name="description" content="TECHM8 online store category page.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="promo-banner">
+    <div class="container promo-banner__inner">
+      <span>TECHM8 online store categories and live product listings.</span>
+      <a href="shop.html">Back to online store</a>
+    </div>
+  </div>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="TECHM8 home">
+        <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+      </a>
+      <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
+      <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="nav__menu" id="primary-menu">
+        <a href="index.html">Home</a>
+        <a href="repairs.html">Repairs</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="store-policy.html">Store Policy</a>
+        <a class="nav__shop-link" href="shop.html">Online Store</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="storefront-page storefront-page--category" data-category-page>
+    <section class="section storefront-category-hero">
+      <div class="container">
+        <div class="storefront-breadcrumbs">
+          <a href="index.html">Home</a>
+          <span>/</span>
+          <a href="shop.html">Online Store</a>
+          <span>/</span>
+          <span data-category-breadcrumb>Category</span>
+        </div>
+        <p class="eyebrow">Category page</p>
+        <h1 data-category-title>Loading category...</h1>
+        <p data-category-description>Checking the live product database.</p>
+        <div class="storefront-category-links" data-category-links></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container storefront-category-toolbar">
+        <p data-category-count>Loading products...</p>
+        <label class="storefront-search storefront-search--inline">
+          <span class="storefront-search__label">Search this category</span>
+          <input type="search" placeholder="Search products in this category" data-category-search>
+        </label>
+      </div>
+      <div class="container storefront-grid storefront-grid--dense" data-category-products></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer footer--bottom">
+      <p>&copy; 2026 TECHM8. All rights reserved.</p>
+      <a href="store-policy.html">Repair Terms & Conditions</a>
+    </div>
+  </footer>
+
+  <script src="site-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
