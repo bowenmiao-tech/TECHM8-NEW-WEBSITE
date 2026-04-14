@@ -386,11 +386,21 @@ function initStorefront() {
 
   const normalizeProduct = (product, categoriesMap) => {
     const category = categoriesMap.get(product.category_id) || null;
+    const retailPrice = Number(product.retail_price);
+    const compareAtPrice = Number(product.compare_at_price);
+    const hasValidComparePrice = Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
+    const fallbackComparePrice =
+      Number.isFinite(retailPrice) && retailPrice > 0
+        ? Math.ceil(retailPrice * 1.18)
+        : null;
+
     return {
       ...product,
       category_name: category?.name || product.category_name || "Other Products",
       category_slug: category?.slug || product.category_slug || "other-products",
       display_image: product.image_url || product.supplier_image_url || "",
+      retail_price: retailPrice,
+      compare_at_price: hasValidComparePrice ? compareAtPrice : fallbackComparePrice,
     };
   };
 
@@ -460,10 +470,17 @@ function initStorefront() {
 
     productTarget.innerHTML = visibleProducts
       .map((product) => {
-        const comparePrice =
-          Number.isFinite(Number(product.compare_at_price)) && Number(product.compare_at_price) > Number(product.retail_price)
-            ? `<span class="storefront-card__compare">${escapeHtml(formatMoney(product.compare_at_price))}</span>`
-            : "";
+        const hasComparePrice =
+          Number.isFinite(Number(product.compare_at_price)) && Number(product.compare_at_price) > Number(product.retail_price);
+        const comparePrice = hasComparePrice
+          ? `<span class="storefront-card__compare">${escapeHtml(formatMoney(product.compare_at_price))}</span>`
+          : "";
+        const savingsAmount = hasComparePrice
+          ? Number(product.compare_at_price) - Number(product.retail_price)
+          : 0;
+        const savingsPill = hasComparePrice
+          ? `<span class="storefront-card__saving">Save ${escapeHtml(formatMoney(savingsAmount))}</span>`
+          : "";
         const stockLabel =
           Number(product.stock_quantity) > 0
             ? `${escapeHtml(String(product.stock_quantity))} in network stock`
@@ -483,8 +500,9 @@ function initStorefront() {
               <h3>${escapeHtml(product.name)}</h3>
               <p>${escapeHtml(product.short_description || "Retail catalog product.")}</p>
               <div class="storefront-card__price-row">
-                <strong>${escapeHtml(formatMoney(product.retail_price))}</strong>
                 ${comparePrice}
+                <strong>${escapeHtml(formatMoney(product.retail_price))}</strong>
+                ${savingsPill}
               </div>
               <div class="storefront-card__meta">
                 <span>${escapeHtml(product.brand || "TECHM8")}</span>
@@ -493,11 +511,6 @@ function initStorefront() {
               </div>
               <div class="storefront-card__actions">
                 <a href="stores.html">Find in store</a>
-                ${
-                  product.supplier_product_url
-                    ? `<a href="${escapeHtml(product.supplier_product_url)}" target="_blank" rel="noreferrer">View source item</a>`
-                    : `<a href="products.html">More details</a>`
-                }
               </div>
             </div>
           </article>

@@ -1602,15 +1602,6 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   transform: translateY(-1px);
 }
 
-.storefront-backend-list {
-  margin: 0;
-  padding-left: 1.15rem;
-  color: var(--muted);
-  display: grid;
-  gap: 0.55rem;
-  line-height: 1.55;
-}
-
 .storefront-content {
   display: grid;
   gap: 1rem;
@@ -1725,22 +1716,39 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
 .storefront-card__price-row {
   display: flex;
-  align-items: end;
+  align-items: center;
   gap: 0.65rem;
   flex-wrap: wrap;
 }
 
 .storefront-card__price-row strong {
   font-family: "Space Grotesk", sans-serif;
-  font-size: 1.65rem;
+  font-size: 1.95rem;
   line-height: 1;
   color: var(--accent);
+  order: 2;
 }
 
 .storefront-card__compare {
-  color: var(--muted);
+  color: #8ca5aa;
   text-decoration: line-through;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1rem;
+  order: 1;
+}
+
+.storefront-card__saving {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.9rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 92, 92, 0.12);
+  color: #d64545;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  order: 3;
 }
 
 .storefront-card__meta {
@@ -1764,12 +1772,22 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 .storefront-card__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .storefront-card__actions a {
   color: var(--brand-dark);
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.6rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  background: rgba(22, 200, 186, 0.12);
+}
+
+.storefront-card__actions a:hover {
+  background: rgba(22, 200, 186, 0.18);
 }
 
 .storefront-card--loading,
