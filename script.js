@@ -239,6 +239,115 @@ function formatMoney(value) {
   }).format(amount);
 }
 
+const CART_STORAGE_KEY = "techm8_cart_v1";
+const LOCAL_ORDER_STORAGE_KEY = "techm8_orders_v1";
+
+function loadCart() {
+  try {
+    const raw = window.localStorage.getItem(CART_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveCart(items) {
+  window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+  window.dispatchEvent(new CustomEvent("techm8:cart-updated", { detail: { items } }));
+}
+
+function getCartCount(items = loadCart()) {
+  return items.reduce((total, item) => total + Math.max(0, Number(item.qty) || 0), 0);
+}
+
+function getCartSubtotal(items = loadCart()) {
+  return items.reduce((total, item) => total + (Number(item.price) || 0) * (Number(item.qty) || 0), 0);
+}
+
+function updateCartIndicators(items = loadCart()) {
+  const count = getCartCount(items);
+  document.querySelectorAll("[data-cart-count]").forEach((target) => {
+    target.textContent = String(count);
+  });
+}
+
+function normaliseCartItem(product, quantity = 1) {
+  const price = Number(product.retail_price) || 0;
+  const compareAtPrice = Number(product.compare_at_price) || 0;
+  return {
+    product_id: product.id,
+    slug: product.slug,
+    sku: product.sku || "",
+    name: product.name,
+    image_url: product.display_image || product.image_url || "",
+    brand: product.brand || "TECHM8",
+    category_name: product.category_name || "Store product",
+    category_slug: product.category_slug || "other-products",
+    compatibility: product.compatibility || "",
+    short_description: product.short_description || "",
+    price,
+    compare_at_price: compareAtPrice > price ? compareAtPrice : null,
+    qty: Math.max(1, Number(quantity) || 1),
+  };
+}
+
+function addItemToCart(product, quantity = 1) {
+  const items = loadCart();
+  const existing = items.find((item) => item.slug === product.slug);
+
+  if (existing) {
+    existing.qty = Math.max(1, Number(existing.qty) || 1) + Math.max(1, Number(quantity) || 1);
+  } else {
+    items.push(normaliseCartItem(product, quantity));
+  }
+
+  saveCart(items);
+  updateCartIndicators(items);
+  return items;
+}
+
+function updateCartItemQuantity(slug, quantity) {
+  const items = loadCart()
+    .map((item) => (item.slug === slug ? { ...item, qty: Math.max(1, Number(quantity) || 1) } : item));
+  saveCart(items);
+  updateCartIndicators(items);
+  return items;
+}
+
+function removeCartItem(slug) {
+  const items = loadCart().filter((item) => item.slug !== slug);
+  saveCart(items);
+  updateCartIndicators(items);
+  return items;
+}
+
+function clearCart() {
+  saveCart([]);
+  updateCartIndicators([]);
+}
+
+function makeOrderCode() {
+  const stamp = new Date().toISOString().replace(/[-:TZ.]/g, "").slice(0, 12);
+  const suffix = Math.random().toString(36).slice(2, 6).toUpperCase();
+  return `TM8-${stamp}-${suffix}`;
+}
+
+function saveLocalOrder(payload) {
+  const orders = (() => {
+    try {
+      const raw = window.localStorage.getItem(LOCAL_ORDER_STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      return [];
+    }
+  })();
+
+  orders.unshift(payload);
+  window.localStorage.setItem(LOCAL_ORDER_STORAGE_KEY, JSON.stringify(orders.slice(0, 30)));
+}
+
 function initStorefront() {
   const root = document.querySelector("[data-storefront]");
   if (!(root instanceof HTMLElement)) return;
@@ -364,6 +473,8 @@ function initStorefront() {
     query: "",
   };
 
+  bindCartButtons(productTarget, () => state.products);
+
   const deriveCategories = (products) => {
     const map = new Map();
     products.forEach((product) => {
@@ -393,7 +504,7 @@ function initStorefront() {
       ...product,
       category_name: category?.name || product.category_name || "Other Products",
       category_slug: category?.slug || product.category_slug || "other-products",
-      display_image: product.image_url || product.supplier_image_url || "",
+      display_image: product.image_url || "",
       retail_price: retailPrice,
       compare_at_price: hasValidComparePrice ? compareAtPrice : fallbackComparePrice,
     };
@@ -463,62 +574,7 @@ function initStorefront() {
       return;
     }
 
-    productTarget.innerHTML = visibleProducts
-      .map((product) => {
-        const hasComparePrice =
-          Number.isFinite(Number(product.compare_at_price)) && Number(product.compare_at_price) > Number(product.retail_price);
-        const comparePrice = hasComparePrice
-          ? `<span class="storefront-card__compare">${escapeHtml(formatMoney(product.compare_at_price))}</span>`
-          : "";
-        const savingsAmount = hasComparePrice
-          ? Number(product.compare_at_price) - Number(product.retail_price)
-          : 0;
-        const savingsPill = hasComparePrice
-          ? `<span class="storefront-card__saving">Save ${escapeHtml(formatMoney(savingsAmount))}</span>`
-          : "";
-        const stockLabel =
-          Number(product.stock_quantity) > 0
-            ? `${escapeHtml(String(product.stock_quantity))} in network stock`
-            : "Stock to be updated";
-      const imageMarkup = product.display_image
-          ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(product.name)}" loading="lazy">`
-          : `<div class="storefront-card__image storefront-card__image--placeholder" aria-hidden="true">TECHM8</div>`;
-        const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
-        const categoryUrl = `category.html?slug=${encodeURIComponent(product.category_slug)}`;
-
-        return `
-          <article class="storefront-card">
-            <a class="storefront-card__media-link" href="${detailUrl}">
-              <div class="storefront-card__media">${imageMarkup}</div>
-            </a>
-            <div class="storefront-card__body">
-              <div class="storefront-card__top">
-                <a class="storefront-card__pill storefront-card__pill--link" href="${categoryUrl}">${escapeHtml(product.category_name)}</a>
-                ${product.is_featured ? '<span class="storefront-card__tag">Featured</span>' : ""}
-              </div>
-              <a class="storefront-card__title-link" href="${detailUrl}">
-                <h3>${escapeHtml(product.name)}</h3>
-              </a>
-              <p>${escapeHtml(product.short_description || "Retail catalog product.")}</p>
-              <div class="storefront-card__price-row">
-                ${comparePrice}
-                <strong>${escapeHtml(formatMoney(product.retail_price))}</strong>
-                ${savingsPill}
-              </div>
-              <div class="storefront-card__meta">
-                <span>${escapeHtml(product.brand || "TECHM8")}</span>
-                <span>${escapeHtml(product.compatibility || "Store product")}</span>
-                <span>${escapeHtml(stockLabel)}</span>
-              </div>
-              <div class="storefront-card__actions">
-                <a href="${detailUrl}">View details</a>
-                <a href="stores.html">Find in store</a>
-              </div>
-            </div>
-          </article>
-        `;
-      })
-      .join("");
+    productTarget.innerHTML = visibleProducts.map((product) => createCatalogCard(product)).join("");
   };
 
   const loadStorefrontData = async () => {
@@ -541,7 +597,7 @@ function initStorefront() {
       };
 
       const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,sort_order&order=sort_order.asc`;
-      const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,retail_price,compare_at_price,image_url,supplier_image_url,supplier_product_url,stock_quantity,is_featured,condition_label,compatibility,category_id&is_visible=eq.true&order=created_at.desc`;
+      const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id&is_visible=eq.true&order=created_at.desc`;
 
       const [categoriesResponse, productsResponse] = await Promise.all([
         fetch(categoriesUrl, { headers }),
@@ -727,7 +783,7 @@ async function loadSharedCatalogData() {
       Authorization: `Bearer ${supabaseAnonKey}`,
     };
     const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
-    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,supplier_image_url,stock_quantity,is_featured,condition_label,compatibility,category_id&is_visible=eq.true&order=created_at.desc`;
+    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id&is_visible=eq.true&order=created_at.desc`;
     const [categoriesResponse, productsResponse] = await Promise.all([
       fetch(categoriesUrl, { headers }),
       fetch(productsUrl, { headers }),
@@ -744,19 +800,20 @@ async function loadSharedCatalogData() {
       const category = categoriesMap.get(product.category_id) || null;
       const retailPrice = Number(product.retail_price);
       const compareAtPrice = Number(product.compare_at_price);
+      const safeRetailPrice = Number.isFinite(retailPrice) && retailPrice > 0 ? retailPrice : 0;
       return {
         ...product,
-        retail_price: retailPrice,
+        retail_price: safeRetailPrice,
         compare_at_price:
-          Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice
+          Number.isFinite(compareAtPrice) && compareAtPrice > safeRetailPrice
             ? compareAtPrice
-            : Math.ceil(retailPrice * 1.18),
-        display_image: product.image_url || product.supplier_image_url || "",
+            : Math.ceil(safeRetailPrice * 1.18),
+        display_image: product.image_url || "",
         category_slug: category?.slug || "other-products",
         category_name: category?.name || "Other Products",
         category_description: category?.description || "",
       };
-    });
+    }).sort((left, right) => Number(right.is_featured) - Number(left.is_featured) || left.name.localeCompare(right.name));
 
     return {
       products: normalizedProducts.length ? normalizedProducts : getFallbackCatalogProducts(),
@@ -776,13 +833,15 @@ async function loadSharedCatalogData() {
 function createCatalogCard(product) {
   const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
   const categoryUrl = `category.html?slug=${encodeURIComponent(product.category_slug)}`;
+  const retailPrice = Number(product.retail_price) || 0;
+  const compareAtPrice = Number(product.compare_at_price) || 0;
   const comparePrice =
-    Number.isFinite(Number(product.compare_at_price)) && Number(product.compare_at_price) > Number(product.retail_price)
-      ? `<span class="storefront-card__compare">${escapeHtml(formatMoney(product.compare_at_price))}</span>`
+    Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice
+      ? `<span class="storefront-card__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>`
       : "";
   const savingsAmount =
-    Number.isFinite(Number(product.compare_at_price)) && Number(product.compare_at_price) > Number(product.retail_price)
-      ? Number(product.compare_at_price) - Number(product.retail_price)
+    Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice
+      ? compareAtPrice - retailPrice
       : 0;
   const savingsPill =
     savingsAmount > 0
@@ -795,38 +854,71 @@ function createCatalogCard(product) {
   const imageMarkup = product.display_image
     ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(product.name)}" loading="lazy">`
     : `<div class="storefront-card__image storefront-card__image--placeholder" aria-hidden="true">TECHM8</div>`;
+  const stockClass = Number(product.stock_quantity) > 0 ? "is-in-stock" : "is-pending";
 
   return `
-    <article class="storefront-card">
+    <article class="storefront-card storefront-card--commerce">
       <a class="storefront-card__media-link" href="${detailUrl}">
         <div class="storefront-card__media">${imageMarkup}</div>
       </a>
       <div class="storefront-card__body">
         <div class="storefront-card__top">
           <a class="storefront-card__pill storefront-card__pill--link" href="${categoryUrl}">${escapeHtml(product.category_name)}</a>
-          ${product.is_featured ? '<span class="storefront-card__tag">Featured</span>' : ""}
+          ${product.is_featured ? '<span class="storefront-card__tag">Featured</span>' : savingsPill}
         </div>
         <a class="storefront-card__title-link" href="${detailUrl}">
           <h3>${escapeHtml(product.name)}</h3>
         </a>
-        <p>${escapeHtml(product.short_description || "Retail catalog product.")}</p>
-        <div class="storefront-card__price-row">
-          ${comparePrice}
-          <strong>${escapeHtml(formatMoney(product.retail_price))}</strong>
-          ${savingsPill}
+        <p class="storefront-card__summary">${escapeHtml(product.short_description || "Retail catalog product.")}</p>
+        <div class="storefront-card__price-row storefront-card__price-row--stacked">
+          <div class="storefront-card__price-meta">${comparePrice}</div>
+          <strong>${escapeHtml(formatMoney(retailPrice))}</strong>
         </div>
         <div class="storefront-card__meta">
           <span>${escapeHtml(product.brand || "TECHM8")}</span>
           <span>${escapeHtml(product.compatibility || "Store product")}</span>
-          <span>${escapeHtml(stockLabel)}</span>
         </div>
-        <div class="storefront-card__actions">
-          <a href="${detailUrl}">View details</a>
-          <a href="stores.html">Find in store</a>
+        <div class="storefront-card__footer">
+          <span class="storefront-card__stock ${stockClass}">${escapeHtml(stockLabel)}</span>
+          <div class="storefront-card__actions">
+            <button class="storefront-card__action storefront-card__action--primary" type="button" data-add-cart-slug="${escapeHtml(product.slug)}">Add to cart</button>
+            <a class="storefront-card__action storefront-card__action--secondary" href="${detailUrl}">Details</a>
+          </div>
         </div>
       </div>
     </article>
   `;
+}
+
+function bindCartButtons(container, products, options = {}) {
+  if (!(container instanceof HTMLElement) || container.dataset.cartBound === "true") {
+    return;
+  }
+
+  container.dataset.cartBound = "true";
+
+  container.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+
+    const button = target.closest("[data-add-cart-slug]");
+    if (!(button instanceof HTMLElement)) return;
+
+    event.preventDefault();
+    const slug = button.getAttribute("data-add-cart-slug") || "";
+    const qty = Number(button.getAttribute("data-add-cart-qty") || "1") || 1;
+    const source = typeof products === "function" ? products() : products;
+    const product = Array.isArray(source) ? source.find((item) => item.slug === slug) : null;
+    if (!product) return;
+
+    addItemToCart(product, qty);
+
+    const original = button.textContent || "Add to cart";
+    button.textContent = options.confirmText || "Added";
+    window.setTimeout(() => {
+      button.textContent = original;
+    }, 1200);
+  });
 }
 
 function initCategoryPage() {
@@ -846,6 +938,7 @@ function initCategoryPage() {
   const slug = params.get("slug") || "";
 
   loadSharedCatalogData().then(({ products, categories }) => {
+    bindCartButtons(productsTarget, products);
     const category = categories.find((item) => item.slug === slug);
 
     if (!category) {
@@ -890,54 +983,400 @@ function initProductDetailPage() {
   const root = document.querySelector("[data-product-page]");
   if (!(root instanceof HTMLElement)) return;
 
+  const shell = root.querySelector("[data-product-shell]");
+  if (!(shell instanceof HTMLElement)) return;
+
   const params = new URLSearchParams(window.location.search);
   const slug = params.get("slug") || "";
 
   loadSharedCatalogData().then(({ products }) => {
     const product = products.find((item) => item.slug === slug);
-    const titleTarget = root.querySelector("[data-product-title]");
-    const categoryTarget = root.querySelector("[data-product-category]");
-    const descriptionTarget = root.querySelector("[data-product-description]");
-    const imageTarget = root.querySelector("[data-product-image]");
-    const priceTarget = root.querySelector("[data-product-price]");
-    const compareTarget = root.querySelector("[data-product-compare]");
-    const savingsTarget = root.querySelector("[data-product-saving]");
-    const stockTarget = root.querySelector("[data-product-stock]");
-    const metaTarget = root.querySelector("[data-product-meta]");
-    const breadcrumbTarget = root.querySelector("[data-product-breadcrumb]");
-    const relatedTarget = root.querySelector("[data-product-related]");
+    if (!product) {
+      shell.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing product</span><h3>Product not found</h3><p>Return to the online store and select another item.</p><div class="storefront-card__actions"><a href="shop.html">Back to online store</a></div></div></article>`;
+      return;
+    }
 
-    if (!product || !(titleTarget instanceof HTMLElement) || !(relatedTarget instanceof HTMLElement)) {
-      if (relatedTarget instanceof HTMLElement) {
-        relatedTarget.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing product</span><h3>Product not found</h3><p>Return to the online store and select another item.</p></div></article>`;
+    const compareAtPrice = Number(product.compare_at_price) || 0;
+    const retailPrice = Number(product.retail_price) || 0;
+    const savings = compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
+    const stockText = Number(product.stock_quantity) > 0 ? `${product.stock_quantity} available across stores` : "Store stock is updated in-store";
+    const relatedProducts = products
+      .filter((item) => item.category_slug === product.category_slug && item.slug !== product.slug)
+      .slice(0, 4);
+
+    document.title = `${product.name} | TECHM8 Online Store`;
+    shell.innerHTML = `
+      <div class="storefront-breadcrumbs">
+        <a href="index.html">Home</a>
+        <span>/</span>
+        <a href="shop.html">Online Store</a>
+        <span>/</span>
+        <a href="category.html?slug=${encodeURIComponent(product.category_slug)}">${escapeHtml(product.category_name)}</a>
+        <span>/</span>
+        <span>${escapeHtml(product.name)}</span>
+      </div>
+
+      <section class="storefront-pdp">
+        <div class="storefront-pdp__gallery">
+          <div class="storefront-pdp__gallery-main">
+            ${product.display_image ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(product.name)}">` : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`}
+          </div>
+          <div class="storefront-pdp__gallery-note">
+            <strong>Official product image</strong>
+            <span>Stored in Supabase and linked to the live catalog.</span>
+          </div>
+        </div>
+
+        <div class="storefront-pdp__summary">
+          <p class="eyebrow">Online store item</p>
+          <div class="storefront-pdp__brand-row">
+            <span class="storefront-pdp__brand">${escapeHtml(product.brand || "TECHM8")}</span>
+            <span class="storefront-pdp__stock">${escapeHtml(stockText)}</span>
+          </div>
+          <h1>${escapeHtml(product.name)}</h1>
+          <p class="storefront-pdp__intro">${escapeHtml(product.description || product.short_description || "Retail catalog product.")}</p>
+
+          <div class="storefront-pdp__price-card">
+            <div class="storefront-pdp__price-top">
+              ${compareAtPrice > retailPrice ? `<span class="storefront-pdp__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>` : ""}
+              ${savings > 0 ? `<span class="storefront-pdp__save">Save ${escapeHtml(formatMoney(savings))}</span>` : ""}
+            </div>
+            <div class="storefront-pdp__price-main">${escapeHtml(formatMoney(retailPrice))}</div>
+            <p class="storefront-pdp__price-note">Final in-store pricing and stock can be confirmed by your nearest TECHM8 location.</p>
+          </div>
+
+          <div class="storefront-pdp__purchase">
+            <label class="storefront-pdp__qty">
+              <span>Qty</span>
+              <input type="number" min="1" value="1" data-product-qty>
+            </label>
+            <button class="button button--primary storefront-pdp__cart-button" type="button" data-product-add-cart>Add to cart</button>
+            <a class="button button--ghost" href="stores.html">Find in store</a>
+          </div>
+
+          <div class="storefront-pdp__highlights">
+            <div class="storefront-pdp__highlight"><strong>Brand</strong><span>${escapeHtml(product.brand || "TECHM8")}</span></div>
+            <div class="storefront-pdp__highlight"><strong>Category</strong><span>${escapeHtml(product.category_name)}</span></div>
+            <div class="storefront-pdp__highlight"><strong>Model</strong><span>${escapeHtml(product.model || "Store product")}</span></div>
+            <div class="storefront-pdp__highlight"><strong>Compatibility</strong><span>${escapeHtml(product.compatibility || "General use")}</span></div>
+            <div class="storefront-pdp__highlight"><strong>SKU</strong><span>${escapeHtml(product.sku || "To be assigned")}</span></div>
+            <div class="storefront-pdp__highlight"><strong>Pickup</strong><span>Select a TECHM8 store at checkout</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="storefront-pdp__content">
+        <div class="storefront-pdp__content-main">
+          <article class="storefront-pdp__panel">
+            <div class="section-heading section-heading--split">
+              <div>
+                <p class="eyebrow">Overview</p>
+                <h2>Product overview</h2>
+              </div>
+            </div>
+            <p>${escapeHtml(product.description || product.short_description || "Retail catalog product.")}</p>
+          </article>
+
+          <article class="storefront-pdp__panel">
+            <div class="section-heading section-heading--split">
+              <div>
+                <p class="eyebrow">Key details</p>
+                <h2>What customers need to know</h2>
+              </div>
+            </div>
+            <div class="storefront-pdp__facts">
+              <div><strong>Current selling price</strong><span>${escapeHtml(formatMoney(retailPrice))}</span></div>
+              <div><strong>Original / compare price</strong><span>${compareAtPrice > retailPrice ? escapeHtml(formatMoney(compareAtPrice)) : "Not listed"}</span></div>
+              <div><strong>Availability</strong><span>${escapeHtml(stockText)}</span></div>
+              <div><strong>Category link</strong><span><a href="category.html?slug=${encodeURIComponent(product.category_slug)}">${escapeHtml(product.category_name)}</a></span></div>
+            </div>
+          </article>
+        </div>
+
+        <aside class="storefront-pdp__sidebar">
+          <article class="storefront-pdp__sidecard">
+            <p class="eyebrow">Why buy here</p>
+            <ul class="storefront-pdp__bullets">
+              <li>Product data comes from the live TECHM8 catalog.</li>
+              <li>Store pickup can be matched to your nearest location.</li>
+              <li>Catalog structure is ready for future POS integration.</li>
+            </ul>
+          </article>
+
+          <article class="storefront-pdp__sidecard">
+            <p class="eyebrow">Need support first?</p>
+            <a class="button button--secondary" href="book-repair.html">Book a repair</a>
+          </article>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="section-heading section-heading--split">
+          <div>
+            <p class="eyebrow">Related products</p>
+            <h2>Customers also view</h2>
+          </div>
+          <a href="category.html?slug=${encodeURIComponent(product.category_slug)}">View ${escapeHtml(product.category_name)}</a>
+        </div>
+        <div class="storefront-grid storefront-grid--dense" data-product-related>
+          ${relatedProducts.length
+            ? relatedProducts.map((item) => createCatalogCard(item)).join("")
+            : `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">No related items</span><h3>No more products in this category yet</h3><p>More items can be added from the database later.</p></div></article>`}
+        </div>
+      </section>
+    `;
+
+    const addButton = shell.querySelector("[data-product-add-cart]");
+    const qtyField = shell.querySelector("[data-product-qty]");
+    if (addButton instanceof HTMLButtonElement) {
+      addButton.addEventListener("click", () => {
+        const quantity = qtyField instanceof HTMLInputElement ? Math.max(1, Number(qtyField.value) || 1) : 1;
+        addItemToCart(product, quantity);
+        addButton.textContent = "Added to cart";
+        window.setTimeout(() => {
+          addButton.textContent = "Add to cart";
+        }, 1200);
+      });
+    }
+
+    const relatedTarget = shell.querySelector("[data-product-related]");
+    if (relatedTarget instanceof HTMLElement) {
+      bindCartButtons(relatedTarget, products);
+    }
+  });
+}
+
+function renderCartLineItems(target, items) {
+  if (!(target instanceof HTMLElement)) return;
+
+  if (!items.length) {
+    target.innerHTML = `
+      <article class="storefront-card storefront-card--empty">
+        <div class="storefront-card__body">
+          <span class="storefront-card__pill">Cart empty</span>
+          <h3>Your cart is empty</h3>
+          <p>Add products from the online store before checking out.</p>
+          <div class="storefront-card__actions">
+            <a href="shop.html">Return to online store</a>
+          </div>
+        </div>
+      </article>
+    `;
+    return;
+  }
+
+  target.innerHTML = items.map((item) => {
+    const lineTotal = (Number(item.price) || 0) * (Number(item.qty) || 0);
+    return `
+      <article class="storefront-cart__item">
+        <a class="storefront-cart__media" href="product.html?slug=${encodeURIComponent(item.slug)}">
+          ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}">` : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`}
+        </a>
+        <div class="storefront-cart__details">
+          <div class="storefront-cart__top">
+            <div>
+              <p class="storefront-cart__eyebrow">${escapeHtml(item.category_name || "Store product")}</p>
+              <h3><a href="product.html?slug=${encodeURIComponent(item.slug)}">${escapeHtml(item.name)}</a></h3>
+            </div>
+            <strong>${escapeHtml(formatMoney(lineTotal))}</strong>
+          </div>
+          <p class="storefront-cart__meta">${escapeHtml(item.brand || "TECHM8")} ${item.compatibility ? `· ${escapeHtml(item.compatibility)}` : ""}</p>
+          <div class="storefront-cart__controls">
+            <label>
+              <span>Qty</span>
+              <input type="number" min="1" value="${escapeHtml(String(item.qty))}" data-cart-qty="${escapeHtml(item.slug)}">
+            </label>
+            <span class="storefront-cart__price">${escapeHtml(formatMoney(item.price))} each</span>
+            <button class="storefront-cart__remove" type="button" data-cart-remove="${escapeHtml(item.slug)}">Remove</button>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function renderCartSummary(target, items) {
+  if (!(target instanceof HTMLElement)) return;
+
+  const subtotal = getCartSubtotal(items);
+  const itemCount = getCartCount(items);
+  target.innerHTML = `
+    <div class="storefront-summary__row">
+      <span>Items</span>
+      <strong>${escapeHtml(String(itemCount))}</strong>
+    </div>
+    <div class="storefront-summary__row">
+      <span>Subtotal</span>
+      <strong>${escapeHtml(formatMoney(subtotal))}</strong>
+    </div>
+    <div class="storefront-summary__row storefront-summary__row--muted">
+      <span>Store pickup</span>
+      <strong>To be confirmed</strong>
+    </div>
+    <div class="storefront-summary__row storefront-summary__row--total">
+      <span>Total</span>
+      <strong>${escapeHtml(formatMoney(subtotal))}</strong>
+    </div>
+  `;
+}
+
+function initCartPage() {
+  const root = document.querySelector("[data-cart-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const itemsTarget = root.querySelector("[data-cart-items]");
+  const summaryTarget = root.querySelector("[data-cart-summary]");
+  const checkoutButtons = root.querySelectorAll("[data-cart-checkout]");
+  if (!(itemsTarget instanceof HTMLElement) || !(summaryTarget instanceof HTMLElement)) return;
+
+  const render = () => {
+    const items = loadCart();
+    renderCartLineItems(itemsTarget, items);
+    renderCartSummary(summaryTarget, items);
+    checkoutButtons.forEach((button) => {
+      if (button instanceof HTMLAnchorElement || button instanceof HTMLButtonElement) {
+        button.toggleAttribute("disabled", !items.length);
+        if (button instanceof HTMLAnchorElement) {
+          button.setAttribute("aria-disabled", items.length ? "false" : "true");
+          button.href = items.length ? "checkout.html" : "cart.html";
+        }
+      }
+    });
+  };
+
+  itemsTarget.addEventListener("input", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) return;
+    const slug = target.getAttribute("data-cart-qty");
+    if (!slug) return;
+    updateCartItemQuantity(slug, target.value);
+    render();
+  });
+
+  itemsTarget.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const button = target.closest("[data-cart-remove]");
+    if (!(button instanceof HTMLElement)) return;
+    const slug = button.getAttribute("data-cart-remove") || "";
+    removeCartItem(slug);
+    render();
+  });
+
+  window.addEventListener("techm8:cart-updated", render);
+  render();
+}
+
+function initCheckoutPage() {
+  const root = document.querySelector("[data-checkout-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const form = root.querySelector("[data-checkout-form]");
+  const summaryTarget = root.querySelector("[data-checkout-summary]");
+  const itemsTarget = root.querySelector("[data-checkout-items]");
+  const messageTarget = root.querySelector("[data-checkout-message]");
+  if (!(form instanceof HTMLFormElement) || !(summaryTarget instanceof HTMLElement) || !(itemsTarget instanceof HTMLElement)) return;
+
+  const render = () => {
+    const items = loadCart();
+    renderCartLineItems(itemsTarget, items);
+    renderCartSummary(summaryTarget, items);
+  };
+
+  itemsTarget.addEventListener("input", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) return;
+    const slug = target.getAttribute("data-cart-qty");
+    if (!slug) return;
+    updateCartItemQuantity(slug, target.value);
+    render();
+  });
+
+  itemsTarget.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const button = target.closest("[data-cart-remove]");
+    if (!(button instanceof HTMLElement)) return;
+    const slug = button.getAttribute("data-cart-remove") || "";
+    removeCartItem(slug);
+    render();
+  });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const items = loadCart();
+    if (!items.length) {
+      if (messageTarget instanceof HTMLElement) {
+        messageTarget.hidden = false;
+        messageTarget.className = "booking-message is-error";
+        messageTarget.textContent = "Your cart is empty. Add products before checking out.";
       }
       return;
     }
 
-    document.title = `${product.name} | TECHM8 Online Store`;
-    titleTarget.textContent = product.name;
-    if (categoryTarget instanceof HTMLElement) categoryTarget.innerHTML = `<a href="category.html?slug=${encodeURIComponent(product.category_slug)}">${escapeHtml(product.category_name)}</a>`;
-    if (descriptionTarget instanceof HTMLElement) descriptionTarget.textContent = product.description || product.short_description || "";
-    if (imageTarget instanceof HTMLElement) imageTarget.innerHTML = `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(product.name)}">`;
-    if (priceTarget instanceof HTMLElement) priceTarget.textContent = formatMoney(product.retail_price);
-    if (compareTarget instanceof HTMLElement) compareTarget.textContent = formatMoney(product.compare_at_price);
-    if (savingsTarget instanceof HTMLElement) savingsTarget.textContent = `Save ${formatMoney(Number(product.compare_at_price) - Number(product.retail_price))}`;
-    if (stockTarget instanceof HTMLElement) stockTarget.textContent = Number(product.stock_quantity) > 0 ? `${product.stock_quantity} in network stock` : "Stock to be updated";
-    if (breadcrumbTarget instanceof HTMLElement) breadcrumbTarget.textContent = product.name;
-    if (metaTarget instanceof HTMLElement) {
-      metaTarget.innerHTML = `
-        <div class="storefront-detail__meta-item"><span>Brand</span><strong>${escapeHtml(product.brand || "TECHM8")}</strong></div>
-        <div class="storefront-detail__meta-item"><span>Model</span><strong>${escapeHtml(product.model || "Store product")}</strong></div>
-        <div class="storefront-detail__meta-item"><span>Category</span><strong>${escapeHtml(product.category_name)}</strong></div>
-        <div class="storefront-detail__meta-item"><span>Compatibility</span><strong>${escapeHtml(product.compatibility || "General use")}</strong></div>
-      `;
-    }
+    if (!form.reportValidity()) return;
 
-    const relatedProducts = products.filter((item) => item.category_slug === product.category_slug && item.slug !== product.slug).slice(0, 4);
-    relatedTarget.innerHTML = relatedProducts.length
-      ? relatedProducts.map((item) => createCatalogCard(item)).join("")
-      : `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">No related items</span><h3>No more products in this category yet</h3><p>More items can be added from the database later.</p></div></article>`;
+    const formData = new FormData(form);
+    const subtotal = getCartSubtotal(items);
+    const payload = {
+      order_code: makeOrderCode(),
+      customer_name: String(formData.get("customer_name") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      store_slug: String(formData.get("store_slug") || "").trim(),
+      preferred_contact_method: String(formData.get("preferred_contact_method") || "phone").trim(),
+      notes: String(formData.get("notes") || "").trim(),
+      subtotal_amount: subtotal,
+      total_amount: subtotal,
+      source: "website",
+      items,
+      created_at: new Date().toISOString(),
+    };
+
+    const endpoint = window.TECHM8_CONFIG?.orderEndpoint || "";
+    const supabaseAnonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
+
+    try {
+      if (endpoint) {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${supabaseAnonKey}`,
+            apikey: supabaseAnonKey,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+        if (!response.ok || !result.ok) {
+          throw new Error(result.error || "Checkout submission failed.");
+        }
+      } else {
+        saveLocalOrder(payload);
+      }
+
+      clearCart();
+      form.reset();
+      render();
+
+      if (messageTarget instanceof HTMLElement) {
+        messageTarget.hidden = false;
+        messageTarget.className = "booking-message is-success";
+        messageTarget.textContent = `Order request submitted successfully. Reference: ${payload.order_code}`;
+      }
+    } catch (error) {
+      if (messageTarget instanceof HTMLElement) {
+        messageTarget.hidden = false;
+        messageTarget.className = "booking-message is-error";
+        messageTarget.textContent = error instanceof Error ? error.message : "Checkout submission failed.";
+      }
+    }
   });
+
+  render();
 }
 
 function initBookingForm() {
@@ -1173,12 +1612,16 @@ function initNavigation() {
 }
 
 function initPage() {
+  updateCartIndicators();
+  window.addEventListener("storage", () => updateCartIndicators());
   initFilters();
   initNavigation();
   initHomeBanner();
   initStorefront();
   initCategoryPage();
   initProductDetailPage();
+  initCartPage();
+  initCheckoutPage();
   initBookingForm();
 }
 

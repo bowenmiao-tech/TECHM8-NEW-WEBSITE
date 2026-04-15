@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TECHM8 Checkout</title>
+  <meta name="description" content="Submit your TECHM8 order request and select your preferred store.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="promo-banner">
+    <div class="container promo-banner__inner">
+      <span>Submit an order request for store pickup and follow-up.</span>
+      <a href="cart.html">Back to cart</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="TECHM8 home">
+        <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+      </a>
+      <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
+      <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="nav__menu" id="primary-menu">
+        <a href="index.html">Home</a>
+        <a href="repairs.html">Repairs</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="store-policy.html">Store Policy</a>
+        <a class="nav__cart-link" href="cart.html">Cart <span class="nav__cart-count" data-cart-count>0</span></a>
+        <a class="nav__shop-link" href="shop.html">Online Store</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="storefront-page" data-checkout-page>
+    <section class="section">
+      <div class="container storefront-checkout">
+        <div class="storefront-checkout__main">
+          <div class="section-heading section-heading--split">
+            <div>
+              <p class="eyebrow">Checkout</p>
+              <h1>Submit your order request</h1>
+            </div>
+            <a href="cart.html">Back to cart</a>
+          </div>
+
+          <form class="storefront-checkout__form" data-checkout-form>
+            <div class="booking-message" data-checkout-message hidden></div>
+            <div class="storefront-checkout__form-grid">
+              <label>
+                <span>Full name</span>
+                <input type="text" name="customer_name" required>
+              </label>
+              <label>
+                <span>Phone</span>
+                <input type="tel" name="phone" required>
+              </label>
+              <label>
+                <span>Email</span>
+                <input type="email" name="email" required>
+              </label>
+              <label>
+                <span>Preferred contact method</span>
+                <select name="preferred_contact_method">
+                  <option value="phone">Phone</option>
+                  <option value="email">Email</option>
+                  <option value="sms">SMS</option>
+                </select>
+              </label>
+              <label>
+                <span>Pickup store</span>
+                <select name="store_slug" required>
+                  <option value="">Select a store</option>
+                  <option value="park-ridge">Park Ridge</option>
+                  <option value="fairfield">Fairfield</option>
+                  <option value="north-lakes">North Lakes</option>
+                  <option value="toowong">Toowong</option>
+                  <option value="brassall">Brassall</option>
+                </select>
+              </label>
+              <label class="storefront-checkout__form-grid-full">
+                <span>Order notes</span>
+                <textarea name="notes" rows="4" placeholder="Anything the store should know before contacting you?"></textarea>
+              </label>
+            </div>
+
+            <div class="storefront-summary storefront-summary--embedded">
+              <p class="eyebrow">Items in this request</p>
+              <div data-checkout-items></div>
+            </div>
+
+            <div class="storefront-checkout__submit">
+              <button class="button button--primary" type="submit">Submit order request</button>
+            </div>
+          </form>
+        </div>
+
+        <aside class="storefront-checkout__sidebar">
+          <div class="storefront-summary">
+            <p class="eyebrow">Order summary</p>
+            <div data-checkout-summary></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer footer--bottom">
+      <p>&copy; 2026 TECHM8. All rights reserved.</p>
+      <a href="store-policy.html">Repair Terms & Conditions</a>
+    </div>
+  </footer>
+
+  <script src="site-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

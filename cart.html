@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TECHM8 Product</title>
-  <meta name="description" content="TECHM8 product detail page.">
+  <title>TECHM8 Cart</title>
+  <meta name="description" content="Review products in your TECHM8 shopping cart before checkout.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,8 +13,8 @@
 <body>
   <div class="promo-banner">
     <div class="container promo-banner__inner">
-      <span>TECHM8 product detail page powered by the live catalog.</span>
-      <a href="shop.html">Back to online store</a>
+      <span>Review selected products before moving to checkout.</span>
+      <a href="shop.html">Continue shopping</a>
     </div>
   </div>
 
@@ -39,16 +39,28 @@
     </div>
   </header>
 
-  <main class="storefront-page storefront-page--detail" data-product-page>
+  <main class="storefront-page" data-cart-page>
     <section class="section">
-      <div class="container" data-product-shell>
-        <article class="storefront-card storefront-card--loading">
-          <div class="storefront-card__body">
-            <span class="storefront-card__pill">Loading</span>
-            <h3>Loading product...</h3>
-            <p>Please wait while the page checks the live catalog.</p>
+      <div class="container storefront-checkout">
+        <div class="storefront-checkout__main">
+          <div class="section-heading section-heading--split">
+            <div>
+              <p class="eyebrow">Shopping cart</p>
+              <h1>Review your selected items</h1>
+            </div>
+            <a href="shop.html">Continue shopping</a>
           </div>
-        </article>
+          <div data-cart-items></div>
+        </div>
+        <aside class="storefront-checkout__sidebar">
+          <div class="storefront-summary">
+            <p class="eyebrow">Order summary</p>
+            <div data-cart-summary></div>
+            <div class="storefront-summary__actions">
+              <a class="button button--primary" href="checkout.html" data-cart-checkout>Proceed to checkout</a>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
   </main>
