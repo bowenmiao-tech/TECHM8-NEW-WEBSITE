@@ -1294,7 +1294,7 @@ function initCheckoutPage() {
                 </div>
                 <div class="storefront-success__item">
                   <strong>Store</strong>
-                  <span>${escapeHtml(payload.store_slug || "To be confirmed")}</span>
+                  <span>${escapeHtml(payload.store_name || payload.store_slug || "To be confirmed")}</span>
                 </div>
                 <div class="storefront-success__item">
                   <strong>Contact</strong>
@@ -1303,6 +1303,14 @@ function initCheckoutPage() {
                 <div class="storefront-success__item">
                   <strong>Total</strong>
                   <span>${escapeHtml(formatMoney(payload.total_amount))}</span>
+                </div>
+                <div class="storefront-success__item">
+                  <strong>Payment</strong>
+                  <span>${escapeHtml(payload.payment_method_label || 'Pay in store')}</span>
+                </div>
+                <div class="storefront-success__item">
+                  <strong>Payment fee</strong>
+                  <span>${escapeHtml(formatMoney(payload.payment_fee_amount || 0))}</span>
                 </div>
               </div>
               <div class="storefront-success__actions">
@@ -1424,6 +1432,13 @@ function initCheckoutPage() {
         if (!response.ok || !result.ok) {
           throw new Error(result.error || "Checkout submission failed.");
         }
+
+        payload.order_code = String(result.order_code || payload.order_code);
+        payload.store_name = String(result.store_name || payload.store_name || "");
+        payload.total_amount = Number(result.total_amount ?? payload.total_amount) || payload.total_amount;
+        payload.payment_fee_amount = Number(result.payment_fee_amount ?? 0) || 0;
+        payload.payment_method_code = String(result.payment_method_code || payload.payment_method_code || "");
+        payload.payment_method_label = String(result.payment_method_label || payload.payment_method_label || "");
       } else {
         saveLocalOrder(payload);
       }
