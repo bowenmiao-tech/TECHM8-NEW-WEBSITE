@@ -1276,11 +1276,76 @@ function initCheckoutPage() {
   const itemsTarget = root.querySelector("[data-checkout-items]");
   const messageTarget = root.querySelector("[data-checkout-message]");
   if (!(form instanceof HTMLFormElement) || !(summaryTarget instanceof HTMLElement) || !(itemsTarget instanceof HTMLElement)) return;
+  const submitButton = form.querySelector('button[type="submit"]');
+
+  const renderSuccessState = (payload) => {
+    root.innerHTML = `
+      <section class="section">
+        <div class="container storefront-checkout storefront-checkout--success">
+          <div class="storefront-checkout__main">
+            <article class="storefront-success">
+              <p class="eyebrow">Order submitted</p>
+              <h1>Order request submitted successfully</h1>
+              <p class="storefront-success__lead">Reference: ${escapeHtml(payload.order_code)}</p>
+              <div class="storefront-success__grid">
+                <div class="storefront-success__item">
+                  <strong>Customer</strong>
+                  <span>${escapeHtml(payload.customer_name)}</span>
+                </div>
+                <div class="storefront-success__item">
+                  <strong>Store</strong>
+                  <span>${escapeHtml(payload.store_slug || "To be confirmed")}</span>
+                </div>
+                <div class="storefront-success__item">
+                  <strong>Contact</strong>
+                  <span>${escapeHtml(payload.phone)}${payload.email ? ` / ${escapeHtml(payload.email)}` : ""}</span>
+                </div>
+                <div class="storefront-success__item">
+                  <strong>Total</strong>
+                  <span>${escapeHtml(formatMoney(payload.total_amount))}</span>
+                </div>
+              </div>
+              <div class="storefront-success__actions">
+                <a class="button button--primary" href="shop.html">Continue shopping</a>
+                <a class="button button--ghost" href="stores.html">Find a store</a>
+              </div>
+            </article>
+
+            <div class="storefront-summary storefront-summary--embedded">
+              <p class="eyebrow">Submitted items</p>
+              <div data-checkout-success-items></div>
+            </div>
+          </div>
+
+          <aside class="storefront-checkout__sidebar">
+            <div class="storefront-summary">
+              <p class="eyebrow">Order summary</p>
+              <div data-checkout-success-summary></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    `;
+
+    const successItemsTarget = root.querySelector("[data-checkout-success-items]");
+    const successSummaryTarget = root.querySelector("[data-checkout-success-summary]");
+    renderCartLineItems(successItemsTarget, payload.items || []);
+    renderCartSummary(successSummaryTarget, payload.items || []);
+  };
 
   const render = () => {
     const items = loadCart();
     renderCartLineItems(itemsTarget, items);
     renderCartSummary(summaryTarget, items);
+    if (messageTarget instanceof HTMLElement && items.length) {
+      messageTarget.hidden = true;
+      messageTarget.textContent = "";
+      messageTarget.className = "booking-message";
+    }
+    if (submitButton instanceof HTMLButtonElement) {
+      submitButton.disabled = !items.length;
+      submitButton.textContent = items.length ? "Submit order request" : "Add items before checkout";
+    }
   };
 
   itemsTarget.addEventListener("input", (event) => {
@@ -1338,6 +1403,11 @@ function initCheckoutPage() {
     const supabaseAnonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
 
     try {
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+      }
+
       if (endpoint) {
         const response = await fetch(endpoint, {
           method: "POST",
@@ -1359,19 +1429,16 @@ function initCheckoutPage() {
       }
 
       clearCart();
-      form.reset();
-      render();
-
-      if (messageTarget instanceof HTMLElement) {
-        messageTarget.hidden = false;
-        messageTarget.className = "booking-message is-success";
-        messageTarget.textContent = `Order request submitted successfully. Reference: ${payload.order_code}`;
-      }
+      renderSuccessState(payload);
     } catch (error) {
       if (messageTarget instanceof HTMLElement) {
         messageTarget.hidden = false;
         messageTarget.className = "booking-message is-error";
         messageTarget.textContent = error instanceof Error ? error.message : "Checkout submission failed.";
+      }
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit order request";
       }
     }
   });
