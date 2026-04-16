@@ -86,12 +86,11 @@
                   <option value="brassall">Brassall</option>
                 </select>
               </label>
-              <label>
-                <span>Payment method</span>
-                <select name="payment_method_code" data-payment-method required>
-                  <option value="pay_in_store">Pay in store</option>
-                </select>
-              </label>
+              <div class="storefront-checkout__form-grid-full">
+                <span class="storefront-checkout__label">Payment method</span>
+                <div class="storefront-payment-list" data-payment-options></div>
+                <input type="hidden" name="payment_method_code" data-payment-method value="pay_in_store" required>
+              </div>
               <label class="storefront-checkout__form-grid-full">
                 <span>Order notes</span>
                 <textarea name="notes" rows="4" placeholder="Anything the store should know before contacting you?"></textarea>

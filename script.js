@@ -1362,6 +1362,7 @@ function initCheckoutPage() {
   const summaryTarget = root.querySelector("[data-checkout-summary]");
   const itemsTarget = root.querySelector("[data-checkout-items]");
   const messageTarget = root.querySelector("[data-checkout-message]");
+  const paymentOptionsTarget = root.querySelector("[data-payment-options]");
   const paymentMethodField = root.querySelector("[data-payment-method]");
   const paymentNoteTarget = root.querySelector("[data-payment-note]");
   if (!(form instanceof HTMLFormElement) || !(summaryTarget instanceof HTMLElement) || !(itemsTarget instanceof HTMLElement)) return;
@@ -1372,10 +1373,93 @@ function initCheckoutPage() {
 
   const getSelectedPaymentProfile = () => {
     const selectedCode =
-      paymentMethodField instanceof HTMLSelectElement
+      paymentMethodField instanceof HTMLInputElement
         ? String(paymentMethodField.value || "pay_in_store").trim()
         : "pay_in_store";
     return paymentProfiles.find((profile) => profile.code === selectedCode) || null;
+  };
+
+  const formatFeeRule = (profile) => {
+    if (!profile) return "";
+    const percentage = Number(profile.percentage) || 0;
+    const fixedAmount = Number(profile.fixed_amount) || 0;
+
+    switch (profile.fee_type) {
+      case "fixed":
+        return `Fee ${formatMoney(fixedAmount)}`;
+      case "percent":
+        return `Fee ${percentage.toFixed(1)}%`;
+      case "combined":
+        return `Fee ${percentage.toFixed(1)}% + ${formatMoney(fixedAmount)}`;
+      default:
+        return "No extra fee";
+    }
+  };
+
+  const getPaymentBadges = (profile) => {
+    if (!profile) return [];
+    if (profile.code === "card") {
+      return [
+        { label: "VISA", className: "storefront-payment-option__badge--visa" },
+        { label: "Mastercard", className: "storefront-payment-option__badge--mc" },
+        { label: "AMEX", className: "storefront-payment-option__badge--amex" },
+        { label: "JCB", className: "storefront-payment-option__badge--jcb" },
+        { label: "Apple Pay", className: "storefront-payment-option__badge--apple" },
+      ];
+    }
+    if (profile.code === "afterpay_clearpay") {
+      return [{ label: "Afterpay", className: "storefront-payment-option__badge--afterpay" }];
+    }
+    return [{ label: "In-store", className: "storefront-payment-option__badge--manual" }];
+  };
+
+  const getPaymentDescription = (profile) => {
+    if (!profile) return "";
+    if (profile.code === "card") {
+      return "Supports major credit and debit cards. Apple Pay will appear automatically inside Stripe Checkout on supported devices and browsers.";
+    }
+    if (profile.code === "afterpay_clearpay") {
+      return "Split payments with Afterpay inside Stripe Checkout when the cart and customer are eligible.";
+    }
+    if (profile.code === "wechat_pay") {
+      return "Complete payment with WeChat Pay through Stripe Checkout when enabled for your account.";
+    }
+    return "No online redirect. The store will contact you and collect payment directly.";
+  };
+
+  const renderPaymentOptions = (subtotal) => {
+    if (!(paymentOptionsTarget instanceof HTMLElement) || !(paymentMethodField instanceof HTMLInputElement)) return;
+
+    paymentOptionsTarget.innerHTML = paymentProfiles.map((profile) => {
+      const estimate = calculatePaymentFee(subtotal, profile);
+      const badges = getPaymentBadges(profile).map((badge) => {
+        return `<span class="storefront-payment-option__badge ${badge.className}">${escapeHtml(badge.label)}</span>`;
+      }).join("");
+      const isSelected = getSelectedPaymentProfile()?.code === profile.code;
+
+      return `
+        <button
+          class="storefront-payment-option ${isSelected ? "is-selected" : ""}"
+          type="button"
+          data-payment-option="${escapeHtml(profile.code)}"
+          aria-pressed="${isSelected ? "true" : "false"}"
+        >
+          <span class="storefront-payment-option__radio" aria-hidden="true"></span>
+          <span class="storefront-payment-option__body">
+            <span class="storefront-payment-option__top">
+              <strong class="storefront-payment-option__title">${escapeHtml(profile.label)}</strong>
+              <span class="storefront-payment-option__fee">${escapeHtml(formatFeeRule(profile))}</span>
+            </span>
+            <span class="storefront-payment-option__meta">${badges}</span>
+            <span class="storefront-payment-option__description">${escapeHtml(getPaymentDescription(profile))}</span>
+          </span>
+          <span class="storefront-payment-option__estimate">
+            <strong>${escapeHtml(formatMoney(estimate))}</strong>
+            <span>Current surcharge</span>
+          </span>
+        </button>
+      `;
+    }).join("");
   };
 
   const renderPaymentNote = () => {
@@ -1478,6 +1562,8 @@ function initCheckoutPage() {
 
   const render = () => {
     const items = loadCart();
+    const subtotal = getCartSubtotal(items);
+    renderPaymentOptions(subtotal);
     renderCartLineItems(itemsTarget, items);
     renderCartSummary(summaryTarget, items, {
       paymentProfile: getSelectedPaymentProfile(),
@@ -1626,8 +1712,17 @@ function initCheckoutPage() {
     }
   });
 
-  if (paymentMethodField instanceof HTMLSelectElement) {
-    paymentMethodField.addEventListener("change", render);
+  if (paymentOptionsTarget instanceof HTMLElement && paymentMethodField instanceof HTMLInputElement) {
+    paymentOptionsTarget.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const option = target.closest("[data-payment-option]");
+      if (!(option instanceof HTMLElement)) return;
+      const code = String(option.getAttribute("data-payment-option") || "").trim();
+      if (!code) return;
+      paymentMethodField.value = code;
+      render();
+    });
   }
 
   loadPaymentFeeProfiles()
@@ -1660,10 +1755,11 @@ function initCheckoutPage() {
             ])
       );
 
-      if (paymentMethodField instanceof HTMLSelectElement) {
-        paymentMethodField.innerHTML = paymentProfiles
-          .map((profile) => `<option value="${escapeHtml(profile.code)}">${escapeHtml(profile.label)}</option>`)
-          .join("");
+      if (paymentMethodField instanceof HTMLInputElement) {
+        const initialProfile = paymentProfiles.find((profile) => profile.code === "pay_in_store") || paymentProfiles[0];
+        if (initialProfile) {
+          paymentMethodField.value = initialProfile.code;
+        }
       }
 
       render();
@@ -1679,8 +1775,8 @@ function initCheckoutPage() {
         is_enabled: true,
         notes: "",
       });
-      if (paymentMethodField instanceof HTMLSelectElement) {
-        paymentMethodField.innerHTML = `<option value="pay_in_store">Pay in store</option>`;
+      if (paymentMethodField instanceof HTMLInputElement) {
+        paymentMethodField.value = "pay_in_store";
       }
       render();
     });

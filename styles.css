@@ -4504,6 +4504,14 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   color: var(--muted);
 }
 
+.storefront-checkout__label {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
 .storefront-checkout__form-grid input,
 .storefront-checkout__form-grid select,
 .storefront-checkout__form-grid textarea {
@@ -4528,6 +4536,158 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   background: rgba(22, 200, 186, 0.08);
   color: var(--muted);
   line-height: 1.7;
+}
+
+.storefront-payment-list {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.storefront-payment-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: rgba(255,255,255,0.88);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.storefront-payment-option:hover {
+  border-color: rgba(22, 200, 186, 0.38);
+  box-shadow: 0 10px 24px rgba(6, 31, 36, 0.08);
+}
+
+.storefront-payment-option.is-selected {
+  border-color: rgba(22, 200, 186, 0.48);
+  background: rgba(233, 250, 248, 0.95);
+  box-shadow: 0 12px 28px rgba(22, 200, 186, 0.12);
+}
+
+.storefront-payment-option__radio {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  border: 2px solid rgba(7, 39, 45, 0.2);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.storefront-payment-option.is-selected .storefront-payment-option__radio {
+  border-color: var(--accent);
+}
+
+.storefront-payment-option.is-selected .storefront-payment-option__radio::after {
+  content: "";
+  position: absolute;
+  inset: 0.17rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--brand));
+}
+
+.storefront-payment-option__body {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.storefront-payment-option__top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.storefront-payment-option__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+}
+
+.storefront-payment-option__fee {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.storefront-payment-option__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.storefront-payment-option__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.9rem;
+  padding: 0 0.68rem;
+  border-radius: 0.7rem;
+  border: 1px solid rgba(7, 39, 45, 0.1);
+  background: #fff;
+  color: var(--brand-dark);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  box-shadow: inset 0 -1px 0 rgba(7, 39, 45, 0.04);
+}
+
+.storefront-payment-option__badge--visa {
+  color: #1a1f71;
+}
+
+.storefront-payment-option__badge--mc {
+  color: #eb001b;
+}
+
+.storefront-payment-option__badge--amex {
+  color: #016fd0;
+}
+
+.storefront-payment-option__badge--jcb {
+  color: #0b7c3e;
+}
+
+.storefront-payment-option__badge--apple {
+  color: #111;
+}
+
+.storefront-payment-option__badge--afterpay {
+  color: #0bb38d;
+}
+
+.storefront-payment-option__badge--manual {
+  color: var(--accent);
+}
+
+.storefront-payment-option__description {
+  color: var(--muted);
+  line-height: 1.65;
+  font-size: 0.92rem;
+}
+
+.storefront-payment-option__estimate {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: end;
+  text-align: right;
+}
+
+.storefront-payment-option__estimate strong {
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--brand-dark);
+  font-size: 1.15rem;
+}
+
+.storefront-payment-option__estimate span {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 700;
 }
 
 .storefront-summary--embedded {
@@ -4611,6 +4771,16 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   .storefront-checkout__form-grid,
   .storefront-success__grid {
     grid-template-columns: 1fr;
+  }
+
+  .storefront-payment-option {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .storefront-payment-option__estimate {
+    grid-column: 2;
+    justify-items: start;
+    text-align: left;
   }
 }
 
