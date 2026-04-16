@@ -147,7 +147,7 @@ insert into public.payment_fee_profiles (
 values
   ('pay_in_store', 'Pay in store', 'manual', 'none', 0, 0, true, 10, 'Used for order requests that will be paid in-store.'),
   ('card', 'Card', 'stripe', 'combined', 1.700, 0.30, true, 20, 'Base domestic card fee placeholder. Review against your actual Stripe statement before going live.'),
-  ('apple_pay', 'Apple Pay', 'stripe', 'combined', 1.700, 0.30, true, 30, 'Apple Pay on Stripe uses card rails, so pricing normally matches the underlying card fee.'),
+  ('apple_pay', 'Apple Pay', 'stripe', 'combined', 1.700, 0.30, false, 30, 'Informational profile only. In Stripe Checkout, Apple Pay is presented through card wallets and should share the card fee logic.'),
   ('afterpay_clearpay', 'Afterpay', 'stripe', 'combined', 5.490, 0.30, true, 40, 'Starter placeholder based on standard AU BNPL pricing. Confirm before charging customers.'),
   ('wechat_pay', 'WeChat Pay', 'stripe', 'none', 0, 0, false, 50, 'Enable only after confirming your Stripe account can use WeChat Pay and after setting your actual cost recovery rule.'),
   ('paypal', 'PayPal', 'external', 'none', 0, 0, false, 60, 'Disabled by default. Confirm PayPal availability for your Stripe account or connect PayPal directly before enabling.')

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TECHM8 Payment Success</title>
+  <meta name="description" content="Your TECHM8 payment was completed successfully.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="promo-banner">
+    <div class="container promo-banner__inner">
+      <span>Payment received. The store will continue processing your order.</span>
+      <a href="shop.html">Return to online store</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="TECHM8 home">
+        <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+      </a>
+      <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
+      <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="nav__menu" id="primary-menu">
+        <a href="index.html">Home</a>
+        <a href="repairs.html">Repairs</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="store-policy.html">Store Policy</a>
+        <a class="nav__cart-link" href="cart.html">Cart <span class="nav__cart-count" data-cart-count>0</span></a>
+        <a class="nav__shop-link" href="shop.html">Online Store</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="storefront-page" data-checkout-success-page>
+    <section class="section">
+      <div class="container storefront-checkout storefront-checkout--success">
+        <div class="storefront-checkout__main">
+          <article class="storefront-success">
+            <p class="eyebrow">Stripe checkout complete</p>
+            <h1>Payment completed successfully</h1>
+            <p class="storefront-success__lead">Order reference: <span data-success-order-code>Pending</span></p>
+            <div class="storefront-success__grid">
+              <div class="storefront-success__item">
+                <strong>Status</strong>
+                <span>Paid and submitted</span>
+              </div>
+              <div class="storefront-success__item">
+                <strong>Session</strong>
+                <span data-success-session-id>Stripe session confirmed</span>
+              </div>
+            </div>
+            <div class="storefront-success__actions">
+              <a class="button button--primary" href="shop.html">Continue shopping</a>
+              <a class="button button--ghost" href="stores.html">Find a store</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer footer--bottom">
+      <p>&copy; 2026 TECHM8. All rights reserved.</p>
+      <a href="store-policy.html">Repair Terms & Conditions</a>
+    </div>
+  </footer>
+
+  <script src="site-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

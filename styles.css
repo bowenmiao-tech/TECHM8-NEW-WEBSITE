@@ -4521,6 +4521,15 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   grid-column: 1 / -1;
 }
 
+.storefront-checkout__payment-note {
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(22, 200, 186, 0.22);
+  border-radius: 1rem;
+  background: rgba(22, 200, 186, 0.08);
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 .storefront-summary--embedded {
   padding: 1rem;
 }

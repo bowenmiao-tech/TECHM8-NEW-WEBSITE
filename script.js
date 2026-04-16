@@ -348,6 +348,86 @@ function saveLocalOrder(payload) {
   window.localStorage.setItem(LOCAL_ORDER_STORAGE_KEY, JSON.stringify(orders.slice(0, 30)));
 }
 
+async function loadPaymentFeeProfiles() {
+  const { supabaseUrl, supabaseAnonKey } = window.TECHM8_CONFIG || {};
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return [
+      {
+        code: "pay_in_store",
+        label: "Pay in store",
+        provider: "manual",
+        fee_type: "none",
+        percentage: 0,
+        fixed_amount: 0,
+        is_enabled: true,
+      },
+    ];
+  }
+
+  try {
+    const response = await fetch(
+      `${supabaseUrl}/rest/v1/payment_fee_profiles?select=code,label,provider,fee_type,percentage,fixed_amount,is_enabled,sort_order,notes&is_enabled=eq.true&order=sort_order.asc`,
+      {
+        headers: {
+          Accept: "application/json",
+          apikey: supabaseAnonKey,
+          Authorization: `Bearer ${supabaseAnonKey}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Payment fee profiles could not be loaded.");
+    }
+
+    const rows = await response.json();
+    return Array.isArray(rows) && rows.length
+      ? rows
+      : [
+          {
+            code: "pay_in_store",
+            label: "Pay in store",
+            provider: "manual",
+            fee_type: "none",
+            percentage: 0,
+            fixed_amount: 0,
+            is_enabled: true,
+          },
+        ];
+  } catch (error) {
+    return [
+      {
+        code: "pay_in_store",
+        label: "Pay in store",
+        provider: "manual",
+        fee_type: "none",
+        percentage: 0,
+        fixed_amount: 0,
+        is_enabled: true,
+      },
+    ];
+  }
+}
+
+function calculatePaymentFee(subtotal, profile) {
+  if (!profile) return 0;
+
+  const percentage = Number(profile.percentage) || 0;
+  const fixedAmount = Number(profile.fixed_amount) || 0;
+
+  switch (profile.fee_type) {
+    case "fixed":
+      return Number(fixedAmount.toFixed(2));
+    case "percent":
+      return Number((subtotal * (percentage / 100)).toFixed(2));
+    case "combined":
+      return Number((subtotal * (percentage / 100) + fixedAmount).toFixed(2));
+    default:
+      return 0;
+  }
+}
+
 function initStorefront() {
   const root = document.querySelector("[data-storefront]");
   if (!(root instanceof HTMLElement)) return;
@@ -1195,11 +1275,14 @@ function renderCartLineItems(target, items) {
   }).join("");
 }
 
-function renderCartSummary(target, items) {
+function renderCartSummary(target, items, options = {}) {
   if (!(target instanceof HTMLElement)) return;
 
   const subtotal = getCartSubtotal(items);
+  const paymentProfile = options.paymentProfile || null;
+  const paymentFee = paymentProfile ? calculatePaymentFee(subtotal, paymentProfile) : 0;
   const itemCount = getCartCount(items);
+  const total = subtotal + paymentFee;
   target.innerHTML = `
     <div class="storefront-summary__row">
       <span>Items</span>
@@ -1213,9 +1296,13 @@ function renderCartSummary(target, items) {
       <span>Store pickup</span>
       <strong>To be confirmed</strong>
     </div>
+    <div class="storefront-summary__row storefront-summary__row--muted">
+      <span>Payment fee</span>
+      <strong>${escapeHtml(formatMoney(paymentFee))}</strong>
+    </div>
     <div class="storefront-summary__row storefront-summary__row--total">
       <span>Total</span>
-      <strong>${escapeHtml(formatMoney(subtotal))}</strong>
+      <strong>${escapeHtml(formatMoney(total))}</strong>
     </div>
   `;
 }
@@ -1275,8 +1362,51 @@ function initCheckoutPage() {
   const summaryTarget = root.querySelector("[data-checkout-summary]");
   const itemsTarget = root.querySelector("[data-checkout-items]");
   const messageTarget = root.querySelector("[data-checkout-message]");
+  const paymentMethodField = root.querySelector("[data-payment-method]");
+  const paymentNoteTarget = root.querySelector("[data-payment-note]");
   if (!(form instanceof HTMLFormElement) || !(summaryTarget instanceof HTMLElement) || !(itemsTarget instanceof HTMLElement)) return;
   const submitButton = form.querySelector('button[type="submit"]');
+  const paymentProfiles = [];
+  const checkoutParams = new URLSearchParams(window.location.search);
+  const isPaymentCancelled = checkoutParams.get("payment") === "cancelled";
+
+  const getSelectedPaymentProfile = () => {
+    const selectedCode =
+      paymentMethodField instanceof HTMLSelectElement
+        ? String(paymentMethodField.value || "pay_in_store").trim()
+        : "pay_in_store";
+    return paymentProfiles.find((profile) => profile.code === selectedCode) || null;
+  };
+
+  const renderPaymentNote = () => {
+    if (!(paymentNoteTarget instanceof HTMLElement)) return;
+    const profile = getSelectedPaymentProfile();
+    if (!profile) {
+      paymentNoteTarget.hidden = true;
+      paymentNoteTarget.textContent = "";
+      return;
+    }
+
+    const notes = [];
+    if (profile.provider === "manual") {
+      notes.push("No online payment redirect. The store will confirm the order and collect payment in store.");
+    }
+    if (profile.provider === "stripe" && profile.code === "card") {
+      notes.push("Card payment uses Stripe Checkout. Apple Pay will appear automatically there on supported Apple devices and browsers.");
+    }
+    if (profile.provider === "stripe" && profile.code === "afterpay_clearpay") {
+      notes.push("Afterpay opens in Stripe Checkout and is only shown when the cart and customer are eligible.");
+    }
+    if (profile.provider === "stripe" && profile.code === "wechat_pay") {
+      notes.push("WeChat Pay opens in Stripe Checkout. Availability depends on your Stripe account and customer region.");
+    }
+    if (profile.notes) {
+      notes.push(String(profile.notes).trim());
+    }
+
+    paymentNoteTarget.hidden = !notes.length;
+    paymentNoteTarget.textContent = notes.join(" ");
+  };
 
   const renderSuccessState = (payload) => {
     root.innerHTML = `
@@ -1338,14 +1468,22 @@ function initCheckoutPage() {
     const successItemsTarget = root.querySelector("[data-checkout-success-items]");
     const successSummaryTarget = root.querySelector("[data-checkout-success-summary]");
     renderCartLineItems(successItemsTarget, payload.items || []);
-    renderCartSummary(successSummaryTarget, payload.items || []);
+    renderCartSummary(successSummaryTarget, payload.items || [], {
+      paymentProfile:
+        payload.payment_method_code
+          ? paymentProfiles.find((profile) => profile.code === payload.payment_method_code) || null
+          : null,
+    });
   };
 
   const render = () => {
     const items = loadCart();
     renderCartLineItems(itemsTarget, items);
-    renderCartSummary(summaryTarget, items);
-    if (messageTarget instanceof HTMLElement && items.length) {
+    renderCartSummary(summaryTarget, items, {
+      paymentProfile: getSelectedPaymentProfile(),
+    });
+    renderPaymentNote();
+    if (messageTarget instanceof HTMLElement && items.length && !isPaymentCancelled) {
       messageTarget.hidden = true;
       messageTarget.textContent = "";
       messageTarget.className = "booking-message";
@@ -1392,6 +1530,7 @@ function initCheckoutPage() {
 
     const formData = new FormData(form);
     const subtotal = getCartSubtotal(items);
+    const selectedProfile = getSelectedPaymentProfile();
     const payload = {
       order_code: makeOrderCode(),
       customer_name: String(formData.get("customer_name") || "").trim(),
@@ -1399,21 +1538,50 @@ function initCheckoutPage() {
       email: String(formData.get("email") || "").trim(),
       store_slug: String(formData.get("store_slug") || "").trim(),
       preferred_contact_method: String(formData.get("preferred_contact_method") || "phone").trim(),
+      payment_method_code: String(formData.get("payment_method_code") || "pay_in_store").trim(),
+      fulfillment_method: "pickup",
       notes: String(formData.get("notes") || "").trim(),
       subtotal_amount: subtotal,
       total_amount: subtotal,
       source: "website",
+      site_url: window.location.origin,
       items,
       created_at: new Date().toISOString(),
     };
 
     const endpoint = window.TECHM8_CONFIG?.orderEndpoint || "";
+    const checkoutSessionEndpoint = window.TECHM8_CONFIG?.checkoutSessionEndpoint || "";
     const supabaseAnonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
 
     try {
       if (submitButton instanceof HTMLButtonElement) {
         submitButton.disabled = true;
         submitButton.textContent = "Submitting...";
+      }
+
+      if (selectedProfile?.provider === "stripe") {
+        if (!checkoutSessionEndpoint) {
+          throw new Error("Stripe Checkout is not configured yet.");
+        }
+
+        const response = await fetch(checkoutSessionEndpoint, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${supabaseAnonKey}`,
+            apikey: supabaseAnonKey,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+        if (!response.ok || !result.ok || !result.checkout_url) {
+          throw new Error(result.error || "Stripe Checkout could not be started.");
+        }
+
+        window.location.href = result.checkout_url;
+        return;
       }
 
       if (endpoint) {
@@ -1458,7 +1626,91 @@ function initCheckoutPage() {
     }
   });
 
-  render();
+  if (paymentMethodField instanceof HTMLSelectElement) {
+    paymentMethodField.addEventListener("change", render);
+  }
+
+  loadPaymentFeeProfiles()
+    .then((profiles) => {
+      const supportedProfiles = profiles.filter((profile) => {
+        if (!profile || !profile.code || profile.is_enabled === false) return false;
+        if (profile.provider === "manual") return true;
+        if (profile.provider === "stripe") {
+          return ["card", "afterpay_clearpay", "wechat_pay"].includes(profile.code);
+        }
+        return false;
+      });
+
+      paymentProfiles.splice(
+        0,
+        paymentProfiles.length,
+        ...(supportedProfiles.length
+          ? supportedProfiles
+          : [
+              {
+                code: "pay_in_store",
+                label: "Pay in store",
+                provider: "manual",
+                fee_type: "none",
+                percentage: 0,
+                fixed_amount: 0,
+                is_enabled: true,
+                notes: "",
+              },
+            ])
+      );
+
+      if (paymentMethodField instanceof HTMLSelectElement) {
+        paymentMethodField.innerHTML = paymentProfiles
+          .map((profile) => `<option value="${escapeHtml(profile.code)}">${escapeHtml(profile.label)}</option>`)
+          .join("");
+      }
+
+      render();
+    })
+    .catch(() => {
+      paymentProfiles.splice(0, paymentProfiles.length, {
+        code: "pay_in_store",
+        label: "Pay in store",
+        provider: "manual",
+        fee_type: "none",
+        percentage: 0,
+        fixed_amount: 0,
+        is_enabled: true,
+        notes: "",
+      });
+      if (paymentMethodField instanceof HTMLSelectElement) {
+        paymentMethodField.innerHTML = `<option value="pay_in_store">Pay in store</option>`;
+      }
+      render();
+    });
+
+  if (isPaymentCancelled && messageTarget instanceof HTMLElement) {
+    messageTarget.hidden = false;
+    messageTarget.className = "booking-message is-error";
+    messageTarget.textContent = "Stripe payment was cancelled. Your cart is still here and you can try again.";
+  }
+}
+
+function initCheckoutSuccessPage() {
+  const root = document.querySelector("[data-checkout-success-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const orderCode = params.get("order_code") || "Pending";
+  const sessionId = params.get("session_id") || "";
+  const orderCodeTarget = root.querySelector("[data-success-order-code]");
+  const sessionTarget = root.querySelector("[data-success-session-id]");
+
+  clearCart();
+
+  if (orderCodeTarget instanceof HTMLElement) {
+    orderCodeTarget.textContent = orderCode;
+  }
+
+  if (sessionTarget instanceof HTMLElement) {
+    sessionTarget.textContent = sessionId || "Stripe session confirmed";
+  }
 }
 
 function initBookingForm() {
@@ -1704,6 +1956,7 @@ function initPage() {
   initProductDetailPage();
   initCartPage();
   initCheckoutPage();
+  initCheckoutSuccessPage();
   initBookingForm();
 }
 
