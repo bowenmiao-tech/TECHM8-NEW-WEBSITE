@@ -265,10 +265,51 @@ function getCartSubtotal(items = loadCart()) {
   return items.reduce((total, item) => total + (Number(item.price) || 0) * (Number(item.qty) || 0), 0);
 }
 
+function ensureGlobalCartUi() {
+  document.querySelectorAll(".nav__menu").forEach((menu) => {
+    if (!(menu instanceof HTMLElement)) return;
+    if (menu.querySelector(".nav__cart-link")) return;
+
+    const cartLink = document.createElement("a");
+    cartLink.className = "nav__cart-link";
+    cartLink.href = "cart.html";
+    cartLink.innerHTML = 'Cart <span class="nav__cart-count" data-cart-count>0</span>';
+
+    const shopLink = menu.querySelector(".nav__shop-link");
+    if (shopLink?.parentNode === menu) {
+      menu.insertBefore(cartLink, shopLink);
+    } else {
+      menu.appendChild(cartLink);
+    }
+  });
+
+  if (!document.querySelector("[data-floating-cart]")) {
+    const floatingCart = document.createElement("a");
+    floatingCart.className = "floating-cart";
+    floatingCart.href = "cart.html";
+    floatingCart.setAttribute("aria-label", "Open cart");
+    floatingCart.setAttribute("data-floating-cart", "true");
+    floatingCart.innerHTML = `
+      <span class="floating-cart__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="20" r="1.35"></circle>
+          <circle cx="18" cy="20" r="1.35"></circle>
+          <path d="M2 3h2.2l2.4 10.2a1 1 0 0 0 .98.78h9.85a1 1 0 0 0 .98-.8L20 7H6.1"></path>
+        </svg>
+      </span>
+      <span class="floating-cart__count" data-cart-count>0</span>
+    `;
+    document.body.appendChild(floatingCart);
+  }
+}
+
 function updateCartIndicators(items = loadCart()) {
   const count = getCartCount(items);
   document.querySelectorAll("[data-cart-count]").forEach((target) => {
+    if (!(target instanceof HTMLElement)) return;
     target.textContent = String(count);
+    target.toggleAttribute("hidden", count <= 0);
+    target.setAttribute("aria-hidden", count <= 0 ? "true" : "false");
   });
 }
 
@@ -2042,6 +2083,7 @@ function initNavigation() {
 }
 
 function initPage() {
+  ensureGlobalCartUi();
   updateCartIndicators();
   window.addEventListener("storage", () => updateCartIndicators());
   initFilters();
