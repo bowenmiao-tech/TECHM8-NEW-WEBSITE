@@ -896,7 +896,14 @@ function getFallbackCatalogProducts() {
       category_slug: "ps5-controllers",
       category_description: "PlayStation 5 wireless controller range.",
     },
-  ];
+  ].map((product, index) => ({
+    ...product,
+    catalog_index: index,
+    display_image: product.image_url || "",
+    gallery_images: product.image_url
+      ? [{ product_id: product.id, image_url: product.image_url, alt_text: product.name || "", sort_order: 0 }]
+      : [],
+  }));
 }
 
 async function loadSharedCatalogData() {
@@ -920,31 +927,60 @@ async function loadSharedCatalogData() {
     };
     const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
     const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id&is_visible=eq.true&order=created_at.desc`;
-    const [categoriesResponse, productsResponse] = await Promise.all([
+    const productImagesUrl = `${supabaseUrl}/rest/v1/product_images?select=product_id,image_url,alt_text,sort_order&order=sort_order.asc`;
+    const [categoriesResponse, productsResponse, productImagesResponse] = await Promise.all([
       fetch(categoriesUrl, { headers }),
       fetch(productsUrl, { headers }),
+      fetch(productImagesUrl, { headers }),
     ]);
 
-    if (!categoriesResponse.ok || !productsResponse.ok) {
+    if (!categoriesResponse.ok || !productsResponse.ok || !productImagesResponse.ok) {
       throw new Error("Catalog request failed");
     }
 
     const categories = await categoriesResponse.json();
     const products = await productsResponse.json();
+    const productImages = await productImagesResponse.json();
     const categoriesMap = new Map(categories.map((category) => [category.id, category]));
-    const normalizedProducts = products.map((product) => {
+    const galleryMap = new Map();
+
+    productImages.forEach((image) => {
+      if (!image?.product_id || !image?.image_url) return;
+      if (!galleryMap.has(image.product_id)) {
+        galleryMap.set(image.product_id, []);
+      }
+      galleryMap.get(image.product_id).push({
+        product_id: image.product_id,
+        image_url: image.image_url,
+        alt_text: image.alt_text || "",
+        sort_order: Number(image.sort_order) || 0,
+      });
+    });
+
+    const normalizedProducts = products.map((product, index) => {
       const category = categoriesMap.get(product.category_id) || null;
       const retailPrice = Number(product.retail_price);
       const compareAtPrice = Number(product.compare_at_price);
       const safeRetailPrice = Number.isFinite(retailPrice) && retailPrice > 0 ? retailPrice : 0;
+      const galleryImages = Array.isArray(galleryMap.get(product.id))
+        ? galleryMap.get(product.id).slice().sort((left, right) => (Number(left.sort_order) || 0) - (Number(right.sort_order) || 0))
+        : [];
+      const fallbackGallery =
+        product.image_url && !galleryImages.length
+          ? [{ product_id: product.id, image_url: product.image_url, alt_text: product.name || "", sort_order: 0 }]
+          : [];
+      const finalGallery = galleryImages.length ? galleryImages : fallbackGallery;
+
       return {
         ...product,
+        catalog_index: index,
         retail_price: safeRetailPrice,
         compare_at_price:
           Number.isFinite(compareAtPrice) && compareAtPrice > safeRetailPrice
             ? compareAtPrice
             : Math.ceil(safeRetailPrice * 1.18),
-        display_image: product.image_url || "",
+        display_image: finalGallery[0]?.image_url || product.image_url || "",
+        gallery_images: finalGallery,
         category_slug: category?.slug || "other-products",
         category_name: category?.name || "Other Products",
         category_description: category?.description || "",
@@ -964,6 +1000,26 @@ async function loadSharedCatalogData() {
       categories: [{ slug: "ps5-controllers", name: "PS5 Controllers", description: "PlayStation 5 wireless controller range." }],
     };
   }
+}
+
+function getProductGalleryImages(product) {
+  if (Array.isArray(product?.gallery_images) && product.gallery_images.length) {
+    return product.gallery_images
+      .filter((item) => item?.image_url)
+      .sort((left, right) => (Number(left?.sort_order) || 0) - (Number(right?.sort_order) || 0));
+  }
+
+  if (product?.display_image || product?.image_url) {
+    return [
+      {
+        image_url: product.display_image || product.image_url,
+        alt_text: product.name || "",
+        sort_order: 0,
+      },
+    ];
+  }
+
+  return [];
 }
 
 function createCatalogCard(product) {
@@ -1136,6 +1192,8 @@ function initProductDetailPage() {
     const retailPrice = Number(product.retail_price) || 0;
     const savings = compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
     const stockText = Number(product.stock_quantity) > 0 ? `${product.stock_quantity} available across stores` : "Store stock is updated in-store";
+    const galleryImages = getProductGalleryImages(product);
+    const mainImage = galleryImages[0] || null;
     const relatedProducts = products
       .filter((item) => item.category_slug === product.category_slug && item.slug !== product.slug)
       .slice(0, 4);
@@ -1155,11 +1213,35 @@ function initProductDetailPage() {
       <section class="storefront-pdp">
         <div class="storefront-pdp__gallery">
           <div class="storefront-pdp__gallery-main">
-            ${product.display_image ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(product.name)}">` : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`}
+            ${mainImage ? `<img src="${escapeHtml(mainImage.image_url)}" alt="${escapeHtml(mainImage.alt_text || product.name)}" data-pdp-main-image>` : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`}
           </div>
+          ${
+            galleryImages.length > 1
+              ? `
+                <div class="storefront-pdp__gallery-thumbs">
+                  ${galleryImages
+                    .map(
+                      (image, index) => `
+                        <button
+                          class="storefront-pdp__thumb ${index === 0 ? "is-active" : ""}"
+                          type="button"
+                          data-pdp-thumb
+                          data-image-src="${escapeHtml(image.image_url)}"
+                          data-image-alt="${escapeHtml(image.alt_text || product.name)}"
+                          aria-label="View image ${index + 1}"
+                        >
+                          <img src="${escapeHtml(image.image_url)}" alt="${escapeHtml(image.alt_text || product.name)}" loading="lazy">
+                        </button>
+                      `
+                    )
+                    .join("")}
+                </div>
+              `
+              : ""
+          }
           <div class="storefront-pdp__gallery-note">
-            <strong>Official product image</strong>
-            <span>Stored in Supabase and linked to the live catalog.</span>
+            <strong>${galleryImages.length > 1 ? `${galleryImages.length} product images` : "Product image"}</strong>
+            <span>Catalog images are stored in Supabase and linked to the live storefront.</span>
           </div>
         </div>
 
@@ -1264,6 +1346,8 @@ function initProductDetailPage() {
 
     const addButton = shell.querySelector("[data-product-add-cart]");
     const qtyField = shell.querySelector("[data-product-qty]");
+    const mainImageTarget = shell.querySelector("[data-pdp-main-image]");
+    const thumbnailButtons = shell.querySelectorAll("[data-pdp-thumb]");
     if (addButton instanceof HTMLButtonElement) {
       addButton.addEventListener("click", () => {
         const quantity = qtyField instanceof HTMLInputElement ? Math.max(1, Number(qtyField.value) || 1) : 1;
@@ -1272,6 +1356,21 @@ function initProductDetailPage() {
         window.setTimeout(() => {
           addButton.textContent = "Add to cart";
         }, 1200);
+      });
+    }
+
+    if (mainImageTarget instanceof HTMLImageElement && thumbnailButtons.length) {
+      thumbnailButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          if (!(button instanceof HTMLButtonElement)) return;
+          const imageSrc = button.getAttribute("data-image-src") || "";
+          const imageAlt = button.getAttribute("data-image-alt") || product.name || "";
+          if (!imageSrc) return;
+          mainImageTarget.src = imageSrc;
+          mainImageTarget.alt = imageAlt;
+          thumbnailButtons.forEach((item) => item.classList.remove("is-active"));
+          button.classList.add("is-active");
+        });
       });
     }
 
@@ -1363,6 +1462,62 @@ function renderCartSummary(target, items, options = {}) {
   `;
 }
 
+function selectCheckoutRecommendations(products, cartItems, limit = 5) {
+  const safeProducts = Array.isArray(products) ? products.slice() : [];
+  const cartSlugs = new Set((Array.isArray(cartItems) ? cartItems : []).map((item) => item.slug).filter(Boolean));
+  const cartTerms = new Set();
+  const latestProducts = safeProducts
+    .slice()
+    .sort((left, right) => (Number(left.catalog_index) || 0) - (Number(right.catalog_index) || 0));
+
+  (Array.isArray(cartItems) ? cartItems : []).forEach((item) => {
+    const text = [item.name, item.category_name, item.compatibility, item.brand].join(" ").toLowerCase();
+    if (/charger|adapter|magsafe|usb-c/.test(text)) cartTerms.add("power");
+    if (/controller|dualsense|playstation|xbox|nintendo/.test(text)) cartTerms.add("gaming");
+    if (/case|glass|protector|cover/.test(text)) cartTerms.add("protection");
+    if (/cable/.test(text)) cartTerms.add("cable");
+  });
+
+  const scored = safeProducts
+    .filter((product) => product?.slug && !cartSlugs.has(product.slug))
+    .map((product) => {
+      const haystack = [product.name, product.category_name, product.compatibility, product.brand, product.short_description]
+        .join(" ")
+        .toLowerCase();
+      let score = 0;
+      if (cartTerms.has("power") && /charger|adapter|magsafe|usb-c|cable/.test(haystack)) score += 3;
+      if (cartTerms.has("gaming") && /controller|playstation|xbox|gaming/.test(haystack)) score += 3;
+      if (cartTerms.has("protection") && /case|protector|glass|cover|charger|cable/.test(haystack)) score += 2;
+      if (cartTerms.has("cable") && /charger|adapter|usb-c|plug/.test(haystack)) score += 2;
+      if (product.is_featured) score += 1;
+      return { product, score };
+    })
+    .sort((left, right) => right.score - left.score || Number(right.product.is_featured) - Number(left.product.is_featured));
+
+  const related = scored.filter((item) => item.score > 0).map((item) => item.product).slice(0, limit);
+  if (related.length >= limit) {
+    return related;
+  }
+
+  const seen = new Set(related.map((item) => item.slug));
+  latestProducts.forEach((product) => {
+    if (!product?.slug || seen.has(product.slug) || cartSlugs.has(product.slug) || related.length >= limit) return;
+    related.push(product);
+    seen.add(product.slug);
+  });
+
+  return related;
+}
+
+function renderCheckoutRecommendations(target, products, cartItems) {
+  if (!(target instanceof HTMLElement)) return;
+  const recommendations = selectCheckoutRecommendations(products, cartItems, 5);
+
+  target.innerHTML = recommendations.length
+    ? recommendations.map((product) => createCatalogCard(product)).join("")
+    : `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">No recommendations</span><h3>No extra products to suggest yet</h3><p>New catalog items will appear here automatically.</p></div></article>`;
+}
+
 function initCartPage() {
   const root = document.querySelector("[data-cart-page]");
   if (!(root instanceof HTMLElement)) return;
@@ -1421,9 +1576,11 @@ function initCheckoutPage() {
   const paymentOptionsTarget = root.querySelector("[data-payment-options]");
   const paymentMethodField = root.querySelector("[data-payment-method]");
   const paymentNoteTarget = root.querySelector("[data-payment-note]");
+  const recommendationsTarget = root.querySelector("[data-checkout-recommendations]");
   if (!(form instanceof HTMLFormElement) || !(summaryTarget instanceof HTMLElement) || !(itemsTarget instanceof HTMLElement)) return;
   const submitButton = form.querySelector('button[type="submit"]');
   const paymentProfiles = [];
+  let catalogProducts = [];
   const checkoutParams = new URLSearchParams(window.location.search);
   const isPaymentCancelled = checkoutParams.get("payment") === "cancelled";
 
@@ -1630,6 +1787,9 @@ function initCheckoutPage() {
       messageTarget.textContent = "";
       messageTarget.className = "booking-message";
     }
+    if (recommendationsTarget instanceof HTMLElement && catalogProducts.length) {
+      renderCheckoutRecommendations(recommendationsTarget, catalogProducts, items);
+    }
     if (submitButton instanceof HTMLButtonElement) {
       submitButton.disabled = !items.length;
       submitButton.textContent = items.length ? "Submit order request" : "Add items before checkout";
@@ -1833,6 +1993,22 @@ function initCheckoutPage() {
       });
       if (paymentMethodField instanceof HTMLInputElement) {
         paymentMethodField.value = "pay_in_store";
+      }
+      render();
+    });
+
+  loadSharedCatalogData()
+    .then(({ products }) => {
+      catalogProducts = Array.isArray(products) ? products : [];
+      if (recommendationsTarget instanceof HTMLElement) {
+        bindCartButtons(recommendationsTarget, () => catalogProducts, { confirmText: "Added" });
+      }
+      render();
+    })
+    .catch(() => {
+      catalogProducts = getFallbackCatalogProducts();
+      if (recommendationsTarget instanceof HTMLElement) {
+        bindCartButtons(recommendationsTarget, () => catalogProducts, { confirmText: "Added" });
       }
       render();
     });

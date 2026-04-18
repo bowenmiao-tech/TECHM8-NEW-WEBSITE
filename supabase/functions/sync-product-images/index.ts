@@ -8,46 +8,69 @@ const corsHeaders = {
 
 const bucketName = 'product-images'
 
-const controllerImages = [
-  {
-    sku: 'TM8-PS5-DS-STERLING-SILVER',
-    slug: 'dualsense-wireless-controller-sterling-silver-playstation-5',
-    sourceImageUrl:
-      'https://static.wixstatic.com/media/ff60a8_44b8629acec14e089b265c9c134f3dcd~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg',
-  },
-  {
-    sku: 'TM8-PS5-DS-COSMIC-RED',
-    slug: 'dualsense-wireless-controller-cosmic-red-playstation-5',
-    sourceImageUrl:
-      'https://static.wixstatic.com/media/ff60a8_3d6c59b7f9844dce9cddba30391438aa~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg',
-  },
-  {
-    sku: 'TM8-PS5-DS-GRAY-CAMO',
-    slug: 'dualsense-wireless-controller-gray-camouflage',
-    sourceImageUrl:
-      'https://static.wixstatic.com/media/ff60a8_e970ca83b1cb486aaae98a2172e07cbc~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg',
-  },
-  {
-    sku: 'TM8-PS5-DS-BLACK',
-    slug: 'copy-of-dualsense-wireless-controller-playstation-5-black',
-    sourceImageUrl:
-      'https://static.wixstatic.com/media/ff60a8_8b5310c0258a420ea7f0e18e943a501d~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg',
-  },
-  {
-    sku: 'TM8-PS5-DS-WHITE',
-    slug: 'dualsense-wireless-controller-playstation-5-white',
-    sourceImageUrl:
-      'https://static.wixstatic.com/media/ff60a8_997f0a93bc8e4b9a907efb21027b37f0~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg',
-  },
-]
+type GalleryRow = {
+  id: number
+  product_id: number
+  image_url: string
+  alt_text: string | null
+  sort_order: number
+  products: {
+    id: number
+    sku: string
+    slug: string
+    name: string
+    image_url: string | null
+    supplier_image_url: string | null
+  } | null
+}
+
+function getPublicPrefix(supabaseUrl: string) {
+  return `${supabaseUrl}/storage/v1/object/public/${bucketName}/`
+}
+
+function isSupabaseImage(url: string, supabaseUrl: string) {
+  return String(url || '').startsWith(getPublicPrefix(supabaseUrl))
+}
+
+function normalizeWixUrl(sourceUrl: string) {
+  const decodedUrl = decodeURIComponent(String(sourceUrl || '').trim())
+  const match = decodedUrl.match(/https:\/\/static\.wixstatic\.com\/media\/([^/?#]+)(?:\/v1\/.*)?$/i)
+  if (!match) return decodedUrl
+
+  const fileName = match[1]
+  const extensionMatch = fileName.match(/\.([a-z0-9]+)$/i)
+  const extension = extensionMatch?.[1]?.toLowerCase() || 'jpg'
+
+  return `https://static.wixstatic.com/media/${fileName}/v1/fit/w_1400,h_1400,q_90/file.${extension}`
+}
+
+function sanitizeSegment(value: string) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'item'
+}
 
 function getFileExtension(contentType: string | null, sourceUrl: string) {
   if (contentType?.includes('png')) return 'png'
   if (contentType?.includes('webp')) return 'webp'
   if (contentType?.includes('jpeg') || contentType?.includes('jpg')) return 'jpg'
 
-  const match = sourceUrl.match(/\.([a-zA-Z0-9]+)(?:$|\?)/)
+  const match = String(sourceUrl || '').match(/\.([a-zA-Z0-9]+)(?:$|\?)/)
   return match?.[1]?.toLowerCase() || 'jpg'
+}
+
+async function ensureBucket(supabaseAdmin: ReturnType<typeof createClient>) {
+  const { error } = await supabaseAdmin.storage.createBucket(bucketName, {
+    public: true,
+    fileSizeLimit: 10 * 1024 * 1024,
+    allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+  })
+
+  if (error && !error.message.toLowerCase().includes('already exists')) {
+    throw error
+  }
 }
 
 Deno.serve(async (req) => {
@@ -68,49 +91,68 @@ Deno.serve(async (req) => {
     }
 
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey)
+    await ensureBucket(supabaseAdmin)
 
-    const { error: bucketError } = await supabaseAdmin.storage.createBucket(bucketName, {
-      public: true,
-      fileSizeLimit: 5 * 1024 * 1024,
-      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
-    })
+    const { data: galleryRows, error: galleryError } = await supabaseAdmin
+      .from('product_images')
+      .select(`
+        id,
+        product_id,
+        image_url,
+        alt_text,
+        sort_order,
+        products:products!product_images_product_id_fkey (
+          id,
+          sku,
+          slug,
+          name,
+          image_url,
+          supplier_image_url
+        )
+      `)
+      .order('product_id', { ascending: true })
+      .order('sort_order', { ascending: true })
 
-    if (bucketError && !bucketError.message.toLowerCase().includes('already exists')) {
-      console.error(bucketError)
-      return Response.json({ ok: false, error: 'Could not create or access the product image bucket.' }, { status: 500, headers: corsHeaders })
+    if (galleryError) {
+      console.error(galleryError)
+      return Response.json({ ok: false, error: 'Could not read product image rows.' }, { status: 500, headers: corsHeaders })
     }
+
+    const rowsToSync = (galleryRows as GalleryRow[]).filter((row) => {
+      return row.products?.slug && row.image_url && !isSupabaseImage(row.image_url, supabaseUrl)
+    })
 
     const results: Array<Record<string, unknown>> = []
 
-    for (const item of controllerImages) {
-      const { data: product, error: productError } = await supabaseAdmin
-        .from('products')
-        .select('id, sku, name')
-        .eq('sku', item.sku)
-        .maybeSingle()
+    for (const row of rowsToSync) {
+      const product = row.products
+      if (!product) continue
 
-      if (productError || !product) {
-        results.push({
-          sku: item.sku,
-          ok: false,
-          error: 'Product row not found. Run the product seed first.',
-        })
-        continue
+      const preferredSourceUrl = normalizeWixUrl(row.image_url)
+      const fallbackSourceUrl = String(row.image_url)
+      let imageResponse = await fetch(preferredSourceUrl)
+      let sourceUsed = preferredSourceUrl
+
+      if (!imageResponse.ok && fallbackSourceUrl !== preferredSourceUrl) {
+        imageResponse = await fetch(fallbackSourceUrl)
+        sourceUsed = fallbackSourceUrl
       }
 
-      const imageResponse = await fetch(item.sourceImageUrl)
       if (!imageResponse.ok) {
         results.push({
-          sku: item.sku,
+          sku: product.sku,
+          product_slug: product.slug,
+          sort_order: row.sort_order,
           ok: false,
           error: `Could not download source image (${imageResponse.status}).`,
+          source_url: sourceUsed,
         })
         continue
       }
 
       const contentType = imageResponse.headers.get('content-type') || 'image/jpeg'
-      const extension = getFileExtension(contentType, item.sourceImageUrl)
-      const storagePath = `products/controllers/${item.slug}.${extension}`
+      const extension = getFileExtension(contentType, sourceUsed)
+      const storagePath = `products/${sanitizeSegment(product.slug)}/${String(row.sort_order).padStart(2, '0')}.${extension}`
       const imageBytes = new Uint8Array(await imageResponse.arrayBuffer())
 
       const { error: uploadError } = await supabaseAdmin.storage
@@ -123,9 +165,12 @@ Deno.serve(async (req) => {
       if (uploadError) {
         console.error(uploadError)
         results.push({
-          sku: item.sku,
+          sku: product.sku,
+          product_slug: product.slug,
+          sort_order: row.sort_order,
           ok: false,
           error: 'Image upload failed.',
+          source_url: sourceUsed,
         })
         continue
       }
@@ -133,67 +178,55 @@ Deno.serve(async (req) => {
       const { data: publicUrlData } = supabaseAdmin.storage.from(bucketName).getPublicUrl(storagePath)
       const publicUrl = publicUrlData.publicUrl
 
-      const { error: updateProductError } = await supabaseAdmin
-        .from('products')
-        .update({
-          image_url: publicUrl,
-        })
-        .eq('id', product.id)
+      const { error: imageUpdateError } = await supabaseAdmin
+        .from('product_images')
+        .update({ image_url: publicUrl })
+        .eq('id', row.id)
 
-      if (updateProductError) {
-        console.error(updateProductError)
+      if (imageUpdateError) {
+        console.error(imageUpdateError)
         results.push({
-          sku: item.sku,
+          sku: product.sku,
+          product_slug: product.slug,
+          sort_order: row.sort_order,
           ok: false,
-          error: 'Product image URL could not be updated.',
+          error: 'Gallery image row could not be updated.',
+          source_url: sourceUsed,
         })
         continue
       }
 
-      const { error: deleteImagesError } = await supabaseAdmin
-        .from('product_images')
-        .delete()
-        .eq('product_id', product.id)
+      if (row.sort_order === 0) {
+        const { error: productUpdateError } = await supabaseAdmin
+          .from('products')
+          .update({
+            image_url: publicUrl,
+            supplier_image_url: publicUrl,
+          })
+          .eq('id', product.id)
 
-      if (deleteImagesError) {
-        console.error(deleteImagesError)
-      }
-
-      const { error: insertImageError } = await supabaseAdmin
-        .from('product_images')
-        .insert({
-          product_id: product.id,
-          image_url: publicUrl,
-          alt_text: product.name,
-          sort_order: 0,
-        })
-
-      if (insertImageError) {
-        console.error(insertImageError)
-        results.push({
-          sku: item.sku,
-          ok: false,
-          error: 'Stored product image row could not be recreated.',
-        })
-        continue
+        if (productUpdateError) {
+          console.error(productUpdateError)
+        }
       }
 
       results.push({
-        sku: item.sku,
+        sku: product.sku,
+        product_slug: product.slug,
+        sort_order: row.sort_order,
         ok: true,
+        source_url: sourceUsed,
         storage_path: storagePath,
         public_url: publicUrl,
       })
     }
 
-    const successCount = results.filter((item) => item.ok === true).length
-
     return Response.json(
       {
         ok: true,
         bucket: bucketName,
-        synced: successCount,
-        total: controllerImages.length,
+        synced: results.filter((item) => item.ok === true).length,
+        total: rowsToSync.length,
         results,
       },
       { status: 200, headers: corsHeaders }
