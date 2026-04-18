@@ -111,6 +111,17 @@ if (pageData) {
           <a href="${prefix}products.html">Products</a>
           ${storeDropdown}
           <a href="${prefix}store-policy.html">Store Policy</a>
+          <a class="nav__cart-link" href="${prefix}cart.html">
+            <span class="nav__cart-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="20" r="1.35"></circle>
+                <circle cx="18" cy="20" r="1.35"></circle>
+                <path d="M2 3h2.2l2.4 10.2a1 1 0 0 0 .98.78h9.85a1 1 0 0 0 .98-.8L20 7H6.1"></path>
+              </svg>
+            </span>
+            <span class="nav__cart-text">Cart</span>
+            <span class="nav__cart-count" data-cart-count>0</span>
+          </a>
           <a class="nav__shop-link" href="${prefix}shop.html">Online Store</a>
         </nav>
       </div>
@@ -192,6 +203,52 @@ if (pageData) {
       </div>
     </footer>
   `;
+
+  const CART_STORAGE_KEY = "techm8_cart_v1";
+
+  const loadCart = () => {
+    try {
+      const raw = window.localStorage.getItem(CART_STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      return [];
+    }
+  };
+
+  const updateCartIndicators = () => {
+    const items = loadCart();
+    const count = items.reduce((total, item) => total + Math.max(0, Number(item.qty) || 0), 0);
+    document.querySelectorAll("[data-cart-count]").forEach((target) => {
+      if (!(target instanceof HTMLElement)) return;
+      target.textContent = String(count);
+      target.toggleAttribute("hidden", count <= 0);
+      target.setAttribute("aria-hidden", count <= 0 ? "true" : "false");
+    });
+  };
+
+  if (!document.querySelector("[data-floating-cart]")) {
+    const floatingCart = document.createElement("a");
+    floatingCart.className = "floating-cart";
+    floatingCart.href = `${prefix}cart.html`;
+    floatingCart.setAttribute("aria-label", "Open cart");
+    floatingCart.setAttribute("data-floating-cart", "true");
+    floatingCart.innerHTML = `
+      <span class="floating-cart__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="20" r="1.35"></circle>
+          <circle cx="18" cy="20" r="1.35"></circle>
+          <path d="M2 3h2.2l2.4 10.2a1 1 0 0 0 .98.78h9.85a1 1 0 0 0 .98-.8L20 7H6.1"></path>
+        </svg>
+      </span>
+      <span class="floating-cart__count" data-cart-count>0</span>
+    `;
+    document.body.appendChild(floatingCart);
+  }
+
+  updateCartIndicators();
+  window.addEventListener("storage", updateCartIndicators);
+  window.addEventListener("techm8:cart-updated", updateCartIndicators);
 
   const isMobileNavigation = () => window.innerWidth <= 960;
 

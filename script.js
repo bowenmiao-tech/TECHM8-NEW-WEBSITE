@@ -268,18 +268,33 @@ function getCartSubtotal(items = loadCart()) {
 function ensureGlobalCartUi() {
   document.querySelectorAll(".nav__menu").forEach((menu) => {
     if (!(menu instanceof HTMLElement)) return;
-    if (menu.querySelector(".nav__cart-link")) return;
+    let cartLink = menu.querySelector(".nav__cart-link");
 
-    const cartLink = document.createElement("a");
-    cartLink.className = "nav__cart-link";
-    cartLink.href = "cart.html";
-    cartLink.innerHTML = 'Cart <span class="nav__cart-count" data-cart-count>0</span>';
+    if (!(cartLink instanceof HTMLAnchorElement)) {
+      cartLink = document.createElement("a");
+      cartLink.className = "nav__cart-link";
+      cartLink.href = "cart.html";
 
-    const shopLink = menu.querySelector(".nav__shop-link");
-    if (shopLink?.parentNode === menu) {
-      menu.insertBefore(cartLink, shopLink);
-    } else {
-      menu.appendChild(cartLink);
+      const shopLink = menu.querySelector(".nav__shop-link");
+      if (shopLink?.parentNode === menu) {
+        menu.insertBefore(cartLink, shopLink);
+      } else {
+        menu.appendChild(cartLink);
+      }
+    }
+
+    if (!cartLink.querySelector(".nav__cart-icon")) {
+      cartLink.innerHTML = `
+        <span class="nav__cart-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="20" r="1.35"></circle>
+            <circle cx="18" cy="20" r="1.35"></circle>
+            <path d="M2 3h2.2l2.4 10.2a1 1 0 0 0 .98.78h9.85a1 1 0 0 0 .98-.8L20 7H6.1"></path>
+          </svg>
+        </span>
+        <span class="nav__cart-text">Cart</span>
+        <span class="nav__cart-count" data-cart-count>0</span>
+      `;
     }
   });
 
