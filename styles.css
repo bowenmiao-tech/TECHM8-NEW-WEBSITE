@@ -2426,6 +2426,137 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   border-radius: 999px;
 }
 
+.repair-brand-card,
+.repair-device-card {
+  min-height: 16rem;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(8, 52, 60, 0.08);
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.92), transparent 20%),
+    linear-gradient(140deg, rgba(22, 200, 186, 0.16), rgba(9, 102, 115, 0.12));
+}
+
+.repair-brand-card::after,
+.repair-device-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -2.5rem -3rem auto;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.repair-brand-card__mark,
+.repair-device-card__icon {
+  width: 4.9rem;
+  height: 4.9rem;
+  border-radius: 1.2rem;
+  display: grid;
+  place-items: center;
+  font: 700 1.35rem/1 "Space Grotesk", sans-serif;
+  letter-spacing: 0.04em;
+  color: #07272d;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 14px 30px rgba(10, 79, 88, 0.14);
+}
+
+.repair-brand-card__copy,
+.repair-device-card__copy {
+  display: grid;
+  gap: 0.35rem;
+  max-width: 14rem;
+}
+
+.repair-brand-card__copy strong,
+.repair-device-card__copy strong {
+  color: var(--brand-dark);
+  font-size: 1.32rem;
+  line-height: 1.1;
+}
+
+.repair-brand-card__copy span,
+.repair-device-card__copy span {
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.repair-device-card__icon svg {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.repair-brand-card--apple .repair-brand-card__mark {
+  background: #111111;
+  color: #ffffff;
+}
+
+.repair-brand-card--samsung .repair-brand-card__mark {
+  background: #1428a0;
+  color: #ffffff;
+}
+
+.repair-brand-card--oppo .repair-brand-card__mark {
+  background: #0e9f53;
+  color: #ffffff;
+}
+
+.repair-brand-card--huawei .repair-brand-card__mark {
+  background: #c70028;
+  color: #ffffff;
+}
+
+.repair-brand-card--xiaomi .repair-brand-card__mark {
+  background: #ff6a00;
+  color: #ffffff;
+}
+
+.repair-brand-card--google .repair-brand-card__mark {
+  background: linear-gradient(135deg, #4285f4 0%, #34a853 38%, #fbbc05 68%, #ea4335 100%);
+  color: #ffffff;
+}
+
+.repair-brand-card--oneplus .repair-brand-card__mark {
+  background: #ef1b2d;
+  color: #ffffff;
+}
+
+.repair-brand-card--sony .repair-brand-card__mark {
+  background: #111111;
+  color: #ffffff;
+}
+
+.repair-brand-card--xbox .repair-brand-card__mark {
+  background: #107c10;
+  color: #ffffff;
+}
+
+.repair-brand-card--nintendo .repair-brand-card__mark {
+  background: #e60012;
+  color: #ffffff;
+}
+
+.repair-brand-card--other .repair-brand-card__mark {
+  background: var(--brand-dark);
+  color: #ffffff;
+}
+
+.repair-device-card--pc-tower .repair-device-card__icon,
+.repair-device-card--all-in-one .repair-device-card__icon,
+.repair-device-card--laptop .repair-device-card__icon,
+.repair-device-card--small-pc .repair-device-card__icon {
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--brand-dark);
+}
+
 .repair-content-grid {
   display: grid;
   gap: 1rem;
@@ -3072,6 +3203,18 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
   .repair-detail-panel__icon {
     min-height: 12rem;
+  }
+
+  .repair-brand-card,
+  .repair-device-card {
+    min-height: 12rem;
+    padding: 1.15rem;
+  }
+
+  .repair-brand-card__mark,
+  .repair-device-card__icon {
+    width: 4.2rem;
+    height: 4.2rem;
   }
 }
 .store-profile {

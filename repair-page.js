@@ -88,6 +88,120 @@ if (pageData) {
     )
     .join("");
 
+  const renderBrandVisual = (slug, mark, name, meta) => `
+    <div class="repair-brand-card repair-brand-card--${slug}">
+      <div class="repair-brand-card__mark" aria-hidden="true">${mark}</div>
+      <div class="repair-brand-card__copy">
+        <strong>${name}</strong>
+        <span>${meta}</span>
+      </div>
+    </div>
+  `;
+
+  const renderDeviceVisual = (slug, name, meta, svgMarkup) => `
+    <div class="repair-device-card repair-device-card--${slug}">
+      <div class="repair-device-card__icon" aria-hidden="true">${svgMarkup}</div>
+      <div class="repair-device-card__copy">
+        <strong>${name}</strong>
+        <span>${meta}</span>
+      </div>
+    </div>
+  `;
+
+  const resolveRepairVisual = () => {
+    const title = String(pageData.title || "").toLowerCase();
+
+    if (title.includes("apple iphone") || title.includes("apple ipad")) {
+      return renderBrandVisual("apple", "A", "Apple", "iPhone and iPad repairs");
+    }
+    if (title.includes("samsung phone") || title.includes("samsung tablet")) {
+      return renderBrandVisual("samsung", "S", "Samsung", "Galaxy phone and tablet service");
+    }
+    if (title.includes("oppo")) {
+      return renderBrandVisual("oppo", "O", "Oppo", "Screen, battery and charging support");
+    }
+    if (title.includes("huawei")) {
+      return renderBrandVisual("huawei", "H", "Huawei", "Hardware diagnostics and repair");
+    }
+    if (title.includes("xiaomi")) {
+      return renderBrandVisual("xiaomi", "MI", "Xiaomi", "Battery, screen and port service");
+    }
+    if (title.includes("google pixel")) {
+      return renderBrandVisual("google", "G", "Google", "Pixel repair and hardware support");
+    }
+    if (title.includes("oneplus")) {
+      return renderBrandVisual("oneplus", "1+", "OnePlus", "Premium Android device repairs");
+    }
+    if (title.includes("sony console")) {
+      return renderBrandVisual("sony", "S", "Sony", "PlayStation console repair support");
+    }
+    if (title.includes("xbox")) {
+      return renderBrandVisual("xbox", "X", "Xbox", "HDMI, PSU and storage repairs");
+    }
+    if (title.includes("nintendo")) {
+      return renderBrandVisual("nintendo", "N", "Nintendo", "Portable and console repair support");
+    }
+    if (title.includes("other phone") || title.includes("other tablet")) {
+      return renderBrandVisual("other", "+", "Other Brands", "Supported models and general diagnostics");
+    }
+    if (title.includes("pc tower")) {
+      return renderDeviceVisual(
+        "pc-tower",
+        "PC Tower",
+        "Power, storage, cooling and upgrade work",
+        `<svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="12" width="36" height="72" rx="8"></rect>
+          <circle cx="48" cy="26" r="3" fill="currentColor" stroke="none"></circle>
+          <path d="M40 40h16"></path>
+          <path d="M40 52h16"></path>
+          <path d="M40 64h16"></path>
+        </svg>`
+      );
+    }
+    if (title.includes("all in one")) {
+      return renderDeviceVisual(
+        "all-in-one",
+        "All in One",
+        "Integrated display and desktop hardware service",
+        `<svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="16" y="18" width="64" height="42" rx="6"></rect>
+          <path d="M48 60v10"></path>
+          <path d="M34 74h28"></path>
+          <rect x="22" y="24" width="52" height="30" rx="3"></rect>
+        </svg>`
+      );
+    }
+    if (title.includes("laptop")) {
+      return renderDeviceVisual(
+        "laptop",
+        "Laptop",
+        "Screen, battery, keyboard and charging repairs",
+        `<svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="20" y="18" width="56" height="36" rx="5"></rect>
+          <path d="M12 64h72"></path>
+          <path d="M24 54l-8 10"></path>
+          <path d="M72 54l8 10"></path>
+        </svg>`
+      );
+    }
+    if (title.includes("small pc")) {
+      return renderDeviceVisual(
+        "small-pc",
+        "Small PC",
+        "Mini PC diagnostics, thermal service and upgrades",
+        `<svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="22" y="22" width="52" height="52" rx="12"></rect>
+          <circle cx="38" cy="38" r="3" fill="currentColor" stroke="none"></circle>
+          <path d="M46 36h18"></path>
+          <path d="M46 48h18"></path>
+          <path d="M34 58h28"></path>
+        </svg>`
+      );
+    }
+
+    return `<div class="repair-detail-panel__icon ${pageData.vectorClass}" aria-hidden="true"></div>`;
+  };
+
   document.body.innerHTML = `
     <div class="promo-banner">
       <div class="container promo-banner__inner">
@@ -140,7 +254,7 @@ if (pageData) {
             </div>
           </div>
           <div class="repair-detail-panel">
-            <div class="repair-detail-panel__icon ${pageData.vectorClass}"></div>
+            ${resolveRepairVisual()}
           </div>
         </div>
       </section>
