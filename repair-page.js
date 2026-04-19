@@ -88,9 +88,26 @@ if (pageData) {
     )
     .join("");
 
-  const renderBrandVisual = (slug, mark, name, meta) => `
+  const logoRoot = `${prefix}assets/repair-logos/`;
+
+  const brandLogoMap = {
+    apple: `${logoRoot}apple.png`,
+    samsung: `${logoRoot}samsung.png`,
+    oppo: `${logoRoot}oppo.ico`,
+    huawei: `${logoRoot}huawei.png`,
+    xiaomi: `${logoRoot}xiaomi.png`,
+    google: `${logoRoot}google.png`,
+    oneplus: `${logoRoot}oneplus.png`,
+    sony: `${logoRoot}sony.png`,
+    xbox: `${logoRoot}xbox.svg`,
+    nintendo: `${logoRoot}nintendo.svg`,
+  };
+
+  const renderBrandVisual = (slug, name, meta) => `
     <div class="repair-brand-card repair-brand-card--${slug}">
-      <div class="repair-brand-card__mark" aria-hidden="true">${mark}</div>
+      <div class="repair-brand-card__mark" aria-hidden="true">
+        <img class="repair-brand-card__logo repair-brand-card__logo--${slug}" src="${brandLogoMap[slug]}" alt="">
+      </div>
       <div class="repair-brand-card__copy">
         <strong>${name}</strong>
         <span>${meta}</span>
@@ -112,37 +129,45 @@ if (pageData) {
     const title = String(pageData.title || "").toLowerCase();
 
     if (title.includes("apple iphone") || title.includes("apple ipad")) {
-      return renderBrandVisual("apple", "A", "Apple", "iPhone and iPad repairs");
+      return renderBrandVisual("apple", "Apple", "iPhone and iPad repairs");
     }
     if (title.includes("samsung phone") || title.includes("samsung tablet")) {
-      return renderBrandVisual("samsung", "S", "Samsung", "Galaxy phone and tablet service");
+      return renderBrandVisual("samsung", "Samsung", "Galaxy phone and tablet service");
     }
     if (title.includes("oppo")) {
-      return renderBrandVisual("oppo", "O", "Oppo", "Screen, battery and charging support");
+      return renderBrandVisual("oppo", "OPPO", "Screen, battery and charging support");
     }
     if (title.includes("huawei")) {
-      return renderBrandVisual("huawei", "H", "Huawei", "Hardware diagnostics and repair");
+      return renderBrandVisual("huawei", "Huawei", "Hardware diagnostics and repair");
     }
     if (title.includes("xiaomi")) {
-      return renderBrandVisual("xiaomi", "MI", "Xiaomi", "Battery, screen and port service");
+      return renderBrandVisual("xiaomi", "Xiaomi", "Battery, screen and port service");
     }
     if (title.includes("google pixel")) {
-      return renderBrandVisual("google", "G", "Google", "Pixel repair and hardware support");
+      return renderBrandVisual("google", "Google", "Pixel repair and hardware support");
     }
     if (title.includes("oneplus")) {
-      return renderBrandVisual("oneplus", "1+", "OnePlus", "Premium Android device repairs");
+      return renderBrandVisual("oneplus", "OnePlus", "Premium Android device repairs");
     }
     if (title.includes("sony console")) {
-      return renderBrandVisual("sony", "S", "Sony", "PlayStation console repair support");
+      return renderBrandVisual("sony", "PlayStation", "Console repair support");
     }
     if (title.includes("xbox")) {
-      return renderBrandVisual("xbox", "X", "Xbox", "HDMI, PSU and storage repairs");
+      return renderBrandVisual("xbox", "Xbox", "HDMI, PSU and storage repairs");
     }
     if (title.includes("nintendo")) {
-      return renderBrandVisual("nintendo", "N", "Nintendo", "Portable and console repair support");
+      return renderBrandVisual("nintendo", "Nintendo", "Portable and console repair support");
     }
     if (title.includes("other phone") || title.includes("other tablet")) {
-      return renderBrandVisual("other", "+", "Other Brands", "Supported models and general diagnostics");
+      return `
+        <div class="repair-brand-card repair-brand-card--other">
+          <div class="repair-brand-card__mark repair-brand-card__mark--fallback" aria-hidden="true">+</div>
+          <div class="repair-brand-card__copy">
+            <strong>Other Brands</strong>
+            <span>Supported models and general diagnostics</span>
+          </div>
+        </div>
+      `;
     }
     if (title.includes("pc tower")) {
       return renderDeviceVisual(
@@ -366,6 +391,20 @@ if (pageData) {
 
   const isMobileNavigation = () => window.innerWidth <= 960;
 
+  const keepMobileMenuOpen = () => {
+    if (!isMobileNavigation()) return;
+    const mobileInput = document.querySelector(".nav__mobile-input");
+    const navMenu = document.querySelector(".nav__menu");
+    const navToggle = document.querySelector(".nav__toggle--open, .nav__toggle");
+
+    if (mobileInput instanceof HTMLInputElement) {
+      mobileInput.checked = true;
+    }
+
+    navMenu?.classList.add("is-open");
+    navToggle?.setAttribute("aria-expanded", "true");
+  };
+
   const closeAllDropdowns = (exceptDropdown) => {
     document.querySelectorAll(".nav__dropdown.is-open").forEach((item) => {
       if (item === exceptDropdown) return;
@@ -455,6 +494,7 @@ if (pageData) {
       closeAllDropdowns(dropdown);
       dropdown.classList.add("is-open");
       dropdownToggle.setAttribute("aria-expanded", "true");
+      keepMobileMenuOpen();
       armDropdownNavigation(dropdownToggle);
       return;
     }
@@ -481,6 +521,12 @@ if (pageData) {
     }
 
     const isOpen = group.classList.contains("is-open");
+    const parentDropdown = group.closest(".nav__dropdown");
+    parentDropdown?.classList.add("is-open");
+    parentDropdown
+      ?.querySelector(".nav__dropdown-toggle")
+      ?.setAttribute("aria-expanded", "true");
+    keepMobileMenuOpen();
     closeAllSubmenus(group);
     group.classList.toggle("is-open", !isOpen);
     toggle.setAttribute("aria-expanded", String(!isOpen));
@@ -539,6 +585,10 @@ if (pageData) {
         closeAllDropdowns();
         closeAllSubmenus();
       }
+    });
+
+    navMenu.addEventListener("click", (event) => {
+      event.stopPropagation();
     });
   }
 

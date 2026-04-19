@@ -2461,11 +2461,40 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   border-radius: 1.2rem;
   display: grid;
   place-items: center;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 14px 30px rgba(10, 79, 88, 0.14);
+}
+
+.repair-brand-card__mark {
+  padding: 0.55rem;
+}
+
+.repair-brand-card__mark--fallback {
   font: 700 1.35rem/1 "Space Grotesk", sans-serif;
   letter-spacing: 0.04em;
   color: #07272d;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 14px 30px rgba(10, 79, 88, 0.14);
+}
+
+.repair-brand-card__logo {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.repair-brand-card__logo--google {
+  width: 100%;
+}
+
+.repair-brand-card__logo--apple,
+.repair-brand-card__logo--xiaomi,
+.repair-brand-card__logo--xbox,
+.repair-brand-card__logo--nintendo,
+.repair-brand-card__logo--oppo {
+  width: 100%;
+  height: 100%;
 }
 
 .repair-brand-card__copy,
@@ -2492,61 +2521,6 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 .repair-device-card__icon svg {
   width: 2.75rem;
   height: 2.75rem;
-}
-
-.repair-brand-card--apple .repair-brand-card__mark {
-  background: #111111;
-  color: #ffffff;
-}
-
-.repair-brand-card--samsung .repair-brand-card__mark {
-  background: #1428a0;
-  color: #ffffff;
-}
-
-.repair-brand-card--oppo .repair-brand-card__mark {
-  background: #0e9f53;
-  color: #ffffff;
-}
-
-.repair-brand-card--huawei .repair-brand-card__mark {
-  background: #c70028;
-  color: #ffffff;
-}
-
-.repair-brand-card--xiaomi .repair-brand-card__mark {
-  background: #ff6a00;
-  color: #ffffff;
-}
-
-.repair-brand-card--google .repair-brand-card__mark {
-  background: linear-gradient(135deg, #4285f4 0%, #34a853 38%, #fbbc05 68%, #ea4335 100%);
-  color: #ffffff;
-}
-
-.repair-brand-card--oneplus .repair-brand-card__mark {
-  background: #ef1b2d;
-  color: #ffffff;
-}
-
-.repair-brand-card--sony .repair-brand-card__mark {
-  background: #111111;
-  color: #ffffff;
-}
-
-.repair-brand-card--xbox .repair-brand-card__mark {
-  background: #107c10;
-  color: #ffffff;
-}
-
-.repair-brand-card--nintendo .repair-brand-card__mark {
-  background: #e60012;
-  color: #ffffff;
-}
-
-.repair-brand-card--other .repair-brand-card__mark {
-  background: var(--brand-dark);
-  color: #ffffff;
 }
 
 .repair-device-card--pc-tower .repair-device-card__icon,

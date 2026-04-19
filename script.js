@@ -21,6 +21,20 @@ function isMobileNavigation() {
   return window.innerWidth <= 960;
 }
 
+function keepMobileMenuOpen() {
+  if (!isMobileNavigation()) return;
+  const mobileInput = document.querySelector(".nav__mobile-input");
+  const navMenu = document.querySelector(".nav__menu");
+  const navToggle = document.querySelector(".nav__toggle--open, .nav__toggle");
+
+  if (mobileInput instanceof HTMLInputElement) {
+    mobileInput.checked = true;
+  }
+
+  navMenu?.classList.add("is-open");
+  navToggle?.setAttribute("aria-expanded", "true");
+}
+
 function closeAllDropdowns(exceptDropdown) {
   document.querySelectorAll(".nav__dropdown.is-open").forEach((item) => {
     if (item === exceptDropdown) return;
@@ -110,6 +124,7 @@ function handleDropdownToggle(event, dropdownToggle) {
     closeAllDropdowns(dropdown);
     dropdown.classList.add("is-open");
     dropdownToggle.setAttribute("aria-expanded", "true");
+    keepMobileMenuOpen();
     armDropdownNavigation(dropdownToggle);
     return;
   }
@@ -136,6 +151,12 @@ function handleSubmenuToggle(event, toggle) {
   }
 
   const isOpen = group.classList.contains("is-open");
+  const parentDropdown = group.closest(".nav__dropdown");
+  parentDropdown?.classList.add("is-open");
+  parentDropdown
+    ?.querySelector(".nav__dropdown-toggle")
+    ?.setAttribute("aria-expanded", "true");
+  keepMobileMenuOpen();
   closeAllSubmenus(group);
   group.classList.toggle("is-open", !isOpen);
   toggle.setAttribute("aria-expanded", String(!isOpen));
@@ -2297,6 +2318,10 @@ function initNavigation() {
         closeAllDropdowns();
         closeAllSubmenus();
       }
+    });
+
+    navMenu.addEventListener("click", (event) => {
+      event.stopPropagation();
     });
   }
 
