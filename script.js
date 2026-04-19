@@ -1082,6 +1082,69 @@ function createCatalogCard(product) {
   `;
 }
 
+function selectLatestHomeProducts(products, limit = 6) {
+  return (Array.isArray(products) ? products.slice() : [])
+    .sort((left, right) => (Number(left.catalog_index) || 0) - (Number(right.catalog_index) || 0))
+    .slice(0, limit);
+}
+
+function createHomeFeaturedCard(product) {
+  const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
+  const categoryUrl = `category.html?slug=${encodeURIComponent(product.category_slug)}`;
+  const retailPrice = Number(product.retail_price) || 0;
+  const compareAtPrice = Number(product.compare_at_price) || 0;
+  const hasComparePrice = Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
+  const imageMarkup = product.display_image
+    ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(product.name)}" loading="lazy">`
+    : `<div class="home-product-card__image-placeholder" aria-hidden="true">TECHM8</div>`;
+
+  return `
+    <article class="home-product-card">
+      <a class="home-product-card__media" href="${detailUrl}">
+        ${imageMarkup}
+      </a>
+      <div class="home-product-card__content">
+        <div class="home-product-card__row">
+          <a class="home-product-card__eyebrow" href="${categoryUrl}">${escapeHtml(product.category_name || "Latest product")}</a>
+          <span class="home-product-card__pill">${product.is_featured ? "Featured" : "New"}</span>
+        </div>
+        <a class="home-product-card__title-link" href="${detailUrl}">
+          <h3>${escapeHtml(product.name)}</h3>
+        </a>
+        <p class="home-product-card__summary">${escapeHtml(product.short_description || product.description || "Latest item from the TECHM8 online catalog.")}</p>
+        <div class="home-product-card__price-row">
+          <strong>${escapeHtml(formatMoney(retailPrice))}</strong>
+          ${hasComparePrice ? `<span class="home-product-card__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>` : ""}
+        </div>
+        <div class="home-product-card__meta">
+          <span>${escapeHtml(product.brand || "TECHM8")}</span>
+          <a href="${detailUrl}">View details</a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function initHomeFeaturedProducts() {
+  const grid = document.querySelector("[data-home-featured-grid]");
+  if (!(grid instanceof HTMLElement)) return;
+
+  const render = (products) => {
+    const latestProducts = selectLatestHomeProducts(products, 6);
+    grid.innerHTML = latestProducts.length
+      ? latestProducts.map((product) => createHomeFeaturedCard(product)).join("")
+      : `<article class="home-product-card home-product-card--loading"><div class="home-product-card__content"><div class="home-product-card__row"><h3>No products available yet</h3><span class="home-product-card__pill">Catalog</span></div><p class="home-product-card__summary">Add products in Supabase and the newest six items will appear here automatically.</p></div></article>`;
+  };
+
+  loadSharedCatalogData()
+    .then(({ products }) => {
+      render(products);
+    })
+    .catch(() => {
+      render(getFallbackCatalogProducts());
+    });
+}
+
 function bindCartButtons(container, products, options = {}) {
   if (!(container instanceof HTMLElement) || container.dataset.cartBound === "true") {
     return;
@@ -2280,6 +2343,7 @@ function initPage() {
   initFilters();
   initNavigation();
   initHomeBanner();
+  initHomeFeaturedProducts();
   initStorefront();
   initCategoryPage();
   initProductDetailPage();

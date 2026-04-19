@@ -762,6 +762,39 @@ a { color: inherit; text-decoration: none; }
   text-align: left;
 }
 
+.home-product-card--loading {
+  grid-template-columns: 1fr;
+}
+
+.home-product-card__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 0.82;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #f8fcfd 0%, #eef7f8 100%);
+}
+
+.home-product-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.home-product-card__image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(7, 39, 45, 0.42);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
 .home-product-card__icon {
   display: flex;
   align-items: center;
@@ -775,11 +808,23 @@ a { color: inherit; text-decoration: none; }
   gap: 0.6rem;
 }
 
+.home-product-card__eyebrow {
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .home-product-card__row {
   display: flex;
   justify-content: space-between;
   gap: 0.8rem;
   align-items: flex-start;
+}
+
+.home-product-card__title-link {
+  color: inherit;
 }
 
 .home-product-card h3 {
@@ -788,11 +833,45 @@ a { color: inherit; text-decoration: none; }
   line-height: 1.35;
 }
 
+.home-product-card__summary {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+  font-size: 0.96rem;
+}
+
+.home-product-card__price-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
 .home-product-card strong {
   color: var(--accent);
   font-family: "Space Grotesk", sans-serif;
   font-size: 1.9rem;
   line-height: 1;
+}
+
+.home-product-card__compare {
+  color: rgba(7, 39, 45, 0.42);
+  font-size: 0.95rem;
+  text-decoration: line-through;
+}
+
+.home-product-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  color: rgba(7, 39, 45, 0.68);
+  font-size: 0.88rem;
+}
+
+.home-product-card__meta a {
+  color: var(--accent);
+  font-weight: 700;
 }
 
 .home-product-card__pill {
@@ -2448,6 +2527,10 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     border-radius: 1.1rem;
   }
 
+  .home-product-card__media {
+    aspect-ratio: 1 / 0.88;
+  }
+
   .home-product-card__icon {
     min-height: 2.9rem;
     font-size: 1.8rem;
@@ -2465,6 +2548,10 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
   .home-product-card strong {
     font-size: 1.45rem;
+  }
+
+  .home-product-card__summary {
+    font-size: 0.92rem;
   }
 
   .home-product-card__pill {
@@ -2849,6 +2936,10 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     padding: 1rem 0.95rem;
   }
 
+  .home-product-card__media {
+    aspect-ratio: 1 / 0.9;
+  }
+
   .home-product-card__icon {
     min-height: 3.2rem;
     font-size: 2rem;
@@ -2866,6 +2957,12 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
   .home-product-card strong {
     font-size: 1.25rem;
+  }
+
+  .home-product-card__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
   }
 
   .home-product-card__pill {
