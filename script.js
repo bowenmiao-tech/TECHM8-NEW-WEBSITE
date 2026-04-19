@@ -1462,7 +1462,7 @@ function renderCartSummary(target, items, options = {}) {
   `;
 }
 
-function selectCheckoutRecommendations(products, cartItems, limit = 5) {
+function selectRecommendedProducts(products, cartItems, limit = 5) {
   const safeProducts = Array.isArray(products) ? products.slice() : [];
   const cartSlugs = new Set((Array.isArray(cartItems) ? cartItems : []).map((item) => item.slug).filter(Boolean));
   const cartTerms = new Set();
@@ -1509,9 +1509,9 @@ function selectCheckoutRecommendations(products, cartItems, limit = 5) {
   return related;
 }
 
-function renderCheckoutRecommendations(target, products, cartItems) {
+function renderRecommendedProducts(target, products, cartItems) {
   if (!(target instanceof HTMLElement)) return;
-  const recommendations = selectCheckoutRecommendations(products, cartItems, 5);
+  const recommendations = selectRecommendedProducts(products, cartItems, 5);
 
   target.innerHTML = recommendations.length
     ? recommendations.map((product) => createCatalogCard(product)).join("")
@@ -1524,13 +1524,18 @@ function initCartPage() {
 
   const itemsTarget = root.querySelector("[data-cart-items]");
   const summaryTarget = root.querySelector("[data-cart-summary]");
+  const recommendationsTarget = root.querySelector("[data-cart-recommendations]");
   const checkoutButtons = root.querySelectorAll("[data-cart-checkout]");
   if (!(itemsTarget instanceof HTMLElement) || !(summaryTarget instanceof HTMLElement)) return;
+  let catalogProducts = [];
 
   const render = () => {
     const items = loadCart();
     renderCartLineItems(itemsTarget, items);
     renderCartSummary(summaryTarget, items);
+    if (recommendationsTarget instanceof HTMLElement && catalogProducts.length) {
+      renderRecommendedProducts(recommendationsTarget, catalogProducts, items);
+    }
     checkoutButtons.forEach((button) => {
       if (button instanceof HTMLAnchorElement || button instanceof HTMLButtonElement) {
         button.toggleAttribute("disabled", !items.length);
@@ -1561,6 +1566,22 @@ function initCartPage() {
     render();
   });
 
+  loadSharedCatalogData()
+    .then(({ products }) => {
+      catalogProducts = Array.isArray(products) ? products : [];
+      if (recommendationsTarget instanceof HTMLElement) {
+        bindCartButtons(recommendationsTarget, () => catalogProducts, { confirmText: "Added" });
+      }
+      render();
+    })
+    .catch(() => {
+      catalogProducts = getFallbackCatalogProducts();
+      if (recommendationsTarget instanceof HTMLElement) {
+        bindCartButtons(recommendationsTarget, () => catalogProducts, { confirmText: "Added" });
+      }
+      render();
+    });
+
   window.addEventListener("techm8:cart-updated", render);
   render();
 }
@@ -1576,11 +1597,9 @@ function initCheckoutPage() {
   const paymentOptionsTarget = root.querySelector("[data-payment-options]");
   const paymentMethodField = root.querySelector("[data-payment-method]");
   const paymentNoteTarget = root.querySelector("[data-payment-note]");
-  const recommendationsTarget = root.querySelector("[data-checkout-recommendations]");
   if (!(form instanceof HTMLFormElement) || !(summaryTarget instanceof HTMLElement) || !(itemsTarget instanceof HTMLElement)) return;
   const submitButton = form.querySelector('button[type="submit"]');
   const paymentProfiles = [];
-  let catalogProducts = [];
   const checkoutParams = new URLSearchParams(window.location.search);
   const isPaymentCancelled = checkoutParams.get("payment") === "cancelled";
 
@@ -1787,9 +1806,6 @@ function initCheckoutPage() {
       messageTarget.textContent = "";
       messageTarget.className = "booking-message";
     }
-    if (recommendationsTarget instanceof HTMLElement && catalogProducts.length) {
-      renderCheckoutRecommendations(recommendationsTarget, catalogProducts, items);
-    }
     if (submitButton instanceof HTMLButtonElement) {
       submitButton.disabled = !items.length;
       submitButton.textContent = items.length ? "Submit order request" : "Add items before checkout";
@@ -1993,22 +2009,6 @@ function initCheckoutPage() {
       });
       if (paymentMethodField instanceof HTMLInputElement) {
         paymentMethodField.value = "pay_in_store";
-      }
-      render();
-    });
-
-  loadSharedCatalogData()
-    .then(({ products }) => {
-      catalogProducts = Array.isArray(products) ? products : [];
-      if (recommendationsTarget instanceof HTMLElement) {
-        bindCartButtons(recommendationsTarget, () => catalogProducts, { confirmText: "Added" });
-      }
-      render();
-    })
-    .catch(() => {
-      catalogProducts = getFallbackCatalogProducts();
-      if (recommendationsTarget instanceof HTMLElement) {
-        bindCartButtons(recommendationsTarget, () => catalogProducts, { confirmText: "Added" });
       }
       render();
     });

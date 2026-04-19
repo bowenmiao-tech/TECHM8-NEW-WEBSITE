@@ -4463,10 +4463,12 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   gap: 1rem;
 }
 
+.storefront-cart__recommendation-card,
 .storefront-checkout__recommendation-card {
   overflow: hidden;
 }
 
+.storefront-grid--cart,
 .storefront-grid--checkout {
   grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
 }
