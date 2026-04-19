@@ -55,6 +55,13 @@ function closeAllSubmenus(exceptGroup) {
   });
 }
 
+function openSubmenuGroup(group) {
+  if (!(group instanceof HTMLElement)) return;
+  closeAllSubmenus(group);
+  group.classList.add("is-open");
+  group.querySelector(".nav__submenu-toggle")?.setAttribute("aria-expanded", "true");
+}
+
 function decorateMobileMenu() {
   const nav = document.querySelector(".nav");
   const navMenu = nav?.querySelector(".nav__menu");
@@ -122,6 +129,11 @@ function handleSubmenuToggle(event, toggle) {
 
   const group = toggle.closest(".nav__dropdown-group");
   if (!group) return false;
+
+  if (!isMobileNavigation()) {
+    openSubmenuGroup(group);
+    return false;
+  }
 
   const isOpen = group.classList.contains("is-open");
   closeAllSubmenus(group);
@@ -2302,6 +2314,11 @@ function initNavigation() {
       if (toggle) {
         delete toggle.dataset.navReady;
       }
+
+      const firstGroup = dropdown.querySelector(".nav__dropdown-group");
+      if (firstGroup instanceof HTMLElement) {
+        openSubmenuGroup(firstGroup);
+      }
     });
 
     dropdown.addEventListener("mouseleave", () => {
@@ -2316,6 +2333,18 @@ function initNavigation() {
         }
         closeAllSubmenus();
       }, 180);
+    });
+
+    dropdown.querySelectorAll(".nav__dropdown-group").forEach((group) => {
+      group.addEventListener("mouseenter", () => {
+        if (isMobileNavigation()) return;
+        openSubmenuGroup(group);
+      });
+
+      group.addEventListener("focusin", () => {
+        if (isMobileNavigation()) return;
+        openSubmenuGroup(group);
+      });
     });
   });
 
