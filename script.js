@@ -193,21 +193,29 @@ function handleDropdownToggle(event, dropdownToggle) {
   const dropdown = dropdownToggle.closest(".nav__dropdown");
   if (!dropdown) return;
 
+  if (isMobileNavigation()) {
+    event.preventDefault();
+    const willOpen = !dropdown.classList.contains("is-open");
+    closeAllDropdowns(willOpen ? dropdown : null);
+    dropdown.classList.toggle("is-open", willOpen);
+    dropdownToggle.setAttribute("aria-expanded", String(willOpen));
+    keepMobileMenuOpen();
+    if (!willOpen) {
+      closeAllMobileRepairsGroups();
+    }
+    delete dropdownToggle.dataset.navReady;
+    return;
+  }
+
   const destination = dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
   const alreadyOpen = dropdown.classList.contains("is-open");
   const readyToNavigate = dropdownToggle.dataset.navReady === "true";
-  const isRepairsMobileAccordion =
-    isMobileNavigation() && dropdown.classList.contains("nav__dropdown--repairs");
 
   if (!alreadyOpen || !readyToNavigate) {
     event.preventDefault();
     closeAllDropdowns(dropdown);
     dropdown.classList.add("is-open");
     dropdownToggle.setAttribute("aria-expanded", "true");
-    keepMobileMenuOpen();
-    if (isRepairsMobileAccordion) {
-      closeAllMobileRepairsGroups();
-    }
     armDropdownNavigation(dropdownToggle);
     return;
   }
