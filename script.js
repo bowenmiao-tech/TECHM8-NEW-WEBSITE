@@ -407,6 +407,12 @@ function compareProductsByLatest(left, right) {
     return -1;
   }
 
+  const rightId = Number(right?.id);
+  const leftId = Number(left?.id);
+  if (Number.isFinite(rightId) && Number.isFinite(leftId) && rightId !== leftId) {
+    return rightId - leftId;
+  }
+
   return (Number(left?.catalog_index) || 0) - (Number(right?.catalog_index) || 0);
 }
 
@@ -1097,21 +1103,29 @@ async function loadSharedCatalogData() {
       Authorization: `Bearer ${supabaseAnonKey}`,
     };
     const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
-    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc`;
+    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc,id.desc`;
     const productImagesUrl = `${supabaseUrl}/rest/v1/product_images?select=product_id,image_url,alt_text,sort_order&order=sort_order.asc`;
-    const [categoriesResponse, productsResponse, productImagesResponse] = await Promise.all([
+
+    const [categoriesResult, productsResult, productImagesResult] = await Promise.allSettled([
       fetch(categoriesUrl, { headers, cache: "no-store" }),
       fetch(productsUrl, { headers, cache: "no-store" }),
       fetch(productImagesUrl, { headers, cache: "no-store" }),
     ]);
 
-    if (!categoriesResponse.ok || !productsResponse.ok || !productImagesResponse.ok) {
-      throw new Error("Catalog request failed");
+    if (productsResult.status !== "fulfilled" || !productsResult.value.ok) {
+      throw new Error("Products request failed");
     }
 
-    const categories = await categoriesResponse.json();
-    const products = await productsResponse.json();
-    const productImages = await productImagesResponse.json();
+    const products = await productsResult.value.json();
+    const categories =
+      categoriesResult.status === "fulfilled" && categoriesResult.value.ok
+        ? await categoriesResult.value.json()
+        : [];
+    const productImages =
+      productImagesResult.status === "fulfilled" && productImagesResult.value.ok
+        ? await productImagesResult.value.json()
+        : [];
+
     const categoriesMap = new Map(categories.map((category) => [category.id, category]));
     const galleryMap = new Map();
 
@@ -1158,10 +1172,27 @@ async function loadSharedCatalogData() {
       };
     }).sort(compareProductsByLatest);
 
+    const derivedCategories = categories.length
+      ? categories
+      : Array.from(
+          new Map(
+            normalizedProducts.map((product) => [
+              product.category_slug || `category-${product.category_id || product.id}`,
+              {
+                id: product.category_id || product.category_slug || product.id,
+                slug: product.category_slug || `category-${product.category_id || product.id}`,
+                name: product.category_name || "Other Products",
+                description: product.category_description || "",
+                sort_order: 999,
+              },
+            ])
+          ).values()
+        );
+
     return {
       products: normalizedProducts.length ? normalizedProducts : getFallbackCatalogProducts(),
-      categories: categories.length
-        ? categories
+      categories: derivedCategories.length
+        ? derivedCategories
         : [{ slug: "ps5-controllers", name: "PS5 Controllers", description: "PlayStation 5 wireless controller range." }],
     };
   } catch (error) {
