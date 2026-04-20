@@ -482,6 +482,7 @@ if (pageData) {
   };
 
   const handleDropdownToggle = (event, dropdownToggle) => {
+    event.stopPropagation();
     const dropdown = dropdownToggle.closest(".nav__dropdown");
     if (!dropdown) return;
 
@@ -511,6 +512,9 @@ if (pageData) {
   const handleSubmenuToggle = (event, toggle) => {
     event.preventDefault();
     event.stopPropagation();
+    if (typeof event.stopImmediatePropagation === "function") {
+      event.stopImmediatePropagation();
+    }
 
     const group = toggle.closest(".nav__dropdown-group");
     if (!group) return false;
@@ -575,6 +579,32 @@ if (pageData) {
   const navMenu = document.querySelector(".nav__menu");
   const navToggle = document.querySelector(".nav__toggle--open, .nav__toggle");
   const navDropdowns = document.querySelectorAll(".nav__dropdown");
+  const navDropdownToggles = document.querySelectorAll(".nav__dropdown-toggle");
+  const navSubmenuToggles = document.querySelectorAll(".nav__submenu-toggle");
+
+  navDropdownToggles.forEach((toggle) => {
+    if (!(toggle instanceof HTMLButtonElement)) return;
+    toggle.removeAttribute("onclick");
+    if (toggle.dataset.navBound === "true") return;
+    toggle.dataset.navBound = "true";
+    toggle.addEventListener("click", (event) => {
+      handleDropdownToggle(event, toggle);
+    });
+  });
+
+  navSubmenuToggles.forEach((toggle) => {
+    if (!(toggle instanceof HTMLButtonElement)) return;
+    toggle.removeAttribute("onclick");
+    if (toggle.dataset.navBound === "true") return;
+    toggle.dataset.navBound = "true";
+    toggle.addEventListener("click", (event) => {
+      handleSubmenuToggle(event, toggle);
+    });
+    toggle.addEventListener("touchstart", (event) => {
+      event.stopPropagation();
+      keepMobileMenuOpen();
+    }, { passive: true });
+  });
 
   if (mobileInput && navMenu) {
     mobileInput.addEventListener("change", () => {
