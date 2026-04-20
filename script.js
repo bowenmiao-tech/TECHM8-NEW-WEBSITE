@@ -416,6 +416,118 @@ function compareProductsByLatest(left, right) {
   return (Number(left?.catalog_index) || 0) - (Number(right?.catalog_index) || 0);
 }
 
+const DEFAULT_PRODUCT_IMAGE_URL =
+  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/placeholders/image-coming-soon.png";
+const SUPABASE_BROWSER_CDN_URL = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+let supabaseBrowserClientPromise = null;
+
+function resolveProductImageUrl(product) {
+  const imageUrl = String(product?.display_image || product?.image_url || "").trim();
+  return imageUrl || DEFAULT_PRODUCT_IMAGE_URL;
+}
+
+function compareProductsByNewestRecord(left, right) {
+  const rightId = Number(right?.id);
+  const leftId = Number(left?.id);
+
+  if (Number.isFinite(rightId) && Number.isFinite(leftId) && rightId !== leftId) {
+    return rightId - leftId;
+  }
+
+  return compareProductsByLatest(left, right);
+}
+
+function ensureAccountNavLink(relativeHref = "account.html") {
+  document.querySelectorAll(".nav__menu").forEach((menu) => {
+    if (!(menu instanceof HTMLElement) || menu.querySelector("[data-account-link]")) {
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = relativeHref;
+    link.className = "nav__account-link";
+    link.setAttribute("data-account-link", "true");
+    link.textContent = "Account";
+
+    const cartLink = menu.querySelector(".nav__cart-link");
+    const shopLink = menu.querySelector(".nav__shop-link");
+
+    if (cartLink?.parentNode === menu) {
+      menu.insertBefore(link, cartLink);
+    } else if (shopLink?.parentNode === menu) {
+      menu.insertBefore(link, shopLink);
+    } else {
+      menu.appendChild(link);
+    }
+  });
+}
+
+function getAuthRedirectUrl() {
+  const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
+  if (configuredSiteUrl) {
+    return new URL("account.html", configuredSiteUrl.endsWith("/") ? configuredSiteUrl : `${configuredSiteUrl}/`).toString();
+  }
+
+  return new URL("account.html", window.location.href).toString();
+}
+
+async function ensureSupabaseBrowserLibrary() {
+  if (window.supabase?.createClient) {
+    return window.supabase;
+  }
+
+  const existingScript = document.querySelector("script[data-supabase-browser]");
+  if (existingScript) {
+    await new Promise((resolve, reject) => {
+      if (window.supabase?.createClient) {
+        resolve();
+        return;
+      }
+
+      existingScript.addEventListener("load", resolve, { once: true });
+      existingScript.addEventListener("error", reject, { once: true });
+    });
+    return window.supabase;
+  }
+
+  await new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = SUPABASE_BROWSER_CDN_URL;
+    script.defer = true;
+    script.setAttribute("data-supabase-browser", "true");
+    script.addEventListener("load", resolve, { once: true });
+    script.addEventListener("error", reject, { once: true });
+    document.head.appendChild(script);
+  });
+
+  return window.supabase;
+}
+
+async function getSupabaseBrowserClient() {
+  if (supabaseBrowserClientPromise) {
+    return supabaseBrowserClientPromise;
+  }
+
+  supabaseBrowserClientPromise = (async () => {
+    const supabaseLib = await ensureSupabaseBrowserLibrary();
+    const { supabaseUrl, supabaseAnonKey } = window.TECHM8_CONFIG || {};
+
+    if (!supabaseUrl || !supabaseAnonKey || !supabaseLib?.createClient) {
+      throw new Error("Supabase auth client is not configured.");
+    }
+
+    return supabaseLib.createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
+    });
+  })();
+
+  return supabaseBrowserClientPromise;
+}
+
 const PRODUCT_VARIANT_COLOR_RULES = [
   { label: "Gray Camouflage", tokens: ["gray camouflage", "grey camouflage", "camouflage"] },
   { label: "Sterling Silver", tokens: ["sterling silver", "silver"] },
@@ -632,6 +744,8 @@ function applyProductVariantData(products) {
           sort_order: index,
         }));
         item.display_image = orderedGallery[0].image_url;
+      } else {
+        item.display_image = resolveProductImageUrl(item);
       }
     });
   });
@@ -655,6 +769,8 @@ function applyProductVariantData(products) {
         product.display_image = orderedGallery[0].image_url;
       }
     }
+
+    product.display_image = resolveProductImageUrl(product);
   });
 
   return products;
@@ -676,6 +792,28 @@ function getCatalogDisplayProducts(products) {
   });
 
   return displayProducts;
+}
+
+function getLatestDisplayProducts(products, limit = 6) {
+  const orderedProducts = Array.isArray(products) ? products.slice().sort(compareProductsByNewestRecord) : [];
+  const visibleGroups = new Set();
+  const displayProducts = [];
+
+  orderedProducts.forEach((product) => {
+    const hasVariants = Array.isArray(product?.variant_options) && product.variant_options.length > 1;
+    const groupKey = hasVariants
+      ? (product?.variant_group_key || product?.slug)
+      : (product?.slug || product?.sku || product?.id);
+
+    if (visibleGroups.has(groupKey)) {
+      return;
+    }
+
+    visibleGroups.add(groupKey);
+    displayProducts.push(product);
+  });
+
+  return displayProducts.slice(0, limit);
 }
 
 function renderVariantSummary(product, classPrefix) {
@@ -787,7 +925,7 @@ function normaliseCartItem(product, quantity = 1) {
     slug: product.slug,
     sku: product.sku || "",
     name: product.name,
-    image_url: product.display_image || product.image_url || "",
+    image_url: resolveProductImageUrl(product),
     brand: product.brand || "TECHM8",
     category_name: product.category_name || "Store product",
     category_slug: product.category_slug || "other-products",
@@ -1091,7 +1229,7 @@ function initStorefront() {
       ...product,
       category_name: category?.name || product.category_name || "Other Products",
       category_slug: category?.slug || product.category_slug || "other-products",
-      display_image: product.image_url || "",
+      display_image: resolveProductImageUrl(product),
       retail_price: retailPrice,
       compare_at_price: hasValidComparePrice ? compareAtPrice : fallbackComparePrice,
     };
@@ -1239,7 +1377,7 @@ function initStorefront() {
 }
 
 function getFallbackCatalogProducts() {
-  return [
+  return applyProductVariantData([
     {
       id: "sample-1",
       sku: "TM8-PS5-DS-STERLING-SILVER",
@@ -1350,10 +1488,10 @@ function getFallbackCatalogProducts() {
       category_slug: "ps5-controllers",
       category_description: "PlayStation 5 wireless controller range.",
     },
-  ].map((product, index) => ({
+  ]).map((product, index) => ({
     ...product,
     catalog_index: index,
-    display_image: product.image_url || "",
+    display_image: resolveProductImageUrl(product),
     gallery_images: product.image_url
       ? [{ product_id: product.id, image_url: product.image_url, alt_text: product.name || "", sort_order: 0 }]
       : [],
@@ -1441,7 +1579,7 @@ async function loadSharedCatalogData() {
           Number.isFinite(compareAtPrice) && compareAtPrice > safeRetailPrice
             ? compareAtPrice
             : Math.ceil(safeRetailPrice * 1.18),
-        display_image: finalGallery[0]?.image_url || product.image_url || "",
+        display_image: finalGallery[0]?.image_url || resolveProductImageUrl(product),
         gallery_images: finalGallery,
         category_slug: category?.slug || "other-products",
         category_name: category?.name || "Other Products",
@@ -1493,14 +1631,20 @@ function getProductGalleryImages(product) {
   if (product?.display_image || product?.image_url) {
     return [
       {
-        image_url: product.display_image || product.image_url,
+        image_url: resolveProductImageUrl(product),
         alt_text: product.name || "",
         sort_order: 0,
       },
     ];
   }
 
-  return [];
+  return [
+    {
+      image_url: DEFAULT_PRODUCT_IMAGE_URL,
+      alt_text: product?.name || "TECHM8 product image coming soon",
+      sort_order: 0,
+    },
+  ];
 }
 
 function createCatalogCard(product) {
@@ -1566,9 +1710,7 @@ function createCatalogCard(product) {
 }
 
 function selectLatestHomeProducts(products, limit = 6) {
-  return getCatalogDisplayProducts(Array.isArray(products) ? products.slice() : [])
-    .sort(compareProductsByLatest)
-    .slice(0, limit);
+  return getLatestDisplayProducts(products, limit);
 }
 
 function createHomeFeaturedCard(product) {
@@ -2930,7 +3072,244 @@ function initNavigation() {
   });
 }
 
+function setAuthMessage(target, message, tone = "success") {
+  if (!(target instanceof HTMLElement)) return;
+
+  if (!message) {
+    target.hidden = true;
+    target.textContent = "";
+    target.classList.remove("is-success", "is-error");
+    return;
+  }
+
+  target.hidden = false;
+  target.textContent = message;
+  target.classList.toggle("is-success", tone === "success");
+  target.classList.toggle("is-error", tone === "error");
+}
+
+function getReadableAuthError(error) {
+  const message = String(error?.message || error || "Authentication request failed.");
+  if (/Invalid login credentials/i.test(message)) return "The email or password is incorrect.";
+  if (/Email rate limit exceeded/i.test(message)) return "Too many email requests were sent. Please wait and try again.";
+  if (/provider is not enabled/i.test(message)) return "This login provider is not enabled in Supabase Auth yet.";
+  return message;
+}
+
+function isEmailConfirmed(user) {
+  return Boolean(user?.email_confirmed_at || user?.confirmed_at);
+}
+
+function getUserDisplayName(user) {
+  const fullName = String(user?.user_metadata?.full_name || "").trim();
+  if (fullName) return fullName;
+  const fallbackName = String(user?.user_metadata?.name || "").trim();
+  if (fallbackName) return fallbackName;
+  return String(user?.email || "TECHM8 customer");
+}
+
+async function initAccountPage() {
+  const root = document.querySelector("[data-account-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const guestPanel = root.querySelector("[data-auth-guest]");
+  const memberPanel = root.querySelector("[data-auth-member]");
+  const messageBox = root.querySelector("[data-auth-message]");
+  const loginForm = root.querySelector("[data-login-form]");
+  const registerForm = root.querySelector("[data-register-form]");
+  const resetForm = root.querySelector("[data-reset-form]");
+  const googleButton = root.querySelector("[data-auth-google]");
+  const facebookButton = root.querySelector("[data-auth-facebook]");
+  const logoutButton = root.querySelector("[data-auth-logout]");
+  const nameTarget = root.querySelector("[data-auth-name]");
+  const emailTarget = root.querySelector("[data-auth-email]");
+  const phoneTarget = root.querySelector("[data-auth-phone]");
+  const statusTarget = root.querySelector("[data-auth-status]");
+  const verifiedTarget = root.querySelector("[data-auth-verified]");
+
+  let supabase;
+
+  try {
+    supabase = await getSupabaseBrowserClient();
+  } catch (error) {
+    setAuthMessage(messageBox, "Supabase Auth could not be loaded on this page.", "error");
+    return;
+  }
+
+  const renderSession = (session) => {
+    const user = session?.user || null;
+    const verified = isEmailConfirmed(user);
+
+    if (guestPanel instanceof HTMLElement) guestPanel.hidden = Boolean(user);
+    if (memberPanel instanceof HTMLElement) memberPanel.hidden = !user;
+
+    if (!user) {
+      if (nameTarget instanceof HTMLElement) nameTarget.textContent = "Guest";
+      if (emailTarget instanceof HTMLElement) emailTarget.textContent = "Sign in or register to save your checkout details.";
+      if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = "Phone number will be saved after registration.";
+      if (statusTarget instanceof HTMLElement) statusTarget.textContent = "Guest";
+      if (verifiedTarget instanceof HTMLElement) verifiedTarget.textContent = "Email verification is required for new accounts.";
+      return;
+    }
+
+    if (nameTarget instanceof HTMLElement) nameTarget.textContent = getUserDisplayName(user);
+    if (emailTarget instanceof HTMLElement) emailTarget.textContent = user.email || "No email";
+    if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = user.user_metadata?.phone || "Phone not saved";
+    if (statusTarget instanceof HTMLElement) statusTarget.textContent = verified ? "Signed in" : "Pending email verification";
+    if (verifiedTarget instanceof HTMLElement) {
+      verifiedTarget.textContent = verified
+        ? "Email verified"
+        : "Open your email and confirm the account before using it fully.";
+    }
+  };
+
+  const { data: { session: initialSession } } = await supabase.auth.getSession();
+  renderSession(initialSession);
+
+  supabase.auth.onAuthStateChange((_event, session) => {
+    renderSession(session);
+  });
+
+  if (googleButton instanceof HTMLButtonElement) {
+    googleButton.addEventListener("click", async () => {
+      try {
+        setAuthMessage(messageBox, "");
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: getAuthRedirectUrl(),
+          },
+        });
+        if (error) throw error;
+      } catch (error) {
+        setAuthMessage(messageBox, getReadableAuthError(error), "error");
+      }
+    });
+  }
+
+  if (facebookButton instanceof HTMLButtonElement) {
+    facebookButton.addEventListener("click", async () => {
+      try {
+        setAuthMessage(messageBox, "");
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: "facebook",
+          options: {
+            redirectTo: getAuthRedirectUrl(),
+          },
+        });
+        if (error) throw error;
+      } catch (error) {
+        setAuthMessage(messageBox, getReadableAuthError(error), "error");
+      }
+    });
+  }
+
+  if (loginForm instanceof HTMLFormElement) {
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(loginForm);
+      const email = String(formData.get("email") || "").trim();
+      const password = String(formData.get("password") || "");
+
+      try {
+        setAuthMessage(messageBox, "");
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        setAuthMessage(messageBox, "Signed in successfully.");
+        loginForm.reset();
+      } catch (error) {
+        setAuthMessage(messageBox, getReadableAuthError(error), "error");
+      }
+    });
+  }
+
+  if (registerForm instanceof HTMLFormElement) {
+    registerForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(registerForm);
+      const fullName = String(formData.get("full_name") || "").trim();
+      const phone = String(formData.get("phone") || "").trim();
+      const email = String(formData.get("email") || "").trim();
+      const password = String(formData.get("password") || "");
+      const confirmPassword = String(formData.get("confirm_password") || "");
+
+      if (!fullName || !phone || !email || !password) {
+        setAuthMessage(messageBox, "Please complete all required registration fields.", "error");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        setAuthMessage(messageBox, "Password confirmation does not match.", "error");
+        return;
+      }
+
+      try {
+        setAuthMessage(messageBox, "");
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: getAuthRedirectUrl(),
+            data: {
+              full_name: fullName,
+              phone,
+            },
+          },
+        });
+        if (error) throw error;
+
+        if (data?.session && !isEmailConfirmed(data.user)) {
+          await supabase.auth.signOut();
+        }
+
+        setAuthMessage(messageBox, "Registration submitted. Check your email and verify the account before signing in.");
+        registerForm.reset();
+      } catch (error) {
+        setAuthMessage(messageBox, getReadableAuthError(error), "error");
+      }
+    });
+  }
+
+  if (resetForm instanceof HTMLFormElement) {
+    resetForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(resetForm);
+      const email = String(formData.get("email") || "").trim();
+
+      if (!email) {
+        setAuthMessage(messageBox, "Enter an email address to send a reset link.", "error");
+        return;
+      }
+
+      try {
+        setAuthMessage(messageBox, "");
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: getAuthRedirectUrl(),
+        });
+        if (error) throw error;
+        setAuthMessage(messageBox, "Password reset link sent. Check your email inbox.");
+        resetForm.reset();
+      } catch (error) {
+        setAuthMessage(messageBox, getReadableAuthError(error), "error");
+      }
+    });
+  }
+
+  if (logoutButton instanceof HTMLButtonElement) {
+    logoutButton.addEventListener("click", async () => {
+      try {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+        setAuthMessage(messageBox, "Signed out successfully.");
+      } catch (error) {
+        setAuthMessage(messageBox, getReadableAuthError(error), "error");
+      }
+    });
+  }
+}
+
 function initPage() {
+  ensureAccountNavLink();
   ensureGlobalCartUi();
   updateCartIndicators();
   window.addEventListener("storage", () => updateCartIndicators());
@@ -2945,6 +3324,7 @@ function initPage() {
   initCheckoutPage();
   initCheckoutSuccessPage();
   initBookingForm();
+  initAccountPage();
 }
 
 if (document.readyState === "loading") {

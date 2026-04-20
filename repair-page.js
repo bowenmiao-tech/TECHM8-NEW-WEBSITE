@@ -250,6 +250,7 @@ if (pageData) {
           <a href="${prefix}products.html">Products</a>
           ${storeDropdown}
           <a href="${prefix}store-policy.html">Store Policy</a>
+          <a class="nav__account-link" href="${prefix}account.html">Account</a>
           <a class="nav__cart-link" href="${prefix}cart.html">
             <span class="nav__cart-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
