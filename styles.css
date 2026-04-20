@@ -2727,6 +2727,11 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     pointer-events: auto;
   }
 
+  .nav__overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .nav__menu-header {
     position: sticky;
     top: 0;
@@ -2754,6 +2759,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     border-radius: 999px;
     background: transparent;
     position: relative;
+    cursor: pointer;
   }
 
   .nav__toggle--close span {

@@ -393,16 +393,22 @@ if (pageData) {
 
   const keepMobileMenuOpen = () => {
     if (!isMobileNavigation()) return;
+    setMobileMenuState(true);
+  };
+
+  const setMobileMenuState = (isOpen) => {
     const mobileInput = document.querySelector(".nav__mobile-input");
     const navMenu = document.querySelector(".nav__menu");
-    const navToggle = document.querySelector(".nav__toggle--open, .nav__toggle");
+    const navToggle = document.querySelector(".nav__toggle--open, .nav > .nav__toggle");
+    const navOverlay = document.querySelector(".nav__overlay");
 
     if (mobileInput instanceof HTMLInputElement) {
-      mobileInput.checked = true;
+      mobileInput.checked = isOpen;
     }
 
-    navMenu?.classList.add("is-open");
-    navToggle?.setAttribute("aria-expanded", "true");
+    navMenu?.classList.toggle("is-open", isOpen);
+    navOverlay?.classList.toggle("is-open", isOpen);
+    navToggle?.setAttribute("aria-expanded", String(isOpen));
   };
 
   const closeAllDropdowns = (exceptDropdown) => {
@@ -455,12 +461,27 @@ if (pageData) {
 
     if (!nav || !navMenu || !mobileInput || !openToggle || !brand) return;
 
+    let trigger = openToggle;
+    if (!(trigger instanceof HTMLButtonElement)) {
+      const openButton = document.createElement("button");
+      openButton.type = "button";
+      openButton.className = "nav__toggle nav__toggle--open";
+      openButton.setAttribute("aria-label", "Open menu");
+      openButton.setAttribute("aria-controls", navMenu.id || "primary-menu");
+      openButton.setAttribute("aria-expanded", "false");
+      openButton.innerHTML = openToggle.innerHTML;
+      openToggle.replaceWith(openButton);
+      trigger = openButton;
+    } else {
+      trigger.classList.add("nav__toggle--open");
+    }
+
     if (!nav.querySelector(".nav__overlay")) {
-      const overlay = document.createElement("label");
+      const overlay = document.createElement("button");
+      overlay.type = "button";
       overlay.className = "nav__overlay";
-      overlay.setAttribute("for", mobileInput.id);
       overlay.setAttribute("aria-label", "Close menu");
-      openToggle.insertAdjacentElement("afterend", overlay);
+      trigger.insertAdjacentElement("afterend", overlay);
     }
 
     if (!navMenu.querySelector(".nav__menu-header")) {
@@ -470,9 +491,9 @@ if (pageData) {
       const brandClone = brand.cloneNode(true);
       brandClone.classList.add("brand--menu");
 
-      const closeToggle = document.createElement("label");
+      const closeToggle = document.createElement("button");
+      closeToggle.type = "button";
       closeToggle.className = "nav__toggle nav__toggle--close";
-      closeToggle.setAttribute("for", mobileInput.id);
       closeToggle.setAttribute("aria-label", "Close menu");
       closeToggle.innerHTML = "<span></span><span></span>";
 
@@ -577,7 +598,9 @@ if (pageData) {
 
   const mobileInput = document.querySelector(".nav__mobile-input");
   const navMenu = document.querySelector(".nav__menu");
-  const navToggle = document.querySelector(".nav__toggle--open, .nav__toggle");
+  const navToggle = document.querySelector(".nav__toggle--open, .nav > .nav__toggle");
+  const navOverlay = document.querySelector(".nav__overlay");
+  const navCloseToggle = document.querySelector(".nav__toggle--close");
   const navDropdowns = document.querySelectorAll(".nav__dropdown");
   const navDropdownToggles = document.querySelectorAll(".nav__dropdown-toggle");
   const navSubmenuToggles = document.querySelectorAll(".nav__submenu-toggle");
@@ -607,10 +630,27 @@ if (pageData) {
   });
 
   if (mobileInput && navMenu) {
+    navToggle?.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setMobileMenuState(!navMenu.classList.contains("is-open"));
+    });
+
+    navOverlay?.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setMobileMenuState(false);
+    });
+
+    navCloseToggle?.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setMobileMenuState(false);
+    });
+
     mobileInput.addEventListener("change", () => {
       const isOpen = mobileInput.checked;
-      navMenu.classList.toggle("is-open", isOpen);
-      navToggle?.setAttribute("aria-expanded", String(isOpen));
+      setMobileMenuState(isOpen);
       if (!isOpen) {
         closeAllDropdowns();
         closeAllSubmenus();
