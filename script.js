@@ -416,6 +416,280 @@ function compareProductsByLatest(left, right) {
   return (Number(left?.catalog_index) || 0) - (Number(right?.catalog_index) || 0);
 }
 
+const PRODUCT_VARIANT_COLOR_RULES = [
+  { label: "Gray Camouflage", tokens: ["gray camouflage", "grey camouflage", "camouflage"] },
+  { label: "Sterling Silver", tokens: ["sterling silver", "silver"] },
+  { label: "Cosmic Red", tokens: ["cosmic red", "red"] },
+  { label: "White", tokens: ["white"] },
+  { label: "Black", tokens: ["black", "midnight black", "dark gray", "dark grey", "grey", "gray"] },
+  { label: "Blue", tokens: ["blue"] },
+  { label: "Pink", tokens: ["pink"] },
+  { label: "Purple", tokens: ["purple"] },
+];
+
+const PRODUCT_IMAGE_LOW_PRIORITY_KEYWORDS = [
+  "package",
+  "packaging",
+  "box",
+  "combo",
+  "group",
+  "multi",
+  "all-colour",
+  "all-color",
+  "feature",
+  "detail",
+  "details",
+  "spec",
+  "manual",
+  "english",
+  "包装",
+  "套装",
+  "组合",
+  "全色",
+  "详情",
+  "参数",
+  "说明",
+];
+
+function normalizeVariantText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function escapeRegExp(value) {
+  return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function isGroupedVariantProduct(product) {
+  const categorySlug = normalizeVariantText(product?.category_slug);
+  const model = String(product?.model || "").trim();
+  return categorySlug === "power-banks" || /^(rpp|fcp|wp)-\d+/i.test(model);
+}
+
+function getProductVariantColor(product) {
+  const searchable = normalizeVariantText(
+    [product?.name, product?.short_description, product?.description, product?.compatibility].join(" ")
+  );
+
+  for (const rule of PRODUCT_VARIANT_COLOR_RULES) {
+    if (rule.tokens.some((token) => searchable.includes(token))) {
+      return rule.label;
+    }
+  }
+
+  return "";
+}
+
+function getProductVariantGroupKey(product) {
+  if (!isGroupedVariantProduct(product)) {
+    return String(product?.slug || "");
+  }
+
+  return [
+    normalizeVariantText(product?.brand || "techm8"),
+    normalizeVariantText(product?.category_slug || "catalog"),
+    normalizeVariantText(product?.model || product?.slug || ""),
+  ].join("::");
+}
+
+function getVariantSortWeight(product) {
+  const color = normalizeVariantText(getProductVariantColor(product));
+  const weights = {
+    white: 10,
+    black: 20,
+    "gray camouflage": 30,
+    camouflage: 30,
+    "sterling silver": 40,
+    silver: 40,
+    "cosmic red": 50,
+    red: 50,
+    blue: 60,
+    pink: 70,
+    purple: 80,
+  };
+
+  return weights[color] || 999;
+}
+
+function stripProductColorSuffix(name, colorLabel) {
+  let output = String(name || "").trim();
+  if (!output || !colorLabel) return output;
+
+  const colorPattern = escapeRegExp(colorLabel);
+  const patterns = [
+    new RegExp(`\\s*-\\s*${colorPattern}\\s*$`, "i"),
+    new RegExp(`\\s*\\(${colorPattern}\\)\\s*$`, "i"),
+    new RegExp(`\\s+${colorPattern}\\s*$`, "i"),
+  ];
+
+  patterns.forEach((pattern) => {
+    output = output.replace(pattern, "");
+  });
+
+  return output.replace(/\s{2,}/g, " ").trim();
+}
+
+function getProductDisplayName(product) {
+  const baseName = String(product?.display_name || product?.name || "").trim();
+  if (!product?.variant_options || product.variant_options.length <= 1) {
+    return baseName;
+  }
+
+  return stripProductColorSuffix(baseName, getProductVariantColor(product));
+}
+
+function scoreProductImage(product, image, index) {
+  const imageText = normalizeVariantText([image?.image_url, image?.alt_text].join(" "));
+  const color = normalizeVariantText(getProductVariantColor(product));
+  let score = 1000 - index * 10;
+
+  if (index === 0) score += 90;
+  if (index === 1) score += 80;
+  if (index >= 2) score -= index * 8;
+
+  if (PRODUCT_IMAGE_LOW_PRIORITY_KEYWORDS.some((keyword) => imageText.includes(keyword))) {
+    score -= 300;
+  }
+
+  if (color) {
+    if (imageText.includes(color)) {
+      score += 450;
+    }
+
+    if (isGroupedVariantProduct(product)) {
+      if (color === "white" && index === 0) score += 320;
+      if (["black", "gray", "grey", "silver", "sterling silver", "gray camouflage"].includes(color) && index === 1) {
+        score += 320;
+      }
+      if (["red", "cosmic red"].includes(color) && index <= 2) score += 220;
+    }
+  }
+
+  return score;
+}
+
+function getOrderedProductGalleryImages(product) {
+  return getProductGalleryImages(product)
+    .slice()
+    .sort((left, right) => {
+      const scoreDiff = scoreProductImage(product, right, Number(right?.sort_order) || 0) - scoreProductImage(product, left, Number(left?.sort_order) || 0);
+      if (scoreDiff !== 0) return scoreDiff;
+      return (Number(left?.sort_order) || 0) - (Number(right?.sort_order) || 0);
+    });
+}
+
+function applyProductVariantData(products) {
+  if (!Array.isArray(products) || !products.length) return products;
+
+  const groups = new Map();
+
+  products.forEach((product) => {
+    product.variant_group_key = getProductVariantGroupKey(product);
+    product.color_label = getProductVariantColor(product);
+    product.display_name = product.name;
+
+    if (!isGroupedVariantProduct(product)) {
+      product.variant_options = [];
+      return;
+    }
+
+    const existing = groups.get(product.variant_group_key) || [];
+    existing.push(product);
+    groups.set(product.variant_group_key, existing);
+  });
+
+  groups.forEach((items) => {
+    const sortedItems = items
+      .slice()
+      .sort((left, right) => {
+        const sortDiff = getVariantSortWeight(left) - getVariantSortWeight(right);
+        if (sortDiff !== 0) return sortDiff;
+        return compareProductsByLatest(left, right);
+      });
+
+    const representative = sortedItems[0];
+    const displayName = stripProductColorSuffix(representative?.name || "", representative?.color_label || "") || representative?.name || "";
+    const variantOptions = sortedItems.map((item) => ({
+      slug: item.slug,
+      label: item.color_label || item.model || item.brand || "Option",
+      is_active: false,
+    }));
+
+    sortedItems.forEach((item) => {
+      item.display_name = displayName;
+      item.variant_options = variantOptions.map((option) => ({
+        ...option,
+        is_active: option.slug === item.slug,
+      }));
+
+      const orderedGallery = getOrderedProductGalleryImages(item);
+      if (orderedGallery.length) {
+        item.gallery_images = orderedGallery.map((image, index) => ({
+          ...image,
+          sort_order: index,
+        }));
+        item.display_image = orderedGallery[0].image_url;
+      }
+    });
+  });
+
+  products.forEach((product) => {
+    if (!Array.isArray(product.variant_options)) {
+      product.variant_options = [];
+    }
+
+    if (!product.display_name) {
+      product.display_name = product.name;
+    }
+
+    if ((!product.display_image || !String(product.display_image).trim()) && Array.isArray(product.gallery_images) && product.gallery_images.length) {
+      const orderedGallery = getOrderedProductGalleryImages(product);
+      if (orderedGallery.length) {
+        product.gallery_images = orderedGallery.map((image, index) => ({
+          ...image,
+          sort_order: index,
+        }));
+        product.display_image = orderedGallery[0].image_url;
+      }
+    }
+  });
+
+  return products;
+}
+
+function getCatalogDisplayProducts(products) {
+  const orderedProducts = Array.isArray(products) ? products.slice().sort(compareProductsByLatest) : [];
+  const visibleGroups = new Set();
+  const displayProducts = [];
+
+  orderedProducts.forEach((product) => {
+    const groupKey = product?.variant_group_key || product?.slug;
+    if (product?.variant_options?.length > 1) {
+      if (visibleGroups.has(groupKey)) return;
+      visibleGroups.add(groupKey);
+    }
+
+    displayProducts.push(product);
+  });
+
+  return displayProducts;
+}
+
+function renderVariantSummary(product, classPrefix) {
+  if (!Array.isArray(product?.variant_options) || product.variant_options.length <= 1) {
+    return "";
+  }
+
+  const items = product.variant_options
+    .map((option) => `<span class="${classPrefix}__variant ${option.is_active ? "is-active" : ""}">${escapeHtml(option.label)}</span>`)
+    .join("");
+
+  return `<div class="${classPrefix}__variants">${items}</div>`;
+}
+
 const CART_STORAGE_KEY = "techm8_cart_v1";
 const LOCAL_ORDER_STORAGE_KEY = "techm8_orders_v1";
 
@@ -855,7 +1129,7 @@ function initStorefront() {
 
   const renderProducts = () => {
     const query = state.query.trim().toLowerCase();
-    const visibleProducts = state.products.filter((product) => {
+    const matchingProducts = state.products.filter((product) => {
       const inCategory = state.activeCategory === "all" || product.category_slug === state.activeCategory;
       const haystack = [
         product.name,
@@ -869,6 +1143,7 @@ function initStorefront() {
 
       return inCategory && (!query || haystack.includes(query));
     });
+    const visibleProducts = getCatalogDisplayProducts(matchingProducts);
 
     if (countTarget instanceof HTMLElement) {
       countTarget.textContent = `${visibleProducts.length} product${visibleProducts.length === 1 ? "" : "s"} visible`;
@@ -924,9 +1199,11 @@ function initStorefront() {
       const categories = await categoriesResponse.json();
       const products = await productsResponse.json();
       const categoriesMap = new Map(categories.map((category) => [category.id, category]));
-      const normalizedProducts = products
-        .map((product) => normalizeProduct(product, categoriesMap))
-        .sort(compareProductsByLatest);
+      const normalizedProducts = applyProductVariantData(
+        products
+          .map((product) => normalizeProduct(product, categoriesMap))
+          .sort(compareProductsByLatest)
+      );
 
       if (normalizedProducts.length) {
         state.products = normalizedProducts;
@@ -1189,8 +1466,10 @@ async function loadSharedCatalogData() {
           ).values()
         );
 
+    const catalogProducts = normalizedProducts.length ? applyProductVariantData(normalizedProducts) : getFallbackCatalogProducts();
+
     return {
-      products: normalizedProducts.length ? normalizedProducts : getFallbackCatalogProducts(),
+      products: catalogProducts,
       categories: derivedCategories.length
         ? derivedCategories
         : [{ slug: "ps5-controllers", name: "PS5 Controllers", description: "PlayStation 5 wireless controller range." }],
@@ -1229,6 +1508,7 @@ function createCatalogCard(product) {
   const categoryUrl = `category.html?slug=${encodeURIComponent(product.category_slug)}`;
   const retailPrice = Number(product.retail_price) || 0;
   const compareAtPrice = Number(product.compare_at_price) || 0;
+  const productName = getProductDisplayName(product) || product.name;
   const comparePrice =
     Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice
       ? `<span class="storefront-card__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>`
@@ -1246,7 +1526,7 @@ function createCatalogCard(product) {
       ? `${escapeHtml(String(product.stock_quantity))} in network stock`
       : "Stock to be updated";
   const imageMarkup = product.display_image
-    ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(product.name)}" loading="lazy">`
+    ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy">`
     : `<div class="storefront-card__image storefront-card__image--placeholder" aria-hidden="true">TECHM8</div>`;
   const stockClass = Number(product.stock_quantity) > 0 ? "is-in-stock" : "is-pending";
 
@@ -1261,9 +1541,10 @@ function createCatalogCard(product) {
           ${product.is_featured ? '<span class="storefront-card__tag">Featured</span>' : savingsPill}
         </div>
         <a class="storefront-card__title-link" href="${detailUrl}">
-          <h3>${escapeHtml(product.name)}</h3>
+          <h3>${escapeHtml(productName)}</h3>
         </a>
         <p class="storefront-card__summary">${escapeHtml(product.short_description || "Retail catalog product.")}</p>
+        ${renderVariantSummary(product, "storefront-card")}
         <div class="storefront-card__price-row storefront-card__price-row--stacked">
           <div class="storefront-card__price-meta">${comparePrice}</div>
           <strong>${escapeHtml(formatMoney(retailPrice))}</strong>
@@ -1285,7 +1566,7 @@ function createCatalogCard(product) {
 }
 
 function selectLatestHomeProducts(products, limit = 6) {
-  return (Array.isArray(products) ? products.slice() : [])
+  return getCatalogDisplayProducts(Array.isArray(products) ? products.slice() : [])
     .sort(compareProductsByLatest)
     .slice(0, limit);
 }
@@ -1296,8 +1577,9 @@ function createHomeFeaturedCard(product) {
   const retailPrice = Number(product.retail_price) || 0;
   const compareAtPrice = Number(product.compare_at_price) || 0;
   const hasComparePrice = Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
+  const productName = getProductDisplayName(product) || product.name;
   const imageMarkup = product.display_image
-    ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(product.name)}" loading="lazy">`
+    ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy">`
     : `<div class="home-product-card__image-placeholder" aria-hidden="true">TECHM8</div>`;
 
   return `
@@ -1306,18 +1588,19 @@ function createHomeFeaturedCard(product) {
         ${imageMarkup}
       </a>
       <div class="home-product-card__content">
-        <div class="home-product-card__row">
-          <a class="home-product-card__eyebrow" href="${categoryUrl}">${escapeHtml(product.category_name || "Latest product")}</a>
-          <span class="home-product-card__pill">${product.is_featured ? "Featured" : "New"}</span>
-        </div>
-        <a class="home-product-card__title-link" href="${detailUrl}">
-          <h3>${escapeHtml(product.name)}</h3>
-        </a>
-        <p class="home-product-card__summary">${escapeHtml(product.short_description || product.description || "Latest item from the TECHM8 online catalog.")}</p>
-        <div class="home-product-card__price-row">
-          <strong>${escapeHtml(formatMoney(retailPrice))}</strong>
-          ${hasComparePrice ? `<span class="home-product-card__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>` : ""}
-        </div>
+          <div class="home-product-card__row">
+            <a class="home-product-card__eyebrow" href="${categoryUrl}">${escapeHtml(product.category_name || "Latest product")}</a>
+            <span class="home-product-card__pill">${product.is_featured ? "Featured" : "New"}</span>
+          </div>
+          <a class="home-product-card__title-link" href="${detailUrl}">
+            <h3>${escapeHtml(productName)}</h3>
+          </a>
+          <p class="home-product-card__summary">${escapeHtml(product.short_description || product.description || "Latest item from the TECHM8 online catalog.")}</p>
+          ${renderVariantSummary(product, "home-product-card")}
+          <div class="home-product-card__price-row">
+            <strong>${escapeHtml(formatMoney(retailPrice))}</strong>
+            ${hasComparePrice ? `<span class="home-product-card__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>` : ""}
+          </div>
         <div class="home-product-card__meta">
           <span>${escapeHtml(product.brand || "TECHM8")}</span>
           <a href="${detailUrl}">View details</a>
@@ -1414,10 +1697,11 @@ function initCategoryPage() {
 
     const render = () => {
       const query = searchField instanceof HTMLInputElement ? searchField.value.trim().toLowerCase() : "";
-      const visibleProducts = products.filter((product) => {
+      const matchingProducts = products.filter((product) => {
         const haystack = [product.name, product.brand, product.model, product.short_description].join(" ").toLowerCase();
         return product.category_slug === slug && (!query || haystack.includes(query));
       });
+      const visibleProducts = getCatalogDisplayProducts(matchingProducts);
 
       if (countTarget instanceof HTMLElement) {
         countTarget.textContent = `${visibleProducts.length} product${visibleProducts.length === 1 ? "" : "s"}`;
@@ -1457,14 +1741,39 @@ function initProductDetailPage() {
     const retailPrice = Number(product.retail_price) || 0;
     const savings = compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
     const stockText = Number(product.stock_quantity) > 0 ? `${product.stock_quantity} available across stores` : "Store stock is updated in-store";
-    const galleryImages = getProductGalleryImages(product);
+    const productName = getProductDisplayName(product) || product.name;
+    const productColor = getProductVariantColor(product);
+    const galleryImages = getOrderedProductGalleryImages(product);
     const mainImage = galleryImages[0] || null;
-    const relatedProducts = products
-      .filter((item) => item.category_slug === product.category_slug && item.slug !== product.slug)
+    const variantOptions = Array.isArray(product.variant_options) ? product.variant_options : [];
+    const productGroupKey = product.variant_group_key || product.slug;
+    const relatedProducts = getCatalogDisplayProducts(
+      products.filter((item) => item.category_slug === product.category_slug && (item.variant_group_key || item.slug) !== productGroupKey)
+    )
       .sort(compareProductsByLatest)
       .slice(0, 4);
+    const variantMarkup =
+      variantOptions.length > 1
+        ? `
+          <div class="storefront-pdp__variant-picker">
+            <span class="storefront-pdp__variant-label">Colour</span>
+            <div class="storefront-pdp__variant-options">
+              ${variantOptions
+                .map(
+                  (option) => `
+                    <a
+                      class="storefront-pdp__variant ${option.is_active ? "is-active" : ""}"
+                      href="product.html?slug=${encodeURIComponent(option.slug)}"
+                    >${escapeHtml(option.label)}</a>
+                  `
+                )
+                .join("")}
+            </div>
+          </div>
+        `
+        : "";
 
-    document.title = `${product.name} | TECHM8 Online Store`;
+    document.title = `${productName} | TECHM8 Online Store`;
     shell.innerHTML = `
       <div class="storefront-breadcrumbs">
         <a href="index.html">Home</a>
@@ -1473,7 +1782,7 @@ function initProductDetailPage() {
         <span>/</span>
         <a href="category.html?slug=${encodeURIComponent(product.category_slug)}">${escapeHtml(product.category_name)}</a>
         <span>/</span>
-        <span>${escapeHtml(product.name)}</span>
+        <span>${escapeHtml(productName)}</span>
       </div>
 
       <section class="storefront-pdp">
@@ -1517,7 +1826,7 @@ function initProductDetailPage() {
             <span class="storefront-pdp__brand">${escapeHtml(product.brand || "TECHM8")}</span>
             <span class="storefront-pdp__stock">${escapeHtml(stockText)}</span>
           </div>
-          <h1>${escapeHtml(product.name)}</h1>
+          <h1>${escapeHtml(productName)}</h1>
           <p class="storefront-pdp__intro">${escapeHtml(product.description || product.short_description || "Retail catalog product.")}</p>
 
           <div class="storefront-pdp__price-card">
@@ -1528,6 +1837,8 @@ function initProductDetailPage() {
             <div class="storefront-pdp__price-main">${escapeHtml(formatMoney(retailPrice))}</div>
             <p class="storefront-pdp__price-note">Final in-store pricing and stock can be confirmed by your nearest TECHM8 location.</p>
           </div>
+
+          ${variantMarkup}
 
           <div class="storefront-pdp__purchase">
             <label class="storefront-pdp__qty">
@@ -1542,6 +1853,7 @@ function initProductDetailPage() {
             <div class="storefront-pdp__highlight"><strong>Brand</strong><span>${escapeHtml(product.brand || "TECHM8")}</span></div>
             <div class="storefront-pdp__highlight"><strong>Category</strong><span>${escapeHtml(product.category_name)}</span></div>
             <div class="storefront-pdp__highlight"><strong>Model</strong><span>${escapeHtml(product.model || "Store product")}</span></div>
+            <div class="storefront-pdp__highlight"><strong>Colour</strong><span>${escapeHtml(productColor || "Standard")}</span></div>
             <div class="storefront-pdp__highlight"><strong>Compatibility</strong><span>${escapeHtml(product.compatibility || "General use")}</span></div>
             <div class="storefront-pdp__highlight"><strong>SKU</strong><span>${escapeHtml(product.sku || "To be assigned")}</span></div>
             <div class="storefront-pdp__highlight"><strong>UPC</strong><span>${escapeHtml(product.upc || "Not listed")}</span></div>
