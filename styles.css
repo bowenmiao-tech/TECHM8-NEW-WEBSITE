@@ -354,6 +354,10 @@ a { color: inherit; text-decoration: none; }
   color: var(--accent);
 }
 
+.nav__mobile-repairs {
+  display: none;
+}
+
 .store-switcher {
   display: grid;
   gap: 0.35rem;
@@ -2835,6 +2839,81 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
   .nav__dropdown--stores.is-open .nav__dropdown-menu {
     padding: 0.6rem 1rem 1rem;
+  }
+
+  .nav__dropdown--repairs > .nav__dropdown-menu {
+    display: none;
+  }
+
+  .nav__mobile-repairs {
+    display: grid;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 220ms ease, padding 220ms ease;
+  }
+
+  .nav__dropdown--repairs.is-open > .nav__mobile-repairs {
+    max-height: 80vh;
+    padding: 0.35rem 0 0.7rem;
+  }
+
+  .nav__mobile-repairs-group {
+    width: 100%;
+  }
+
+  .nav__mobile-repairs-toggle {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.95rem 1.25rem;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .nav__mobile-repairs-toggle::after {
+    content: "";
+    width: 0.55rem;
+    height: 0.55rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-0.1rem);
+  }
+
+  .nav__mobile-repairs-group.is-open > .nav__mobile-repairs-toggle {
+    background: rgba(17, 141, 149, 0.08);
+    color: var(--accent);
+  }
+
+  .nav__mobile-repairs-group.is-open > .nav__mobile-repairs-toggle::after {
+    transform: rotate(-135deg) translateY(-0.05rem);
+  }
+
+  .nav__mobile-repairs-panel {
+    display: grid;
+    gap: 0.45rem;
+    max-height: 0;
+    overflow: hidden;
+    padding-bottom: 0;
+    transition: max-height 220ms ease, padding-bottom 220ms ease;
+  }
+
+  .nav__mobile-repairs-group.is-open > .nav__mobile-repairs-panel {
+    max-height: 36rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .nav__mobile-repairs-panel a {
+    display: block;
+    padding: 0.78rem 1.8rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
   }
 
   .nav__dropdown-group {

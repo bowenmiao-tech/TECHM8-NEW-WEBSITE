@@ -54,6 +54,7 @@ function closeAllDropdowns(exceptDropdown) {
 
   if (!exceptDropdown) {
     closeAllSubmenus();
+    closeAllMobileRepairsGroups();
   }
 }
 
@@ -72,6 +73,14 @@ function closeAllSubmenus(exceptGroup) {
     if (group === exceptGroup) return;
     group.classList.remove("is-open");
     group.querySelector(".nav__submenu-toggle")?.setAttribute("aria-expanded", "false");
+  });
+}
+
+function closeAllMobileRepairsGroups(exceptGroup) {
+  document.querySelectorAll(".nav__mobile-repairs-group.is-open").forEach((group) => {
+    if (group === exceptGroup) return;
+    group.classList.remove("is-open");
+    group.querySelector(".nav__mobile-repairs-toggle")?.setAttribute("aria-expanded", "false");
   });
 }
 
@@ -132,6 +141,53 @@ function decorateMobileMenu() {
   }
 }
 
+function decorateMobileRepairsAccordion() {
+  const repairsDropdown = Array.from(document.querySelectorAll(".nav__dropdown")).find((dropdown) => {
+    const toggle = dropdown.querySelector(".nav__dropdown-toggle");
+    return toggle?.dataset.href?.includes("repairs.html");
+  });
+
+  if (!(repairsDropdown instanceof HTMLElement)) return;
+  repairsDropdown.classList.add("nav__dropdown--repairs");
+
+  if (repairsDropdown.querySelector(".nav__mobile-repairs")) return;
+
+  const sourceGroups = Array.from(repairsDropdown.querySelectorAll(".nav__dropdown-menu .nav__dropdown-group"));
+  if (!sourceGroups.length) return;
+
+  const mobilePanel = document.createElement("div");
+  mobilePanel.className = "nav__mobile-repairs";
+
+  sourceGroups.forEach((group, index) => {
+    const sourceToggle = group.querySelector(".nav__submenu-toggle");
+    const sourceLinks = Array.from(group.querySelectorAll(".nav__submenu-panel a"));
+    if (!(sourceToggle instanceof HTMLElement) || !sourceLinks.length) return;
+
+    const groupEl = document.createElement("div");
+    groupEl.className = "nav__mobile-repairs-group";
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "nav__mobile-repairs-toggle";
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("data-mobile-repairs-toggle", String(index));
+    button.textContent = sourceToggle.textContent?.trim() || `Group ${index + 1}`;
+
+    const linksPanel = document.createElement("div");
+    linksPanel.className = "nav__mobile-repairs-panel";
+
+    sourceLinks.forEach((link) => {
+      const clone = link.cloneNode(true);
+      linksPanel.appendChild(clone);
+    });
+
+    groupEl.append(button, linksPanel);
+    mobilePanel.appendChild(groupEl);
+  });
+
+  repairsDropdown.appendChild(mobilePanel);
+}
+
 function handleDropdownToggle(event, dropdownToggle) {
   event.stopPropagation();
   const dropdown = dropdownToggle.closest(".nav__dropdown");
@@ -140,6 +196,8 @@ function handleDropdownToggle(event, dropdownToggle) {
   const destination = dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
   const alreadyOpen = dropdown.classList.contains("is-open");
   const readyToNavigate = dropdownToggle.dataset.navReady === "true";
+  const isRepairsMobileAccordion =
+    isMobileNavigation() && dropdown.classList.contains("nav__dropdown--repairs");
 
   if (!alreadyOpen || !readyToNavigate) {
     event.preventDefault();
@@ -147,6 +205,9 @@ function handleDropdownToggle(event, dropdownToggle) {
     dropdown.classList.add("is-open");
     dropdownToggle.setAttribute("aria-expanded", "true");
     keepMobileMenuOpen();
+    if (isRepairsMobileAccordion) {
+      closeAllMobileRepairsGroups();
+    }
     armDropdownNavigation(dropdownToggle);
     return;
   }
@@ -158,6 +219,26 @@ function handleDropdownToggle(event, dropdownToggle) {
   }
 
   event.preventDefault();
+}
+
+function handleMobileRepairsToggle(event, toggle) {
+  event.preventDefault();
+  event.stopPropagation();
+  if (typeof event.stopImmediatePropagation === "function") {
+    event.stopImmediatePropagation();
+  }
+
+  const group = toggle.closest(".nav__mobile-repairs-group");
+  const dropdown = toggle.closest(".nav__dropdown");
+  if (!(group instanceof HTMLElement) || !(dropdown instanceof HTMLElement)) return;
+
+  const isOpen = group.classList.contains("is-open");
+  dropdown.classList.add("is-open");
+  dropdown.querySelector(".nav__dropdown-toggle")?.setAttribute("aria-expanded", "true");
+  keepMobileMenuOpen();
+  closeAllMobileRepairsGroups(group);
+  group.classList.toggle("is-open", !isOpen);
+  toggle.setAttribute("aria-expanded", String(!isOpen));
 }
 
 function handleSubmenuToggle(event, toggle) {
@@ -2327,6 +2408,7 @@ function initBookingForm() {
 
 function initNavigation() {
   decorateMobileMenu();
+  decorateMobileRepairsAccordion();
   initStoreSearch();
 
   const mobileInput = document.querySelector(".nav__mobile-input");
@@ -2337,6 +2419,7 @@ function initNavigation() {
   const navDropdowns = document.querySelectorAll(".nav__dropdown");
   const navDropdownToggles = document.querySelectorAll(".nav__dropdown-toggle");
   const navSubmenuToggles = document.querySelectorAll(".nav__submenu-toggle");
+  const mobileRepairsToggles = document.querySelectorAll(".nav__mobile-repairs-toggle");
 
   navDropdownToggles.forEach((toggle) => {
     if (!(toggle instanceof HTMLButtonElement)) return;
@@ -2355,6 +2438,19 @@ function initNavigation() {
     toggle.dataset.navBound = "true";
     toggle.addEventListener("click", (event) => {
       handleSubmenuToggle(event, toggle);
+    });
+    toggle.addEventListener("touchstart", (event) => {
+      event.stopPropagation();
+      keepMobileMenuOpen();
+    }, { passive: true });
+  });
+
+  mobileRepairsToggles.forEach((toggle) => {
+    if (!(toggle instanceof HTMLButtonElement)) return;
+    if (toggle.dataset.navBound === "true") return;
+    toggle.dataset.navBound = "true";
+    toggle.addEventListener("click", (event) => {
+      handleMobileRepairsToggle(event, toggle);
     });
     toggle.addEventListener("touchstart", (event) => {
       event.stopPropagation();
@@ -2387,6 +2483,7 @@ function initNavigation() {
       if (!isOpen) {
         closeAllDropdowns();
         closeAllSubmenus();
+        closeAllMobileRepairsGroups();
       }
     });
 
