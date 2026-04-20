@@ -386,6 +386,30 @@ function formatMoney(value) {
   }).format(amount);
 }
 
+function getProductCreatedTimestamp(product) {
+  const createdAt = product?.created_at ? Date.parse(product.created_at) : NaN;
+  return Number.isFinite(createdAt) ? createdAt : null;
+}
+
+function compareProductsByLatest(left, right) {
+  const rightCreated = getProductCreatedTimestamp(right);
+  const leftCreated = getProductCreatedTimestamp(left);
+
+  if (rightCreated !== null && leftCreated !== null && rightCreated !== leftCreated) {
+    return rightCreated - leftCreated;
+  }
+
+  if (rightCreated !== null && leftCreated === null) {
+    return 1;
+  }
+
+  if (rightCreated === null && leftCreated !== null) {
+    return -1;
+  }
+
+  return (Number(left?.catalog_index) || 0) - (Number(right?.catalog_index) || 0);
+}
+
 const CART_STORAGE_KEY = "techm8_cart_v1";
 const LOCAL_ORDER_STORAGE_KEY = "techm8_orders_v1";
 
@@ -880,11 +904,11 @@ function initStorefront() {
       };
 
       const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,sort_order&order=sort_order.asc`;
-      const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id&is_visible=eq.true&order=created_at.desc`;
+      const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc`;
 
       const [categoriesResponse, productsResponse] = await Promise.all([
-        fetch(categoriesUrl, { headers }),
-        fetch(productsUrl, { headers }),
+        fetch(categoriesUrl, { headers, cache: "no-store" }),
+        fetch(productsUrl, { headers, cache: "no-store" }),
       ]);
 
       if (!categoriesResponse.ok || !productsResponse.ok) {
@@ -896,7 +920,7 @@ function initStorefront() {
       const categoriesMap = new Map(categories.map((category) => [category.id, category]));
       const normalizedProducts = products
         .map((product) => normalizeProduct(product, categoriesMap))
-        .sort((left, right) => Number(right.is_featured) - Number(left.is_featured) || left.name.localeCompare(right.name));
+        .sort(compareProductsByLatest);
 
       if (normalizedProducts.length) {
         state.products = normalizedProducts;
@@ -1073,12 +1097,12 @@ async function loadSharedCatalogData() {
       Authorization: `Bearer ${supabaseAnonKey}`,
     };
     const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
-    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id&is_visible=eq.true&order=created_at.desc`;
+    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc`;
     const productImagesUrl = `${supabaseUrl}/rest/v1/product_images?select=product_id,image_url,alt_text,sort_order&order=sort_order.asc`;
     const [categoriesResponse, productsResponse, productImagesResponse] = await Promise.all([
-      fetch(categoriesUrl, { headers }),
-      fetch(productsUrl, { headers }),
-      fetch(productImagesUrl, { headers }),
+      fetch(categoriesUrl, { headers, cache: "no-store" }),
+      fetch(productsUrl, { headers, cache: "no-store" }),
+      fetch(productImagesUrl, { headers, cache: "no-store" }),
     ]);
 
     if (!categoriesResponse.ok || !productsResponse.ok || !productImagesResponse.ok) {
@@ -1132,7 +1156,7 @@ async function loadSharedCatalogData() {
         category_name: category?.name || "Other Products",
         category_description: category?.description || "",
       };
-    }).sort((left, right) => Number(right.is_featured) - Number(left.is_featured) || left.name.localeCompare(right.name));
+    }).sort(compareProductsByLatest);
 
     return {
       products: normalizedProducts.length ? normalizedProducts : getFallbackCatalogProducts(),
@@ -1231,7 +1255,7 @@ function createCatalogCard(product) {
 
 function selectLatestHomeProducts(products, limit = 6) {
   return (Array.isArray(products) ? products.slice() : [])
-    .sort((left, right) => (Number(left.catalog_index) || 0) - (Number(right.catalog_index) || 0))
+    .sort(compareProductsByLatest)
     .slice(0, limit);
 }
 
@@ -1406,6 +1430,7 @@ function initProductDetailPage() {
     const mainImage = galleryImages[0] || null;
     const relatedProducts = products
       .filter((item) => item.category_slug === product.category_slug && item.slug !== product.slug)
+      .sort(compareProductsByLatest)
       .slice(0, 4);
 
     document.title = `${product.name} | TECHM8 Online Store`;
@@ -1488,6 +1513,7 @@ function initProductDetailPage() {
             <div class="storefront-pdp__highlight"><strong>Model</strong><span>${escapeHtml(product.model || "Store product")}</span></div>
             <div class="storefront-pdp__highlight"><strong>Compatibility</strong><span>${escapeHtml(product.compatibility || "General use")}</span></div>
             <div class="storefront-pdp__highlight"><strong>SKU</strong><span>${escapeHtml(product.sku || "To be assigned")}</span></div>
+            <div class="storefront-pdp__highlight"><strong>UPC</strong><span>${escapeHtml(product.upc || "Not listed")}</span></div>
             <div class="storefront-pdp__highlight"><strong>Pickup</strong><span>Select a TECHM8 store at checkout</span></div>
           </div>
         </div>
