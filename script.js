@@ -386,6 +386,54 @@ function formatMoney(value) {
   }).format(amount);
 }
 
+const STORE_NAME_MAP = {
+  "park-ridge": "Park Ridge",
+  "fairfield": "Fairfield",
+  "toowong": "Toowong",
+  "north-lakes": "North Lakes",
+  "brassall": "Brassall",
+  "warehouse-dispatch": "Warehouse Dispatch",
+};
+
+const REPAIR_CATEGORY_LABELS = {
+  phone: "Phone",
+  tablet: "Tablet",
+  computer: "Computer",
+  gaming_console: "Gaming Console",
+};
+
+function formatDateTime(value) {
+  if (!value) return "Not available";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return new Intl.DateTimeFormat("en-AU", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date);
+}
+
+function formatDateOnly(value) {
+  if (!value) return "Not available";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return new Intl.DateTimeFormat("en-AU", {
+    dateStyle: "medium",
+  }).format(date);
+}
+
+function formatStatusLabel(value) {
+  const safeValue = String(value || "").trim();
+  if (!safeValue) return "Not available";
+  return safeValue
+    .replace(/[_-]+/g, " ")
+    .replace(/\b\w/g, (match) => match.toUpperCase());
+}
+
+function getStoreDisplayName(storeSlug) {
+  const safeSlug = String(storeSlug || "").trim().toLowerCase();
+  return STORE_NAME_MAP[safeSlug] || formatStatusLabel(safeSlug);
+}
+
 function getProductCreatedTimestamp(product) {
   const createdAt = product?.created_at ? Date.parse(product.created_at) : NaN;
   return Number.isFinite(createdAt) ? createdAt : null;
@@ -526,6 +574,240 @@ async function getSupabaseBrowserClient() {
   })();
 
   return supabaseBrowserClientPromise;
+}
+
+async function getCurrentAuthState() {
+  try {
+    const supabase = await getSupabaseBrowserClient();
+    const { data: { session } } = await supabase.auth.getSession();
+    return {
+      supabase,
+      session,
+      user: session?.user || null,
+    };
+  } catch (error) {
+    return {
+      supabase: null,
+      session: null,
+      user: null,
+    };
+  }
+}
+
+async function syncCustomerProfile(supabase, user, overrides = {}) {
+  if (!supabase || !user?.id) return null;
+
+  const payload = {
+    id: user.id,
+    email: String(overrides.email || user.email || "").trim() || null,
+    full_name: String(overrides.full_name || user.user_metadata?.full_name || user.user_metadata?.name || "").trim() || null,
+    phone: String(overrides.phone || user.user_metadata?.phone || "").trim() || null,
+    avatar_url: String(user.user_metadata?.avatar_url || "").trim() || null,
+    provider: String(user.app_metadata?.provider || user.user_metadata?.provider || "").trim() || null,
+    default_store_slug: String(overrides.default_store_slug || "").trim() || null,
+  };
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .upsert(payload, { onConflict: "id" })
+    .select("id, email, full_name, phone, default_store_slug, avatar_url, provider, created_at, updated_at")
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+async function fetchCustomerProfile(supabase, user) {
+  if (!supabase || !user?.id) return null;
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, email, full_name, phone, default_store_slug, avatar_url, provider, created_at, updated_at")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+function fillFormField(form, fieldName, value, overwrite = false) {
+  if (!(form instanceof HTMLFormElement)) return;
+  const field = form.elements.namedItem(fieldName);
+  if (
+    !(field instanceof HTMLInputElement) &&
+    !(field instanceof HTMLTextAreaElement) &&
+    !(field instanceof HTMLSelectElement)
+  ) {
+    return;
+  }
+
+  const safeValue = String(value || "").trim();
+  if (!safeValue) return;
+  if (!overwrite && String(field.value || "").trim()) return;
+  field.value = safeValue;
+}
+
+async function prefillCustomerContactForm(form, options = {}) {
+  const { includeStore = false } = options;
+  const authState = await getCurrentAuthState();
+  if (!authState.user || !authState.supabase) {
+    return null;
+  }
+
+  let profile = null;
+  try {
+    profile = await syncCustomerProfile(authState.supabase, authState.user);
+  } catch (error) {
+    try {
+      profile = await fetchCustomerProfile(authState.supabase, authState.user);
+    } catch (nestedError) {
+      profile = null;
+    }
+  }
+
+  const fullName = String(profile?.full_name || authState.user.user_metadata?.full_name || authState.user.user_metadata?.name || "").trim();
+  const phone = String(profile?.phone || authState.user.user_metadata?.phone || "").trim();
+  const email = String(profile?.email || authState.user.email || "").trim();
+  const defaultStoreSlug = String(profile?.default_store_slug || "").trim();
+
+  fillFormField(form, "customer_name", fullName);
+  fillFormField(form, "phone", phone);
+  fillFormField(form, "email", email);
+
+  if (includeStore && defaultStoreSlug) {
+    fillFormField(form, "store_slug", defaultStoreSlug);
+  }
+
+  return {
+    ...authState,
+    profile,
+  };
+}
+
+async function loadCustomerOrders(supabase, user, limit = 50) {
+  if (!supabase || !user?.id) return [];
+
+  const { data, error } = await supabase
+    .from("orders")
+    .select("id, order_code, customer_name, email, phone, store_slug, fulfillment_method, payment_method_label, payment_status, status, fulfillment_status, total_amount, created_at")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw error;
+  }
+
+  return Array.isArray(data) ? data : [];
+}
+
+async function loadCustomerRepairBookings(supabase, user, limit = 50) {
+  if (!supabase || !user?.id) return [];
+
+  const { data, error } = await supabase
+    .from("repair_bookings")
+    .select("id, booking_code, store_slug, repair_category, brand, device_model, preferred_date, preferred_time, preferred_contact_method, status, created_at")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw error;
+  }
+
+  return Array.isArray(data) ? data : [];
+}
+
+function renderHistoryPreview(target, records, kind) {
+  if (!(target instanceof HTMLElement)) return;
+
+  if (!Array.isArray(records) || !records.length) {
+    target.innerHTML = `<p class="auth-history__empty">No ${kind === "orders" ? "orders" : "repair requests"} linked to this account yet.</p>`;
+    return;
+  }
+
+  target.innerHTML = records.slice(0, 3).map((record) => {
+    if (kind === "orders") {
+      return `
+        <article class="auth-history__item">
+          <strong>${escapeHtml(record.order_code || "Pending order")}</strong>
+          <span>${escapeHtml(getStoreDisplayName(record.store_slug))} · ${escapeHtml(formatMoney(record.total_amount || 0))}</span>
+          <span>${escapeHtml(formatStatusLabel(record.status))} · ${escapeHtml(formatDateTime(record.created_at))}</span>
+        </article>
+      `;
+    }
+
+    return `
+      <article class="auth-history__item">
+        <strong>${escapeHtml(record.booking_code || "Pending repair")}</strong>
+        <span>${escapeHtml(REPAIR_CATEGORY_LABELS[record.repair_category] || formatStatusLabel(record.repair_category))} · ${escapeHtml(getStoreDisplayName(record.store_slug))}</span>
+        <span>${escapeHtml(formatStatusLabel(record.status))} · ${escapeHtml(formatDateTime(record.created_at))}</span>
+      </article>
+    `;
+  }).join("");
+}
+
+function renderHistoryList(target, records, kind) {
+  if (!(target instanceof HTMLElement)) return;
+
+  if (!Array.isArray(records) || !records.length) {
+    target.innerHTML = `
+      <article class="history-card history-card--empty">
+        <p class="eyebrow">${kind === "orders" ? "No orders yet" : "No repairs yet"}</p>
+        <h2>${kind === "orders" ? "No order history is linked to this account." : "No repair bookings are linked to this account."}</h2>
+        <p>${kind === "orders" ? "Place an order while signed in and it will appear here automatically." : "Submit a repair request while signed in and it will appear here automatically."}</p>
+      </article>
+    `;
+    return;
+  }
+
+  target.innerHTML = records.map((record) => {
+    if (kind === "orders") {
+      return `
+        <article class="history-card">
+          <div class="history-card__top">
+            <div>
+              <p class="eyebrow">Order</p>
+              <h2>${escapeHtml(record.order_code || "Pending order")}</h2>
+            </div>
+            <span class="history-card__status">${escapeHtml(formatStatusLabel(record.status))}</span>
+          </div>
+          <div class="history-card__grid">
+            <div><strong>Store</strong><span>${escapeHtml(getStoreDisplayName(record.store_slug))}</span></div>
+            <div><strong>Total</strong><span>${escapeHtml(formatMoney(record.total_amount || 0))}</span></div>
+            <div><strong>Payment</strong><span>${escapeHtml(record.payment_method_label || "Pay in store")} · ${escapeHtml(formatStatusLabel(record.payment_status))}</span></div>
+            <div><strong>Fulfilment</strong><span>${escapeHtml(formatStatusLabel(record.fulfillment_method || "pickup"))} · ${escapeHtml(formatStatusLabel(record.fulfillment_status || "new"))}</span></div>
+            <div><strong>Placed</strong><span>${escapeHtml(formatDateTime(record.created_at))}</span></div>
+            <div><strong>Contact</strong><span>${escapeHtml(record.phone || "")}${record.email ? ` / ${escapeHtml(record.email)}` : ""}</span></div>
+          </div>
+        </article>
+      `;
+    }
+
+    return `
+      <article class="history-card">
+        <div class="history-card__top">
+          <div>
+            <p class="eyebrow">Repair booking</p>
+            <h2>${escapeHtml(record.booking_code || "Pending repair")}</h2>
+          </div>
+          <span class="history-card__status">${escapeHtml(formatStatusLabel(record.status))}</span>
+        </div>
+        <div class="history-card__grid">
+          <div><strong>Store</strong><span>${escapeHtml(getStoreDisplayName(record.store_slug))}</span></div>
+          <div><strong>Category</strong><span>${escapeHtml(REPAIR_CATEGORY_LABELS[record.repair_category] || formatStatusLabel(record.repair_category))}</span></div>
+          <div><strong>Brand</strong><span>${escapeHtml(record.brand || "Not specified")}</span></div>
+          <div><strong>Model</strong><span>${escapeHtml(record.device_model || "Not specified")}</span></div>
+          <div><strong>Preferred date</strong><span>${escapeHtml(record.preferred_date ? formatDateOnly(record.preferred_date) : "Flexible")}</span></div>
+          <div><strong>Requested</strong><span>${escapeHtml(formatDateTime(record.created_at))}</span></div>
+        </div>
+      </article>
+    `;
+  }).join("");
 }
 
 const PRODUCT_VARIANT_COLOR_RULES = [
@@ -2323,6 +2605,7 @@ function initCheckoutPage() {
   const paymentProfiles = [];
   const checkoutParams = new URLSearchParams(window.location.search);
   const isPaymentCancelled = checkoutParams.get("payment") === "cancelled";
+  let activeAuthState = null;
 
   const getSelectedPaymentProfile = () => {
     const selectedCode =
@@ -2533,6 +2816,10 @@ function initCheckoutPage() {
     }
   };
 
+  const applyAccountPrefill = async () => {
+    activeAuthState = await prefillCustomerContactForm(form, { includeStore: true });
+  };
+
   itemsTarget.addEventListener("input", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLInputElement)) return;
@@ -2570,6 +2857,8 @@ function initCheckoutPage() {
     const formData = new FormData(form);
     const subtotal = getCartSubtotal(items);
     const selectedProfile = getSelectedPaymentProfile();
+    activeAuthState = await getCurrentAuthState();
+    const authAccessToken = activeAuthState?.session?.access_token || supabaseAnonKey;
     const payload = {
       order_code: makeOrderCode(),
       customer_name: String(formData.get("customer_name") || "").trim(),
@@ -2584,6 +2873,7 @@ function initCheckoutPage() {
       total_amount: subtotal,
       source: "website",
       site_url: window.location.origin,
+      auth_user_id: activeAuthState?.user?.id || null,
       items,
       created_at: new Date().toISOString(),
     };
@@ -2598,6 +2888,15 @@ function initCheckoutPage() {
         submitButton.textContent = "Submitting...";
       }
 
+      if (activeAuthState?.supabase && activeAuthState?.user) {
+        await syncCustomerProfile(activeAuthState.supabase, activeAuthState.user, {
+          full_name: payload.customer_name,
+          phone: payload.phone,
+          email: payload.email,
+          default_store_slug: payload.store_slug,
+        });
+      }
+
       if (selectedProfile?.provider === "stripe") {
         if (!checkoutSessionEndpoint) {
           throw new Error("Stripe Checkout is not configured yet.");
@@ -2608,7 +2907,7 @@ function initCheckoutPage() {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${supabaseAnonKey}`,
+            Authorization: `Bearer ${authAccessToken}`,
             apikey: supabaseAnonKey,
           },
           body: JSON.stringify(payload),
@@ -2629,7 +2928,7 @@ function initCheckoutPage() {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${supabaseAnonKey}`,
+            Authorization: `Bearer ${authAccessToken}`,
             apikey: supabaseAnonKey,
           },
           body: JSON.stringify(payload),
@@ -2734,6 +3033,10 @@ function initCheckoutPage() {
       render();
     });
 
+  applyAccountPrefill().then(() => {
+    render();
+  });
+
   if (isPaymentCancelled && messageTarget instanceof HTMLElement) {
     messageTarget.hidden = false;
     messageTarget.className = "booking-message is-error";
@@ -2771,6 +3074,7 @@ function initBookingForm() {
     window.TECHM8_CONFIG?.bookingEndpoint ||
     "api/book-repair.php";
   const isSupabaseEndpoint = /^https:\/\/.+\.supabase\.co\/functions\/v1\//.test(bookingEndpoint);
+  let activeAuthState = null;
 
   const submitButton = form.querySelector("[data-booking-submit]");
   const messageBox = form.querySelector("[data-booking-message]");
@@ -2839,6 +3143,10 @@ function initBookingForm() {
     storeField.value = storeParam;
   }
 
+  prefillCustomerContactForm(form, { includeStore: true }).then((authState) => {
+    activeAuthState = authState;
+  });
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -2860,6 +3168,19 @@ function initBookingForm() {
 
     try {
       const formData = new FormData(form);
+      activeAuthState = await getCurrentAuthState();
+      const authAccessToken = activeAuthState?.session?.access_token || supabaseAnonKey;
+      const payload = Object.fromEntries(formData.entries());
+
+      if (activeAuthState?.supabase && activeAuthState?.user) {
+        await syncCustomerProfile(activeAuthState.supabase, activeAuthState.user, {
+          full_name: String(payload.customer_name || "").trim(),
+          phone: String(payload.phone || "").trim(),
+          email: String(payload.email || "").trim(),
+          default_store_slug: String(payload.store_slug || "").trim(),
+        });
+      }
+
       const response = await fetch(
         bookingEndpoint,
         isSupabaseEndpoint
@@ -2868,10 +3189,13 @@ function initBookingForm() {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${supabaseAnonKey}`,
+                Authorization: `Bearer ${authAccessToken}`,
                 apikey: supabaseAnonKey,
               },
-              body: JSON.stringify(Object.fromEntries(formData.entries())),
+              body: JSON.stringify({
+                ...payload,
+                auth_user_id: activeAuthState?.user?.id || null,
+              }),
             }
           : {
               method: "POST",
@@ -3126,6 +3450,8 @@ async function initAccountPage() {
   const phoneTarget = root.querySelector("[data-auth-phone]");
   const statusTarget = root.querySelector("[data-auth-status]");
   const verifiedTarget = root.querySelector("[data-auth-verified]");
+  const ordersPreviewTarget = root.querySelector("[data-account-orders-preview]");
+  const repairsPreviewTarget = root.querySelector("[data-account-repairs-preview]");
 
   let supabase;
 
@@ -3136,35 +3462,69 @@ async function initAccountPage() {
     return;
   }
 
-  const renderSession = (session) => {
+  const renderSignedOutState = () => {
+    if (guestPanel instanceof HTMLElement) guestPanel.hidden = false;
+    if (memberPanel instanceof HTMLElement) memberPanel.hidden = true;
+    if (nameTarget instanceof HTMLElement) nameTarget.textContent = "Guest";
+    if (emailTarget instanceof HTMLElement) emailTarget.textContent = "Sign in or register to save your checkout details.";
+    if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = "Phone number will be saved after registration.";
+    if (statusTarget instanceof HTMLElement) statusTarget.textContent = "Guest";
+    if (verifiedTarget instanceof HTMLElement) verifiedTarget.textContent = "Email verification is required for new accounts.";
+    renderHistoryPreview(ordersPreviewTarget, [], "orders");
+    renderHistoryPreview(repairsPreviewTarget, [], "repairs");
+  };
+
+  const renderSession = async (session) => {
     const user = session?.user || null;
     const verified = isEmailConfirmed(user);
 
-    if (guestPanel instanceof HTMLElement) guestPanel.hidden = Boolean(user);
-    if (memberPanel instanceof HTMLElement) memberPanel.hidden = !user;
-
     if (!user) {
-      if (nameTarget instanceof HTMLElement) nameTarget.textContent = "Guest";
-      if (emailTarget instanceof HTMLElement) emailTarget.textContent = "Sign in or register to save your checkout details.";
-      if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = "Phone number will be saved after registration.";
-      if (statusTarget instanceof HTMLElement) statusTarget.textContent = "Guest";
-      if (verifiedTarget instanceof HTMLElement) verifiedTarget.textContent = "Email verification is required for new accounts.";
+      renderSignedOutState();
       return;
     }
 
-    if (nameTarget instanceof HTMLElement) nameTarget.textContent = getUserDisplayName(user);
-    if (emailTarget instanceof HTMLElement) emailTarget.textContent = user.email || "No email";
-    if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = user.user_metadata?.phone || "Phone not saved";
+    if (guestPanel instanceof HTMLElement) guestPanel.hidden = true;
+    if (memberPanel instanceof HTMLElement) memberPanel.hidden = false;
+
+    let profile = null;
+    let orders = [];
+    let repairs = [];
+
+    try {
+      profile = await syncCustomerProfile(supabase, user);
+    } catch (error) {
+      try {
+        profile = await fetchCustomerProfile(supabase, user);
+      } catch (nestedError) {
+        profile = null;
+      }
+    }
+
+    try {
+      [orders, repairs] = await Promise.all([
+        loadCustomerOrders(supabase, user, 3),
+        loadCustomerRepairBookings(supabase, user, 3),
+      ]);
+    } catch (error) {
+      orders = [];
+      repairs = [];
+    }
+
+    if (nameTarget instanceof HTMLElement) nameTarget.textContent = String(profile?.full_name || getUserDisplayName(user));
+    if (emailTarget instanceof HTMLElement) emailTarget.textContent = String(profile?.email || user.email || "No email");
+    if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = String(profile?.phone || user.user_metadata?.phone || "Phone not saved");
     if (statusTarget instanceof HTMLElement) statusTarget.textContent = verified ? "Signed in" : "Pending email verification";
     if (verifiedTarget instanceof HTMLElement) {
       verifiedTarget.textContent = verified
         ? "Email verified"
         : "Open your email and confirm the account before using it fully.";
     }
+    renderHistoryPreview(ordersPreviewTarget, orders, "orders");
+    renderHistoryPreview(repairsPreviewTarget, repairs, "repairs");
   };
 
   const { data: { session: initialSession } } = await supabase.auth.getSession();
-  renderSession(initialSession);
+  await renderSession(initialSession);
 
   supabase.auth.onAuthStateChange((_event, session) => {
     renderSession(session);
@@ -3301,10 +3661,85 @@ async function initAccountPage() {
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
         setAuthMessage(messageBox, "Signed out successfully.");
+        renderSignedOutState();
       } catch (error) {
         setAuthMessage(messageBox, getReadableAuthError(error), "error");
       }
     });
+  }
+}
+
+async function initMyOrdersPage() {
+  const root = document.querySelector("[data-my-orders-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const listTarget = root.querySelector("[data-orders-history-list]");
+  const messageTarget = root.querySelector("[data-orders-history-message]");
+  if (!(listTarget instanceof HTMLElement)) return;
+
+  const authState = await getCurrentAuthState();
+  if (!authState.user || !authState.supabase) {
+    if (messageTarget instanceof HTMLElement) {
+      messageTarget.hidden = false;
+      messageTarget.className = "booking-message is-error";
+      messageTarget.textContent = "Sign in to view your order history.";
+    }
+    renderHistoryList(listTarget, [], "orders");
+    return;
+  }
+
+  try {
+    const records = await loadCustomerOrders(authState.supabase, authState.user, 100);
+    if (messageTarget instanceof HTMLElement) {
+      messageTarget.hidden = false;
+      messageTarget.className = "booking-message is-success";
+      messageTarget.textContent = `Showing ${records.length} order${records.length === 1 ? "" : "s"} linked to your account.`;
+    }
+    renderHistoryList(listTarget, records, "orders");
+  } catch (error) {
+    if (messageTarget instanceof HTMLElement) {
+      messageTarget.hidden = false;
+      messageTarget.className = "booking-message is-error";
+      messageTarget.textContent = error instanceof Error ? error.message : "Order history could not be loaded.";
+    }
+    renderHistoryList(listTarget, [], "orders");
+  }
+}
+
+async function initMyRepairsPage() {
+  const root = document.querySelector("[data-my-repairs-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const listTarget = root.querySelector("[data-repairs-history-list]");
+  const messageTarget = root.querySelector("[data-repairs-history-message]");
+  if (!(listTarget instanceof HTMLElement)) return;
+
+  const authState = await getCurrentAuthState();
+  if (!authState.user || !authState.supabase) {
+    if (messageTarget instanceof HTMLElement) {
+      messageTarget.hidden = false;
+      messageTarget.className = "booking-message is-error";
+      messageTarget.textContent = "Sign in to view your repair history.";
+    }
+    renderHistoryList(listTarget, [], "repairs");
+    return;
+  }
+
+  try {
+    const records = await loadCustomerRepairBookings(authState.supabase, authState.user, 100);
+    if (messageTarget instanceof HTMLElement) {
+      messageTarget.hidden = false;
+      messageTarget.className = "booking-message is-success";
+      messageTarget.textContent = `Showing ${records.length} repair request${records.length === 1 ? "" : "s"} linked to your account.`;
+    }
+    renderHistoryList(listTarget, records, "repairs");
+  } catch (error) {
+    if (messageTarget instanceof HTMLElement) {
+      messageTarget.hidden = false;
+      messageTarget.className = "booking-message is-error";
+      messageTarget.textContent = error instanceof Error ? error.message : "Repair history could not be loaded.";
+    }
+    renderHistoryList(listTarget, [], "repairs");
   }
 }
 
@@ -3325,6 +3760,8 @@ function initPage() {
   initCheckoutSuccessPage();
   initBookingForm();
   initAccountPage();
+  initMyOrdersPage();
+  initMyRepairsPage();
 }
 
 if (document.readyState === "loading") {

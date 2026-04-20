@@ -23,6 +23,12 @@ function buildOrderCode() {
   return `TM8-${new Date().toISOString().slice(0, 10).replaceAll('-', '')}-${crypto.randomUUID().slice(0, 6).toUpperCase()}`
 }
 
+function getBearerToken(req: Request) {
+  const authorization = req.headers.get('authorization') ?? ''
+  if (!authorization.toLowerCase().startsWith('bearer ')) return ''
+  return authorization.slice(7).trim()
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -81,6 +87,28 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
+
+    const bearerToken = getBearerToken(req)
+    let authUser: Awaited<ReturnType<typeof supabaseAdmin.auth.getUser>>['data']['user'] = null
+    if (bearerToken) {
+      const { data } = await supabaseAdmin.auth.getUser(bearerToken)
+      authUser = data.user ?? null
+    }
+
+    if (authUser?.id) {
+      await supabaseAdmin.from('profiles').upsert(
+        {
+          id: authUser.id,
+          email: authUser.email ?? email,
+          full_name: customerName || authUser.user_metadata?.full_name || authUser.user_metadata?.name || null,
+          phone: phone || authUser.user_metadata?.phone || null,
+          default_store_slug: storeSlug || null,
+          avatar_url: authUser.user_metadata?.avatar_url ?? null,
+          provider: authUser.app_metadata?.provider ?? null,
+        },
+        { onConflict: 'id' }
+      )
+    }
 
     const [{ data: store, error: storeError }, { data: feeProfile, error: feeProfileError }] = await Promise.all([
       supabaseAdmin
@@ -205,6 +233,7 @@ Deno.serve(async (req) => {
         customer_name: customerName,
         phone,
         email,
+        auth_user_id: authUser?.id ?? null,
         preferred_contact_method: preferredContactMethod,
         store_id: store.id,
         store_slug: store.slug,
