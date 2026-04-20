@@ -781,11 +781,7 @@ if (pageData) {
       if (toggle) {
         delete toggle.dataset.navReady;
       }
-
-      const firstGroup = dropdown.querySelector(".nav__dropdown-group");
-      if (firstGroup instanceof HTMLElement) {
-        openSubmenuGroup(firstGroup);
-      }
+      closeAllSubmenus();
     });
 
     dropdown.addEventListener("mouseleave", () => {
