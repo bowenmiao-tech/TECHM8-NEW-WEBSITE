@@ -3440,8 +3440,6 @@ async function initAccountPage() {
   const memberPanel = root.querySelector("[data-auth-member]");
   const messageBox = root.querySelector("[data-auth-message]");
   const loginForm = root.querySelector("[data-login-form]");
-  const registerForm = root.querySelector("[data-register-form]");
-  const resetForm = root.querySelector("[data-reset-form]");
   const googleButton = root.querySelector("[data-auth-google]");
   const facebookButton = root.querySelector("[data-auth-facebook]");
   const logoutButton = root.querySelector("[data-auth-logout]");
@@ -3450,8 +3448,6 @@ async function initAccountPage() {
   const phoneTarget = root.querySelector("[data-auth-phone]");
   const statusTarget = root.querySelector("[data-auth-status]");
   const verifiedTarget = root.querySelector("[data-auth-verified]");
-  const ordersPreviewTarget = root.querySelector("[data-account-orders-preview]");
-  const repairsPreviewTarget = root.querySelector("[data-account-repairs-preview]");
 
   let supabase;
 
@@ -3465,13 +3461,11 @@ async function initAccountPage() {
   const renderSignedOutState = () => {
     if (guestPanel instanceof HTMLElement) guestPanel.hidden = false;
     if (memberPanel instanceof HTMLElement) memberPanel.hidden = true;
-    if (nameTarget instanceof HTMLElement) nameTarget.textContent = "Guest";
-    if (emailTarget instanceof HTMLElement) emailTarget.textContent = "Sign in or register to save your checkout details.";
-    if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = "Phone number will be saved after registration.";
+    if (nameTarget instanceof HTMLElement) nameTarget.textContent = "Customer";
+    if (emailTarget instanceof HTMLElement) emailTarget.textContent = "Sign in to access your account.";
+    if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = "Saved after registration";
     if (statusTarget instanceof HTMLElement) statusTarget.textContent = "Guest";
-    if (verifiedTarget instanceof HTMLElement) verifiedTarget.textContent = "Email verification is required for new accounts.";
-    renderHistoryPreview(ordersPreviewTarget, [], "orders");
-    renderHistoryPreview(repairsPreviewTarget, [], "repairs");
+    if (verifiedTarget instanceof HTMLElement) verifiedTarget.textContent = "Verification required for new accounts.";
   };
 
   const renderSession = async (session) => {
@@ -3487,8 +3481,6 @@ async function initAccountPage() {
     if (memberPanel instanceof HTMLElement) memberPanel.hidden = false;
 
     let profile = null;
-    let orders = [];
-    let repairs = [];
 
     try {
       profile = await syncCustomerProfile(supabase, user);
@@ -3500,16 +3492,6 @@ async function initAccountPage() {
       }
     }
 
-    try {
-      [orders, repairs] = await Promise.all([
-        loadCustomerOrders(supabase, user, 3),
-        loadCustomerRepairBookings(supabase, user, 3),
-      ]);
-    } catch (error) {
-      orders = [];
-      repairs = [];
-    }
-
     if (nameTarget instanceof HTMLElement) nameTarget.textContent = String(profile?.full_name || getUserDisplayName(user));
     if (emailTarget instanceof HTMLElement) emailTarget.textContent = String(profile?.email || user.email || "No email");
     if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = String(profile?.phone || user.user_metadata?.phone || "Phone not saved");
@@ -3519,8 +3501,6 @@ async function initAccountPage() {
         ? "Email verified"
         : "Open your email and confirm the account before using it fully.";
     }
-    renderHistoryPreview(ordersPreviewTarget, orders, "orders");
-    renderHistoryPreview(repairsPreviewTarget, repairs, "repairs");
   };
 
   const { data: { session: initialSession } } = await supabase.auth.getSession();
@@ -3583,78 +3563,6 @@ async function initAccountPage() {
     });
   }
 
-  if (registerForm instanceof HTMLFormElement) {
-    registerForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const formData = new FormData(registerForm);
-      const fullName = String(formData.get("full_name") || "").trim();
-      const phone = String(formData.get("phone") || "").trim();
-      const email = String(formData.get("email") || "").trim();
-      const password = String(formData.get("password") || "");
-      const confirmPassword = String(formData.get("confirm_password") || "");
-
-      if (!fullName || !phone || !email || !password) {
-        setAuthMessage(messageBox, "Please complete all required registration fields.", "error");
-        return;
-      }
-
-      if (password !== confirmPassword) {
-        setAuthMessage(messageBox, "Password confirmation does not match.", "error");
-        return;
-      }
-
-      try {
-        setAuthMessage(messageBox, "");
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: getAuthRedirectUrl(),
-            data: {
-              full_name: fullName,
-              phone,
-            },
-          },
-        });
-        if (error) throw error;
-
-        if (data?.session && !isEmailConfirmed(data.user)) {
-          await supabase.auth.signOut();
-        }
-
-        setAuthMessage(messageBox, "Registration submitted. Check your email and verify the account before signing in.");
-        registerForm.reset();
-      } catch (error) {
-        setAuthMessage(messageBox, getReadableAuthError(error), "error");
-      }
-    });
-  }
-
-  if (resetForm instanceof HTMLFormElement) {
-    resetForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const formData = new FormData(resetForm);
-      const email = String(formData.get("email") || "").trim();
-
-      if (!email) {
-        setAuthMessage(messageBox, "Enter an email address to send a reset link.", "error");
-        return;
-      }
-
-      try {
-        setAuthMessage(messageBox, "");
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: getAuthRedirectUrl(),
-        });
-        if (error) throw error;
-        setAuthMessage(messageBox, "Password reset link sent. Check your email inbox.");
-        resetForm.reset();
-      } catch (error) {
-        setAuthMessage(messageBox, getReadableAuthError(error), "error");
-      }
-    });
-  }
-
   if (logoutButton instanceof HTMLButtonElement) {
     logoutButton.addEventListener("click", async () => {
       try {
@@ -3667,6 +3575,108 @@ async function initAccountPage() {
       }
     });
   }
+}
+
+async function initRegisterPage() {
+  const root = document.querySelector("[data-register-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const messageBox = root.querySelector("[data-auth-message]");
+  const registerForm = root.querySelector("[data-register-form]");
+  if (!(registerForm instanceof HTMLFormElement)) return;
+
+  let supabase;
+  try {
+    supabase = await getSupabaseBrowserClient();
+  } catch (error) {
+    setAuthMessage(messageBox, "Supabase Auth could not be loaded on this page.", "error");
+    return;
+  }
+
+  registerForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(registerForm);
+    const fullName = String(formData.get("full_name") || "").trim();
+    const phone = String(formData.get("phone") || "").trim();
+    const email = String(formData.get("email") || "").trim();
+    const password = String(formData.get("password") || "");
+    const confirmPassword = String(formData.get("confirm_password") || "");
+
+    if (!fullName || !phone || !email || !password) {
+      setAuthMessage(messageBox, "Please complete all required registration fields.", "error");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setAuthMessage(messageBox, "Password confirmation does not match.", "error");
+      return;
+    }
+
+    try {
+      setAuthMessage(messageBox, "");
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: getAuthRedirectUrl(),
+          data: {
+            full_name: fullName,
+            phone,
+          },
+        },
+      });
+      if (error) throw error;
+
+      if (data?.session && !isEmailConfirmed(data.user)) {
+        await supabase.auth.signOut();
+      }
+
+      setAuthMessage(messageBox, "Registration submitted. Check your email and verify the account before signing in.");
+      registerForm.reset();
+    } catch (error) {
+      setAuthMessage(messageBox, getReadableAuthError(error), "error");
+    }
+  });
+}
+
+async function initForgotPasswordPage() {
+  const root = document.querySelector("[data-reset-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const messageBox = root.querySelector("[data-auth-message]");
+  const resetForm = root.querySelector("[data-reset-form]");
+  if (!(resetForm instanceof HTMLFormElement)) return;
+
+  let supabase;
+  try {
+    supabase = await getSupabaseBrowserClient();
+  } catch (error) {
+    setAuthMessage(messageBox, "Supabase Auth could not be loaded on this page.", "error");
+    return;
+  }
+
+  resetForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(resetForm);
+    const email = String(formData.get("email") || "").trim();
+
+    if (!email) {
+      setAuthMessage(messageBox, "Enter an email address to send a reset link.", "error");
+      return;
+    }
+
+    try {
+      setAuthMessage(messageBox, "");
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: getAuthRedirectUrl(),
+      });
+      if (error) throw error;
+      setAuthMessage(messageBox, "Password reset link sent. Check your email inbox.");
+      resetForm.reset();
+    } catch (error) {
+      setAuthMessage(messageBox, getReadableAuthError(error), "error");
+    }
+  });
 }
 
 async function initMyOrdersPage() {
@@ -3760,6 +3770,8 @@ function initPage() {
   initCheckoutSuccessPage();
   initBookingForm();
   initAccountPage();
+  initRegisterPage();
+  initForgotPasswordPage();
   initMyOrdersPage();
   initMyRepairsPage();
 }

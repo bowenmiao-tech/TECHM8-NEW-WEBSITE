@@ -3,534 +3,315 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OZ TECH M8 Account</title>
-  <meta name="description" content="Sign in, register and manage your OZ TECH M8 customer account.">
+  <title>Account Login | OZ TECH M8</title>
+  <meta name="description" content="Sign in to your OZ TECH M8 account with email, Google or Facebook.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
     :root {
-      --account-accent: #05CEAC;
-      --account-accent-strong: #03b899;
-      --account-accent-soft: rgba(5, 206, 172, 0.12);
-      --account-dark: #0d1417;
-      --account-text: #102125;
-      --account-muted: #61757b;
-      --account-line: rgba(16, 33, 37, 0.1);
-      --account-panel: rgba(255, 255, 255, 0.92);
-      --account-panel-strong: #ffffff;
-      --account-surface: #f4fbfa;
+      --auth-accent: #05CEAC;
+      --auth-accent-strong: #03b899;
+      --auth-dark: #0f171a;
+      --auth-text: #14262b;
+      --auth-muted: #65797f;
+      --auth-line: rgba(20, 38, 43, 0.1);
+      --auth-soft: rgba(5, 206, 172, 0.1);
     }
 
     body {
       background:
-        radial-gradient(circle at top left, rgba(5, 206, 172, 0.14), transparent 28%),
-        radial-gradient(circle at top right, rgba(5, 206, 172, 0.08), transparent 24%),
-        linear-gradient(180deg, #f8fcfb 0%, #ffffff 42%, #f4fbfa 100%);
+        radial-gradient(circle at top left, rgba(5, 206, 172, 0.12), transparent 30%),
+        linear-gradient(180deg, #f8fcfb 0%, #ffffff 48%, #f4fbfa 100%);
     }
 
-    .account-page {
+    .auth-shell {
       min-height: calc(100vh - 15rem);
+      padding: clamp(2.5rem, 6vw, 5rem) 0;
     }
 
-    .account-hero {
-      padding: clamp(2.5rem, 5vw, 5rem) 0 clamp(3rem, 6vw, 5.5rem);
-    }
-
-    .account-hero__grid {
+    .auth-shell__grid {
       display: grid;
-      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
       gap: clamp(1.5rem, 4vw, 3rem);
-      align-items: start;
+      align-items: center;
     }
 
-    .account-intro {
+    .auth-intro {
       display: grid;
-      gap: 1.4rem;
+      gap: 1.2rem;
       align-content: start;
-      padding-top: 0.75rem;
     }
 
-    .account-kicker {
+    .auth-kicker {
       display: inline-flex;
       align-items: center;
       gap: 0.55rem;
       width: fit-content;
       padding: 0.55rem 0.9rem;
       border-radius: 999px;
-      background: rgba(13, 20, 23, 0.94);
+      background: #0f171a;
       color: #f7fffd;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .account-kicker::before {
-      content: "";
-      width: 0.6rem;
-      height: 0.6rem;
-      border-radius: 999px;
-      background: var(--account-accent);
-      box-shadow: 0 0 0 0.38rem rgba(5, 206, 172, 0.18);
-    }
-
-    .account-intro h1 {
-      margin: 0;
-      color: var(--account-dark);
-      font-size: clamp(2.8rem, 6.6vw, 5.8rem);
-      line-height: 0.94;
-      letter-spacing: -0.08em;
-      max-width: 8.6ch;
-    }
-
-    .account-lead {
-      max-width: 34rem;
-      margin: 0;
-      color: var(--account-muted);
-      font-size: 1.08rem;
-      line-height: 1.8;
-    }
-
-    .account-points {
-      display: grid;
-      gap: 0.9rem;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      max-width: 34rem;
-    }
-
-    .account-point {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0.9rem;
-      align-items: start;
-      color: var(--account-text);
-      font-weight: 500;
-    }
-
-    .account-point::before {
-      content: "";
-      width: 0.7rem;
-      height: 0.7rem;
-      margin-top: 0.45rem;
-      border-radius: 999px;
-      background: var(--account-accent);
-      box-shadow: 0 0 0 0.4rem rgba(5, 206, 172, 0.14);
-    }
-
-    .account-panel {
-      display: grid;
-      gap: 1.15rem;
-      padding: clamp(1.2rem, 3vw, 1.8rem);
-      border: 1px solid var(--account-line);
-      border-radius: 2rem;
-      background: var(--account-panel);
-      box-shadow: 0 30px 80px rgba(10, 24, 28, 0.08);
-      backdrop-filter: blur(14px);
-    }
-
-    .account-panel__head {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-
-    .account-panel__eyebrow {
-      margin: 0 0 0.4rem;
-      color: var(--account-accent-strong);
       font-size: 0.8rem;
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
     }
 
-    .account-panel__head h2,
-    .account-card h3,
-    .account-member__header h2 {
+    .auth-kicker::before {
+      content: "";
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 999px;
+      background: var(--auth-accent);
+      box-shadow: 0 0 0 0.35rem rgba(5, 206, 172, 0.18);
+    }
+
+    .auth-intro h1 {
       margin: 0;
-      color: var(--account-dark);
+      color: var(--auth-dark);
+      font-size: clamp(2.8rem, 6vw, 5.4rem);
+      line-height: 0.94;
+      letter-spacing: -0.08em;
+      max-width: 8ch;
+    }
+
+    .auth-intro p {
+      margin: 0;
+      max-width: 30rem;
+      color: var(--auth-muted);
+      font-size: 1.02rem;
+      line-height: 1.8;
+    }
+
+    .auth-panel {
+      display: grid;
+      gap: 1rem;
+      padding: clamp(1.15rem, 3vw, 1.75rem);
+      border: 1px solid var(--auth-line);
+      border-radius: 1.8rem;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 28px 75px rgba(7, 26, 31, 0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .auth-panel h2,
+    .auth-member h2 {
+      margin: 0;
+      color: var(--auth-dark);
       letter-spacing: -0.04em;
     }
 
-    .account-panel__head p,
-    .account-card p,
-    .account-member__header p {
+    .auth-panel__text {
       margin: 0;
-      color: var(--account-muted);
+      color: var(--auth-muted);
       line-height: 1.7;
     }
 
-    .account-panel__link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 2.9rem;
-      padding: 0.75rem 1rem;
-      border-radius: 999px;
-      border: 1px solid var(--account-line);
-      background: rgba(255, 255, 255, 0.78);
-      color: var(--account-text);
-      font-weight: 700;
-      text-decoration: none;
-      transition: border-color 0.22s ease, color 0.22s ease, transform 0.22s ease;
-    }
-
-    .account-panel__link:hover {
-      color: var(--account-accent-strong);
-      border-color: rgba(5, 206, 172, 0.38);
-      transform: translateY(-1px);
-    }
-
-    .account-page .auth-panel,
-    .account-page .auth-card {
-      padding: 0;
-      border: 0;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .account-member,
-    .account-guest {
+    .auth-provider-list,
+    .auth-links,
+    .auth-member__actions,
+    .auth-member__meta {
       display: grid;
-      gap: 1rem;
+      gap: 0.8rem;
     }
 
-    .account-member__header {
-      display: grid;
-      gap: 0.55rem;
-      padding: 1.35rem;
-      border-radius: 1.6rem;
-      background: linear-gradient(135deg, #0d1417 0%, #132126 54%, rgba(5, 206, 172, 0.18) 100%);
-      color: #f7fffd;
-    }
-
-    .account-member__header p,
-    .account-member__header h2 {
-      color: inherit;
-    }
-
-    .account-member__meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.65rem;
-      margin-top: 0.2rem;
-    }
-
-    .account-pill {
-      display: inline-flex;
-      align-items: center;
-      min-height: 2rem;
-      padding: 0.4rem 0.7rem;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-    }
-
-    .account-grid,
-    .account-grid--secondary,
-    .account-history-grid,
-    .account-profile-grid {
-      display: grid;
-      gap: 1rem;
-    }
-
-    .account-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .account-grid--secondary {
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-    }
-
-    .account-history-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .account-card {
-      display: grid;
-      gap: 1rem;
-      padding: 1.25rem;
-      border: 1px solid var(--account-line);
-      border-radius: 1.6rem;
-      background: var(--account-panel-strong);
-      box-shadow: 0 16px 40px rgba(10, 24, 28, 0.04);
-    }
-
-    .account-card__header {
-      display: grid;
-      gap: 0.45rem;
-    }
-
-    .account-card__eyebrow {
-      margin: 0;
-      color: var(--account-accent-strong);
-      font-size: 0.76rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .account-card__subtle {
-      color: var(--account-muted);
-      font-size: 0.95rem;
-      line-height: 1.65;
-    }
-
-    .account-provider-list {
-      display: grid;
-      gap: 0.75rem;
-    }
-
-    .account-provider {
+    .auth-provider {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
       width: 100%;
-      padding: 1rem 1.05rem;
-      border: 1px solid var(--account-line);
-      border-radius: 1.15rem;
+      min-height: 3.35rem;
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--auth-line);
+      border-radius: 1rem;
       background: #fff;
-      color: var(--account-text);
-      text-align: left;
+      color: var(--auth-text);
       font: inherit;
       font-weight: 700;
       cursor: pointer;
       transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
     }
 
-    .account-provider:hover {
-      border-color: rgba(5, 206, 172, 0.4);
+    .auth-provider:hover {
+      border-color: rgba(5, 206, 172, 0.42);
       background: rgba(5, 206, 172, 0.04);
       transform: translateY(-1px);
     }
 
-    .account-provider__meta {
-      display: grid;
-      gap: 0.2rem;
-    }
-
-    .account-provider__label {
-      font-size: 1rem;
-    }
-
-    .account-provider__hint {
-      color: var(--account-muted);
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-
-    .account-provider__badge {
+    .auth-provider__badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 2.15rem;
-      height: 2.15rem;
-      padding: 0.4rem;
+      width: 2rem;
+      height: 2rem;
       border-radius: 999px;
-      background: var(--account-surface);
-      color: var(--account-accent-strong);
+      background: var(--auth-soft);
+      color: var(--auth-accent-strong);
       font-weight: 700;
     }
 
-    .account-page .auth-form {
-      gap: 0.9rem;
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: var(--auth-muted);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
-    .account-page .auth-form label {
-      gap: 0.38rem;
-      color: var(--account-text);
+    .auth-divider::before,
+    .auth-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--auth-line);
+    }
+
+    .auth-form {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .auth-form label {
+      display: grid;
+      gap: 0.35rem;
+      color: var(--auth-text);
       font-weight: 600;
     }
 
-    .account-page .auth-form input {
-      padding: 0.92rem 1rem;
+    .auth-form input {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--auth-line);
       border-radius: 1rem;
-      border: 1px solid var(--account-line);
       background: #fff;
-      color: var(--account-text);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      color: var(--auth-text);
+      font: inherit;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .account-page .auth-form input:focus {
+    .auth-form input:focus {
       outline: none;
-      border-color: rgba(5, 206, 172, 0.66);
-      box-shadow: 0 0 0 0.28rem rgba(5, 206, 172, 0.15);
-      background: #fcfffe;
+      border-color: rgba(5, 206, 172, 0.7);
+      box-shadow: 0 0 0 0.28rem rgba(5, 206, 172, 0.14);
     }
 
-    .account-page .auth-actions {
-      gap: 0.8rem;
-    }
-
-    .account-page .button {
+    .auth-button,
+    .auth-link-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       min-height: 3rem;
+      padding: 0.85rem 1.1rem;
       border-radius: 999px;
+      text-decoration: none;
       font-weight: 700;
-      transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     }
 
-    .account-page .button:hover {
+    .auth-button:hover,
+    .auth-link-button:hover {
       transform: translateY(-1px);
     }
 
-    .account-page .button--primary {
+    .auth-button {
       border: 0;
-      background: var(--account-accent);
-      color: #07272d;
-      box-shadow: 0 14px 30px rgba(5, 206, 172, 0.2);
+      background: var(--auth-accent);
+      color: #082824;
+      box-shadow: 0 12px 28px rgba(5, 206, 172, 0.18);
     }
 
-    .account-page .button--primary:hover {
-      background: var(--account-accent-strong);
-      color: #041f1c;
+    .auth-button:hover {
+      background: var(--auth-accent-strong);
     }
 
-    .account-page .button--secondary {
-      border: 1px solid var(--account-line);
+    .auth-link-button {
+      border: 1px solid var(--auth-line);
       background: #fff;
-      color: var(--account-text);
+      color: var(--auth-text);
     }
 
-    .account-page .button--secondary:hover {
-      border-color: rgba(5, 206, 172, 0.38);
-      color: var(--account-accent-strong);
+    .auth-link-button:hover {
+      border-color: rgba(5, 206, 172, 0.42);
+      color: var(--auth-accent-strong);
     }
 
-    .account-profile-grid {
+    .auth-links {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .account-profile-item,
-    .auth-history__item,
-    .auth-history__empty {
-      padding: 1rem 1.05rem;
-      border: 1px solid rgba(16, 33, 37, 0.08);
-      border-radius: 1.15rem;
-      background: var(--account-surface);
-    }
-
-    .account-profile-item {
+    .auth-member {
       display: grid;
-      gap: 0.28rem;
+      gap: 1rem;
     }
 
-    .account-profile-item strong {
-      color: var(--account-muted);
-      font-size: 0.76rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
+    .auth-member__card {
+      display: grid;
+      gap: 0.8rem;
+      padding: 1.2rem;
+      border-radius: 1.25rem;
+      background: linear-gradient(135deg, #0f171a 0%, #122025 100%);
+      color: #f7fffd;
+    }
+
+    .auth-member__card h2,
+    .auth-member__card p {
+      margin: 0;
+      color: inherit;
+    }
+
+    .auth-member__meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .auth-member__item {
+      padding: 0.9rem 1rem;
+      border-radius: 1rem;
+      background: #f4fbfa;
+      border: 1px solid rgba(20, 38, 43, 0.08);
+    }
+
+    .auth-member__item strong {
+      display: block;
+      margin-bottom: 0.2rem;
+      color: var(--auth-muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
-    .auth-history {
-      display: grid;
-      gap: 0.8rem;
+    .auth-member__actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .auth-history__item strong {
-      display: block;
-      margin-bottom: 0.2rem;
-      color: var(--account-dark);
-      font-size: 0.98rem;
-    }
-
-    .auth-history__item span,
-    .auth-history__empty {
-      color: var(--account-muted);
-      line-height: 1.65;
-    }
-
-    .account-side-list {
-      display: grid;
-      gap: 0.75rem;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .account-side-list li {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0.7rem;
-      color: var(--account-text);
-      line-height: 1.65;
-    }
-
-    .account-side-list li::before {
-      content: "";
-      width: 0.52rem;
-      height: 0.52rem;
-      margin-top: 0.6rem;
-      border-radius: 999px;
-      background: var(--account-accent);
-    }
-
-    .account-note {
-      margin: 0;
-      color: var(--account-muted);
-      font-size: 0.92rem;
-      line-height: 1.65;
-    }
-
-    .account-note a {
-      color: var(--account-accent-strong);
-      font-weight: 700;
-    }
-
-    @media (max-width: 1080px) {
-      .account-hero__grid,
-      .account-grid--secondary {
-        grid-template-columns: 1fr;
-      }
-
-      .account-intro h1 {
-        max-width: 10ch;
-      }
-    }
-
-    @media (max-width: 820px) {
-      .account-grid,
-      .account-history-grid,
-      .account-profile-grid {
+    @media (max-width: 980px) {
+      .auth-shell__grid {
         grid-template-columns: 1fr;
       }
     }
 
     @media (max-width: 640px) {
-      .account-hero {
+      .auth-links,
+      .auth-member__meta,
+      .auth-member__actions {
+        grid-template-columns: 1fr;
+      }
+
+      .auth-shell {
         padding-top: 2rem;
       }
 
-      .account-panel {
+      .auth-panel {
         padding: 1rem;
-        border-radius: 1.5rem;
+        border-radius: 1.4rem;
       }
 
-      .account-card,
-      .account-member__header {
-        padding: 1rem;
-        border-radius: 1.25rem;
-      }
-
-      .account-panel__head {
-        align-items: stretch;
-      }
-
-      .account-panel__link {
-        width: 100%;
-      }
-
-      .account-intro h1 {
-        font-size: 2.55rem;
+      .auth-intro h1 {
+        font-size: 2.5rem;
       }
     }
   </style>
@@ -538,7 +319,7 @@
 <body>
   <div class="promo-banner">
     <div class="container promo-banner__inner">
-      <span>Sign in for faster checkout, saved contact details and future order history.</span>
+      <span>Sign in to manage your account, orders and repair requests.</span>
       <a href="shop.html">Back to online store</a>
     </div>
   </div>
@@ -564,189 +345,83 @@
     </div>
   </header>
 
-  <main class="account-page" data-account-page>
-    <section class="account-hero" aria-labelledby="account-page-title">
-      <div class="container account-hero__grid">
-        <aside class="account-intro" aria-label="Account introduction">
-          <p class="account-kicker">OZ TECH M8 Account</p>
-          <h1 id="account-page-title">One account for repairs, orders and faster checkout.</h1>
-          <p class="account-lead">Sign in once and keep your details ready for future repair bookings, product orders and store contact. The interface is intentionally minimal so the main actions stay clear on both desktop and mobile.</p>
-          <ul class="account-points">
-            <li class="account-point">Save contact details for checkout and repair requests.</li>
-            <li class="account-point">Review your recent orders and repair history in one place.</li>
-            <li class="account-point">Use Google or Facebook sign in when those providers are enabled in Supabase Auth.</li>
-          </ul>
-        </aside>
+  <main class="auth-shell" data-account-page>
+    <section class="container auth-shell__grid" aria-labelledby="account-login-title">
+      <div class="auth-intro">
+        <p class="auth-kicker">OZ TECH M8</p>
+        <h1 id="account-login-title">Account login.</h1>
+        <p>Use Google, Facebook or your email and password. Registration and password reset are handled on their own pages.</p>
+      </div>
 
-        <section class="account-panel" aria-label="Account access panel">
-          <div class="account-panel__head">
-            <div>
-              <p class="account-panel__eyebrow">Secure customer access</p>
-              <h2>Account centre</h2>
-              <p>Use email sign in, create a new account, or continue with a supported provider.</p>
-            </div>
-            <a class="account-panel__link" href="shop.html">Continue shopping</a>
+      <div class="auth-panel">
+        <div class="booking-message" data-auth-message hidden></div>
+
+        <section class="auth-member" data-auth-member hidden aria-label="Signed in account">
+          <div class="auth-member__card">
+            <h2 data-auth-name>Customer</h2>
+            <p>Your account is active.</p>
           </div>
 
-          <div class="booking-message" data-auth-message hidden></div>
-
-          <section class="auth-panel account-member" data-auth-member hidden aria-label="Signed in account">
-            <header class="account-member__header">
-              <p class="account-panel__eyebrow">Signed in</p>
-              <h2 data-auth-name>Customer account</h2>
-              <p>Your profile is ready for checkout, repair bookings and future order history.</p>
-              <div class="account-member__meta">
-                <span class="account-pill">Status: <span data-auth-status></span></span>
-                <span class="account-pill">Verification: <span data-auth-verified></span></span>
-              </div>
-            </header>
-
-            <div class="account-profile-grid">
-              <article class="account-profile-item">
-                <strong>Email</strong>
-                <span data-auth-email></span>
-              </article>
-              <article class="account-profile-item">
-                <strong>Phone</strong>
-                <span data-auth-phone></span>
-              </article>
-            </div>
-
-            <div class="auth-actions">
-              <a class="button button--primary" href="checkout.html">Go to checkout</a>
-              <a class="button button--secondary" href="my-orders.html">My orders</a>
-              <a class="button button--secondary" href="my-repairs.html">My repairs</a>
-              <button class="button button--secondary" type="button" data-auth-logout>Sign out</button>
-            </div>
-
-            <div class="account-history-grid">
-              <article class="account-card">
-                <div class="account-card__header">
-                  <p class="account-card__eyebrow">Recent orders</p>
-                  <h3>Order history preview</h3>
-                  <p class="account-card__subtle">Latest customer orders saved against your account.</p>
-                </div>
-                <div class="auth-history" data-account-orders-preview></div>
-              </article>
-
-              <article class="account-card">
-                <div class="account-card__header">
-                  <p class="account-card__eyebrow">Recent repairs</p>
-                  <h3>Repair history preview</h3>
-                  <p class="account-card__subtle">Latest repair bookings linked to your login profile.</p>
-                </div>
-                <div class="auth-history" data-account-repairs-preview></div>
-              </article>
-            </div>
-          </section>
-
-          <section class="auth-panel account-guest" data-auth-guest aria-label="Sign in or register">
-            <div class="account-grid">
-              <article class="account-card">
-                <div class="account-card__header">
-                  <p class="account-card__eyebrow">Fast sign in</p>
-                  <h3>Use an existing provider</h3>
-                  <p class="account-card__subtle">Choose a social login for a quicker start. Provider setup is controlled from Supabase Auth.</p>
-                </div>
-                <div class="account-provider-list">
-                  <button class="account-provider" type="button" data-auth-google>
-                    <span class="account-provider__meta">
-                      <span class="account-provider__label">Continue with Google</span>
-                      <span class="account-provider__hint">Use your Google account for instant sign in.</span>
-                    </span>
-                    <span class="account-provider__badge">G</span>
-                  </button>
-                  <button class="account-provider" type="button" data-auth-facebook>
-                    <span class="account-provider__meta">
-                      <span class="account-provider__label">Continue with Facebook</span>
-                      <span class="account-provider__hint">Use your Facebook account if enabled.</span>
-                    </span>
-                    <span class="account-provider__badge">f</span>
-                  </button>
-                </div>
-              </article>
-
-              <article class="account-card">
-                <div class="account-card__header">
-                  <p class="account-card__eyebrow">Email sign in</p>
-                  <h3>Access your existing account</h3>
-                  <p class="account-card__subtle">Use your email and password to open your customer dashboard.</p>
-                </div>
-                <form class="auth-form" data-login-form>
-                  <label>
-                    <span>Email</span>
-                    <input type="email" name="email" autocomplete="email" required>
-                  </label>
-                  <label>
-                    <span>Password</span>
-                    <input type="password" name="password" autocomplete="current-password" required>
-                  </label>
-                  <button class="button button--primary" type="submit">Sign in</button>
-                </form>
-              </article>
-            </div>
-
-            <div class="account-grid--secondary">
-              <article class="account-card">
-                <div class="account-card__header">
-                  <p class="account-card__eyebrow">Create account</p>
-                  <h3>Register with email verification</h3>
-                  <p class="account-card__subtle">Required fields stay minimal so new customers can register quickly without extra friction.</p>
-                </div>
-                <form class="auth-form" data-register-form>
-                  <label>
-                    <span>Full name *</span>
-                    <input type="text" name="full_name" autocomplete="name" required>
-                  </label>
-                  <label>
-                    <span>Phone *</span>
-                    <input type="tel" name="phone" autocomplete="tel" required>
-                  </label>
-                  <label>
-                    <span>Email *</span>
-                    <input type="email" name="email" autocomplete="email" required>
-                  </label>
-                  <label>
-                    <span>Password *</span>
-                    <input type="password" name="password" autocomplete="new-password" required>
-                  </label>
-                  <label>
-                    <span>Confirm password *</span>
-                    <input type="password" name="confirm_password" autocomplete="new-password" required>
-                  </label>
-                  <button class="button button--primary" type="submit">Create account</button>
-                </form>
-              </article>
-
-              <article class="account-card">
-                <div class="account-card__header">
-                  <p class="account-card__eyebrow">Reset access</p>
-                  <h3>Send a password reset link</h3>
-                  <p class="account-card__subtle">Use this if a customer cannot access an existing account.</p>
-                </div>
-                <form class="auth-form" data-reset-form>
-                  <label>
-                    <span>Email</span>
-                    <input type="email" name="email" autocomplete="email" required>
-                  </label>
-                  <button class="button button--secondary" type="submit">Send reset email</button>
-                </form>
-                <p class="account-note">Email confirmation should stay enabled in Supabase so customer accounts are verified before full use.</p>
-              </article>
-            </div>
-
-            <article class="account-card">
-              <div class="account-card__header">
-                <p class="account-card__eyebrow">Why it matters</p>
-                <h3>Built for repeat repairs and repeat orders</h3>
-              </div>
-              <ul class="account-side-list">
-                <li>Customers can move from browsing products into checkout without retyping contact details every time.</li>
-                <li>The same account structure is already aligned with repair bookings, order history and future loyalty or POS features.</li>
-                <li>The page keeps a minimal surface area so the sign in, register and account actions stay the visual priority.</li>
-              </ul>
+          <div class="auth-member__meta">
+            <article class="auth-member__item">
+              <strong>Email</strong>
+              <span data-auth-email></span>
             </article>
-          </section>
+            <article class="auth-member__item">
+              <strong>Phone</strong>
+              <span data-auth-phone></span>
+            </article>
+            <article class="auth-member__item">
+              <strong>Status</strong>
+              <span data-auth-status></span>
+            </article>
+            <article class="auth-member__item">
+              <strong>Verification</strong>
+              <span data-auth-verified></span>
+            </article>
+          </div>
+
+          <div class="auth-member__actions">
+            <a class="auth-button" href="my-orders.html">My orders</a>
+            <a class="auth-link-button" href="my-repairs.html">My repairs</a>
+            <a class="auth-link-button" href="checkout.html">Checkout</a>
+            <button class="auth-link-button" type="button" data-auth-logout>Sign out</button>
+          </div>
+        </section>
+
+        <section data-auth-guest aria-label="Login form">
+          <h2>Sign in</h2>
+          <p class="auth-panel__text">Choose a provider or use your email and password.</p>
+
+          <div class="auth-provider-list">
+            <button class="auth-provider" type="button" data-auth-google>
+              <span>Continue with Google</span>
+              <span class="auth-provider__badge">G</span>
+            </button>
+            <button class="auth-provider" type="button" data-auth-facebook>
+              <span>Continue with Facebook</span>
+              <span class="auth-provider__badge">f</span>
+            </button>
+          </div>
+
+          <div class="auth-divider">or</div>
+
+          <form class="auth-form" data-login-form>
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" autocomplete="email" required>
+            </label>
+            <label>
+              <span>Password</span>
+              <input type="password" name="password" autocomplete="current-password" required>
+            </label>
+            <button class="auth-button" type="submit">Sign in</button>
+          </form>
+
+          <div class="auth-links">
+            <a class="auth-link-button" href="register.html">Create account</a>
+            <a class="auth-link-button" href="forgot-password.html">Forgot password</a>
+          </div>
         </section>
       </div>
     </section>
