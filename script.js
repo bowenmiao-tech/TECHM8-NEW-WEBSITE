@@ -528,6 +528,15 @@ function getAccountHomeUrl() {
   return new URL("account-details.html", window.location.href).toString();
 }
 
+function getConfiguredSiteBaseUrl() {
+  const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
+  if (configuredSiteUrl) {
+    return configuredSiteUrl.endsWith("/") ? configuredSiteUrl.slice(0, -1) : configuredSiteUrl;
+  }
+
+  return window.location.origin;
+}
+
 function getAccountDashboardUrl() {
   const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
   if (configuredSiteUrl) {
@@ -2789,13 +2798,25 @@ function initCheckoutPage() {
   const isPaymentCancelled = checkoutParams.get("payment") === "cancelled";
   let activeAuthState = null;
 
-  const getSelectedPaymentProfile = () => {
-    const selectedCode =
-      paymentMethodField instanceof HTMLInputElement
-        ? String(paymentMethodField.value || "pay_in_store").trim()
-        : "pay_in_store";
-    return paymentProfiles.find((profile) => profile.code === selectedCode) || null;
-  };
+    const getSelectedPaymentProfile = () => {
+      const selectedCode =
+        paymentMethodField instanceof HTMLInputElement
+          ? String(paymentMethodField.value || "pay_in_store").trim()
+          : "pay_in_store";
+      return paymentProfiles.find((profile) => profile.code === selectedCode) || null;
+    };
+
+    const parseJsonResponse = async (response) => {
+      const raw = await response.text();
+      try {
+        return raw ? JSON.parse(raw) : {};
+      } catch (_error) {
+        return {
+          ok: false,
+          error: raw || `Request failed with status ${response.status}.`,
+        };
+      }
+    };
 
   const formatFeeRule = (profile) => {
     if (!profile) return "";
@@ -3041,7 +3062,7 @@ function initCheckoutPage() {
     const selectedProfile = getSelectedPaymentProfile();
     activeAuthState = await getCurrentAuthState();
     const authAccessToken = activeAuthState?.session?.access_token || supabaseAnonKey;
-    const payload = {
+      const payload = {
       order_code: makeOrderCode(),
       customer_name: String(formData.get("customer_name") || "").trim(),
       phone: String(formData.get("phone") || "").trim(),
@@ -3051,14 +3072,14 @@ function initCheckoutPage() {
       payment_method_code: String(formData.get("payment_method_code") || "pay_in_store").trim(),
       fulfillment_method: "pickup",
       notes: String(formData.get("notes") || "").trim(),
-      subtotal_amount: subtotal,
-      total_amount: subtotal,
-      source: "website",
-      site_url: window.location.origin,
-      auth_user_id: activeAuthState?.user?.id || null,
-      items,
-      created_at: new Date().toISOString(),
-    };
+        subtotal_amount: subtotal,
+        total_amount: subtotal,
+        source: "website",
+        site_url: getConfiguredSiteBaseUrl(),
+        auth_user_id: activeAuthState?.user?.id || null,
+        items,
+        created_at: new Date().toISOString(),
+      };
 
     const endpoint = window.TECHM8_CONFIG?.orderEndpoint || "";
     const checkoutSessionEndpoint = window.TECHM8_CONFIG?.checkoutSessionEndpoint || "";
@@ -3084,42 +3105,42 @@ function initCheckoutPage() {
           throw new Error("Stripe Checkout is not configured yet.");
         }
 
-        const response = await fetch(checkoutSessionEndpoint, {
-          method: "POST",
+          const response = await fetch(checkoutSessionEndpoint, {
+            method: "POST",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${authAccessToken}`,
             apikey: supabaseAnonKey,
           },
-          body: JSON.stringify(payload),
-        });
+            body: JSON.stringify(payload),
+          });
 
-        const result = await response.json();
-        if (!response.ok || !result.ok || !result.checkout_url) {
-          throw new Error(result.error || "Stripe Checkout could not be started.");
-        }
+          const result = await parseJsonResponse(response);
+          if (!response.ok || !result.ok || !result.checkout_url) {
+            throw new Error(result.error || "Stripe Checkout could not be started.");
+          }
 
         window.location.href = result.checkout_url;
         return;
       }
 
       if (endpoint) {
-        const response = await fetch(endpoint, {
-          method: "POST",
+          const response = await fetch(endpoint, {
+            method: "POST",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${authAccessToken}`,
             apikey: supabaseAnonKey,
           },
-          body: JSON.stringify(payload),
-        });
+            body: JSON.stringify(payload),
+          });
 
-        const result = await response.json();
-        if (!response.ok || !result.ok) {
-          throw new Error(result.error || "Checkout submission failed.");
-        }
+          const result = await parseJsonResponse(response);
+          if (!response.ok || !result.ok) {
+            throw new Error(result.error || "Checkout submission failed.");
+          }
 
         payload.order_code = String(result.order_code || payload.order_code);
         payload.store_name = String(result.store_name || payload.store_name || "");
