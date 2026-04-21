@@ -4,314 +4,286 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Account Login | OZ TECH M8</title>
-  <meta name="description" content="Sign in to your OZ TECH M8 account with email, Google or Facebook.">
+  <meta name="description" content="Sign in to your OZ TECH M8 account with Google, Facebook or email and password.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
     :root {
-      --auth-accent: #05CEAC;
-      --auth-accent-strong: #03b899;
-      --auth-dark: #0f171a;
-      --auth-text: #14262b;
-      --auth-muted: #65797f;
-      --auth-line: rgba(20, 38, 43, 0.1);
-      --auth-soft: rgba(5, 206, 172, 0.1);
+      --login-accent: #05CEAC;
+      --login-accent-strong: #03b899;
+      --login-dark: #0f171a;
+      --login-text: #132327;
+      --login-muted: #677c82;
+      --login-line: rgba(19, 35, 39, 0.12);
+      --login-surface: rgba(255, 255, 255, 0.96);
+      --login-soft: rgba(5, 206, 172, 0.1);
     }
 
     body {
-      background:
-        radial-gradient(circle at top left, rgba(5, 206, 172, 0.12), transparent 30%),
-        linear-gradient(180deg, #f8fcfb 0%, #ffffff 48%, #f4fbfa 100%);
+      background: linear-gradient(180deg, #f8fcfb 0%, #ffffff 52%, #f4fbfa 100%);
     }
 
-    .auth-shell {
+    .login-page {
       min-height: calc(100vh - 15rem);
-      padding: clamp(2.5rem, 6vw, 5rem) 0;
+      padding: clamp(2.25rem, 6vw, 4.5rem) 0;
     }
 
-    .auth-shell__grid {
-      display: grid;
-      grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
-      gap: clamp(1.5rem, 4vw, 3rem);
-      align-items: center;
-    }
-
-    .auth-intro {
-      display: grid;
-      gap: 1.2rem;
-      align-content: start;
-    }
-
-    .auth-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.55rem;
-      width: fit-content;
-      padding: 0.55rem 0.9rem;
-      border-radius: 999px;
-      background: #0f171a;
-      color: #f7fffd;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .auth-kicker::before {
-      content: "";
-      width: 0.55rem;
-      height: 0.55rem;
-      border-radius: 999px;
-      background: var(--auth-accent);
-      box-shadow: 0 0 0 0.35rem rgba(5, 206, 172, 0.18);
-    }
-
-    .auth-intro h1 {
-      margin: 0;
-      color: var(--auth-dark);
-      font-size: clamp(2.8rem, 6vw, 5.4rem);
-      line-height: 0.94;
-      letter-spacing: -0.08em;
-      max-width: 8ch;
-    }
-
-    .auth-intro p {
-      margin: 0;
+    .login-page__wrap {
       max-width: 30rem;
-      color: var(--auth-muted);
-      font-size: 1.02rem;
-      line-height: 1.8;
-    }
-
-    .auth-panel {
+      margin: 0 auto;
       display: grid;
-      gap: 1rem;
-      padding: clamp(1.15rem, 3vw, 1.75rem);
-      border: 1px solid var(--auth-line);
-      border-radius: 1.8rem;
-      background: rgba(255, 255, 255, 0.92);
-      box-shadow: 0 28px 75px rgba(7, 26, 31, 0.08);
-      backdrop-filter: blur(12px);
+      gap: 1.25rem;
     }
 
-    .auth-panel h2,
-    .auth-member h2 {
-      margin: 0;
-      color: var(--auth-dark);
-      letter-spacing: -0.04em;
-    }
-
-    .auth-panel__text {
-      margin: 0;
-      color: var(--auth-muted);
-      line-height: 1.7;
-    }
-
-    .auth-provider-list,
-    .auth-links,
-    .auth-member__actions,
-    .auth-member__meta {
-      display: grid;
-      gap: 0.8rem;
-    }
-
-    .auth-provider {
+    .login-page__brand {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      width: 100%;
-      min-height: 3.35rem;
-      padding: 0.95rem 1rem;
-      border: 1px solid var(--auth-line);
-      border-radius: 1rem;
-      background: #fff;
-      color: var(--auth-text);
-      font: inherit;
-      font-weight: 700;
-      cursor: pointer;
-      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-    }
-
-    .auth-provider:hover {
-      border-color: rgba(5, 206, 172, 0.42);
-      background: rgba(5, 206, 172, 0.04);
-      transform: translateY(-1px);
-    }
-
-    .auth-provider__badge {
-      display: inline-flex;
-      align-items: center;
       justify-content: center;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 999px;
-      background: var(--auth-soft);
-      color: var(--auth-accent-strong);
-      font-weight: 700;
     }
 
-    .auth-divider {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      color: var(--auth-muted);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+    .login-page__brand img {
+      width: min(15rem, 58vw);
+      height: auto;
     }
 
-    .auth-divider::before,
-    .auth-divider::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: var(--auth-line);
-    }
-
-    .auth-form {
+    .login-card,
+    .login-member {
       display: grid;
+      gap: 1rem;
+      padding: clamp(1.25rem, 3vw, 1.85rem);
+      border: 1px solid var(--login-line);
+      border-radius: 0;
+      background: var(--login-surface);
+      box-shadow: 0 24px 64px rgba(9, 24, 28, 0.06);
+    }
+
+    .login-card h1,
+    .login-member h2 {
+      margin: 0;
+      color: var(--login-dark);
+      font-size: clamp(2rem, 4vw, 2.55rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .login-provider-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0.85rem;
     }
 
-    .auth-form label {
-      display: grid;
-      gap: 0.35rem;
-      color: var(--auth-text);
-      font-weight: 600;
-    }
-
-    .auth-form input {
-      width: 100%;
-      padding: 0.95rem 1rem;
-      border: 1px solid var(--auth-line);
-      border-radius: 1rem;
-      background: #fff;
-      color: var(--auth-text);
-      font: inherit;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .auth-form input:focus {
-      outline: none;
-      border-color: rgba(5, 206, 172, 0.7);
-      box-shadow: 0 0 0 0.28rem rgba(5, 206, 172, 0.14);
-    }
-
-    .auth-button,
-    .auth-link-button {
+    .login-provider {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 3rem;
-      padding: 0.85rem 1.1rem;
-      border-radius: 999px;
-      text-decoration: none;
+      gap: 0.75rem;
+      min-height: 3.35rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--login-dark);
+      background: #fff;
+      color: var(--login-dark);
+      font: inherit;
       font-weight: 700;
-      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      cursor: pointer;
+      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
     }
 
-    .auth-button:hover,
-    .auth-link-button:hover {
+    .login-provider:hover {
+      background: var(--login-soft);
+      border-color: var(--login-accent-strong);
       transform: translateY(-1px);
     }
 
-    .auth-button {
-      border: 0;
-      background: var(--auth-accent);
-      color: #082824;
-      box-shadow: 0 12px 28px rgba(5, 206, 172, 0.18);
+    .login-provider__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--login-accent-strong);
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1;
     }
 
-    .auth-button:hover {
-      background: var(--auth-accent-strong);
-    }
-
-    .auth-link-button {
-      border: 1px solid var(--auth-line);
-      background: #fff;
-      color: var(--auth-text);
-    }
-
-    .auth-link-button:hover {
-      border-color: rgba(5, 206, 172, 0.42);
-      color: var(--auth-accent-strong);
-    }
-
-    .auth-links {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .auth-member {
-      display: grid;
-      gap: 1rem;
-    }
-
-    .auth-member__card {
-      display: grid;
+    .login-divider {
+      display: flex;
+      align-items: center;
       gap: 0.8rem;
-      padding: 1.2rem;
-      border-radius: 1.25rem;
-      background: linear-gradient(135deg, #0f171a 0%, #122025 100%);
-      color: #f7fffd;
+      color: var(--login-dark);
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: lowercase;
     }
 
-    .auth-member__card h2,
-    .auth-member__card p {
-      margin: 0;
-      color: inherit;
+    .login-divider::before,
+    .login-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--login-line);
     }
 
-    .auth-member__meta {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .login-form {
+      display: grid;
+      gap: 0.9rem;
     }
 
-    .auth-member__item {
+    .login-field {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .login-field label {
+      color: var(--login-muted);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .login-field input {
+      width: 100%;
+      min-height: 3.3rem;
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--login-line);
+      background: #fff;
+      color: var(--login-text);
+      font: inherit;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .login-field input:focus {
+      outline: none;
+      border-color: rgba(5, 206, 172, 0.72);
+      box-shadow: 0 0 0 0.25rem rgba(5, 206, 172, 0.14);
+    }
+
+    .login-password {
+      position: relative;
+    }
+
+    .login-password input {
+      padding-right: 5rem;
+    }
+
+    .login-password__toggle {
+      position: absolute;
+      top: 50%;
+      right: 0.7rem;
+      transform: translateY(-50%);
+      border: 0;
+      background: #efefef;
+      color: var(--login-dark);
+      min-height: 2.25rem;
+      padding: 0.4rem 0.8rem;
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s ease;
+    }
+
+    .login-password__toggle:hover {
+      background: #e4f9f5;
+    }
+
+    .login-meta {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .login-meta a {
+      color: var(--login-dark);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 0.16rem;
+    }
+
+    .login-meta a:hover {
+      color: var(--login-accent-strong);
+    }
+
+    .login-submit,
+    .login-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 3.35rem;
       padding: 0.9rem 1rem;
-      border-radius: 1rem;
-      background: #f4fbfa;
-      border: 1px solid rgba(20, 38, 43, 0.08);
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
     }
 
-    .auth-member__item strong {
+    .login-submit:hover,
+    .login-secondary:hover {
+      transform: translateY(-1px);
+    }
+
+    .login-submit {
+      border: 0;
+      background: var(--login-dark);
+      color: #fff;
+    }
+
+    .login-submit:hover {
+      background: #092c28;
+    }
+
+    .login-secondary {
+      border: 1px solid var(--login-dark);
+      background: #fff;
+      color: var(--login-dark);
+    }
+
+    .login-secondary:hover {
+      border-color: var(--login-accent-strong);
+      color: var(--login-accent-strong);
+    }
+
+    .login-note {
+      margin: 0;
+      color: var(--login-muted);
+      font-size: 0.98rem;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .login-member__meta {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .login-member__item {
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--login-line);
+      background: #fff;
+    }
+
+    .login-member__item strong {
       display: block;
       margin-bottom: 0.2rem;
-      color: var(--auth-muted);
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
+      color: var(--login-muted);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .auth-member__actions {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .login-member__actions {
+      display: grid;
+      gap: 0.75rem;
     }
 
-    @media (max-width: 980px) {
-      .auth-shell__grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .auth-links,
-      .auth-member__meta,
-      .auth-member__actions {
+    @media (max-width: 560px) {
+      .login-provider-row {
         grid-template-columns: 1fr;
       }
 
-      .auth-shell {
-        padding-top: 2rem;
-      }
-
-      .auth-panel {
+      .login-card,
+      .login-member {
         padding: 1rem;
-        border-radius: 1.4rem;
-      }
-
-      .auth-intro h1 {
-        font-size: 2.5rem;
       }
     }
   </style>
@@ -319,7 +291,7 @@
 <body>
   <div class="promo-banner">
     <div class="container promo-banner__inner">
-      <span>Sign in to manage your account, orders and repair requests.</span>
+      <span>Account access for orders, repairs and checkout.</span>
       <a href="shop.html">Back to online store</a>
     </div>
   </div>
@@ -345,84 +317,83 @@
     </div>
   </header>
 
-  <main class="auth-shell" data-account-page>
-    <section class="container auth-shell__grid" aria-labelledby="account-login-title">
-      <div class="auth-intro">
-        <p class="auth-kicker">OZ TECH M8</p>
-        <h1 id="account-login-title">Account login.</h1>
-        <p>Use Google, Facebook or your email and password. Registration and password reset are handled on their own pages.</p>
-      </div>
+  <main class="login-page" data-account-page>
+    <section class="container">
+      <div class="login-page__wrap">
+        <div class="login-page__brand">
+          <img src="assets/logo-techm8.png" alt="OZ TECH M8">
+        </div>
 
-      <div class="auth-panel">
         <div class="booking-message" data-auth-message hidden></div>
 
-        <section class="auth-member" data-auth-member hidden aria-label="Signed in account">
-          <div class="auth-member__card">
-            <h2 data-auth-name>Customer</h2>
-            <p>Your account is active.</p>
+        <section class="login-card" data-auth-guest aria-label="Login form">
+          <h1>Log in</h1>
+
+          <div class="login-provider-row">
+            <button class="login-provider" type="button" data-auth-google>
+              <span class="login-provider__icon">G</span>
+              <span>Google</span>
+            </button>
+            <button class="login-provider" type="button" data-auth-facebook>
+              <span class="login-provider__icon">f</span>
+              <span>Facebook</span>
+            </button>
           </div>
 
-          <div class="auth-member__meta">
-            <article class="auth-member__item">
+          <div class="login-divider">or</div>
+
+          <form class="login-form" data-login-form>
+            <div class="login-field">
+              <label for="account-email">Email address</label>
+              <input id="account-email" type="email" name="email" autocomplete="email" required>
+            </div>
+
+            <div class="login-field">
+              <label for="account-password">Password</label>
+              <div class="login-password">
+                <input id="account-password" type="password" name="password" autocomplete="current-password" required>
+                <button class="login-password__toggle" type="button" data-password-toggle data-password-target="account-password">Show</button>
+              </div>
+            </div>
+
+            <div class="login-meta">
+              <a href="forgot-password.html">Forgot password?</a>
+            </div>
+
+            <button class="login-submit" type="submit">Log in</button>
+          </form>
+        </section>
+
+        <section class="login-member" data-auth-member hidden aria-label="Signed in account">
+          <h2 data-auth-name>Customer</h2>
+          <div class="login-member__meta">
+            <article class="login-member__item">
               <strong>Email</strong>
               <span data-auth-email></span>
             </article>
-            <article class="auth-member__item">
+            <article class="login-member__item">
               <strong>Phone</strong>
               <span data-auth-phone></span>
             </article>
-            <article class="auth-member__item">
+            <article class="login-member__item">
               <strong>Status</strong>
               <span data-auth-status></span>
             </article>
-            <article class="auth-member__item">
+            <article class="login-member__item">
               <strong>Verification</strong>
               <span data-auth-verified></span>
             </article>
           </div>
-
-          <div class="auth-member__actions">
-            <a class="auth-button" href="my-orders.html">My orders</a>
-            <a class="auth-link-button" href="my-repairs.html">My repairs</a>
-            <a class="auth-link-button" href="checkout.html">Checkout</a>
-            <button class="auth-link-button" type="button" data-auth-logout>Sign out</button>
+          <div class="login-member__actions">
+            <a class="login-secondary" href="my-orders.html">My orders</a>
+            <a class="login-secondary" href="my-repairs.html">My repairs</a>
+            <a class="login-secondary" href="checkout.html">Checkout</a>
+            <button class="login-submit" type="button" data-auth-logout>Sign out</button>
           </div>
         </section>
 
-        <section data-auth-guest aria-label="Login form">
-          <h2>Sign in</h2>
-          <p class="auth-panel__text">Choose a provider or use your email and password.</p>
-
-          <div class="auth-provider-list">
-            <button class="auth-provider" type="button" data-auth-google>
-              <span>Continue with Google</span>
-              <span class="auth-provider__badge">G</span>
-            </button>
-            <button class="auth-provider" type="button" data-auth-facebook>
-              <span>Continue with Facebook</span>
-              <span class="auth-provider__badge">f</span>
-            </button>
-          </div>
-
-          <div class="auth-divider">or</div>
-
-          <form class="auth-form" data-login-form>
-            <label>
-              <span>Email</span>
-              <input type="email" name="email" autocomplete="email" required>
-            </label>
-            <label>
-              <span>Password</span>
-              <input type="password" name="password" autocomplete="current-password" required>
-            </label>
-            <button class="auth-button" type="submit">Sign in</button>
-          </form>
-
-          <div class="auth-links">
-            <a class="auth-link-button" href="register.html">Create account</a>
-            <a class="auth-link-button" href="forgot-password.html">Forgot password</a>
-          </div>
-        </section>
+        <p class="login-note">Faster checkout, saved details and future order or repair history.</p>
+        <a class="login-secondary" href="register.html">Create an account</a>
       </div>
     </section>
   </main>

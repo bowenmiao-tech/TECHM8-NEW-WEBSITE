@@ -3448,6 +3448,7 @@ async function initAccountPage() {
   const phoneTarget = root.querySelector("[data-auth-phone]");
   const statusTarget = root.querySelector("[data-auth-status]");
   const verifiedTarget = root.querySelector("[data-auth-verified]");
+  const passwordToggleButtons = root.querySelectorAll("[data-password-toggle]");
 
   let supabase;
 
@@ -3562,6 +3563,21 @@ async function initAccountPage() {
       }
     });
   }
+
+  passwordToggleButtons.forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) return;
+    const targetId = button.getAttribute("data-password-target");
+    if (!targetId) return;
+    const input = root.querySelector(`#${CSS.escape(targetId)}`);
+    if (!(input instanceof HTMLInputElement)) return;
+
+    button.addEventListener("click", () => {
+      const nextType = input.type === "password" ? "text" : "password";
+      input.type = nextType;
+      button.textContent = nextType === "password" ? "Show" : "Hide";
+      button.setAttribute("aria-pressed", nextType === "text" ? "true" : "false");
+    });
+  });
 
   if (logoutButton instanceof HTMLButtonElement) {
     logoutButton.addEventListener("click", async () => {
