@@ -519,6 +519,15 @@ function getAuthRedirectUrl() {
   return new URL("account.html", window.location.href).toString();
 }
 
+function getAccountDashboardUrl() {
+  const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
+  if (configuredSiteUrl) {
+    return new URL("account-dashboard.html", configuredSiteUrl.endsWith("/") ? configuredSiteUrl : `${configuredSiteUrl}/`).toString();
+  }
+
+  return new URL("account-dashboard.html", window.location.href).toString();
+}
+
 async function ensureSupabaseBrowserLibrary() {
   if (window.supabase?.createClient) {
     return window.supabase;
@@ -3437,17 +3446,10 @@ async function initAccountPage() {
   if (!(root instanceof HTMLElement)) return;
 
   const guestPanel = root.querySelector("[data-auth-guest]");
-  const memberPanel = root.querySelector("[data-auth-member]");
   const messageBox = root.querySelector("[data-auth-message]");
   const loginForm = root.querySelector("[data-login-form]");
   const googleButton = root.querySelector("[data-auth-google]");
   const facebookButton = root.querySelector("[data-auth-facebook]");
-  const logoutButton = root.querySelector("[data-auth-logout]");
-  const nameTarget = root.querySelector("[data-auth-name]");
-  const emailTarget = root.querySelector("[data-auth-email]");
-  const phoneTarget = root.querySelector("[data-auth-phone]");
-  const statusTarget = root.querySelector("[data-auth-status]");
-  const verifiedTarget = root.querySelector("[data-auth-verified]");
   const passwordToggleButtons = root.querySelectorAll("[data-password-toggle]");
 
   let supabase;
@@ -3461,47 +3463,17 @@ async function initAccountPage() {
 
   const renderSignedOutState = () => {
     if (guestPanel instanceof HTMLElement) guestPanel.hidden = false;
-    if (memberPanel instanceof HTMLElement) memberPanel.hidden = true;
-    if (nameTarget instanceof HTMLElement) nameTarget.textContent = "Customer";
-    if (emailTarget instanceof HTMLElement) emailTarget.textContent = "Sign in to access your account.";
-    if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = "Saved after registration";
-    if (statusTarget instanceof HTMLElement) statusTarget.textContent = "Guest";
-    if (verifiedTarget instanceof HTMLElement) verifiedTarget.textContent = "Verification required for new accounts.";
   };
 
   const renderSession = async (session) => {
     const user = session?.user || null;
-    const verified = isEmailConfirmed(user);
 
     if (!user) {
       renderSignedOutState();
       return;
     }
 
-    if (guestPanel instanceof HTMLElement) guestPanel.hidden = true;
-    if (memberPanel instanceof HTMLElement) memberPanel.hidden = false;
-
-    let profile = null;
-
-    try {
-      profile = await syncCustomerProfile(supabase, user);
-    } catch (error) {
-      try {
-        profile = await fetchCustomerProfile(supabase, user);
-      } catch (nestedError) {
-        profile = null;
-      }
-    }
-
-    if (nameTarget instanceof HTMLElement) nameTarget.textContent = String(profile?.full_name || getUserDisplayName(user));
-    if (emailTarget instanceof HTMLElement) emailTarget.textContent = String(profile?.email || user.email || "No email");
-    if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = String(profile?.phone || user.user_metadata?.phone || "Phone not saved");
-    if (statusTarget instanceof HTMLElement) statusTarget.textContent = verified ? "Signed in" : "Pending email verification";
-    if (verifiedTarget instanceof HTMLElement) {
-      verifiedTarget.textContent = verified
-        ? "Email verified"
-        : "Open your email and confirm the account before using it fully.";
-    }
+    window.location.replace(getAccountDashboardUrl());
   };
 
   const { data: { session: initialSession } } = await supabase.auth.getSession();
@@ -3556,8 +3528,8 @@ async function initAccountPage() {
         setAuthMessage(messageBox, "");
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        setAuthMessage(messageBox, "Signed in successfully.");
         loginForm.reset();
+        window.location.assign(getAccountDashboardUrl());
       } catch (error) {
         setAuthMessage(messageBox, getReadableAuthError(error), "error");
       }
@@ -3579,13 +3551,88 @@ async function initAccountPage() {
     });
   });
 
+}
+
+async function initAccountDashboardPage() {
+  const root = document.querySelector("[data-account-dashboard-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const messageBox = root.querySelector("[data-auth-message]");
+  const logoutButton = root.querySelector("[data-auth-logout]");
+  const nameTarget = root.querySelector("[data-auth-name]");
+  const emailTarget = root.querySelector("[data-auth-email]");
+  const phoneTarget = root.querySelector("[data-auth-phone]");
+  const statusTarget = root.querySelector("[data-auth-status]");
+  const verifiedTarget = root.querySelector("[data-auth-verified]");
+  const ordersPreviewTarget = root.querySelector("[data-account-orders-preview]");
+  const repairsPreviewTarget = root.querySelector("[data-account-repairs-preview]");
+
+  let supabase;
+
+  try {
+    supabase = await getSupabaseBrowserClient();
+  } catch (error) {
+    setAuthMessage(messageBox, "Supabase Auth could not be loaded on this page.", "error");
+    return;
+  }
+
+  const renderSession = async (session) => {
+    const user = session?.user || null;
+    const verified = isEmailConfirmed(user);
+
+    if (!user) {
+      window.location.replace(getAuthRedirectUrl());
+      return;
+    }
+
+    let profile = null;
+    let orders = [];
+    let repairs = [];
+
+    try {
+      profile = await syncCustomerProfile(supabase, user);
+    } catch (error) {
+      try {
+        profile = await fetchCustomerProfile(supabase, user);
+      } catch (nestedError) {
+        profile = null;
+      }
+    }
+
+    try {
+      [orders, repairs] = await Promise.all([
+        loadCustomerOrders(supabase, user, 3),
+        loadCustomerRepairBookings(supabase, user, 3),
+      ]);
+    } catch (error) {
+      orders = [];
+      repairs = [];
+    }
+
+    if (nameTarget instanceof HTMLElement) nameTarget.textContent = String(profile?.full_name || getUserDisplayName(user));
+    if (emailTarget instanceof HTMLElement) emailTarget.textContent = String(profile?.email || user.email || "No email");
+    if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = String(profile?.phone || user.user_metadata?.phone || "Phone not saved");
+    if (statusTarget instanceof HTMLElement) statusTarget.textContent = verified ? "Signed in" : "Pending email verification";
+    if (verifiedTarget instanceof HTMLElement) {
+      verifiedTarget.textContent = verified ? "Email verified" : "Verification pending";
+    }
+    renderHistoryPreview(ordersPreviewTarget, orders, "orders");
+    renderHistoryPreview(repairsPreviewTarget, repairs, "repairs");
+  };
+
+  const { data: { session: initialSession } } = await supabase.auth.getSession();
+  await renderSession(initialSession);
+
+  supabase.auth.onAuthStateChange((_event, session) => {
+    renderSession(session);
+  });
+
   if (logoutButton instanceof HTMLButtonElement) {
     logoutButton.addEventListener("click", async () => {
       try {
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
-        setAuthMessage(messageBox, "Signed out successfully.");
-        renderSignedOutState();
+        window.location.assign(getAuthRedirectUrl());
       } catch (error) {
         setAuthMessage(messageBox, getReadableAuthError(error), "error");
       }
@@ -3786,6 +3833,7 @@ function initPage() {
   initCheckoutSuccessPage();
   initBookingForm();
   initAccountPage();
+  initAccountDashboardPage();
   initRegisterPage();
   initForgotPasswordPage();
   initMyOrdersPage();

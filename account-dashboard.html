@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account | OZ TECH M8</title>
+  <meta name="description" content="View your OZ TECH M8 account details, recent orders and repair history.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --dash-accent: #05CEAC;
+      --dash-accent-strong: #03b899;
+      --dash-dark: #10181b;
+      --dash-text: #132429;
+      --dash-muted: #687d83;
+      --dash-line: rgba(19, 36, 41, 0.1);
+    }
+
+    body {
+      background: linear-gradient(180deg, #f8fcfb 0%, #ffffff 52%, #f4fbfa 100%);
+    }
+
+    .account-dashboard {
+      min-height: calc(100vh - 15rem);
+      padding: clamp(2.25rem, 6vw, 4.5rem) 0;
+    }
+
+    .account-dashboard__wrap {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .account-dashboard__hero {
+      display: grid;
+      gap: 0.8rem;
+      padding: clamp(1.25rem, 3vw, 1.9rem);
+      border: 1px solid var(--dash-line);
+      border-radius: 1.5rem;
+      background: linear-gradient(135deg, #10181b 0%, #14252a 65%, rgba(5, 206, 172, 0.18) 100%);
+      color: #f7fffd;
+    }
+
+    .account-dashboard__hero p,
+    .account-dashboard__hero h1 {
+      margin: 0;
+      color: inherit;
+    }
+
+    .account-dashboard__hero h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+
+    .account-dashboard__grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 1rem;
+    }
+
+    .account-panel {
+      display: grid;
+      gap: 1rem;
+      padding: 1.2rem;
+      border: 1px solid var(--dash-line);
+      border-radius: 1.35rem;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 22px 58px rgba(9, 24, 28, 0.05);
+    }
+
+    .account-panel h2 {
+      margin: 0;
+      color: var(--dash-dark);
+      letter-spacing: -0.04em;
+    }
+
+    .account-meta {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .account-meta__item,
+    .account-history .auth-history__item,
+    .account-history .auth-history__empty {
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--dash-line);
+      border-radius: 1rem;
+      background: #fff;
+    }
+
+    .account-meta__item strong {
+      display: block;
+      margin-bottom: 0.2rem;
+      color: var(--dash-muted);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .account-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .account-action,
+    .account-signout {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3rem;
+      padding: 0.85rem 1rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    }
+
+    .account-action:hover,
+    .account-signout:hover {
+      transform: translateY(-1px);
+    }
+
+    .account-action {
+      border: 1px solid var(--dash-line);
+      background: #fff;
+      color: var(--dash-text);
+    }
+
+    .account-action:hover {
+      border-color: rgba(5, 206, 172, 0.42);
+      color: var(--dash-accent-strong);
+    }
+
+    .account-signout {
+      border: 0;
+      background: var(--dash-accent);
+      color: #082824;
+      cursor: pointer;
+    }
+
+    .account-signout:hover {
+      background: var(--dash-accent-strong);
+    }
+
+    .account-history-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .account-history .eyebrow {
+      margin-bottom: 0.4rem;
+    }
+
+    .account-history .auth-history {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 900px) {
+      .account-dashboard__grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .account-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="promo-banner">
+    <div class="container promo-banner__inner">
+      <span>Manage your profile, recent orders and repair requests here.</span>
+      <a href="shop.html">Back to online store</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="TECHM8 home">
+        <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+      </a>
+      <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
+      <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="nav__menu" id="primary-menu">
+        <a href="index.html">Home</a>
+        <a href="repairs.html">Repairs</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="store-policy.html">Store Policy</a>
+        <a class="nav__cart-link" href="cart.html">Cart <span class="nav__cart-count" data-cart-count>0</span></a>
+        <a class="nav__shop-link" href="shop.html">Online Store</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="account-dashboard" data-account-dashboard-page>
+    <section class="container">
+      <div class="account-dashboard__wrap">
+        <div class="booking-message" data-auth-message hidden></div>
+
+        <section class="account-dashboard__hero" aria-label="Account header">
+          <p class="eyebrow">My account</p>
+          <h1 data-auth-name>Customer</h1>
+          <p>Your saved profile, order history and repair history.</p>
+        </section>
+
+        <div class="account-dashboard__grid">
+          <section class="account-panel" aria-label="Profile details">
+            <h2>Account details</h2>
+            <div class="account-meta">
+              <article class="account-meta__item">
+                <strong>Email</strong>
+                <span data-auth-email></span>
+              </article>
+              <article class="account-meta__item">
+                <strong>Phone</strong>
+                <span data-auth-phone></span>
+              </article>
+              <article class="account-meta__item">
+                <strong>Status</strong>
+                <span data-auth-status></span>
+              </article>
+              <article class="account-meta__item">
+                <strong>Verification</strong>
+                <span data-auth-verified></span>
+              </article>
+            </div>
+            <div class="account-actions">
+              <a class="account-action" href="my-orders.html">My orders</a>
+              <a class="account-action" href="my-repairs.html">My repairs</a>
+              <a class="account-action" href="checkout.html">Checkout</a>
+              <button class="account-signout" type="button" data-auth-logout>Sign out</button>
+            </div>
+          </section>
+
+          <div class="account-history-grid">
+            <section class="account-panel account-history" aria-label="Recent orders">
+              <div>
+                <p class="eyebrow">Recent orders</p>
+                <h2>Latest orders</h2>
+              </div>
+              <div class="auth-history" data-account-orders-preview></div>
+            </section>
+
+            <section class="account-panel account-history" aria-label="Recent repairs">
+              <div>
+                <p class="eyebrow">Recent repairs</p>
+                <h2>Latest repairs</h2>
+              </div>
+              <div class="auth-history" data-account-repairs-preview></div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+        <p>TECHM8 repairs phones, tablets, computers, laptops and game consoles, and also supplies parts, accessories and everyday tech products.</p>
+      </div>
+      <div>
+        <h4>Quick links</h4>
+        <a href="repairs.html">Repairs</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="shop.html">Online Store</a>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <a href="book-repair.html">Book a repair</a>
+        <a href="cart.html">Cart</a>
+        <a href="checkout.html">Checkout</a>
+        <a href="store-policy.html">Store Policy</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>Use your nearest store page or the online checkout flow for the fastest response.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="site-config.js"></script>
+  <script defer src="script.js"></script>
+</body>
+</html>
