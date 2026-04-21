@@ -3429,6 +3429,34 @@ function getReadableAuthError(error) {
   return message;
 }
 
+function isValidEmailAddress(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(String(email || "").trim());
+}
+
+function normalizeAustralianPhone(phone) {
+  const raw = String(phone || "").trim();
+  const compact = raw.replace(/[^\d+]/g, "");
+  const digitsOnly = raw.replace(/\D/g, "");
+
+  if (/^\+61[2-478]\d{8}$/.test(compact)) {
+    return compact;
+  }
+
+  if (/^61[2-478]\d{8}$/.test(digitsOnly)) {
+    return `+${digitsOnly}`;
+  }
+
+  if (/^0[2-478]\d{8}$/.test(digitsOnly)) {
+    return `+61${digitsOnly.slice(1)}`;
+  }
+
+  return raw;
+}
+
+function isValidAustralianPhone(phone) {
+  return /^\+61[2-478]\d{8}$/.test(normalizeAustralianPhone(phone));
+}
+
 function isEmailConfirmed(user) {
   return Boolean(user?.email_confirmed_at || user?.confirmed_at);
 }
@@ -3656,24 +3684,34 @@ async function initRegisterPage() {
     return;
   }
 
-  registerForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const formData = new FormData(registerForm);
-    const fullName = String(formData.get("full_name") || "").trim();
-    const phone = String(formData.get("phone") || "").trim();
-    const email = String(formData.get("email") || "").trim();
-    const password = String(formData.get("password") || "");
-    const confirmPassword = String(formData.get("confirm_password") || "");
+    registerForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(registerForm);
+      const fullName = String(formData.get("full_name") || "").trim();
+      const phone = normalizeAustralianPhone(String(formData.get("phone") || "").trim());
+      const email = String(formData.get("email") || "").trim().toLowerCase();
+      const password = String(formData.get("password") || "");
+      const confirmPassword = String(formData.get("confirm_password") || "");
 
-    if (!fullName || !phone || !email || !password) {
-      setAuthMessage(messageBox, "Please complete all required registration fields.", "error");
-      return;
-    }
+      if (!fullName || !phone || !email || !password) {
+        setAuthMessage(messageBox, "Please complete all required registration fields.", "error");
+        return;
+      }
 
-    if (password !== confirmPassword) {
-      setAuthMessage(messageBox, "Password confirmation does not match.", "error");
-      return;
-    }
+      if (!isValidEmailAddress(email)) {
+        setAuthMessage(messageBox, "Please enter a valid email address.", "error");
+        return;
+      }
+
+      if (!isValidAustralianPhone(phone)) {
+        setAuthMessage(messageBox, "Please enter a valid Australian phone number.", "error");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        setAuthMessage(messageBox, "Password confirmation does not match.", "error");
+        return;
+      }
 
     try {
       setAuthMessage(messageBox, "");
