@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pending Orders | OZ TECH M8</title>
+  <meta name="description" content="View pending OZ TECH M8 orders linked to your account.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="account-area.css">
+</head>
+<body class="account-area-body">
+  <div class="promo-banner">
+    <div class="container promo-banner__inner">
+      <span>Review open and in-progress orders here.</span>
+      <a href="shop.html">Back to online store</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="TECHM8 home">
+        <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+      </a>
+      <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
+      <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="nav__menu" id="primary-menu">
+        <a href="index.html">Home</a>
+        <a href="repairs.html">Repairs</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="store-policy.html">Store Policy</a>
+        <a class="nav__cart-link" href="cart.html">Cart <span class="nav__cart-count" data-cart-count>0</span></a>
+        <a class="nav__shop-link" href="shop.html">Online Store</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="account-area" data-pending-orders-page>
+    <section class="container account-area__layout">
+      <aside class="account-sidebar">
+        <div class="account-sidebar__panel">
+          <h2 class="account-sidebar__title">My Account</h2>
+          <nav class="account-sidebar__nav" aria-label="Account navigation">
+            <a class="account-sidebar__link" href="account-details.html">Account Details</a>
+            <a class="account-sidebar__link" href="delivery-address.html">Delivery Address</a>
+            <a class="account-sidebar__link is-active" href="pending-orders.html">Pending Orders <span class="account-sidebar__badge" data-pending-orders-count>0</span></a>
+            <a class="account-sidebar__link" href="completed-orders.html">Completed Orders</a>
+            <a class="account-sidebar__link" href="repair-bookings.html">Repair Service Bookings</a>
+            <a class="account-sidebar__link" href="warranty-returns.html">Warranty & Returns</a>
+          </nav>
+        </div>
+        <div class="account-sidebar__panel account-help">
+          <p class="account-help__eyebrow">Open orders</p>
+          <h3>Still processing?</h3>
+          <p>Pending orders include requests still waiting on payment, fulfilment or store pickup.</p>
+          <a class="account-help__link" href="checkout.html">Go to checkout</a>
+        </div>
+      </aside>
+
+      <div class="account-main">
+        <section class="account-hero-card">
+          <p class="eyebrow">Orders</p>
+          <h1>Pending Orders</h1>
+          <p>Track customer orders that are still new, processing, awaiting pickup or not yet completed.</p>
+        </section>
+
+        <section class="account-main__panel">
+          <div class="account-main__header">
+            <div class="account-main__header-copy">
+              <h2 class="account-main__title">Pending order list</h2>
+              <p class="account-main__intro">Search by order code, store or payment label.</p>
+            </div>
+          </div>
+          <div class="booking-message" data-pending-orders-message hidden></div>
+          <div class="account-search">
+            <div class="account-search__field">
+              <input type="search" name="pending_orders_query" data-pending-orders-query placeholder="Search order code, store or payment method">
+            </div>
+          </div>
+          <div class="account-card-list" data-pending-orders-list></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+        <p>TECHM8 repairs phones, tablets, computers, laptops and game consoles, and also supplies parts, accessories and everyday tech products.</p>
+      </div>
+      <div>
+        <h4>Quick links</h4>
+        <a href="repairs.html">Repairs</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="shop.html">Online Store</a>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <a href="book-repair.html">Book a repair</a>
+        <a href="cart.html">Cart</a>
+        <a href="checkout.html">Checkout</a>
+        <a href="store-policy.html">Store Policy</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>Use your nearest store page or the online checkout flow for the fastest response.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="site-config.js"></script>
+  <script defer src="script.js"></script>
+</body>
+</html>

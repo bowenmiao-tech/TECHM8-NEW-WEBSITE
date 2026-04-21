@@ -519,6 +519,15 @@ function getAuthRedirectUrl() {
   return new URL("account.html", window.location.href).toString();
 }
 
+function getAccountHomeUrl() {
+  const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
+  if (configuredSiteUrl) {
+    return new URL("account-details.html", configuredSiteUrl.endsWith("/") ? configuredSiteUrl : `${configuredSiteUrl}/`).toString();
+  }
+
+  return new URL("account-details.html", window.location.href).toString();
+}
+
 function getAccountDashboardUrl() {
   const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
   if (configuredSiteUrl) {
@@ -603,46 +612,210 @@ async function getCurrentAuthState() {
   }
 }
 
-async function syncCustomerProfile(supabase, user, overrides = {}) {
-  if (!supabase || !user?.id) return null;
+const PROFILE_SELECT_FIELDS = [
+  "id",
+  "email",
+  "full_name",
+  "first_name",
+  "last_name",
+  "phone",
+  "business_name",
+  "address_line_1",
+  "address_line_2",
+  "suburb",
+  "postcode",
+  "state",
+  "default_store_slug",
+  "service_email_opt_in",
+  "marketing_opt_in",
+  "avatar_url",
+  "provider",
+  "created_at",
+  "updated_at",
+].join(", ");
 
-  const payload = {
+const PROFILE_LEGACY_SELECT_FIELDS = [
+  "id",
+  "email",
+  "full_name",
+  "phone",
+  "default_store_slug",
+  "avatar_url",
+  "provider",
+  "created_at",
+  "updated_at",
+].join(", ");
+
+function splitProfileName(profile, user = null) {
+  const firstName = String(profile?.first_name || "").trim();
+  const lastName = String(profile?.last_name || "").trim();
+
+  if (firstName || lastName) {
+    return {
+      firstName,
+      lastName,
+    };
+  }
+
+  const fullName = String(profile?.full_name || user?.user_metadata?.full_name || user?.user_metadata?.name || "").trim();
+  if (!fullName) {
+    return { firstName: "", lastName: "" };
+  }
+
+  const parts = fullName.split(/\s+/).filter(Boolean);
+  return {
+    firstName: parts.shift() || "",
+    lastName: parts.join(" "),
+  };
+}
+
+function buildProfileFullName(firstName, lastName, fallback = "") {
+  const combined = [String(firstName || "").trim(), String(lastName || "").trim()].filter(Boolean).join(" ").trim();
+  return combined || String(fallback || "").trim() || null;
+}
+
+function isMissingProfileColumnError(error) {
+  const code = String(error?.code || "").trim();
+  const message = String(error?.message || "").trim();
+  return code === "PGRST204" || /Could not find the .* column of 'profiles'/i.test(message);
+}
+
+function toBooleanOrNull(value) {
+  if (typeof value === "boolean") return value;
+  if (value === "true" || value === "1" || value === 1) return true;
+  if (value === "false" || value === "0" || value === 0) return false;
+  return null;
+}
+
+function buildProfilePayload(user, overrides = {}) {
+  const existingFullName = String(overrides.full_name || user?.user_metadata?.full_name || user?.user_metadata?.name || "").trim();
+  const firstName = String(overrides.first_name || "").trim();
+  const lastName = String(overrides.last_name || "").trim();
+
+  return {
     id: user.id,
     email: String(overrides.email || user.email || "").trim() || null,
-    full_name: String(overrides.full_name || user.user_metadata?.full_name || user.user_metadata?.name || "").trim() || null,
+    full_name: buildProfileFullName(firstName, lastName, existingFullName),
+    first_name: firstName || null,
+    last_name: lastName || null,
     phone: String(overrides.phone || user.user_metadata?.phone || "").trim() || null,
+    business_name: String(overrides.business_name || "").trim() || null,
+    address_line_1: String(overrides.address_line_1 || "").trim() || null,
+    address_line_2: String(overrides.address_line_2 || "").trim() || null,
+    suburb: String(overrides.suburb || "").trim() || null,
+    postcode: String(overrides.postcode || "").trim() || null,
+    state: String(overrides.state || "").trim().toUpperCase() || null,
     avatar_url: String(user.user_metadata?.avatar_url || "").trim() || null,
     provider: String(user.app_metadata?.provider || user.user_metadata?.provider || "").trim() || null,
     default_store_slug: String(overrides.default_store_slug || "").trim() || null,
+    service_email_opt_in: toBooleanOrNull(overrides.service_email_opt_in),
+    marketing_opt_in: toBooleanOrNull(overrides.marketing_opt_in),
   };
+}
 
-  const { data, error } = await supabase
-    .from("profiles")
-    .upsert(payload, { onConflict: "id" })
-    .select("id, email, full_name, phone, default_store_slug, avatar_url, provider, created_at, updated_at")
-    .single();
+function buildLegacyProfilePayload(payload) {
+  return {
+    id: payload.id,
+    email: payload.email,
+    full_name: payload.full_name,
+    phone: payload.phone,
+    avatar_url: payload.avatar_url,
+    provider: payload.provider,
+    default_store_slug: payload.default_store_slug,
+  };
+}
 
-  if (error) {
-    throw error;
+function normalizeProfileRecord(profile, user = null) {
+  if (!profile) return null;
+
+  const nameParts = splitProfileName(profile, user);
+  return {
+    ...profile,
+    first_name: String(profile.first_name || nameParts.firstName || "").trim() || null,
+    last_name: String(profile.last_name || nameParts.lastName || "").trim() || null,
+    business_name: String(profile.business_name || "").trim() || null,
+    address_line_1: String(profile.address_line_1 || "").trim() || null,
+    address_line_2: String(profile.address_line_2 || "").trim() || null,
+    suburb: String(profile.suburb || "").trim() || null,
+    postcode: String(profile.postcode || "").trim() || null,
+    state: String(profile.state || "").trim().toUpperCase() || null,
+    service_email_opt_in: typeof profile.service_email_opt_in === "boolean" ? profile.service_email_opt_in : null,
+    marketing_opt_in: typeof profile.marketing_opt_in === "boolean" ? profile.marketing_opt_in : null,
+  };
+}
+
+async function upsertCustomerProfile(supabase, user, overrides = {}, options = {}) {
+  if (!supabase || !user?.id) return null;
+  const { allowLegacyFallback = true } = options;
+  const payload = buildProfilePayload(user, overrides);
+
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .upsert(payload, { onConflict: "id" })
+      .select(PROFILE_SELECT_FIELDS)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return normalizeProfileRecord(data, user);
+  } catch (error) {
+    if (!allowLegacyFallback || !isMissingProfileColumnError(error)) {
+      throw error;
+    }
+
+    const { data, error: fallbackError } = await supabase
+      .from("profiles")
+      .upsert(buildLegacyProfilePayload(payload), { onConflict: "id" })
+      .select(PROFILE_LEGACY_SELECT_FIELDS)
+      .single();
+
+    if (fallbackError) {
+      throw fallbackError;
+    }
+
+    return normalizeProfileRecord(data, user);
   }
+}
 
-  return data;
+async function syncCustomerProfile(supabase, user, overrides = {}) {
+  return upsertCustomerProfile(supabase, user, overrides, { allowLegacyFallback: true });
 }
 
 async function fetchCustomerProfile(supabase, user) {
   if (!supabase || !user?.id) return null;
 
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("id, email, full_name, phone, default_store_slug, avatar_url, provider, created_at, updated_at")
-    .eq("id", user.id)
-    .maybeSingle();
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select(PROFILE_SELECT_FIELDS)
+      .eq("id", user.id)
+      .maybeSingle();
 
-  if (error) {
-    throw error;
+    if (error) {
+      throw error;
+    }
+
+    return normalizeProfileRecord(data, user);
+  } catch (error) {
+    if (!isMissingProfileColumnError(error)) {
+      throw error;
+    }
+
+    const { data, error: fallbackError } = await supabase
+      .from("profiles")
+      .select(PROFILE_LEGACY_SELECT_FIELDS)
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (fallbackError) {
+      throw fallbackError;
+    }
+
+    return normalizeProfileRecord(data, user);
   }
-
-  return data;
 }
 
 function fillFormField(form, fieldName, value, overwrite = false) {
@@ -3501,7 +3674,7 @@ async function initAccountPage() {
       return;
     }
 
-    window.location.replace(getAccountDashboardUrl());
+    window.location.replace(getAccountHomeUrl());
   };
 
   const { data: { session: initialSession } } = await supabase.auth.getSession();
@@ -3553,15 +3726,15 @@ async function initAccountPage() {
       const password = String(formData.get("password") || "");
 
       try {
-        setAuthMessage(messageBox, "");
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        loginForm.reset();
-        window.location.assign(getAccountDashboardUrl());
-      } catch (error) {
-        setAuthMessage(messageBox, getReadableAuthError(error), "error");
-      }
-    });
+          setAuthMessage(messageBox, "");
+          const { error } = await supabase.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          loginForm.reset();
+          window.location.assign(getAccountHomeUrl());
+        } catch (error) {
+          setAuthMessage(messageBox, getReadableAuthError(error), "error");
+        }
+      });
   }
 
   passwordToggleButtons.forEach((button) => {
@@ -3780,6 +3953,490 @@ async function initForgotPasswordPage() {
   });
 }
 
+function setCheckboxField(form, fieldName, checked) {
+  if (!(form instanceof HTMLFormElement)) return;
+  const field = form.elements.namedItem(fieldName);
+  if (!(field instanceof HTMLInputElement) || field.type !== "checkbox") return;
+  field.checked = Boolean(checked);
+}
+
+async function requireSignedInAccountPage(messageTarget = null) {
+  const authState = await getCurrentAuthState();
+
+  if (!authState.user || !authState.supabase) {
+    if (messageTarget instanceof HTMLElement) {
+      setAuthMessage(messageTarget, "Sign in to access your account.", "error");
+    }
+    window.location.replace(getAuthRedirectUrl());
+    return null;
+  }
+
+  return authState;
+}
+
+async function loadResolvedCustomerProfile(supabase, user) {
+  try {
+    return await syncCustomerProfile(supabase, user);
+  } catch (error) {
+    return fetchCustomerProfile(supabase, user);
+  }
+}
+
+function populateAccountDetailsForm(form, profile, user) {
+  if (!(form instanceof HTMLFormElement)) return;
+  const { firstName, lastName } = splitProfileName(profile, user);
+
+  fillFormField(form, "email", profile?.email || user?.email || "", true);
+  fillFormField(form, "first_name", firstName, true);
+  fillFormField(form, "last_name", lastName, true);
+  fillFormField(form, "phone", profile?.phone || user?.user_metadata?.phone || "", true);
+  fillFormField(form, "business_name", profile?.business_name || "", true);
+  fillFormField(form, "address_line_1", profile?.address_line_1 || "", true);
+  fillFormField(form, "address_line_2", profile?.address_line_2 || "", true);
+  fillFormField(form, "suburb", profile?.suburb || "", true);
+  fillFormField(form, "postcode", profile?.postcode || "", true);
+  fillFormField(form, "state", profile?.state || "", true);
+  fillFormField(form, "default_store_slug", profile?.default_store_slug || "", true);
+  setCheckboxField(form, "service_email_opt_in", profile?.service_email_opt_in);
+  setCheckboxField(form, "marketing_opt_in", profile?.marketing_opt_in);
+}
+
+function populateDeliveryAddressForm(form, profile, user) {
+  if (!(form instanceof HTMLFormElement)) return;
+  const { firstName, lastName } = splitProfileName(profile, user);
+
+  fillFormField(form, "first_name", firstName, true);
+  fillFormField(form, "last_name", lastName, true);
+  fillFormField(form, "phone", profile?.phone || user?.user_metadata?.phone || "", true);
+  fillFormField(form, "business_name", profile?.business_name || "", true);
+  fillFormField(form, "address_line_1", profile?.address_line_1 || "", true);
+  fillFormField(form, "address_line_2", profile?.address_line_2 || "", true);
+  fillFormField(form, "suburb", profile?.suburb || "", true);
+  fillFormField(form, "postcode", profile?.postcode || "", true);
+  fillFormField(form, "state", profile?.state || "", true);
+}
+
+function normalizeOrderSearchRecord(record) {
+  return [
+    record?.order_code,
+    record?.customer_name,
+    record?.store_slug,
+    record?.payment_method_label,
+    record?.status,
+    record?.fulfillment_status,
+  ]
+    .map((value) => String(value || "").trim().toLowerCase())
+    .join(" ");
+}
+
+function normalizeRepairSearchRecord(record) {
+  return [
+    record?.booking_code,
+    record?.brand,
+    record?.device_model,
+    record?.store_slug,
+    record?.repair_category,
+    record?.status,
+  ]
+    .map((value) => String(value || "").trim().toLowerCase())
+    .join(" ");
+}
+
+function isCompletedOrderRecord(record) {
+  const status = String(record?.status || "").trim().toLowerCase();
+  const fulfillmentStatus = String(record?.fulfillment_status || "").trim().toLowerCase();
+  return ["completed", "complete", "closed"].includes(status)
+    || ["completed", "fulfilled", "delivered", "collected", "picked_up", "picked up"].includes(fulfillmentStatus);
+}
+
+function renderAccountOrderCards(target, records, mode = "all") {
+  if (!(target instanceof HTMLElement)) return;
+
+  if (!Array.isArray(records) || !records.length) {
+    target.innerHTML = `
+      <article class="account-empty-card">
+        <h3>${mode === "pending" ? "No pending orders" : "No completed orders"}</h3>
+        <p>${mode === "pending"
+          ? "New and in-progress orders linked to this account will appear here."
+          : "Completed orders linked to this account will appear here once they are fulfilled."}</p>
+      </article>
+    `;
+    return;
+  }
+
+  target.innerHTML = records.map((record) => `
+    <article class="account-order-card">
+      <div class="account-order-card__head">
+        <div>
+          <p class="eyebrow">Order</p>
+          <h3 class="account-order-card__title">${escapeHtml(record.order_code || "Pending order")}</h3>
+          <div class="account-inline-meta">
+            <span>${escapeHtml(formatDateTime(record.created_at))}</span>
+            <span>${escapeHtml(getStoreDisplayName(record.store_slug))}</span>
+            <span>${escapeHtml(record.payment_method_label || "Pay in store")}</span>
+          </div>
+        </div>
+        <span class="account-status">${escapeHtml(formatStatusLabel(record.status || record.fulfillment_status || "new"))}</span>
+      </div>
+      <div class="account-order-card__body">
+        <div class="account-order-card__grid">
+          <div><strong>Total</strong><span>${escapeHtml(formatMoney(record.total_amount || 0))}</span></div>
+          <div><strong>Payment status</strong><span>${escapeHtml(formatStatusLabel(record.payment_status || "pending"))}</span></div>
+          <div><strong>Fulfilment</strong><span>${escapeHtml(formatStatusLabel(record.fulfillment_method || "pickup"))}</span></div>
+          <div><strong>Fulfilment status</strong><span>${escapeHtml(formatStatusLabel(record.fulfillment_status || "new"))}</span></div>
+          <div><strong>Email</strong><span>${escapeHtml(record.email || "Not available")}</span></div>
+          <div><strong>Phone</strong><span>${escapeHtml(record.phone || "Not available")}</span></div>
+        </div>
+      </div>
+      <div class="account-order-card__foot">
+        <span class="account-muted">${mode === "pending" ? "This order is still active." : "This order has been completed."}</span>
+        <div class="account-order-card__actions">
+          <a class="account-button--secondary" href="shop.html">Browse store</a>
+          <a class="account-button" href="cart.html">${mode === "pending" ? "View cart" : "Shop again"}</a>
+        </div>
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderAccountRepairCards(target, records) {
+  if (!(target instanceof HTMLElement)) return;
+
+  if (!Array.isArray(records) || !records.length) {
+    target.innerHTML = `
+      <article class="account-empty-card">
+        <h3>No repair bookings found</h3>
+        <p>Repair bookings linked to this signed-in account will appear here.</p>
+      </article>
+    `;
+    return;
+  }
+
+  target.innerHTML = records.map((record) => `
+    <article class="account-order-card">
+      <div class="account-order-card__head">
+        <div>
+          <p class="eyebrow">Repair booking</p>
+          <h3 class="account-order-card__title">${escapeHtml(record.booking_code || "Pending booking")}</h3>
+          <div class="account-inline-meta">
+            <span>${escapeHtml(getStoreDisplayName(record.store_slug))}</span>
+            <span>${escapeHtml(REPAIR_CATEGORY_LABELS[record.repair_category] || formatStatusLabel(record.repair_category))}</span>
+            <span>${escapeHtml(formatDateTime(record.created_at))}</span>
+          </div>
+        </div>
+        <span class="account-status">${escapeHtml(formatStatusLabel(record.status || "new"))}</span>
+      </div>
+      <div class="account-order-card__body">
+        <div class="account-order-card__grid">
+          <div><strong>Brand</strong><span>${escapeHtml(record.brand || "Not specified")}</span></div>
+          <div><strong>Model</strong><span>${escapeHtml(record.device_model || "Not specified")}</span></div>
+          <div><strong>Preferred date</strong><span>${escapeHtml(record.preferred_date ? formatDateOnly(record.preferred_date) : "Flexible")}</span></div>
+          <div><strong>Preferred time</strong><span>${escapeHtml(record.preferred_time || "Flexible")}</span></div>
+          <div><strong>Contact method</strong><span>${escapeHtml(formatStatusLabel(record.preferred_contact_method || "phone"))}</span></div>
+          <div><strong>Store</strong><span>${escapeHtml(getStoreDisplayName(record.store_slug))}</span></div>
+        </div>
+      </div>
+      <div class="account-order-card__foot">
+        <span class="account-muted">Use the store page or book a new repair if you need to follow up.</span>
+        <div class="account-order-card__actions">
+          <a class="account-button--secondary" href="stores.html">Find store</a>
+          <a class="account-button" href="book-repair.html">Book again</a>
+        </div>
+      </div>
+    </article>
+  `).join("");
+}
+
+async function initAccountDetailsPage() {
+  const root = document.querySelector("[data-account-details-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const form = root.querySelector("[data-account-details-form]");
+  const messageTarget = root.querySelector("[data-account-details-message]");
+  if (!(form instanceof HTMLFormElement)) return;
+
+  const authState = await requireSignedInAccountPage(messageTarget);
+  if (!authState) return;
+
+  try {
+    const profile = await loadResolvedCustomerProfile(authState.supabase, authState.user);
+    populateAccountDetailsForm(form, profile, authState.user);
+  } catch (error) {
+    setAuthMessage(messageTarget, error instanceof Error ? error.message : "Profile could not be loaded.", "error");
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const email = String(formData.get("email") || "").trim().toLowerCase();
+    const phone = normalizeAustralianPhone(String(formData.get("phone") || "").trim());
+    const postcode = String(formData.get("postcode") || "").trim();
+
+    if (!email || !isValidEmailAddress(email)) {
+      setAuthMessage(messageTarget, "Enter a valid email address.", "error");
+      return;
+    }
+
+    if (phone && !isValidAustralianPhone(phone)) {
+      setAuthMessage(messageTarget, "Enter a valid Australian phone number.", "error");
+      return;
+    }
+
+    if (postcode && !/^\d{4}$/.test(postcode)) {
+      setAuthMessage(messageTarget, "Post code must be a valid 4-digit Australian postcode.", "error");
+      return;
+    }
+
+    try {
+      await upsertCustomerProfile(authState.supabase, authState.user, {
+        email,
+        first_name: String(formData.get("first_name") || "").trim(),
+        last_name: String(formData.get("last_name") || "").trim(),
+        phone,
+        business_name: String(formData.get("business_name") || "").trim(),
+        address_line_1: String(formData.get("address_line_1") || "").trim(),
+        address_line_2: String(formData.get("address_line_2") || "").trim(),
+        suburb: String(formData.get("suburb") || "").trim(),
+        postcode,
+        state: String(formData.get("state") || "").trim(),
+        default_store_slug: String(formData.get("default_store_slug") || "").trim(),
+        service_email_opt_in: formData.get("service_email_opt_in") === "true",
+        marketing_opt_in: formData.get("marketing_opt_in") === "true",
+      }, { allowLegacyFallback: false });
+      setAuthMessage(messageTarget, "Account details updated.");
+    } catch (error) {
+      const message = isMissingProfileColumnError(error)
+        ? "The profile table still needs the account fields migration before this page can save all fields."
+        : getReadableAuthError(error);
+      setAuthMessage(messageTarget, message, "error");
+    }
+  });
+}
+
+async function initDeliveryAddressPage() {
+  const root = document.querySelector("[data-delivery-address-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const form = root.querySelector("[data-delivery-address-form]");
+  const messageTarget = root.querySelector("[data-delivery-address-message]");
+  if (!(form instanceof HTMLFormElement)) return;
+
+  const authState = await requireSignedInAccountPage(messageTarget);
+  if (!authState) return;
+
+  try {
+    const profile = await loadResolvedCustomerProfile(authState.supabase, authState.user);
+    populateDeliveryAddressForm(form, profile, authState.user);
+  } catch (error) {
+    setAuthMessage(messageTarget, error instanceof Error ? error.message : "Saved address could not be loaded.", "error");
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const phone = normalizeAustralianPhone(String(formData.get("phone") || "").trim());
+    const postcode = String(formData.get("postcode") || "").trim();
+
+    if (!String(formData.get("address_line_1") || "").trim() || !String(formData.get("suburb") || "").trim()) {
+      setAuthMessage(messageTarget, "Address line 1 and suburb are required.", "error");
+      return;
+    }
+
+    if (phone && !isValidAustralianPhone(phone)) {
+      setAuthMessage(messageTarget, "Enter a valid Australian phone number.", "error");
+      return;
+    }
+
+    if (!/^\d{4}$/.test(postcode)) {
+      setAuthMessage(messageTarget, "Post code must be a valid 4-digit Australian postcode.", "error");
+      return;
+    }
+
+    try {
+      await upsertCustomerProfile(authState.supabase, authState.user, {
+        first_name: String(formData.get("first_name") || "").trim(),
+        last_name: String(formData.get("last_name") || "").trim(),
+        phone,
+        business_name: String(formData.get("business_name") || "").trim(),
+        address_line_1: String(formData.get("address_line_1") || "").trim(),
+        address_line_2: String(formData.get("address_line_2") || "").trim(),
+        suburb: String(formData.get("suburb") || "").trim(),
+        postcode,
+        state: String(formData.get("state") || "").trim(),
+      }, { allowLegacyFallback: false });
+      setAuthMessage(messageTarget, "Delivery address updated.");
+    } catch (error) {
+      const message = isMissingProfileColumnError(error)
+        ? "The profile table still needs the account fields migration before this page can save address fields."
+        : getReadableAuthError(error);
+      setAuthMessage(messageTarget, message, "error");
+    }
+  });
+}
+
+async function initPendingOrdersPage() {
+  const root = document.querySelector("[data-pending-orders-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const listTarget = root.querySelector("[data-pending-orders-list]");
+  const messageTarget = root.querySelector("[data-pending-orders-message]");
+  const queryInput = root.querySelector("[data-pending-orders-query]");
+  const badgeTarget = root.querySelector("[data-pending-orders-count]");
+  if (!(listTarget instanceof HTMLElement)) return;
+
+  const authState = await requireSignedInAccountPage(messageTarget);
+  if (!authState) return;
+
+  try {
+    const records = await loadCustomerOrders(authState.supabase, authState.user, 100);
+    const pendingRecords = records.filter((record) => !isCompletedOrderRecord(record));
+    if (badgeTarget instanceof HTMLElement) {
+      badgeTarget.textContent = String(pendingRecords.length);
+    }
+
+    const render = () => {
+      const query = String(queryInput?.value || "").trim().toLowerCase();
+      const filtered = !query
+        ? pendingRecords
+        : pendingRecords.filter((record) => normalizeOrderSearchRecord(record).includes(query));
+      renderAccountOrderCards(listTarget, filtered, "pending");
+      setAuthMessage(messageTarget, `Showing ${filtered.length} pending order${filtered.length === 1 ? "" : "s"}.`);
+    };
+
+    render();
+    queryInput?.addEventListener("input", render);
+  } catch (error) {
+    setAuthMessage(messageTarget, error instanceof Error ? error.message : "Pending orders could not be loaded.", "error");
+    renderAccountOrderCards(listTarget, [], "pending");
+  }
+}
+
+async function initCompletedOrdersPage() {
+  const root = document.querySelector("[data-completed-orders-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const listTarget = root.querySelector("[data-completed-orders-list]");
+  const messageTarget = root.querySelector("[data-completed-orders-message]");
+  const queryInput = root.querySelector("[data-completed-orders-query]");
+  if (!(listTarget instanceof HTMLElement)) return;
+
+  const authState = await requireSignedInAccountPage(messageTarget);
+  if (!authState) return;
+
+  try {
+    const records = await loadCustomerOrders(authState.supabase, authState.user, 100);
+    const completedRecords = records.filter((record) => isCompletedOrderRecord(record));
+
+    const render = () => {
+      const query = String(queryInput?.value || "").trim().toLowerCase();
+      const filtered = !query
+        ? completedRecords
+        : completedRecords.filter((record) => normalizeOrderSearchRecord(record).includes(query));
+      renderAccountOrderCards(listTarget, filtered, "completed");
+      setAuthMessage(messageTarget, `Showing ${filtered.length} completed order${filtered.length === 1 ? "" : "s"}.`);
+    };
+
+    render();
+    queryInput?.addEventListener("input", render);
+  } catch (error) {
+    setAuthMessage(messageTarget, error instanceof Error ? error.message : "Completed orders could not be loaded.", "error");
+    renderAccountOrderCards(listTarget, [], "completed");
+  }
+}
+
+async function initRepairBookingsPage() {
+  const root = document.querySelector("[data-repair-bookings-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const listTarget = root.querySelector("[data-repair-bookings-list]");
+  const messageTarget = root.querySelector("[data-repair-bookings-message]");
+  const queryInput = root.querySelector("[data-repair-bookings-query]");
+  const rangeSelect = root.querySelector("[data-repair-bookings-range]");
+  if (!(listTarget instanceof HTMLElement)) return;
+
+  const authState = await requireSignedInAccountPage(messageTarget);
+  if (!authState) return;
+
+  try {
+    const records = await loadCustomerRepairBookings(authState.supabase, authState.user, 100);
+
+    const render = () => {
+      const query = String(queryInput?.value || "").trim().toLowerCase();
+      const rangeDays = String(rangeSelect?.value || "all");
+      const now = Date.now();
+
+      const filtered = records.filter((record) => {
+        if (query && !normalizeRepairSearchRecord(record).includes(query)) {
+          return false;
+        }
+
+        if (rangeDays !== "all") {
+          const createdAt = Date.parse(record.created_at || "");
+          if (!Number.isFinite(createdAt)) return false;
+          const ageDays = (now - createdAt) / (1000 * 60 * 60 * 24);
+          if (ageDays > Number(rangeDays)) return false;
+        }
+
+        return true;
+      });
+
+      renderAccountRepairCards(listTarget, filtered);
+      setAuthMessage(messageTarget, `Showing ${filtered.length} repair booking${filtered.length === 1 ? "" : "s"}.`);
+    };
+
+    render();
+    queryInput?.addEventListener("input", render);
+    rangeSelect?.addEventListener("change", render);
+  } catch (error) {
+    setAuthMessage(messageTarget, error instanceof Error ? error.message : "Repair bookings could not be loaded.", "error");
+    renderAccountRepairCards(listTarget, []);
+  }
+}
+
+async function initWarrantyReturnsPage() {
+  const root = document.querySelector("[data-warranty-returns-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const messageTarget = root.querySelector("[data-warranty-returns-message]");
+  const listTarget = root.querySelector("[data-warranty-returns-list]");
+  const searchButton = root.querySelector("[data-warranty-search]");
+  const returnButton = root.querySelector("[data-warranty-return-action]");
+  const queryInput = root.querySelector("[data-warranty-returns-query]");
+
+  const authState = await requireSignedInAccountPage(messageTarget);
+  if (!authState) return;
+
+  if (messageTarget instanceof HTMLElement) {
+    setAuthMessage(messageTarget, "Warranty and return records are ready for backend connection. This page layout is in place.", "success");
+  }
+
+  searchButton?.addEventListener("click", () => {
+    const query = String(queryInput?.value || "").trim();
+    if (messageTarget instanceof HTMLElement) {
+      setAuthMessage(
+        messageTarget,
+        query
+          ? `Warranty search for "${query}" is ready once the warranty table is connected.`
+          : "Enter an RA number or product name to search once the warranty backend is connected.",
+        query ? "success" : "error"
+      );
+    }
+  });
+
+  returnButton?.addEventListener("click", () => {
+    window.location.assign("store-policy.html");
+  });
+
+  if (listTarget instanceof HTMLElement && !listTarget.children.length) {
+    listTarget.innerHTML = `
+      <article class="account-empty-card">
+        <h3>Warranty / RA integration pending</h3>
+        <p>The frontend layout is ready. Once the warranty return table and workflow are added in Supabase, live RA records can render here.</p>
+      </article>
+    `;
+  }
+}
+
 async function initMyOrdersPage() {
   const root = document.querySelector("[data-my-orders-page]");
   if (!(root instanceof HTMLElement)) return;
@@ -3872,6 +4529,12 @@ function initPage() {
   initBookingForm();
   initAccountPage();
   initAccountDashboardPage();
+  initAccountDetailsPage();
+  initDeliveryAddressPage();
+  initPendingOrdersPage();
+  initCompletedOrdersPage();
+  initRepairBookingsPage();
+  initWarrantyReturnsPage();
   initRegisterPage();
   initForgotPasswordPage();
   initMyOrdersPage();

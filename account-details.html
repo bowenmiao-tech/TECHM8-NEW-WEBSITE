@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Details | OZ TECH M8</title>
+  <meta name="description" content="Manage your OZ TECH M8 account details.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="account-area.css">
+</head>
+<body class="account-area-body">
+  <div class="promo-banner">
+    <div class="container promo-banner__inner">
+      <span>Manage your customer profile, order history and repair activity.</span>
+      <a href="shop.html">Back to online store</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="TECHM8 home">
+        <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+      </a>
+      <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
+      <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="nav__menu" id="primary-menu">
+        <a href="index.html">Home</a>
+        <a href="repairs.html">Repairs</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="store-policy.html">Store Policy</a>
+        <a class="nav__cart-link" href="cart.html">Cart <span class="nav__cart-count" data-cart-count>0</span></a>
+        <a class="nav__shop-link" href="shop.html">Online Store</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="account-area" data-account-details-page>
+    <section class="container account-area__layout">
+      <aside class="account-sidebar">
+        <div class="account-sidebar__panel">
+          <h2 class="account-sidebar__title">My Account</h2>
+          <nav class="account-sidebar__nav" aria-label="Account navigation">
+            <a class="account-sidebar__link is-active" href="account-details.html">Account Details</a>
+            <a class="account-sidebar__link" href="delivery-address.html">Delivery Address</a>
+            <a class="account-sidebar__link" href="pending-orders.html">Pending Orders</a>
+            <a class="account-sidebar__link" href="completed-orders.html">Completed Orders</a>
+            <a class="account-sidebar__link" href="repair-bookings.html">Repair Service Bookings</a>
+            <a class="account-sidebar__link" href="warranty-returns.html">Warranty & Returns</a>
+          </nav>
+        </div>
+        <div class="account-sidebar__panel account-help">
+          <p class="account-help__eyebrow">Support</p>
+          <h3>Need help?</h3>
+          <p>Update your details here so checkout, repairs and future support requests stay accurate.</p>
+          <a class="account-help__link" href="book-repair.html">Book a repair</a>
+        </div>
+      </aside>
+
+      <div class="account-main">
+        <section class="account-hero-card">
+          <p class="eyebrow">Customer profile</p>
+          <h1>Account Details</h1>
+          <p>Manage the main customer information connected to your OZ TECH M8 account.</p>
+        </section>
+
+        <section class="account-main__panel">
+          <div class="booking-message" data-account-details-message hidden></div>
+          <form class="account-form" data-account-details-form>
+            <div class="account-form__grid">
+              <div class="account-field account-field--full">
+                <label for="account-email-address">Email address</label>
+                <input id="account-email-address" type="email" name="email" autocomplete="email" required>
+                <span class="account-field__hint">This email is used for account contact and order notifications.</span>
+              </div>
+              <div class="account-field">
+                <label for="account-first-name">First name</label>
+                <input id="account-first-name" type="text" name="first_name" autocomplete="given-name" required>
+              </div>
+              <div class="account-field">
+                <label for="account-last-name">Last name</label>
+                <input id="account-last-name" type="text" name="last_name" autocomplete="family-name">
+              </div>
+              <div class="account-field">
+                <label for="account-mobile-number">Mobile number</label>
+                <input id="account-mobile-number" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="04xx xxx xxx or +61 4xx xxx xxx" required>
+              </div>
+              <div class="account-field">
+                <label for="account-business-name">Business name</label>
+                <input id="account-business-name" type="text" name="business_name" autocomplete="organization">
+              </div>
+              <div class="account-field account-field--full">
+                <label for="account-address-line-1">Address</label>
+                <input id="account-address-line-1" type="text" name="address_line_1" autocomplete="address-line1">
+              </div>
+              <div class="account-field">
+                <label for="account-suburb">Suburb</label>
+                <input id="account-suburb" type="text" name="suburb" autocomplete="address-level2">
+              </div>
+              <div class="account-field">
+                <label for="account-postcode">Post code</label>
+                <input id="account-postcode" type="text" name="postcode" autocomplete="postal-code" inputmode="numeric">
+              </div>
+              <div class="account-field">
+                <label for="account-state">State</label>
+                <select id="account-state" name="state" autocomplete="address-level1">
+                  <option value="">Select state</option>
+                  <option value="QLD">QLD</option>
+                  <option value="NSW">NSW</option>
+                  <option value="VIC">VIC</option>
+                  <option value="ACT">ACT</option>
+                  <option value="SA">SA</option>
+                  <option value="WA">WA</option>
+                  <option value="TAS">TAS</option>
+                  <option value="NT">NT</option>
+                </select>
+              </div>
+              <div class="account-field">
+                <label for="account-default-store">Preferred store</label>
+                <select id="account-default-store" name="default_store_slug">
+                  <option value="">Select store</option>
+                  <option value="park-ridge">Park Ridge</option>
+                  <option value="fairfield">Fairfield</option>
+                  <option value="toowong">Toowong</option>
+                  <option value="north-lakes">North Lakes</option>
+                  <option value="brassall">Brassall</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="account-summary-grid">
+              <div class="account-summary-item">
+                <strong>Service emails</strong>
+                <label><input type="checkbox" name="service_email_opt_in" value="true"> Receive order, repair and warranty related emails</label>
+              </div>
+              <div class="account-summary-item">
+                <strong>Marketing emails</strong>
+                <label><input type="checkbox" name="marketing_opt_in" value="true"> Receive new product and promotional emails</label>
+              </div>
+            </div>
+
+            <div class="account-toolbar">
+              <button class="account-button" type="submit">Save changes</button>
+              <a class="account-button--secondary" href="forgot-password.html">Change password</a>
+            </div>
+          </form>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
+        <p>TECHM8 repairs phones, tablets, computers, laptops and game consoles, and also supplies parts, accessories and everyday tech products.</p>
+      </div>
+      <div>
+        <h4>Quick links</h4>
+        <a href="repairs.html">Repairs</a>
+        <a href="products.html">Products</a>
+        <a href="stores.html">Stores</a>
+        <a href="shop.html">Online Store</a>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <a href="book-repair.html">Book a repair</a>
+        <a href="cart.html">Cart</a>
+        <a href="checkout.html">Checkout</a>
+        <a href="store-policy.html">Store Policy</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>Use your nearest store page or the online checkout flow for the fastest response.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="site-config.js"></script>
+  <script defer src="script.js"></script>
+</body>
+</html>
