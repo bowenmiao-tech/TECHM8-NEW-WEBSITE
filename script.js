@@ -2791,32 +2791,81 @@ function initCheckoutPage() {
   const paymentOptionsTarget = root.querySelector("[data-payment-options]");
   const paymentMethodField = root.querySelector("[data-payment-method]");
   const paymentNoteTarget = root.querySelector("[data-payment-note]");
+  const storeField = root.querySelector("[data-checkout-store]");
+  const warehouseOption = root.querySelector("[data-checkout-warehouse-option]");
+  const shippingSection = root.querySelector("[data-checkout-shipping]");
+  const shippingFields = Array.from(root.querySelectorAll("[data-checkout-shipping-field]"));
   if (!(form instanceof HTMLFormElement) || !(summaryTarget instanceof HTMLElement) || !(itemsTarget instanceof HTMLElement)) return;
   const submitButton = form.querySelector('button[type="submit"]');
   const paymentProfiles = [];
   const checkoutParams = new URLSearchParams(window.location.search);
   const isPaymentCancelled = checkoutParams.get("payment") === "cancelled";
   let activeAuthState = null;
+  const supabaseAnonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
 
-    const getSelectedPaymentProfile = () => {
-      const selectedCode =
-        paymentMethodField instanceof HTMLInputElement
-          ? String(paymentMethodField.value || "pay_in_store").trim()
-          : "pay_in_store";
-      return paymentProfiles.find((profile) => profile.code === selectedCode) || null;
-    };
+  const getSelectedPaymentProfile = () => {
+    const selectedCode =
+      paymentMethodField instanceof HTMLInputElement
+        ? String(paymentMethodField.value || "pay_in_store").trim()
+        : "pay_in_store";
+    return paymentProfiles.find((profile) => profile.code === selectedCode) || null;
+  };
 
-    const parseJsonResponse = async (response) => {
-      const raw = await response.text();
-      try {
-        return raw ? JSON.parse(raw) : {};
-      } catch (_error) {
-        return {
-          ok: false,
-          error: raw || `Request failed with status ${response.status}.`,
-        };
+  const parseJsonResponse = async (response) => {
+    const raw = await response.text();
+    try {
+      return raw ? JSON.parse(raw) : {};
+    } catch (_error) {
+      return {
+        ok: false,
+        error: raw || `Request failed with status ${response.status}.`,
+      };
+    }
+  };
+
+  const isWarehouseDispatchSelected = () => {
+    if (!(storeField instanceof HTMLSelectElement)) return false;
+    return String(storeField.value || "").trim() === "warehouse-dispatch";
+  };
+
+  const syncCheckoutMode = () => {
+    const selectedProfile = getSelectedPaymentProfile();
+    const isPayInStore = selectedProfile?.code === "pay_in_store" || selectedProfile?.provider === "manual";
+    const isWarehouseDispatch = isWarehouseDispatchSelected();
+
+    if (warehouseOption instanceof HTMLOptionElement) {
+      warehouseOption.disabled = isPayInStore;
+    }
+
+    if (
+      isPayInStore &&
+      storeField instanceof HTMLSelectElement &&
+      String(storeField.value || "").trim() === "warehouse-dispatch"
+    ) {
+      const fallbackOption = Array.from(storeField.options).find((option) => {
+        const value = String(option.value || "").trim();
+        return value && value !== "warehouse-dispatch" && !option.disabled;
+      });
+      storeField.value = fallbackOption ? fallbackOption.value : "";
+    }
+
+    const showShipping = !isPayInStore && isWarehouseDispatchSelected();
+    if (shippingSection instanceof HTMLElement) {
+      shippingSection.hidden = !showShipping;
+    }
+
+    shippingFields.forEach((field) => {
+      if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement)) {
+        return;
       }
-    };
+      const fieldName = String(field.getAttribute("name") || "").trim();
+      const isRequiredShippingField = ["recipient_name", "address_line_1", "suburb", "postcode", "state"].includes(fieldName);
+      field.required = showShipping && isRequiredShippingField;
+      if (!showShipping && field instanceof HTMLInputElement && field.type !== "hidden") {
+        field.setCustomValidity("");
+      }
+    });
+  };
 
   const formatFeeRule = (profile) => {
     if (!profile) return "";
@@ -3007,6 +3056,7 @@ function initCheckoutPage() {
     renderCartSummary(summaryTarget, items, {
       paymentProfile: getSelectedPaymentProfile(),
     });
+    syncCheckoutMode();
     renderPaymentNote();
     if (messageTarget instanceof HTMLElement && items.length && !isPaymentCancelled) {
       messageTarget.hidden = true;
@@ -3062,28 +3112,79 @@ function initCheckoutPage() {
     const selectedProfile = getSelectedPaymentProfile();
     activeAuthState = await getCurrentAuthState();
     const authAccessToken = activeAuthState?.session?.access_token || supabaseAnonKey;
-      const payload = {
+    const storeSlug = String(formData.get("store_slug") || "").trim();
+    const paymentMethodCode = String(formData.get("payment_method_code") || "pay_in_store").trim();
+    const warehouseDispatch = storeSlug === "warehouse-dispatch";
+    const shippingPayload = {
+      recipient_name: String(formData.get("recipient_name") || "").trim(),
+      company_name: String(formData.get("company_name") || "").trim(),
+      shipping_phone: String(formData.get("shipping_phone") || "").trim(),
+      shipping_email: String(formData.get("shipping_email") || "").trim(),
+      address_line_1: String(formData.get("address_line_1") || "").trim(),
+      address_line_2: String(formData.get("address_line_2") || "").trim(),
+      suburb: String(formData.get("suburb") || "").trim(),
+      postcode: String(formData.get("postcode") || "").trim(),
+      state: String(formData.get("state") || "").trim(),
+      country_code: String(formData.get("country_code") || "AU").trim(),
+    };
+
+    if (!storeSlug) {
+      if (messageTarget instanceof HTMLElement) {
+        messageTarget.hidden = false;
+        messageTarget.className = "booking-message is-error";
+        messageTarget.textContent = "Please select a pickup store or dispatch point.";
+      }
+      return;
+    }
+
+    if (paymentMethodCode === "pay_in_store" && warehouseDispatch) {
+      if (messageTarget instanceof HTMLElement) {
+        messageTarget.hidden = false;
+        messageTarget.className = "booking-message is-error";
+        messageTarget.textContent = "Pay in store can only be used with a physical pickup store.";
+      }
+      return;
+    }
+
+    if (warehouseDispatch) {
+      const missingShippingField = !shippingPayload.recipient_name
+        || !shippingPayload.address_line_1
+        || !shippingPayload.suburb
+        || !shippingPayload.postcode
+        || !shippingPayload.state;
+
+      if (missingShippingField) {
+        if (messageTarget instanceof HTMLElement) {
+          messageTarget.hidden = false;
+          messageTarget.className = "booking-message is-error";
+          messageTarget.textContent = "Warehouse Dispatch requires a full delivery address.";
+        }
+        return;
+      }
+    }
+
+    const payload = {
       order_code: makeOrderCode(),
       customer_name: String(formData.get("customer_name") || "").trim(),
       phone: String(formData.get("phone") || "").trim(),
       email: String(formData.get("email") || "").trim(),
-      store_slug: String(formData.get("store_slug") || "").trim(),
+      store_slug: storeSlug,
       preferred_contact_method: String(formData.get("preferred_contact_method") || "phone").trim(),
-      payment_method_code: String(formData.get("payment_method_code") || "pay_in_store").trim(),
-      fulfillment_method: "pickup",
+      payment_method_code: paymentMethodCode,
+      fulfillment_method: warehouseDispatch ? "shipping" : "pickup",
       notes: String(formData.get("notes") || "").trim(),
-        subtotal_amount: subtotal,
-        total_amount: subtotal,
-        source: "website",
-        site_url: getConfiguredSiteBaseUrl(),
-        auth_user_id: activeAuthState?.user?.id || null,
-        items,
-        created_at: new Date().toISOString(),
-      };
+      subtotal_amount: subtotal,
+      total_amount: subtotal,
+      source: "website",
+      site_url: getConfiguredSiteBaseUrl(),
+      auth_user_id: activeAuthState?.user?.id || null,
+      items,
+      created_at: new Date().toISOString(),
+      ...shippingPayload,
+    };
 
     const endpoint = window.TECHM8_CONFIG?.orderEndpoint || "";
     const checkoutSessionEndpoint = window.TECHM8_CONFIG?.checkoutSessionEndpoint || "";
-    const supabaseAnonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
 
     try {
       if (submitButton instanceof HTMLButtonElement) {
@@ -3105,42 +3206,42 @@ function initCheckoutPage() {
           throw new Error("Stripe Checkout is not configured yet.");
         }
 
-          const response = await fetch(checkoutSessionEndpoint, {
-            method: "POST",
+        const response = await fetch(checkoutSessionEndpoint, {
+          method: "POST",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${authAccessToken}`,
             apikey: supabaseAnonKey,
           },
-            body: JSON.stringify(payload),
-          });
+          body: JSON.stringify(payload),
+        });
 
-          const result = await parseJsonResponse(response);
-          if (!response.ok || !result.ok || !result.checkout_url) {
-            throw new Error(result.error || "Stripe Checkout could not be started.");
-          }
+        const result = await parseJsonResponse(response);
+        if (!response.ok || !result.ok || !result.checkout_url) {
+          throw new Error(result.error || "Stripe Checkout could not be started.");
+        }
 
         window.location.href = result.checkout_url;
         return;
       }
 
       if (endpoint) {
-          const response = await fetch(endpoint, {
-            method: "POST",
+        const response = await fetch(endpoint, {
+          method: "POST",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${authAccessToken}`,
             apikey: supabaseAnonKey,
           },
-            body: JSON.stringify(payload),
-          });
+          body: JSON.stringify(payload),
+        });
 
-          const result = await parseJsonResponse(response);
-          if (!response.ok || !result.ok) {
-            throw new Error(result.error || "Checkout submission failed.");
-          }
+        const result = await parseJsonResponse(response);
+        if (!response.ok || !result.ok) {
+          throw new Error(result.error || "Checkout submission failed.");
+        }
 
         payload.order_code = String(result.order_code || payload.order_code);
         payload.store_name = String(result.store_name || payload.store_name || "");
@@ -3177,6 +3278,13 @@ function initCheckoutPage() {
       if (!code) return;
       paymentMethodField.value = code;
       render();
+    });
+  }
+
+  if (storeField instanceof HTMLSelectElement) {
+    storeField.addEventListener("change", () => {
+      syncCheckoutMode();
+      renderPaymentNote();
     });
   }
 
