@@ -395,6 +395,63 @@ const STORE_NAME_MAP = {
   "warehouse-dispatch": "Warehouse Dispatch",
 };
 
+const STORE_CHECKOUT_DETAILS = {
+  "park-ridge": {
+    title: "Park Ridge",
+    mode: "Click & Collect",
+    summary: "Collect your order from the Park Ridge store once the team confirms stock and pickup timing.",
+    address: "Shop 11, 3732 Mount Lindesay Hwy, Park Ridge QLD 4125",
+    phone: "0452 488 710",
+    mapUrl: "https://maps.app.goo.gl/SBzYCp7G5C3UM4SdA",
+    pageUrl: "stores/park-ridge.html",
+  },
+  "fairfield": {
+    title: "Fairfield",
+    mode: "Click & Collect",
+    summary: "Pick up directly from Fairfield after order confirmation.",
+    address: "Shop 8, 180 Fairfield Rd, Fairfield QLD 4103",
+    phone: "0412 788 818",
+    mapUrl: "https://maps.app.goo.gl/2iQqRL4YURm5cUfy7",
+    pageUrl: "stores/fairfield.html",
+  },
+  "toowong": {
+    title: "Toowong",
+    mode: "Click & Collect",
+    summary: "Collect from the Toowong store once your order is prepared.",
+    address: "Ground Level Shop 53, 9 Sherwood Rd, Toowong QLD 4066",
+    phone: "0485 500 099",
+    mapUrl: "https://maps.app.goo.gl/9V7EERgpiuUjreQp7",
+    pageUrl: "stores/toowong.html",
+  },
+  "north-lakes": {
+    title: "North Lakes",
+    mode: "Click & Collect",
+    summary: "North Lakes pickup with confirmation from the local team before collection.",
+    address: "1114A N Lakes Drive, North Lakes QLD 4509",
+    phone: "0482 390 009",
+    mapUrl: "https://maps.app.goo.gl/ZdEjv8V98RxT9uCT7",
+    pageUrl: "stores/north-lakes.html",
+  },
+  brassall: {
+    title: "Brassall",
+    mode: "Click & Collect",
+    summary: "Collect in store from Brassall once the order is packed and ready.",
+    address: "68 Hunter St, Primewest Brassall Shopping Centre, Brassall QLD 4305",
+    phone: "0403 999 366",
+    mapUrl: "https://maps.app.goo.gl/ViJetRb1zEiMhGyZ7",
+    pageUrl: "stores/brassall.html",
+  },
+  "warehouse-dispatch": {
+    title: "Warehouse Dispatch",
+    mode: "Direct Shipping",
+    summary: "Ship directly from warehouse. A full delivery address is required before payment can continue.",
+    address: "Warehouse fulfilment only",
+    phone: "",
+    mapUrl: "",
+    pageUrl: "",
+  },
+};
+
 const REPAIR_CATEGORY_LABELS = {
   phone: "Phone",
   tablet: "Tablet",
@@ -2793,6 +2850,8 @@ function initCheckoutPage() {
   const paymentNoteTarget = root.querySelector("[data-payment-note]");
   const storeField = root.querySelector("[data-checkout-store]");
   const warehouseOption = root.querySelector("[data-checkout-warehouse-option]");
+  const storeDetailTarget = root.querySelector("[data-checkout-store-detail]");
+  const stepTwo = root.querySelector("[data-checkout-step-two]");
   const shippingSection = root.querySelector("[data-checkout-shipping]");
   const shippingFields = Array.from(root.querySelectorAll("[data-checkout-shipping-field]"));
   if (!(form instanceof HTMLFormElement) || !(summaryTarget instanceof HTMLElement) || !(itemsTarget instanceof HTMLElement)) return;
@@ -2823,33 +2882,76 @@ function initCheckoutPage() {
     }
   };
 
+  const getVisiblePaymentProfiles = () => {
+    const isWarehouseDispatch = isWarehouseDispatchSelected();
+    return paymentProfiles.filter((profile) => {
+      if (!profile || !profile.code || profile.is_enabled === false) return false;
+      if (isWarehouseDispatch) {
+        return profile.provider !== "manual";
+      }
+      return true;
+    });
+  };
+
   const isWarehouseDispatchSelected = () => {
     if (!(storeField instanceof HTMLSelectElement)) return false;
     return String(storeField.value || "").trim() === "warehouse-dispatch";
   };
 
+  const renderStoreSelectionDetail = () => {
+    if (!(storeDetailTarget instanceof HTMLElement) || !(storeField instanceof HTMLSelectElement)) return;
+    const storeSlug = String(storeField.value || "").trim();
+    const detail = STORE_CHECKOUT_DETAILS[storeSlug];
+
+    if (!storeSlug || !detail) {
+      storeDetailTarget.hidden = true;
+      storeDetailTarget.innerHTML = "";
+      return;
+    }
+
+    storeDetailTarget.hidden = false;
+    storeDetailTarget.innerHTML = `
+      <div class="storefront-checkout__delivery-detail-top">
+        <div>
+          <p class="storefront-checkout__delivery-mode">${escapeHtml(detail.mode)}</p>
+          <h3>${escapeHtml(detail.title)}</h3>
+        </div>
+        <span class="storefront-checkout__delivery-chip">${escapeHtml(detail.mode)}</span>
+      </div>
+      <p class="storefront-checkout__delivery-summary">${escapeHtml(detail.summary)}</p>
+      <div class="storefront-checkout__delivery-meta">
+        <p><strong>Address</strong><span>${escapeHtml(detail.address)}</span></p>
+        ${detail.phone ? `<p><strong>Phone</strong><span><a href="tel:${escapeHtml(detail.phone.replace(/\s+/g, ""))}">${escapeHtml(detail.phone)}</a></span></p>` : ""}
+      </div>
+      <div class="storefront-checkout__delivery-actions">
+        ${detail.mapUrl ? `<a class="button button--ghost" href="${escapeHtml(detail.mapUrl)}" target="_blank" rel="noopener">Open in Maps</a>` : ""}
+        ${detail.pageUrl ? `<a class="button button--secondary" href="${escapeHtml(detail.pageUrl)}">View store page</a>` : ""}
+      </div>
+    `;
+  };
+
   const syncCheckoutMode = () => {
-    const selectedProfile = getSelectedPaymentProfile();
-    const isPayInStore = selectedProfile?.code === "pay_in_store" || selectedProfile?.provider === "manual";
+    const storeSlug = storeField instanceof HTMLSelectElement ? String(storeField.value || "").trim() : "";
     const isWarehouseDispatch = isWarehouseDispatchSelected();
+    const showStepTwo = Boolean(storeSlug);
+    const visibleProfiles = getVisiblePaymentProfiles();
+    const selectedProfile = getSelectedPaymentProfile();
 
-    if (warehouseOption instanceof HTMLOptionElement) {
-      warehouseOption.disabled = isPayInStore;
+    if (paymentMethodField instanceof HTMLInputElement && visibleProfiles.length) {
+      const selectedCode = selectedProfile?.code || "";
+      if (!visibleProfiles.some((profile) => profile.code === selectedCode)) {
+        const fallbackProfile = isWarehouseDispatch
+          ? visibleProfiles[0]
+          : visibleProfiles.find((profile) => profile.code === "pay_in_store") || visibleProfiles[0];
+        paymentMethodField.value = fallbackProfile ? fallbackProfile.code : "";
+      }
     }
 
-    if (
-      isPayInStore &&
-      storeField instanceof HTMLSelectElement &&
-      String(storeField.value || "").trim() === "warehouse-dispatch"
-    ) {
-      const fallbackOption = Array.from(storeField.options).find((option) => {
-        const value = String(option.value || "").trim();
-        return value && value !== "warehouse-dispatch" && !option.disabled;
-      });
-      storeField.value = fallbackOption ? fallbackOption.value : "";
+    if (stepTwo instanceof HTMLElement) {
+      stepTwo.hidden = !showStepTwo;
     }
 
-    const showShipping = !isPayInStore && isWarehouseDispatchSelected();
+    const showShipping = isWarehouseDispatch;
     if (shippingSection instanceof HTMLElement) {
       shippingSection.hidden = !showShipping;
     }
@@ -2917,8 +3019,14 @@ function initCheckoutPage() {
 
   const renderPaymentOptions = (subtotal) => {
     if (!(paymentOptionsTarget instanceof HTMLElement) || !(paymentMethodField instanceof HTMLInputElement)) return;
+    const visibleProfiles = getVisiblePaymentProfiles();
+    const currentCode = String(paymentMethodField.value || "").trim();
+    if (!visibleProfiles.some((profile) => profile.code === currentCode)) {
+      const fallbackProfile = visibleProfiles.find((profile) => profile.code === "pay_in_store") || visibleProfiles[0] || null;
+      paymentMethodField.value = fallbackProfile ? fallbackProfile.code : "";
+    }
 
-    paymentOptionsTarget.innerHTML = paymentProfiles.map((profile) => {
+    paymentOptionsTarget.innerHTML = visibleProfiles.map((profile) => {
       const estimate = calculatePaymentFee(subtotal, profile);
       const badges = getPaymentBadges(profile).map((badge) => {
         return `<span class="storefront-payment-option__badge ${badge.className}">${escapeHtml(badge.label)}</span>`;
@@ -3051,6 +3159,7 @@ function initCheckoutPage() {
   const render = () => {
     const items = loadCart();
     const subtotal = getCartSubtotal(items);
+    renderStoreSelectionDetail();
     renderPaymentOptions(subtotal);
     renderCartLineItems(itemsTarget, items);
     renderCartSummary(summaryTarget, items, {
@@ -3064,7 +3173,8 @@ function initCheckoutPage() {
       messageTarget.className = "booking-message";
     }
     if (submitButton instanceof HTMLButtonElement) {
-      submitButton.disabled = !items.length;
+      const hasStoreSelection = storeField instanceof HTMLSelectElement && Boolean(String(storeField.value || "").trim());
+      submitButton.disabled = !items.length || !hasStoreSelection;
       submitButton.textContent = items.length ? "Submit order request" : "Add items before checkout";
     }
   };
@@ -3283,8 +3393,7 @@ function initCheckoutPage() {
 
   if (storeField instanceof HTMLSelectElement) {
     storeField.addEventListener("change", () => {
-      syncCheckoutMode();
-      renderPaymentNote();
+      render();
     });
   }
 

@@ -53,109 +53,134 @@
 
           <form class="storefront-checkout__form" data-checkout-form>
             <div class="booking-message" data-checkout-message hidden></div>
-            <div class="storefront-checkout__form-grid">
-              <label>
-                <span>Full name</span>
-                <input type="text" name="customer_name" required>
-              </label>
-              <label>
-                <span>Phone</span>
-                <input type="tel" name="phone" required>
-              </label>
-              <label>
-                <span>Email</span>
-                <input type="email" name="email" required>
-              </label>
-              <label>
-                <span>Preferred contact method</span>
-                <select name="preferred_contact_method">
-                  <option value="phone">Phone</option>
-                  <option value="email">Email</option>
-                  <option value="sms">SMS</option>
-                </select>
-              </label>
-              <label>
-                <span>Pickup store / dispatch point</span>
-                <select name="store_slug" data-checkout-store required>
-                  <option value="">Select a store</option>
-                  <option value="warehouse-dispatch" data-checkout-warehouse-option>Warehouse Dispatch</option>
-                  <option value="park-ridge">Park Ridge</option>
-                  <option value="fairfield">Fairfield</option>
-                  <option value="toowong">Toowong</option>
-                  <option value="north-lakes">North Lakes</option>
-                  <option value="brassall">Brassall</option>
-                </select>
-              </label>
-              <div class="storefront-checkout__form-grid-full">
-                <span class="storefront-checkout__label">Payment method</span>
-                <div class="storefront-payment-list" data-payment-options></div>
-                <input type="hidden" name="payment_method_code" data-payment-method value="pay_in_store" required>
+            <section class="storefront-checkout__step">
+              <div class="storefront-checkout__step-heading">
+                <span class="storefront-checkout__step-number">1</span>
+                <div>
+                  <h2>Select delivery method</h2>
+                  <p>Choose a store for click and collect, or switch to warehouse dispatch for direct shipping.</p>
+                </div>
               </div>
-              <label class="storefront-checkout__form-grid-full">
-                <span>Order notes</span>
-                <textarea name="notes" rows="4" placeholder="Anything the store should know before contacting you?"></textarea>
-              </label>
-            </div>
 
-            <div class="storefront-checkout__shipping" data-checkout-shipping hidden>
-              <div class="booking-message is-success" data-checkout-shipping-note>
-                Warehouse Dispatch requires a delivery address. Pay in store can only be used with a physical store pickup location.
-              </div>
-              <div class="storefront-checkout__form-grid">
-                <label>
-                  <span>Recipient name</span>
-                  <input type="text" name="recipient_name" data-checkout-shipping-field>
-                </label>
-                <label>
-                  <span>Business name</span>
-                  <input type="text" name="company_name" data-checkout-shipping-field>
-                </label>
-                <label>
-                  <span>Shipping phone</span>
-                  <input type="tel" name="shipping_phone" data-checkout-shipping-field>
-                </label>
-                <label>
-                  <span>Shipping email</span>
-                  <input type="email" name="shipping_email" data-checkout-shipping-field>
-                </label>
-                <label class="storefront-checkout__form-grid-full">
-                  <span>Address line 1</span>
-                  <input type="text" name="address_line_1" data-checkout-shipping-field>
-                </label>
-                <label class="storefront-checkout__form-grid-full">
-                  <span>Address line 2</span>
-                  <input type="text" name="address_line_2" data-checkout-shipping-field>
-                </label>
-                <label>
-                  <span>Suburb</span>
-                  <input type="text" name="suburb" data-checkout-shipping-field>
-                </label>
-                <label>
-                  <span>Postcode</span>
-                  <input type="text" name="postcode" inputmode="numeric" data-checkout-shipping-field>
-                </label>
-                <label>
-                  <span>State</span>
-                  <select name="state" data-checkout-shipping-field>
-                    <option value="">Select state</option>
-                    <option value="QLD">QLD</option>
-                    <option value="NSW">NSW</option>
-                    <option value="VIC">VIC</option>
-                    <option value="ACT">ACT</option>
-                    <option value="SA">SA</option>
-                    <option value="WA">WA</option>
-                    <option value="TAS">TAS</option>
-                    <option value="NT">NT</option>
+              <div class="storefront-checkout__delivery-card">
+                <label class="storefront-checkout__delivery-select">
+                  <span>Pickup store / dispatch point</span>
+                  <select name="store_slug" data-checkout-store required>
+                    <option value="">Select a store</option>
+                    <option value="park-ridge">Park Ridge</option>
+                    <option value="fairfield">Fairfield</option>
+                    <option value="toowong">Toowong</option>
+                    <option value="north-lakes">North Lakes</option>
+                    <option value="brassall">Brassall</option>
+                    <option value="warehouse-dispatch" data-checkout-warehouse-option>Warehouse Dispatch</option>
                   </select>
                 </label>
+
+                <div class="storefront-checkout__delivery-detail" data-checkout-store-detail hidden></div>
+              </div>
+            </section>
+
+            <section class="storefront-checkout__step" data-checkout-step-two hidden>
+              <div class="storefront-checkout__step-heading">
+                <span class="storefront-checkout__step-number">2</span>
+                <div>
+                  <h2>Contact and payment</h2>
+                  <p>Complete your contact details, then choose the payment method that matches this delivery option.</p>
+                </div>
+              </div>
+
+              <div class="storefront-checkout__form-grid">
                 <label>
-                  <span>Country</span>
-                  <input type="text" name="country_code" value="AU" data-checkout-shipping-field>
+                  <span>Full name</span>
+                  <input type="text" name="customer_name" required>
+                </label>
+                <label>
+                  <span>Phone</span>
+                  <input type="tel" name="phone" required>
+                </label>
+                <label>
+                  <span>Email</span>
+                  <input type="email" name="email" required>
+                </label>
+                <label>
+                  <span>Preferred contact method</span>
+                  <select name="preferred_contact_method">
+                    <option value="phone">Phone</option>
+                    <option value="email">Email</option>
+                    <option value="sms">SMS</option>
+                  </select>
+                </label>
+                <div class="storefront-checkout__form-grid-full">
+                  <span class="storefront-checkout__label">Payment method</span>
+                  <div class="storefront-payment-list" data-payment-options></div>
+                  <input type="hidden" name="payment_method_code" data-payment-method value="pay_in_store" required>
+                </div>
+                <label class="storefront-checkout__form-grid-full">
+                  <span>Order notes</span>
+                  <textarea name="notes" rows="4" placeholder="Anything the store should know before contacting you?"></textarea>
                 </label>
               </div>
-            </div>
 
-            <div class="storefront-checkout__payment-note" data-payment-note hidden></div>
+              <div class="storefront-checkout__shipping" data-checkout-shipping hidden>
+                <div class="booking-message is-success" data-checkout-shipping-note>
+                  Warehouse Dispatch requires a delivery address and online payment before the order can be confirmed.
+                </div>
+                <div class="storefront-checkout__form-grid">
+                  <label>
+                    <span>Recipient name</span>
+                    <input type="text" name="recipient_name" data-checkout-shipping-field>
+                  </label>
+                  <label>
+                    <span>Business name</span>
+                    <input type="text" name="company_name" data-checkout-shipping-field>
+                  </label>
+                  <label>
+                    <span>Shipping phone</span>
+                    <input type="tel" name="shipping_phone" data-checkout-shipping-field>
+                  </label>
+                  <label>
+                    <span>Shipping email</span>
+                    <input type="email" name="shipping_email" data-checkout-shipping-field>
+                  </label>
+                  <label class="storefront-checkout__form-grid-full">
+                    <span>Address line 1</span>
+                    <input type="text" name="address_line_1" data-checkout-shipping-field>
+                  </label>
+                  <label class="storefront-checkout__form-grid-full">
+                    <span>Address line 2</span>
+                    <input type="text" name="address_line_2" data-checkout-shipping-field>
+                  </label>
+                  <label>
+                    <span>Suburb</span>
+                    <input type="text" name="suburb" data-checkout-shipping-field>
+                  </label>
+                  <label>
+                    <span>Postcode</span>
+                    <input type="text" name="postcode" inputmode="numeric" data-checkout-shipping-field>
+                  </label>
+                  <label>
+                    <span>State</span>
+                    <select name="state" data-checkout-shipping-field>
+                      <option value="">Select state</option>
+                      <option value="QLD">QLD</option>
+                      <option value="NSW">NSW</option>
+                      <option value="VIC">VIC</option>
+                      <option value="ACT">ACT</option>
+                      <option value="SA">SA</option>
+                      <option value="WA">WA</option>
+                      <option value="TAS">TAS</option>
+                      <option value="NT">NT</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span>Country</span>
+                    <input type="text" name="country_code" value="AU" data-checkout-shipping-field>
+                  </label>
+                </div>
+              </div>
+
+              <div class="storefront-checkout__payment-note" data-payment-note hidden></div>
+            </section>
 
             <div class="storefront-summary storefront-summary--embedded">
               <p class="eyebrow">Items in this request</p>
