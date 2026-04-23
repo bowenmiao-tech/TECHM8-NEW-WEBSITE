@@ -1,0 +1,20 @@
+﻿[
+    {
+        "sku":  "110511610",
+        "slug":  "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+        "action":  "upserted_with_images",
+        "image_count":  5
+    },
+    {
+        "sku":  "TM8-ACC-001",
+        "slug":  "techm8-everyday-accessory",
+        "action":  "upserted",
+        "image_count":  0
+    },
+    {
+        "sku":  "TM8-ACC-010",
+        "slug":  "techm8-charging-essential-pack",
+        "action":  "upserted",
+        "image_count":  0
+    }
+]
