@@ -14,6 +14,14 @@ const allowedStripePaymentMethods = new Map<string, Stripe.Checkout.SessionCreat
   ['afterpay_clearpay', ['afterpay_clearpay']],
   ['wechat_pay', ['wechat_pay']],
 ])
+const fallbackStores = new Map([
+  ['park-ridge', { slug: 'park-ridge', name: 'Park Ridge', is_active: true, id: null }],
+  ['fairfield', { slug: 'fairfield', name: 'Fairfield', is_active: true, id: null }],
+  ['toowong', { slug: 'toowong', name: 'Toowong', is_active: true, id: null }],
+  ['north-lakes', { slug: 'north-lakes', name: 'North Lakes', is_active: true, id: null }],
+  ['brassall', { slug: 'brassall', name: 'Brassall', is_active: true, id: null }],
+  ['warehouse-dispatch', { slug: 'warehouse-dispatch', name: 'Warehouse Dispatch', is_active: true, id: null }],
+])
 
 type CartItemInput = {
   slug?: string | null
@@ -150,7 +158,11 @@ Deno.serve(async (req) => {
         .maybeSingle(),
     ])
 
-    if (storeError || !store || !store.is_active) {
+    const resolvedStore = store && !storeError && store.is_active
+      ? store
+      : fallbackStores.get(storeSlug) ?? null
+
+    if (!resolvedStore || !resolvedStore.is_active) {
       return Response.json({ ok: false, error: 'Please select a valid store.' }, { status: 422, headers: corsHeaders })
     }
 
@@ -259,8 +271,8 @@ Deno.serve(async (req) => {
         email,
         auth_user_id: authUser?.id ?? null,
         preferred_contact_method: preferredContactMethod,
-        store_id: store.id,
-        store_slug: store.slug,
+        store_id: resolvedStore.id,
+        store_slug: resolvedStore.slug,
         fulfillment_method: fulfillmentMethod,
         recipient_name: fulfillmentMethod === 'shipping' ? recipientName : null,
         company_name: fulfillmentMethod === 'shipping' ? companyName || null : null,
@@ -356,14 +368,14 @@ Deno.serve(async (req) => {
         metadata: {
           order_id: String(insertedOrder.id),
           order_code: orderCode,
-          store_slug: store.slug,
+          store_slug: resolvedStore.slug,
           payment_method_code: feeProfile.code,
         },
         payment_intent_data: {
           metadata: {
             order_id: String(insertedOrder.id),
             order_code: orderCode,
-            store_slug: store.slug,
+            store_slug: resolvedStore.slug,
             payment_method_code: feeProfile.code,
           },
         },

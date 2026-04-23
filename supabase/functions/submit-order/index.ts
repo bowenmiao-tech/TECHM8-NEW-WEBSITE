@@ -8,6 +8,14 @@ const corsHeaders = {
 
 const allowedContactMethods = new Set(['phone', 'email', 'sms'])
 const allowedFulfillmentMethods = new Set(['pickup', 'shipping'])
+const fallbackStores = new Map([
+  ['park-ridge', { slug: 'park-ridge', name: 'Park Ridge', is_active: true, id: null }],
+  ['fairfield', { slug: 'fairfield', name: 'Fairfield', is_active: true, id: null }],
+  ['toowong', { slug: 'toowong', name: 'Toowong', is_active: true, id: null }],
+  ['north-lakes', { slug: 'north-lakes', name: 'North Lakes', is_active: true, id: null }],
+  ['brassall', { slug: 'brassall', name: 'Brassall', is_active: true, id: null }],
+  ['warehouse-dispatch', { slug: 'warehouse-dispatch', name: 'Warehouse Dispatch', is_active: true, id: null }],
+])
 
 type CartItemInput = {
   product_id?: number | string | null
@@ -123,11 +131,32 @@ Deno.serve(async (req) => {
         .maybeSingle(),
     ])
 
-    if (storeError || !store || !store.is_active) {
+    const resolvedStore = store && !storeError && store.is_active
+      ? store
+      : fallbackStores.get(storeSlug) ?? null
+
+    if (!resolvedStore || !resolvedStore.is_active) {
       return Response.json({ ok: false, error: 'Please select a valid store.' }, { status: 422, headers: corsHeaders })
     }
 
-    if (feeProfileError || !feeProfile || !feeProfile.is_enabled) {
+    const resolvedFeeProfile = feeProfileError || !feeProfile || !feeProfile.is_enabled
+      ? (
+          paymentMethodCode === 'pay_in_store'
+            ? {
+                id: null,
+                code: 'pay_in_store',
+                label: 'Pay in store',
+                provider: 'manual',
+                fee_type: 'none',
+                percentage: 0,
+                fixed_amount: 0,
+                is_enabled: true,
+              }
+            : null
+        )
+      : feeProfile
+
+    if (!resolvedFeeProfile || !resolvedFeeProfile.is_enabled) {
       return Response.json({ ok: false, error: 'Selected payment method is not available.' }, { status: 422, headers: corsHeaders })
     }
 
@@ -202,11 +231,11 @@ Deno.serve(async (req) => {
     const discountAmount = 0
     const shippingFeeAmount = 0
 
-    const percentage = Number(feeProfile.percentage) || 0
-    const fixedAmount = Number(feeProfile.fixed_amount) || 0
+    const percentage = Number(resolvedFeeProfile.percentage) || 0
+    const fixedAmount = Number(resolvedFeeProfile.fixed_amount) || 0
     let paymentFeeAmount = 0
 
-    switch (feeProfile.fee_type) {
+    switch (resolvedFeeProfile.fee_type) {
       case 'fixed':
         paymentFeeAmount = fixedAmount
         break
@@ -224,7 +253,7 @@ Deno.serve(async (req) => {
     const totalAmount = decimal(subtotalAmount - discountAmount + paymentFeeAmount + shippingFeeAmount)
     const orderCode = buildOrderCode()
 
-    const paymentStatus = feeProfile.code === 'pay_in_store' ? 'not_required' : 'pending'
+    const paymentStatus = resolvedFeeProfile.code === 'pay_in_store' ? 'not_required' : 'pending'
 
     const { data: insertedOrder, error: orderError } = await supabaseAdmin
       .from('orders')
@@ -235,8 +264,8 @@ Deno.serve(async (req) => {
         email,
         auth_user_id: authUser?.id ?? null,
         preferred_contact_method: preferredContactMethod,
-        store_id: store.id,
-        store_slug: store.slug,
+        store_id: resolvedStore.id,
+        store_slug: resolvedStore.slug,
         fulfillment_method: fulfillmentMethod,
         recipient_name: fulfillmentMethod === 'shipping' ? recipientName : null,
         company_name: fulfillmentMethod === 'shipping' ? companyName || null : null,
@@ -254,9 +283,9 @@ Deno.serve(async (req) => {
         payment_fee_amount: paymentFeeAmount,
         shipping_fee_amount: shippingFeeAmount,
         total_amount: totalAmount,
-        payment_fee_profile_id: feeProfile.id,
-        payment_method_code: feeProfile.code,
-        payment_method_label: feeProfile.label,
+        payment_fee_profile_id: resolvedFeeProfile.id,
+        payment_method_code: resolvedFeeProfile.code,
+        payment_method_label: resolvedFeeProfile.label,
         payment_status: paymentStatus,
         status: 'submitted',
         fulfillment_status: 'new',
@@ -291,7 +320,7 @@ Deno.serve(async (req) => {
         ok: true,
         order_id: insertedOrder.id,
         order_code: insertedOrder.order_code,
-        store_name: store.name,
+        store_name: resolvedStore.name,
         total_amount: insertedOrder.total_amount,
         payment_fee_amount: insertedOrder.payment_fee_amount,
         payment_method_code: insertedOrder.payment_method_code,

@@ -452,6 +452,31 @@ const STORE_CHECKOUT_DETAILS = {
   },
 };
 
+const CHECKOUT_SUCCESS_STORAGE_KEY = "techm8_checkout_success";
+
+function saveCheckoutSuccessContext(payload) {
+  try {
+    sessionStorage.setItem(CHECKOUT_SUCCESS_STORAGE_KEY, JSON.stringify(payload));
+  } catch (_error) {
+    // Ignore storage failures and continue with query-string fallback.
+  }
+}
+
+function readCheckoutSuccessContext(orderCode = "") {
+  try {
+    const raw = sessionStorage.getItem(CHECKOUT_SUCCESS_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return null;
+    if (orderCode && String(parsed.order_code || "").trim() && String(parsed.order_code || "").trim() !== String(orderCode || "").trim()) {
+      return null;
+    }
+    return parsed;
+  } catch (_error) {
+    return null;
+  }
+}
+
 const REPAIR_CATEGORY_LABELS = {
   phone: "Phone",
   tablet: "Tablet",
@@ -3364,6 +3389,16 @@ function initCheckoutPage() {
       }
 
       clearCart();
+      saveCheckoutSuccessContext(payload);
+
+      if ((selectedProfile?.provider || "manual") === "manual") {
+        const confirmationUrl = new URL("checkout-success.html", window.location.href);
+        confirmationUrl.searchParams.set("order_code", payload.order_code);
+        confirmationUrl.searchParams.set("mode", "pay_in_store");
+        window.location.href = confirmationUrl.toString();
+        return;
+      }
+
       renderSuccessState(payload);
     } catch (error) {
       if (messageTarget instanceof HTMLElement) {
@@ -3471,15 +3506,106 @@ function initCheckoutSuccessPage() {
   const params = new URLSearchParams(window.location.search);
   const orderCode = params.get("order_code") || "Pending";
   const sessionId = params.get("session_id") || "";
-  const orderCodeTarget = root.querySelector("[data-success-order-code]");
-  const sessionTarget = root.querySelector("[data-success-session-id]");
+  const mode = params.get("mode") || "";
+  const storedPayload = readCheckoutSuccessContext(orderCode);
 
   clearCart();
 
+  if (storedPayload) {
+    const storeSlug = String(storedPayload.store_slug || "").trim();
+    const storeDetail = STORE_CHECKOUT_DETAILS[storeSlug] || null;
+    const isPayInStore = mode === "pay_in_store" || String(storedPayload.payment_method_code || "").trim() === "pay_in_store";
+
+    root.innerHTML = `
+      <section class="section">
+        <div class="container storefront-checkout storefront-checkout--success">
+          <div class="storefront-checkout__main">
+            <article class="storefront-success">
+              <p class="eyebrow">${escapeHtml(isPayInStore ? "Order confirmed" : "Payment received")}</p>
+              <h1>${escapeHtml(isPayInStore ? "Order request submitted" : "Payment completed successfully")}</h1>
+              <p class="storefront-success__lead">Order reference: ${escapeHtml(storedPayload.order_code || orderCode)}</p>
+              <div class="storefront-success__grid">
+                <div class="storefront-success__item">
+                  <strong>Status</strong>
+                  <span>${escapeHtml(isPayInStore ? "Awaiting in-store payment" : "Paid and submitted")}</span>
+                </div>
+                <div class="storefront-success__item">
+                  <strong>Store / dispatch point</strong>
+                  <span>${escapeHtml(storeDetail?.title || storedPayload.store_name || storedPayload.store_slug || "Pending confirmation")}</span>
+                </div>
+                <div class="storefront-success__item">
+                  <strong>Contact</strong>
+                  <span>${escapeHtml(storedPayload.phone || "")}${storedPayload.email ? ` / ${escapeHtml(storedPayload.email)}` : ""}</span>
+                </div>
+                <div class="storefront-success__item">
+                  <strong>Total</strong>
+                  <span>${escapeHtml(formatMoney(storedPayload.total_amount || 0))}</span>
+                </div>
+              </div>
+              <div class="storefront-success__actions">
+                <a class="button button--primary" href="shop.html">Continue shopping</a>
+                ${storeDetail?.mapUrl ? `<a class="button button--ghost" href="${escapeHtml(storeDetail.mapUrl)}" target="_blank" rel="noopener">Open pickup map</a>` : `<a class="button button--ghost" href="stores.html">Find a store</a>`}
+              </div>
+            </article>
+
+            ${storeDetail ? `
+              <article class="storefront-checkout__delivery-detail">
+                <div class="storefront-checkout__delivery-detail-top">
+                  <div>
+                    <p class="storefront-checkout__delivery-mode">${escapeHtml(storeDetail.mode)}</p>
+                    <h3>${escapeHtml(storeDetail.title)}</h3>
+                  </div>
+                  <span class="storefront-checkout__delivery-chip">${escapeHtml(storeDetail.mode)}</span>
+                </div>
+                <p class="storefront-checkout__delivery-summary">${escapeHtml(isPayInStore ? "Bring your order reference to the store and pay at collection." : storeDetail.summary)}</p>
+                <div class="storefront-checkout__delivery-meta">
+                  <p><strong>Address</strong><span>${escapeHtml(storeDetail.address)}</span></p>
+                  ${storeDetail.phone ? `<p><strong>Phone</strong><span><a href="tel:${escapeHtml(storeDetail.phone.replace(/\s+/g, ""))}">${escapeHtml(storeDetail.phone)}</a></span></p>` : ""}
+                </div>
+                <div class="storefront-checkout__delivery-actions">
+                  ${storeDetail.mapUrl ? `<a class="button button--ghost" href="${escapeHtml(storeDetail.mapUrl)}" target="_blank" rel="noopener">Open in Maps</a>` : ""}
+                  ${storeDetail.pageUrl ? `<a class="button button--secondary" href="${escapeHtml(storeDetail.pageUrl)}">View store page</a>` : ""}
+                </div>
+              </article>
+            ` : ""}
+
+            <div class="storefront-summary storefront-summary--embedded">
+              <p class="eyebrow">Submitted items</p>
+              <div data-checkout-success-items></div>
+            </div>
+          </div>
+
+          <aside class="storefront-checkout__sidebar">
+            <div class="storefront-summary">
+              <p class="eyebrow">Order summary</p>
+              <div data-checkout-success-summary></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    `;
+
+    const successItemsTarget = root.querySelector("[data-checkout-success-items]");
+    const successSummaryTarget = root.querySelector("[data-checkout-success-summary]");
+    renderCartLineItems(successItemsTarget, storedPayload.items || []);
+    renderCartSummary(successSummaryTarget, storedPayload.items || [], {
+      paymentProfile: {
+        code: storedPayload.payment_method_code || "pay_in_store",
+        label: storedPayload.payment_method_label || "Pay in store",
+        provider: isPayInStore ? "manual" : "stripe",
+        fee_type: "none",
+        percentage: 0,
+        fixed_amount: 0,
+      },
+    });
+    return;
+  }
+
+  const orderCodeTarget = root.querySelector("[data-success-order-code]");
+  const sessionTarget = root.querySelector("[data-success-session-id]");
   if (orderCodeTarget instanceof HTMLElement) {
     orderCodeTarget.textContent = orderCode;
   }
-
   if (sessionTarget instanceof HTMLElement) {
     sessionTarget.textContent = sessionId || "Stripe session confirmed";
   }
