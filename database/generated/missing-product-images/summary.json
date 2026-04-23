@@ -1,0 +1,64 @@
+﻿[
+    {
+        "source_folder":  "D:\\program\\productes photos temple\\171.WP-59潮能三代自带线22.5W超级快充系列移动电源",
+        "model_token":  "WP-59",
+        "product_slug":  "wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging",
+        "status":  "uploaded",
+        "reason":  "",
+        "image_count":  4,
+        "primary_image":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/01-2.jpg"
+    },
+    {
+        "source_folder":  "D:\\program\\productes photos temple\\171.WP-59潮能三代自带线22.5W超级快充系列移动电源",
+        "model_token":  "WP-59",
+        "product_slug":  "wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging",
+        "status":  "uploaded",
+        "reason":  "",
+        "image_count":  4,
+        "primary_image":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/01-2-5-3.jpg"
+    },
+    {
+        "source_folder":  "D:\\program\\productes photos temple\\192.WP-80 WP-81 刀锋三代超薄磁吸15W无线 快充5000mAh10000mAh移动电源",
+        "model_token":  "WP-80",
+        "product_slug":  "wekome-wp-80-magsafe-5000mah-power-bank",
+        "status":  "uploaded",
+        "reason":  "",
+        "image_count":  7,
+        "primary_image":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/01-wp-81.jpg"
+    },
+    {
+        "source_folder":  "D:\\program\\productes photos temple\\192.WP-80 WP-81 刀锋三代超薄磁吸15W无线 快充5000mAh10000mAh移动电源",
+        "model_token":  "WP-81",
+        "product_slug":  "wekome-wp-81-magsafe-10000mah-power-bank",
+        "status":  "uploaded",
+        "reason":  "",
+        "image_count":  7,
+        "primary_image":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/01-wp-81.jpg"
+    },
+    {
+        "source_folder":  "D:\\program\\productes photos temple\\196.WP-101 WP-121 麒麟系列12W移动电源",
+        "model_token":  "WP-101",
+        "product_slug":  "wekome-wp-101-10000mah-power-bank",
+        "status":  "uploaded",
+        "reason":  "",
+        "image_count":  9,
+        "primary_image":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/01-1w.jpg"
+    },
+    {
+        "source_folder":  "D:\\program\\productes photos temple\\196.WP-101 WP-121 麒麟系列12W移动电源",
+        "model_token":  "WP-121",
+        "product_slug":  "",
+        "status":  "missing-product",
+        "reason":  "No visible product matched this token in Supabase.",
+        "image_count":  9
+    },
+    {
+        "source_folder":  "D:\\program\\productes photos temple\\215.WP-70 112 万磁王2 三合一多功能磁吸无线快充移动电源",
+        "model_token":  "WP-70",
+        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+        "status":  "uploaded",
+        "reason":  "",
+        "image_count":  13,
+        "primary_image":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01-wp-70-112.jpg"
+    }
+]
