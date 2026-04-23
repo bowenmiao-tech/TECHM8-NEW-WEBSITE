@@ -175,7 +175,7 @@ Deno.serve(async (req) => {
       .eq('is_visible', true)
 
     if (productsError || !products?.length) {
-      return Response.json({ ok: false, error: 'Products could not be validated.' }, { status: 422, headers: corsHeaders })
+      return Response.json({ ok: false, error: 'Products could not be validated. One or more cart items are missing from the products table or are not visible.' }, { status: 422, headers: corsHeaders })
     }
 
     const productsBySlug = new Map(products.map((product) => [product.slug, product]))

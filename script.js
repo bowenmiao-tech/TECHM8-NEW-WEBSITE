@@ -1492,6 +1492,72 @@ function normaliseCartItem(product, quantity = 1) {
   };
 }
 
+function reconcileCartItems(items, products) {
+  const safeItems = Array.isArray(items) ? items : [];
+  const safeProducts = Array.isArray(products) ? products : [];
+  const productsBySlug = new Map();
+  const productsBySku = new Map();
+  const productsByName = new Map();
+
+  safeProducts.forEach((product) => {
+    const slug = String(product?.slug || "").trim();
+    const sku = String(product?.sku || "").trim().toUpperCase();
+    const name = String(product?.name || "").trim().toLowerCase();
+    if (slug) productsBySlug.set(slug, product);
+    if (sku) productsBySku.set(sku, product);
+    if (name) productsByName.set(name, product);
+  });
+
+  const resolved = [];
+  const missing = [];
+  let changed = false;
+
+  safeItems.forEach((item) => {
+    const slug = String(item?.slug || "").trim();
+    const sku = String(item?.sku || "").trim().toUpperCase();
+    const name = String(item?.name || "").trim().toLowerCase();
+    const qty = Math.max(1, Number(item?.qty) || 1);
+
+    let product = null;
+    if (slug && productsBySlug.has(slug)) {
+      product = productsBySlug.get(slug);
+    } else if (sku && productsBySku.has(sku)) {
+      product = productsBySku.get(sku);
+      changed = true;
+    } else if (name && productsByName.has(name)) {
+      product = productsByName.get(name);
+      changed = true;
+    }
+
+    if (!product) {
+      missing.push({
+        slug,
+        sku,
+        name: String(item?.name || "").trim(),
+      });
+      return;
+    }
+
+    const nextItem = normaliseCartItem(product, qty);
+    if (
+      nextItem.slug !== slug
+      || String(nextItem.sku || "").trim() !== String(item?.sku || "").trim()
+      || Number(nextItem.price || 0) !== Number(item?.price || 0)
+      || String(nextItem.image_url || "").trim() !== String(item?.image_url || "").trim()
+    ) {
+      changed = true;
+    }
+
+    resolved.push(nextItem);
+  });
+
+  return {
+    items: resolved,
+    missing,
+    changed,
+  };
+}
+
 function addItemToCart(product, quantity = 1) {
   const items = loadCart();
   const existing = items.find((item) => item.slug === product.slug);
@@ -3230,7 +3296,7 @@ function initCheckoutPage() {
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const items = loadCart();
+    let items = loadCart();
     if (!items.length) {
       if (messageTarget instanceof HTMLElement) {
         messageTarget.hidden = false;
@@ -3241,6 +3307,36 @@ function initCheckoutPage() {
     }
 
     if (!form.reportValidity()) return;
+
+    try {
+      const { products: latestProducts } = await loadSharedCatalogData();
+      const reconciliation = reconcileCartItems(items, latestProducts);
+
+      if (reconciliation.changed) {
+        items = reconciliation.items;
+        saveCart(items);
+        updateCartIndicators(items);
+        render();
+      }
+
+      if (reconciliation.missing.length) {
+        const missingNames = reconciliation.missing
+          .map((item) => item.name || item.sku || item.slug)
+          .filter(Boolean)
+          .slice(0, 3)
+          .join(", ");
+        if (messageTarget instanceof HTMLElement) {
+          messageTarget.hidden = false;
+          messageTarget.className = "booking-message is-error";
+          messageTarget.textContent = missingNames
+            ? `Some cart items are not linked to the product database: ${missingNames}. Remove them from the cart and try again.`
+            : "Some cart items are not linked to the product database. Remove them from the cart and try again.";
+        }
+        return;
+      }
+    } catch (_error) {
+      // Continue. Server-side product validation is still authoritative.
+    }
 
     const formData = new FormData(form);
     const subtotal = getCartSubtotal(items);
