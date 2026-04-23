@@ -1355,6 +1355,15 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   padding: 0.9rem 1.3rem;
   border-radius: 999px;
   font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
 }
 
 .button--primary {
@@ -1362,6 +1371,37 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   color: white;
   box-shadow: 0 14px 34px rgba(17, 141, 149, 0.26);
 }
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 4px rgba(22, 200, 186, 0.22),
+    0 14px 34px rgba(17, 141, 149, 0.26);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+}
+
+.button--primary:hover {
+  background: linear-gradient(135deg, #1ed9c9, #0d8a8f);
+  box-shadow: 0 18px 40px rgba(17, 141, 149, 0.32);
+}
+
+.button--primary:active {
+  box-shadow: 0 8px 20px rgba(17, 141, 149, 0.22);
+}
+
 .button--secondary { border: 1px solid var(--line); background: rgba(255, 255, 255, 0.65); }
 
 .hero__stats {
@@ -5376,6 +5416,31 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   resize: vertical;
 }
 
+.storefront-checkout__form-grid input:focus-visible,
+.storefront-checkout__form-grid select:focus-visible,
+.storefront-checkout__form-grid textarea:focus-visible,
+.storefront-checkout__delivery-select select:focus-visible {
+  outline: none;
+  border-color: rgba(22, 200, 186, 0.6);
+  box-shadow: 0 0 0 4px rgba(22, 200, 186, 0.14);
+}
+
+.storefront-checkout__form-grid input.is-invalid,
+.storefront-checkout__form-grid select.is-invalid,
+.storefront-checkout__form-grid textarea.is-invalid,
+.storefront-checkout__delivery-select select.is-invalid {
+  border-color: rgba(205, 79, 79, 0.9);
+  background: rgba(255, 249, 249, 0.96);
+}
+
+.storefront-field-error {
+  margin: 0.1rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  font-weight: 600;
+  color: #b53d3d;
+}
+
 .storefront-checkout__form-grid-full {
   grid-column: 1 / -1;
 }
@@ -5564,6 +5629,10 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 .storefront-checkout__submit {
   display: flex;
   justify-content: flex-start;
+}
+
+.storefront-checkout__submit .button--primary {
+  min-width: 14rem;
 }
 
 .storefront-success {

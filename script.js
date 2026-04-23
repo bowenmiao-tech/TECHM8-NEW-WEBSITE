@@ -2957,6 +2957,92 @@ function initCheckoutPage() {
   let activeAuthState = null;
   const supabaseAnonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
 
+  const setCheckoutMessage = (text, tone = "error") => {
+    if (!(messageTarget instanceof HTMLElement)) return;
+    if (!text) {
+      messageTarget.hidden = true;
+      messageTarget.textContent = "";
+      messageTarget.className = "booking-message";
+      return;
+    }
+    messageTarget.hidden = false;
+    messageTarget.className = `booking-message is-${tone}`;
+    messageTarget.textContent = text;
+  };
+
+  const getFieldErrorElement = (field) => {
+    if (!(field instanceof HTMLElement)) return null;
+    const fieldName = String(field.getAttribute("name") || "").trim();
+    if (!fieldName) return null;
+    const wrapper = field.closest("label, .storefront-checkout__delivery-select");
+    if (!(wrapper instanceof HTMLElement)) return null;
+
+    let errorElement = wrapper.querySelector(`[data-field-error="${fieldName}"]`);
+    if (!(errorElement instanceof HTMLElement)) {
+      errorElement = document.createElement("p");
+      errorElement.className = "storefront-field-error";
+      errorElement.hidden = true;
+      errorElement.setAttribute("data-field-error", fieldName);
+      wrapper.appendChild(errorElement);
+    }
+
+    return errorElement;
+  };
+
+  const clearFieldError = (field) => {
+    if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement)) {
+      return;
+    }
+    field.classList.remove("is-invalid");
+    field.removeAttribute("aria-invalid");
+    field.setCustomValidity("");
+    const errorElement = getFieldErrorElement(field);
+    if (errorElement instanceof HTMLElement) {
+      errorElement.hidden = true;
+      errorElement.textContent = "";
+    }
+  };
+
+  const setFieldError = (field, message) => {
+    if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement)) {
+      return false;
+    }
+    field.classList.add("is-invalid");
+    field.setAttribute("aria-invalid", "true");
+    field.setCustomValidity(message);
+    const errorElement = getFieldErrorElement(field);
+    if (errorElement instanceof HTMLElement) {
+      errorElement.hidden = false;
+      errorElement.textContent = message;
+    }
+    return true;
+  };
+
+  const clearAllFieldErrors = () => {
+    form.querySelectorAll("input, select, textarea").forEach((field) => {
+      clearFieldError(field);
+    });
+  };
+
+  const invalidateField = (field, message, topMessage = message) => {
+    setCheckoutMessage(topMessage, "error");
+    if (setFieldError(field, message) && typeof field.focus === "function") {
+      field.focus();
+    }
+    return false;
+  };
+
+  const requireField = (field, message, topMessage = message) => {
+    if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement)) {
+      return true;
+    }
+    if (String(field.value || "").trim()) {
+      clearFieldError(field);
+      return true;
+    }
+    return invalidateField(field, message, topMessage);
+  };
+
   const getSelectedPaymentProfile = () => {
     const selectedCode =
       paymentMethodField instanceof HTMLInputElement
@@ -3059,7 +3145,7 @@ function initCheckoutPage() {
       const isRequiredShippingField = ["recipient_name", "address_line_1", "suburb", "postcode", "state"].includes(fieldName);
       field.required = showShipping && isRequiredShippingField;
       if (!showShipping && field instanceof HTMLInputElement && field.type !== "hidden") {
-        field.setCustomValidity("");
+        clearFieldError(field);
       }
     });
   };
@@ -3263,10 +3349,8 @@ function initCheckoutPage() {
     syncCheckoutMode();
     syncAccountSetup();
     renderPaymentNote();
-    if (messageTarget instanceof HTMLElement && items.length && !isPaymentCancelled) {
-      messageTarget.hidden = true;
-      messageTarget.textContent = "";
-      messageTarget.className = "booking-message";
+    if (items.length && !isPaymentCancelled) {
+      setCheckoutMessage("");
     }
     if (submitButton instanceof HTMLButtonElement) {
       const hasStoreSelection = storeField instanceof HTMLSelectElement && Boolean(String(storeField.value || "").trim());
@@ -3319,20 +3403,32 @@ function initCheckoutPage() {
     render();
   });
 
+  form.addEventListener("input", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement)) {
+      return;
+    }
+    clearFieldError(target);
+  });
+
+  form.addEventListener("change", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement)) {
+      return;
+    }
+    clearFieldError(target);
+  });
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    clearAllFieldErrors();
+    setCheckoutMessage("");
 
     let items = loadCart();
     if (!items.length) {
-      if (messageTarget instanceof HTMLElement) {
-        messageTarget.hidden = false;
-        messageTarget.className = "booking-message is-error";
-        messageTarget.textContent = "Your cart is empty. Add products before checking out.";
-      }
+      setCheckoutMessage("Your cart is empty. Add products before checking out.", "error");
       return;
     }
-
-    if (!form.reportValidity()) return;
 
     try {
       const { products: latestProducts } = await loadSharedCatalogData();
@@ -3351,13 +3447,12 @@ function initCheckoutPage() {
           .filter(Boolean)
           .slice(0, 3)
           .join(", ");
-        if (messageTarget instanceof HTMLElement) {
-          messageTarget.hidden = false;
-          messageTarget.className = "booking-message is-error";
-          messageTarget.textContent = missingNames
+        setCheckoutMessage(
+          missingNames
             ? `Some cart items are not linked to the product database: ${missingNames}. Remove them from the cart and try again.`
-            : "Some cart items are not linked to the product database. Remove them from the cart and try again.";
-        }
+            : "Some cart items are not linked to the product database. Remove them from the cart and try again.",
+          "error"
+        );
         return;
       }
     } catch (_error) {
@@ -3379,6 +3474,18 @@ function initCheckoutPage() {
     const warehouseDispatch = storeSlug === "warehouse-dispatch";
     const checkoutPassword = String(formData.get("checkout_password") || "");
     const checkoutPasswordConfirm = String(formData.get("checkout_password_confirm") || "");
+    const firstNameField = form.elements.namedItem("first_name");
+    const lastNameField = form.elements.namedItem("last_name");
+    const phoneField = form.elements.namedItem("phone");
+    const emailField = form.elements.namedItem("email");
+    const storeSelectField = form.elements.namedItem("store_slug");
+    const shippingRecipientField = form.elements.namedItem("recipient_name");
+    const shippingPhoneField = form.elements.namedItem("shipping_phone");
+    const shippingEmailField = form.elements.namedItem("shipping_email");
+    const shippingAddressField = form.elements.namedItem("address_line_1");
+    const shippingSuburbField = form.elements.namedItem("suburb");
+    const shippingPostcodeField = form.elements.namedItem("postcode");
+    const shippingStateField = form.elements.namedItem("state");
     const shippingPayload = {
       recipient_name: String(formData.get("recipient_name") || "").trim(),
       company_name: String(formData.get("company_name") || "").trim(),
@@ -3392,104 +3499,68 @@ function initCheckoutPage() {
       country_code: String(formData.get("country_code") || "AU").trim(),
     };
 
-    if (!firstName || !lastName) {
-      if (messageTarget instanceof HTMLElement) {
-        messageTarget.hidden = false;
-        messageTarget.className = "booking-message is-error";
-        messageTarget.textContent = "First name and last name are required.";
-      }
-      return;
-    }
+    if (!requireField(firstNameField, "Enter your first name.", "First name is required.")) return;
+    if (!requireField(lastNameField, "Enter your last name.", "Last name is required.")) return;
+    if (!requireField(phoneField, "Enter your phone number.", "Phone number is required.")) return;
+    if (!requireField(emailField, "Enter your email address.", "Email address is required.")) return;
 
     if (!isValidEmailAddress(email)) {
-      if (messageTarget instanceof HTMLElement) {
-        messageTarget.hidden = false;
-        messageTarget.className = "booking-message is-error";
-        messageTarget.textContent = "Please enter a valid email address.";
-      }
+      invalidateField(emailField, "Enter a valid email address, for example name@example.com.au.");
       return;
     }
 
     if (!isValidAustralianPhone(phone)) {
-      if (messageTarget instanceof HTMLElement) {
-        messageTarget.hidden = false;
-        messageTarget.className = "booking-message is-error";
-        messageTarget.textContent = "Please enter a valid Australian phone number.";
-      }
+      invalidateField(phoneField, "Enter a valid Australian phone number, for example 0412 345 678 or +61 412 345 678.");
       return;
     }
 
     if (!activeAuthState?.user) {
       if (!checkoutPassword) {
-        if (messageTarget instanceof HTMLElement) {
-          messageTarget.hidden = false;
-          messageTarget.className = "booking-message is-error";
-          messageTarget.textContent = "Create a password to register your TECHM8 account with this order.";
-        }
+        invalidateField(passwordField, "Create a password for your TECHM8 account.", "Create a password to register your TECHM8 account with this order.");
         return;
       }
 
       if (checkoutPassword !== checkoutPasswordConfirm) {
-        if (messageTarget instanceof HTMLElement) {
-          messageTarget.hidden = false;
-          messageTarget.className = "booking-message is-error";
-          messageTarget.textContent = "Password confirmation does not match.";
-        }
+        invalidateField(passwordConfirmField, "Passwords do not match.", "Password confirmation does not match.");
         return;
       }
     }
 
     if (!storeSlug) {
-      if (messageTarget instanceof HTMLElement) {
-        messageTarget.hidden = false;
-        messageTarget.className = "booking-message is-error";
-        messageTarget.textContent = "Please select a pickup store or dispatch point.";
-      }
+      invalidateField(storeSelectField, "Select a pickup store or dispatch point.", "Please select a pickup store or dispatch point.");
       return;
     }
 
     if (paymentMethodCode === "pay_in_store" && warehouseDispatch) {
-      if (messageTarget instanceof HTMLElement) {
-        messageTarget.hidden = false;
-        messageTarget.className = "booking-message is-error";
-        messageTarget.textContent = "Pay in store can only be used with a physical pickup store.";
-      }
+      setCheckoutMessage("Pay in store can only be used with a physical pickup store.", "error");
       return;
     }
 
     if (warehouseDispatch) {
       const shippingPhone = String(shippingPayload.shipping_phone || "").trim();
       const shippingEmail = String(shippingPayload.shipping_email || "").trim().toLowerCase();
-      const missingShippingField = !shippingPayload.recipient_name
-        || !shippingPayload.address_line_1
-        || !shippingPayload.suburb
-        || !shippingPayload.postcode
-        || !shippingPayload.state;
-
-      if (missingShippingField) {
-        if (messageTarget instanceof HTMLElement) {
-          messageTarget.hidden = false;
-          messageTarget.className = "booking-message is-error";
-          messageTarget.textContent = "Warehouse Dispatch requires a full delivery address.";
-        }
-        return;
-      }
+      if (!requireField(shippingRecipientField, "Enter the recipient name.", "Warehouse Dispatch requires a full delivery address.")) return;
+      if (!requireField(shippingAddressField, "Enter the delivery address.", "Warehouse Dispatch requires a full delivery address.")) return;
+      if (!requireField(shippingSuburbField, "Enter the suburb.", "Warehouse Dispatch requires a full delivery address.")) return;
+      if (!requireField(shippingPostcodeField, "Enter the 4-digit postcode.", "Warehouse Dispatch requires a full delivery address.")) return;
+      if (!requireField(shippingStateField, "Select a state.", "Warehouse Dispatch requires a full delivery address.")) return;
 
       if (shippingPhone && !isValidAustralianPhone(shippingPhone)) {
-        if (messageTarget instanceof HTMLElement) {
-          messageTarget.hidden = false;
-          messageTarget.className = "booking-message is-error";
-          messageTarget.textContent = "Please enter a valid Australian shipping phone number.";
-        }
+        invalidateField(
+          shippingPhoneField,
+          "Enter a valid Australian shipping phone number, for example 0412 345 678 or +61 412 345 678.",
+          "Please enter a valid Australian shipping phone number."
+        );
         return;
       }
 
       if (shippingEmail && !isValidEmailAddress(shippingEmail)) {
-        if (messageTarget instanceof HTMLElement) {
-          messageTarget.hidden = false;
-          messageTarget.className = "booking-message is-error";
-          messageTarget.textContent = "Please enter a valid shipping email address.";
-        }
+        invalidateField(shippingEmailField, "Enter a valid shipping email address.", "Please enter a valid shipping email address.");
+        return;
+      }
+
+      if (!/^\d{4}$/.test(shippingPayload.postcode)) {
+        invalidateField(shippingPostcodeField, "Enter a valid 4-digit Australian postcode.", "Please enter a valid 4-digit Australian postcode.");
         return;
       }
 
@@ -3632,11 +3703,7 @@ function initCheckoutPage() {
 
       renderSuccessState(payload);
     } catch (error) {
-      if (messageTarget instanceof HTMLElement) {
-        messageTarget.hidden = false;
-        messageTarget.className = "booking-message is-error";
-        messageTarget.textContent = error instanceof Error ? error.message : "Checkout submission failed.";
-      }
+      setCheckoutMessage(error instanceof Error ? error.message : "Checkout submission failed.", "error");
       if (submitButton instanceof HTMLButtonElement) {
         submitButton.disabled = false;
         submitButton.textContent = "Submit order request";
@@ -4528,10 +4595,15 @@ async function initForgotPasswordPage() {
   resetForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(resetForm);
-    const email = String(formData.get("email") || "").trim();
+    const email = String(formData.get("email") || "").trim().toLowerCase();
 
     if (!email) {
       setAuthMessage(messageBox, "Enter an email address to send a reset link.", "error");
+      return;
+    }
+
+    if (!isValidEmailAddress(email)) {
+      setAuthMessage(messageBox, "Enter a valid email address.", "error");
       return;
     }
 
