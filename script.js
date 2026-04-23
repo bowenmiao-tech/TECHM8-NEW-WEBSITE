@@ -944,12 +944,13 @@ async function prefillCustomerContactForm(form, options = {}) {
     }
   }
 
-  const fullName = String(profile?.full_name || authState.user.user_metadata?.full_name || authState.user.user_metadata?.name || "").trim();
+  const { firstName, lastName } = splitProfileName(profile, authState.user);
   const phone = String(profile?.phone || authState.user.user_metadata?.phone || "").trim();
   const email = String(profile?.email || authState.user.email || "").trim();
   const defaultStoreSlug = String(profile?.default_store_slug || "").trim();
 
-  fillFormField(form, "customer_name", fullName);
+  fillFormField(form, "first_name", firstName);
+  fillFormField(form, "last_name", lastName);
   fillFormField(form, "phone", phone);
   fillFormField(form, "email", email);
 
@@ -2945,6 +2946,9 @@ function initCheckoutPage() {
   const stepTwo = root.querySelector("[data-checkout-step-two]");
   const shippingSection = root.querySelector("[data-checkout-shipping]");
   const shippingFields = Array.from(root.querySelectorAll("[data-checkout-shipping-field]"));
+  const accountSetup = root.querySelector("[data-checkout-account-setup]");
+  const passwordField = root.querySelector("[data-checkout-password]");
+  const passwordConfirmField = root.querySelector("[data-checkout-password-confirm]");
   if (!(form instanceof HTMLFormElement) || !(summaryTarget instanceof HTMLElement) || !(itemsTarget instanceof HTMLElement)) return;
   const submitButton = form.querySelector('button[type="submit"]');
   const paymentProfiles = [];
@@ -3257,6 +3261,7 @@ function initCheckoutPage() {
       paymentProfile: getSelectedPaymentProfile(),
     });
     syncCheckoutMode();
+    syncAccountSetup();
     renderPaymentNote();
     if (messageTarget instanceof HTMLElement && items.length && !isPaymentCancelled) {
       messageTarget.hidden = true;
@@ -3272,6 +3277,27 @@ function initCheckoutPage() {
 
   const applyAccountPrefill = async () => {
     activeAuthState = await prefillCustomerContactForm(form, { includeStore: true });
+  };
+
+  const syncAccountSetup = () => {
+    const isSignedIn = Boolean(activeAuthState?.user);
+    if (accountSetup instanceof HTMLElement) {
+      accountSetup.hidden = isSignedIn;
+    }
+    if (passwordField instanceof HTMLInputElement) {
+      passwordField.required = !isSignedIn;
+      if (isSignedIn) {
+        passwordField.value = "";
+        passwordField.setCustomValidity("");
+      }
+    }
+    if (passwordConfirmField instanceof HTMLInputElement) {
+      passwordConfirmField.required = !isSignedIn;
+      if (isSignedIn) {
+        passwordConfirmField.value = "";
+        passwordConfirmField.setCustomValidity("");
+      }
+    }
   };
 
   itemsTarget.addEventListener("input", (event) => {
@@ -3342,10 +3368,17 @@ function initCheckoutPage() {
     const subtotal = getCartSubtotal(items);
     const selectedProfile = getSelectedPaymentProfile();
     activeAuthState = await getCurrentAuthState();
-    const authAccessToken = activeAuthState?.session?.access_token || supabaseAnonKey;
+    const firstName = String(formData.get("first_name") || "").trim();
+    const lastName = String(formData.get("last_name") || "").trim();
+    const customerName = buildProfileFullName(firstName, lastName, "") || "";
+    const phone = normalizeAustralianPhone(String(formData.get("phone") || "").trim());
+    const email = String(formData.get("email") || "").trim().toLowerCase();
+    let authAccessToken = activeAuthState?.session?.access_token || supabaseAnonKey;
     const storeSlug = String(formData.get("store_slug") || "").trim();
     const paymentMethodCode = String(formData.get("payment_method_code") || "pay_in_store").trim();
     const warehouseDispatch = storeSlug === "warehouse-dispatch";
+    const checkoutPassword = String(formData.get("checkout_password") || "");
+    const checkoutPasswordConfirm = String(formData.get("checkout_password_confirm") || "");
     const shippingPayload = {
       recipient_name: String(formData.get("recipient_name") || "").trim(),
       company_name: String(formData.get("company_name") || "").trim(),
@@ -3358,6 +3391,53 @@ function initCheckoutPage() {
       state: String(formData.get("state") || "").trim(),
       country_code: String(formData.get("country_code") || "AU").trim(),
     };
+
+    if (!firstName || !lastName) {
+      if (messageTarget instanceof HTMLElement) {
+        messageTarget.hidden = false;
+        messageTarget.className = "booking-message is-error";
+        messageTarget.textContent = "First name and last name are required.";
+      }
+      return;
+    }
+
+    if (!isValidEmailAddress(email)) {
+      if (messageTarget instanceof HTMLElement) {
+        messageTarget.hidden = false;
+        messageTarget.className = "booking-message is-error";
+        messageTarget.textContent = "Please enter a valid email address.";
+      }
+      return;
+    }
+
+    if (!isValidAustralianPhone(phone)) {
+      if (messageTarget instanceof HTMLElement) {
+        messageTarget.hidden = false;
+        messageTarget.className = "booking-message is-error";
+        messageTarget.textContent = "Please enter a valid Australian phone number.";
+      }
+      return;
+    }
+
+    if (!activeAuthState?.user) {
+      if (!checkoutPassword) {
+        if (messageTarget instanceof HTMLElement) {
+          messageTarget.hidden = false;
+          messageTarget.className = "booking-message is-error";
+          messageTarget.textContent = "Create a password to register your TECHM8 account with this order.";
+        }
+        return;
+      }
+
+      if (checkoutPassword !== checkoutPasswordConfirm) {
+        if (messageTarget instanceof HTMLElement) {
+          messageTarget.hidden = false;
+          messageTarget.className = "booking-message is-error";
+          messageTarget.textContent = "Password confirmation does not match.";
+        }
+        return;
+      }
+    }
 
     if (!storeSlug) {
       if (messageTarget instanceof HTMLElement) {
@@ -3378,6 +3458,8 @@ function initCheckoutPage() {
     }
 
     if (warehouseDispatch) {
+      const shippingPhone = String(shippingPayload.shipping_phone || "").trim();
+      const shippingEmail = String(shippingPayload.shipping_email || "").trim().toLowerCase();
       const missingShippingField = !shippingPayload.recipient_name
         || !shippingPayload.address_line_1
         || !shippingPayload.suburb
@@ -3392,15 +3474,38 @@ function initCheckoutPage() {
         }
         return;
       }
+
+      if (shippingPhone && !isValidAustralianPhone(shippingPhone)) {
+        if (messageTarget instanceof HTMLElement) {
+          messageTarget.hidden = false;
+          messageTarget.className = "booking-message is-error";
+          messageTarget.textContent = "Please enter a valid Australian shipping phone number.";
+        }
+        return;
+      }
+
+      if (shippingEmail && !isValidEmailAddress(shippingEmail)) {
+        if (messageTarget instanceof HTMLElement) {
+          messageTarget.hidden = false;
+          messageTarget.className = "booking-message is-error";
+          messageTarget.textContent = "Please enter a valid shipping email address.";
+        }
+        return;
+      }
+
+      shippingPayload.shipping_phone = shippingPhone ? normalizeAustralianPhone(shippingPhone) : "";
+      shippingPayload.shipping_email = shippingEmail;
     }
 
     const payload = {
       order_code: makeOrderCode(),
-      customer_name: String(formData.get("customer_name") || "").trim(),
-      phone: String(formData.get("phone") || "").trim(),
-      email: String(formData.get("email") || "").trim(),
+      customer_name: customerName,
+      first_name: firstName,
+      last_name: lastName,
+      phone,
+      email,
       store_slug: storeSlug,
-      preferred_contact_method: String(formData.get("preferred_contact_method") || "phone").trim(),
+      preferred_contact_method: "phone",
       payment_method_code: paymentMethodCode,
       fulfillment_method: warehouseDispatch ? "shipping" : "pickup",
       notes: String(formData.get("notes") || "").trim(),
@@ -3423,9 +3528,39 @@ function initCheckoutPage() {
         submitButton.textContent = "Submitting...";
       }
 
+      if (!activeAuthState?.user && activeAuthState?.supabase) {
+        const { data: signUpData, error: signUpError } = await activeAuthState.supabase.auth.signUp({
+          email,
+          password: checkoutPassword,
+          options: {
+            emailRedirectTo: getAuthRedirectUrl(),
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              full_name: customerName,
+              phone,
+            },
+          },
+        });
+
+        if (signUpError) {
+          throw new Error(getReadableAuthError(signUpError));
+        }
+
+        activeAuthState = {
+          supabase: activeAuthState.supabase,
+          session: signUpData?.session || null,
+          user: signUpData?.user || null,
+        };
+        authAccessToken = activeAuthState?.session?.access_token || supabaseAnonKey;
+        payload.auth_user_id = activeAuthState?.user?.id || null;
+      }
+
       if (activeAuthState?.supabase && activeAuthState?.user) {
         await syncCustomerProfile(activeAuthState.supabase, activeAuthState.user, {
           full_name: payload.customer_name,
+          first_name: payload.first_name,
+          last_name: payload.last_name,
           phone: payload.phone,
           email: payload.email,
           default_store_slug: payload.store_slug,
@@ -4058,6 +4193,7 @@ function getReadableAuthError(error) {
   const message = String(error?.message || error || "Authentication request failed.");
   if (/Invalid login credentials/i.test(message)) return "The email or password is incorrect.";
   if (/Email rate limit exceeded/i.test(message)) return "Too many email requests were sent. Please wait and try again.";
+  if (/User already registered/i.test(message)) return "This email is already registered. Sign in first or use a different email address.";
   if (/provider is not enabled/i.test(message)) return "This login provider is not enabled in Supabase Auth yet.";
   return message;
 }

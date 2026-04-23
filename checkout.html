@@ -91,25 +91,35 @@
 
               <div class="storefront-checkout__form-grid">
                 <label>
-                  <span>Full name</span>
-                  <input type="text" name="customer_name" required>
+                  <span>First name</span>
+                  <input type="text" name="first_name" autocomplete="given-name" required>
+                </label>
+                <label>
+                  <span>Last name</span>
+                  <input type="text" name="last_name" autocomplete="family-name" required>
                 </label>
                 <label>
                   <span>Phone</span>
-                  <input type="tel" name="phone" required>
+                  <input type="tel" name="phone" autocomplete="tel" placeholder="0412 345 678 or +61 412 345 678" required>
                 </label>
                 <label>
                   <span>Email</span>
-                  <input type="email" name="email" required>
+                  <input type="email" name="email" autocomplete="email" placeholder="name@example.com.au" required>
                 </label>
-                <label>
-                  <span>Preferred contact method</span>
-                  <select name="preferred_contact_method">
-                    <option value="phone">Phone</option>
-                    <option value="email">Email</option>
-                    <option value="sms">SMS</option>
-                  </select>
-                </label>
+                <div class="storefront-checkout__form-grid-full storefront-checkout__account-setup" data-checkout-account-setup>
+                  <span class="storefront-checkout__label">Create your TECHM8 account</span>
+                  <p class="storefront-checkout__account-copy">Set a password now so this order is linked to your customer account and future invoices can be sent to the same email.</p>
+                  <div class="storefront-checkout__form-grid">
+                    <label>
+                      <span>Password</span>
+                      <input type="password" name="checkout_password" autocomplete="new-password" data-checkout-password>
+                    </label>
+                    <label>
+                      <span>Confirm password</span>
+                      <input type="password" name="checkout_password_confirm" autocomplete="new-password" data-checkout-password-confirm>
+                    </label>
+                  </div>
+                </div>
                 <div class="storefront-checkout__form-grid-full">
                   <span class="storefront-checkout__label">Payment method</span>
                   <div class="storefront-payment-list" data-payment-options></div>

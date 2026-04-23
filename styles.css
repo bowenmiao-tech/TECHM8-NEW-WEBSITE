@@ -5380,6 +5380,22 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   grid-column: 1 / -1;
 }
 
+.storefront-checkout__account-setup {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+  border: 1px solid rgba(22, 200, 186, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.storefront-checkout__account-copy {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+
 .storefront-checkout__payment-note {
   padding: 0.95rem 1rem;
   border: 1px solid rgba(22, 200, 186, 0.22);
