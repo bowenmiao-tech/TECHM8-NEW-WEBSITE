@@ -3627,15 +3627,19 @@ function initCheckoutPage() {
         payload.auth_user_id = activeAuthState?.user?.id || null;
       }
 
-      if (activeAuthState?.supabase && activeAuthState?.user) {
-        await syncCustomerProfile(activeAuthState.supabase, activeAuthState.user, {
-          full_name: payload.customer_name,
-          first_name: payload.first_name,
-          last_name: payload.last_name,
-          phone: payload.phone,
-          email: payload.email,
-          default_store_slug: payload.store_slug,
-        });
+      if (activeAuthState?.supabase && activeAuthState?.user && activeAuthState?.session?.access_token) {
+        try {
+          await syncCustomerProfile(activeAuthState.supabase, activeAuthState.user, {
+            full_name: payload.customer_name,
+            first_name: payload.first_name,
+            last_name: payload.last_name,
+            phone: payload.phone,
+            email: payload.email,
+            default_store_slug: payload.store_slug,
+          });
+        } catch (profileSyncError) {
+          console.warn("Checkout profile sync skipped:", profileSyncError);
+        }
       }
 
       if (selectedProfile?.provider === "stripe") {
