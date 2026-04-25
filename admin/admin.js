@@ -2,6 +2,7 @@ const SUPABASE_BROWSER_CDN_URL = "https://cdn.jsdelivr.net/npm/@supabase/supabas
 const DEFAULT_PRODUCT_IMAGE_URL =
   "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/placeholders/image-coming-soon.png";
 let adminSupabaseClientPromise = null;
+const DETAIL_BLOCK_MARKER = "TECHM8_DETAIL_BLOCKS:";
 
 const ADMIN_NAV_ITEMS = [
   { href: "dashboard.html", view: "dashboard", label: "Dashboard" },
@@ -18,6 +19,126 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function splitLines(value) {
+  return String(value || "")
+    .split(/\r?\n/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function normalizeSpecRows(value) {
+  return splitLines(value).map((line) => {
+    const [label, ...rest] = line.split("|");
+    return {
+      label: String(label || "").trim(),
+      value: String(rest.join("|") || "").trim(),
+    };
+  }).filter((row) => row.label && row.value);
+}
+
+function encodeDetailBlocks(blocks) {
+  return `<!-- ${DETAIL_BLOCK_MARKER}${encodeURIComponent(JSON.stringify(blocks))} -->`;
+}
+
+function parseStoredDetailBlocks(detailHtml) {
+  const html = String(detailHtml || "").trim();
+  if (!html) return null;
+  const match = html.match(/<!--\s*TECHM8_DETAIL_BLOCKS:([\s\S]*?)\s*-->/i);
+  if (!match) return null;
+  try {
+    return JSON.parse(decodeURIComponent(match[1]));
+  } catch {
+    return null;
+  }
+}
+
+function getDetailHtmlWithoutMarker(detailHtml) {
+  return String(detailHtml || "").replace(/<!--\s*TECHM8_DETAIL_BLOCKS:[\s\S]*?-->\s*/i, "").trim();
+}
+
+function buildDefaultProductDetailBlocks(row) {
+  const compatibilityItems = splitLines(String(row.compatibility || "").replace(/,\s*/g, "\n"));
+  const comparePrice = Number(row.compare_at_price) > Number(row.retail_price) ? formatMoney(row.compare_at_price) : "";
+
+  return {
+    overview_title: "Product overview",
+    overview_text: String(row.short_description || row.description || `${row.name} is available from the TECHM8 catalog.`).trim(),
+    details_title: "Key details",
+    bullets: compatibilityItems.join("\n"),
+    image_url: String(row.image_url || "").trim(),
+    image_alt: String(row.name || "").trim(),
+    specs: [
+      row.retail_price ? `Current selling price|${formatMoney(row.retail_price)}` : "",
+      comparePrice ? `Original / compare price|${comparePrice}` : "",
+      row.brand ? `Brand|${row.brand}` : "",
+      row.model ? `Model|${row.model}` : "",
+    ].filter(Boolean).join("\n"),
+    extra_html: "",
+  };
+}
+
+function buildDetailBlocksState(row) {
+  const parsed = parseStoredDetailBlocks(row.detail_html);
+  if (parsed) return parsed;
+  const fallback = buildDefaultProductDetailBlocks(row);
+  const rawHtml = getDetailHtmlWithoutMarker(row.detail_html);
+  if (rawHtml) {
+    fallback.extra_html = rawHtml;
+  }
+  return fallback;
+}
+
+function renderDetailBlocksPreview(blocks) {
+  const bullets = splitLines(blocks.bullets);
+  const specRows = normalizeSpecRows(blocks.specs);
+  const extraHtml = String(blocks.extra_html || "").trim();
+
+  return `
+    <section>
+      <h2>${escapeHtml(blocks.overview_title || "Product overview")}</h2>
+      <p>${escapeHtml(blocks.overview_text || "")}</p>
+    </section>
+    <section>
+      <h2>${escapeHtml(blocks.details_title || "Key details")}</h2>
+      ${blocks.image_url ? `
+        <figure>
+          <img src="${escapeHtml(blocks.image_url)}" alt="${escapeHtml(blocks.image_alt || "")}">
+        </figure>
+      ` : ""}
+      ${bullets.length ? `<ul>${bullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : ""}
+      ${specRows.length ? `
+        <table>
+          <tbody>
+            ${specRows.map((row) => `
+              <tr>
+                <th>${escapeHtml(row.label)}</th>
+                <td>${escapeHtml(row.value)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      ` : ""}
+    </section>
+    ${extraHtml}
+  `.trim();
+}
+
+function buildDetailHtmlFromBlocks(blocks) {
+  const normalizedBlocks = {
+    overview_title: String(blocks.overview_title || "").trim(),
+    overview_text: String(blocks.overview_text || "").trim(),
+    details_title: String(blocks.details_title || "").trim(),
+    bullets: String(blocks.bullets || "").trim(),
+    image_url: String(blocks.image_url || "").trim(),
+    image_alt: String(blocks.image_alt || "").trim(),
+    specs: String(blocks.specs || "").trim(),
+    extra_html: String(blocks.extra_html || "").trim(),
+  };
+
+  return `${encodeDetailBlocks(normalizedBlocks)}
+${renderDetailBlocksPreview(normalizedBlocks)}`.trim();
 }
 
 function formatMoney(value) {
@@ -1445,6 +1566,8 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
       return;
     }
 
+    const detailBlocks = buildDetailBlocksState(row);
+
     editorTarget.innerHTML = `
       <div class="admin-editor">
         <img class="admin-inline-image" src="${escapeHtml(getImageOrPlaceholder(row.image_url))}" alt="${escapeHtml(row.name)}">
@@ -1483,13 +1606,61 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
           <label><span>Hero image URL</span><input type="url" name="image_url" value="${escapeHtml(row.image_url || "")}" ${state.canEdit ? "" : "disabled"}></label>
           <label><span>Short description</span><textarea name="short_description" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.short_description || "")}</textarea></label>
           <label><span>Compatibility</span><textarea name="compatibility" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.compatibility || "")}</textarea></label>
-          <label><span>Detail page content (HTML allowed)</span><textarea class="admin-editor__detail-html" name="detail_html" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.detail_html || "")}</textarea></label>
+          <div class="admin-detail-builder">
+            <div class="admin-detail-builder__header">
+              <div>
+                <strong>Detail page builder</strong>
+                <p>Use structured blocks for the product detail page. This generates the HTML shown on the storefront.</p>
+              </div>
+            </div>
+            <div class="admin-detail-builder__grid">
+              <label><span>Overview title</span><input type="text" data-detail-block-input="overview_title" value="${escapeHtml(detailBlocks.overview_title || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label class="admin-detail-builder__full"><span>Overview text</span><textarea data-detail-block-input="overview_text" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.overview_text || "")}</textarea></label>
+              <label><span>Key details title</span><input type="text" data-detail-block-input="details_title" value="${escapeHtml(detailBlocks.details_title || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label><span>Feature image URL</span><input type="url" data-detail-block-input="image_url" value="${escapeHtml(detailBlocks.image_url || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label><span>Feature image alt</span><input type="text" data-detail-block-input="image_alt" value="${escapeHtml(detailBlocks.image_alt || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label class="admin-detail-builder__full"><span>Bullet points</span><textarea data-detail-block-input="bullets" placeholder="One point per line" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.bullets || "")}</textarea></label>
+              <label class="admin-detail-builder__full"><span>Comparison / spec table</span><textarea data-detail-block-input="specs" placeholder="Label|Value&#10;Charging|USB-C PD" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.specs || "")}</textarea></label>
+              <label class="admin-detail-builder__full"><span>Additional custom HTML</span><textarea class="admin-editor__detail-html" data-detail-block-input="extra_html" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.extra_html || "")}</textarea></label>
+            </div>
+            <input type="hidden" name="detail_html" value="${escapeHtml(buildDetailHtmlFromBlocks(detailBlocks))}">
+            <div class="admin-detail-preview">
+              <div class="admin-detail-preview__label">Preview</div>
+              <div class="storefront-rich-content" data-detail-preview>${renderDetailBlocksPreview(detailBlocks)}</div>
+            </div>
+          </div>
           ${state.canEdit ? `<div class="admin-button-row"><button class="button button--primary" type="submit">Save product</button></div>` : `<p class="admin-note">This account can view catalog data but only super admins can change it.</p>`}
         </form>
       </div>
     `;
 
-    editorTarget.querySelector("[data-product-editor-form]")?.addEventListener("submit", async (event) => {
+    const formElement = editorTarget.querySelector("[data-product-editor-form]");
+    const hiddenDetailInput = editorTarget.querySelector('input[name="detail_html"]');
+    const detailPreview = editorTarget.querySelector("[data-detail-preview]");
+    const blockInputs = editorTarget.querySelectorAll("[data-detail-block-input]");
+
+    const syncDetailBuilder = () => {
+      const nextBlocks = {};
+      blockInputs.forEach((input) => {
+        const key = input.getAttribute("data-detail-block-input");
+        if (!key) return;
+        nextBlocks[key] = input.value;
+      });
+      const nextHtml = buildDetailHtmlFromBlocks(nextBlocks);
+      if (hiddenDetailInput instanceof HTMLInputElement) {
+        hiddenDetailInput.value = nextHtml;
+      }
+      if (detailPreview instanceof HTMLElement) {
+        detailPreview.innerHTML = renderDetailBlocksPreview(nextBlocks);
+      }
+    };
+
+    blockInputs.forEach((input) => {
+      input.addEventListener("input", syncDetailBuilder);
+      input.addEventListener("change", syncDetailBuilder);
+    });
+
+    formElement?.addEventListener("submit", async (event) => {
       event.preventDefault();
       const form = event.currentTarget;
       const formData = new FormData(form);
