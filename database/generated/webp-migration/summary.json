@@ -1,0 +1,1519 @@
+﻿{
+    "processed_at":  "2026-04-25T23:07:51",
+    "total":  151,
+    "updated":  151,
+    "skipped":  0,
+    "errors":  0,
+    "results":  [
+                    {
+                        "type":  "gallery",
+                        "product_id":  1,
+                        "product_slug":  "dualsense-wireless-controller-sterling-silver-playstation-5",
+                        "image_id":  203,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_83ed55bd7c2f43eebc7a6dcdf024bc18~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-sterling-silver-playstation-5/dualsense-wireless-controller-sterling-silver-playstation-5-02.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-sterling-silver-playstation-5/dualsense-wireless-controller-sterling-silver-playstation-5-02.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  1,
+                        "product_slug":  "dualsense-wireless-controller-sterling-silver-playstation-5",
+                        "image_id":  201,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_44b8629acec14e089b265c9c134f3dcd~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-sterling-silver-playstation-5/dualsense-wireless-controller-sterling-silver-playstation-5-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-sterling-silver-playstation-5/dualsense-wireless-controller-sterling-silver-playstation-5-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  1,
+                        "product_slug":  "dualsense-wireless-controller-sterling-silver-playstation-5",
+                        "image_id":  202,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_c12a09563972465d8bb2885b5c7fd3f3~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-sterling-silver-playstation-5/dualsense-wireless-controller-sterling-silver-playstation-5-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-sterling-silver-playstation-5/dualsense-wireless-controller-sterling-silver-playstation-5-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  1,
+                        "product_slug":  "dualsense-wireless-controller-sterling-silver-playstation-5",
+                        "image_id":  204,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_50adc098d4e140148de53e22255cbd85~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-sterling-silver-playstation-5/dualsense-wireless-controller-sterling-silver-playstation-5-03.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-sterling-silver-playstation-5/dualsense-wireless-controller-sterling-silver-playstation-5-03.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  2,
+                        "product_slug":  "dualsense-wireless-controller-cosmic-red-playstation-5",
+                        "image_id":  206,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_fe58f9e9a961475e84ee19ae5f866a12~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-cosmic-red-playstation-5/dualsense-wireless-controller-cosmic-red-playstation-5-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-cosmic-red-playstation-5/dualsense-wireless-controller-cosmic-red-playstation-5-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  2,
+                        "product_slug":  "dualsense-wireless-controller-cosmic-red-playstation-5",
+                        "image_id":  205,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_3d6c59b7f9844dce9cddba30391438aa~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-cosmic-red-playstation-5/dualsense-wireless-controller-cosmic-red-playstation-5-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-cosmic-red-playstation-5/dualsense-wireless-controller-cosmic-red-playstation-5-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  3,
+                        "product_slug":  "dualsense-wireless-controller-gray-camouflage",
+                        "image_id":  207,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_e970ca83b1cb486aaae98a2172e07cbc~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  3,
+                        "product_slug":  "dualsense-wireless-controller-gray-camouflage",
+                        "image_id":  209,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_606559554bd544408840943b8356fe2f~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-02.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-02.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  3,
+                        "product_slug":  "dualsense-wireless-controller-gray-camouflage",
+                        "image_id":  210,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_cc60f866f0df48d7994dd15fb2bc0227~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-03.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-03.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  3,
+                        "product_slug":  "dualsense-wireless-controller-gray-camouflage",
+                        "image_id":  208,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_ddaf2f2fce8f4fe395afbf54247c972a~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  4,
+                        "product_slug":  "copy-of-dualsense-wireless-controller-playstation-5-black",
+                        "image_id":  213,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_96b13a2437b9425b829e143975830c0f~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/copy-of-dualsense-wireless-controller-playstation-5-black/copy-of-dualsense-wireless-controller-playstation-5-black-02.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/copy-of-dualsense-wireless-controller-playstation-5-black/copy-of-dualsense-wireless-controller-playstation-5-black-02.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  4,
+                        "product_slug":  "copy-of-dualsense-wireless-controller-playstation-5-black",
+                        "image_id":  214,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_b8abb95556a0400c94d96110a5f331a2~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/copy-of-dualsense-wireless-controller-playstation-5-black/copy-of-dualsense-wireless-controller-playstation-5-black-03.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/copy-of-dualsense-wireless-controller-playstation-5-black/copy-of-dualsense-wireless-controller-playstation-5-black-03.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  4,
+                        "product_slug":  "copy-of-dualsense-wireless-controller-playstation-5-black",
+                        "image_id":  211,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_8b5310c0258a420ea7f0e18e943a501d~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/copy-of-dualsense-wireless-controller-playstation-5-black/copy-of-dualsense-wireless-controller-playstation-5-black-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/copy-of-dualsense-wireless-controller-playstation-5-black/copy-of-dualsense-wireless-controller-playstation-5-black-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  4,
+                        "product_slug":  "copy-of-dualsense-wireless-controller-playstation-5-black",
+                        "image_id":  212,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_c822fb68c48e4bdbb46b941113bd2718~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/copy-of-dualsense-wireless-controller-playstation-5-black/copy-of-dualsense-wireless-controller-playstation-5-black-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/copy-of-dualsense-wireless-controller-playstation-5-black/copy-of-dualsense-wireless-controller-playstation-5-black-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  5,
+                        "product_slug":  "dualsense-wireless-controller-playstation-5-white",
+                        "image_id":  218,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_ce477dac9fa347528ba1c92b81f7f0af~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-03.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-03.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  5,
+                        "product_slug":  "dualsense-wireless-controller-playstation-5-white",
+                        "image_id":  217,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_2383e937cd4d41f29f5457d63e38c754~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-02.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-02.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  5,
+                        "product_slug":  "dualsense-wireless-controller-playstation-5-white",
+                        "image_id":  216,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_71b008d662b3413b9387870a23db14fb~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  5,
+                        "product_slug":  "dualsense-wireless-controller-playstation-5-white",
+                        "image_id":  215,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_997f0a93bc8e4b9a907efb21027b37f0~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  5,
+                        "product_slug":  "dualsense-wireless-controller-playstation-5-white",
+                        "image_id":  219,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_b903692bb44b410a8b8c28eefc72dce0~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-04.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-04.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  12,
+                        "product_slug":  "brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty",
+                        "image_id":  183,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_82c47b57c47c4e35848e4cf0fbbc13d3~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  12,
+                        "product_slug":  "brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty",
+                        "image_id":  184,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_cb25dbbec0e041d091534f8b67994793~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  13,
+                        "product_slug":  "brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro",
+                        "image_id":  185,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_9393ed8d4111498e82effd5f2cddf721~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro/brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro/brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  13,
+                        "product_slug":  "brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro",
+                        "image_id":  186,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_cb25dbbec0e041d091534f8b67994793~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro/brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro/brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  14,
+                        "product_slug":  "copy-of-brand-new-45w-magsafe-1-power-adapter-for-macbook-air-six-months-warranty",
+                        "image_id":  221,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/copy-of-brand-new-45w-magsafe-1-power-adapter-for-macbook-air-six-months-warranty/00.png",
+                        "storage_path":  "products/copy-of-brand-new-45w-magsafe-1-power-adapter-for-macbook-air-six-months-warranty/00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/copy-of-brand-new-45w-magsafe-1-power-adapter-for-macbook-air-six-months-warranty/00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  15,
+                        "product_slug":  "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+                        "image_id":  190,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_01270e17ceb0461a97f52417a817d297~mv2.png/v1/fit/w_500,h_500,q_90/file.png",
+                        "storage_path":  "products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  15,
+                        "product_slug":  "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+                        "image_id":  189,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_fc23e3fdda774c7ba40336b6cac8826e~mv2.png/v1/fit/w_500,h_500,q_90/file.png",
+                        "storage_path":  "products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  16,
+                        "product_slug":  "new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+                        "image_id":  191,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_3c2acc8d32554ee397f2b10cc22c6afe~mv2.png/v1/fit/w_500,h_500,q_90/file.png",
+                        "storage_path":  "products/new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  16,
+                        "product_slug":  "new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+                        "image_id":  192,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_576f43941adf4b33893c85972c80fe74~mv2.png/v1/fit/w_500,h_500,q_90/file.png",
+                        "storage_path":  "products/new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  17,
+                        "product_slug":  "new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+                        "image_id":  194,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_339c920136d94845a88eac5ed75f737b~mv2.png/v1/fit/w_500,h_500,q_90/file.png",
+                        "storage_path":  "products/new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  17,
+                        "product_slug":  "new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+                        "image_id":  193,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_a6f80139c7714ebfac0e2803bd3dc645~mv2.png/v1/fit/w_500,h_500,q_90/file.png",
+                        "storage_path":  "products/new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  18,
+                        "product_slug":  "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
+                        "image_id":  195,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_fb6323cc9b89460ab40c019182b43f5b~mv2.png/v1/fit/w_500,h_500,q_90/file.png",
+                        "storage_path":  "products/85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa/85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa/85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  18,
+                        "product_slug":  "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
+                        "image_id":  196,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_cb25dbbec0e041d091534f8b67994793~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa/85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa/85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  19,
+                        "product_slug":  "60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont",
+                        "image_id":  197,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_116f8c2c7d9d4ad4b605474063149b85~mv2.png/v1/fit/w_500,h_500,q_90/file.png",
+                        "storage_path":  "products/60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont/60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont/60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  19,
+                        "product_slug":  "60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont",
+                        "image_id":  198,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_cb25dbbec0e041d091534f8b67994793~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont/60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont/60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  20,
+                        "product_slug":  "new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty",
+                        "image_id":  199,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_39ba1cbcb8b2404081090867ff7c631e~mv2.png/v1/fit/w_500,h_500,q_90/file.png",
+                        "storage_path":  "products/new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty/new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty-00.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty/new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty-00.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  20,
+                        "product_slug":  "new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty",
+                        "image_id":  200,
+                        "status":  "updated",
+                        "source_url":  "https://static.wixstatic.com/media/ff60a8_cb25dbbec0e041d091534f8b67994793~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                        "storage_path":  "products/new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty/new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty/new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  21,
+                        "product_slug":  "remax-rpp-623-power-bank-20000-mah",
+                        "image_id":  56,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/04-image-4.png",
+                        "storage_path":  "products/power-banks/remax-rpp-623-power-bank-20000-mah/04-image-4.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/04-image-4.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  21,
+                        "product_slug":  "remax-rpp-623-power-bank-20000-mah",
+                        "image_id":  55,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/03-image-3.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-623-power-bank-20000-mah/03-image-3.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/03-image-3.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  21,
+                        "product_slug":  "remax-rpp-623-power-bank-20000-mah",
+                        "image_id":  54,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/02-image-2.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-623-power-bank-20000-mah/02-image-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/02-image-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  21,
+                        "product_slug":  "remax-rpp-623-power-bank-20000-mah",
+                        "image_id":  53,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/01-image-1.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-623-power-bank-20000-mah/01-image-1.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/01-image-1.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  22,
+                        "product_slug":  "remax-rpp-622-10000mah-power-bank",
+                        "image_id":  57,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/01-image-1.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-622-10000mah-power-bank/01-image-1.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/01-image-1.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  22,
+                        "product_slug":  "remax-rpp-622-10000mah-power-bank",
+                        "image_id":  60,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/04-image-4.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-622-10000mah-power-bank/04-image-4.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/04-image-4.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  22,
+                        "product_slug":  "remax-rpp-622-10000mah-power-bank",
+                        "image_id":  59,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/03-image-3.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-622-10000mah-power-bank/03-image-3.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/03-image-3.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  22,
+                        "product_slug":  "remax-rpp-622-10000mah-power-bank",
+                        "image_id":  58,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/02-image-2.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-622-10000mah-power-bank/02-image-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/02-image-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  163,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04-wp-70-3.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04-wp-70-3.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04-wp-70-3.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  166,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/07-wp-70-03.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/07-wp-70-03.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/07-wp-70-03.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  165,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/06-wp-70-02.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/06-wp-70-02.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/06-wp-70-02.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  172,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/13-2.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/13-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/13-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  171,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/12-wp-70-08.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/12-wp-70-08.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/12-wp-70-08.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  160,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01-wp-70-112.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01-wp-70-112.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01-wp-70-112.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  161,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02-1.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02-1.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02-1.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  162,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/03-wp-112.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/03-wp-112.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/03-wp-112.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  164,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05-wp-70-01.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05-wp-70-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05-wp-70-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  170,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/11-wp-70-07.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/11-wp-70-07.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/11-wp-70-07.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  169,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/10-wp-70-06.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/10-wp-70-06.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/10-wp-70-06.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  168,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/09-wp-70-05.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/09-wp-70-05.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/09-wp-70-05.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  23,
+                        "product_slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  167,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/08-wp-70-04.jpg",
+                        "storage_path":  "products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/08-wp-70-04.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/08-wp-70-04.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  24,
+                        "product_slug":  "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  179,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02.jpg",
+                        "storage_path":  "products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  24,
+                        "product_slug":  "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  178,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01.jpg",
+                        "storage_path":  "products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  24,
+                        "product_slug":  "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  182,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05.jpg",
+                        "storage_path":  "products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  24,
+                        "product_slug":  "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  181,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04.jpg",
+                        "storage_path":  "products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  24,
+                        "product_slug":  "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+                        "image_id":  180,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/03.jpg",
+                        "storage_path":  "products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/03.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/03.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  25,
+                        "product_slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-white",
+                        "image_id":  63,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/03-5.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/03-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/03-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  25,
+                        "product_slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-white",
+                        "image_id":  64,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/04-image-4.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/04-image-4.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/04-image-4.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  25,
+                        "product_slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-white",
+                        "image_id":  65,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/05-image-5.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/05-image-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/05-image-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  25,
+                        "product_slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-white",
+                        "image_id":  61,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/01-2.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/01-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/01-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  25,
+                        "product_slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-white",
+                        "image_id":  62,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/02-4.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/02-4.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-white/02-4.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  26,
+                        "product_slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-black",
+                        "image_id":  66,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/01-2.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/01-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/01-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  26,
+                        "product_slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-black",
+                        "image_id":  70,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/05-image-5.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/05-image-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/05-image-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  26,
+                        "product_slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-black",
+                        "image_id":  67,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/02-4.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/02-4.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/02-4.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  26,
+                        "product_slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-black",
+                        "image_id":  68,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/03-5.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/03-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/03-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  26,
+                        "product_slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-black",
+                        "image_id":  69,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/04-image-4.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/04-image-4.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/04-image-4.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  27,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+                        "image_id":  71,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/01-2.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/01-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/01-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  27,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+                        "image_id":  72,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/02-4.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/02-4.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/02-4.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  27,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+                        "image_id":  73,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/03-5.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/03-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/03-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  27,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+                        "image_id":  74,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/04-6.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/04-6.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/04-6.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  27,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+                        "image_id":  75,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/05-image-5.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/05-image-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/05-image-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  27,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+                        "image_id":  76,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/06-image-6.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/06-image-6.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/06-image-6.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  28,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+                        "image_id":  80,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/04-6.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/04-6.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/04-6.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  28,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+                        "image_id":  81,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/05-image-5.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/05-image-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/05-image-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  28,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+                        "image_id":  82,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/06-image-6.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/06-image-6.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/06-image-6.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  28,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+                        "image_id":  77,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/01-2.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/01-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/01-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  28,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+                        "image_id":  78,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/02-4.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/02-4.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/02-4.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  28,
+                        "product_slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+                        "image_id":  79,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/03-5.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/03-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-white/03-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  29,
+                        "product_slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white",
+                        "image_id":  84,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/02-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/02-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/02-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  29,
+                        "product_slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white",
+                        "image_id":  86,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/04-english.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/04-english.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/04-english.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  29,
+                        "product_slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white",
+                        "image_id":  87,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/05-package.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/05-package.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/05-package.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  29,
+                        "product_slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white",
+                        "image_id":  83,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/01-01-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/01-01-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/01-01-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  29,
+                        "product_slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white",
+                        "image_id":  85,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/03-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/03-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white/03-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  30,
+                        "product_slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black",
+                        "image_id":  89,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/02-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/02-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/02-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  30,
+                        "product_slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black",
+                        "image_id":  92,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/05-package.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/05-package.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/05-package.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  30,
+                        "product_slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black",
+                        "image_id":  91,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/04-english.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/04-english.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/04-english.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  30,
+                        "product_slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black",
+                        "image_id":  88,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/01-01-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/01-01-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/01-01-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  30,
+                        "product_slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black",
+                        "image_id":  90,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/03-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/03-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black/03-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  31,
+                        "product_slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black",
+                        "image_id":  97,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/05-package.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/05-package.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/05-package.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  31,
+                        "product_slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black",
+                        "image_id":  93,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/01-01-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/01-01-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/01-01-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  31,
+                        "product_slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black",
+                        "image_id":  94,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/02-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/02-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/02-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  31,
+                        "product_slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black",
+                        "image_id":  95,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/03-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/03-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/03-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  31,
+                        "product_slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black",
+                        "image_id":  96,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/04-english.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/04-english.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black/04-english.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  32,
+                        "product_slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white",
+                        "image_id":  100,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/03-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/03-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/03-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  32,
+                        "product_slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white",
+                        "image_id":  99,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/02-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/02-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/02-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  32,
+                        "product_slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white",
+                        "image_id":  102,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/05-package.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/05-package.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/05-package.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  32,
+                        "product_slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white",
+                        "image_id":  98,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/01-01-white-background.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/01-01-white-background.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/01-01-white-background.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  32,
+                        "product_slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white",
+                        "image_id":  101,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/04-english.jpg",
+                        "storage_path":  "products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/04-english.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white/04-english.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  33,
+                        "product_slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black",
+                        "image_id":  105,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/03-rpp-657-2-4a-10000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/03-rpp-657-2-4a-10000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/03-rpp-657-2-4a-10000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  33,
+                        "product_slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black",
+                        "image_id":  104,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/02-rpp-657-2-4a-10000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/02-rpp-657-2-4a-10000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/02-rpp-657-2-4a-10000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  33,
+                        "product_slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black",
+                        "image_id":  103,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/01-rpp-657-2-4a-10000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/01-rpp-657-2-4a-10000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/01-rpp-657-2-4a-10000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  33,
+                        "product_slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black",
+                        "image_id":  107,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/05-rpp-659-2-4a-30000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/05-rpp-659-2-4a-30000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/05-rpp-659-2-4a-30000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  33,
+                        "product_slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black",
+                        "image_id":  106,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/04-rpp-659-2-4a-30000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/04-rpp-659-2-4a-30000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black/04-rpp-659-2-4a-30000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  34,
+                        "product_slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white",
+                        "image_id":  108,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/01-rpp-657-2-4a-10000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/01-rpp-657-2-4a-10000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/01-rpp-657-2-4a-10000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  34,
+                        "product_slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white",
+                        "image_id":  112,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/05-rpp-659-2-4a-30000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/05-rpp-659-2-4a-30000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/05-rpp-659-2-4a-30000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  34,
+                        "product_slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white",
+                        "image_id":  111,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/04-rpp-659-2-4a-30000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/04-rpp-659-2-4a-30000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/04-rpp-659-2-4a-30000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  34,
+                        "product_slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white",
+                        "image_id":  110,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/03-rpp-657-2-4a-10000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/03-rpp-657-2-4a-10000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/03-rpp-657-2-4a-10000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  34,
+                        "product_slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white",
+                        "image_id":  109,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/02-rpp-657-2-4a-10000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/02-rpp-657-2-4a-10000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white/02-rpp-657-2-4a-10000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  35,
+                        "product_slug":  "remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white",
+                        "image_id":  124,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/06-rpp-658-2-4a-20000mah-1.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/06-rpp-658-2-4a-20000mah-1.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/06-rpp-658-2-4a-20000mah-1.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  35,
+                        "product_slug":  "remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white",
+                        "image_id":  122,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/04-rpp-658-2-4a-20000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/04-rpp-658-2-4a-20000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/04-rpp-658-2-4a-20000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  35,
+                        "product_slug":  "remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white",
+                        "image_id":  121,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/03-rpp-658-2-4a-20000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/03-rpp-658-2-4a-20000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/03-rpp-658-2-4a-20000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  35,
+                        "product_slug":  "remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white",
+                        "image_id":  120,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/02-rpp-658-2-4a-20000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/02-rpp-658-2-4a-20000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/02-rpp-658-2-4a-20000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  35,
+                        "product_slug":  "remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white",
+                        "image_id":  119,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/01-rpp-658-2-4a-20000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/01-rpp-658-2-4a-20000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/01-rpp-658-2-4a-20000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  35,
+                        "product_slug":  "remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white",
+                        "image_id":  123,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/05-rpp-658-2-4a-20000mah.jpg",
+                        "storage_path":  "products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/05-rpp-658-2-4a-20000mah.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white/05-rpp-658-2-4a-20000mah.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  37,
+                        "product_slug":  "wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging",
+                        "image_id":  135,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/03-2.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/03-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/03-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  37,
+                        "product_slug":  "wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging",
+                        "image_id":  133,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/01-2-5-3.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/01-2-5-3.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/01-2-5-3.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  37,
+                        "product_slug":  "wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging",
+                        "image_id":  136,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/04-2.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/04-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/04-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  37,
+                        "product_slug":  "wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging",
+                        "image_id":  134,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/02-2-6-3.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/02-2-6-3.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging/02-2-6-3.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  39,
+                        "product_slug":  "wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging",
+                        "image_id":  131,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/03-2-5-3.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/03-2-5-3.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/03-2-5-3.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  39,
+                        "product_slug":  "wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging",
+                        "image_id":  132,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/04-2-6-3.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/04-2-6-3.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/04-2-6-3.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  39,
+                        "product_slug":  "wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging",
+                        "image_id":  130,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/02-2.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/02-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/02-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  39,
+                        "product_slug":  "wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging",
+                        "image_id":  129,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/01-2.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/01-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging/01-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  40,
+                        "product_slug":  "wekome-wp-80-magsafe-5000mah-power-bank",
+                        "image_id":  138,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/02-10000-2.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/02-10000-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/02-10000-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  40,
+                        "product_slug":  "wekome-wp-80-magsafe-5000mah-power-bank",
+                        "image_id":  137,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/01-wp-81.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/01-wp-81.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/01-wp-81.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  40,
+                        "product_slug":  "wekome-wp-80-magsafe-5000mah-power-bank",
+                        "image_id":  142,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/06-2-5.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/06-2-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/06-2-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  40,
+                        "product_slug":  "wekome-wp-80-magsafe-5000mah-power-bank",
+                        "image_id":  143,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/07-09.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/07-09.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/07-09.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  40,
+                        "product_slug":  "wekome-wp-80-magsafe-5000mah-power-bank",
+                        "image_id":  141,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/05-5000-5.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/05-5000-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/05-5000-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  40,
+                        "product_slug":  "wekome-wp-80-magsafe-5000mah-power-bank",
+                        "image_id":  140,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/04-5000-1.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/04-5000-1.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/04-5000-1.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  40,
+                        "product_slug":  "wekome-wp-80-magsafe-5000mah-power-bank",
+                        "image_id":  139,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/03-10000-4.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/03-10000-4.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-80-magsafe-5000mah-power-bank/03-10000-4.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  41,
+                        "product_slug":  "wekome-wp-81-magsafe-10000mah-power-bank",
+                        "image_id":  147,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/04-5000-1.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/04-5000-1.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/04-5000-1.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  41,
+                        "product_slug":  "wekome-wp-81-magsafe-10000mah-power-bank",
+                        "image_id":  145,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/02-10000-2.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/02-10000-2.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/02-10000-2.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  41,
+                        "product_slug":  "wekome-wp-81-magsafe-10000mah-power-bank",
+                        "image_id":  144,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/01-wp-81.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/01-wp-81.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/01-wp-81.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  41,
+                        "product_slug":  "wekome-wp-81-magsafe-10000mah-power-bank",
+                        "image_id":  150,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/07-09.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/07-09.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/07-09.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  41,
+                        "product_slug":  "wekome-wp-81-magsafe-10000mah-power-bank",
+                        "image_id":  149,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/06-2-5.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/06-2-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/06-2-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  41,
+                        "product_slug":  "wekome-wp-81-magsafe-10000mah-power-bank",
+                        "image_id":  148,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/05-5000-5.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/05-5000-5.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/05-5000-5.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  41,
+                        "product_slug":  "wekome-wp-81-magsafe-10000mah-power-bank",
+                        "image_id":  146,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/03-10000-4.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/03-10000-4.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-81-magsafe-10000mah-power-bank/03-10000-4.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  42,
+                        "product_slug":  "wekome-wp-101-10000mah-power-bank",
+                        "image_id":  157,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/07-04.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/07-04.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/07-04.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  42,
+                        "product_slug":  "wekome-wp-101-10000mah-power-bank",
+                        "image_id":  158,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/08-05.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/08-05.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/08-05.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  42,
+                        "product_slug":  "wekome-wp-101-10000mah-power-bank",
+                        "image_id":  159,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/09-06.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/09-06.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/09-06.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  42,
+                        "product_slug":  "wekome-wp-101-10000mah-power-bank",
+                        "image_id":  156,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/06-03.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/06-03.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/06-03.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  42,
+                        "product_slug":  "wekome-wp-101-10000mah-power-bank",
+                        "image_id":  155,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/05-02.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/05-02.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/05-02.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  42,
+                        "product_slug":  "wekome-wp-101-10000mah-power-bank",
+                        "image_id":  154,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/04-01.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/04-01.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/04-01.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  42,
+                        "product_slug":  "wekome-wp-101-10000mah-power-bank",
+                        "image_id":  153,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/03-image.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/03-image.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/03-image.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  42,
+                        "product_slug":  "wekome-wp-101-10000mah-power-bank",
+                        "image_id":  152,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/02-image.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/02-image.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/02-image.webp"
+                    },
+                    {
+                        "type":  "gallery",
+                        "product_id":  42,
+                        "product_slug":  "wekome-wp-101-10000mah-power-bank",
+                        "image_id":  151,
+                        "status":  "updated",
+                        "source_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/01-1w.jpg",
+                        "storage_path":  "products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/01-1w.webp",
+                        "public_url":  "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wekome-wp-101-10000mah-power-bank/01-1w.webp"
+                    }
+                ]
+}

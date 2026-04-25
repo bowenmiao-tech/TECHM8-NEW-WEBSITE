@@ -28,6 +28,52 @@ function ConvertTo-Slug {
   return $slug
 }
 
+function Get-WebPUploadAsset {
+  param(
+    [string]$SourcePath,
+    [string]$CacheRoot
+  )
+
+  $extension = [System.IO.Path]::GetExtension($SourcePath).ToLowerInvariant()
+  if ($extension -eq ".webp") {
+    return [pscustomobject]@{
+      local_path = $SourcePath
+      extension  = ".webp"
+    }
+  }
+
+  $npxCommand = Get-Command npx -ErrorAction SilentlyContinue
+  if ($null -eq $npxCommand) {
+    return [pscustomobject]@{
+      local_path = $SourcePath
+      extension  = $extension
+    }
+  }
+
+  New-Item -ItemType Directory -Path $CacheRoot -Force | Out-Null
+  $sourceHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $SourcePath).Hash.Substring(0, 12).ToLowerInvariant()
+  $baseName = ConvertTo-Slug ([System.IO.Path]::GetFileNameWithoutExtension($SourcePath))
+  if ([string]::IsNullOrWhiteSpace($baseName)) {
+    $baseName = "image"
+  }
+
+  $targetPath = Join-Path $CacheRoot ("{0}-{1}.webp" -f $baseName, $sourceHash)
+  if (-not (Test-Path $targetPath)) {
+    & $npxCommand.Source --yes sharp-cli -i $SourcePath -o $targetPath | Out-Null
+    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $targetPath)) {
+      return [pscustomobject]@{
+        local_path = $SourcePath
+        extension  = $extension
+      }
+    }
+  }
+
+  return [pscustomobject]@{
+    local_path = $targetPath
+    extension  = ".webp"
+  }
+}
+
 function Get-XlsxRows {
   param([string]$Path)
 
@@ -643,6 +689,7 @@ $summary = [pscustomobject]@{
 }
 
 New-Item -ItemType Directory -Path $outputAbsolute -Force | Out-Null
+$webpCacheRoot = Join-Path $outputAbsolute "_webp-cache"
 $products | ConvertTo-Json -Depth 10 | Set-Content -Path (Join-Path $outputAbsolute "products.json") -Encoding UTF8
 $summary | ConvertTo-Json -Depth 6 | Set-Content -Path (Join-Path $outputAbsolute "summary.json") -Encoding UTF8
 
@@ -669,8 +716,14 @@ foreach ($product in $products) {
   $uploadedImages = @()
   if (-not $SkipImageUpload) {
     foreach ($image in $product.image_files) {
-      $storagePath = "products/power-banks/{0}/{1}" -f $product.slug, $image.file_name
-      $publicUrl = Upload-ToSupabaseStorage -LocalPath $image.local_path -StoragePath $storagePath
+      $uploadAsset = Get-WebPUploadAsset -SourcePath $image.local_path -CacheRoot $webpCacheRoot
+      $safeBaseName = ConvertTo-Slug ([System.IO.Path]::GetFileNameWithoutExtension($image.file_name))
+      if ([string]::IsNullOrWhiteSpace($safeBaseName)) {
+        $safeBaseName = "image"
+      }
+      $safeFileName = "{0:D2}-{1}{2}" -f $image.sort_order, $safeBaseName, $uploadAsset.extension
+      $storagePath = "products/power-banks/{0}/{1}" -f $product.slug, $safeFileName
+      $publicUrl = Upload-ToSupabaseStorage -LocalPath $uploadAsset.local_path -StoragePath $storagePath
       $uploadedImages += [pscustomobject]@{
         public_url = $publicUrl
         alt_text = $product.name

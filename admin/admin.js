@@ -1483,6 +1483,7 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
           <label><span>Hero image URL</span><input type="url" name="image_url" value="${escapeHtml(row.image_url || "")}" ${state.canEdit ? "" : "disabled"}></label>
           <label><span>Short description</span><textarea name="short_description" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.short_description || "")}</textarea></label>
           <label><span>Compatibility</span><textarea name="compatibility" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.compatibility || "")}</textarea></label>
+          <label><span>Detail page content (HTML allowed)</span><textarea class="admin-editor__detail-html" name="detail_html" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.detail_html || "")}</textarea></label>
           ${state.canEdit ? `<div class="admin-button-row"><button class="button button--primary" type="submit">Save product</button></div>` : `<p class="admin-note">This account can view catalog data but only super admins can change it.</p>`}
         </form>
       </div>
@@ -1508,6 +1509,7 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
           image_url: formData.get("image_url"),
           short_description: formData.get("short_description"),
           compatibility: formData.get("compatibility"),
+          detail_html: formData.get("detail_html"),
         }, session);
         setAlert(alertTarget, "Product updated.", "success");
         await load();

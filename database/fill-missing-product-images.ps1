@@ -24,6 +24,52 @@ function ConvertTo-Slug {
   return $slug
 }
 
+function Get-WebPUploadAsset {
+  param(
+    [string]$SourcePath,
+    [string]$CacheRoot
+  )
+
+  $extension = [System.IO.Path]::GetExtension($SourcePath).ToLowerInvariant()
+  if ($extension -eq ".webp") {
+    return [pscustomobject]@{
+      local_path = $SourcePath
+      extension  = ".webp"
+    }
+  }
+
+  $npxCommand = Get-Command npx -ErrorAction SilentlyContinue
+  if ($null -eq $npxCommand) {
+    return [pscustomobject]@{
+      local_path = $SourcePath
+      extension  = $extension
+    }
+  }
+
+  New-Item -ItemType Directory -Path $CacheRoot -Force | Out-Null
+  $sourceHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $SourcePath).Hash.Substring(0, 12).ToLowerInvariant()
+  $baseName = ConvertTo-Slug ([System.IO.Path]::GetFileNameWithoutExtension($SourcePath))
+  if ([string]::IsNullOrWhiteSpace($baseName)) {
+    $baseName = "image"
+  }
+
+  $targetPath = Join-Path $CacheRoot ("{0}-{1}.webp" -f $baseName, $sourceHash)
+  if (-not (Test-Path $targetPath)) {
+    & $npxCommand.Source --yes sharp-cli -i $SourcePath -o $targetPath | Out-Null
+    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $targetPath)) {
+      return [pscustomobject]@{
+        local_path = $SourcePath
+        extension  = $extension
+      }
+    }
+  }
+
+  return [pscustomobject]@{
+    local_path = $targetPath
+    extension  = ".webp"
+  }
+}
+
 function Get-ModelTokens {
   param([string]$Text)
 
@@ -269,6 +315,7 @@ New-Item -ItemType Directory -Path $outputAbsolute -Force | Out-Null
 
 $topLevelFolders = @(Get-ChildItem -Path $ImageRoot -Directory)
 $summaryRows = New-Object System.Collections.Generic.List[object]
+$webpCacheRoot = Join-Path $outputAbsolute "_webp-cache"
 
 foreach ($folder in $topLevelFolders) {
   $tokens = @(Get-ModelTokens -Text $folder.Name)
@@ -374,9 +421,10 @@ foreach ($folder in $topLevelFolders) {
         if ([string]::IsNullOrWhiteSpace($baseName)) {
           $baseName = "image"
         }
-        $safeFileName = "{0:D2}-{1}{2}" -f $image.sort_order, $baseName, ([System.IO.Path]::GetExtension($image.file_name).ToLowerInvariant())
+        $uploadAsset = Get-WebPUploadAsset -SourcePath $image.local_path -CacheRoot $webpCacheRoot
+        $safeFileName = "{0:D2}-{1}{2}" -f $image.sort_order, $baseName, $uploadAsset.extension
         $storagePath = "products/missing-catalog-images/{0}/{1}" -f $product.slug, $safeFileName
-        $publicUrl = Upload-ToSupabaseStorage -LocalPath $image.local_path -StoragePath $storagePath
+        $publicUrl = Upload-ToSupabaseStorage -LocalPath $uploadAsset.local_path -StoragePath $storagePath
         $uploadedImages += [pscustomobject]@{
           public_url = $publicUrl
           alt_text = $image.alt_text

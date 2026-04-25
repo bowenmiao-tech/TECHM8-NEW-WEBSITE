@@ -1372,6 +1372,127 @@ function getLatestDisplayProducts(products, limit = 6) {
   return displayProducts.slice(0, limit);
 }
 
+function sanitizeRichContentHtml(html) {
+  const source = String(html || "").trim();
+  if (!source) return "";
+
+  const template = document.createElement("template");
+  template.innerHTML = source;
+  template.content.querySelectorAll("script, iframe, object, embed, style, link[rel='import']").forEach((node) => node.remove());
+
+  template.content.querySelectorAll("*").forEach((node) => {
+    Array.from(node.attributes).forEach((attribute) => {
+      const name = attribute.name.toLowerCase();
+      const value = String(attribute.value || "");
+      if (name.startsWith("on")) {
+        node.removeAttribute(attribute.name);
+        return;
+      }
+      if (["src", "href"].includes(name) && /^\s*javascript:/i.test(value)) {
+        node.removeAttribute(attribute.name);
+      }
+    });
+  });
+
+  return template.innerHTML.trim();
+}
+
+function formatProductDetailHtml(product) {
+  const detailHtml = sanitizeRichContentHtml(product?.detail_html || "");
+  if (detailHtml) {
+    return detailHtml;
+  }
+
+  const paragraphs = [product?.description, product?.short_description]
+    .map((item) => String(item || "").trim())
+    .filter(Boolean);
+
+  if (!paragraphs.length) {
+    return `<p>Product information will be expanded as more supplier content is added to the catalog.</p>`;
+  }
+
+  return paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("");
+}
+
+function createRailProductCard(product) {
+  const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
+  const retailPrice = Number(product.retail_price) || 0;
+  const compareAtPrice = Number(product.compare_at_price) || 0;
+  const savingsAmount = Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
+  const productName = getProductDisplayName(product) || product.name;
+  const compareMarkup =
+    Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice
+      ? `<span class="storefront-rail-card__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>`
+      : "";
+  const savingsMarkup =
+    savingsAmount > 0
+      ? `<span class="storefront-rail-card__saving">Save ${escapeHtml(formatMoney(savingsAmount))}</span>`
+      : "";
+
+  return `
+    <article class="storefront-rail-card">
+      <a class="storefront-rail-card__media" href="${detailUrl}">
+        <img src="${escapeHtml(resolveProductImageUrl(product))}" alt="${escapeHtml(productName)}" loading="lazy">
+      </a>
+      <div class="storefront-rail-card__body">
+        <p class="storefront-rail-card__eyebrow">${escapeHtml(product.brand || product.category_name || "TECHM8")}</p>
+        <a class="storefront-rail-card__title" href="${detailUrl}">${escapeHtml(productName)}</a>
+        <div class="storefront-rail-card__price">
+          <strong>${escapeHtml(formatMoney(retailPrice))}</strong>
+          ${compareMarkup}
+        </div>
+        ${savingsMarkup}
+        <div class="storefront-rail-card__actions">
+          <button class="storefront-card__action storefront-card__action--primary" type="button" data-add-cart-slug="${escapeHtml(product.slug)}">Add to cart</button>
+          <a class="storefront-card__action storefront-card__action--secondary" href="${detailUrl}">Details</a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderProductRailSection(config) {
+  const {
+    eyebrow = "",
+    title = "",
+    linkHref = "",
+    linkLabel = "",
+    emptyTitle = "",
+    emptyCopy = "",
+    products = [],
+    dataAttribute = "",
+  } = config || {};
+
+  return `
+    <section class="section storefront-product-rail">
+      <div class="section-heading section-heading--split">
+        <div>
+          ${eyebrow ? `<p class="eyebrow">${escapeHtml(eyebrow)}</p>` : ""}
+          <h2>${escapeHtml(title)}</h2>
+        </div>
+        ${linkHref && linkLabel ? `<a href="${escapeHtml(linkHref)}">${escapeHtml(linkLabel)}</a>` : ""}
+      </div>
+      ${
+        Array.isArray(products) && products.length
+          ? `
+            <div class="storefront-rail" ${dataAttribute ? `${dataAttribute}` : ""}>
+              ${products.map((product) => createRailProductCard(product)).join("")}
+            </div>
+          `
+          : `
+            <article class="storefront-card storefront-card--empty">
+              <div class="storefront-card__body">
+                <span class="storefront-card__pill">No products</span>
+                <h3>${escapeHtml(emptyTitle || "Nothing to show yet")}</h3>
+                <p>${escapeHtml(emptyCopy || "This section will update automatically as the catalog grows.")}</p>
+              </div>
+            </article>
+          `
+      }
+    </section>
+  `;
+}
+
 function renderVariantSummary(product, classPrefix) {
   if (!Array.isArray(product?.variant_options) || product.variant_options.length <= 1) {
     return "";
@@ -1386,6 +1507,52 @@ function renderVariantSummary(product, classPrefix) {
 
 const CART_STORAGE_KEY = "techm8_cart_v1";
 const LOCAL_ORDER_STORAGE_KEY = "techm8_orders_v1";
+const RECENT_PRODUCTS_STORAGE_KEY = "techm8_recent_products_v1";
+
+function loadRecentProductSlugs() {
+  try {
+    const raw = window.localStorage.getItem(RECENT_PRODUCTS_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.map((item) => String(item || "").trim()).filter(Boolean) : [];
+  } catch (_error) {
+    return [];
+  }
+}
+
+function saveRecentProductSlugs(slugs) {
+  const normalized = Array.isArray(slugs)
+    ? slugs.map((item) => String(item || "").trim()).filter(Boolean).slice(0, 24)
+    : [];
+  window.localStorage.setItem(RECENT_PRODUCTS_STORAGE_KEY, JSON.stringify(normalized));
+}
+
+function rememberRecentProduct(product) {
+  const slug = String(product?.slug || "").trim();
+  if (!slug) return;
+  const existing = loadRecentProductSlugs().filter((item) => item !== slug);
+  existing.unshift(slug);
+  saveRecentProductSlugs(existing);
+}
+
+function getRecentlyViewedProducts(products, currentSlug, limit = 6) {
+  const allProducts = Array.isArray(products) ? products : [];
+  const slugs = loadRecentProductSlugs().filter((slug) => slug && slug !== currentSlug);
+  const bySlug = new Map(allProducts.map((product) => [product.slug, product]));
+  const seenGroups = new Set();
+  const items = [];
+
+  slugs.forEach((slug) => {
+    if (items.length >= limit) return;
+    const product = bySlug.get(slug);
+    if (!product) return;
+    const groupKey = product.variant_group_key || product.slug;
+    if (seenGroups.has(groupKey)) return;
+    seenGroups.add(groupKey);
+    items.push(product);
+  });
+
+  return items.slice(0, limit);
+}
 
 function loadCart() {
   try {
@@ -2136,7 +2303,7 @@ async function loadSharedCatalogData() {
       Authorization: `Bearer ${supabaseAnonKey}`,
     };
     const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
-    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc,id.desc`;
+    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,detail_html,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc,id.desc`;
     const productImagesUrl = `${supabaseUrl}/rest/v1/product_images?select=product_id,image_url,alt_text,sort_order&order=sort_order.asc`;
 
     const [categoriesResult, productsResult, productImagesResult] = await Promise.allSettled([
@@ -2542,11 +2709,13 @@ function initProductDetailPage() {
     const mainImage = galleryImages[0] || null;
     const variantOptions = Array.isArray(product.variant_options) ? product.variant_options : [];
     const productGroupKey = product.variant_group_key || product.slug;
-    const relatedProducts = getCatalogDisplayProducts(
-      products.filter((item) => item.category_slug === product.category_slug && (item.variant_group_key || item.slug) !== productGroupKey)
-    )
-      .sort(compareProductsByLatest)
-      .slice(0, 4);
+    const latestProducts = getLatestDisplayProducts(
+      products.filter((item) => (item.variant_group_key || item.slug) !== productGroupKey),
+      6
+    );
+    rememberRecentProduct(product);
+    const recentlyViewedProducts = getRecentlyViewedProducts(products, product.slug, 6);
+    const detailHtml = formatProductDetailHtml(product);
     const variantMarkup =
       variantOptions.length > 1
         ? `
@@ -2657,65 +2826,41 @@ function initProductDetailPage() {
         </div>
       </section>
 
-      <section class="storefront-pdp__content">
-        <div class="storefront-pdp__content-main">
-          <article class="storefront-pdp__panel">
-            <div class="section-heading section-heading--split">
-              <div>
-                <p class="eyebrow">Overview</p>
-                <h2>Product overview</h2>
-              </div>
+      <section class="storefront-pdp__detail-stack">
+        <article class="storefront-pdp__panel storefront-pdp__panel--detail-html">
+          <div class="section-heading section-heading--split">
+            <div>
+              <p class="eyebrow">Product details</p>
+              <h2>Everything about this product</h2>
             </div>
-            <p>${escapeHtml(product.description || product.short_description || "Retail catalog product.")}</p>
-          </article>
-
-          <article class="storefront-pdp__panel">
-            <div class="section-heading section-heading--split">
-              <div>
-                <p class="eyebrow">Key details</p>
-                <h2>What customers need to know</h2>
-              </div>
-            </div>
-            <div class="storefront-pdp__facts">
-              <div><strong>Current selling price</strong><span>${escapeHtml(formatMoney(retailPrice))}</span></div>
-              <div><strong>Original / compare price</strong><span>${compareAtPrice > retailPrice ? escapeHtml(formatMoney(compareAtPrice)) : "Not listed"}</span></div>
-              <div><strong>Availability</strong><span>${escapeHtml(stockText)}</span></div>
-              <div><strong>Category link</strong><span><a href="category.html?slug=${encodeURIComponent(product.category_slug)}">${escapeHtml(product.category_name)}</a></span></div>
-            </div>
-          </article>
-        </div>
-
-        <aside class="storefront-pdp__sidebar">
-          <article class="storefront-pdp__sidecard">
-            <p class="eyebrow">Why buy here</p>
-            <ul class="storefront-pdp__bullets">
-              <li>Product data comes from the live TECHM8 catalog.</li>
-              <li>Store pickup can be matched to your nearest location.</li>
-              <li>Catalog structure is ready for future POS integration.</li>
-            </ul>
-          </article>
-
-          <article class="storefront-pdp__sidecard">
-            <p class="eyebrow">Need support first?</p>
-            <a class="button button--secondary" href="book-repair.html">Book a repair</a>
-          </article>
-        </aside>
-      </section>
-
-      <section class="section">
-        <div class="section-heading section-heading--split">
-          <div>
-            <p class="eyebrow">Related products</p>
-            <h2>Customers also view</h2>
           </div>
-          <a href="category.html?slug=${encodeURIComponent(product.category_slug)}">View ${escapeHtml(product.category_name)}</a>
-        </div>
-        <div class="storefront-grid storefront-grid--dense" data-product-related>
-          ${relatedProducts.length
-            ? relatedProducts.map((item) => createCatalogCard(item)).join("")
-            : `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">No related items</span><h3>No more products in this category yet</h3><p>More items can be added from the database later.</p></div></article>`}
-        </div>
+          <div class="storefront-rich-content">
+            ${detailHtml}
+          </div>
+        </article>
       </section>
+
+      ${renderProductRailSection({
+        eyebrow: "Latest products",
+        title: "New arrivals in the catalog",
+        linkHref: "shop.html",
+        linkLabel: "View all products",
+        emptyTitle: "No newer products yet",
+        emptyCopy: "New products will appear here automatically as they are added to Supabase.",
+        products: latestProducts,
+        dataAttribute: 'data-product-latest'
+      })}
+
+      ${renderProductRailSection({
+        eyebrow: "Recently viewed",
+        title: "Products viewed on this browser",
+        linkHref: `category.html?slug=${encodeURIComponent(product.category_slug)}`,
+        linkLabel: `View ${product.category_name}`,
+        emptyTitle: "No recent products yet",
+        emptyCopy: "As customers browse the catalog, recently viewed products will appear here.",
+        products: recentlyViewedProducts,
+        dataAttribute: 'data-product-recent'
+      })}
     `;
 
     const addButton = shell.querySelector("[data-product-add-cart]");
@@ -2748,10 +2893,11 @@ function initProductDetailPage() {
       });
     }
 
-    const relatedTarget = shell.querySelector("[data-product-related]");
-    if (relatedTarget instanceof HTMLElement) {
-      bindCartButtons(relatedTarget, products);
-    }
+    shell.querySelectorAll("[data-product-latest], [data-product-recent]").forEach((target) => {
+      if (target instanceof HTMLElement) {
+        bindCartButtons(target, products);
+      }
+    });
   });
 }
 

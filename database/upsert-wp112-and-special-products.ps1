@@ -45,6 +45,65 @@ function Invoke-SupabaseRest {
   return Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers -ContentType "application/json" -Body $json
 }
 
+function ConvertTo-Slug {
+  param([string]$Value)
+
+  if ([string]::IsNullOrWhiteSpace($Value)) {
+    return ""
+  }
+
+  $slug = $Value.ToLowerInvariant()
+  $slug = [regex]::Replace($slug, "[^a-z0-9]+", "-")
+  $slug = $slug.Trim("-")
+  return $slug
+}
+
+function Get-WebPUploadAsset {
+  param(
+    [string]$SourcePath,
+    [string]$CacheRoot
+  )
+
+  $extension = [System.IO.Path]::GetExtension($SourcePath).ToLowerInvariant()
+  if ($extension -eq ".webp") {
+    return [pscustomobject]@{
+      local_path = $SourcePath
+      extension  = ".webp"
+    }
+  }
+
+  $npxCommand = Get-Command npx -ErrorAction SilentlyContinue
+  if ($null -eq $npxCommand) {
+    return [pscustomobject]@{
+      local_path = $SourcePath
+      extension  = $extension
+    }
+  }
+
+  New-Item -ItemType Directory -Path $CacheRoot -Force | Out-Null
+  $sourceHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $SourcePath).Hash.Substring(0, 12).ToLowerInvariant()
+  $baseName = ConvertTo-Slug ([System.IO.Path]::GetFileNameWithoutExtension($SourcePath))
+  if ([string]::IsNullOrWhiteSpace($baseName)) {
+    $baseName = "image"
+  }
+
+  $targetPath = Join-Path $CacheRoot ("{0}-{1}.webp" -f $baseName, $sourceHash)
+  if (-not (Test-Path $targetPath)) {
+    & $npxCommand.Source --yes sharp-cli -i $SourcePath -o $targetPath | Out-Null
+    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $targetPath)) {
+      return [pscustomobject]@{
+        local_path = $SourcePath
+        extension  = $extension
+      }
+    }
+  }
+
+  return [pscustomobject]@{
+    local_path = $targetPath
+    extension  = ".webp"
+  }
+}
+
 function Ensure-Array {
   param([object]$Value)
 
@@ -87,12 +146,7 @@ function ConvertTo-SafeFileName {
     [int]$Index
   )
 
-  $extension = [System.IO.Path]::GetExtension($Name).ToLowerInvariant()
-  if ([string]::IsNullOrWhiteSpace($extension)) {
-    $extension = ".jpg"
-  }
-
-  return ("{0:D2}{1}" -f ($Index + 1), $extension)
+  return ("{0:D2}.webp" -f ($Index + 1))
 }
 
 function Get-OrCreateCategoryId {
@@ -244,6 +298,7 @@ function Get-LocalWp112Images {
 
 $outputAbsolute = Join-Path (Get-Location) $OutputRoot
 New-Item -ItemType Directory -Path $outputAbsolute -Force | Out-Null
+$webpCacheRoot = Join-Path $outputAbsolute "_webp-cache"
 
 $generatedProducts = Get-Content -Path $GeneratedProductsPath -Raw | ConvertFrom-Json
 $wp112 = @($generatedProducts | Where-Object { $_.model -eq "WP-112" })[0]
@@ -323,9 +378,10 @@ $wp112ProductId = Upsert-Product -Product $wp112Product -CategoryId $powerBankCa
 $uploadedWp112Images = @()
 $sortOrder = 0
 foreach ($file in $wp112ImageFiles) {
+  $uploadAsset = Get-WebPUploadAsset -SourcePath $file.FullName -CacheRoot $webpCacheRoot
   $safeFileName = ConvertTo-SafeFileName -Name $file.Name -Index $sortOrder
   $storagePath = "products/power-banks/{0}/{1}" -f $wp112Product.slug, $safeFileName
-  $publicUrl = Upload-ToSupabaseStorage -LocalPath $file.FullName -StoragePath $storagePath
+  $publicUrl = Upload-ToSupabaseStorage -LocalPath $uploadAsset.local_path -StoragePath $storagePath
   $uploadedWp112Images += [pscustomobject]@{
     public_url  = $publicUrl
     alt_text    = $wp112Product.name

@@ -463,7 +463,7 @@ async function listProducts(supabaseAdmin: ReturnType<typeof createClient>, cont
 
   let query = supabaseAdmin
     .from('products')
-    .select('id, sku, slug, name, brand, model, category_id, short_description, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at', { count: 'exact' })
+    .select('id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at', { count: 'exact' })
     .order('updated_at', { ascending: false })
     .range(from, to)
 
@@ -518,6 +518,7 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     is_visible: typeof body.is_visible === 'boolean' ? body.is_visible : undefined,
     is_featured: typeof body.is_featured === 'boolean' ? body.is_featured : undefined,
     image_url: body.image_url === '' ? null : normalizeNullableString(body.image_url),
+    detail_html: body.detail_html === '' ? null : String(body.detail_html ?? ''),
   }
 
   const cleanPatch = Object.fromEntries(Object.entries(patch).filter(([, value]) => value !== undefined))

@@ -2,11 +2,21 @@ import { defineConfig } from "vite";
 import { readdirSync, statSync } from "node:fs";
 import { resolve, relative } from "node:path";
 
+const IGNORED_DIRECTORIES = new Set([
+  ".git",
+  "dist",
+  "node_modules",
+  "public",
+  "supabase"
+]);
+
 function collectHtmlFiles(dir, baseDir = dir) {
   const entries = readdirSync(dir);
   const files = {};
 
   for (const entry of entries) {
+    if (IGNORED_DIRECTORIES.has(entry)) continue;
+
     const fullPath = resolve(dir, entry);
     const stats = statSync(fullPath);
 

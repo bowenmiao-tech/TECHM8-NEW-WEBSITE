@@ -104,6 +104,13 @@ body.admin-login-body {
   resize: vertical;
 }
 
+.admin-editor__detail-html {
+  min-height: 280px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
 .admin-login__form input:focus,
 .admin-editor__form input:focus,
 .admin-editor__form textarea:focus,
