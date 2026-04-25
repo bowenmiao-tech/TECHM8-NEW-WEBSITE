@@ -328,11 +328,19 @@ function initHomeBanner() {
   const dots = Array.from(banner.querySelectorAll("[data-banner-dot]"));
   const prev = banner.querySelector("[data-banner-prev]");
   const next = banner.querySelector("[data-banner-next]");
+  const currentCount = banner.querySelector("[data-banner-current]");
+  const totalCount = banner.querySelector("[data-banner-total]");
 
   if (!slides.length) return;
 
   let current = 0;
   let timer;
+  let touchStartX = 0;
+  let touchDeltaX = 0;
+
+  if (totalCount instanceof HTMLElement) {
+    totalCount.textContent = String(slides.length);
+  }
 
   const render = (index) => {
     current = (index + slides.length) % slides.length;
@@ -342,6 +350,9 @@ function initHomeBanner() {
     dots.forEach((dot, dotIndex) => {
       dot.classList.toggle("is-active", dotIndex === current);
     });
+    if (currentCount instanceof HTMLElement) {
+      currentCount.textContent = String(current + 1);
+    }
   };
 
   const restart = () => {
@@ -365,6 +376,34 @@ function initHomeBanner() {
 
   next?.addEventListener("click", () => {
     render(current + 1);
+    restart();
+  });
+
+  banner.addEventListener("mouseenter", () => {
+    window.clearInterval(timer);
+  });
+
+  banner.addEventListener("mouseleave", () => {
+    restart();
+  });
+
+  banner.addEventListener("touchstart", (event) => {
+    touchStartX = event.touches[0]?.clientX ?? 0;
+    touchDeltaX = 0;
+  }, { passive: true });
+
+  banner.addEventListener("touchmove", (event) => {
+    const currentX = event.touches[0]?.clientX ?? touchStartX;
+    touchDeltaX = currentX - touchStartX;
+  }, { passive: true });
+
+  banner.addEventListener("touchend", () => {
+    if (Math.abs(touchDeltaX) < 36) return;
+    if (touchDeltaX < 0) {
+      render(current + 1);
+    } else {
+      render(current - 1);
+    }
     restart();
   });
 

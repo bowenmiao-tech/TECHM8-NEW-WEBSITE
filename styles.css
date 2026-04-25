@@ -5915,3 +5915,112 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     grid-template-columns: 1fr;
   }
 }
+
+/* Banner slider overrides */
+.home-banner__controls {
+  position: relative;
+  left: 50%;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  transform: translateX(-50%);
+}
+
+.home-banner__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.65rem;
+  height: 3.65rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(7, 39, 45, 0.08);
+  color: var(--text);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 10px 24px rgba(3, 24, 28, 0.12);
+  cursor: pointer;
+  transition: transform 180ms ease, color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.home-banner__arrow:hover {
+  background: rgba(5, 206, 172, 0.16);
+  color: var(--accent);
+  transform: translateY(-1px) scale(1.03);
+}
+
+.home-banner__arrow:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.home-banner__counter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.24rem;
+  min-width: 4.6rem;
+  padding: 0.55rem 0.95rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 10px 24px rgba(3, 24, 28, 0.08);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.home-banner__counter [data-banner-current] {
+  color: var(--accent);
+}
+
+.home-banner__counter-separator {
+  opacity: 0.45;
+}
+
+.home-banner__dots {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.home-banner__dots button {
+  width: 2.65rem;
+  height: 0.42rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(7, 39, 45, 0.16);
+  cursor: pointer;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.home-banner__dots button:hover {
+  transform: scaleX(1.04);
+}
+
+.home-banner__dots button.is-active {
+  background: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .home-banner__controls {
+    gap: 0.55rem;
+    margin-top: 0.8rem;
+    flex-wrap: nowrap;
+  }
+
+  .home-banner__arrow {
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
+  }
+
+  .home-banner__counter {
+    min-width: 3.85rem;
+    padding: 0.42rem 0.72rem;
+    font-size: 0.82rem;
+  }
+
+  .home-banner__dots button {
+    width: 1.9rem;
+  }
+}
