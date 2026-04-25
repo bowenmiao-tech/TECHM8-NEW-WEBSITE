@@ -184,16 +184,29 @@
             <p>Authentic quality, popular accessories and practical tech essentials for phones, tablets and computers.</p>
           </div>
 
-          <div class="home-products-grid" data-home-featured-grid>
-            <article class="home-product-card home-product-card--loading">
-              <div class="home-product-card__content">
-                <div class="home-product-card__row">
-                  <h3>Loading latest products...</h3>
-                  <span class="home-product-card__pill">Live</span>
-                </div>
-                <p class="home-product-card__summary">The newest six products from your online catalog will appear here automatically.</p>
+          <div class="home-products-toolbar">
+            <span class="home-products-toolbar__note">Live latest 6 products</span>
+            <div class="home-products-toolbar__actions">
+              <button class="home-products-toolbar__arrow" type="button" data-home-featured-prev aria-label="Previous products">&#8249;</button>
+              <button class="home-products-toolbar__arrow" type="button" data-home-featured-next aria-label="Next products">&#8250;</button>
+              <a class="home-products-toolbar__viewall" href="shop.html">View all <span aria-hidden="true">&#8250;</span></a>
+            </div>
+          </div>
+
+          <div class="home-products-carousel">
+            <div class="home-products-viewport" data-home-featured-viewport>
+              <div class="home-products-grid" data-home-featured-grid>
+                <article class="home-product-card home-product-card--loading">
+                  <div class="home-product-card__content">
+                    <div class="home-product-card__row">
+                      <h3>Loading latest products...</h3>
+                      <span class="home-product-card__pill">Live</span>
+                    </div>
+                    <p class="home-product-card__summary">The newest six products from your online catalog will appear here automatically.</p>
+                  </div>
+                </article>
               </div>
-            </article>
+            </div>
           </div>
 
           <div class="home-products-showcase__cta">

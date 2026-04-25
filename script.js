@@ -2341,44 +2341,79 @@ function createHomeFeaturedCard(product) {
   const imageMarkup = product.display_image
     ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy">`
     : `<div class="home-product-card__image-placeholder" aria-hidden="true">TECHM8</div>`;
+  const saleAmount = hasComparePrice ? compareAtPrice - retailPrice : 0;
+  const primaryBadge = hasComparePrice ? "On sale" : (product.is_featured ? "Featured" : "New");
 
   return `
-    <article class="home-product-card">
-      <a class="home-product-card__media" href="${detailUrl}">
-        ${imageMarkup}
-      </a>
-      <div class="home-product-card__content">
-          <div class="home-product-card__row">
-            <a class="home-product-card__eyebrow" href="${categoryUrl}">${escapeHtml(product.category_name || "Latest product")}</a>
-            <span class="home-product-card__pill">${product.is_featured ? "Featured" : "New"}</span>
-          </div>
-          <a class="home-product-card__title-link" href="${detailUrl}">
-            <h3>${escapeHtml(productName)}</h3>
-          </a>
-          <p class="home-product-card__summary">${escapeHtml(product.short_description || product.description || "Latest item from the TECHM8 online catalog.")}</p>
-          ${renderVariantSummary(product, "home-product-card")}
-          <div class="home-product-card__price-row">
-            <strong>${escapeHtml(formatMoney(retailPrice))}</strong>
-            ${hasComparePrice ? `<span class="home-product-card__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>` : ""}
-          </div>
-        <div class="home-product-card__meta">
-          <span>${escapeHtml(product.brand || "TECHM8")}</span>
-          <a href="${detailUrl}">View details</a>
+      <article class="home-product-card">
+        <div class="home-product-card__topline">
+          <span class="home-product-card__deal-badge ${hasComparePrice ? "is-sale" : ""}">${escapeHtml(primaryBadge)}</span>
+          <a class="home-product-card__eyebrow" href="${categoryUrl}">${escapeHtml(product.category_name || "Latest product")}</a>
         </div>
-      </div>
-    </article>
-  `;
+        <a class="home-product-card__media" href="${detailUrl}">
+          ${imageMarkup}
+        </a>
+        <div class="home-product-card__content">
+            <div class="home-product-card__row">
+              <span class="home-product-card__brand">${escapeHtml(product.brand || "TECHM8")}</span>
+              <span class="home-product-card__pill">${hasComparePrice ? "Deal" : "Latest"}</span>
+            </div>
+            <a class="home-product-card__title-link" href="${detailUrl}">
+              <h3>${escapeHtml(productName)}</h3>
+            </a>
+            <p class="home-product-card__summary">${escapeHtml(product.short_description || product.description || "Latest item from the TECHM8 online catalog.")}</p>
+            ${renderVariantSummary(product, "home-product-card")}
+            <div class="home-product-card__price-row">
+              <strong>${escapeHtml(formatMoney(retailPrice))}</strong>
+              ${hasComparePrice ? `<span class="home-product-card__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>` : ""}
+            </div>
+          ${hasComparePrice ? `<p class="home-product-card__saving">Save ${escapeHtml(formatMoney(saleAmount))}</p>` : `<p class="home-product-card__saving is-muted">Standard price</p>`}
+          <div class="home-product-card__actions">
+            <button class="home-product-card__cart-button" type="button" data-add-cart-slug="${escapeHtml(product.slug)}" data-add-cart-qty="1">Add to cart</button>
+            <a class="home-product-card__detail-link" href="${detailUrl}">Details</a>
+          </div>
+        </div>
+      </article>
+    `;
 }
 
 function initHomeFeaturedProducts() {
   const grid = document.querySelector("[data-home-featured-grid]");
-  if (!(grid instanceof HTMLElement)) return;
+  const viewport = document.querySelector("[data-home-featured-viewport]");
+  const prevButton = document.querySelector("[data-home-featured-prev]");
+  const nextButton = document.querySelector("[data-home-featured-next]");
+  if (!(grid instanceof HTMLElement) || !(viewport instanceof HTMLElement)) return;
+
+  const updateArrowState = () => {
+    if (!(prevButton instanceof HTMLButtonElement) || !(nextButton instanceof HTMLButtonElement)) return;
+    const maxScrollLeft = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    prevButton.disabled = viewport.scrollLeft <= 8;
+    nextButton.disabled = viewport.scrollLeft >= maxScrollLeft - 8;
+  };
+
+  const scrollCarousel = (direction) => {
+    const step = Math.max(viewport.clientWidth * 0.82, 260);
+    viewport.scrollBy({ left: direction * step, behavior: "smooth" });
+  };
+
+  if (prevButton instanceof HTMLButtonElement) {
+    prevButton.addEventListener("click", () => scrollCarousel(-1));
+  }
+
+  if (nextButton instanceof HTMLButtonElement) {
+    nextButton.addEventListener("click", () => scrollCarousel(1));
+  }
+
+  viewport.addEventListener("scroll", updateArrowState, { passive: true });
+  window.addEventListener("resize", updateArrowState);
 
   const render = (products) => {
     const latestProducts = selectLatestHomeProducts(products, 6);
     grid.innerHTML = latestProducts.length
-      ? latestProducts.map((product) => createHomeFeaturedCard(product)).join("")
-      : `<article class="home-product-card home-product-card--loading"><div class="home-product-card__content"><div class="home-product-card__row"><h3>No products available yet</h3><span class="home-product-card__pill">Catalog</span></div><p class="home-product-card__summary">Add products in Supabase and the newest six items will appear here automatically.</p></div></article>`;
+        ? latestProducts.map((product) => createHomeFeaturedCard(product)).join("")
+        : `<article class="home-product-card home-product-card--loading"><div class="home-product-card__content"><div class="home-product-card__row"><h3>No products available yet</h3><span class="home-product-card__pill">Catalog</span></div><p class="home-product-card__summary">Add products in Supabase and the newest six items will appear here automatically.</p></div></article>`;
+    bindCartButtons(grid, latestProducts);
+    requestAnimationFrame(updateArrowState);
   };
 
   loadSharedCatalogData()
