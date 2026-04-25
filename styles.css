@@ -704,6 +704,13 @@ a { color: inherit; text-decoration: none; }
   padding-bottom: 5rem;
 }
 
+.home-products-showcase,
+.home-repair-showcase,
+.home-review-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
+}
+
 .home-section__heading {
   max-width: 44rem;
 }
@@ -3064,7 +3071,8 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   }
 
   .nav__dropdown--repairs.is-open > .nav__mobile-repairs {
-    max-height: 80vh;
+    max-height: 120rem;
+    overflow: visible;
     padding: 0.35rem 0 0.7rem;
   }
 
@@ -3115,7 +3123,8 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   }
 
   .nav__mobile-repairs-group.is-open > .nav__mobile-repairs-panel {
-    max-height: 36rem;
+    max-height: 56rem;
+    overflow: visible;
     padding-bottom: 0.4rem;
   }
 
@@ -4674,7 +4683,7 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 @media (max-width: 520px) {
   .storefront-grid,
   .storefront-grid--dense {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -6056,12 +6065,36 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 @media (max-width: 520px) {
   .storefront-grid,
   .storefront-grid--dense {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .storefront-card__body {
+    padding: 0.72rem;
+    gap: 0.42rem;
+  }
+
+  .storefront-card h3 {
+    font-size: 0.92rem;
+    line-height: 1.28;
+  }
+
+  .storefront-card__summary {
+    min-height: 2.35rem;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .storefront-card__price-row strong {
+    font-size: 1.28rem;
   }
 
   .storefront-card__actions,
   .storefront-card__action {
     width: 100%;
+    min-height: 2rem;
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+    font-size: 0.76rem;
   }
 
   .storefront-pdp__purchase {
@@ -6075,5 +6108,12 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
   .storefront-rail-card__actions {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 380px) {
+  .storefront-grid,
+  .storefront-grid--dense {
+    grid-template-columns: 1fr;
   }
 }

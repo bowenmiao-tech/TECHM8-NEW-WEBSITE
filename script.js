@@ -26,6 +26,13 @@ function keepMobileMenuOpen() {
   setMobileMenuState(true);
 }
 
+function expandMobileRepairsContainer(dropdown) {
+  if (!isMobileNavigation() || !(dropdown instanceof HTMLElement)) return;
+  const mobilePanel = dropdown.querySelector(".nav__mobile-repairs");
+  if (!(mobilePanel instanceof HTMLElement)) return;
+  mobilePanel.style.maxHeight = `${mobilePanel.scrollHeight + 480}px`;
+}
+
 function setMobileMenuState(isOpen) {
   const mobileInput = document.querySelector(".nav__mobile-input");
   const navMenu = document.querySelector(".nav__menu");
@@ -247,6 +254,7 @@ function handleMobileRepairsToggle(event, toggle) {
   closeAllMobileRepairsGroups(group);
   group.classList.toggle("is-open", !isOpen);
   toggle.setAttribute("aria-expanded", String(!isOpen));
+  window.requestAnimationFrame(() => expandMobileRepairsContainer(dropdown));
 }
 
 function handleSubmenuToggle(event, toggle) {
@@ -2455,7 +2463,7 @@ function createCatalogCard(product) {
       ? `${escapeHtml(String(product.stock_quantity))} in network stock`
       : "Stock to be updated";
   const imageMarkup = product.display_image
-    ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy">`
+    ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy" decoding="async" sizes="(max-width: 380px) 92vw, (max-width: 720px) 44vw, (max-width: 1200px) 30vw, 18vw">`
     : `<div class="storefront-card__image storefront-card__image--placeholder" aria-hidden="true">TECHM8</div>`;
   const stockClass = Number(product.stock_quantity) > 0 ? "is-in-stock" : "is-pending";
 
@@ -2506,7 +2514,7 @@ function createHomeFeaturedCard(product) {
   const hasComparePrice = Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
   const productName = getProductDisplayName(product) || product.name;
   const imageMarkup = product.display_image
-    ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy">`
+    ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy" decoding="async" sizes="(max-width: 720px) 72vw, 22vw">`
     : `<div class="home-product-card__image-placeholder" aria-hidden="true">TECHM8</div>`;
   const saleAmount = hasComparePrice ? compareAtPrice - retailPrice : 0;
   const primaryBadge = hasComparePrice ? "On sale" : (product.is_featured ? "Featured" : "New");
@@ -2550,6 +2558,8 @@ function initHomeFeaturedProducts() {
   const prevButton = document.querySelector("[data-home-featured-prev]");
   const nextButton = document.querySelector("[data-home-featured-next]");
   if (!(grid instanceof HTMLElement) || !(viewport instanceof HTMLElement)) return;
+  const section = grid.closest(".home-products-showcase");
+  let hasLoaded = false;
 
   const updateArrowState = () => {
     if (!(prevButton instanceof HTMLButtonElement) || !(nextButton instanceof HTMLButtonElement)) return;
@@ -2583,13 +2593,32 @@ function initHomeFeaturedProducts() {
     requestAnimationFrame(updateArrowState);
   };
 
-  loadSharedCatalogData()
-    .then(({ products }) => {
-      render(products);
-    })
-    .catch(() => {
-      render(getFallbackCatalogProducts());
+  const loadProducts = () => {
+    if (hasLoaded) return;
+    hasLoaded = true;
+    loadSharedCatalogData()
+      .then(({ products }) => {
+        render(products);
+      })
+      .catch(() => {
+        render(getFallbackCatalogProducts());
+      });
+  };
+
+  if ("IntersectionObserver" in window && section instanceof HTMLElement) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        observer.disconnect();
+        loadProducts();
+      }
+    }, {
+      rootMargin: "220px 0px",
+      threshold: 0.12,
     });
+    observer.observe(section);
+  } else {
+    loadProducts();
+  }
 }
 
 function bindCartButtons(container, products, options = {}) {
@@ -4418,6 +4447,12 @@ function initNavigation() {
 
     closeAllDropdowns();
     closeAllSubmenus();
+  });
+
+  window.addEventListener("resize", () => {
+    document.querySelectorAll(".nav__dropdown--repairs.is-open").forEach((dropdown) => {
+      expandMobileRepairsContainer(dropdown);
+    });
   });
 }
 
