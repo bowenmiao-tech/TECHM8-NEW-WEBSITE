@@ -16,6 +16,78 @@ function getBearerToken(req: Request) {
   return authorization.slice(7).trim()
 }
 
+function escapeHtml(value: unknown) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+}
+
+async function sendRepairBookingNotificationEmail(payload: {
+  recipients: string[]
+  bookingCode: string
+  storeName: string
+  customerName: string
+  phone: string
+  email: string
+  repairCategory: string
+  brand: string
+  deviceModel: string
+  issueDescription: string
+  preferredDate: string
+  preferredTime: string
+}) {
+  const resendApiKey = Deno.env.get('RESEND_API_KEY') ?? ''
+  const fromEmail = Deno.env.get('BOOKING_FROM_EMAIL') ?? ''
+
+  if (!resendApiKey || !fromEmail || !payload.recipients.length) {
+    return { sent: false, reason: 'missing_email_config' }
+  }
+
+  const prettyCategory = payload.repairCategory.replaceAll('_', ' ')
+  const subject = `[TECHM8 Repair] ${payload.bookingCode} - ${payload.storeName}`
+  const html = `
+    <div style="font-family:Arial,sans-serif;color:#10242c;line-height:1.6">
+      <h2 style="margin:0 0 12px">New repair booking received</h2>
+      <p style="margin:0 0 16px">A customer has submitted a new repair request for <strong>${escapeHtml(payload.storeName)}</strong>.</p>
+      <table style="border-collapse:collapse;width:100%;max-width:720px">
+        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Booking code</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(payload.bookingCode)}</td></tr>
+        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Customer</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(payload.customerName)}</td></tr>
+        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Phone</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(payload.phone)}</td></tr>
+        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Email</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(payload.email)}</td></tr>
+        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Category</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(prettyCategory)}</td></tr>
+        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Device</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml([payload.brand, payload.deviceModel].filter(Boolean).join(' ') || payload.deviceModel)}</td></tr>
+        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Preferred time</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml([payload.preferredDate, payload.preferredTime].filter(Boolean).join(' · ') || 'Not specified')}</td></tr>
+        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Issue</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(payload.issueDescription)}</td></tr>
+      </table>
+      <p style="margin:16px 0 0;color:#4f6b74">Open the admin panel to follow up and update the booking status.</p>
+    </div>
+  `
+
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${resendApiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: fromEmail,
+      to: payload.recipients,
+      subject,
+      html,
+    }),
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    throw new Error(`Repair notification email failed: ${errorText}`)
+  }
+
+  return { sent: true }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -112,10 +184,47 @@ Deno.serve(async (req) => {
         ip_address: forwardedFor,
         user_agent: userAgent,
       })
+      .select('id, booking_code, store_slug, repair_category, brand, device_model, issue_description, preferred_date, preferred_time, customer_name, phone, email')
+      .single()
 
     if (error) {
       console.error(error)
       return Response.json({ ok: false, error: 'Booking could not be saved.' }, { status: 500, headers: corsHeaders })
+    }
+
+    try {
+      const { data: storeRow } = await supabaseAdmin
+        .from('stores')
+        .select('slug, name, email')
+        .eq('slug', storeSlug)
+        .maybeSingle()
+
+      const mainNotificationEmail = String(Deno.env.get('REPAIR_NOTIFICATION_EMAIL') ?? 'techm8contact@gmail.com').trim().toLowerCase()
+      const recipients = Array.from(
+        new Set(
+          [String(storeRow?.email ?? '').trim().toLowerCase(), mainNotificationEmail]
+            .filter(Boolean),
+        ),
+      )
+
+      if (recipients.length) {
+        await sendRepairBookingNotificationEmail({
+          recipients,
+          bookingCode,
+          storeName: String(storeRow?.name ?? storeSlug),
+          customerName,
+          phone,
+          email,
+          repairCategory,
+          brand,
+          deviceModel,
+          issueDescription,
+          preferredDate,
+          preferredTime,
+        })
+      }
+    } catch (notificationError) {
+      console.error(notificationError)
     }
 
     return Response.json(

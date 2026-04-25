@@ -41,6 +41,179 @@ function formatDateTime(value) {
   }).format(date);
 }
 
+function formatCurrencyNumber(value) {
+  return Number(Number(value || 0).toFixed(2));
+}
+
+function formatAddress(parts = []) {
+  return parts
+    .map((part) => String(part || "").trim())
+    .filter(Boolean)
+    .join(", ");
+}
+
+function getStoreMapUrl(store) {
+  if (!store) return "#";
+  const address = formatAddress([
+    store.address_line_1,
+    store.address_line_2,
+    store.suburb,
+    store.state,
+    store.postcode,
+  ]);
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address || store.name || "")}`;
+}
+
+function getStorePageUrl(storeSlug) {
+  const slug = String(storeSlug || "").trim();
+  if (!slug) return "#";
+  return new URL(`../stores/${slug}.html`, window.location.href).toString();
+}
+
+function getSiteBaseUrl() {
+  const configured = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
+  return configured ? configured.replace(/\/+$/, "") : window.location.origin;
+}
+
+function ensureAdminModalRoot() {
+  let modalRoot = document.querySelector("[data-admin-modal-root]");
+  if (modalRoot instanceof HTMLElement) return modalRoot;
+
+  modalRoot = document.createElement("div");
+  modalRoot.className = "admin-modal-root";
+  modalRoot.setAttribute("data-admin-modal-root", "true");
+  modalRoot.hidden = true;
+  document.body.appendChild(modalRoot);
+  return modalRoot;
+}
+
+function closeAdminModal() {
+  const modalRoot = document.querySelector("[data-admin-modal-root]");
+  if (!(modalRoot instanceof HTMLElement)) return;
+  modalRoot.hidden = true;
+  modalRoot.innerHTML = "";
+  document.body.classList.remove("admin-modal-open");
+}
+
+function openAdminModal({ title, subtitle = "", content = "" }) {
+  const modalRoot = ensureAdminModalRoot();
+  modalRoot.hidden = false;
+  modalRoot.innerHTML = `
+    <div class="admin-modal-backdrop" data-admin-modal-close></div>
+    <div class="admin-modal">
+      <header class="admin-modal__header">
+        <div>
+          <h2>${escapeHtml(title)}</h2>
+          ${subtitle ? `<p>${escapeHtml(subtitle)}</p>` : ""}
+        </div>
+        <button class="admin-modal__close" type="button" data-admin-modal-close aria-label="Close">×</button>
+      </header>
+      <div class="admin-modal__body">${content}</div>
+    </div>
+  `;
+  document.body.classList.add("admin-modal-open");
+
+  modalRoot.querySelectorAll("[data-admin-modal-close]").forEach((element) => {
+    element.addEventListener("click", () => closeAdminModal());
+  });
+
+  return modalRoot;
+}
+
+function printOrderDocument(order, stores) {
+  const store = (stores || []).find((item) => item.slug === order.store_slug) || null;
+  const addressText = order.fulfillment_method === "shipping"
+    ? formatAddress([
+        order.recipient_name || `${order.customer_name || ""}`.trim(),
+        order.company_name,
+        order.address_line_1,
+        order.address_line_2,
+        order.suburb,
+        order.state,
+        order.postcode,
+        order.country_code || "AU",
+      ])
+    : formatAddress([
+        store?.name,
+        store?.address_line_1,
+        store?.address_line_2,
+        store?.suburb,
+        store?.state,
+        store?.postcode,
+      ]);
+
+  const itemRows = (order.items || []).map((item) => `
+    <tr>
+      <td>${escapeHtml(item.product_name || "Item")}</td>
+      <td>${escapeHtml(item.quantity || 0)}</td>
+      <td>${formatMoney(item.line_total || 0)}</td>
+    </tr>
+  `).join("");
+
+  const html = `
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <title>${escapeHtml(order.order_code)} - TECHM8 Print</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 24px; color: #111; }
+        h1 { margin: 0 0 8px; font-size: 28px; }
+        .meta, .block { margin-bottom: 18px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .block { border: 1px solid #ccc; border-radius: 10px; padding: 14px; }
+        .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #555; margin-bottom: 6px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #ddd; }
+        th { font-size: 12px; text-transform: uppercase; color: #555; }
+        .address { white-space: pre-line; font-size: 18px; line-height: 1.45; }
+      </style>
+    </head>
+    <body>
+      <h1>TECHM8 Order Slip</h1>
+      <div class="meta">
+        <strong>${escapeHtml(order.order_code)}</strong><br>
+        ${escapeHtml(order.fulfillment_method === "shipping" ? "Warehouse dispatch" : `Store pickup - ${store?.name || order.store_slug}`)}<br>
+        ${escapeHtml(formatDateTime(order.created_at))}
+      </div>
+      <div class="grid">
+        <div class="block">
+          <div class="eyebrow">Customer</div>
+          <div>${escapeHtml(order.customer_name || "")}</div>
+          <div>${escapeHtml(order.phone || "")}</div>
+          <div>${escapeHtml(order.email || "")}</div>
+        </div>
+        <div class="block">
+          <div class="eyebrow">${escapeHtml(order.fulfillment_method === "shipping" ? "Ship to" : "Pickup point")}</div>
+          <div class="address">${escapeHtml(addressText).replaceAll(", ", "\n")}</div>
+        </div>
+      </div>
+      <div class="block">
+        <div class="eyebrow">Items</div>
+        <table>
+          <thead><tr><th>Product</th><th>Qty</th><th>Total</th></tr></thead>
+          <tbody>${itemRows || '<tr><td colspan="3">No items found</td></tr>'}</tbody>
+        </table>
+      </div>
+      <div class="block">
+        <div class="eyebrow">Totals</div>
+        <div>Subtotal: ${formatMoney(order.subtotal_amount || 0)}</div>
+        <div>Payment fee: ${formatMoney(order.payment_fee_amount || 0)}</div>
+        <div>Shipping fee: ${formatMoney(order.shipping_fee_amount || 0)}</div>
+        <div><strong>Total: ${formatMoney(order.total_amount || 0)}</strong></div>
+      </div>
+      <script>window.onload = () => { window.print(); };</script>
+    </body>
+    </html>
+  `;
+
+  const printWindow = window.open("", "_blank", "width=980,height=840");
+  if (!printWindow) return;
+  printWindow.document.open();
+  printWindow.document.write(html);
+  printWindow.document.close();
+}
+
 function setAlert(target, message = "", tone = "error") {
   if (!(target instanceof HTMLElement)) return;
   if (!message) {
@@ -592,6 +765,293 @@ function renderDashboardPage(root, bootstrap, session, alertTarget) {
           </div>
         `).join("")
       : `<div class="admin-empty">No low stock items.</div>`;
+  };
+
+  load().catch((error) => {
+    setAlert(alertTarget, error instanceof Error ? error.message : "Dashboard could not be loaded.", "error");
+  });
+}
+
+function renderDashboardPageEnhanced(root, bootstrap, session, alertTarget) {
+  root.innerHTML = getViewTemplate("dashboard");
+  const cardsTarget = root.querySelector("[data-dashboard-cards]");
+  const ordersTarget = root.querySelector("[data-dashboard-orders]");
+  const repairsTarget = root.querySelector("[data-dashboard-repairs]");
+  const stockTarget = root.querySelector("[data-dashboard-stock]");
+  const state = { orders: [], repairs: [], stores: bootstrap.stores || [] };
+
+  const saveDashboardOrder = async (orderId, form, reload) => {
+    const formData = new FormData(form);
+    await callAdminApi("order_update", {
+      id: orderId,
+      status: formData.get("status"),
+      payment_status: formData.get("payment_status"),
+      fulfillment_status: formData.get("fulfillment_status"),
+      tracking_number: formData.get("tracking_number"),
+      tracking_url: formData.get("tracking_url"),
+      notes: formData.get("notes"),
+    }, session);
+    setAlert(alertTarget, "Order updated.", "success");
+    await reload();
+  };
+
+  const openOrderQuickView = (order, reload) => {
+    const store = state.stores.find((item) => item.slug === order.store_slug) || null;
+    const addressText = order.fulfillment_method === "shipping"
+      ? formatAddress([
+          order.recipient_name || `${order.customer_name || ""}`.trim(),
+          order.company_name,
+          order.address_line_1,
+          order.address_line_2,
+          order.suburb,
+          order.state,
+          order.postcode,
+          order.country_code || "AU",
+        ])
+      : formatAddress([
+          store?.name,
+          store?.address_line_1,
+          store?.address_line_2,
+          store?.suburb,
+          store?.state,
+          store?.postcode,
+        ]);
+
+    const modal = openAdminModal({
+      title: order.order_code,
+      subtitle: `${order.customer_name || "Customer"} · ${order.fulfillment_method === "shipping" ? "Warehouse dispatch" : `Pickup - ${store?.name || order.store_slug}`}`,
+      content: `
+        <div class="admin-detail-grid">
+          <section class="admin-panel admin-panel--embedded">
+            <div class="admin-panel__heading">
+              <div>
+                <h3>Customer and fulfilment</h3>
+                <p>Review the recipient details before updating the order.</p>
+              </div>
+              <div class="admin-button-row">
+                <button class="button button--ghost" type="button" data-order-print>Print PDF</button>
+                ${order.fulfillment_method === "shipping" ? "" : `<a class="button button--ghost" href="${escapeHtml(getStoreMapUrl(store))}" target="_blank" rel="noreferrer">Open map</a>`}
+              </div>
+            </div>
+            <div class="admin-summary-grid">
+              <div class="admin-summary-card"><span>Name</span><strong>${escapeHtml(order.customer_name || "—")}</strong></div>
+              <div class="admin-summary-card"><span>Phone</span><strong>${escapeHtml(order.phone || "—")}</strong></div>
+              <div class="admin-summary-card"><span>Email</span><strong>${escapeHtml(order.email || "—")}</strong></div>
+              <div class="admin-summary-card"><span>Payment</span><strong>${escapeHtml(order.payment_method_label || "—")}</strong></div>
+            </div>
+            <div class="admin-address-card">
+              <span>${escapeHtml(order.fulfillment_method === "shipping" ? "Delivery address" : "Pickup location")}</span>
+              <strong>${escapeHtml(addressText || "No address available.")}</strong>
+            </div>
+          </section>
+          <section class="admin-panel admin-panel--embedded">
+            <div class="admin-panel__heading">
+              <div>
+                <h3>Update order</h3>
+                <p>Tracking, status and internal notes.</p>
+              </div>
+            </div>
+            <form class="admin-editor__form" data-dashboard-order-form>
+              <div class="admin-editor__grid">
+                <label><span>Status</span>
+                  <select name="status">
+                    ${["submitted", "confirmed", "packed", "shipped", "completed", "cancelled"].map((value) => `<option value="${value}" ${order.status === value ? "selected" : ""}>${value}</option>`).join("")}
+                  </select>
+                </label>
+                <label><span>Payment</span>
+                  <select name="payment_status">
+                    ${["unpaid", "pending", "paid", "failed", "refunded", "not_required"].map((value) => `<option value="${value}" ${order.payment_status === value ? "selected" : ""}>${value}</option>`).join("")}
+                  </select>
+                </label>
+                <label><span>Fulfilment</span>
+                  <select name="fulfillment_status">
+                    ${["new", "queued", "ready_for_pickup", "packed", "label_created", "shipped", "completed", "cancelled"].map((value) => `<option value="${value}" ${order.fulfillment_status === value ? "selected" : ""}>${value}</option>`).join("")}
+                  </select>
+                </label>
+                <label><span>Tracking number</span><input type="text" name="tracking_number" value="${escapeHtml(order.tracking_number || "")}"></label>
+              </div>
+              <label><span>Tracking URL</span><input type="url" name="tracking_url" value="${escapeHtml(order.tracking_url || "")}"></label>
+              <label><span>Notes</span><textarea name="notes">${escapeHtml(order.notes || "")}</textarea></label>
+              <div class="admin-button-row">
+                <button class="button button--primary" type="submit">Save order</button>
+                <a class="button button--ghost" href="orders.html">Open full orders page</a>
+              </div>
+            </form>
+          </section>
+        </div>
+        <section class="admin-panel admin-panel--embedded">
+          <div class="admin-panel__heading">
+            <div>
+              <h3>Order items</h3>
+              <p>Current line items and totals.</p>
+            </div>
+          </div>
+          <div class="admin-list">
+            ${(order.items || []).length ? order.items.map((item) => `
+              <div class="admin-list-item">
+                <div class="admin-list-item__content">
+                  <strong>${escapeHtml(item.product_name || "Item")}</strong>
+                  <span>${escapeHtml(item.quantity || 0)} × ${formatMoney(item.unit_price || 0)}</span>
+                </div>
+                <strong>${formatMoney(item.line_total || 0)}</strong>
+              </div>
+            `).join("") : `<div class="admin-empty">No line items found.</div>`}
+          </div>
+          <div class="admin-summary-grid admin-summary-grid--totals">
+            <div class="admin-summary-card"><span>Subtotal</span><strong>${formatMoney(order.subtotal_amount || 0)}</strong></div>
+            <div class="admin-summary-card"><span>Payment fee</span><strong>${formatMoney(order.payment_fee_amount || 0)}</strong></div>
+            <div class="admin-summary-card"><span>Shipping fee</span><strong>${formatMoney(order.shipping_fee_amount || 0)}</strong></div>
+            <div class="admin-summary-card"><span>Total</span><strong>${formatMoney(order.total_amount || 0)}</strong></div>
+          </div>
+        </section>
+      `,
+    });
+
+    modal.querySelector("[data-order-print]")?.addEventListener("click", () => {
+      printOrderDocument(order, state.stores);
+    });
+    modal.querySelector("[data-dashboard-order-form]")?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      try {
+        await saveDashboardOrder(order.id, event.currentTarget, load);
+        closeAdminModal();
+      } catch (error) {
+        setAlert(alertTarget, error instanceof Error ? error.message : "Order update failed.", "error");
+      }
+    });
+  };
+
+  const openRepairQuickView = (repair) => {
+    const store = state.stores.find((item) => item.slug === repair.store_slug) || null;
+    openAdminModal({
+      title: repair.booking_code,
+      subtitle: `${repair.customer_name || "Customer"} · ${store?.name || repair.store_slug}`,
+      content: `
+        <div class="admin-detail-grid">
+          <section class="admin-panel admin-panel--embedded">
+            <div class="admin-panel__heading">
+              <div>
+                <h3>Repair customer</h3>
+                <p>Core contact and booking details.</p>
+              </div>
+            </div>
+            <div class="admin-summary-grid">
+              <div class="admin-summary-card"><span>Name</span><strong>${escapeHtml(repair.customer_name || "—")}</strong></div>
+              <div class="admin-summary-card"><span>Phone</span><strong>${escapeHtml(repair.phone || "—")}</strong></div>
+              <div class="admin-summary-card"><span>Email</span><strong>${escapeHtml(repair.email || "—")}</strong></div>
+              <div class="admin-summary-card"><span>Store</span><strong>${escapeHtml(store?.name || repair.store_slug || "—")}</strong></div>
+              <div class="admin-summary-card"><span>Category</span><strong>${escapeHtml(repair.repair_category || "—")}</strong></div>
+              <div class="admin-summary-card"><span>Status</span><strong>${escapeHtml(repair.status || "—")}</strong></div>
+            </div>
+          </section>
+          <section class="admin-panel admin-panel--embedded">
+            <div class="admin-panel__heading">
+              <div>
+                <h3>Device and issue</h3>
+                <p>What the customer booked in for.</p>
+              </div>
+            </div>
+            <div class="admin-address-card">
+              <span>Device</span>
+              <strong>${escapeHtml([repair.brand, repair.device_model].filter(Boolean).join(" ") || repair.device_model || "—")}</strong>
+            </div>
+            <div class="admin-address-card">
+              <span>Issue description</span>
+              <strong>${escapeHtml(repair.issue_description || "No description provided.")}</strong>
+            </div>
+            <div class="admin-address-card">
+              <span>Requested time</span>
+              <strong>${escapeHtml([repair.preferred_date, repair.preferred_time].filter(Boolean).join(" · ") || "Not specified")}</strong>
+            </div>
+            <div class="admin-button-row">
+              <a class="button button--ghost" href="repairs.html">Open repair bookings page</a>
+            </div>
+          </section>
+        </div>
+      `,
+    });
+  };
+
+  const load = async () => {
+    setAlert(alertTarget, "");
+    if (cardsTarget) cardsTarget.innerHTML = `<div class="admin-loading">Loading dashboard...</div>`;
+    const result = await callAdminApi("dashboard", {}, session);
+    state.orders = result.recent_orders || [];
+    state.repairs = result.recent_repairs || [];
+    state.stores = result.stores || bootstrap.stores || [];
+    cardsTarget.innerHTML = result.cards.map((card) => {
+      return `
+        <article class="admin-card">
+          <p class="admin-card__label">${escapeHtml(card.label)}</p>
+          <p class="admin-card__value ${card.money ? "is-money" : ""}">${card.money ? escapeHtml(String(Number(card.value || 0).toFixed(2))) : escapeHtml(card.value)}</p>
+        </article>
+      `;
+    }).join("");
+
+    ordersTarget.innerHTML = state.orders.length
+      ? state.orders.map((row) => `
+          <button class="admin-list-item admin-list-item--interactive" type="button" data-dashboard-order="${row.id}">
+            <div class="admin-list-item__content">
+              <strong>${escapeHtml(row.order_code)}</strong>
+              <span>${escapeHtml(row.customer_name)} · ${escapeHtml(makeStoreLabel(row.store_slug, state.stores))}</span>
+            </div>
+            <div class="admin-list-item__content" style="text-align:right">
+              <strong>${formatMoney(row.total_amount)}</strong>
+              <span>${renderBadge(row.status)} ${renderBadge(row.payment_status)}</span>
+            </div>
+          </button>
+        `).join("")
+      : `<div class="admin-empty">No recent orders yet.</div>`;
+
+    repairsTarget.innerHTML = state.repairs.length
+      ? state.repairs.map((row) => `
+          <button class="admin-list-item admin-list-item--interactive" type="button" data-dashboard-repair="${row.id}">
+            <div class="admin-list-item__content">
+              <strong>${escapeHtml(row.booking_code)}</strong>
+              <span>${escapeHtml(row.customer_name)} · ${escapeHtml(row.device_model)}</span>
+            </div>
+            <div class="admin-list-item__content" style="text-align:right">
+              <strong>${escapeHtml(makeStoreLabel(row.store_slug, state.stores))}</strong>
+              <span>${renderBadge(row.status)}</span>
+            </div>
+          </button>
+        `).join("")
+      : `<div class="admin-empty">No recent repair bookings yet.</div>`;
+
+    stockTarget.innerHTML = (result.low_stock_items || []).length
+      ? result.low_stock_items.map((row) => `
+          <div class="admin-list-item">
+            <div class="admin-list-item__content">
+              <strong>${escapeHtml(row.name)}</strong>
+              <span>${escapeHtml(row.sku)}</span>
+            </div>
+            <div class="admin-list-item__content" style="text-align:right">
+              <strong>${escapeHtml(row.stock_quantity)}</strong>
+              <span>units left</span>
+            </div>
+          </div>
+        `).join("")
+      : `<div class="admin-empty">No low stock items.</div>`;
+
+    ordersTarget.onclick = (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const rowElement = target.closest("[data-dashboard-order]");
+      if (!(rowElement instanceof HTMLElement)) return;
+      const orderId = Number(rowElement.getAttribute("data-dashboard-order"));
+      const order = state.orders.find((item) => item.id === orderId);
+      if (order) openOrderQuickView(order, load);
+    };
+
+    repairsTarget.onclick = (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const rowElement = target.closest("[data-dashboard-repair]");
+      if (!(rowElement instanceof HTMLElement)) return;
+      const repairId = Number(rowElement.getAttribute("data-dashboard-repair"));
+      const repair = state.repairs.find((item) => item.id === repairId);
+      if (repair) openRepairQuickView(repair);
+    };
   };
 
   load().catch((error) => {
@@ -1393,7 +1853,7 @@ async function initAdminApp() {
 
   switch (view) {
     case "dashboard":
-      renderDashboardPage(pageRoot, bootstrap, authState.session, alertTarget);
+      renderDashboardPageEnhanced(pageRoot, bootstrap, authState.session, alertTarget);
       break;
     case "orders":
       renderOrdersPage(pageRoot, bootstrap, authState.session, alertTarget);

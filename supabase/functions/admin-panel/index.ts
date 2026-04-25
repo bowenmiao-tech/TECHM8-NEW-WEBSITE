@@ -152,7 +152,7 @@ async function getSharedLists(supabaseAdmin: ReturnType<typeof createClient>) {
   const [{ data: stores }, { data: categories }] = await Promise.all([
     supabaseAdmin
       .from('stores')
-      .select('id, slug, name, is_active')
+      .select('id, slug, name, is_active, address_line_1, address_line_2, suburb, state, postcode, phone, email, opening_hours')
       .order('name', { ascending: true }),
     supabaseAdmin
       .from('categories')
@@ -197,13 +197,13 @@ async function getDashboardData(supabaseAdmin: ReturnType<typeof createClient>, 
 
   let recentOrdersQuery = supabaseAdmin
     .from('orders')
-    .select('id, order_code, customer_name, store_slug, total_amount, status, payment_status, created_at')
+    .select('id, order_code, customer_name, phone, email, store_slug, fulfillment_method, recipient_name, company_name, shipping_phone, shipping_email, address_line_1, address_line_2, suburb, state, postcode, country_code, payment_method_label, payment_status, status, fulfillment_status, subtotal_amount, payment_fee_amount, shipping_fee_amount, total_amount, notes, tracking_number, tracking_url, created_at')
     .order('created_at', { ascending: false })
     .limit(8)
 
   let recentRepairsQuery = supabaseAdmin
     .from('repair_bookings')
-    .select('id, booking_code, customer_name, store_slug, device_model, repair_category, status, created_at')
+    .select('id, booking_code, customer_name, phone, email, store_slug, device_model, repair_category, brand, issue_description, preferred_date, preferred_time, status, created_at')
     .order('created_at', { ascending: false })
     .limit(8)
 
@@ -235,6 +235,22 @@ async function getDashboardData(supabaseAdmin: ReturnType<typeof createClient>, 
   ])
 
   const salesToday = Number((salesRows ?? []).reduce((sum, row) => sum + (Number((row as { total_amount?: number }).total_amount) || 0), 0).toFixed(2))
+  const recentOrderIds = (recentOrders ?? []).map((row) => (row as { id: number }).id)
+  const { data: recentOrderItems } = recentOrderIds.length
+    ? await supabaseAdmin
+        .from('order_items')
+        .select('id, order_id, product_name, quantity, image_url, unit_price, line_total')
+        .in('order_id', recentOrderIds)
+        .order('id', { ascending: true })
+    : { data: [] as unknown[] }
+
+  const itemsByOrderId = new Map<number, unknown[]>()
+  ;(recentOrderItems ?? []).forEach((item) => {
+    const orderId = (item as { order_id: number }).order_id
+    const items = itemsByOrderId.get(orderId) ?? []
+    items.push(item)
+    itemsByOrderId.set(orderId, items)
+  })
 
   return {
     cards: [
@@ -245,7 +261,10 @@ async function getDashboardData(supabaseAdmin: ReturnType<typeof createClient>, 
       { key: 'low_stock', label: 'Low stock products', value: lowStockCount, tone: 'danger' },
       { key: 'sales_today', label: 'Sales today', value: salesToday, tone: 'success', money: true },
     ],
-    recent_orders: recentOrders ?? [],
+    recent_orders: (recentOrders ?? []).map((row) => ({
+      ...row,
+      items: itemsByOrderId.get((row as { id: number }).id) ?? [],
+    })),
     recent_repairs: recentRepairs ?? [],
     low_stock_items: lowStockItems ?? [],
   }
