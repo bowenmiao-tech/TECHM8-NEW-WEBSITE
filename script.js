@@ -1840,12 +1840,8 @@ function initStorefront() {
   const normalizeProduct = (product, categoriesMap) => {
     const category = categoriesMap.get(product.category_id) || null;
     const retailPrice = Number(product.retail_price);
-    const compareAtPrice = Number(product.compare_at_price);
-    const hasValidComparePrice = Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
-    const fallbackComparePrice =
-      Number.isFinite(retailPrice) && retailPrice > 0
-        ? Math.ceil(retailPrice * 1.18)
-        : null;
+      const compareAtPrice = Number(product.compare_at_price);
+      const hasValidComparePrice = Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
 
     return {
       ...product,
@@ -1853,7 +1849,7 @@ function initStorefront() {
       category_slug: category?.slug || product.category_slug || "other-products",
       display_image: resolveProductImageUrl(product),
       retail_price: retailPrice,
-      compare_at_price: hasValidComparePrice ? compareAtPrice : fallbackComparePrice,
+        compare_at_price: hasValidComparePrice ? compareAtPrice : null,
     };
   };
 
@@ -2200,7 +2196,7 @@ async function loadSharedCatalogData() {
         compare_at_price:
           Number.isFinite(compareAtPrice) && compareAtPrice > safeRetailPrice
             ? compareAtPrice
-            : Math.ceil(safeRetailPrice * 1.18),
+            : null,
         display_image: finalGallery[0]?.image_url || resolveProductImageUrl(product),
         gallery_images: finalGallery,
         category_slug: category?.slug || "other-products",

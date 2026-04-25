@@ -294,7 +294,7 @@ $specialProducts = @(
     compatibility     = "Phones, tablets and computers"
     cost_price        = [decimal]0.10
     retail_price      = [decimal]1.00
-    compare_at_price  = [decimal]2.00
+    compare_at_price  = $null
     image_url         = $null
     stock_quantity    = 999
   },
@@ -311,7 +311,7 @@ $specialProducts = @(
     compatibility     = "Phones, tablets and computers"
     cost_price        = [decimal]2.00
     retail_price      = [decimal]10.00
-    compare_at_price  = [decimal]14.95
+    compare_at_price  = $null
     image_url         = $null
     stock_quantity    = 999
   }
