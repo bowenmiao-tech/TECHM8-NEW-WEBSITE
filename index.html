@@ -112,67 +112,39 @@
 
   <main>
     <section class="home-banner" data-home-banner>
-      <div class="home-banner__slides">
-        <article class="home-banner__slide home-banner__slide--products is-active" data-banner-slide>
-          <div class="container home-banner__inner">
-            <div class="home-banner__copy">
-              <span class="home-banner__badge">New Arrival</span>
-              <h1>WP-70 magnetic power bank now live in the online store.</h1>
-              <p>Three-in-one magnetic fast charging with portable everyday carry convenience. Open the product page directly from the homepage banner.</p>
-              <div class="home-banner__actions">
-                <a class="button button--primary" href="product.html?slug=wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank">View WP-70</a>
-                <a class="button button--secondary" href="shop.html">Browse online store</a>
-              </div>
-            </div>
-            <div class="home-banner__feature home-banner__feature--poster">
-              <a class="home-banner__poster" href="product.html?slug=wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank" aria-label="Open WP-70 product page">
-                <picture>
-                  <img
-                    src="assets/banner-home-wp70.webp"
-                    alt="WP-70 magnetic power bank banner"
-                    width="1774"
-                    height="887"
-                    fetchpriority="high"
-                    decoding="async">
-                </picture>
-              </a>
-            </div>
-          </div>
-        </article>
-        <article class="home-banner__slide home-banner__slide--stores" data-banner-slide>
-          <div class="container home-banner__inner">
-            <div class="home-banner__copy">
-              <span class="home-banner__badge">Controller Range</span>
-              <h2>Browse the full PS5 controller colour range.</h2>
-              <p>All available DualSense colours are grouped together in one category so customers can compare finishes quickly and add the right controller straight to cart.</p>
-              <div class="home-banner__actions">
-                <a class="button button--primary" href="category.html?slug=ps5-controllers">View PS5 controllers</a>
-                <a class="button button--secondary" href="shop.html">Browse online store</a>
-              </div>
-            </div>
-            <div class="home-banner__feature home-banner__feature--poster">
-              <a class="home-banner__poster" href="category.html?slug=ps5-controllers" aria-label="Open PS5 controllers category">
-                <picture>
-                  <img
-                    src="assets/banner-home-ps5-controllers.webp"
-                    alt="PS5 controller colour range banner"
-                    width="1536"
-                    height="1024"
-                    loading="lazy"
-                    decoding="async">
-                </picture>
-              </a>
-            </div>
-          </div>
-        </article>
-      </div>
-      <div class="home-banner__controls">
-        <button type="button" class="home-banner__arrow" data-banner-prev aria-label="Previous banner">&#8249;</button>
-        <div class="home-banner__dots">
-          <button type="button" class="is-active" data-banner-dot aria-label="Banner 1"></button>
-          <button type="button" data-banner-dot aria-label="Banner 2"></button>
+      <div class="container home-banner__shell">
+        <div class="home-banner__slides">
+          <article class="home-banner__slide home-banner__slide--flat is-active" data-banner-slide>
+            <a class="home-banner__flat-link" href="product.html?slug=wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank" aria-label="Open WP-70 product page">
+              <img
+                src="assets/banner-home-wp70.webp"
+                alt="WP-70 magnetic power bank banner"
+                width="1774"
+                height="887"
+                fetchpriority="high"
+                decoding="async">
+            </a>
+          </article>
+          <article class="home-banner__slide home-banner__slide--flat" data-banner-slide>
+            <a class="home-banner__flat-link" href="category.html?slug=ps5-controllers" aria-label="Open PS5 controllers category">
+              <img
+                src="assets/banner-home-ps5-controllers.webp"
+                alt="PS5 controller colour range banner"
+                width="1536"
+                height="1024"
+                loading="lazy"
+                decoding="async">
+            </a>
+          </article>
         </div>
-        <button type="button" class="home-banner__arrow" data-banner-next aria-label="Next banner">&#8250;</button>
+        <div class="home-banner__controls">
+          <button type="button" class="home-banner__arrow" data-banner-prev aria-label="Previous banner">&#8249;</button>
+          <div class="home-banner__dots">
+            <button type="button" class="is-active" data-banner-dot aria-label="Banner 1"></button>
+            <button type="button" data-banner-dot aria-label="Banner 2"></button>
+          </div>
+          <button type="button" class="home-banner__arrow" data-banner-next aria-label="Next banner">&#8250;</button>
+        </div>
       </div>
     </section>
 
