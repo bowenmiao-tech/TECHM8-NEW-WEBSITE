@@ -4,5 +4,6 @@ window.TECHM8_CONFIG = {
   bookingEndpoint: 'https://fwlronvmgqzkleofriis.supabase.co/functions/v1/book-repair',
   orderEndpoint: 'https://fwlronvmgqzkleofriis.supabase.co/functions/v1/submit-order',
   checkoutSessionEndpoint: 'https://fwlronvmgqzkleofriis.supabase.co/functions/v1/create-checkout-session',
+  adminEndpoint: 'https://fwlronvmgqzkleofriis.supabase.co/functions/v1/admin-panel',
   siteUrl: 'https://bowenmiao-tech.github.io/TECHM8-NEW-WEBSITE/'
 };
