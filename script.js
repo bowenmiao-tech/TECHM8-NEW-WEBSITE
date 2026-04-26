@@ -148,6 +148,62 @@ function decorateMobileMenu() {
   }
 }
 
+const MOBILE_REPAIR_GROUPS = [
+  {
+    label: "Phones",
+    links: [
+      ["Apple", "repair-services/phones/apple.html"],
+      ["Samsung", "repair-services/phones/samsung.html"],
+      ["Oppo", "repair-services/phones/oppo.html"],
+      ["Huawei", "repair-services/phones/huawei.html"],
+      ["Xiaomi", "repair-services/phones/xiaomi.html"],
+      ["Google", "repair-services/phones/google.html"],
+      ["OnePlus", "repair-services/phones/oneplus.html"],
+      ["Others", "repair-services/phones/others.html"],
+    ],
+  },
+  {
+    label: "Tablets",
+    links: [
+      ["Apple", "repair-services/tablets/apple.html"],
+      ["Samsung", "repair-services/tablets/samsung.html"],
+      ["Other Tablets", "repair-services/tablets/other.html"],
+    ],
+  },
+  {
+    label: "Computers",
+    links: [
+      ["PC Tower", "repair-services/computers/pc-tower.html"],
+      ["All in One", "repair-services/computers/all-in-one.html"],
+      ["Laptop", "repair-services/computers/laptop.html"],
+      ["Small PC", "repair-services/computers/small-pc.html"],
+    ],
+  },
+  {
+    label: "Game Consoles",
+    links: [
+      ["Sony", "repair-services/consoles/sony.html"],
+      ["Xbox", "repair-services/consoles/xbox.html"],
+      ["Nintendo", "repair-services/consoles/nintendo.html"],
+    ],
+  },
+];
+
+function getSiteRelativePrefix() {
+  const directoryPath = window.location.pathname.replace(/\/[^/]*$/, "/");
+  const siteRootMarker = "/TECHM8-NEW-WEBSITE/";
+  const relativeDirectory = directoryPath.includes(siteRootMarker)
+    ? directoryPath.split(siteRootMarker)[1]
+    : directoryPath.replace(/^\//, "");
+  const depth = relativeDirectory.split("/").filter(Boolean).length;
+  return depth > 0 ? "../".repeat(depth) : "";
+}
+
+function buildSiteRelativeHref(path) {
+  const safePath = String(path || "").replace(/^\/+/, "");
+  return `${getSiteRelativePrefix()}${safePath}`;
+}
+
 function decorateMobileRepairsAccordion() {
   const repairsDropdown = Array.from(document.querySelectorAll(".nav__dropdown")).find((dropdown) => {
     const toggle = dropdown.querySelector(".nav__dropdown-toggle");
@@ -159,17 +215,10 @@ function decorateMobileRepairsAccordion() {
 
   if (repairsDropdown.querySelector(".nav__mobile-repairs")) return;
 
-  const sourceGroups = Array.from(repairsDropdown.querySelectorAll(".nav__dropdown-menu .nav__dropdown-group"));
-  if (!sourceGroups.length) return;
-
   const mobilePanel = document.createElement("div");
   mobilePanel.className = "nav__mobile-repairs";
 
-  sourceGroups.forEach((group, index) => {
-    const sourceToggle = group.querySelector(".nav__submenu-toggle");
-    const sourceLinks = Array.from(group.querySelectorAll(".nav__submenu-panel a"));
-    if (!(sourceToggle instanceof HTMLElement) || !sourceLinks.length) return;
-
+  MOBILE_REPAIR_GROUPS.forEach((group, index) => {
     const groupEl = document.createElement("div");
     groupEl.className = "nav__mobile-repairs-group";
 
@@ -178,14 +227,16 @@ function decorateMobileRepairsAccordion() {
     button.className = "nav__mobile-repairs-toggle";
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("data-mobile-repairs-toggle", String(index));
-    button.textContent = sourceToggle.textContent?.trim() || `Group ${index + 1}`;
+    button.textContent = group.label;
 
     const linksPanel = document.createElement("div");
     linksPanel.className = "nav__mobile-repairs-panel";
 
-    sourceLinks.forEach((link) => {
-      const clone = link.cloneNode(true);
-      linksPanel.appendChild(clone);
+    group.links.forEach(([label, href]) => {
+      const link = document.createElement("a");
+      link.href = buildSiteRelativeHref(href);
+      link.textContent = label;
+      linksPanel.appendChild(link);
     });
 
     groupEl.append(button, linksPanel);
@@ -4387,6 +4438,9 @@ function initNavigation() {
     handleMobileRepairsActivation(event, mobileRepairsToggle);
   };
 
+  navMenu?.addEventListener("touchstart", interceptMobileRepairsToggle, { capture: true, passive: false });
+  navMenu?.addEventListener("touchend", interceptMobileRepairsToggle, { capture: true, passive: false });
+  navMenu?.addEventListener("pointerdown", interceptMobileRepairsToggle, true);
   navMenu?.addEventListener("pointerup", interceptMobileRepairsToggle, true);
   navMenu?.addEventListener("click", interceptMobileRepairsToggle, true);
   

@@ -6026,10 +6026,17 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 }
 
 @media (max-width: 960px) {
+  .nav__dropdown--repairs > .nav__dropdown-menu {
+    display: none !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+
   .nav__dropdown--repairs.is-open > .nav__mobile-repairs {
     display: block;
     max-height: none !important;
     overflow: visible;
+    pointer-events: auto;
   }
 
   .nav__mobile-repairs-group.is-open > .nav__mobile-repairs-panel {
