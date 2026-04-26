@@ -6045,3 +6045,118 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     overflow: visible;
   }
 }
+
+/* Home banner final layout */
+.site-header {
+  background: rgba(248, 255, 254, 0.96);
+  box-shadow: 0 10px 30px rgba(3, 24, 28, 0.08);
+}
+
+.home-banner {
+  padding: 1.15rem 0 1.45rem;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(5, 206, 172, 0.28), transparent 28%),
+    radial-gradient(circle at 88% 0%, rgba(5, 206, 172, 0.16), transparent 24%),
+    linear-gradient(180deg, #03181c 0%, #073036 58%, #eafbf8 100%);
+  color: var(--text);
+}
+
+.home-banner__shell {
+  max-width: 1180px;
+}
+
+.home-banner__slides {
+  min-height: auto;
+  aspect-ratio: 1672 / 941;
+  border-radius: 1rem;
+}
+
+.home-banner__flat-link {
+  height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  background: #061b20;
+  box-shadow: 0 24px 60px rgba(3, 24, 28, 0.26);
+}
+
+.home-banner__flat-link img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.home-banner__controls {
+  width: fit-content;
+  margin-top: 0.9rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(3, 24, 28, 0.88);
+  box-shadow: 0 18px 36px rgba(3, 24, 28, 0.22);
+}
+
+.home-banner__arrow {
+  width: 3.3rem;
+  height: 3.3rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 2.6rem;
+  font-weight: 800;
+}
+
+.home-banner__arrow:hover {
+  background: var(--brand);
+  color: #04282d;
+}
+
+.home-banner__counter {
+  min-width: 4.4rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.home-banner__counter [data-banner-current] {
+  color: #7ff5ec;
+}
+
+.home-banner__dots button {
+  width: 2.5rem;
+  height: 0.45rem;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.home-banner__dots button.is-active {
+  background: var(--brand);
+}
+
+@media (max-width: 720px) {
+  .home-banner {
+    padding: 0.75rem 0 1.1rem;
+  }
+
+  .home-banner__slides {
+    aspect-ratio: 1672 / 941;
+    border-radius: 0.85rem;
+  }
+
+  .home-banner__flat-link {
+    border-radius: 0.85rem;
+  }
+
+  .home-banner__controls {
+    gap: 0.45rem;
+    padding: 0.38rem 0.5rem;
+  }
+
+  .home-banner__arrow {
+    width: 2.65rem;
+    height: 2.65rem;
+    font-size: 2.05rem;
+  }
+
+  .home-banner__dots button {
+    width: 1.65rem;
+  }
+}
