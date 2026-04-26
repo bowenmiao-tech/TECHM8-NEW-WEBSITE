@@ -236,6 +236,14 @@ function decorateMobileRepairsAccordion() {
       const link = document.createElement("a");
       link.href = buildSiteRelativeHref(href);
       link.textContent = label;
+      link.addEventListener("touchstart", (e) => {
+        e.stopPropagation();
+        keepMobileMenuOpen();
+      }, { passive: true });
+      link.addEventListener("pointerdown", (e) => {
+        e.stopPropagation();
+        keepMobileMenuOpen();
+      });
       linksPanel.appendChild(link);
     });
 
@@ -4566,6 +4574,8 @@ function initNavigation() {
 
     if (target.closest(".nav__dropdown-toggle")) return;
     if (target.closest(".nav__submenu-toggle")) return;
+    if (target.closest(".nav__mobile-repairs-toggle")) return;
+    if (target.closest(".nav__mobile-repairs-panel")) return;
     if (target.closest(".nav__dropdown")) return;
 
     closeAllDropdowns();
