@@ -4357,6 +4357,16 @@ function initNavigation() {
   const navSubmenuToggles = document.querySelectorAll(".nav__submenu-toggle");
   const mobileRepairsToggles = document.querySelectorAll(".nav__mobile-repairs-toggle");
 
+  navMenu?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const mobileRepairsToggle = target.closest(".nav__mobile-repairs-toggle");
+    if (!(mobileRepairsToggle instanceof HTMLButtonElement)) return;
+
+    handleMobileRepairsToggle(event, mobileRepairsToggle);
+  }, true);
+  
   navDropdownToggles.forEach((toggle) => {
     if (!(toggle instanceof HTMLButtonElement)) return;
     toggle.removeAttribute("onclick");
@@ -4385,9 +4395,6 @@ function initNavigation() {
     if (!(toggle instanceof HTMLButtonElement)) return;
     if (toggle.dataset.navBound === "true") return;
     toggle.dataset.navBound = "true";
-    toggle.addEventListener("click", (event) => {
-      handleMobileRepairsToggle(event, toggle);
-    });
     toggle.addEventListener("touchstart", (event) => {
       event.stopPropagation();
       keepMobileMenuOpen();

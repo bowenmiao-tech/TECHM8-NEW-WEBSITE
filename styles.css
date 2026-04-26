@@ -6024,3 +6024,17 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
     width: 1.9rem;
   }
 }
+
+@media (max-width: 960px) {
+  .nav__dropdown--repairs.is-open > .nav__mobile-repairs {
+    display: block;
+    max-height: none !important;
+    overflow: visible;
+  }
+
+  .nav__mobile-repairs-group.is-open > .nav__mobile-repairs-panel {
+    display: grid;
+    max-height: none !important;
+    overflow: visible;
+  }
+}
