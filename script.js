@@ -257,6 +257,26 @@ function handleMobileRepairsToggle(event, toggle) {
   window.requestAnimationFrame(() => expandMobileRepairsContainer(dropdown));
 }
 
+function handleMobileRepairsActivation(event, toggle) {
+  if (!isMobileNavigation()) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+  if (typeof event.stopImmediatePropagation === "function") {
+    event.stopImmediatePropagation();
+  }
+
+  const now = Date.now();
+  const previous = Number(toggle.dataset.mobileRepairsActivatedAt || 0);
+  if (now - previous < 450) {
+    keepMobileMenuOpen();
+    return;
+  }
+
+  toggle.dataset.mobileRepairsActivatedAt = String(now);
+  handleMobileRepairsToggle(event, toggle);
+}
+
 function handleSubmenuToggle(event, toggle) {
   event.preventDefault();
   event.stopPropagation();
@@ -4357,15 +4377,18 @@ function initNavigation() {
   const navSubmenuToggles = document.querySelectorAll(".nav__submenu-toggle");
   const mobileRepairsToggles = document.querySelectorAll(".nav__mobile-repairs-toggle");
 
-  navMenu?.addEventListener("click", (event) => {
+  const interceptMobileRepairsToggle = (event) => {
     const target = event.target;
     if (!(target instanceof Element)) return;
 
     const mobileRepairsToggle = target.closest(".nav__mobile-repairs-toggle");
     if (!(mobileRepairsToggle instanceof HTMLButtonElement)) return;
 
-    handleMobileRepairsToggle(event, mobileRepairsToggle);
-  }, true);
+    handleMobileRepairsActivation(event, mobileRepairsToggle);
+  };
+
+  navMenu?.addEventListener("pointerup", interceptMobileRepairsToggle, true);
+  navMenu?.addEventListener("click", interceptMobileRepairsToggle, true);
   
   navDropdownToggles.forEach((toggle) => {
     if (!(toggle instanceof HTMLButtonElement)) return;
