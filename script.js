@@ -154,12 +154,8 @@ const MOBILE_REPAIR_GROUPS = [
     links: [
       ["Apple", "repair-services/phones/apple.html"],
       ["Samsung", "repair-services/phones/samsung.html"],
-      ["Oppo", "repair-services/phones/oppo.html"],
-      ["Huawei", "repair-services/phones/huawei.html"],
-      ["Xiaomi", "repair-services/phones/xiaomi.html"],
       ["Google", "repair-services/phones/google.html"],
-      ["OnePlus", "repair-services/phones/oneplus.html"],
-      ["Others", "repair-services/phones/others.html"],
+      ["Other", "repair-services/phones/others.html"],
     ],
   },
   {
@@ -204,6 +200,29 @@ function buildSiteRelativeHref(path) {
   return `${getSiteRelativePrefix()}${safePath}`;
 }
 
+function normalizeDesktopPhoneRepairSubmenu(repairsDropdown) {
+  if (!(repairsDropdown instanceof HTMLElement)) return;
+
+  const phoneGroup = Array.from(repairsDropdown.querySelectorAll(".nav__dropdown-menu .nav__dropdown-group"))
+    .find((group) => {
+      const toggle = group.querySelector(".nav__submenu-toggle");
+      return toggle?.textContent?.trim().toLowerCase() === "phones";
+    });
+  if (!(phoneGroup instanceof HTMLElement)) return;
+
+  const phoneLinks = MOBILE_REPAIR_GROUPS.find((group) => group.label === "Phones")?.links || [];
+  const linksPanel = phoneGroup.querySelector(".nav__submenu-panel");
+  if (!(linksPanel instanceof HTMLElement)) return;
+
+  linksPanel.replaceChildren();
+  phoneLinks.forEach(([label, href]) => {
+    const link = document.createElement("a");
+    link.href = buildSiteRelativeHref(href);
+    link.textContent = label;
+    linksPanel.appendChild(link);
+  });
+}
+
 function decorateMobileRepairsAccordion() {
   const repairsDropdown = Array.from(document.querySelectorAll(".nav__dropdown")).find((dropdown) => {
     const toggle = dropdown.querySelector(".nav__dropdown-toggle");
@@ -212,6 +231,7 @@ function decorateMobileRepairsAccordion() {
 
   if (!(repairsDropdown instanceof HTMLElement)) return;
   repairsDropdown.classList.add("nav__dropdown--repairs");
+  normalizeDesktopPhoneRepairSubmenu(repairsDropdown);
 
   if (repairsDropdown.querySelector(".nav__mobile-repairs")) return;
 
