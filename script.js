@@ -1654,8 +1654,186 @@ function renderVariantSummary(product, classPrefix) {
 const CART_STORAGE_KEY = "techm8_cart_v1";
 const LOCAL_ORDER_STORAGE_KEY = "techm8_orders_v1";
 const RECENT_PRODUCTS_STORAGE_KEY = "techm8_recent_products_v1";
+const COOKIE_CONSENT_STORAGE_KEY = "techm8_cookie_consent_v1";
+const COOKIE_CONSENT_COOKIE_NAME = "techm8_cookie_consent";
+const COOKIE_CONSENT_VERSION = 1;
+
+function readCookieConsent() {
+  try {
+    const raw = window.localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (parsed && parsed.version === COOKIE_CONSENT_VERSION) {
+      return parsed;
+    }
+  } catch (_error) {
+    // Ignore unavailable storage; cookie fallback below keeps the banner usable.
+  }
+
+  try {
+    const cookie = document.cookie
+      .split(";")
+      .map((item) => item.trim())
+      .find((item) => item.startsWith(`${COOKIE_CONSENT_COOKIE_NAME}=`));
+    if (!cookie) return null;
+    const value = decodeURIComponent(cookie.split("=").slice(1).join("="));
+    const parsed = JSON.parse(value);
+    return parsed && parsed.version === COOKIE_CONSENT_VERSION ? parsed : null;
+  } catch (_error) {
+    return null;
+  }
+}
+
+function writeCookieConsent(preferences) {
+  const consent = {
+    version: COOKIE_CONSENT_VERSION,
+    essential: true,
+    personalisation: Boolean(preferences?.personalisation),
+    analytics: Boolean(preferences?.analytics),
+    marketing: Boolean(preferences?.marketing),
+    updated_at: new Date().toISOString(),
+  };
+
+  const serialized = JSON.stringify(consent);
+  try {
+    window.localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, serialized);
+  } catch (_error) {
+    // Local storage can be blocked in private mode; the cookie still records the choice.
+  }
+
+  try {
+    document.cookie = `${COOKIE_CONSENT_COOKIE_NAME}=${encodeURIComponent(serialized)}; Max-Age=31536000; Path=/; SameSite=Lax`;
+  } catch (_error) {
+    // Non-critical: the visible preference state remains in localStorage when available.
+  }
+
+  window.dispatchEvent(new CustomEvent("techm8:cookie-consent-updated", { detail: { consent } }));
+  return consent;
+}
+
+function hasCookieConsent(type) {
+  const consent = readCookieConsent();
+  if (!consent) return false;
+  if (type === "personalisation") return Boolean(consent.personalisation);
+  if (type === "analytics") return Boolean(consent.analytics);
+  if (type === "marketing") return Boolean(consent.marketing);
+  return Boolean(consent.essential);
+}
+
+function clearNonEssentialBrowserData() {
+  try {
+    window.localStorage.removeItem(RECENT_PRODUCTS_STORAGE_KEY);
+  } catch (_error) {
+    // Ignore storage errors.
+  }
+}
+
+function initCookieConsentBanner() {
+  if (!document.body || document.querySelector("[data-cookie-consent]") || readCookieConsent()) {
+    return;
+  }
+
+  const banner = document.createElement("section");
+  banner.className = "cookie-consent";
+  banner.setAttribute("data-cookie-consent", "true");
+  banner.setAttribute("aria-label", "Cookie preferences");
+  banner.innerHTML = `
+    <div class="cookie-consent__content">
+      <p class="cookie-consent__eyebrow">Privacy preferences</p>
+      <h2>We use cookies to improve your TECHM8 experience.</h2>
+      <p>Essential cookies keep the cart and checkout working. With your permission, we also remember recently viewed products on this browser so we can show more relevant product suggestions.</p>
+      <a href="store-policy.html">View privacy and store policies</a>
+    </div>
+    <div class="cookie-consent__actions">
+      <button class="cookie-consent__button cookie-consent__button--ghost" type="button" data-cookie-settings>Settings</button>
+      <button class="cookie-consent__button cookie-consent__button--muted" type="button" data-cookie-essential>Essential only</button>
+      <button class="cookie-consent__button cookie-consent__button--primary" type="button" data-cookie-accept>Accept all</button>
+    </div>
+  `;
+
+  const settingsPanel = document.createElement("div");
+  settingsPanel.className = "cookie-settings";
+  settingsPanel.hidden = true;
+  settingsPanel.setAttribute("data-cookie-settings-panel", "true");
+  settingsPanel.innerHTML = `
+    <div class="cookie-settings__card" role="dialog" aria-modal="true" aria-labelledby="cookie-settings-title">
+      <button class="cookie-settings__close" type="button" aria-label="Close cookie settings" data-cookie-settings-close>&times;</button>
+      <p class="cookie-consent__eyebrow">Cookie settings</p>
+      <h2 id="cookie-settings-title">Choose what TECHM8 can remember</h2>
+      <label class="cookie-settings__option is-locked">
+        <span>
+          <strong>Essential cookies</strong>
+          <small>Required for cart, checkout, account security and basic website functions.</small>
+        </span>
+        <input type="checkbox" checked disabled>
+      </label>
+      <label class="cookie-settings__option">
+        <span>
+          <strong>Personalisation</strong>
+          <small>Remember recently viewed products on this browser for product suggestions.</small>
+        </span>
+        <input type="checkbox" data-cookie-personalisation checked>
+      </label>
+      <label class="cookie-settings__option">
+        <span>
+          <strong>Analytics ready</strong>
+          <small>Reserved for future Google Analytics or Meta reporting. No third-party analytics is loaded by this banner today.</small>
+        </span>
+        <input type="checkbox" data-cookie-analytics>
+      </label>
+      <div class="cookie-settings__actions">
+        <button class="cookie-consent__button cookie-consent__button--muted" type="button" data-cookie-save-essential>Essential only</button>
+        <button class="cookie-consent__button cookie-consent__button--primary" type="button" data-cookie-save-settings>Save settings</button>
+      </div>
+    </div>
+  `;
+
+  const closeBanner = () => {
+    banner.remove();
+    settingsPanel.remove();
+  };
+  const acceptAll = () => {
+    writeCookieConsent({ personalisation: true, analytics: true, marketing: false });
+    closeBanner();
+  };
+  const essentialOnly = () => {
+    writeCookieConsent({ personalisation: false, analytics: false, marketing: false });
+    clearNonEssentialBrowserData();
+    closeBanner();
+  };
+  const saveSettings = () => {
+    const personalisation = settingsPanel.querySelector("[data-cookie-personalisation]");
+    const analytics = settingsPanel.querySelector("[data-cookie-analytics]");
+    writeCookieConsent({
+      personalisation: personalisation instanceof HTMLInputElement ? personalisation.checked : false,
+      analytics: analytics instanceof HTMLInputElement ? analytics.checked : false,
+      marketing: false,
+    });
+    if (!hasCookieConsent("personalisation")) {
+      clearNonEssentialBrowserData();
+    }
+    closeBanner();
+  };
+
+  banner.querySelector("[data-cookie-accept]")?.addEventListener("click", acceptAll);
+  banner.querySelector("[data-cookie-essential]")?.addEventListener("click", essentialOnly);
+  banner.querySelector("[data-cookie-settings]")?.addEventListener("click", () => {
+    settingsPanel.hidden = false;
+  });
+  settingsPanel.querySelector("[data-cookie-settings-close]")?.addEventListener("click", () => {
+    settingsPanel.hidden = true;
+  });
+  settingsPanel.querySelector("[data-cookie-save-essential]")?.addEventListener("click", essentialOnly);
+  settingsPanel.querySelector("[data-cookie-save-settings]")?.addEventListener("click", saveSettings);
+
+  document.body.appendChild(banner);
+  document.body.appendChild(settingsPanel);
+}
 
 function loadRecentProductSlugs() {
+  if (!hasCookieConsent("personalisation")) {
+    return [];
+  }
+
   try {
     const raw = window.localStorage.getItem(RECENT_PRODUCTS_STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
@@ -1666,6 +1844,10 @@ function loadRecentProductSlugs() {
 }
 
 function saveRecentProductSlugs(slugs) {
+  if (!hasCookieConsent("personalisation")) {
+    return;
+  }
+
   const normalized = Array.isArray(slugs)
     ? slugs.map((item) => String(item || "").trim()).filter(Boolean).slice(0, 24)
     : [];
@@ -1673,6 +1855,10 @@ function saveRecentProductSlugs(slugs) {
 }
 
 function rememberRecentProduct(product) {
+  if (!hasCookieConsent("personalisation")) {
+    return;
+  }
+
   const slug = String(product?.slug || "").trim();
   if (!slug) return;
   const existing = loadRecentProductSlugs().filter((item) => item !== slug);
@@ -5549,6 +5735,7 @@ async function initMyRepairsPage() {
 }
 
 function initPage() {
+  initCookieConsentBanner();
   ensureAccountNavLink();
   ensureGlobalCartUi();
   updateCartIndicators();
