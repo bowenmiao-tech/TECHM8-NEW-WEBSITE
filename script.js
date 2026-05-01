@@ -545,7 +545,7 @@ const STORE_CHECKOUT_DETAILS = {
   "park-ridge": {
     title: "Park Ridge",
     mode: "Click & Collect",
-    summary: "Collect your order from the Park Ridge store once the team confirms stock and pickup timing.",
+    summary: "Collect your order from the Park Ridge store once the team confirms pickup timing.",
     address: "Shop 11, 3732 Mount Lindesay Hwy, Park Ridge QLD 4125",
     phone: "0452 488 710",
     mapUrl: "https://maps.app.goo.gl/SBzYCp7G5C3UM4SdA",
@@ -2782,14 +2782,11 @@ function createCatalogCard(product) {
     savingsAmount > 0
       ? `<span class="storefront-card__saving">Save ${escapeHtml(formatMoney(savingsAmount))}</span>`
       : "";
-  const stockLabel =
-    Number(product.stock_quantity) > 0
-      ? `${escapeHtml(String(product.stock_quantity))} in network stock`
-      : "Stock to be updated";
+  const stockLabel = "Available to order";
   const imageMarkup = product.display_image
     ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy" decoding="async" sizes="(max-width: 380px) 92vw, (max-width: 720px) 44vw, (max-width: 1200px) 30vw, 18vw">`
     : `<div class="storefront-card__image storefront-card__image--placeholder" aria-hidden="true">TECHM8</div>`;
-  const stockClass = Number(product.stock_quantity) > 0 ? "is-in-stock" : "is-pending";
+  const stockClass = "is-in-stock";
 
   return `
     <article class="storefront-card storefront-card--commerce">
@@ -3055,7 +3052,7 @@ function initProductDetailPage() {
     const compareAtPrice = Number(product.compare_at_price) || 0;
     const retailPrice = Number(product.retail_price) || 0;
     const savings = compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
-    const stockText = Number(product.stock_quantity) > 0 ? `${product.stock_quantity} available across stores` : "Store stock is updated in-store";
+    const stockText = "Available for online order or store pickup";
     const productName = getProductDisplayName(product) || product.name;
     const productColor = getProductVariantColor(product);
     const galleryImages = getOrderedProductGalleryImages(product);
@@ -3152,7 +3149,7 @@ function initProductDetailPage() {
               ${savings > 0 ? `<span class="storefront-pdp__save">Save ${escapeHtml(formatMoney(savings))}</span>` : ""}
             </div>
             <div class="storefront-pdp__price-main">${escapeHtml(formatMoney(retailPrice))}</div>
-            <p class="storefront-pdp__price-note">Final in-store pricing and stock can be confirmed by your nearest TECHM8 location.</p>
+            <p class="storefront-pdp__price-note">Order online or choose a TECHM8 pickup store at checkout.</p>
           </div>
 
           ${variantMarkup}
