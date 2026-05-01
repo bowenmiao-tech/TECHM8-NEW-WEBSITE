@@ -682,12 +682,21 @@ function getViewTemplate(view) {
       `;
     case "products":
       return `
-        <section class="admin-layout">
-          <article class="admin-panel">
+        <section class="admin-products-workspace">
+          <article class="admin-panel admin-products-editor-panel">
+            <div class="admin-panel__heading">
+              <div>
+                <h2>Product editor</h2>
+                <p>Edit storefront content, images, pricing and product visibility.</p>
+              </div>
+            </div>
+            <div data-products-editor class="admin-note">No product selected yet.</div>
+          </article>
+          <aside class="admin-panel admin-products-list-panel">
             <div class="admin-panel__heading">
               <div>
                 <h2>Products</h2>
-                <p>Manage pricing, visibility, featured status and hero image.</p>
+                <p>Select a product to edit.</p>
               </div>
               <div class="admin-button-row">
                 <button class="button button--ghost" type="button" data-products-refresh>Refresh</button>
@@ -714,15 +723,6 @@ function getViewTemplate(view) {
             </form>
             <div class="admin-table-wrap" data-products-table></div>
             <div data-products-pagination></div>
-          </article>
-          <aside class="admin-panel">
-            <div class="admin-panel__heading">
-              <div>
-                <h2>Product editor</h2>
-                <p>Catalog edits are restricted to super admins.</p>
-              </div>
-            </div>
-            <div data-products-editor class="admin-note">No product selected yet.</div>
           </aside>
         </section>
       `;
@@ -800,6 +800,115 @@ function fillCategoryOptions(select, categories) {
 function getImageOrPlaceholder(url) {
   const text = String(url || "").trim();
   return text || DEFAULT_PRODUCT_IMAGE_URL;
+}
+
+function normalizeProductGallery(row) {
+  const sourceImages = Array.isArray(row.images)
+    ? row.images
+    : Array.isArray(row.product_images)
+      ? row.product_images
+      : [];
+  const seen = new Set();
+  const gallery = [];
+
+  const pushImage = (image, index = 0) => {
+    const imageUrl = String(image?.image_url || image?.url || "").trim();
+    if (!imageUrl || seen.has(imageUrl)) return;
+    seen.add(imageUrl);
+    gallery.push({
+      id: image?.id || "",
+      image_url: imageUrl,
+      alt_text: String(image?.alt_text || row.name || "").trim(),
+      sort_order: Number.isFinite(Number(image?.sort_order)) ? Number(image.sort_order) : index,
+    });
+  };
+
+  if (row.image_url) {
+    pushImage({ id: "", image_url: row.image_url, alt_text: row.name, sort_order: -1 }, -1);
+  }
+
+  [...sourceImages]
+    .sort((left, right) => Number(left?.sort_order || 0) - Number(right?.sort_order || 0))
+    .forEach(pushImage);
+
+  return gallery.length
+    ? gallery
+    : [{ id: "", image_url: "", alt_text: String(row.name || "").trim(), sort_order: 0 }];
+}
+
+function renderProductGalleryRow(image, index, canEdit) {
+  const disabled = canEdit ? "" : "disabled";
+  return `
+    <div class="admin-gallery-row" data-product-gallery-row>
+      <div class="admin-gallery-row__preview">
+        <img src="${escapeHtml(getImageOrPlaceholder(image.image_url))}" alt="${escapeHtml(image.alt_text || "")}" data-gallery-preview>
+        <span data-gallery-index>${index + 1}</span>
+      </div>
+      <div class="admin-gallery-row__fields">
+        <input type="hidden" data-gallery-id value="${escapeHtml(image.id || "")}">
+        <label>
+          <span>Image URL</span>
+          <input type="url" data-gallery-url value="${escapeHtml(image.image_url || "")}" placeholder="https://..." ${disabled}>
+        </label>
+        <label>
+          <span>Alt text</span>
+          <input type="text" data-gallery-alt value="${escapeHtml(image.alt_text || "")}" placeholder="Product image description" ${disabled}>
+        </label>
+      </div>
+      <div class="admin-gallery-row__actions">
+        <button class="button button--ghost button--small" type="button" data-gallery-action="up" ${disabled}>Up</button>
+        <button class="button button--ghost button--small" type="button" data-gallery-action="down" ${disabled}>Down</button>
+        <button class="button button--danger button--small" type="button" data-gallery-action="remove" ${disabled}>Delete</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderProductGalleryEditor(row, canEdit) {
+  const gallery = normalizeProductGallery(row);
+  return `
+    <section class="admin-editor-section">
+      <div class="admin-editor-section__heading">
+        <div>
+          <h3>Images and videos</h3>
+          <p>First image becomes the storefront hero image. Reorder with Up and Down.</p>
+        </div>
+        ${canEdit ? `<button class="button button--ghost" type="button" data-gallery-add>Add image</button>` : ""}
+      </div>
+      <div class="admin-gallery-list" data-product-gallery-list>
+        ${gallery.map((image, index) => renderProductGalleryRow(image, index, canEdit)).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function refreshProductGalleryRows(list) {
+  if (!(list instanceof HTMLElement)) return;
+  list.querySelectorAll("[data-product-gallery-row]").forEach((row, index) => {
+    const indexTarget = row.querySelector("[data-gallery-index]");
+    const imageInput = row.querySelector("[data-gallery-url]");
+    const preview = row.querySelector("[data-gallery-preview]");
+    if (indexTarget) indexTarget.textContent = String(index + 1);
+    if (preview instanceof HTMLImageElement && imageInput instanceof HTMLInputElement) {
+      preview.src = getImageOrPlaceholder(imageInput.value);
+    }
+  });
+}
+
+function collectProductGallery(editorTarget) {
+  return Array.from(editorTarget.querySelectorAll("[data-product-gallery-row]"))
+    .map((row, index) => {
+      const idInput = row.querySelector("[data-gallery-id]");
+      const urlInput = row.querySelector("[data-gallery-url]");
+      const altInput = row.querySelector("[data-gallery-alt]");
+      return {
+        id: idInput instanceof HTMLInputElement ? idInput.value.trim() : "",
+        image_url: urlInput instanceof HTMLInputElement ? urlInput.value.trim() : "",
+        alt_text: altInput instanceof HTMLInputElement ? altInput.value.trim() : "",
+        sort_order: index,
+      };
+    })
+    .filter((image) => image.image_url);
 }
 
 function buildRowClickHandler(container, selector, callback) {
@@ -1786,6 +1895,320 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
   load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be loaded.", "error"));
 }
 
+function renderProductsPageV2(root, bootstrap, session, alertTarget) {
+  root.innerHTML = getViewTemplate("products");
+  const filterForm = root.querySelector("[data-products-filters]");
+  const tableTarget = root.querySelector("[data-products-table]");
+  const editorTarget = root.querySelector("[data-products-editor]");
+  const paginationTarget = root.querySelector("[data-products-pagination]");
+  const categoryFilter = root.querySelector("[data-products-category-filter]");
+  const refreshButton = root.querySelector("[data-products-refresh]");
+
+  fillCategoryOptions(categoryFilter, bootstrap.categories || []);
+
+  const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false };
+
+  const renderEditor = () => {
+    const row = state.rows.find((item) => Number(item.id) === Number(state.selectedId));
+    if (!row) {
+      editorTarget.innerHTML = `<p class="admin-note">Select a product from the list to edit images, content, pricing and visibility.</p>`;
+      return;
+    }
+
+    const detailBlocks = buildDetailBlocksState(row);
+    const gallery = normalizeProductGallery(row);
+    const heroImage = gallery.find((image) => image.image_url)?.image_url || row.image_url || "";
+    const storefrontUrl = `../product.html?slug=${encodeURIComponent(row.slug || "")}`;
+
+    editorTarget.innerHTML = `
+      <div class="admin-editor admin-product-editor">
+        <div class="admin-product-hero">
+          <img src="${escapeHtml(getImageOrPlaceholder(heroImage))}" alt="${escapeHtml(row.name)}" data-product-hero-preview>
+          <div>
+            <span class="admin-kicker">Editing product</span>
+            <h3>${escapeHtml(row.name || "Untitled product")}</h3>
+            <p>${escapeHtml(row.sku || "No SKU")} / ${escapeHtml(row.slug || "No slug")}</p>
+            <div class="admin-button-row">
+              <a class="button button--ghost" href="${escapeHtml(storefrontUrl)}" target="_blank" rel="noreferrer">View product page</a>
+              ${state.canEdit ? `<button class="button button--primary" type="submit" form="admin-product-editor-form">Save product</button>` : ""}
+            </div>
+          </div>
+        </div>
+
+        <form class="admin-editor__form" id="admin-product-editor-form" data-product-editor-form>
+          ${renderProductGalleryEditor(row, state.canEdit)}
+
+          <section class="admin-editor-section">
+            <div class="admin-editor-section__heading">
+              <div>
+                <h3>Product info</h3>
+                <p>Core storefront fields and category placement.</p>
+              </div>
+            </div>
+            <div class="admin-editor__grid">
+              <label><span>Name</span><input type="text" name="name" value="${escapeHtml(row.name || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label><span>Brand</span><input type="text" name="brand" value="${escapeHtml(row.brand || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label><span>Model</span><input type="text" name="model" value="${escapeHtml(row.model || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label><span>Category</span>
+                <select name="category_id" ${state.canEdit ? "" : "disabled"}>
+                  <option value="">Unassigned</option>
+                  ${(bootstrap.categories || []).map((category) => `<option value="${category.id}" ${Number(row.category_id) === Number(category.id) ? "selected" : ""}>${escapeHtml(category.name)}</option>`).join("")}
+                </select>
+              </label>
+              <label class="admin-editor__wide"><span>Short description</span><textarea name="short_description" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.short_description || "")}</textarea></label>
+              <label class="admin-editor__wide"><span>Compatibility</span><textarea name="compatibility" placeholder="Phone model, console, charger standard or other compatibility notes" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.compatibility || "")}</textarea></label>
+            </div>
+          </section>
+
+          <section class="admin-editor-section">
+            <div class="admin-editor-section__heading">
+              <div>
+                <h3>Product detail page</h3>
+                <p>Structured blocks generate the detail area shown under price and add-to-cart.</p>
+              </div>
+            </div>
+            <div class="admin-detail-builder__grid">
+              <label><span>Overview title</span><input type="text" data-detail-block-input="overview_title" value="${escapeHtml(detailBlocks.overview_title || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label class="admin-detail-builder__full"><span>Overview text</span><textarea data-detail-block-input="overview_text" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.overview_text || "")}</textarea></label>
+              <label><span>Key details title</span><input type="text" data-detail-block-input="details_title" value="${escapeHtml(detailBlocks.details_title || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label><span>Feature image URL</span><input type="url" data-detail-block-input="image_url" value="${escapeHtml(detailBlocks.image_url || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label><span>Feature image alt</span><input type="text" data-detail-block-input="image_alt" value="${escapeHtml(detailBlocks.image_alt || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label class="admin-detail-builder__full"><span>Bullet points</span><textarea data-detail-block-input="bullets" placeholder="One point per line" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.bullets || "")}</textarea></label>
+              <label class="admin-detail-builder__full"><span>Comparison / spec table</span><textarea data-detail-block-input="specs" placeholder="Label|Value&#10;Charging|USB-C PD" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.specs || "")}</textarea></label>
+              <label class="admin-detail-builder__full"><span>Additional custom HTML</span><textarea class="admin-editor__detail-html" data-detail-block-input="extra_html" placeholder="Optional HTML for supplier content, extra images or formatted product notes" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.extra_html || "")}</textarea></label>
+            </div>
+            <input type="hidden" name="detail_html" value="${escapeHtml(buildDetailHtmlFromBlocks(detailBlocks))}">
+            <div class="admin-detail-preview">
+              <div class="admin-detail-preview__label">Preview</div>
+              <div class="storefront-rich-content" data-detail-preview>${renderDetailBlocksPreview(detailBlocks)}</div>
+            </div>
+          </section>
+
+          <section class="admin-editor-section">
+            <div class="admin-editor-section__heading">
+              <div>
+                <h3>Pricing and inventory</h3>
+                <p>Retail, compare price, cost and total stock are kept POS-ready.</p>
+              </div>
+            </div>
+            <div class="admin-editor__grid admin-editor__grid--four">
+              <label><span>Retail price</span><input type="number" step="0.01" name="retail_price" value="${escapeHtml(row.retail_price ?? "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label><span>Compare at price</span><input type="number" step="0.01" name="compare_at_price" value="${escapeHtml(row.compare_at_price ?? "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label><span>Cost price</span><input type="number" step="0.01" name="cost_price" value="${escapeHtml(row.cost_price ?? "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label><span>Total stock</span><input type="number" step="1" name="stock_quantity" value="${escapeHtml(row.stock_quantity ?? "")}" ${state.canEdit ? "" : "disabled"}></label>
+            </div>
+          </section>
+
+          <section class="admin-editor-section">
+            <div class="admin-editor-section__heading">
+              <div>
+                <h3>Publishing</h3>
+                <p>Control online visibility and featured product placement.</p>
+              </div>
+            </div>
+            <div class="admin-editor__grid">
+              <label><span>Online visibility</span>
+                <select name="is_visible" ${state.canEdit ? "" : "disabled"}>
+                  <option value="true" ${row.is_visible ? "selected" : ""}>Show in online store</option>
+                  <option value="false" ${!row.is_visible ? "selected" : ""}>Hide from online store</option>
+                </select>
+              </label>
+              <label><span>Featured product</span>
+                <select name="is_featured" ${state.canEdit ? "" : "disabled"}>
+                  <option value="false" ${!row.is_featured ? "selected" : ""}>No</option>
+                  <option value="true" ${row.is_featured ? "selected" : ""}>Yes</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          ${state.canEdit ? `<div class="admin-button-row admin-save-row"><button class="button button--primary" type="submit">Save product</button></div>` : `<p class="admin-note">This account can view catalog data but only super admins can change it.</p>`}
+        </form>
+      </div>
+    `;
+
+    const formElement = editorTarget.querySelector("[data-product-editor-form]");
+    const hiddenDetailInput = editorTarget.querySelector('input[name="detail_html"]');
+    const detailPreview = editorTarget.querySelector("[data-detail-preview]");
+    const blockInputs = editorTarget.querySelectorAll("[data-detail-block-input]");
+    const galleryList = editorTarget.querySelector("[data-product-gallery-list]");
+    const heroPreview = editorTarget.querySelector("[data-product-hero-preview]");
+
+    const syncDetailBuilder = () => {
+      const nextBlocks = {};
+      blockInputs.forEach((input) => {
+        const key = input.getAttribute("data-detail-block-input");
+        if (!key) return;
+        nextBlocks[key] = input.value;
+      });
+      const nextHtml = buildDetailHtmlFromBlocks(nextBlocks);
+      if (hiddenDetailInput instanceof HTMLInputElement) {
+        hiddenDetailInput.value = nextHtml;
+      }
+      if (detailPreview instanceof HTMLElement) {
+        detailPreview.innerHTML = renderDetailBlocksPreview(nextBlocks);
+      }
+    };
+
+    const syncGalleryPreview = () => {
+      refreshProductGalleryRows(galleryList);
+      const firstImage = collectProductGallery(editorTarget)[0]?.image_url || "";
+      if (heroPreview instanceof HTMLImageElement) {
+        heroPreview.src = getImageOrPlaceholder(firstImage);
+      }
+    };
+
+    blockInputs.forEach((input) => {
+      input.addEventListener("input", syncDetailBuilder);
+      input.addEventListener("change", syncDetailBuilder);
+    });
+
+    galleryList?.addEventListener("input", syncGalleryPreview);
+    galleryList?.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const actionButton = target.closest("[data-gallery-action]");
+      if (!(actionButton instanceof HTMLElement)) return;
+      const action = actionButton.getAttribute("data-gallery-action");
+      const rowElement = actionButton.closest("[data-product-gallery-row]");
+      if (!(rowElement instanceof HTMLElement) || !(galleryList instanceof HTMLElement)) return;
+
+      if (action === "up" && rowElement.previousElementSibling) {
+        galleryList.insertBefore(rowElement, rowElement.previousElementSibling);
+      }
+      if (action === "down" && rowElement.nextElementSibling) {
+        galleryList.insertBefore(rowElement.nextElementSibling, rowElement);
+      }
+      if (action === "remove") {
+        rowElement.remove();
+      }
+      if (!galleryList.querySelector("[data-product-gallery-row]")) {
+        galleryList.insertAdjacentHTML("beforeend", renderProductGalleryRow({ image_url: "", alt_text: row.name || "" }, 0, state.canEdit));
+      }
+      syncGalleryPreview();
+    });
+
+    editorTarget.querySelector("[data-gallery-add]")?.addEventListener("click", () => {
+      if (!(galleryList instanceof HTMLElement)) return;
+      const count = galleryList.querySelectorAll("[data-product-gallery-row]").length;
+      galleryList.insertAdjacentHTML("beforeend", renderProductGalleryRow({ image_url: "", alt_text: row.name || "" }, count, state.canEdit));
+      refreshProductGalleryRows(galleryList);
+    });
+
+    formElement?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const formData = new FormData(form);
+      const images = collectProductGallery(editorTarget);
+      try {
+        await callAdminApi("product_update", {
+          id: row.id,
+          name: formData.get("name"),
+          brand: formData.get("brand"),
+          model: formData.get("model"),
+          category_id: formData.get("category_id"),
+          retail_price: formData.get("retail_price"),
+          compare_at_price: formData.get("compare_at_price"),
+          cost_price: formData.get("cost_price"),
+          stock_quantity: formData.get("stock_quantity"),
+          is_visible: formData.get("is_visible") === "true",
+          is_featured: formData.get("is_featured") === "true",
+          image_url: images[0]?.image_url || row.image_url || "",
+          images,
+          short_description: formData.get("short_description"),
+          compatibility: formData.get("compatibility"),
+          detail_html: formData.get("detail_html"),
+        }, session);
+        setAlert(alertTarget, "Product updated.", "success");
+        await load();
+      } catch (error) {
+        setAlert(alertTarget, error instanceof Error ? error.message : "Product could not be updated.", "error");
+      }
+    });
+  };
+
+  const renderTable = () => {
+    if (!state.rows.length) {
+      renderEmptyState(tableTarget, "No products matched the current filters.");
+      paginationTarget.innerHTML = "";
+      renderEditor();
+      return;
+    }
+
+    tableTarget.innerHTML = `
+      <div class="admin-product-list">
+        ${state.rows.map((row) => `
+          <button class="admin-product-list__item ${Number(state.selectedId) === Number(row.id) ? "is-selected" : ""}" type="button" data-product-row="${row.id}">
+            <img src="${escapeHtml(getImageOrPlaceholder(row.image_url))}" alt="${escapeHtml(row.name || "")}">
+            <span>
+              <strong>${escapeHtml(row.name || "Untitled product")}</strong>
+              <small>${escapeHtml(row.sku || "No SKU")} / ${escapeHtml(row.brand || "No brand")}</small>
+              <small>${formatMoney(row.retail_price)} / Stock ${escapeHtml(row.stock_quantity ?? 0)}</small>
+            </span>
+            ${renderBadge(row.is_visible ? "visible" : "hidden")}
+          </button>
+        `).join("")}
+      </div>
+    `;
+
+    paginationTarget.innerHTML = renderPagination(state.meta || {});
+    tableTarget.querySelectorAll("[data-product-row]").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.selectedId = Number(button.getAttribute("data-product-row"));
+        renderTable();
+        renderEditor();
+      });
+    });
+    paginationTarget.querySelector("[data-page-prev]")?.addEventListener("click", async () => {
+      state.page = Math.max(1, state.page - 1);
+      await load();
+    });
+    paginationTarget.querySelector("[data-page-next]")?.addEventListener("click", async () => {
+      const totalPages = Math.max(1, Math.ceil((state.meta?.total || 0) / (state.meta?.page_size || 20)));
+      state.page = Math.min(totalPages, state.page + 1);
+      await load();
+    });
+    renderEditor();
+  };
+
+  const load = async () => {
+    setAlert(alertTarget, "");
+    tableTarget.innerHTML = `<div class="admin-loading">Loading products...</div>`;
+    const formData = new FormData(filterForm);
+    const result = await callAdminApi("products_list", {
+      filters: {
+        page: state.page,
+        page_size: 20,
+        search: formData.get("search"),
+        category_id: formData.get("category_id"),
+        visibility: formData.get("visibility"),
+      },
+    }, session);
+    state.rows = result.rows || [];
+    state.meta = result;
+    state.canEdit = Boolean(result.can_edit);
+    if (state.selectedId && !state.rows.some((row) => Number(row.id) === Number(state.selectedId))) {
+      state.selectedId = state.rows[0]?.id || null;
+    }
+    if (!state.selectedId && state.rows.length) {
+      state.selectedId = state.rows[0].id;
+    }
+    renderTable();
+  };
+
+  filterForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    state.page = 1;
+    await load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be loaded.", "error"));
+  });
+
+  refreshButton?.addEventListener("click", () => {
+    load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be refreshed.", "error"));
+  });
+
+  load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be loaded.", "error"));
+}
+
 function renderInventoryPage(root, bootstrap, session, alertTarget) {
   root.innerHTML = getViewTemplate("inventory");
   const filterForm = root.querySelector("[data-inventory-filters]");
@@ -2035,7 +2458,7 @@ async function initAdminApp() {
       renderRepairsPage(pageRoot, bootstrap, authState.session, alertTarget);
       break;
     case "products":
-      renderProductsPage(pageRoot, bootstrap, authState.session, alertTarget);
+      renderProductsPageV2(pageRoot, bootstrap, authState.session, alertTarget);
       break;
     case "inventory":
       renderInventoryPage(pageRoot, bootstrap, authState.session, alertTarget);

@@ -330,6 +330,28 @@ body.admin-login-body {
   gap: 20px;
 }
 
+.admin-products-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 420px);
+  gap: 20px;
+  align-items: start;
+}
+
+.admin-products-list-panel {
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+}
+
+.admin-products-list-panel .admin-filter-bar {
+  grid-template-columns: 1fr;
+}
+
+.admin-products-list-panel .admin-filter {
+  min-width: 0;
+}
+
 .admin-panel {
   background: var(--admin-panel);
   border: 1px solid var(--admin-border);
@@ -372,6 +394,23 @@ body.admin-login-body {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.button--small {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 12px;
+  font-size: 0.86rem;
+}
+
+.button--danger {
+  background: rgba(207, 77, 100, 0.1);
+  border-color: rgba(207, 77, 100, 0.22);
+  color: #9f2e42;
+}
+
+.button--danger:hover {
+  background: rgba(207, 77, 100, 0.16);
 }
 
 .admin-badge {
@@ -469,9 +508,134 @@ body.admin-login-body {
   gap: 18px;
 }
 
+.admin-product-hero {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  padding: 18px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(5, 206, 172, 0.22), transparent 34%),
+    linear-gradient(135deg, rgba(8, 42, 51, 0.96), rgba(3, 84, 76, 0.9));
+  color: #fff;
+  box-shadow: 0 18px 50px rgba(8, 42, 51, 0.12);
+}
+
+.admin-product-hero img {
+  width: 132px;
+  height: 132px;
+  border-radius: 22px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.admin-product-hero h3 {
+  margin: 6px 0;
+  font: 700 clamp(1.45rem, 3vw, 2.45rem) / 1 "Space Grotesk", sans-serif;
+}
+
+.admin-product-hero p {
+  margin: 0 0 16px;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.admin-kicker {
+  display: inline-flex;
+  color: var(--admin-accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .admin-editor__form {
   display: grid;
-  gap: 14px;
+  gap: 18px;
+}
+
+.admin-editor-section {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(8, 42, 51, 0.08);
+}
+
+.admin-editor-section__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-editor-section__heading h3 {
+  margin: 0;
+  font: 700 1.18rem/1.1 "Space Grotesk", sans-serif;
+}
+
+.admin-editor-section__heading p {
+  margin: 6px 0 0;
+  color: var(--admin-muted);
+}
+
+.admin-gallery-list {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-gallery-row {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 20px;
+  background: rgba(232, 255, 250, 0.46);
+  border: 1px solid rgba(5, 206, 172, 0.16);
+}
+
+.admin-gallery-row__preview {
+  position: relative;
+}
+
+.admin-gallery-row__preview img {
+  width: 96px;
+  height: 96px;
+  display: block;
+  border-radius: 16px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid rgba(8, 42, 51, 0.08);
+}
+
+.admin-gallery-row__preview span {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--admin-accent);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.admin-gallery-row__fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+.admin-gallery-row__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .admin-detail-builder {
@@ -529,6 +693,14 @@ body.admin-login-body {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.admin-editor__grid--four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-editor__wide {
+  grid-column: 1 / -1;
 }
 
 .admin-editor__meta {
@@ -605,12 +777,98 @@ body.admin-login-body {
   background: #fff;
 }
 
+.admin-product-list {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-product-list__item {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(8, 42, 51, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--admin-text);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+.admin-product-list__item:hover,
+.admin-product-list__item.is-selected {
+  border-color: rgba(5, 206, 172, 0.38);
+  box-shadow: 0 12px 28px rgba(8, 42, 51, 0.08);
+  transform: translateY(-1px);
+}
+
+.admin-product-list__item.is-selected {
+  background: rgba(5, 206, 172, 0.11);
+}
+
+.admin-product-list__item img {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid rgba(8, 42, 51, 0.08);
+}
+
+.admin-product-list__item span {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.admin-product-list__item strong,
+.admin-product-list__item small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-product-list__item small {
+  color: var(--admin-muted);
+}
+
+.admin-save-row {
+  position: sticky;
+  bottom: 16px;
+  justify-content: flex-end;
+  padding: 14px;
+  border: 1px solid rgba(5, 206, 172, 0.18);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(18px);
+}
+
 .admin-quick-stats {
   display: grid;
   gap: 12px;
 }
 
 @media (max-width: 1024px) {
+  .admin-products-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-products-list-panel {
+    position: static;
+    max-height: none;
+    order: -1;
+  }
+
+  .admin-gallery-row,
+  .admin-gallery-row__fields,
+  .admin-editor__grid--four {
+    grid-template-columns: 1fr;
+  }
+
   .admin-detail-builder__grid {
     grid-template-columns: 1fr;
   }
@@ -786,6 +1044,15 @@ body.admin-login-body {
   .admin-filter-bar--compact,
   .admin-editor__grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-product-hero {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .admin-product-hero img {
+    width: 96px;
+    height: 96px;
   }
 
   .admin-summary-grid,

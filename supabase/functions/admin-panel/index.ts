@@ -485,8 +485,31 @@ async function listProducts(supabaseAdmin: ReturnType<typeof createClient>, cont
   const { data, error, count } = await query
   if (error) throw error
 
+  const productIds = (data ?? []).map((row) => (row as { id: number }).id)
+  const { data: imageRows, error: imageError } = productIds.length
+    ? await supabaseAdmin
+        .from('product_images')
+        .select('id, product_id, image_url, alt_text, sort_order, created_at')
+        .in('product_id', productIds)
+        .order('sort_order', { ascending: true })
+        .order('id', { ascending: true })
+    : { data: [] as unknown[], error: null }
+
+  if (imageError) throw imageError
+
+  const imagesByProductId = new Map<number, unknown[]>()
+  ;(imageRows ?? []).forEach((image) => {
+    const productId = (image as { product_id: number }).product_id
+    const images = imagesByProductId.get(productId) ?? []
+    images.push(image)
+    imagesByProductId.set(productId, images)
+  })
+
   return {
-    rows: data ?? [],
+    rows: (data ?? []).map((row) => ({
+      ...row,
+      images: imagesByProductId.get((row as { id: number }).id) ?? [],
+    })),
     page,
     page_size: pageSize,
     total: count ?? 0,
@@ -504,6 +527,20 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     return jsonResponse({ ok: false, error: 'Product id is missing.' }, 422)
   }
 
+  const imagesInput = Array.isArray(body.images) ? body.images : null
+  const normalizedImages = imagesInput
+    ? imagesInput
+        .map((image, index) => ({
+          product_id: productId,
+          image_url: normalizeNullableString((image as JsonRecord).image_url),
+          alt_text: normalizeNullableString((image as JsonRecord).alt_text),
+          sort_order: index,
+        }))
+        .filter((image) => image.image_url)
+    : null
+
+  const heroImageUrl = normalizedImages?.[0]?.image_url ?? normalizeNullableString(body.image_url)
+
   const patch = {
     name: normalizeNullableString(body.name),
     brand: normalizeNullableString(body.brand),
@@ -517,7 +554,7 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     stock_quantity: normalizeNumber(body.stock_quantity),
     is_visible: typeof body.is_visible === 'boolean' ? body.is_visible : undefined,
     is_featured: typeof body.is_featured === 'boolean' ? body.is_featured : undefined,
-    image_url: body.image_url === '' ? null : normalizeNullableString(body.image_url),
+    image_url: heroImageUrl,
     detail_html: body.detail_html === '' ? null : String(body.detail_html ?? ''),
   }
 
@@ -531,6 +568,27 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
 
   if (error) {
     return jsonResponse({ ok: false, error: 'Product could not be updated.' }, 500)
+  }
+
+  if (normalizedImages) {
+    const { error: deleteImagesError } = await supabaseAdmin
+      .from('product_images')
+      .delete()
+      .eq('product_id', productId)
+
+    if (deleteImagesError) {
+      return jsonResponse({ ok: false, error: 'Product images could not be updated.' }, 500)
+    }
+
+    if (normalizedImages.length) {
+      const { error: insertImagesError } = await supabaseAdmin
+        .from('product_images')
+        .insert(normalizedImages)
+
+      if (insertImagesError) {
+        return jsonResponse({ ok: false, error: 'Product images could not be saved.' }, 500)
+      }
+    }
   }
 
   return jsonResponse({ ok: true, row: data })
