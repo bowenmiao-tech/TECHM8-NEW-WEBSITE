@@ -838,13 +838,19 @@ function normalizeProductGallery(row) {
 
 function renderProductGalleryRow(image, index, canEdit) {
   const disabled = canEdit ? "" : "disabled";
+  const draggable = canEdit ? "true" : "false";
   return `
-    <div class="admin-gallery-row" data-product-gallery-row>
-      <div class="admin-gallery-row__preview">
+    <div class="admin-gallery-tile" data-product-gallery-row draggable="${draggable}">
+      <div class="admin-gallery-tile__preview">
         <img src="${escapeHtml(getImageOrPlaceholder(image.image_url))}" alt="${escapeHtml(image.alt_text || "")}" data-gallery-preview>
-        <span data-gallery-index>${index + 1}</span>
+        <span class="admin-gallery-tile__order" data-gallery-index>${index + 1}</span>
+        <span class="admin-gallery-tile__main">Main image</span>
+        ${canEdit ? `
+          <button class="admin-gallery-tile__edit" type="button" data-gallery-action="edit" aria-label="Edit image">Edit</button>
+          <button class="admin-gallery-tile__remove" type="button" data-gallery-action="remove" aria-label="Remove image">×</button>
+        ` : ""}
       </div>
-      <div class="admin-gallery-row__fields">
+      <div class="admin-gallery-tile__fields">
         <input type="hidden" data-gallery-id value="${escapeHtml(image.id || "")}">
         <label>
           <span>Image URL</span>
@@ -854,11 +860,6 @@ function renderProductGalleryRow(image, index, canEdit) {
           <span>Alt text</span>
           <input type="text" data-gallery-alt value="${escapeHtml(image.alt_text || "")}" placeholder="Product image description" ${disabled}>
         </label>
-      </div>
-      <div class="admin-gallery-row__actions">
-        <button class="button button--ghost button--small" type="button" data-gallery-action="up" ${disabled}>Up</button>
-        <button class="button button--ghost button--small" type="button" data-gallery-action="down" ${disabled}>Down</button>
-        <button class="button button--danger button--small" type="button" data-gallery-action="remove" ${disabled}>Delete</button>
       </div>
     </div>
   `;
@@ -871,7 +872,7 @@ function renderProductGalleryEditor(row, canEdit) {
       <div class="admin-editor-section__heading">
         <div>
           <h3>Images and videos</h3>
-          <p>First image becomes the storefront hero image. Reorder with Up and Down.</p>
+          <p>Drag images to reorder. The first image is the storefront thumbnail and main product image.</p>
         </div>
         ${canEdit ? `<button class="button button--ghost" type="button" data-gallery-add>Add image</button>` : ""}
       </div>
@@ -888,10 +889,62 @@ function refreshProductGalleryRows(list) {
     const indexTarget = row.querySelector("[data-gallery-index]");
     const imageInput = row.querySelector("[data-gallery-url]");
     const preview = row.querySelector("[data-gallery-preview]");
+    row.classList.toggle("is-main", index === 0);
     if (indexTarget) indexTarget.textContent = String(index + 1);
     if (preview instanceof HTMLImageElement && imageInput instanceof HTMLInputElement) {
       preview.src = getImageOrPlaceholder(imageInput.value);
     }
+  });
+}
+
+function setupProductGalleryDrag(list, onChange) {
+  if (!(list instanceof HTMLElement)) return;
+  let draggedRow = null;
+
+  list.addEventListener("dragstart", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const row = target.closest("[data-product-gallery-row]");
+    if (!(row instanceof HTMLElement) || row.getAttribute("draggable") !== "true") return;
+    draggedRow = row;
+    row.classList.add("is-dragging");
+    event.dataTransfer?.setData("text/plain", "product-gallery-image");
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = "move";
+    }
+  });
+
+  list.addEventListener("dragover", (event) => {
+    if (!draggedRow) return;
+    event.preventDefault();
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const overRow = target.closest("[data-product-gallery-row]");
+    if (!(overRow instanceof HTMLElement) || overRow === draggedRow) return;
+
+    const overRect = overRow.getBoundingClientRect();
+    const shouldInsertAfter = event.clientX > overRect.left + overRect.width / 2;
+    if (shouldInsertAfter) {
+      overRow.after(draggedRow);
+    } else {
+      overRow.before(draggedRow);
+    }
+  });
+
+  list.addEventListener("drop", (event) => {
+    if (!draggedRow) return;
+    event.preventDefault();
+    draggedRow.classList.remove("is-dragging");
+    draggedRow = null;
+    onChange?.();
+  });
+
+  list.addEventListener("dragend", () => {
+    if (draggedRow) {
+      draggedRow.classList.remove("is-dragging");
+    }
+    draggedRow = null;
+    onChange?.();
   });
 }
 
@@ -2073,14 +2126,15 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       const rowElement = actionButton.closest("[data-product-gallery-row]");
       if (!(rowElement instanceof HTMLElement) || !(galleryList instanceof HTMLElement)) return;
 
-      if (action === "up" && rowElement.previousElementSibling) {
-        galleryList.insertBefore(rowElement, rowElement.previousElementSibling);
-      }
-      if (action === "down" && rowElement.nextElementSibling) {
-        galleryList.insertBefore(rowElement.nextElementSibling, rowElement);
-      }
       if (action === "remove") {
         rowElement.remove();
+      }
+      if (action === "edit") {
+        const firstInput = rowElement.querySelector("[data-gallery-url]");
+        if (firstInput instanceof HTMLInputElement) {
+          firstInput.focus();
+          firstInput.select();
+        }
       }
       if (!galleryList.querySelector("[data-product-gallery-row]")) {
         galleryList.insertAdjacentHTML("beforeend", renderProductGalleryRow({ image_url: "", alt_text: row.name || "" }, 0, state.canEdit));
@@ -2088,11 +2142,13 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       syncGalleryPreview();
     });
 
+    setupProductGalleryDrag(galleryList, syncGalleryPreview);
+
     editorTarget.querySelector("[data-gallery-add]")?.addEventListener("click", () => {
       if (!(galleryList instanceof HTMLElement)) return;
       const count = galleryList.querySelectorAll("[data-product-gallery-row]").length;
       galleryList.insertAdjacentHTML("beforeend", renderProductGalleryRow({ image_url: "", alt_text: row.name || "" }, count, state.canEdit));
-      refreshProductGalleryRows(galleryList);
+      syncGalleryPreview();
     });
 
     formElement?.addEventListener("submit", async (event) => {
