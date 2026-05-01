@@ -141,6 +141,43 @@ function buildDetailHtmlFromBlocks(blocks) {
 ${renderDetailBlocksPreview(normalizedBlocks)}`.trim();
 }
 
+function buildDefaultProductDescriptionHtml(row) {
+  const description = String(row.description || row.short_description || `${row.name || "This product"} is available from the TECHM8 catalog.`).trim();
+  return `
+    <section>
+      <h2>Everything about this product</h2>
+      <p>${escapeHtml(description)}</p>
+    </section>
+  `.trim();
+}
+
+function getEditableProductDescriptionHtml(row) {
+  return getDetailHtmlWithoutMarker(row.detail_html) || buildDefaultProductDescriptionHtml(row);
+}
+
+function insertTextAtCursor(textarea, text) {
+  if (!(textarea instanceof HTMLTextAreaElement)) return;
+  const start = textarea.selectionStart ?? textarea.value.length;
+  const end = textarea.selectionEnd ?? textarea.value.length;
+  textarea.value = `${textarea.value.slice(0, start)}${text}${textarea.value.slice(end)}`;
+  const nextPosition = start + text.length;
+  textarea.focus();
+  textarea.setSelectionRange(nextPosition, nextPosition);
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function wrapTextareaSelection(textarea, before, after, placeholder = "Text") {
+  if (!(textarea instanceof HTMLTextAreaElement)) return;
+  const start = textarea.selectionStart ?? textarea.value.length;
+  const end = textarea.selectionEnd ?? textarea.value.length;
+  const selectedText = textarea.value.slice(start, end) || placeholder;
+  const nextText = `${before}${selectedText}${after}`;
+  textarea.value = `${textarea.value.slice(0, start)}${nextText}${textarea.value.slice(end)}`;
+  textarea.focus();
+  textarea.setSelectionRange(start + before.length, start + before.length + selectedText.length);
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
 function formatMoney(value) {
   const amount = Number(value) || 0;
   return new Intl.NumberFormat("en-AU", {
@@ -1968,7 +2005,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       return;
     }
 
-    const detailBlocks = buildDetailBlocksState(row);
+    const descriptionHtml = getEditableProductDescriptionHtml(row);
     const gallery = normalizeProductGallery(row);
     const heroImage = gallery.find((image) => image.image_url)?.image_url || row.image_url || "";
     const storefrontUrl = `../product.html?slug=${encodeURIComponent(row.slug || "")}`;
@@ -2009,31 +2046,31 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
                 </select>
               </label>
               <label class="admin-editor__wide"><span>Short description</span><textarea name="short_description" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.short_description || "")}</textarea></label>
-              <label class="admin-editor__wide"><span>Compatibility</span><textarea name="compatibility" placeholder="Phone model, console, charger standard or other compatibility notes" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.compatibility || "")}</textarea></label>
             </div>
           </section>
 
           <section class="admin-editor-section">
             <div class="admin-editor-section__heading">
               <div>
-                <h3>Product detail page</h3>
-                <p>Structured blocks generate the detail area shown under price and add-to-cart.</p>
+                <h3>Description</h3>
+                <p>This content is shown in Product details on the product page. You can write HTML and insert images.</p>
               </div>
             </div>
-            <div class="admin-detail-builder__grid">
-              <label><span>Overview title</span><input type="text" data-detail-block-input="overview_title" value="${escapeHtml(detailBlocks.overview_title || "")}" ${state.canEdit ? "" : "disabled"}></label>
-              <label class="admin-detail-builder__full"><span>Overview text</span><textarea data-detail-block-input="overview_text" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.overview_text || "")}</textarea></label>
-              <label><span>Key details title</span><input type="text" data-detail-block-input="details_title" value="${escapeHtml(detailBlocks.details_title || "")}" ${state.canEdit ? "" : "disabled"}></label>
-              <label><span>Feature image URL</span><input type="url" data-detail-block-input="image_url" value="${escapeHtml(detailBlocks.image_url || "")}" ${state.canEdit ? "" : "disabled"}></label>
-              <label><span>Feature image alt</span><input type="text" data-detail-block-input="image_alt" value="${escapeHtml(detailBlocks.image_alt || "")}" ${state.canEdit ? "" : "disabled"}></label>
-              <label class="admin-detail-builder__full"><span>Bullet points</span><textarea data-detail-block-input="bullets" placeholder="One point per line" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.bullets || "")}</textarea></label>
-              <label class="admin-detail-builder__full"><span>Comparison / spec table</span><textarea data-detail-block-input="specs" placeholder="Label|Value&#10;Charging|USB-C PD" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.specs || "")}</textarea></label>
-              <label class="admin-detail-builder__full"><span>Additional custom HTML</span><textarea class="admin-editor__detail-html" data-detail-block-input="extra_html" placeholder="Optional HTML for supplier content, extra images or formatted product notes" ${state.canEdit ? "" : "disabled"}>${escapeHtml(detailBlocks.extra_html || "")}</textarea></label>
+            <div class="admin-description-toolbar" aria-label="Description formatting tools">
+              <button type="button" data-description-action="bold" ${state.canEdit ? "" : "disabled"}><strong>B</strong></button>
+              <button type="button" data-description-action="italic" ${state.canEdit ? "" : "disabled"}><em>I</em></button>
+              <button type="button" data-description-action="heading" ${state.canEdit ? "" : "disabled"}>H2</button>
+              <button type="button" data-description-action="list" ${state.canEdit ? "" : "disabled"}>List</button>
+              <button type="button" data-description-action="link" ${state.canEdit ? "" : "disabled"}>Link</button>
+              <button type="button" data-description-action="image" ${state.canEdit ? "" : "disabled"}>Image</button>
             </div>
-            <input type="hidden" name="detail_html" value="${escapeHtml(buildDetailHtmlFromBlocks(detailBlocks))}">
+            <label class="admin-editor__wide admin-description-field">
+              <span>Product details HTML</span>
+              <textarea class="admin-editor__detail-html admin-description-editor" name="detail_html" data-description-html placeholder="<h2>Everything about this product</h2>&#10;<p>Add product details, supplier notes, images or specification tables here.</p>" ${state.canEdit ? "" : "disabled"}>${escapeHtml(descriptionHtml)}</textarea>
+            </label>
             <div class="admin-detail-preview">
               <div class="admin-detail-preview__label">Preview</div>
-              <div class="storefront-rich-content" data-detail-preview>${renderDetailBlocksPreview(detailBlocks)}</div>
+              <div class="storefront-rich-content" data-detail-preview>${descriptionHtml}</div>
             </div>
           </section>
 
@@ -2081,25 +2118,15 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
     `;
 
     const formElement = editorTarget.querySelector("[data-product-editor-form]");
-    const hiddenDetailInput = editorTarget.querySelector('input[name="detail_html"]');
+    const descriptionInput = editorTarget.querySelector("[data-description-html]");
     const detailPreview = editorTarget.querySelector("[data-detail-preview]");
-    const blockInputs = editorTarget.querySelectorAll("[data-detail-block-input]");
     const galleryList = editorTarget.querySelector("[data-product-gallery-list]");
     const heroPreview = editorTarget.querySelector("[data-product-hero-preview]");
 
-    const syncDetailBuilder = () => {
-      const nextBlocks = {};
-      blockInputs.forEach((input) => {
-        const key = input.getAttribute("data-detail-block-input");
-        if (!key) return;
-        nextBlocks[key] = input.value;
-      });
-      const nextHtml = buildDetailHtmlFromBlocks(nextBlocks);
-      if (hiddenDetailInput instanceof HTMLInputElement) {
-        hiddenDetailInput.value = nextHtml;
-      }
+    const syncDescriptionPreview = () => {
       if (detailPreview instanceof HTMLElement) {
-        detailPreview.innerHTML = renderDetailBlocksPreview(nextBlocks);
+        const nextHtml = descriptionInput instanceof HTMLTextAreaElement ? descriptionInput.value.trim() : "";
+        detailPreview.innerHTML = nextHtml || "<p>No product details yet.</p>";
       }
     };
 
@@ -2111,9 +2138,29 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       }
     };
 
-    blockInputs.forEach((input) => {
-      input.addEventListener("input", syncDetailBuilder);
-      input.addEventListener("change", syncDetailBuilder);
+    descriptionInput?.addEventListener("input", syncDescriptionPreview);
+    descriptionInput?.addEventListener("change", syncDescriptionPreview);
+
+    editorTarget.querySelector(".admin-description-toolbar")?.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement) || !(descriptionInput instanceof HTMLTextAreaElement)) return;
+      const button = target.closest("[data-description-action]");
+      if (!(button instanceof HTMLElement)) return;
+      const action = button.getAttribute("data-description-action");
+      if (action === "bold") wrapTextareaSelection(descriptionInput, "<strong>", "</strong>");
+      if (action === "italic") wrapTextareaSelection(descriptionInput, "<em>", "</em>");
+      if (action === "heading") wrapTextareaSelection(descriptionInput, "<h2>", "</h2>", "Section heading");
+      if (action === "list") insertTextAtCursor(descriptionInput, "\n<ul>\n  <li>Feature or specification</li>\n</ul>\n");
+      if (action === "link") {
+        const url = window.prompt("Link URL");
+        if (url) wrapTextareaSelection(descriptionInput, `<a href="${escapeHtml(url)}">`, "</a>", "Link text");
+      }
+      if (action === "image") {
+        const imageUrl = window.prompt("Image URL");
+        if (!imageUrl) return;
+        const altText = window.prompt("Image alt text") || "";
+        insertTextAtCursor(descriptionInput, `\n<figure>\n  <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(altText)}">\n</figure>\n`);
+      }
     });
 
     galleryList?.addEventListener("input", syncGalleryPreview);
@@ -2172,7 +2219,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
           image_url: images[0]?.image_url || row.image_url || "",
           images,
           short_description: formData.get("short_description"),
-          compatibility: formData.get("compatibility"),
+          compatibility: "",
           detail_html: formData.get("detail_html"),
         }, session);
         setAlert(alertTarget, "Product updated.", "success");
