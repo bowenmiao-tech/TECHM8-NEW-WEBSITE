@@ -383,7 +383,7 @@ function setAlert(target, message = "", tone = "error") {
   if (!message) {
     target.hidden = true;
     target.textContent = "";
-    target.classList.remove("is-error", "is-success");
+    target.classList.remove("is-error", "is-success", "is-info");
     return;
   }
 
@@ -391,6 +391,16 @@ function setAlert(target, message = "", tone = "error") {
   target.textContent = message;
   target.classList.toggle("is-error", tone === "error");
   target.classList.toggle("is-success", tone === "success");
+  target.classList.toggle("is-info", tone === "info");
+}
+
+function setInlineStatus(target, message = "", tone = "info") {
+  if (!(target instanceof HTMLElement)) return;
+  target.hidden = !message;
+  target.textContent = message;
+  target.classList.toggle("is-error", tone === "error");
+  target.classList.toggle("is-success", tone === "success");
+  target.classList.toggle("is-info", tone === "info");
 }
 
 function getAdminEndpoint() {
@@ -2226,7 +2236,7 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
 
   fillCategoryOptions(categoryFilter, bootstrap.categories || []);
 
-  const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false };
+  const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false, saveFlash: null };
 
   const renderEditor = () => {
     const row = state.rows.find((item) => item.id === state.selectedId);
@@ -2568,7 +2578,12 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
             </div>
           </section>
 
-          ${state.canEdit ? `<div class="admin-button-row admin-save-row"><button class="button button--primary" type="submit">Save product</button></div>` : `<p class="admin-note">This account can view catalog data but only super admins can change it.</p>`}
+          ${state.canEdit ? `
+            <div class="admin-button-row admin-save-row">
+              <span class="admin-save-status" data-product-save-status hidden></span>
+              <button class="button button--primary" type="submit" data-product-save-button>Save product</button>
+            </div>
+          ` : `<p class="admin-note">This account can view catalog data but only super admins can change it.</p>`}
         </form>
       </div>
     `;
@@ -2578,6 +2593,11 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
     const descriptionEditor = editorTarget.querySelector("[data-description-quill]");
     const galleryList = editorTarget.querySelector("[data-product-gallery-list]");
     const heroPreview = editorTarget.querySelector("[data-product-hero-preview]");
+    const saveButton = editorTarget.querySelector("[data-product-save-button]");
+    const saveStatus = editorTarget.querySelector("[data-product-save-status]");
+    if (state.saveFlash && Number(state.saveFlash.productId) === Number(row.id)) {
+      setInlineStatus(saveStatus, state.saveFlash.message, state.saveFlash.tone);
+    }
     let descriptionControllerPromise = null;
     if (descriptionInput instanceof HTMLInputElement && descriptionEditor instanceof HTMLElement) {
       descriptionControllerPromise = setupProductDescriptionQuill({
@@ -2641,8 +2661,15 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       const form = event.currentTarget;
       const formData = new FormData(form);
       const images = collectProductGallery(editorTarget);
-      const descriptionController = descriptionControllerPromise ? await descriptionControllerPromise : null;
+      if (saveButton instanceof HTMLButtonElement) {
+        saveButton.disabled = true;
+        saveButton.textContent = "Saving...";
+      }
+      setInlineStatus(saveStatus, "Saving product changes...", "info");
+      setAlert(alertTarget, "");
+      state.saveFlash = null;
       try {
+        const descriptionController = descriptionControllerPromise ? await descriptionControllerPromise : null;
         await callAdminApi("product_update", {
           id: row.id,
           name: formData.get("name"),
@@ -2661,10 +2688,19 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
           compatibility: "",
           detail_html: descriptionController?.getHtml() ?? formData.get("detail_html"),
         }, session);
-        setAlert(alertTarget, "Product updated.", "success");
+        state.saveFlash = { productId: row.id, message: "Saved successfully.", tone: "success" };
+        setInlineStatus(saveStatus, state.saveFlash.message, state.saveFlash.tone);
+        setAlert(alertTarget, "Product saved successfully.", "success");
         await load();
       } catch (error) {
-        setAlert(alertTarget, error instanceof Error ? error.message : "Product could not be updated.", "error");
+        const message = error instanceof Error ? error.message : "Product could not be updated.";
+        setInlineStatus(saveStatus, `Save failed: ${message}`, "error");
+        setAlert(alertTarget, `Save failed: ${message}`, "error");
+      } finally {
+        if (saveButton instanceof HTMLButtonElement) {
+          saveButton.disabled = false;
+          saveButton.textContent = "Save product";
+        }
       }
     });
   };
