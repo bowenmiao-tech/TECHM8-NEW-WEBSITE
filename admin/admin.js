@@ -56,7 +56,10 @@ function parseStoredDetailBlocks(detailHtml) {
 }
 
 function getDetailHtmlWithoutMarker(detailHtml) {
-  return String(detailHtml || "").replace(/<!--\s*TECHM8_DETAIL_BLOCKS:[\s\S]*?-->\s*/i, "").trim();
+  return String(detailHtml || "")
+    .replace(/<!--\s*TECHM8_DETAIL_BLOCKS:[\s\S]*?-->\s*/i, "")
+    .replace(/^\s*(<section[^>]*>\s*)?<h2[^>]*>\s*(Everything about this product|Description)\s*<\/h2>\s*/i, "$1")
+    .trim();
 }
 
 function buildDefaultProductDetailBlocks(row) {
@@ -146,7 +149,6 @@ function buildDefaultProductDescriptionHtml(row) {
   const description = String(row.description || row.short_description || `${row.name || "This product"} is available from the TECHM8 catalog.`).trim();
   return `
     <section>
-      <h2>Everything about this product</h2>
       <p>${escapeHtml(description)}</p>
     </section>
   `.trim();
@@ -2380,7 +2382,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
             </div>
             <label class="admin-editor__wide admin-description-field">
               <span>Product details HTML</span>
-              <textarea class="admin-editor__detail-html admin-description-editor" name="detail_html" data-description-html placeholder="<h2>Everything about this product</h2>&#10;<p>Add product details, supplier notes, images or specification tables here.</p>" ${state.canEdit ? "" : "disabled"}>${escapeHtml(descriptionHtml)}</textarea>
+              <textarea class="admin-editor__detail-html admin-description-editor" name="detail_html" data-description-html placeholder="<p>Add product details, supplier notes, images or specification tables here.</p>" ${state.canEdit ? "" : "disabled"}>${escapeHtml(descriptionHtml)}</textarea>
             </label>
             <div class="admin-detail-preview">
               <div class="admin-detail-preview__label">Preview</div>

@@ -1543,8 +1543,14 @@ function sanitizeRichContentHtml(html) {
   return template.innerHTML.trim();
 }
 
+function stripDefaultProductDetailHeading(html) {
+  return String(html || "")
+    .replace(/^\s*(<section[^>]*>\s*)?<h2[^>]*>\s*(Everything about this product|Description)\s*<\/h2>\s*/i, "$1")
+    .trim();
+}
+
 function formatProductDetailHtml(product) {
-  const detailHtml = sanitizeRichContentHtml(product?.detail_html || "");
+  const detailHtml = stripDefaultProductDetailHeading(sanitizeRichContentHtml(product?.detail_html || ""));
   if (detailHtml) {
     return detailHtml;
   }
@@ -3181,7 +3187,7 @@ function initProductDetailPage() {
           <div class="section-heading section-heading--split">
             <div>
               <p class="eyebrow">Product details</p>
-              <h2>Everything about this product</h2>
+              <h2>Description</h2>
             </div>
           </div>
           <div class="storefront-rich-content">
