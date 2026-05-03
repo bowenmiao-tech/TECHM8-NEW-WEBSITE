@@ -8,6 +8,7 @@ const ADMIN_NAV_ITEMS = [
   { href: "dashboard.html", view: "dashboard", label: "Dashboard" },
   { href: "orders.html", view: "orders", label: "Orders" },
   { href: "repairs.html", view: "repairs", label: "Repair Bookings" },
+  { href: "customers.html", view: "customers", label: "Customers" },
   { href: "products.html", view: "products", label: "Products" },
   { href: "inventory.html", view: "inventory", label: "Inventory" },
 ];
@@ -715,6 +716,59 @@ function getViewTemplate(view) {
             </div>
             <div data-repairs-editor class="admin-note">No repair booking selected yet.</div>
           </aside>
+        </section>
+      `;
+    case "customers":
+      return `
+        <section class="admin-layout admin-layout--customers">
+          <aside class="admin-panel">
+            <div class="admin-panel__heading">
+              <div>
+                <h2>Customer editor</h2>
+                <p>Add or update customer contact records.</p>
+              </div>
+            </div>
+            <div data-customers-editor class="admin-note">Select a customer, or create a new one.</div>
+          </aside>
+          <article class="admin-panel">
+            <div class="admin-panel__heading">
+              <div>
+                <h2>Customers</h2>
+                <p>Search by name, email or phone. Marketing consent is stored for future campaigns.</p>
+              </div>
+              <div class="admin-button-row">
+                <button class="button button--primary" type="button" data-customers-new>New customer</button>
+                <button class="button button--ghost" type="button" data-customers-refresh>Refresh</button>
+              </div>
+            </div>
+            <form class="admin-filter-bar admin-filter-bar--customers" data-customers-filters>
+              <label class="admin-filter">
+                <span>Search</span>
+                <input type="search" name="search" placeholder="Name, email, phone or company">
+              </label>
+              <label class="admin-filter">
+                <span>Email marketing</span>
+                <select name="email_status">
+                  <option value="">All</option>
+                  <option value="SUBSCRIBED">Subscribed</option>
+                  <option value="NOT_SET">Not set</option>
+                  <option value="UNSUBSCRIBED">Unsubscribed</option>
+                </select>
+              </label>
+              <label class="admin-filter">
+                <span>SMS marketing</span>
+                <select name="sms_status">
+                  <option value="">All</option>
+                  <option value="SUBSCRIBED">Subscribed</option>
+                  <option value="NOT_SET">Not set</option>
+                  <option value="UNSUBSCRIBED">Unsubscribed</option>
+                </select>
+              </label>
+              <button class="button button--primary" type="submit">Search</button>
+            </form>
+            <div class="admin-table-wrap" data-customers-table></div>
+            <div data-customers-pagination></div>
+          </article>
         </section>
       `;
     case "products":
@@ -1745,6 +1799,266 @@ function renderRepairsPage(root, bootstrap, session, alertTarget) {
   load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Repair bookings could not be loaded.", "error"));
 }
 
+function normalizeCustomerStatus(value) {
+  const text = String(value || "").trim().toUpperCase();
+  return text || "NOT_SET";
+}
+
+function renderCustomersPage(root, bootstrap, session, alertTarget) {
+  root.innerHTML = getViewTemplate("customers");
+  const filterForm = root.querySelector("[data-customers-filters]");
+  const tableTarget = root.querySelector("[data-customers-table]");
+  const editorTarget = root.querySelector("[data-customers-editor]");
+  const paginationTarget = root.querySelector("[data-customers-pagination]");
+  const refreshButton = root.querySelector("[data-customers-refresh]");
+  const newButton = root.querySelector("[data-customers-new]");
+  const canEdit = Boolean(bootstrap.capabilities?.can_edit_customers);
+
+  if (!canEdit && newButton instanceof HTMLButtonElement) {
+    newButton.disabled = true;
+    newButton.title = "Only super admins can create customer records.";
+  }
+
+  const emptyCustomer = {
+    id: null,
+    first_name: "",
+    last_name: "",
+    full_name: "",
+    email: "",
+    phone_primary: "",
+    phone_secondary: "",
+    phone_other: "",
+    company: "",
+    business_name: "",
+    abn_crn: "",
+    labels: "",
+    address_line_1: "",
+    address_line_2: "",
+    suburb: "",
+    state: "QLD",
+    postcode: "",
+    country: "AU",
+    email_subscriber_status: "NOT_SET",
+    sms_subscriber_status: "NOT_SET",
+    source: "Admin",
+  };
+
+  const state = {
+    page: 1,
+    selectedId: null,
+    rows: [],
+    meta: null,
+    draft: null,
+  };
+
+  const renderEditor = () => {
+    const row = state.draft || state.rows.find((item) => item.id === state.selectedId);
+    if (!row) {
+      editorTarget.innerHTML = `<p class="admin-note">Select a customer, or create a new one.</p>`;
+      return;
+    }
+
+    const isNew = !row.id;
+    editorTarget.innerHTML = `
+      <form class="admin-editor__form" data-customer-editor-form>
+        <div class="admin-editor__meta">
+          <strong>${isNew ? "New customer" : escapeHtml(row.full_name || `${row.first_name || ""} ${row.last_name || ""}`.trim() || row.email || "Customer")}</strong><br>
+          ${isNew ? "Create a contact record for orders, repairs and future marketing." : `Customer ID ${escapeHtml(row.id)} · Imported ${formatDateTime(row.imported_at)}`}
+        </div>
+        <div class="admin-editor__grid">
+          <label><span>First name</span><input type="text" name="first_name" value="${escapeHtml(row.first_name || "")}" ${canEdit ? "" : "disabled"}></label>
+          <label><span>Last name</span><input type="text" name="last_name" value="${escapeHtml(row.last_name || "")}" ${canEdit ? "" : "disabled"}></label>
+          <label><span>Email</span><input type="email" name="email" value="${escapeHtml(row.email || "")}" ${canEdit ? "" : "disabled"}></label>
+          <label><span>Primary phone</span><input type="tel" name="phone_primary" value="${escapeHtml(row.phone_primary || "")}" ${canEdit ? "" : "disabled"}></label>
+          <label><span>Secondary phone</span><input type="tel" name="phone_secondary" value="${escapeHtml(row.phone_secondary || "")}" ${canEdit ? "" : "disabled"}></label>
+          <label><span>Other phone</span><input type="tel" name="phone_other" value="${escapeHtml(row.phone_other || "")}" ${canEdit ? "" : "disabled"}></label>
+          <label><span>Company</span><input type="text" name="company" value="${escapeHtml(row.company || "")}" ${canEdit ? "" : "disabled"}></label>
+          <label><span>Business name</span><input type="text" name="business_name" value="${escapeHtml(row.business_name || "")}" ${canEdit ? "" : "disabled"}></label>
+          <label><span>ABN / CRN</span><input type="text" name="abn_crn" value="${escapeHtml(row.abn_crn || "")}" ${canEdit ? "" : "disabled"}></label>
+          <label><span>Labels</span><input type="text" name="labels" value="${escapeHtml(row.labels || "")}" ${canEdit ? "" : "disabled"} placeholder="VIP, repair customer, wholesale"></label>
+        </div>
+        <label><span>Address line 1</span><input type="text" name="address_line_1" value="${escapeHtml(row.address_line_1 || "")}" ${canEdit ? "" : "disabled"}></label>
+        <label><span>Address line 2</span><input type="text" name="address_line_2" value="${escapeHtml(row.address_line_2 || "")}" ${canEdit ? "" : "disabled"}></label>
+        <div class="admin-editor__grid">
+          <label><span>Suburb</span><input type="text" name="suburb" value="${escapeHtml(row.suburb || "")}" ${canEdit ? "" : "disabled"}></label>
+          <label><span>State</span>
+            <select name="state" ${canEdit ? "" : "disabled"}>
+              ${["", "QLD", "NSW", "VIC", "ACT", "SA", "WA", "TAS", "NT"].map((value) => `<option value="${value}" ${String(row.state || "") === value ? "selected" : ""}>${value || "Select state"}</option>`).join("")}
+            </select>
+          </label>
+          <label><span>Postcode</span><input type="text" name="postcode" value="${escapeHtml(row.postcode || "")}" ${canEdit ? "" : "disabled"}></label>
+          <label><span>Country</span><input type="text" name="country" value="${escapeHtml(row.country || "AU")}" ${canEdit ? "" : "disabled"}></label>
+        </div>
+        <div class="admin-editor__grid">
+          <label><span>Email marketing</span>
+            <select name="email_subscriber_status" ${canEdit ? "" : "disabled"}>
+              ${["NOT_SET", "SUBSCRIBED", "UNSUBSCRIBED"].map((value) => `<option value="${value}" ${normalizeCustomerStatus(row.email_subscriber_status) === value ? "selected" : ""}>${value}</option>`).join("")}
+            </select>
+          </label>
+          <label><span>SMS marketing</span>
+            <select name="sms_subscriber_status" ${canEdit ? "" : "disabled"}>
+              ${["NOT_SET", "SUBSCRIBED", "UNSUBSCRIBED"].map((value) => `<option value="${value}" ${normalizeCustomerStatus(row.sms_subscriber_status) === value ? "selected" : ""}>${value}</option>`).join("")}
+            </select>
+          </label>
+          <label><span>Source</span><input type="text" name="source" value="${escapeHtml(row.source || "Admin")}" ${canEdit ? "" : "disabled"}></label>
+        </div>
+        <div class="admin-button-row">
+          <button class="button button--primary" type="submit" ${canEdit ? "" : "disabled"}>${isNew ? "Create customer" : "Save customer"}</button>
+          ${!isNew ? `<button class="button button--danger" type="button" data-customer-delete ${canEdit ? "" : "disabled"}>Delete</button>` : ""}
+          ${isNew ? `<button class="button button--ghost" type="button" data-customer-cancel>Cancel</button>` : ""}
+        </div>
+      </form>
+    `;
+
+    editorTarget.querySelector("[data-customer-cancel]")?.addEventListener("click", () => {
+      state.draft = null;
+      renderEditor();
+    });
+
+    editorTarget.querySelector("[data-customer-delete]")?.addEventListener("click", async () => {
+      if (!canEdit || !row.id) return;
+      const confirmed = window.confirm(`Delete ${row.full_name || row.email || "this customer"}? This cannot be undone.`);
+      if (!confirmed) return;
+      try {
+        await callAdminApi("customer_delete", { id: row.id }, session);
+        setAlert(alertTarget, "Customer deleted.", "success");
+        state.selectedId = null;
+        state.draft = null;
+        await load();
+      } catch (error) {
+        setAlert(alertTarget, error instanceof Error ? error.message : "Customer delete failed.", "error");
+      }
+    });
+
+    editorTarget.querySelector("[data-customer-editor-form]")?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!canEdit) return;
+      const formData = new FormData(event.currentTarget);
+      const payload = Object.fromEntries(formData.entries());
+      try {
+        const result = await callAdminApi(isNew ? "customer_create" : "customer_update", {
+          id: row.id,
+          customer: payload,
+        }, session);
+        setAlert(alertTarget, isNew ? "Customer created." : "Customer updated.", "success");
+        state.draft = null;
+        state.selectedId = result.row?.id || row.id || null;
+        await load();
+      } catch (error) {
+        setAlert(alertTarget, error instanceof Error ? error.message : "Customer save failed.", "error");
+      }
+    });
+  };
+
+  const renderTable = () => {
+    if (!state.rows.length) {
+      renderEmptyState(tableTarget, "No customers matched the current filters.");
+      paginationTarget.innerHTML = "";
+      if (!state.draft) editorTarget.innerHTML = `<p class="admin-note">No customer selected yet.</p>`;
+      return;
+    }
+
+    tableTarget.innerHTML = `
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Phone</th>
+            <th>Company</th>
+            <th>Marketing</th>
+            <th>Source</th>
+            <th>Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${state.rows.map((row) => `
+            <tr data-customer-row="${row.id}" class="${state.selectedId === row.id ? "is-selected" : ""}">
+              <td>
+                <div class="admin-cell-title">
+                  <strong>${escapeHtml(row.full_name || `${row.first_name || ""} ${row.last_name || ""}`.trim() || "Unnamed customer")}</strong>
+                  <span>${escapeHtml(row.email || "No email")}</span>
+                </div>
+              </td>
+              <td>${escapeHtml(row.phone_primary || row.phone_secondary || "No phone")}</td>
+              <td>${escapeHtml(row.business_name || row.company || "—")}</td>
+              <td>
+                <div class="admin-mini-stack">
+                  <span>Email: ${escapeHtml(normalizeCustomerStatus(row.email_subscriber_status))}</span>
+                  <span>SMS: ${escapeHtml(normalizeCustomerStatus(row.sms_subscriber_status))}</span>
+                </div>
+              </td>
+              <td>${escapeHtml(row.source || "—")}</td>
+              <td>${formatDateTime(row.updated_at || row.imported_at)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    `;
+
+    paginationTarget.innerHTML = renderPagination(state.meta || {});
+    buildRowClickHandler(tableTarget, "[data-customer-row]", (rowElement) => {
+      state.draft = null;
+      state.selectedId = Number(rowElement.getAttribute("data-customer-row"));
+      renderTable();
+      renderEditor();
+    });
+
+    paginationTarget.querySelector("[data-page-prev]")?.addEventListener("click", async () => {
+      state.page = Math.max(1, state.page - 1);
+      await load();
+    });
+    paginationTarget.querySelector("[data-page-next]")?.addEventListener("click", async () => {
+      const totalPages = Math.max(1, Math.ceil((state.meta?.total || 0) / (state.meta?.page_size || 25)));
+      state.page = Math.min(totalPages, state.page + 1);
+      await load();
+    });
+    renderEditor();
+  };
+
+  const load = async () => {
+    setAlert(alertTarget, "");
+    tableTarget.innerHTML = `<div class="admin-loading">Loading customers...</div>`;
+    const formData = new FormData(filterForm);
+    const result = await callAdminApi("customers_list", {
+      filters: {
+        page: state.page,
+        page_size: 25,
+        search: formData.get("search"),
+        email_status: formData.get("email_status"),
+        sms_status: formData.get("sms_status"),
+      },
+    }, session);
+    state.rows = result.rows || [];
+    state.meta = result;
+    if (state.selectedId && !state.rows.some((row) => row.id === state.selectedId)) {
+      state.selectedId = state.rows[0]?.id || null;
+    }
+    if (!state.selectedId && state.rows.length && !state.draft) {
+      state.selectedId = state.rows[0].id;
+    }
+    renderTable();
+  };
+
+  filterForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    state.page = 1;
+    await load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Customers could not be loaded.", "error"));
+  });
+
+  refreshButton?.addEventListener("click", () => {
+    load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Customers could not be refreshed.", "error"));
+  });
+
+  newButton?.addEventListener("click", () => {
+    state.selectedId = null;
+    state.draft = { ...emptyCustomer };
+    renderTable();
+    renderEditor();
+  });
+
+  load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Customers could not be loaded.", "error"));
+}
+
 function renderProductsPage(root, bootstrap, session, alertTarget) {
   root.innerHTML = getViewTemplate("products");
   const filterForm = root.querySelector("[data-products-filters]");
@@ -2559,6 +2873,9 @@ async function initAdminApp() {
       break;
     case "repairs":
       renderRepairsPage(pageRoot, bootstrap, authState.session, alertTarget);
+      break;
+    case "customers":
+      renderCustomersPage(pageRoot, bootstrap, authState.session, alertTarget);
       break;
     case "products":
       renderProductsPageV2(pageRoot, bootstrap, authState.session, alertTarget);

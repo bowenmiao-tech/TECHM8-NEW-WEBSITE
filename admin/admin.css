@@ -374,6 +374,18 @@ body.admin-login-body {
   gap: 20px;
 }
 
+.admin-layout--customers {
+  grid-template-columns: minmax(360px, 460px) minmax(0, 1fr);
+  align-items: start;
+}
+
+.admin-layout--customers > aside {
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+}
+
 .admin-products-workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(340px, 420px);
@@ -432,6 +444,10 @@ body.admin-login-body {
 
 .admin-filter-bar--compact {
   grid-template-columns: 1.6fr repeat(2, minmax(0, 1fr)) auto;
+}
+
+.admin-filter-bar--customers {
+  grid-template-columns: minmax(260px, 1.5fr) minmax(160px, 0.65fr) minmax(160px, 0.65fr) auto;
 }
 
 .admin-button-row {
@@ -539,6 +555,13 @@ body.admin-login-body {
 .admin-cell-title span {
   color: var(--admin-muted);
   font-size: 0.9rem;
+}
+
+.admin-mini-stack {
+  display: grid;
+  gap: 4px;
+  color: var(--admin-muted);
+  font-size: 0.86rem;
 }
 
 .admin-empty {
@@ -1155,6 +1178,11 @@ body.admin-login-body {
     grid-template-columns: 1fr;
   }
 
+  .admin-layout--customers > aside {
+    position: static;
+    max-height: none;
+  }
+
   .admin-detail-grid {
     grid-template-columns: 1fr;
   }
@@ -1175,6 +1203,7 @@ body.admin-login-body {
 
   .admin-filter-bar,
   .admin-filter-bar--compact,
+  .admin-filter-bar--customers,
   .admin-editor__grid {
     grid-template-columns: 1fr;
   }

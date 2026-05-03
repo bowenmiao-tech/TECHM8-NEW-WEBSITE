@@ -12,6 +12,7 @@ const CATALOG_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE])
 const ORDER_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE, 'store_manager', 'staff'])
 const REPAIR_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE, 'store_manager', 'staff'])
 const INVENTORY_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE, 'store_manager'])
+const CUSTOMER_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE])
 
 type AdminContext = {
   id: number
@@ -71,6 +72,32 @@ function normalizeNumber(value: unknown) {
   if (value === '' || value === null || value === undefined) return null
   const numberValue = Number(value)
   return Number.isFinite(numberValue) ? numberValue : null
+}
+
+function normalizeEmail(value: unknown) {
+  const text = String(value ?? '').trim().toLowerCase()
+  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(text) ? text : null
+}
+
+function normalizePhone(value: unknown) {
+  let text = String(value ?? '').trim()
+  if (!text) return null
+  text = text.replace(/[^\d+]/g, '')
+  if (text.startsWith('+61')) return `0${text.slice(3)}`
+  if (text.startsWith('61') && text.length >= 11) return `0${text.slice(2)}`
+  return text || null
+}
+
+function getCustomerContactKey(email: string | null, phone: string | null) {
+  if (email) return `email:${email}`
+  if (phone) return `phone:${phone.replace(/\D/g, '')}`
+  return `manual:${crypto.randomUUID()}`
+}
+
+function normalizeMarketingStatus(value: unknown) {
+  const text = String(value ?? '').trim().toUpperCase()
+  if (['SUBSCRIBED', 'UNSUBSCRIBED', 'NOT_SET'].includes(text)) return text
+  return 'NOT_SET'
 }
 
 function getBrisbaneDayBounds() {
@@ -454,6 +481,165 @@ async function updateRepair(supabaseAdmin: ReturnType<typeof createClient>, cont
   return jsonResponse({ ok: true, row: data })
 }
 
+async function listCustomers(supabaseAdmin: ReturnType<typeof createClient>, _context: AdminContext, filters: JsonRecord) {
+  const page = clampPage(filters.page, 1)
+  const pageSize = clampPageSize(filters.page_size, 25, 100)
+  const from = (page - 1) * pageSize
+  const to = from + pageSize - 1
+  const search = String(filters.search ?? '').trim()
+
+  let query = supabaseAdmin
+    .from('customer_contacts')
+    .select('id, contact_key, auth_user_id, first_name, last_name, full_name, email, email_normalized, phone_primary, phone_secondary, phone_other, company, business_name, abn_crn, labels, address_line_1, address_line_2, suburb, state, postcode, country, email_subscriber_status, sms_subscriber_status, source, imported_at, updated_at', { count: 'exact' })
+    .order('updated_at', { ascending: false })
+    .range(from, to)
+
+  if (search) {
+    const safe = search.replace(/[%*,]/g, ' ').trim()
+    query = query.or(`first_name.ilike.%${safe}%,last_name.ilike.%${safe}%,full_name.ilike.%${safe}%,email.ilike.%${safe}%,phone_primary.ilike.%${safe}%,phone_secondary.ilike.%${safe}%,phone_other.ilike.%${safe}%,company.ilike.%${safe}%,business_name.ilike.%${safe}%`)
+  }
+
+  const emailStatus = normalizeNullableString(filters.email_status)
+  if (emailStatus) query = query.eq('email_subscriber_status', normalizeMarketingStatus(emailStatus))
+
+  const smsStatus = normalizeNullableString(filters.sms_status)
+  if (smsStatus) query = query.eq('sms_subscriber_status', normalizeMarketingStatus(smsStatus))
+
+  const { data, error, count } = await query
+  if (error) throw error
+
+  return {
+    rows: data ?? [],
+    page,
+    page_size: pageSize,
+    total: count ?? 0,
+    can_edit: CUSTOMER_EDIT_ROLES.has(_context.role),
+  }
+}
+
+function buildCustomerPatch(input: JsonRecord, existingEmail?: string | null, existingPhone?: string | null) {
+  const firstName = normalizeNullableString(input.first_name)
+  const lastName = normalizeNullableString(input.last_name)
+  const fullName = [firstName, lastName].filter(Boolean).join(' ') || normalizeNullableString(input.full_name)
+  const normalizedEmail = normalizeEmail(input.email)
+  const emailInput = normalizeNullableString(input.email)
+  const primaryPhone = normalizePhone(input.phone_primary)
+
+  return {
+    first_name: firstName,
+    last_name: lastName,
+    full_name: fullName,
+    email: normalizedEmail ?? emailInput,
+    email_normalized: normalizedEmail,
+    phone_primary: primaryPhone,
+    phone_secondary: normalizePhone(input.phone_secondary),
+    phone_other: normalizePhone(input.phone_other),
+    company: normalizeNullableString(input.company),
+    business_name: normalizeNullableString(input.business_name),
+    abn_crn: normalizeNullableString(input.abn_crn),
+    labels: normalizeNullableString(input.labels),
+    address_line_1: normalizeNullableString(input.address_line_1),
+    address_line_2: normalizeNullableString(input.address_line_2),
+    suburb: normalizeNullableString(input.suburb),
+    state: normalizeNullableString(input.state),
+    postcode: normalizeNullableString(input.postcode),
+    country: normalizeNullableString(input.country) ?? 'AU',
+    email_subscriber_status: normalizeMarketingStatus(input.email_subscriber_status),
+    sms_subscriber_status: normalizeMarketingStatus(input.sms_subscriber_status),
+    source: normalizeNullableString(input.source) ?? 'Admin',
+    contact_key: getCustomerContactKey(normalizedEmail ?? existingEmail ?? null, primaryPhone ?? existingPhone ?? null),
+  }
+}
+
+async function createCustomer(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!CUSTOMER_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can create customers.' }, 403)
+  }
+
+  const customer = (body.customer ?? {}) as JsonRecord
+  const patch = buildCustomerPatch(customer)
+  if (!patch.first_name && !patch.last_name && !patch.email_normalized && !patch.phone_primary) {
+    return jsonResponse({ ok: false, error: 'Enter at least a name, email or phone number.' }, 422)
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from('customer_contacts')
+    .insert({
+      ...patch,
+      raw_data: { source: 'admin-panel' },
+    })
+    .select('id, first_name, last_name, full_name, email, phone_primary, updated_at')
+    .single()
+
+  if (error) {
+    return jsonResponse({ ok: false, error: error.code === '23505' ? 'A customer with this email or phone already exists.' : 'Customer could not be created.' }, 500)
+  }
+
+  return jsonResponse({ ok: true, row: data })
+}
+
+async function updateCustomer(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!CUSTOMER_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can update customers.' }, 403)
+  }
+
+  const customerId = Number(body.id)
+  if (!Number.isFinite(customerId)) {
+    return jsonResponse({ ok: false, error: 'Customer id is missing.' }, 422)
+  }
+
+  const { data: existingRow, error: existingError } = await supabaseAdmin
+    .from('customer_contacts')
+    .select('id, email_normalized, phone_primary')
+    .eq('id', customerId)
+    .maybeSingle()
+
+  if (existingError || !existingRow) {
+    return jsonResponse({ ok: false, error: 'Customer was not found.' }, 404)
+  }
+
+  const customer = (body.customer ?? {}) as JsonRecord
+  const patch = buildCustomerPatch(customer, existingRow.email_normalized, existingRow.phone_primary)
+  if (!patch.first_name && !patch.last_name && !patch.email_normalized && !patch.phone_primary) {
+    return jsonResponse({ ok: false, error: 'Enter at least a name, email or phone number.' }, 422)
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from('customer_contacts')
+    .update(patch)
+    .eq('id', customerId)
+    .select('id, first_name, last_name, full_name, email, phone_primary, updated_at')
+    .single()
+
+  if (error) {
+    return jsonResponse({ ok: false, error: 'Customer could not be updated.' }, 500)
+  }
+
+  return jsonResponse({ ok: true, row: data })
+}
+
+async function deleteCustomer(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!CUSTOMER_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can delete customers.' }, 403)
+  }
+
+  const customerId = Number(body.id)
+  if (!Number.isFinite(customerId)) {
+    return jsonResponse({ ok: false, error: 'Customer id is missing.' }, 422)
+  }
+
+  const { error } = await supabaseAdmin
+    .from('customer_contacts')
+    .delete()
+    .eq('id', customerId)
+
+  if (error) {
+    return jsonResponse({ ok: false, error: 'Customer could not be deleted.' }, 500)
+  }
+
+  return jsonResponse({ ok: true })
+}
+
 async function listProducts(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, filters: JsonRecord) {
   const page = clampPage(filters.page, 1)
   const pageSize = clampPageSize(filters.page_size, 20, 100)
@@ -768,6 +954,7 @@ Deno.serve(async (req) => {
           can_edit_repairs: REPAIR_EDIT_ROLES.has(context.role),
           can_edit_products: CATALOG_EDIT_ROLES.has(context.role),
           can_edit_inventory: INVENTORY_EDIT_ROLES.has(context.role),
+          can_edit_customers: CUSTOMER_EDIT_ROLES.has(context.role),
           can_view_all_stores: isSuperAdmin(context),
         },
         stores: sharedLists.stores,
@@ -796,6 +983,23 @@ Deno.serve(async (req) => {
 
     if (action === 'repair_update') {
       return await updateRepair(supabaseAdmin, context, body)
+    }
+
+    if (action === 'customers_list') {
+      const result = await listCustomers(supabaseAdmin, context, body.filters as JsonRecord ?? {})
+      return jsonResponse({ ok: true, ...result })
+    }
+
+    if (action === 'customer_create') {
+      return await createCustomer(supabaseAdmin, context, body)
+    }
+
+    if (action === 'customer_update') {
+      return await updateCustomer(supabaseAdmin, context, body)
+    }
+
+    if (action === 'customer_delete') {
+      return await deleteCustomer(supabaseAdmin, context, body)
     }
 
     if (action === 'products_list') {
