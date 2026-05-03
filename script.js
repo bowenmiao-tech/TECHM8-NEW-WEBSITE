@@ -3134,10 +3134,6 @@ function initProductDetailPage() {
               `
               : ""
           }
-          <div class="storefront-pdp__gallery-note">
-            <strong>${galleryImages.length > 1 ? `${galleryImages.length} product images` : "Product image"}</strong>
-            <span>Catalog images are stored in Supabase and linked to the live storefront.</span>
-          </div>
         </div>
 
         <div class="storefront-pdp__summary">
@@ -3155,7 +3151,6 @@ function initProductDetailPage() {
               ${savings > 0 ? `<span class="storefront-pdp__save">Save ${escapeHtml(formatMoney(savings))}</span>` : ""}
             </div>
             <div class="storefront-pdp__price-main">${escapeHtml(formatMoney(retailPrice))}</div>
-            <p class="storefront-pdp__price-note">Order online or choose a TECHM8 pickup store at checkout.</p>
           </div>
 
           ${variantMarkup}
@@ -3172,12 +3167,6 @@ function initProductDetailPage() {
           <div class="storefront-pdp__highlights">
             <div class="storefront-pdp__highlight"><strong>Brand</strong><span>${escapeHtml(product.brand || "TECHM8")}</span></div>
             <div class="storefront-pdp__highlight"><strong>Category</strong><span>${escapeHtml(product.category_name)}</span></div>
-            <div class="storefront-pdp__highlight"><strong>Model</strong><span>${escapeHtml(product.model || "Store product")}</span></div>
-            <div class="storefront-pdp__highlight"><strong>Colour</strong><span>${escapeHtml(productColor || "Standard")}</span></div>
-            <div class="storefront-pdp__highlight"><strong>Compatibility</strong><span>${escapeHtml(product.compatibility || "General use")}</span></div>
-            <div class="storefront-pdp__highlight"><strong>SKU</strong><span>${escapeHtml(product.sku || "To be assigned")}</span></div>
-            <div class="storefront-pdp__highlight"><strong>UPC</strong><span>${escapeHtml(product.upc || "Not listed")}</span></div>
-            <div class="storefront-pdp__highlight"><strong>Pickup</strong><span>Select a TECHM8 store at checkout</span></div>
           </div>
         </div>
       </section>
