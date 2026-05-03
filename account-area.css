@@ -91,6 +91,28 @@ body.account-area-body {
   color: var(--account-accent-strong);
 }
 
+.account-sidebar__signout {
+  width: 100%;
+  border-top: 1px solid rgba(20, 38, 43, 0.08);
+  border-right: 0;
+  border-bottom: 0;
+  background: transparent;
+  color: #b42318;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.account-sidebar__signout:hover {
+  background: rgba(180, 35, 24, 0.06);
+  color: #8f1c12;
+}
+
+.account-sidebar__signout:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
 .account-sidebar__badge {
   display: inline-flex;
   align-items: center;

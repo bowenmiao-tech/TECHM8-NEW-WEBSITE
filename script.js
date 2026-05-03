@@ -5194,6 +5194,48 @@ async function requireSignedInAccountPage(messageTarget = null) {
   return authState;
 }
 
+async function initAccountSidebarSignOut() {
+  const nav = document.querySelector(".account-sidebar__nav");
+  if (!(nav instanceof HTMLElement) || nav.querySelector("[data-account-sidebar-logout]")) return;
+
+  const messageTarget = document.querySelector("[data-account-details-message], [data-delivery-address-message], [data-pending-orders-message], [data-completed-orders-message], [data-repair-bookings-message], [data-warranty-returns-message], [data-account-message], [data-auth-message]");
+  const signOutButton = document.createElement("button");
+  signOutButton.type = "button";
+  signOutButton.className = "account-sidebar__link account-sidebar__signout";
+  signOutButton.setAttribute("data-account-sidebar-logout", "true");
+  signOutButton.textContent = "Sign out";
+  nav.appendChild(signOutButton);
+
+  let authState = null;
+  try {
+    authState = await getCurrentAuthState();
+  } catch (error) {
+    signOutButton.hidden = true;
+    return;
+  }
+
+  if (!authState?.user || !authState?.supabase) {
+    signOutButton.hidden = true;
+    return;
+  }
+
+  signOutButton.addEventListener("click", async () => {
+    signOutButton.disabled = true;
+    signOutButton.textContent = "Signing out...";
+    try {
+      const { error } = await authState.supabase.auth.signOut();
+      if (error) throw error;
+      window.location.assign(getAuthRedirectUrl());
+    } catch (error) {
+      signOutButton.disabled = false;
+      signOutButton.textContent = "Sign out";
+      if (messageTarget instanceof HTMLElement) {
+        setAuthMessage(messageTarget, getReadableAuthError(error), "error");
+      }
+    }
+  });
+}
+
 async function loadResolvedCustomerProfile(supabase, user) {
   try {
     return await syncCustomerProfile(supabase, user);
@@ -5750,6 +5792,7 @@ function initPage() {
   initBookingForm();
   initAccountPage();
   initAccountDashboardPage();
+  initAccountSidebarSignOut();
   initAccountDetailsPage();
   initDeliveryAddressPage();
   initPendingOrdersPage();
