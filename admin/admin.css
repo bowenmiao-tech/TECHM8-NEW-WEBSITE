@@ -839,6 +839,46 @@ body.admin-login-body {
   border-radius: 18px;
 }
 
+.admin-quill-editor {
+  min-height: 360px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(8, 42, 51, 0.12);
+}
+
+.admin-editor-section .ql-toolbar.ql-snow {
+  border: 0;
+  border-bottom: 1px solid rgba(8, 42, 51, 0.1);
+  border-radius: 18px 18px 0 0;
+  background: rgba(232, 255, 250, 0.55);
+}
+
+.admin-quill-editor.ql-container.ql-snow {
+  min-height: 300px;
+  border: 0;
+  font-family: "Instrument Sans", sans-serif;
+  font-size: 1rem;
+}
+
+.admin-quill-editor .ql-editor {
+  min-height: 300px;
+  line-height: 1.65;
+  color: var(--admin-text);
+}
+
+.admin-quill-editor .ql-editor h2,
+.admin-quill-editor .ql-editor h3 {
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--admin-text);
+}
+
+.admin-quill-editor .ql-editor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 18px;
+}
+
 .admin-editor__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

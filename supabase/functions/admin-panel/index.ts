@@ -7,6 +7,7 @@ const corsHeaders = {
 }
 
 const STORE_SORT_ORDER = ['park-ridge', 'fairfield', 'toowong', 'north-lakes', 'brassall', 'warehouse-dispatch']
+const PRODUCT_IMAGE_BUCKET = 'product-images'
 const SUPER_ADMIN_ROLE = 'super_admin'
 const CATALOG_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE])
 const ORDER_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE, 'store_manager', 'staff'])
@@ -98,6 +99,26 @@ function normalizeMarketingStatus(value: unknown) {
   const text = String(value ?? '').trim().toUpperCase()
   if (['SUBSCRIBED', 'UNSUBSCRIBED', 'NOT_SET'].includes(text)) return text
   return 'NOT_SET'
+}
+
+function normalizeStorageSegment(value: unknown, fallback = 'product') {
+  const text = String(value ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+  return text || fallback
+}
+
+function decodeBase64ToBytes(value: unknown) {
+  const base64 = String(value ?? '').replace(/^data:[^;]+;base64,/, '').replace(/\s/g, '')
+  if (!base64) return null
+  const binary = atob(base64)
+  const bytes = new Uint8Array(binary.length)
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index)
+  }
+  return bytes
 }
 
 function getBrisbaneDayBounds() {
@@ -780,6 +801,63 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
   return jsonResponse({ ok: true, row: data })
 }
 
+async function uploadProductDetailImage(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!CATALOG_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can upload product images.' }, 403)
+  }
+
+  const productId = Number(body.product_id)
+  if (!Number.isFinite(productId)) {
+    return jsonResponse({ ok: false, error: 'Product id is missing.' }, 422)
+  }
+
+  const bytes = decodeBase64ToBytes(body.data_base64)
+  if (!bytes || bytes.byteLength === 0) {
+    return jsonResponse({ ok: false, error: 'Image data is missing.' }, 422)
+  }
+
+  if (bytes.byteLength > 8 * 1024 * 1024) {
+    return jsonResponse({ ok: false, error: 'Image is too large. Please use a file under 8MB.' }, 422)
+  }
+
+  const contentType = String(body.content_type ?? '').trim().toLowerCase()
+  if (!contentType.startsWith('image/')) {
+    return jsonResponse({ ok: false, error: 'Only image files can be uploaded.' }, 422)
+  }
+
+  const extensionInput = String(body.extension ?? '').trim().toLowerCase().replace(/[^a-z0-9]/g, '')
+  const extension = ['webp', 'png', 'jpg', 'jpeg', 'gif'].includes(extensionInput)
+    ? (extensionInput === 'jpeg' ? 'jpg' : extensionInput)
+    : (contentType.includes('png') ? 'png' : contentType.includes('webp') ? 'webp' : 'jpg')
+  const productSlug = normalizeStorageSegment(body.product_slug, `product-${productId}`)
+  const randomSuffix = crypto.randomUUID().slice(0, 8)
+  const storagePath = `product-details/${productSlug}/${Date.now()}-${randomSuffix}.${extension}`
+
+  const { error: uploadError } = await supabaseAdmin
+    .storage
+    .from(PRODUCT_IMAGE_BUCKET)
+    .upload(storagePath, bytes, {
+      contentType,
+      upsert: false,
+    })
+
+  if (uploadError) {
+    return jsonResponse({ ok: false, error: 'Product detail image could not be uploaded.' }, 500)
+  }
+
+  const { data: publicData } = supabaseAdmin
+    .storage
+    .from(PRODUCT_IMAGE_BUCKET)
+    .getPublicUrl(storagePath)
+
+  return jsonResponse({
+    ok: true,
+    bucket: PRODUCT_IMAGE_BUCKET,
+    storage_path: storagePath,
+    public_url: publicData.publicUrl,
+  })
+}
+
 async function listInventory(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, filters: JsonRecord) {
   const page = clampPage(filters.page, 1)
   const pageSize = clampPageSize(filters.page_size, 25, 100)
@@ -1009,6 +1087,10 @@ Deno.serve(async (req) => {
 
     if (action === 'product_update') {
       return await updateProduct(supabaseAdmin, context, body)
+    }
+
+    if (action === 'product_detail_image_upload') {
+      return await uploadProductDetailImage(supabaseAdmin, context, body)
     }
 
     if (action === 'inventory_list') {

@@ -1,7 +1,10 @@
 const SUPABASE_BROWSER_CDN_URL = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+const QUILL_CDN_URL = "https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js";
+const QUILL_CSS_URL = "https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css";
 const DEFAULT_PRODUCT_IMAGE_URL =
   "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/placeholders/image-coming-soon.png";
 let adminSupabaseClientPromise = null;
+let adminQuillPromise = null;
 const DETAIL_BLOCK_MARKER = "TECHM8_DETAIL_BLOCKS:";
 
 const ADMIN_NAV_ITEMS = [
@@ -435,6 +438,38 @@ async function ensureSupabaseBrowserLibrary() {
   return window.supabase;
 }
 
+async function ensureQuillLibrary() {
+  if (window.Quill) return window.Quill;
+  if (adminQuillPromise) return adminQuillPromise;
+
+  adminQuillPromise = new Promise((resolve, reject) => {
+    if (!document.querySelector("link[data-quill-css]")) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = QUILL_CSS_URL;
+      link.setAttribute("data-quill-css", "true");
+      document.head.appendChild(link);
+    }
+
+    const existingScript = document.querySelector("script[data-quill-js]");
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(window.Quill), { once: true });
+      existingScript.addEventListener("error", reject, { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = QUILL_CDN_URL;
+    script.defer = true;
+    script.setAttribute("data-quill-js", "true");
+    script.addEventListener("load", () => resolve(window.Quill), { once: true });
+    script.addEventListener("error", reject, { once: true });
+    document.head.appendChild(script);
+  });
+
+  return adminQuillPromise;
+}
+
 async function getSupabaseBrowserClient() {
   if (adminSupabaseClientPromise) return adminSupabaseClientPromise;
 
@@ -492,6 +527,125 @@ async function callAdminApi(action, payload = {}, session) {
   }
 
   return result;
+}
+
+function normalizeQuillHtml(value) {
+  const html = String(value || "").trim();
+  if (!html || html === "<p><br></p>") return "";
+  return html;
+}
+
+function getFileExtension(file) {
+  const type = String(file?.type || "").toLowerCase();
+  if (type.includes("webp")) return "webp";
+  if (type.includes("png")) return "png";
+  if (type.includes("gif")) return "gif";
+  if (type.includes("jpeg") || type.includes("jpg")) return "jpg";
+  const match = String(file?.name || "").toLowerCase().match(/\.([a-z0-9]+)$/);
+  return match ? match[1] : "jpg";
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      const result = String(reader.result || "");
+      resolve(result.includes(",") ? result.split(",").pop() : result);
+    });
+    reader.addEventListener("error", () => reject(new Error("Image could not be read.")));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadProductDetailImage(file, row, session) {
+  if (!(file instanceof File)) throw new Error("Please choose an image file.");
+  if (!file.type.startsWith("image/")) throw new Error("Only image files can be uploaded.");
+  if (file.size > 8 * 1024 * 1024) throw new Error("Image is too large. Please use a file under 8MB.");
+
+  const dataBase64 = await fileToBase64(file);
+  const result = await callAdminApi("product_detail_image_upload", {
+    product_id: row.id,
+    product_slug: row.slug,
+    file_name: file.name,
+    content_type: file.type || "image/jpeg",
+    extension: getFileExtension(file),
+    data_base64: dataBase64,
+  }, session);
+
+  if (!result.public_url) {
+    throw new Error("Image uploaded but no public URL was returned.");
+  }
+
+  return result.public_url;
+}
+
+async function setupProductDescriptionQuill({ editorElement, hiddenInput, row, session, canEdit, alertTarget }) {
+  if (!(editorElement instanceof HTMLElement) || !(hiddenInput instanceof HTMLInputElement)) return null;
+  const Quill = await ensureQuillLibrary();
+  if (!Quill) throw new Error("Quill editor could not be loaded.");
+
+  const toolbarOptions = [
+    [{ header: [2, 3, false] }],
+    ["bold", "italic", "underline"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["link", "image"],
+    ["clean"],
+  ];
+
+  const quill = new Quill(editorElement, {
+    theme: "snow",
+    readOnly: !canEdit,
+    modules: {
+      toolbar: canEdit ? toolbarOptions : false,
+    },
+    placeholder: "Add product description, supplier notes, images or specification details...",
+  });
+
+  const initialHtml = normalizeQuillHtml(hiddenInput.value);
+  if (initialHtml) {
+    quill.clipboard.dangerouslyPasteHTML(initialHtml);
+  }
+
+  const syncHiddenInput = () => {
+    hiddenInput.value = normalizeQuillHtml(quill.root.innerHTML);
+  };
+
+  quill.on("text-change", syncHiddenInput);
+  syncHiddenInput();
+
+  if (canEdit) {
+    const toolbar = quill.getModule("toolbar");
+    toolbar?.addHandler("image", () => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*";
+      input.addEventListener("change", async () => {
+        const file = input.files?.[0];
+        if (!file) return;
+        try {
+          setAlert(alertTarget, "Uploading description image...", "info");
+          const imageUrl = await uploadProductDetailImage(file, row, session);
+          const range = quill.getSelection(true);
+          const insertAt = typeof range?.index === "number" ? range.index : quill.getLength();
+          quill.insertEmbed(insertAt, "image", imageUrl, "user");
+          quill.setSelection(insertAt + 1, 0);
+          syncHiddenInput();
+          setAlert(alertTarget, "Description image uploaded.", "success");
+        } catch (error) {
+          setAlert(alertTarget, error instanceof Error ? error.message : "Description image could not be uploaded.", "error");
+        }
+      }, { once: true });
+      input.click();
+    });
+  }
+
+  return {
+    quill,
+    getHtml: () => {
+      syncHiddenInput();
+      return hiddenInput.value;
+    },
+  };
 }
 
 function roleLabel(role) {
@@ -2369,25 +2523,11 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
             <div class="admin-editor-section__heading">
               <div>
                 <h3>Description</h3>
-                <p>This content is shown in Product details on the product page. You can write HTML and insert images.</p>
+                <p>Edit the product page content directly. Use the image button to upload images into the description.</p>
               </div>
             </div>
-            <div class="admin-description-toolbar" aria-label="Description formatting tools">
-              <button type="button" data-description-action="bold" ${state.canEdit ? "" : "disabled"}><strong>B</strong></button>
-              <button type="button" data-description-action="italic" ${state.canEdit ? "" : "disabled"}><em>I</em></button>
-              <button type="button" data-description-action="heading" ${state.canEdit ? "" : "disabled"}>H2</button>
-              <button type="button" data-description-action="list" ${state.canEdit ? "" : "disabled"}>List</button>
-              <button type="button" data-description-action="link" ${state.canEdit ? "" : "disabled"}>Link</button>
-              <button type="button" data-description-action="image" ${state.canEdit ? "" : "disabled"}>Image</button>
-            </div>
-            <label class="admin-editor__wide admin-description-field">
-              <span>Product details HTML</span>
-              <textarea class="admin-editor__detail-html admin-description-editor" name="detail_html" data-description-html placeholder="<p>Add product details, supplier notes, images or specification tables here.</p>" ${state.canEdit ? "" : "disabled"}>${escapeHtml(descriptionHtml)}</textarea>
-            </label>
-            <div class="admin-detail-preview">
-              <div class="admin-detail-preview__label">Preview</div>
-              <div class="storefront-rich-content" data-detail-preview>${descriptionHtml}</div>
-            </div>
+            <input type="hidden" name="detail_html" data-description-html value="${escapeHtml(descriptionHtml)}">
+            <div class="admin-quill-editor" data-description-quill></div>
           </section>
 
           <section class="admin-editor-section">
@@ -2435,16 +2575,23 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
 
     const formElement = editorTarget.querySelector("[data-product-editor-form]");
     const descriptionInput = editorTarget.querySelector("[data-description-html]");
-    const detailPreview = editorTarget.querySelector("[data-detail-preview]");
+    const descriptionEditor = editorTarget.querySelector("[data-description-quill]");
     const galleryList = editorTarget.querySelector("[data-product-gallery-list]");
     const heroPreview = editorTarget.querySelector("[data-product-hero-preview]");
-
-    const syncDescriptionPreview = () => {
-      if (detailPreview instanceof HTMLElement) {
-        const nextHtml = descriptionInput instanceof HTMLTextAreaElement ? descriptionInput.value.trim() : "";
-        detailPreview.innerHTML = nextHtml || "<p>No product details yet.</p>";
-      }
-    };
+    let descriptionControllerPromise = null;
+    if (descriptionInput instanceof HTMLInputElement && descriptionEditor instanceof HTMLElement) {
+      descriptionControllerPromise = setupProductDescriptionQuill({
+        editorElement: descriptionEditor,
+        hiddenInput: descriptionInput,
+        row,
+        session,
+        canEdit: state.canEdit,
+        alertTarget,
+      }).catch((error) => {
+        setAlert(alertTarget, error instanceof Error ? error.message : "Description editor could not be loaded.", "error");
+        return null;
+      });
+    }
 
     const syncGalleryPreview = () => {
       refreshProductGalleryRows(galleryList);
@@ -2453,31 +2600,6 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
         heroPreview.src = getImageOrPlaceholder(firstImage);
       }
     };
-
-    descriptionInput?.addEventListener("input", syncDescriptionPreview);
-    descriptionInput?.addEventListener("change", syncDescriptionPreview);
-
-    editorTarget.querySelector(".admin-description-toolbar")?.addEventListener("click", (event) => {
-      const target = event.target;
-      if (!(target instanceof HTMLElement) || !(descriptionInput instanceof HTMLTextAreaElement)) return;
-      const button = target.closest("[data-description-action]");
-      if (!(button instanceof HTMLElement)) return;
-      const action = button.getAttribute("data-description-action");
-      if (action === "bold") wrapTextareaSelection(descriptionInput, "<strong>", "</strong>");
-      if (action === "italic") wrapTextareaSelection(descriptionInput, "<em>", "</em>");
-      if (action === "heading") wrapTextareaSelection(descriptionInput, "<h2>", "</h2>", "Section heading");
-      if (action === "list") insertTextAtCursor(descriptionInput, "\n<ul>\n  <li>Feature or specification</li>\n</ul>\n");
-      if (action === "link") {
-        const url = window.prompt("Link URL");
-        if (url) wrapTextareaSelection(descriptionInput, `<a href="${escapeHtml(url)}">`, "</a>", "Link text");
-      }
-      if (action === "image") {
-        const imageUrl = window.prompt("Image URL");
-        if (!imageUrl) return;
-        const altText = window.prompt("Image alt text") || "";
-        insertTextAtCursor(descriptionInput, `\n<figure>\n  <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(altText)}">\n</figure>\n`);
-      }
-    });
 
     galleryList?.addEventListener("input", syncGalleryPreview);
     galleryList?.addEventListener("click", (event) => {
@@ -2519,6 +2641,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       const form = event.currentTarget;
       const formData = new FormData(form);
       const images = collectProductGallery(editorTarget);
+      const descriptionController = descriptionControllerPromise ? await descriptionControllerPromise : null;
       try {
         await callAdminApi("product_update", {
           id: row.id,
@@ -2536,7 +2659,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
           images,
           short_description: formData.get("short_description"),
           compatibility: "",
-          detail_html: formData.get("detail_html"),
+          detail_html: descriptionController?.getHtml() ?? formData.get("detail_html"),
         }, session);
         setAlert(alertTarget, "Product updated.", "success");
         await load();
