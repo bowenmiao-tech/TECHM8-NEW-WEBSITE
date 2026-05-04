@@ -6942,7 +6942,7 @@ h2 {
 
 .storefront-payment-option {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   gap: 0.9rem;
   align-items: center;
   width: 100%;
@@ -6957,6 +6957,10 @@ h2 {
     box-shadow 0.2s ease,
     background 0.2s ease,
     transform 0.2s ease;
+}
+
+.storefront-shipping-option {
+  grid-template-columns: auto minmax(0, 1fr) auto;
 }
 
 .storefront-payment-option:hover {

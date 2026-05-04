@@ -4213,7 +4213,6 @@ function initCheckoutPage() {
 
   const form = root.querySelector("[data-checkout-form]");
   const summaryTarget = root.querySelector("[data-checkout-summary]");
-  const itemsTarget = root.querySelector("[data-checkout-items]");
   const sidebarItemsTarget = root.querySelector(
     "[data-checkout-sidebar-items]",
   );
@@ -4225,7 +4224,6 @@ function initCheckoutPage() {
   const paymentMethodField = root.querySelector("[data-payment-method]");
   const shippingOptionsTarget = root.querySelector("[data-shipping-options]");
   const shippingServiceField = root.querySelector("[data-shipping-service]");
-  const paymentNoteTarget = root.querySelector("[data-payment-note]");
   const storeField = root.querySelector("[data-checkout-store]");
   const warehouseOption = root.querySelector(
     "[data-checkout-warehouse-option]",
@@ -4301,7 +4299,6 @@ function initCheckoutPage() {
   if (
     !(form instanceof HTMLFormElement) ||
     !(summaryTarget instanceof HTMLElement) ||
-    !(itemsTarget instanceof HTMLElement) ||
     !(sidebarItemsTarget instanceof HTMLElement)
   )
     return;
@@ -5025,20 +5022,6 @@ function initCheckoutPage() {
     ];
   };
 
-  const getPaymentDescription = (profile) => {
-    if (!profile) return "";
-    if (profile.code === "card") {
-      return "Supports major credit and debit cards. Apple Pay will appear automatically inside Stripe Checkout on supported devices and browsers.";
-    }
-    if (profile.code === "afterpay_clearpay") {
-      return "Split payments with Afterpay inside Stripe Checkout when the cart and customer are eligible.";
-    }
-    if (profile.code === "wechat_pay") {
-      return "Complete payment with WeChat Pay through Stripe Checkout when enabled for your account.";
-    }
-    return "No online redirect. The store will contact you and collect payment directly.";
-  };
-
   const renderPaymentOptions = (subtotal) => {
     if (
       !(paymentOptionsTarget instanceof HTMLElement) ||
@@ -5057,7 +5040,6 @@ function initCheckoutPage() {
 
     paymentOptionsTarget.innerHTML = visibleProfiles
       .map((profile) => {
-        const estimate = calculatePaymentFee(subtotal, profile);
         const badges = getPaymentBadges(profile)
           .map((badge) => {
             return `<span class="storefront-payment-option__badge ${badge.className}">${escapeHtml(badge.label)}</span>`;
@@ -5079,11 +5061,6 @@ function initCheckoutPage() {
               <span class="storefront-payment-option__fee">${escapeHtml(formatFeeRule(profile))}</span>
             </span>
             <span class="storefront-payment-option__meta">${badges}</span>
-            <span class="storefront-payment-option__description">${escapeHtml(getPaymentDescription(profile))}</span>
-          </span>
-          <span class="storefront-payment-option__estimate">
-            <strong>${escapeHtml(formatMoney(estimate))}</strong>
-            <span>Current surcharge</span>
           </span>
         </button>
       `;
@@ -5130,44 +5107,6 @@ function initCheckoutPage() {
       `;
       },
     ).join("");
-  };
-
-  const renderPaymentNote = () => {
-    if (!(paymentNoteTarget instanceof HTMLElement)) return;
-    const profile = getSelectedPaymentProfile();
-    if (!profile) {
-      paymentNoteTarget.hidden = true;
-      paymentNoteTarget.textContent = "";
-      return;
-    }
-
-    const notes = [];
-    if (profile.provider === "manual") {
-      notes.push(
-        "No online payment redirect. The store will confirm the order and collect payment in store.",
-      );
-    }
-    if (profile.provider === "stripe" && profile.code === "card") {
-      notes.push(
-        "Card payment uses Stripe Checkout. Apple Pay will appear automatically there on supported Apple devices and browsers.",
-      );
-    }
-    if (profile.provider === "stripe" && profile.code === "afterpay_clearpay") {
-      notes.push(
-        "Afterpay opens in Stripe Checkout and is only shown when the cart and customer are eligible.",
-      );
-    }
-    if (profile.provider === "stripe" && profile.code === "wechat_pay") {
-      notes.push(
-        "WeChat Pay opens in Stripe Checkout. Availability depends on your Stripe account and customer region.",
-      );
-    }
-    if (profile.notes) {
-      notes.push(String(profile.notes).trim());
-    }
-
-    paymentNoteTarget.hidden = !notes.length;
-    paymentNoteTarget.textContent = notes.join(" ");
   };
 
   const renderSuccessState = (payload) => {
@@ -5264,7 +5203,6 @@ function initCheckoutPage() {
     renderStoreSelectionDetail();
     renderPaymentOptions(subtotal);
     renderShippingOptions(subtotal);
-    renderCartLineItems(itemsTarget, items);
     renderCheckoutSidebarItems(items);
     renderCartSummary(summaryTarget, items, {
       paymentProfile: getSelectedPaymentProfile(),
@@ -5272,7 +5210,6 @@ function initCheckoutPage() {
     });
     syncCheckoutMode();
     syncAccountSetup();
-    renderPaymentNote();
     if (items.length && !isPaymentCancelled) {
       setCheckoutMessage("");
     }
@@ -5333,25 +5270,6 @@ function initCheckoutPage() {
     }
     render();
   };
-
-  itemsTarget.addEventListener("input", (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLInputElement)) return;
-    const slug = target.getAttribute("data-cart-qty");
-    if (!slug) return;
-    updateCartItemQuantity(slug, target.value);
-    render();
-  });
-
-  itemsTarget.addEventListener("click", (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLElement)) return;
-    const button = target.closest("[data-cart-remove]");
-    if (!(button instanceof HTMLElement)) return;
-    const slug = button.getAttribute("data-cart-remove") || "";
-    removeCartItem(slug);
-    render();
-  });
 
   form.addEventListener("input", (event) => {
     const target = event.target;
