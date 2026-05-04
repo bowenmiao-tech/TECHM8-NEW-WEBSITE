@@ -14,6 +14,10 @@ const allowedStripePaymentMethods = new Map<string, Stripe.Checkout.SessionCreat
   ['afterpay_clearpay', ['afterpay_clearpay']],
   ['wechat_pay', ['wechat_pay']],
 ])
+const shippingOptions = new Map([
+  ['standard_auspost', { code: 'standard_auspost', label: 'Standard Shipping With Australia Post', deliveryTime: '3-5 business day', rate: 15, freeOver: 399 }],
+  ['express_auspost', { code: 'express_auspost', label: 'Express Shipping With Australia Post', deliveryTime: '1-3 business day', rate: 18, freeOver: 599 }],
+])
 const fallbackStores = new Map([
   ['park-ridge', { slug: 'park-ridge', name: 'Park Ridge', is_active: true, id: null }],
   ['fairfield', { slug: 'fairfield', name: 'Fairfield', is_active: true, id: null }],
@@ -34,6 +38,15 @@ function decimal(value: number) {
 
 function moneyToCents(value: number) {
   return Math.max(0, Math.round(value * 100))
+}
+
+function getShippingOption(code: string) {
+  return shippingOptions.get(code) ?? shippingOptions.get('standard_auspost')!
+}
+
+function calculateShippingFee(subtotal: number, option: ReturnType<typeof getShippingOption>) {
+  if (option.freeOver > 0 && subtotal >= option.freeOver) return 0
+  return decimal(option.rate)
 }
 
 function buildOrderCode() {
@@ -77,6 +90,7 @@ Deno.serve(async (req) => {
     const siteUrl = normalizeSiteUrl(String(Deno.env.get('SITE_URL') ?? body.site_url ?? '').trim())
     const fulfillmentMethod = String(body.fulfillment_method ?? 'pickup').trim()
     const paymentMethodCode = String(body.payment_method_code ?? 'card').trim()
+    const shippingServiceCode = String(body.shipping_service_code ?? 'standard_auspost').trim() || 'standard_auspost'
     const recipientName = String(body.recipient_name ?? customerName).trim()
     const companyName = String(body.company_name ?? '').trim()
     const shippingPhone = String(body.shipping_phone ?? phone).trim()
@@ -239,7 +253,8 @@ Deno.serve(async (req) => {
 
     const subtotalAmount = decimal(lineItems.reduce((sum, item) => sum + item.line_total, 0))
     const discountAmount = 0
-    const shippingFeeAmount = 0
+    const shippingOption = fulfillmentMethod === 'shipping' ? getShippingOption(shippingServiceCode) : null
+    const shippingFeeAmount = shippingOption ? calculateShippingFee(subtotalAmount, shippingOption) : 0
     const percentage = Number(feeProfile.percentage) || 0
     const fixedAmount = Number(feeProfile.fixed_amount) || 0
 
@@ -289,6 +304,9 @@ Deno.serve(async (req) => {
         discount_amount: discountAmount,
         payment_fee_amount: paymentFeeAmount,
         shipping_fee_amount: shippingFeeAmount,
+        shipping_provider: shippingOption ? 'Australia Post' : null,
+        shipping_service_code: shippingOption?.code ?? null,
+        shipping_service_name: shippingOption?.label ?? null,
         total_amount: totalAmount,
         payment_fee_profile_id: feeProfile.id,
         payment_method_code: feeProfile.code,
@@ -357,6 +375,20 @@ Deno.serve(async (req) => {
         })
       }
 
+      if (shippingFeeAmount > 0 && shippingOption) {
+        stripeLineItems.push({
+          quantity: 1,
+          price_data: {
+            currency: 'aud',
+            unit_amount: moneyToCents(shippingFeeAmount),
+            product_data: {
+              name: shippingOption.label,
+              description: shippingOption.deliveryTime,
+            },
+          },
+        })
+      }
+
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
         payment_method_types: allowedStripePaymentMethods.get(paymentMethodCode)!,
@@ -370,6 +402,7 @@ Deno.serve(async (req) => {
           order_code: orderCode,
           store_slug: resolvedStore.slug,
           payment_method_code: feeProfile.code,
+          shipping_service_code: shippingOption?.code ?? '',
         },
         payment_intent_data: {
           metadata: {
@@ -377,6 +410,7 @@ Deno.serve(async (req) => {
             order_code: orderCode,
             store_slug: resolvedStore.slug,
             payment_method_code: feeProfile.code,
+            shipping_service_code: shippingOption?.code ?? '',
           },
         },
         line_items: stripeLineItems,

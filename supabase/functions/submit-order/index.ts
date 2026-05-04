@@ -8,6 +8,10 @@ const corsHeaders = {
 
 const allowedContactMethods = new Set(['phone', 'email', 'sms'])
 const allowedFulfillmentMethods = new Set(['pickup', 'shipping'])
+const shippingOptions = new Map([
+  ['standard_auspost', { code: 'standard_auspost', label: 'Standard Shipping With Australia Post', deliveryTime: '3-5 business day', rate: 15, freeOver: 399 }],
+  ['express_auspost', { code: 'express_auspost', label: 'Express Shipping With Australia Post', deliveryTime: '1-3 business day', rate: 18, freeOver: 599 }],
+])
 const fallbackStores = new Map([
   ['park-ridge', { slug: 'park-ridge', name: 'Park Ridge', is_active: true, id: null }],
   ['fairfield', { slug: 'fairfield', name: 'Fairfield', is_active: true, id: null }],
@@ -25,6 +29,15 @@ type CartItemInput = {
 
 function decimal(value: number) {
   return Number(value.toFixed(2))
+}
+
+function getShippingOption(code: string) {
+  return shippingOptions.get(code) ?? shippingOptions.get('standard_auspost')!
+}
+
+function calculateShippingFee(subtotal: number, option: ReturnType<typeof getShippingOption>) {
+  if (option.freeOver > 0 && subtotal >= option.freeOver) return 0
+  return decimal(option.rate)
 }
 
 function buildOrderCode() {
@@ -58,6 +71,7 @@ Deno.serve(async (req) => {
     const source = String(body.source ?? 'website').trim() || 'website'
     const fulfillmentMethod = String(body.fulfillment_method ?? 'pickup').trim()
     const paymentMethodCode = String(body.payment_method_code ?? 'pay_in_store').trim() || 'pay_in_store'
+    const shippingServiceCode = String(body.shipping_service_code ?? 'standard_auspost').trim() || 'standard_auspost'
     const recipientName = String(body.recipient_name ?? customerName).trim()
     const companyName = String(body.company_name ?? '').trim()
     const shippingPhone = String(body.shipping_phone ?? phone).trim()
@@ -229,7 +243,8 @@ Deno.serve(async (req) => {
 
     const subtotalAmount = decimal(lineItems.reduce((sum, item) => sum + item.line_total, 0))
     const discountAmount = 0
-    const shippingFeeAmount = 0
+    const shippingOption = fulfillmentMethod === 'shipping' ? getShippingOption(shippingServiceCode) : null
+    const shippingFeeAmount = shippingOption ? calculateShippingFee(subtotalAmount, shippingOption) : 0
 
     const percentage = Number(resolvedFeeProfile.percentage) || 0
     const fixedAmount = Number(resolvedFeeProfile.fixed_amount) || 0
@@ -282,6 +297,9 @@ Deno.serve(async (req) => {
         discount_amount: discountAmount,
         payment_fee_amount: paymentFeeAmount,
         shipping_fee_amount: shippingFeeAmount,
+        shipping_provider: shippingOption ? 'Australia Post' : null,
+        shipping_service_code: shippingOption?.code ?? null,
+        shipping_service_name: shippingOption?.label ?? null,
         total_amount: totalAmount,
         payment_fee_profile_id: resolvedFeeProfile.id,
         payment_method_code: resolvedFeeProfile.code,
@@ -292,7 +310,7 @@ Deno.serve(async (req) => {
         source,
         metadata,
       })
-      .select('id, order_code, total_amount, payment_fee_amount, payment_method_code, payment_method_label')
+      .select('id, order_code, total_amount, payment_fee_amount, shipping_fee_amount, shipping_service_code, shipping_service_name, payment_method_code, payment_method_label')
       .single()
 
     if (orderError || !insertedOrder) {
@@ -323,6 +341,10 @@ Deno.serve(async (req) => {
         store_name: resolvedStore.name,
         total_amount: insertedOrder.total_amount,
         payment_fee_amount: insertedOrder.payment_fee_amount,
+        shipping_fee_amount: insertedOrder.shipping_fee_amount,
+        shipping_service_code: insertedOrder.shipping_service_code,
+        shipping_service_name: insertedOrder.shipping_service_name,
+        shipping_delivery_time: shippingOption?.deliveryTime ?? null,
         payment_method_code: insertedOrder.payment_method_code,
         payment_method_label: insertedOrder.payment_method_label,
       },

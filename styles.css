@@ -5911,9 +5911,19 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   line-height: 1.7;
 }
 
-.storefront-payment-list {
+.storefront-payment-list,
+.storefront-shipping-list {
   display: grid;
   gap: 0.8rem;
+}
+
+.storefront-checkout__shipping-methods {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.storefront-shipping-option .storefront-payment-option__fee {
+  color: var(--muted);
 }
 
 .storefront-payment-option {

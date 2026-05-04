@@ -2317,6 +2317,34 @@ function calculatePaymentFee(subtotal, profile) {
   }
 }
 
+const CHECKOUT_SHIPPING_OPTIONS = [
+  {
+    code: "standard_auspost",
+    label: "Standard Shipping With Australia Post",
+    deliveryTime: "3-5 business day",
+    rate: 15,
+    freeOver: 399,
+  },
+  {
+    code: "express_auspost",
+    label: "Express Shipping With Australia Post",
+    deliveryTime: "1-3 business day",
+    rate: 18,
+    freeOver: 599,
+  },
+];
+
+function getCheckoutShippingOption(code) {
+  return CHECKOUT_SHIPPING_OPTIONS.find((option) => option.code === code) || CHECKOUT_SHIPPING_OPTIONS[0];
+}
+
+function calculateShippingFee(subtotal, option) {
+  if (!option) return 0;
+  const freeOver = Number(option.freeOver) || 0;
+  if (freeOver > 0 && subtotal >= freeOver) return 0;
+  return Number((Number(option.rate) || 0).toFixed(2));
+}
+
 function initStorefront() {
   const root = document.querySelector("[data-storefront]");
   if (!(root instanceof HTMLElement)) return;
@@ -3417,9 +3445,21 @@ function renderCartSummary(target, items, options = {}) {
 
   const subtotal = getCartSubtotal(items);
   const paymentProfile = options.paymentProfile || null;
-  const paymentFee = paymentProfile ? calculatePaymentFee(subtotal, paymentProfile) : 0;
+  const shippingOption = options.shippingOption || null;
+  const paymentFee = typeof options.paymentFeeOverride === "number"
+    ? options.paymentFeeOverride
+    : paymentProfile ? calculatePaymentFee(subtotal, paymentProfile) : 0;
+  const shippingFee = typeof options.shippingFeeOverride === "number"
+    ? options.shippingFeeOverride
+    : shippingOption ? calculateShippingFee(subtotal, shippingOption) : 0;
   const itemCount = getCartCount(items);
-  const total = subtotal + paymentFee;
+  const total = typeof options.totalOverride === "number"
+    ? options.totalOverride
+    : subtotal + paymentFee + shippingFee;
+  const shippingLabel = shippingOption ? "Shipping" : "Store pickup";
+  const shippingValue = shippingOption
+    ? shippingFee > 0 ? formatMoney(shippingFee) : "Free"
+    : "To be confirmed";
   target.innerHTML = `
     <div class="storefront-summary__row">
       <span>Items</span>
@@ -3430,8 +3470,8 @@ function renderCartSummary(target, items, options = {}) {
       <strong>${escapeHtml(formatMoney(subtotal))}</strong>
     </div>
     <div class="storefront-summary__row storefront-summary__row--muted">
-      <span>Store pickup</span>
-      <strong>To be confirmed</strong>
+      <span>${escapeHtml(shippingLabel)}</span>
+      <strong>${escapeHtml(shippingValue)}</strong>
     </div>
     <div class="storefront-summary__row storefront-summary__row--muted">
       <span>Payment fee</span>
@@ -3578,6 +3618,8 @@ function initCheckoutPage() {
   const messageTarget = root.querySelector("[data-checkout-message]");
   const paymentOptionsTarget = root.querySelector("[data-payment-options]");
   const paymentMethodField = root.querySelector("[data-payment-method]");
+  const shippingOptionsTarget = root.querySelector("[data-shipping-options]");
+  const shippingServiceField = root.querySelector("[data-shipping-service]");
   const paymentNoteTarget = root.querySelector("[data-payment-note]");
   const storeField = root.querySelector("[data-checkout-store]");
   const warehouseOption = root.querySelector("[data-checkout-warehouse-option]");
@@ -3688,6 +3730,14 @@ function initCheckoutPage() {
         ? String(paymentMethodField.value || "pay_in_store").trim()
         : "pay_in_store";
     return paymentProfiles.find((profile) => profile.code === selectedCode) || null;
+  };
+
+  const getSelectedShippingOption = () => {
+    const selectedCode =
+      shippingServiceField instanceof HTMLInputElement
+        ? String(shippingServiceField.value || "standard_auspost").trim()
+        : "standard_auspost";
+    return getCheckoutShippingOption(selectedCode);
   };
 
   const parseJsonResponse = async (response) => {
@@ -3878,6 +3928,41 @@ function initCheckoutPage() {
     }).join("");
   };
 
+  const renderShippingOptions = (subtotal) => {
+    if (!(shippingOptionsTarget instanceof HTMLElement) || !(shippingServiceField instanceof HTMLInputElement)) return;
+    if (!isWarehouseDispatchSelected()) {
+      shippingOptionsTarget.innerHTML = "";
+      return;
+    }
+
+    const currentOption = getSelectedShippingOption();
+    shippingOptionsTarget.innerHTML = CHECKOUT_SHIPPING_OPTIONS.map((option) => {
+      const fee = calculateShippingFee(subtotal, option);
+      const isSelected = currentOption.code === option.code;
+      return `
+        <button
+          class="storefront-payment-option storefront-shipping-option ${isSelected ? "is-selected" : ""}"
+          type="button"
+          data-shipping-option="${escapeHtml(option.code)}"
+          aria-pressed="${isSelected ? "true" : "false"}"
+        >
+          <span class="storefront-payment-option__radio" aria-hidden="true"></span>
+          <span class="storefront-payment-option__body">
+            <span class="storefront-payment-option__top">
+              <strong class="storefront-payment-option__title">${escapeHtml(option.label)}</strong>
+              <span class="storefront-payment-option__fee">${escapeHtml(option.deliveryTime)}</span>
+            </span>
+            <span class="storefront-payment-option__description">Free shipping over ${escapeHtml(formatMoney(option.freeOver))}</span>
+          </span>
+          <span class="storefront-payment-option__estimate">
+            <strong>${escapeHtml(fee > 0 ? formatMoney(fee) : "Free")}</strong>
+            <span>Shipping fee</span>
+          </span>
+        </button>
+      `;
+    }).join("");
+  };
+
   const renderPaymentNote = () => {
     if (!(paymentNoteTarget instanceof HTMLElement)) return;
     const profile = getSelectedPaymentProfile();
@@ -3909,6 +3994,9 @@ function initCheckoutPage() {
   };
 
   const renderSuccessState = (payload) => {
+    const successShippingOption = payload.shipping_service_code
+      ? getCheckoutShippingOption(payload.shipping_service_code)
+      : null;
     root.innerHTML = `
       <section class="section">
         <div class="container storefront-checkout storefront-checkout--success">
@@ -3942,6 +4030,10 @@ function initCheckoutPage() {
                   <strong>Payment fee</strong>
                   <span>${escapeHtml(formatMoney(payload.payment_fee_amount || 0))}</span>
                 </div>
+                <div class="storefront-success__item">
+                  <strong>Shipping</strong>
+                  <span>${escapeHtml(successShippingOption ? `${successShippingOption.label} (${formatMoney(payload.shipping_fee_amount || 0)})` : "Store pickup")}</span>
+                </div>
               </div>
               <div class="storefront-success__actions">
                 <a class="button button--primary" href="shop.html">Continue shopping</a>
@@ -3973,17 +4065,24 @@ function initCheckoutPage() {
         payload.payment_method_code
           ? paymentProfiles.find((profile) => profile.code === payload.payment_method_code) || null
           : null,
+      shippingOption: successShippingOption,
+      paymentFeeOverride: Number(payload.payment_fee_amount ?? 0) || 0,
+      shippingFeeOverride: Number(payload.shipping_fee_amount ?? 0) || 0,
+      totalOverride: Number(payload.total_amount ?? 0) || 0,
     });
   };
 
   const render = () => {
     const items = loadCart();
     const subtotal = getCartSubtotal(items);
+    const shippingOption = isWarehouseDispatchSelected() ? getSelectedShippingOption() : null;
     renderStoreSelectionDetail();
     renderPaymentOptions(subtotal);
+    renderShippingOptions(subtotal);
     renderCartLineItems(itemsTarget, items);
     renderCartSummary(summaryTarget, items, {
       paymentProfile: getSelectedPaymentProfile(),
+      shippingOption,
     });
     syncCheckoutMode();
     syncAccountSetup();
@@ -4111,6 +4210,9 @@ function initCheckoutPage() {
     const storeSlug = String(formData.get("store_slug") || "").trim();
     const paymentMethodCode = String(formData.get("payment_method_code") || "pay_in_store").trim();
     const warehouseDispatch = storeSlug === "warehouse-dispatch";
+    const selectedShippingOption = warehouseDispatch ? getSelectedShippingOption() : null;
+    const shippingFeeAmount = selectedShippingOption ? calculateShippingFee(subtotal, selectedShippingOption) : 0;
+    const paymentFeeAmount = selectedProfile ? calculatePaymentFee(subtotal, selectedProfile) : 0;
     const checkoutPassword = String(formData.get("checkout_password") || "");
     const checkoutPasswordConfirm = String(formData.get("checkout_password_confirm") || "");
     const firstNameField = form.elements.namedItem("first_name");
@@ -4218,9 +4320,14 @@ function initCheckoutPage() {
       preferred_contact_method: "phone",
       payment_method_code: paymentMethodCode,
       fulfillment_method: warehouseDispatch ? "shipping" : "pickup",
+      shipping_service_code: selectedShippingOption?.code || null,
+      shipping_service_name: selectedShippingOption?.label || null,
+      shipping_delivery_time: selectedShippingOption?.deliveryTime || null,
       notes: String(formData.get("notes") || "").trim(),
       subtotal_amount: subtotal,
-      total_amount: subtotal,
+      payment_fee_amount: paymentFeeAmount,
+      shipping_fee_amount: shippingFeeAmount,
+      total_amount: Number((subtotal + paymentFeeAmount + shippingFeeAmount).toFixed(2)),
       source: "website",
       site_url: getConfiguredSiteBaseUrl(),
       auth_user_id: activeAuthState?.user?.id || null,
@@ -4327,6 +4434,10 @@ function initCheckoutPage() {
         payload.store_name = String(result.store_name || payload.store_name || "");
         payload.total_amount = Number(result.total_amount ?? payload.total_amount) || payload.total_amount;
         payload.payment_fee_amount = Number(result.payment_fee_amount ?? 0) || 0;
+        payload.shipping_fee_amount = Number(result.shipping_fee_amount ?? payload.shipping_fee_amount ?? 0) || 0;
+        payload.shipping_service_code = String(result.shipping_service_code || payload.shipping_service_code || "");
+        payload.shipping_service_name = String(result.shipping_service_name || payload.shipping_service_name || "");
+        payload.shipping_delivery_time = String(result.shipping_delivery_time || payload.shipping_delivery_time || "");
         payload.payment_method_code = String(result.payment_method_code || payload.payment_method_code || "");
         payload.payment_method_label = String(result.payment_method_label || payload.payment_method_label || "");
       } else {
@@ -4363,6 +4474,19 @@ function initCheckoutPage() {
       const code = String(option.getAttribute("data-payment-option") || "").trim();
       if (!code) return;
       paymentMethodField.value = code;
+      render();
+    });
+  }
+
+  if (shippingOptionsTarget instanceof HTMLElement && shippingServiceField instanceof HTMLInputElement) {
+    shippingOptionsTarget.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const option = target.closest("[data-shipping-option]");
+      if (!(option instanceof HTMLElement)) return;
+      const code = String(option.getAttribute("data-shipping-option") || "").trim();
+      if (!code) return;
+      shippingServiceField.value = code;
       render();
     });
   }
@@ -4456,6 +4580,9 @@ function initCheckoutSuccessPage() {
     const storeSlug = String(storedPayload.store_slug || "").trim();
     const storeDetail = STORE_CHECKOUT_DETAILS[storeSlug] || null;
     const isPayInStore = mode === "pay_in_store" || String(storedPayload.payment_method_code || "").trim() === "pay_in_store";
+    const storedShippingOption = storedPayload.shipping_service_code
+      ? getCheckoutShippingOption(storedPayload.shipping_service_code)
+      : null;
 
     root.innerHTML = `
       <section class="section">
@@ -4481,6 +4608,10 @@ function initCheckoutSuccessPage() {
                 <div class="storefront-success__item">
                   <strong>Total</strong>
                   <span>${escapeHtml(formatMoney(storedPayload.total_amount || 0))}</span>
+                </div>
+                <div class="storefront-success__item">
+                  <strong>Shipping</strong>
+                  <span>${escapeHtml(storedShippingOption ? `${storedShippingOption.label} (${formatMoney(storedPayload.shipping_fee_amount || 0)})` : "Store pickup")}</span>
                 </div>
               </div>
               <div class="storefront-success__actions">
@@ -4538,6 +4669,10 @@ function initCheckoutSuccessPage() {
         percentage: 0,
         fixed_amount: 0,
       },
+      shippingOption: storedShippingOption,
+      paymentFeeOverride: Number(storedPayload.payment_fee_amount ?? 0) || 0,
+      shippingFeeOverride: Number(storedPayload.shipping_fee_amount ?? 0) || 0,
+      totalOverride: Number(storedPayload.total_amount ?? 0) || 0,
     });
     return;
   }
