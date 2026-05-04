@@ -36,7 +36,9 @@ function expandMobileRepairsContainer(dropdown) {
 function setMobileMenuState(isOpen) {
   const mobileInput = document.querySelector(".nav__mobile-input");
   const navMenu = document.querySelector(".nav__menu");
-  const navToggle = document.querySelector(".nav__toggle--open, .nav > .nav__toggle");
+  const navToggle = document.querySelector(
+    ".nav__toggle--open, .nav > .nav__toggle",
+  );
   const navOverlay = document.querySelector(".nav__overlay");
 
   if (mobileInput instanceof HTMLInputElement) {
@@ -79,23 +81,31 @@ function closeAllSubmenus(exceptGroup) {
   document.querySelectorAll(".nav__dropdown-group.is-open").forEach((group) => {
     if (group === exceptGroup) return;
     group.classList.remove("is-open");
-    group.querySelector(".nav__submenu-toggle")?.setAttribute("aria-expanded", "false");
+    group
+      .querySelector(".nav__submenu-toggle")
+      ?.setAttribute("aria-expanded", "false");
   });
 }
 
 function closeAllMobileRepairsGroups(exceptGroup) {
-  document.querySelectorAll(".nav__mobile-repairs-group.is-open").forEach((group) => {
-    if (group === exceptGroup) return;
-    group.classList.remove("is-open");
-    group.querySelector(".nav__mobile-repairs-toggle")?.setAttribute("aria-expanded", "false");
-  });
+  document
+    .querySelectorAll(".nav__mobile-repairs-group.is-open")
+    .forEach((group) => {
+      if (group === exceptGroup) return;
+      group.classList.remove("is-open");
+      group
+        .querySelector(".nav__mobile-repairs-toggle")
+        ?.setAttribute("aria-expanded", "false");
+    });
 }
 
 function openSubmenuGroup(group) {
   if (!(group instanceof HTMLElement)) return;
   closeAllSubmenus(group);
   group.classList.add("is-open");
-  group.querySelector(".nav__submenu-toggle")?.setAttribute("aria-expanded", "true");
+  group
+    .querySelector(".nav__submenu-toggle")
+    ?.setAttribute("aria-expanded", "true");
 }
 
 function decorateMobileMenu() {
@@ -203,14 +213,18 @@ function buildSiteRelativeHref(path) {
 function normalizeDesktopPhoneRepairSubmenu(repairsDropdown) {
   if (!(repairsDropdown instanceof HTMLElement)) return;
 
-  const phoneGroup = Array.from(repairsDropdown.querySelectorAll(".nav__dropdown-menu .nav__dropdown-group"))
-    .find((group) => {
-      const toggle = group.querySelector(".nav__submenu-toggle");
-      return toggle?.textContent?.trim().toLowerCase() === "phones";
-    });
+  const phoneGroup = Array.from(
+    repairsDropdown.querySelectorAll(
+      ".nav__dropdown-menu .nav__dropdown-group",
+    ),
+  ).find((group) => {
+    const toggle = group.querySelector(".nav__submenu-toggle");
+    return toggle?.textContent?.trim().toLowerCase() === "phones";
+  });
   if (!(phoneGroup instanceof HTMLElement)) return;
 
-  const phoneLinks = MOBILE_REPAIR_GROUPS.find((group) => group.label === "Phones")?.links || [];
+  const phoneLinks =
+    MOBILE_REPAIR_GROUPS.find((group) => group.label === "Phones")?.links || [];
   const linksPanel = phoneGroup.querySelector(".nav__submenu-panel");
   if (!(linksPanel instanceof HTMLElement)) return;
 
@@ -224,7 +238,9 @@ function normalizeDesktopPhoneRepairSubmenu(repairsDropdown) {
 }
 
 function decorateMobileRepairsAccordion() {
-  const repairsDropdown = Array.from(document.querySelectorAll(".nav__dropdown")).find((dropdown) => {
+  const repairsDropdown = Array.from(
+    document.querySelectorAll(".nav__dropdown"),
+  ).find((dropdown) => {
     const toggle = dropdown.querySelector(".nav__dropdown-toggle");
     return toggle?.dataset.href?.includes("repairs.html");
   });
@@ -256,10 +272,14 @@ function decorateMobileRepairsAccordion() {
       const link = document.createElement("a");
       link.href = buildSiteRelativeHref(href);
       link.textContent = label;
-      link.addEventListener("touchstart", (e) => {
-        e.stopPropagation();
-        keepMobileMenuOpen();
-      }, { passive: true });
+      link.addEventListener(
+        "touchstart",
+        (e) => {
+          e.stopPropagation();
+          keepMobileMenuOpen();
+        },
+        { passive: true },
+      );
       link.addEventListener("pointerdown", (e) => {
         e.stopPropagation();
         keepMobileMenuOpen();
@@ -293,7 +313,8 @@ function handleDropdownToggle(event, dropdownToggle) {
     return;
   }
 
-  const destination = dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
+  const destination =
+    dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
   const alreadyOpen = dropdown.classList.contains("is-open");
   const readyToNavigate = dropdownToggle.dataset.navReady === "true";
 
@@ -324,11 +345,14 @@ function handleMobileRepairsToggle(event, toggle) {
 
   const group = toggle.closest(".nav__mobile-repairs-group");
   const dropdown = toggle.closest(".nav__dropdown");
-  if (!(group instanceof HTMLElement) || !(dropdown instanceof HTMLElement)) return;
+  if (!(group instanceof HTMLElement) || !(dropdown instanceof HTMLElement))
+    return;
 
   const isOpen = group.classList.contains("is-open");
   dropdown.classList.add("is-open");
-  dropdown.querySelector(".nav__dropdown-toggle")?.setAttribute("aria-expanded", "true");
+  dropdown
+    .querySelector(".nav__dropdown-toggle")
+    ?.setAttribute("aria-expanded", "true");
   keepMobileMenuOpen();
   closeAllMobileRepairsGroups(group);
   group.classList.toggle("is-open", !isOpen);
@@ -405,7 +429,9 @@ function initStoreSearch() {
     const input = switcher.querySelector(".store-switcher__search");
     if (!(input instanceof HTMLInputElement)) return;
 
-    const links = Array.from(switcher.querySelectorAll(".store-switcher__link"));
+    const links = Array.from(
+      switcher.querySelectorAll(".store-switcher__link"),
+    );
 
     input.addEventListener("input", () => {
       const query = input.value.trim().toLowerCase();
@@ -423,7 +449,13 @@ function initStoresLocator() {
   const root = document.querySelector("[data-store-locator]");
   if (!(root instanceof HTMLElement)) return;
 
-  const storeOrder = ["park-ridge", "fairfield", "toowong", "north-lakes", "brassall"];
+  const storeOrder = [
+    "park-ridge",
+    "fairfield",
+    "toowong",
+    "north-lakes",
+    "brassall",
+  ];
   const cards = Array.from(root.querySelectorAll("[data-store-card]"));
   const searchInput = root.querySelector("[data-store-search]");
   const countTarget = root.querySelector("[data-store-count]");
@@ -433,7 +465,8 @@ function initStoresLocator() {
   const directionsLink = root.querySelector("[data-store-directions]");
   const pageLink = root.querySelector("[data-store-page]");
   const allStoresButton = root.querySelector("[data-store-all]");
-  const allStoresMapSrc = "https://www.google.com/maps?q=OZ%20Tech%20M8%20Queensland%20Australia&output=embed";
+  const allStoresMapSrc =
+    "https://www.google.com/maps?q=OZ%20Tech%20M8%20Queensland%20Australia&output=embed";
 
   const getMapSrc = (store) => {
     const address = String(store?.address || "").trim();
@@ -453,10 +486,12 @@ function initStoresLocator() {
       mapTitle.textContent = "All TECHM8 stores";
     }
     if (mapAddress instanceof HTMLElement) {
-      mapAddress.textContent = "Search result view for OZ Tech M8 stores across Queensland.";
+      mapAddress.textContent =
+        "Search result view for OZ Tech M8 stores across Queensland.";
     }
     if (directionsLink instanceof HTMLAnchorElement) {
-      directionsLink.href = "https://www.google.com/maps/search/?api=1&query=OZ%20Tech%20M8%20Queensland%20Australia";
+      directionsLink.href =
+        "https://www.google.com/maps/search/?api=1&query=OZ%20Tech%20M8%20Queensland%20Australia";
     }
     if (pageLink instanceof HTMLAnchorElement) {
       pageLink.href = "stores.html";
@@ -494,7 +529,10 @@ function initStoresLocator() {
   cards.forEach((card) => {
     const slug = card.getAttribute("data-store-card") || "";
     if (storeOrder.includes(slug)) {
-      card.setAttribute("aria-pressed", card.classList.contains("is-active") ? "true" : "false");
+      card.setAttribute(
+        "aria-pressed",
+        card.classList.contains("is-active") ? "true" : "false",
+      );
       card.addEventListener("click", () => selectStore(slug));
     }
   });
@@ -516,7 +554,9 @@ function initStoresLocator() {
           store?.address,
           store?.phone,
           card.textContent,
-        ].join(" ").toLowerCase();
+        ]
+          .join(" ")
+          .toLowerCase();
         const isVisible = !query || searchable.includes(query);
         card.hidden = !isVisible;
         if (isVisible) visibleCount += 1;
@@ -528,7 +568,10 @@ function initStoresLocator() {
     });
   }
 
-  const initialSlug = cards.find((card) => card.classList.contains("is-active"))?.getAttribute("data-store-card") || "";
+  const initialSlug =
+    cards
+      .find((card) => card.classList.contains("is-active"))
+      ?.getAttribute("data-store-card") || "";
   if (initialSlug) {
     selectStore(initialSlug);
   } else {
@@ -603,15 +646,23 @@ function initHomeBanner() {
     restart();
   });
 
-  banner.addEventListener("touchstart", (event) => {
-    touchStartX = event.touches[0]?.clientX ?? 0;
-    touchDeltaX = 0;
-  }, { passive: true });
+  banner.addEventListener(
+    "touchstart",
+    (event) => {
+      touchStartX = event.touches[0]?.clientX ?? 0;
+      touchDeltaX = 0;
+    },
+    { passive: true },
+  );
 
-  banner.addEventListener("touchmove", (event) => {
-    const currentX = event.touches[0]?.clientX ?? touchStartX;
-    touchDeltaX = currentX - touchStartX;
-  }, { passive: true });
+  banner.addEventListener(
+    "touchmove",
+    (event) => {
+      const currentX = event.touches[0]?.clientX ?? touchStartX;
+      touchDeltaX = currentX - touchStartX;
+    },
+    { passive: true },
+  );
 
   banner.addEventListener("touchend", () => {
     if (Math.abs(touchDeltaX) < 36) return;
@@ -651,10 +702,10 @@ function formatMoney(value) {
 
 const STORE_NAME_MAP = {
   "park-ridge": "Park Ridge",
-  "fairfield": "Fairfield",
-  "toowong": "Toowong",
+  fairfield: "Fairfield",
+  toowong: "Toowong",
   "north-lakes": "North Lakes",
-  "brassall": "Brassall",
+  brassall: "Brassall",
   "warehouse-dispatch": "Warehouse Dispatch",
 };
 
@@ -662,13 +713,14 @@ const STORE_CHECKOUT_DETAILS = {
   "park-ridge": {
     title: "Park Ridge",
     mode: "Click & Collect",
-    summary: "Collect your order from the Park Ridge store once the team confirms pickup timing.",
+    summary:
+      "Collect your order from the Park Ridge store once the team confirms pickup timing.",
     address: "Shop 11, 3732 Mount Lindesay Hwy, Park Ridge QLD 4125",
     phone: "0452 488 710",
     mapUrl: "https://maps.app.goo.gl/SBzYCp7G5C3UM4SdA",
     pageUrl: "stores/park-ridge.html",
   },
-  "fairfield": {
+  fairfield: {
     title: "Fairfield",
     mode: "Click & Collect",
     summary: "Pick up directly from Fairfield after order confirmation.",
@@ -677,7 +729,7 @@ const STORE_CHECKOUT_DETAILS = {
     mapUrl: "https://maps.app.goo.gl/2iQqRL4YURm5cUfy7",
     pageUrl: "stores/fairfield.html",
   },
-  "toowong": {
+  toowong: {
     title: "Toowong",
     mode: "Click & Collect",
     summary: "Collect from the Toowong store once your order is prepared.",
@@ -689,7 +741,8 @@ const STORE_CHECKOUT_DETAILS = {
   "north-lakes": {
     title: "North Lakes",
     mode: "Click & Collect",
-    summary: "North Lakes pickup with confirmation from the local team before collection.",
+    summary:
+      "North Lakes pickup with confirmation from the local team before collection.",
     address: "1114A N Lakes Drive, North Lakes QLD 4509",
     phone: "0482 390 009",
     mapUrl: "https://maps.app.goo.gl/ZdEjv8V98RxT9uCT7",
@@ -698,8 +751,10 @@ const STORE_CHECKOUT_DETAILS = {
   brassall: {
     title: "Brassall",
     mode: "Click & Collect",
-    summary: "Collect in store from Brassall once the order is packed and ready.",
-    address: "68 Hunter St, Primewest Brassall Shopping Centre, Brassall QLD 4305",
+    summary:
+      "Collect in store from Brassall once the order is packed and ready.",
+    address:
+      "68 Hunter St, Primewest Brassall Shopping Centre, Brassall QLD 4305",
     phone: "0403 999 366",
     mapUrl: "https://maps.app.goo.gl/ViJetRb1zEiMhGyZ7",
     pageUrl: "stores/brassall.html",
@@ -707,7 +762,8 @@ const STORE_CHECKOUT_DETAILS = {
   "warehouse-dispatch": {
     title: "Warehouse Dispatch",
     mode: "Direct Shipping",
-    summary: "Ship directly from warehouse. A full delivery address is required before payment can continue.",
+    summary:
+      "Ship directly from warehouse. A full delivery address is required before payment can continue.",
     address: "Warehouse fulfilment only",
     phone: "",
     mapUrl: "",
@@ -719,7 +775,10 @@ const CHECKOUT_SUCCESS_STORAGE_KEY = "techm8_checkout_success";
 
 function saveCheckoutSuccessContext(payload) {
   try {
-    sessionStorage.setItem(CHECKOUT_SUCCESS_STORAGE_KEY, JSON.stringify(payload));
+    sessionStorage.setItem(
+      CHECKOUT_SUCCESS_STORAGE_KEY,
+      JSON.stringify(payload),
+    );
   } catch (_error) {
     // Ignore storage failures and continue with query-string fallback.
   }
@@ -731,7 +790,11 @@ function readCheckoutSuccessContext(orderCode = "") {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (!parsed || typeof parsed !== "object") return null;
-    if (orderCode && String(parsed.order_code || "").trim() && String(parsed.order_code || "").trim() !== String(orderCode || "").trim()) {
+    if (
+      orderCode &&
+      String(parsed.order_code || "").trim() &&
+      String(parsed.order_code || "").trim() !== String(orderCode || "").trim()
+    ) {
       return null;
     }
     return parsed;
@@ -775,7 +838,9 @@ function formatStatusLabel(value) {
 }
 
 function getStoreDisplayName(storeSlug) {
-  const safeSlug = String(storeSlug || "").trim().toLowerCase();
+  const safeSlug = String(storeSlug || "")
+    .trim()
+    .toLowerCase();
   return STORE_NAME_MAP[safeSlug] || formatStatusLabel(safeSlug);
 }
 
@@ -788,7 +853,11 @@ function compareProductsByLatest(left, right) {
   const rightCreated = getProductCreatedTimestamp(right);
   const leftCreated = getProductCreatedTimestamp(left);
 
-  if (rightCreated !== null && leftCreated !== null && rightCreated !== leftCreated) {
+  if (
+    rightCreated !== null &&
+    leftCreated !== null &&
+    rightCreated !== leftCreated
+  ) {
     return rightCreated - leftCreated;
   }
 
@@ -802,20 +871,29 @@ function compareProductsByLatest(left, right) {
 
   const rightId = Number(right?.id);
   const leftId = Number(left?.id);
-  if (Number.isFinite(rightId) && Number.isFinite(leftId) && rightId !== leftId) {
+  if (
+    Number.isFinite(rightId) &&
+    Number.isFinite(leftId) &&
+    rightId !== leftId
+  ) {
     return rightId - leftId;
   }
 
-  return (Number(left?.catalog_index) || 0) - (Number(right?.catalog_index) || 0);
+  return (
+    (Number(left?.catalog_index) || 0) - (Number(right?.catalog_index) || 0)
+  );
 }
 
 const DEFAULT_PRODUCT_IMAGE_URL =
   "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/placeholders/image-coming-soon.png";
-const SUPABASE_BROWSER_CDN_URL = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+const SUPABASE_BROWSER_CDN_URL =
+  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 let supabaseBrowserClientPromise = null;
 
 function resolveProductImageUrl(product) {
-  const imageUrl = String(product?.display_image || product?.image_url || "").trim();
+  const imageUrl = String(
+    product?.display_image || product?.image_url || "",
+  ).trim();
   return imageUrl || DEFAULT_PRODUCT_IMAGE_URL;
 }
 
@@ -823,7 +901,11 @@ function compareProductsByNewestRecord(left, right) {
   const rightId = Number(right?.id);
   const leftId = Number(left?.id);
 
-  if (Number.isFinite(rightId) && Number.isFinite(leftId) && rightId !== leftId) {
+  if (
+    Number.isFinite(rightId) &&
+    Number.isFinite(leftId) &&
+    rightId !== leftId
+  ) {
     return rightId - leftId;
   }
 
@@ -832,7 +914,10 @@ function compareProductsByNewestRecord(left, right) {
 
 function ensureAccountNavLink(relativeHref = "account.html") {
   document.querySelectorAll(".nav__menu").forEach((menu) => {
-    if (!(menu instanceof HTMLElement) || menu.querySelector("[data-account-link]")) {
+    if (
+      !(menu instanceof HTMLElement) ||
+      menu.querySelector("[data-account-link]")
+    ) {
       return;
     }
 
@@ -858,7 +943,12 @@ function ensureAccountNavLink(relativeHref = "account.html") {
 function getAuthRedirectUrl() {
   const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
   if (configuredSiteUrl) {
-    return new URL("account.html", configuredSiteUrl.endsWith("/") ? configuredSiteUrl : `${configuredSiteUrl}/`).toString();
+    return new URL(
+      "account.html",
+      configuredSiteUrl.endsWith("/")
+        ? configuredSiteUrl
+        : `${configuredSiteUrl}/`,
+    ).toString();
   }
 
   return new URL("account.html", window.location.href).toString();
@@ -867,7 +957,12 @@ function getAuthRedirectUrl() {
 function getAccountHomeUrl() {
   const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
   if (configuredSiteUrl) {
-    return new URL("account-details.html", configuredSiteUrl.endsWith("/") ? configuredSiteUrl : `${configuredSiteUrl}/`).toString();
+    return new URL(
+      "account-details.html",
+      configuredSiteUrl.endsWith("/")
+        ? configuredSiteUrl
+        : `${configuredSiteUrl}/`,
+    ).toString();
   }
 
   return new URL("account-details.html", window.location.href).toString();
@@ -876,7 +971,9 @@ function getAccountHomeUrl() {
 function getConfiguredSiteBaseUrl() {
   const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
   if (configuredSiteUrl) {
-    return configuredSiteUrl.endsWith("/") ? configuredSiteUrl.slice(0, -1) : configuredSiteUrl;
+    return configuredSiteUrl.endsWith("/")
+      ? configuredSiteUrl.slice(0, -1)
+      : configuredSiteUrl;
   }
 
   return window.location.origin;
@@ -885,7 +982,12 @@ function getConfiguredSiteBaseUrl() {
 function getAccountDashboardUrl() {
   const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
   if (configuredSiteUrl) {
-    return new URL("account-dashboard.html", configuredSiteUrl.endsWith("/") ? configuredSiteUrl : `${configuredSiteUrl}/`).toString();
+    return new URL(
+      "account-dashboard.html",
+      configuredSiteUrl.endsWith("/")
+        ? configuredSiteUrl
+        : `${configuredSiteUrl}/`,
+    ).toString();
   }
 
   return new URL("account-dashboard.html", window.location.href).toString();
@@ -896,7 +998,9 @@ async function ensureSupabaseBrowserLibrary() {
     return window.supabase;
   }
 
-  const existingScript = document.querySelector("script[data-supabase-browser]");
+  const existingScript = document.querySelector(
+    "script[data-supabase-browser]",
+  );
   if (existingScript) {
     await new Promise((resolve, reject) => {
       if (window.supabase?.createClient) {
@@ -951,7 +1055,9 @@ async function getSupabaseBrowserClient() {
 async function getCurrentAuthState() {
   try {
     const supabase = await getSupabaseBrowserClient();
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     return {
       supabase,
       session,
@@ -1011,7 +1117,12 @@ function splitProfileName(profile, user = null) {
     };
   }
 
-  const fullName = String(profile?.full_name || user?.user_metadata?.full_name || user?.user_metadata?.name || "").trim();
+  const fullName = String(
+    profile?.full_name ||
+      user?.user_metadata?.full_name ||
+      user?.user_metadata?.name ||
+      "",
+  ).trim();
   if (!fullName) {
     return { firstName: "", lastName: "" };
   }
@@ -1024,14 +1135,23 @@ function splitProfileName(profile, user = null) {
 }
 
 function buildProfileFullName(firstName, lastName, fallback = "") {
-  const combined = [String(firstName || "").trim(), String(lastName || "").trim()].filter(Boolean).join(" ").trim();
+  const combined = [
+    String(firstName || "").trim(),
+    String(lastName || "").trim(),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
   return combined || String(fallback || "").trim() || null;
 }
 
 function isMissingProfileColumnError(error) {
   const code = String(error?.code || "").trim();
   const message = String(error?.message || "").trim();
-  return code === "PGRST204" || /Could not find the .* column of 'profiles'/i.test(message);
+  return (
+    code === "PGRST204" ||
+    /Could not find the .* column of 'profiles'/i.test(message)
+  );
 }
 
 function toBooleanOrNull(value) {
@@ -1042,7 +1162,12 @@ function toBooleanOrNull(value) {
 }
 
 function buildProfilePayload(user, overrides = {}) {
-  const existingFullName = String(overrides.full_name || user?.user_metadata?.full_name || user?.user_metadata?.name || "").trim();
+  const existingFullName = String(
+    overrides.full_name ||
+      user?.user_metadata?.full_name ||
+      user?.user_metadata?.name ||
+      "",
+  ).trim();
   const firstName = String(overrides.first_name || "").trim();
   const lastName = String(overrides.last_name || "").trim();
 
@@ -1052,16 +1177,24 @@ function buildProfilePayload(user, overrides = {}) {
     full_name: buildProfileFullName(firstName, lastName, existingFullName),
     first_name: firstName || null,
     last_name: lastName || null,
-    phone: String(overrides.phone || user.user_metadata?.phone || "").trim() || null,
+    phone:
+      String(overrides.phone || user.user_metadata?.phone || "").trim() || null,
     business_name: String(overrides.business_name || "").trim() || null,
     address_line_1: String(overrides.address_line_1 || "").trim() || null,
     address_line_2: String(overrides.address_line_2 || "").trim() || null,
     suburb: String(overrides.suburb || "").trim() || null,
     postcode: String(overrides.postcode || "").trim() || null,
-    state: String(overrides.state || "").trim().toUpperCase() || null,
+    state:
+      String(overrides.state || "")
+        .trim()
+        .toUpperCase() || null,
     avatar_url: String(user.user_metadata?.avatar_url || "").trim() || null,
-    provider: String(user.app_metadata?.provider || user.user_metadata?.provider || "").trim() || null,
-    default_store_slug: String(overrides.default_store_slug || "").trim() || null,
+    provider:
+      String(
+        user.app_metadata?.provider || user.user_metadata?.provider || "",
+      ).trim() || null,
+    default_store_slug:
+      String(overrides.default_store_slug || "").trim() || null,
     service_email_opt_in: toBooleanOrNull(overrides.service_email_opt_in),
     marketing_opt_in: toBooleanOrNull(overrides.marketing_opt_in),
   };
@@ -1085,20 +1218,36 @@ function normalizeProfileRecord(profile, user = null) {
   const nameParts = splitProfileName(profile, user);
   return {
     ...profile,
-    first_name: String(profile.first_name || nameParts.firstName || "").trim() || null,
-    last_name: String(profile.last_name || nameParts.lastName || "").trim() || null,
+    first_name:
+      String(profile.first_name || nameParts.firstName || "").trim() || null,
+    last_name:
+      String(profile.last_name || nameParts.lastName || "").trim() || null,
     business_name: String(profile.business_name || "").trim() || null,
     address_line_1: String(profile.address_line_1 || "").trim() || null,
     address_line_2: String(profile.address_line_2 || "").trim() || null,
     suburb: String(profile.suburb || "").trim() || null,
     postcode: String(profile.postcode || "").trim() || null,
-    state: String(profile.state || "").trim().toUpperCase() || null,
-    service_email_opt_in: typeof profile.service_email_opt_in === "boolean" ? profile.service_email_opt_in : null,
-    marketing_opt_in: typeof profile.marketing_opt_in === "boolean" ? profile.marketing_opt_in : null,
+    state:
+      String(profile.state || "")
+        .trim()
+        .toUpperCase() || null,
+    service_email_opt_in:
+      typeof profile.service_email_opt_in === "boolean"
+        ? profile.service_email_opt_in
+        : null,
+    marketing_opt_in:
+      typeof profile.marketing_opt_in === "boolean"
+        ? profile.marketing_opt_in
+        : null,
   };
 }
 
-async function upsertCustomerProfile(supabase, user, overrides = {}, options = {}) {
+async function upsertCustomerProfile(
+  supabase,
+  user,
+  overrides = {},
+  options = {},
+) {
   if (!supabase || !user?.id) return null;
   const { allowLegacyFallback = true } = options;
   const payload = buildProfilePayload(user, overrides);
@@ -1135,7 +1284,9 @@ async function upsertCustomerProfile(supabase, user, overrides = {}, options = {
 }
 
 async function syncCustomerProfile(supabase, user, overrides = {}) {
-  return upsertCustomerProfile(supabase, user, overrides, { allowLegacyFallback: true });
+  return upsertCustomerProfile(supabase, user, overrides, {
+    allowLegacyFallback: true,
+  });
 }
 
 async function fetchCustomerProfile(supabase, user) {
@@ -1208,7 +1359,9 @@ async function prefillCustomerContactForm(form, options = {}) {
   }
 
   const { firstName, lastName } = splitProfileName(profile, authState.user);
-  const phone = String(profile?.phone || authState.user.user_metadata?.phone || "").trim();
+  const phone = String(
+    profile?.phone || authState.user.user_metadata?.phone || "",
+  ).trim();
   const email = String(profile?.email || authState.user.email || "").trim();
   const defaultStoreSlug = String(profile?.default_store_slug || "").trim();
 
@@ -1232,7 +1385,9 @@ async function loadCustomerOrders(supabase, user, limit = 50) {
 
   const { data, error } = await supabase
     .from("orders")
-    .select("id, order_code, customer_name, email, phone, store_slug, fulfillment_method, payment_method_label, payment_status, status, fulfillment_status, total_amount, created_at")
+    .select(
+      "id, order_code, customer_name, email, phone, store_slug, fulfillment_method, payment_method_label, payment_status, status, fulfillment_status, total_amount, created_at",
+    )
     .order("created_at", { ascending: false })
     .limit(limit);
 
@@ -1248,7 +1403,9 @@ async function loadCustomerRepairBookings(supabase, user, limit = 50) {
 
   const { data, error } = await supabase
     .from("repair_bookings")
-    .select("id, booking_code, store_slug, repair_category, brand, device_model, preferred_date, preferred_time, preferred_contact_method, status, created_at")
+    .select(
+      "id, booking_code, store_slug, repair_category, brand, device_model, preferred_date, preferred_time, preferred_contact_method, status, created_at",
+    )
     .order("created_at", { ascending: false })
     .limit(limit);
 
@@ -1267,25 +1424,28 @@ function renderHistoryPreview(target, records, kind) {
     return;
   }
 
-  target.innerHTML = records.slice(0, 3).map((record) => {
-    if (kind === "orders") {
-      return `
+  target.innerHTML = records
+    .slice(0, 3)
+    .map((record) => {
+      if (kind === "orders") {
+        return `
         <article class="auth-history__item">
           <strong>${escapeHtml(record.order_code || "Pending order")}</strong>
           <span>${escapeHtml(getStoreDisplayName(record.store_slug))} · ${escapeHtml(formatMoney(record.total_amount || 0))}</span>
           <span>${escapeHtml(formatStatusLabel(record.status))} · ${escapeHtml(formatDateTime(record.created_at))}</span>
         </article>
       `;
-    }
+      }
 
-    return `
+      return `
       <article class="auth-history__item">
         <strong>${escapeHtml(record.booking_code || "Pending repair")}</strong>
         <span>${escapeHtml(REPAIR_CATEGORY_LABELS[record.repair_category] || formatStatusLabel(record.repair_category))} · ${escapeHtml(getStoreDisplayName(record.store_slug))}</span>
         <span>${escapeHtml(formatStatusLabel(record.status))} · ${escapeHtml(formatDateTime(record.created_at))}</span>
       </article>
     `;
-  }).join("");
+    })
+    .join("");
 }
 
 function renderHistoryList(target, records, kind) {
@@ -1302,9 +1462,10 @@ function renderHistoryList(target, records, kind) {
     return;
   }
 
-  target.innerHTML = records.map((record) => {
-    if (kind === "orders") {
-      return `
+  target.innerHTML = records
+    .map((record) => {
+      if (kind === "orders") {
+        return `
         <article class="history-card">
           <div class="history-card__top">
             <div>
@@ -1323,9 +1484,9 @@ function renderHistoryList(target, records, kind) {
           </div>
         </article>
       `;
-    }
+      }
 
-    return `
+      return `
       <article class="history-card">
         <div class="history-card__top">
           <div>
@@ -1344,15 +1505,29 @@ function renderHistoryList(target, records, kind) {
         </div>
       </article>
     `;
-  }).join("");
+    })
+    .join("");
 }
 
 const PRODUCT_VARIANT_COLOR_RULES = [
-  { label: "Gray Camouflage", tokens: ["gray camouflage", "grey camouflage", "camouflage"] },
+  {
+    label: "Gray Camouflage",
+    tokens: ["gray camouflage", "grey camouflage", "camouflage"],
+  },
   { label: "Sterling Silver", tokens: ["sterling silver", "silver"] },
   { label: "Cosmic Red", tokens: ["cosmic red", "red"] },
   { label: "White", tokens: ["white"] },
-  { label: "Black", tokens: ["black", "midnight black", "dark gray", "dark grey", "grey", "gray"] },
+  {
+    label: "Black",
+    tokens: [
+      "black",
+      "midnight black",
+      "dark gray",
+      "dark grey",
+      "grey",
+      "gray",
+    ],
+  },
   { label: "Blue", tokens: ["blue"] },
   { label: "Pink", tokens: ["pink"] },
   { label: "Purple", tokens: ["purple"] },
@@ -1402,7 +1577,12 @@ function isGroupedVariantProduct(product) {
 
 function getProductVariantColor(product) {
   const searchable = normalizeVariantText(
-    [product?.name, product?.short_description, product?.description, product?.compatibility].join(" ")
+    [
+      product?.name,
+      product?.short_description,
+      product?.description,
+      product?.compatibility,
+    ].join(" "),
   );
 
   for (const rule of PRODUCT_VARIANT_COLOR_RULES) {
@@ -1473,7 +1653,9 @@ function getProductDisplayName(product) {
 }
 
 function scoreProductImage(product, image, index) {
-  const imageText = normalizeVariantText([image?.image_url, image?.alt_text].join(" "));
+  const imageText = normalizeVariantText(
+    [image?.image_url, image?.alt_text].join(" "),
+  );
   const color = normalizeVariantText(getProductVariantColor(product));
   let score = 1000 - index * 10;
 
@@ -1481,7 +1663,11 @@ function scoreProductImage(product, image, index) {
   if (index === 1) score += 80;
   if (index >= 2) score -= index * 8;
 
-  if (PRODUCT_IMAGE_LOW_PRIORITY_KEYWORDS.some((keyword) => imageText.includes(keyword))) {
+  if (
+    PRODUCT_IMAGE_LOW_PRIORITY_KEYWORDS.some((keyword) =>
+      imageText.includes(keyword),
+    )
+  ) {
     score -= 300;
   }
 
@@ -1492,7 +1678,17 @@ function scoreProductImage(product, image, index) {
 
     if (isGroupedVariantProduct(product)) {
       if (color === "white" && index === 0) score += 320;
-      if (["black", "gray", "grey", "silver", "sterling silver", "gray camouflage"].includes(color) && index === 1) {
+      if (
+        [
+          "black",
+          "gray",
+          "grey",
+          "silver",
+          "sterling silver",
+          "gray camouflage",
+        ].includes(color) &&
+        index === 1
+      ) {
         score += 320;
       }
       if (["red", "cosmic red"].includes(color) && index <= 2) score += 220;
@@ -1506,7 +1702,9 @@ function getOrderedProductGalleryImages(product) {
   return getProductGalleryImages(product)
     .slice()
     .sort((left, right) => {
-      const scoreDiff = scoreProductImage(product, right, Number(right?.sort_order) || 0) - scoreProductImage(product, left, Number(left?.sort_order) || 0);
+      const scoreDiff =
+        scoreProductImage(product, right, Number(right?.sort_order) || 0) -
+        scoreProductImage(product, left, Number(left?.sort_order) || 0);
       if (scoreDiff !== 0) return scoreDiff;
       return (Number(left?.sort_order) || 0) - (Number(right?.sort_order) || 0);
     });
@@ -1533,16 +1731,20 @@ function applyProductVariantData(products) {
   });
 
   groups.forEach((items) => {
-    const sortedItems = items
-      .slice()
-      .sort((left, right) => {
-        const sortDiff = getVariantSortWeight(left) - getVariantSortWeight(right);
-        if (sortDiff !== 0) return sortDiff;
-        return compareProductsByLatest(left, right);
-      });
+    const sortedItems = items.slice().sort((left, right) => {
+      const sortDiff = getVariantSortWeight(left) - getVariantSortWeight(right);
+      if (sortDiff !== 0) return sortDiff;
+      return compareProductsByLatest(left, right);
+    });
 
     const representative = sortedItems[0];
-    const displayName = stripProductColorSuffix(representative?.name || "", representative?.color_label || "") || representative?.name || "";
+    const displayName =
+      stripProductColorSuffix(
+        representative?.name || "",
+        representative?.color_label || "",
+      ) ||
+      representative?.name ||
+      "";
     const variantOptions = sortedItems.map((item) => ({
       slug: item.slug,
       label: item.color_label || item.model || item.brand || "Option",
@@ -1578,7 +1780,11 @@ function applyProductVariantData(products) {
       product.display_name = product.name;
     }
 
-    if ((!product.display_image || !String(product.display_image).trim()) && Array.isArray(product.gallery_images) && product.gallery_images.length) {
+    if (
+      (!product.display_image || !String(product.display_image).trim()) &&
+      Array.isArray(product.gallery_images) &&
+      product.gallery_images.length
+    ) {
       const orderedGallery = getOrderedProductGalleryImages(product);
       if (orderedGallery.length) {
         product.gallery_images = orderedGallery.map((image, index) => ({
@@ -1596,7 +1802,9 @@ function applyProductVariantData(products) {
 }
 
 function getCatalogDisplayProducts(products) {
-  const orderedProducts = Array.isArray(products) ? products.slice().sort(compareProductsByLatest) : [];
+  const orderedProducts = Array.isArray(products)
+    ? products.slice().sort(compareProductsByLatest)
+    : [];
   const visibleGroups = new Set();
   const displayProducts = [];
 
@@ -1614,15 +1822,19 @@ function getCatalogDisplayProducts(products) {
 }
 
 function getLatestDisplayProducts(products, limit = 6) {
-  const orderedProducts = Array.isArray(products) ? products.slice().sort(compareProductsByNewestRecord) : [];
+  const orderedProducts = Array.isArray(products)
+    ? products.slice().sort(compareProductsByNewestRecord)
+    : [];
   const visibleGroups = new Set();
   const displayProducts = [];
 
   orderedProducts.forEach((product) => {
-    const hasVariants = Array.isArray(product?.variant_options) && product.variant_options.length > 1;
+    const hasVariants =
+      Array.isArray(product?.variant_options) &&
+      product.variant_options.length > 1;
     const groupKey = hasVariants
-      ? (product?.variant_group_key || product?.slug)
-      : (product?.slug || product?.sku || product?.id);
+      ? product?.variant_group_key || product?.slug
+      : product?.slug || product?.sku || product?.id;
 
     if (visibleGroups.has(groupKey)) {
       return;
@@ -1641,7 +1853,11 @@ function sanitizeRichContentHtml(html) {
 
   const template = document.createElement("template");
   template.innerHTML = source;
-  template.content.querySelectorAll("script, iframe, object, embed, style, link[rel='import']").forEach((node) => node.remove());
+  template.content
+    .querySelectorAll(
+      "script, iframe, object, embed, style, link[rel='import']",
+    )
+    .forEach((node) => node.remove());
 
   template.content.querySelectorAll("*").forEach((node) => {
     Array.from(node.attributes).forEach((attribute) => {
@@ -1662,12 +1878,17 @@ function sanitizeRichContentHtml(html) {
 
 function stripDefaultProductDetailHeading(html) {
   return String(html || "")
-    .replace(/^\s*(<section[^>]*>\s*)?<h2[^>]*>\s*(Everything about this product|Description)\s*<\/h2>\s*/i, "$1")
+    .replace(
+      /^\s*(<section[^>]*>\s*)?<h2[^>]*>\s*(Everything about this product|Description)\s*<\/h2>\s*/i,
+      "$1",
+    )
     .trim();
 }
 
 function formatProductDetailHtml(product) {
-  const detailHtml = stripDefaultProductDetailHeading(sanitizeRichContentHtml(product?.detail_html || ""));
+  const detailHtml = stripDefaultProductDetailHeading(
+    sanitizeRichContentHtml(product?.detail_html || ""),
+  );
   if (detailHtml) {
     return detailHtml;
   }
@@ -1680,14 +1901,19 @@ function formatProductDetailHtml(product) {
     return `<p>Product information will be expanded as more supplier content is added to the catalog.</p>`;
   }
 
-  return paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("");
+  return paragraphs
+    .map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`)
+    .join("");
 }
 
 function createRailProductCard(product) {
   const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
   const retailPrice = Number(product.retail_price) || 0;
   const compareAtPrice = Number(product.compare_at_price) || 0;
-  const savingsAmount = Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
+  const savingsAmount =
+    Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice
+      ? compareAtPrice - retailPrice
+      : 0;
   const productName = getProductDisplayName(product) || product.name;
   const compareMarkup =
     Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice
@@ -1763,12 +1989,18 @@ function renderProductRailSection(config) {
 }
 
 function renderVariantSummary(product, classPrefix) {
-  if (!Array.isArray(product?.variant_options) || product.variant_options.length <= 1) {
+  if (
+    !Array.isArray(product?.variant_options) ||
+    product.variant_options.length <= 1
+  ) {
     return "";
   }
 
   const items = product.variant_options
-    .map((option) => `<span class="${classPrefix}__variant ${option.is_active ? "is-active" : ""}">${escapeHtml(option.label)}</span>`)
+    .map(
+      (option) =>
+        `<span class="${classPrefix}__variant ${option.is_active ? "is-active" : ""}">${escapeHtml(option.label)}</span>`,
+    )
     .join("");
 
   return `<div class="${classPrefix}__variants">${items}</div>`;
@@ -1829,7 +2061,9 @@ function writeCookieConsent(preferences) {
     // Non-critical: the visible preference state remains in localStorage when available.
   }
 
-  window.dispatchEvent(new CustomEvent("techm8:cookie-consent-updated", { detail: { consent } }));
+  window.dispatchEvent(
+    new CustomEvent("techm8:cookie-consent-updated", { detail: { consent } }),
+  );
   return consent;
 }
 
@@ -1851,7 +2085,11 @@ function clearNonEssentialBrowserData() {
 }
 
 function initCookieConsentBanner() {
-  if (!document.body || document.querySelector("[data-cookie-consent]") || readCookieConsent()) {
+  if (
+    !document.body ||
+    document.querySelector("[data-cookie-consent]") ||
+    readCookieConsent()
+  ) {
     return;
   }
 
@@ -1915,20 +2153,34 @@ function initCookieConsentBanner() {
     settingsPanel.remove();
   };
   const acceptAll = () => {
-    writeCookieConsent({ personalisation: true, analytics: true, marketing: false });
+    writeCookieConsent({
+      personalisation: true,
+      analytics: true,
+      marketing: false,
+    });
     closeBanner();
   };
   const essentialOnly = () => {
-    writeCookieConsent({ personalisation: false, analytics: false, marketing: false });
+    writeCookieConsent({
+      personalisation: false,
+      analytics: false,
+      marketing: false,
+    });
     clearNonEssentialBrowserData();
     closeBanner();
   };
   const saveSettings = () => {
-    const personalisation = settingsPanel.querySelector("[data-cookie-personalisation]");
+    const personalisation = settingsPanel.querySelector(
+      "[data-cookie-personalisation]",
+    );
     const analytics = settingsPanel.querySelector("[data-cookie-analytics]");
     writeCookieConsent({
-      personalisation: personalisation instanceof HTMLInputElement ? personalisation.checked : false,
-      analytics: analytics instanceof HTMLInputElement ? analytics.checked : false,
+      personalisation:
+        personalisation instanceof HTMLInputElement
+          ? personalisation.checked
+          : false,
+      analytics:
+        analytics instanceof HTMLInputElement ? analytics.checked : false,
       marketing: false,
     });
     if (!hasCookieConsent("personalisation")) {
@@ -1937,16 +2189,28 @@ function initCookieConsentBanner() {
     closeBanner();
   };
 
-  banner.querySelector("[data-cookie-accept]")?.addEventListener("click", acceptAll);
-  banner.querySelector("[data-cookie-essential]")?.addEventListener("click", essentialOnly);
-  banner.querySelector("[data-cookie-settings]")?.addEventListener("click", () => {
-    settingsPanel.hidden = false;
-  });
-  settingsPanel.querySelector("[data-cookie-settings-close]")?.addEventListener("click", () => {
-    settingsPanel.hidden = true;
-  });
-  settingsPanel.querySelector("[data-cookie-save-essential]")?.addEventListener("click", essentialOnly);
-  settingsPanel.querySelector("[data-cookie-save-settings]")?.addEventListener("click", saveSettings);
+  banner
+    .querySelector("[data-cookie-accept]")
+    ?.addEventListener("click", acceptAll);
+  banner
+    .querySelector("[data-cookie-essential]")
+    ?.addEventListener("click", essentialOnly);
+  banner
+    .querySelector("[data-cookie-settings]")
+    ?.addEventListener("click", () => {
+      settingsPanel.hidden = false;
+    });
+  settingsPanel
+    .querySelector("[data-cookie-settings-close]")
+    ?.addEventListener("click", () => {
+      settingsPanel.hidden = true;
+    });
+  settingsPanel
+    .querySelector("[data-cookie-save-essential]")
+    ?.addEventListener("click", essentialOnly);
+  settingsPanel
+    .querySelector("[data-cookie-save-settings]")
+    ?.addEventListener("click", saveSettings);
 
   document.body.appendChild(banner);
   document.body.appendChild(settingsPanel);
@@ -1960,7 +2224,9 @@ function loadRecentProductSlugs() {
   try {
     const raw = window.localStorage.getItem(RECENT_PRODUCTS_STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed.map((item) => String(item || "").trim()).filter(Boolean) : [];
+    return Array.isArray(parsed)
+      ? parsed.map((item) => String(item || "").trim()).filter(Boolean)
+      : [];
   } catch (_error) {
     return [];
   }
@@ -1972,9 +2238,15 @@ function saveRecentProductSlugs(slugs) {
   }
 
   const normalized = Array.isArray(slugs)
-    ? slugs.map((item) => String(item || "").trim()).filter(Boolean).slice(0, 24)
+    ? slugs
+        .map((item) => String(item || "").trim())
+        .filter(Boolean)
+        .slice(0, 24)
     : [];
-  window.localStorage.setItem(RECENT_PRODUCTS_STORAGE_KEY, JSON.stringify(normalized));
+  window.localStorage.setItem(
+    RECENT_PRODUCTS_STORAGE_KEY,
+    JSON.stringify(normalized),
+  );
 }
 
 function rememberRecentProduct(product) {
@@ -1991,7 +2263,9 @@ function rememberRecentProduct(product) {
 
 function getRecentlyViewedProducts(products, currentSlug, limit = 6) {
   const allProducts = Array.isArray(products) ? products : [];
-  const slugs = loadRecentProductSlugs().filter((slug) => slug && slug !== currentSlug);
+  const slugs = loadRecentProductSlugs().filter(
+    (slug) => slug && slug !== currentSlug,
+  );
   const bySlug = new Map(allProducts.map((product) => [product.slug, product]));
   const seenGroups = new Set();
   const items = [];
@@ -2021,15 +2295,24 @@ function loadCart() {
 
 function saveCart(items) {
   window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-  window.dispatchEvent(new CustomEvent("techm8:cart-updated", { detail: { items } }));
+  window.dispatchEvent(
+    new CustomEvent("techm8:cart-updated", { detail: { items } }),
+  );
 }
 
 function getCartCount(items = loadCart()) {
-  return items.reduce((total, item) => total + Math.max(0, Number(item.qty) || 0), 0);
+  return items.reduce(
+    (total, item) => total + Math.max(0, Number(item.qty) || 0),
+    0,
+  );
 }
 
 function getCartSubtotal(items = loadCart()) {
-  return items.reduce((total, item) => total + (Number(item.price) || 0) * (Number(item.qty) || 0), 0);
+  return items.reduce(
+    (total, item) =>
+      total + (Number(item.price) || 0) * (Number(item.qty) || 0),
+    0,
+  );
 }
 
 function ensureGlobalCartUi() {
@@ -2124,8 +2407,12 @@ function reconcileCartItems(items, products) {
 
   safeProducts.forEach((product) => {
     const slug = String(product?.slug || "").trim();
-    const sku = String(product?.sku || "").trim().toUpperCase();
-    const name = String(product?.name || "").trim().toLowerCase();
+    const sku = String(product?.sku || "")
+      .trim()
+      .toUpperCase();
+    const name = String(product?.name || "")
+      .trim()
+      .toLowerCase();
     if (slug) productsBySlug.set(slug, product);
     if (sku) productsBySku.set(sku, product);
     if (name) productsByName.set(name, product);
@@ -2137,8 +2424,12 @@ function reconcileCartItems(items, products) {
 
   safeItems.forEach((item) => {
     const slug = String(item?.slug || "").trim();
-    const sku = String(item?.sku || "").trim().toUpperCase();
-    const name = String(item?.name || "").trim().toLowerCase();
+    const sku = String(item?.sku || "")
+      .trim()
+      .toUpperCase();
+    const name = String(item?.name || "")
+      .trim()
+      .toLowerCase();
     const qty = Math.max(1, Number(item?.qty) || 1);
 
     let product = null;
@@ -2163,10 +2454,11 @@ function reconcileCartItems(items, products) {
 
     const nextItem = normaliseCartItem(product, qty);
     if (
-      nextItem.slug !== slug
-      || String(nextItem.sku || "").trim() !== String(item?.sku || "").trim()
-      || Number(nextItem.price || 0) !== Number(item?.price || 0)
-      || String(nextItem.image_url || "").trim() !== String(item?.image_url || "").trim()
+      nextItem.slug !== slug ||
+      String(nextItem.sku || "").trim() !== String(item?.sku || "").trim() ||
+      Number(nextItem.price || 0) !== Number(item?.price || 0) ||
+      String(nextItem.image_url || "").trim() !==
+        String(item?.image_url || "").trim()
     ) {
       changed = true;
     }
@@ -2186,7 +2478,9 @@ function addItemToCart(product, quantity = 1) {
   const existing = items.find((item) => item.slug === product.slug);
 
   if (existing) {
-    existing.qty = Math.max(1, Number(existing.qty) || 1) + Math.max(1, Number(quantity) || 1);
+    existing.qty =
+      Math.max(1, Number(existing.qty) || 1) +
+      Math.max(1, Number(quantity) || 1);
   } else {
     items.push(normaliseCartItem(product, quantity));
   }
@@ -2197,8 +2491,11 @@ function addItemToCart(product, quantity = 1) {
 }
 
 function updateCartItemQuantity(slug, quantity) {
-  const items = loadCart()
-    .map((item) => (item.slug === slug ? { ...item, qty: Math.max(1, Number(quantity) || 1) } : item));
+  const items = loadCart().map((item) =>
+    item.slug === slug
+      ? { ...item, qty: Math.max(1, Number(quantity) || 1) }
+      : item,
+  );
   saveCart(items);
   updateCartIndicators(items);
   return items;
@@ -2217,7 +2514,10 @@ function clearCart() {
 }
 
 function makeOrderCode() {
-  const stamp = new Date().toISOString().replace(/[-:TZ.]/g, "").slice(0, 12);
+  const stamp = new Date()
+    .toISOString()
+    .replace(/[-:TZ.]/g, "")
+    .slice(0, 12);
   const suffix = Math.random().toString(36).slice(2, 6).toUpperCase();
   return `TM8-${stamp}-${suffix}`;
 }
@@ -2234,7 +2534,10 @@ function saveLocalOrder(payload) {
   })();
 
   orders.unshift(payload);
-  window.localStorage.setItem(LOCAL_ORDER_STORAGE_KEY, JSON.stringify(orders.slice(0, 30)));
+  window.localStorage.setItem(
+    LOCAL_ORDER_STORAGE_KEY,
+    JSON.stringify(orders.slice(0, 30)),
+  );
 }
 
 async function loadPaymentFeeProfiles() {
@@ -2263,7 +2566,7 @@ async function loadPaymentFeeProfiles() {
           apikey: supabaseAnonKey,
           Authorization: `Bearer ${supabaseAnonKey}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -2335,7 +2638,10 @@ const CHECKOUT_SHIPPING_OPTIONS = [
 ];
 
 function getCheckoutShippingOption(code) {
-  return CHECKOUT_SHIPPING_OPTIONS.find((option) => option.code === code) || CHECKOUT_SHIPPING_OPTIONS[0];
+  return (
+    CHECKOUT_SHIPPING_OPTIONS.find((option) => option.code === code) ||
+    CHECKOUT_SHIPPING_OPTIONS[0]
+  );
 }
 
 function calculateShippingFee(subtotal, option) {
@@ -2356,7 +2662,10 @@ function initStorefront() {
   const sourceTarget = root.querySelector("[data-store-source]");
   const sourceNoteTarget = root.querySelector("[data-store-source-note]");
 
-  if (!(categoryTarget instanceof HTMLElement) || !(productTarget instanceof HTMLElement)) {
+  if (
+    !(categoryTarget instanceof HTMLElement) ||
+    !(productTarget instanceof HTMLElement)
+  ) {
     return;
   }
 
@@ -2368,11 +2677,14 @@ function initStorefront() {
       name: "DualSense Wireless Controller - Sterling Silver - PlayStation 5",
       brand: "Sony",
       model: "DualSense Wireless Controller",
-      short_description: "Official PS5 DualSense controller in Sterling Silver finish.",
+      short_description:
+        "Official PS5 DualSense controller in Sterling Silver finish.",
       retail_price: 115,
       compare_at_price: 124,
-      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
-      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
+      image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
+      supplier_image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -2388,11 +2700,14 @@ function initStorefront() {
       name: "DualSense Wireless Controller - Cosmic Red - PlayStation 5",
       brand: "Sony",
       model: "DualSense Wireless Controller",
-      short_description: "Official PS5 DualSense controller in Cosmic Red finish.",
+      short_description:
+        "Official PS5 DualSense controller in Cosmic Red finish.",
       retail_price: 109,
       compare_at_price: null,
-      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
-      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
+      image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
+      supplier_image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -2408,11 +2723,14 @@ function initStorefront() {
       name: "DualSense Wireless Controller - Gray Camouflage",
       brand: "Sony",
       model: "DualSense Wireless Controller",
-      short_description: "Official PS5 DualSense controller in Gray Camouflage finish.",
+      short_description:
+        "Official PS5 DualSense controller in Gray Camouflage finish.",
       retail_price: 109,
       compare_at_price: null,
-      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
-      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
+      image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
+      supplier_image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -2431,8 +2749,10 @@ function initStorefront() {
       short_description: "Official PS5 DualSense controller in Black finish.",
       retail_price: 109,
       compare_at_price: null,
-      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
-      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
+      image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
+      supplier_image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -2451,8 +2771,10 @@ function initStorefront() {
       short_description: "Official PS5 DualSense controller in White finish.",
       retail_price: 109,
       compare_at_price: null,
-      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
-      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
+      image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
+      supplier_image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -2475,7 +2797,8 @@ function initStorefront() {
   const deriveCategories = (products) => {
     const map = new Map();
     products.forEach((product) => {
-      const key = product.category_slug || product.category_id || "uncategorized";
+      const key =
+        product.category_slug || product.category_id || "uncategorized";
       if (!map.has(key)) {
         map.set(key, {
           id: product.category_id || key,
@@ -2490,16 +2813,19 @@ function initStorefront() {
   const normalizeProduct = (product, categoriesMap) => {
     const category = categoriesMap.get(product.category_id) || null;
     const retailPrice = Number(product.retail_price);
-      const compareAtPrice = Number(product.compare_at_price);
-      const hasValidComparePrice = Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
+    const compareAtPrice = Number(product.compare_at_price);
+    const hasValidComparePrice =
+      Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
 
     return {
       ...product,
-      category_name: category?.name || product.category_name || "Other Products",
-      category_slug: category?.slug || product.category_slug || "other-products",
+      category_name:
+        category?.name || product.category_name || "Other Products",
+      category_slug:
+        category?.slug || product.category_slug || "other-products",
       display_image: resolveProductImageUrl(product),
       retail_price: retailPrice,
-        compare_at_price: hasValidComparePrice ? compareAtPrice : null,
+      compare_at_price: hasValidComparePrice ? compareAtPrice : null,
     };
   };
 
@@ -2513,30 +2839,38 @@ function initStorefront() {
   };
 
   const renderCategories = () => {
-    const categories = [{ slug: "all", name: "All products" }, ...state.categories];
+    const categories = [
+      { slug: "all", name: "All products" },
+      ...state.categories,
+    ];
     categoryTarget.innerHTML = categories
       .map(
         (category) => `
           <button class="storefront-category-button ${state.activeCategory === category.slug ? "is-active" : ""}" type="button" data-store-category="${escapeHtml(category.slug)}">
             ${escapeHtml(category.name)}
           </button>
-        `
+        `,
       )
       .join("");
 
-    categoryTarget.querySelectorAll("[data-store-category]").forEach((button) => {
-      button.addEventListener("click", () => {
-        state.activeCategory = button.getAttribute("data-store-category") || "all";
-        renderCategories();
-        renderProducts();
+    categoryTarget
+      .querySelectorAll("[data-store-category]")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeCategory =
+            button.getAttribute("data-store-category") || "all";
+          renderCategories();
+          renderProducts();
+        });
       });
-    });
   };
 
   const renderProducts = () => {
     const query = state.query.trim().toLowerCase();
     const matchingProducts = state.products.filter((product) => {
-      const inCategory = state.activeCategory === "all" || product.category_slug === state.activeCategory;
+      const inCategory =
+        state.activeCategory === "all" ||
+        product.category_slug === state.activeCategory;
       const haystack = [
         product.name,
         product.brand,
@@ -2568,7 +2902,9 @@ function initStorefront() {
       return;
     }
 
-    productTarget.innerHTML = visibleProducts.map((product) => createCatalogCard(product)).join("");
+    productTarget.innerHTML = visibleProducts
+      .map((product) => createCatalogCard(product))
+      .join("");
   };
 
   const loadStorefrontData = async () => {
@@ -2577,7 +2913,10 @@ function initStorefront() {
     if (!supabaseUrl || !supabaseAnonKey) {
       state.products = fallbackProducts;
       state.categories = deriveCategories(fallbackProducts);
-      setSource("Starter sample data", "Supabase config is missing, so the page is showing the first 5 controller products locally.");
+      setSource(
+        "Starter sample data",
+        "Supabase config is missing, so the page is showing the first 5 controller products locally.",
+      );
       renderCategories();
       renderProducts();
       return;
@@ -2599,28 +2938,40 @@ function initStorefront() {
       ]);
 
       if (!categoriesResponse.ok || !productsResponse.ok) {
-        throw new Error("The product catalog could not be loaded from Supabase.");
+        throw new Error(
+          "The product catalog could not be loaded from Supabase.",
+        );
       }
 
       const categories = await categoriesResponse.json();
       const products = await productsResponse.json();
-      const categoriesMap = new Map(categories.map((category) => [category.id, category]));
+      const categoriesMap = new Map(
+        categories.map((category) => [category.id, category]),
+      );
       const normalizedProducts = applyProductVariantData(
         products
           .map((product) => normalizeProduct(product, categoriesMap))
-          .sort(compareProductsByLatest)
+          .sort(compareProductsByLatest),
       );
 
       if (normalizedProducts.length) {
         state.products = normalizedProducts;
         state.categories = categories.filter((category) =>
-          normalizedProducts.some((product) => product.category_id === category.id)
+          normalizedProducts.some(
+            (product) => product.category_id === category.id,
+          ),
         );
-        setSource("Live Supabase products", "This page is rendering visible product rows directly from the Supabase catalog.");
+        setSource(
+          "Live Supabase products",
+          "This page is rendering visible product rows directly from the Supabase catalog.",
+        );
       } else {
         state.products = fallbackProducts;
         state.categories = deriveCategories(fallbackProducts);
-        setSource("Starter sample data", "No live product rows were found yet, so the first 5 controller products are shown as a fallback starter catalog.");
+        setSource(
+          "Starter sample data",
+          "No live product rows were found yet, so the first 5 controller products are shown as a fallback starter catalog.",
+        );
       }
 
       renderCategories();
@@ -2628,7 +2979,10 @@ function initStorefront() {
     } catch (error) {
       state.products = fallbackProducts;
       state.categories = deriveCategories(fallbackProducts);
-      setSource("Starter sample data", "Supabase could not be reached from this page, so the first 5 controller products are shown locally.");
+      setSource(
+        "Starter sample data",
+        "Supabase could not be reached from this page, so the first 5 controller products are shown locally.",
+      );
       renderCategories();
       renderProducts();
     }
@@ -2653,12 +3007,16 @@ function getFallbackCatalogProducts() {
       name: "DualSense Wireless Controller - Sterling Silver - PlayStation 5",
       brand: "Sony",
       model: "DualSense Wireless Controller",
-      short_description: "Official PS5 DualSense controller in Sterling Silver finish.",
-      description: "Official PlayStation 5 DualSense wireless controller in Sterling Silver finish.",
+      short_description:
+        "Official PS5 DualSense controller in Sterling Silver finish.",
+      description:
+        "Official PlayStation 5 DualSense wireless controller in Sterling Silver finish.",
       retail_price: 115,
       compare_at_price: 124,
-      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
-      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
+      image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
+      supplier_image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-sterling-silver-playstation-5.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -2675,12 +3033,16 @@ function getFallbackCatalogProducts() {
       name: "DualSense Wireless Controller - Cosmic Red - PlayStation 5",
       brand: "Sony",
       model: "DualSense Wireless Controller",
-      short_description: "Official PS5 DualSense controller in Cosmic Red finish.",
-      description: "Official PlayStation 5 DualSense wireless controller in Cosmic Red finish.",
+      short_description:
+        "Official PS5 DualSense controller in Cosmic Red finish.",
+      description:
+        "Official PlayStation 5 DualSense wireless controller in Cosmic Red finish.",
       retail_price: 109,
       compare_at_price: 129,
-      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
-      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
+      image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
+      supplier_image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-cosmic-red-playstation-5.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -2697,12 +3059,16 @@ function getFallbackCatalogProducts() {
       name: "DualSense Wireless Controller - Gray Camouflage",
       brand: "Sony",
       model: "DualSense Wireless Controller",
-      short_description: "Official PS5 DualSense controller in Gray Camouflage finish.",
-      description: "Official PlayStation 5 DualSense wireless controller in Gray Camouflage finish.",
+      short_description:
+        "Official PS5 DualSense controller in Gray Camouflage finish.",
+      description:
+        "Official PlayStation 5 DualSense wireless controller in Gray Camouflage finish.",
       retail_price: 109,
       compare_at_price: 129,
-      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
-      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
+      image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
+      supplier_image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-gray-camouflage.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -2720,11 +3086,14 @@ function getFallbackCatalogProducts() {
       brand: "Sony",
       model: "DualSense Wireless Controller",
       short_description: "Official PS5 DualSense controller in Black finish.",
-      description: "Official PlayStation 5 DualSense wireless controller in Black finish.",
+      description:
+        "Official PlayStation 5 DualSense wireless controller in Black finish.",
       retail_price: 109,
       compare_at_price: 129,
-      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
-      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
+      image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
+      supplier_image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/copy-of-dualsense-wireless-controller-playstation-5-black.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -2742,11 +3111,14 @@ function getFallbackCatalogProducts() {
       brand: "Sony",
       model: "DualSense Wireless Controller",
       short_description: "Official PS5 DualSense controller in White finish.",
-      description: "Official PlayStation 5 DualSense wireless controller in White finish.",
+      description:
+        "Official PlayStation 5 DualSense wireless controller in White finish.",
       retail_price: 109,
       compare_at_price: 129,
-      image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
-      supplier_image_url: "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
+      image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
+      supplier_image_url:
+        "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/controllers/dualsense-wireless-controller-playstation-5-white.jpg",
       stock_quantity: 0,
       is_featured: true,
       condition_label: "New",
@@ -2761,7 +3133,14 @@ function getFallbackCatalogProducts() {
     catalog_index: index,
     display_image: resolveProductImageUrl(product),
     gallery_images: product.image_url
-      ? [{ product_id: product.id, image_url: product.image_url, alt_text: product.name || "", sort_order: 0 }]
+      ? [
+          {
+            product_id: product.id,
+            image_url: product.image_url,
+            alt_text: product.name || "",
+            sort_order: 0,
+          },
+        ]
       : [],
   }));
 }
@@ -2774,7 +3153,11 @@ async function loadSharedCatalogData() {
     return {
       products,
       categories: [
-        { slug: "ps5-controllers", name: "PS5 Controllers", description: "PlayStation 5 wireless controller range." },
+        {
+          slug: "ps5-controllers",
+          name: "PS5 Controllers",
+          description: "PlayStation 5 wireless controller range.",
+        },
       ],
     };
   }
@@ -2789,11 +3172,12 @@ async function loadSharedCatalogData() {
     const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,detail_html,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc,id.desc`;
     const productImagesUrl = `${supabaseUrl}/rest/v1/product_images?select=product_id,image_url,alt_text,sort_order&order=sort_order.asc`;
 
-    const [categoriesResult, productsResult, productImagesResult] = await Promise.allSettled([
-      fetch(categoriesUrl, { headers, cache: "no-store" }),
-      fetch(productsUrl, { headers, cache: "no-store" }),
-      fetch(productImagesUrl, { headers, cache: "no-store" }),
-    ]);
+    const [categoriesResult, productsResult, productImagesResult] =
+      await Promise.allSettled([
+        fetch(categoriesUrl, { headers, cache: "no-store" }),
+        fetch(productsUrl, { headers, cache: "no-store" }),
+        fetch(productImagesUrl, { headers, cache: "no-store" }),
+      ]);
 
     if (productsResult.status !== "fulfilled" || !productsResult.value.ok) {
       throw new Error("Products request failed");
@@ -2809,7 +3193,9 @@ async function loadSharedCatalogData() {
         ? await productImagesResult.value.json()
         : [];
 
-    const categoriesMap = new Map(categories.map((category) => [category.id, category]));
+    const categoriesMap = new Map(
+      categories.map((category) => [category.id, category]),
+    );
     const galleryMap = new Map();
 
     productImages.forEach((image) => {
@@ -2825,66 +3211,103 @@ async function loadSharedCatalogData() {
       });
     });
 
-    const normalizedProducts = products.map((product, index) => {
-      const category = categoriesMap.get(product.category_id) || null;
-      const retailPrice = Number(product.retail_price);
-      const compareAtPrice = Number(product.compare_at_price);
-      const safeRetailPrice = Number.isFinite(retailPrice) && retailPrice > 0 ? retailPrice : 0;
-      const galleryImages = Array.isArray(galleryMap.get(product.id))
-        ? galleryMap.get(product.id).slice().sort((left, right) => (Number(left.sort_order) || 0) - (Number(right.sort_order) || 0))
-        : [];
-      const fallbackGallery =
-        product.image_url && !galleryImages.length
-          ? [{ product_id: product.id, image_url: product.image_url, alt_text: product.name || "", sort_order: 0 }]
+    const normalizedProducts = products
+      .map((product, index) => {
+        const category = categoriesMap.get(product.category_id) || null;
+        const retailPrice = Number(product.retail_price);
+        const compareAtPrice = Number(product.compare_at_price);
+        const safeRetailPrice =
+          Number.isFinite(retailPrice) && retailPrice > 0 ? retailPrice : 0;
+        const galleryImages = Array.isArray(galleryMap.get(product.id))
+          ? galleryMap
+              .get(product.id)
+              .slice()
+              .sort(
+                (left, right) =>
+                  (Number(left.sort_order) || 0) -
+                  (Number(right.sort_order) || 0),
+              )
           : [];
-      const finalGallery = galleryImages.length ? galleryImages : fallbackGallery;
+        const fallbackGallery =
+          product.image_url && !galleryImages.length
+            ? [
+                {
+                  product_id: product.id,
+                  image_url: product.image_url,
+                  alt_text: product.name || "",
+                  sort_order: 0,
+                },
+              ]
+            : [];
+        const finalGallery = galleryImages.length
+          ? galleryImages
+          : fallbackGallery;
 
-      return {
-        ...product,
-        catalog_index: index,
-        retail_price: safeRetailPrice,
-        compare_at_price:
-          Number.isFinite(compareAtPrice) && compareAtPrice > safeRetailPrice
-            ? compareAtPrice
-            : null,
-        display_image: finalGallery[0]?.image_url || resolveProductImageUrl(product),
-        gallery_images: finalGallery,
-        category_slug: category?.slug || "other-products",
-        category_name: category?.name || "Other Products",
-        category_description: category?.description || "",
-      };
-    }).sort(compareProductsByLatest);
+        return {
+          ...product,
+          catalog_index: index,
+          retail_price: safeRetailPrice,
+          compare_at_price:
+            Number.isFinite(compareAtPrice) && compareAtPrice > safeRetailPrice
+              ? compareAtPrice
+              : null,
+          display_image:
+            finalGallery[0]?.image_url || resolveProductImageUrl(product),
+          gallery_images: finalGallery,
+          category_slug: category?.slug || "other-products",
+          category_name: category?.name || "Other Products",
+          category_description: category?.description || "",
+        };
+      })
+      .sort(compareProductsByLatest);
 
     const derivedCategories = categories.length
       ? categories
       : Array.from(
           new Map(
             normalizedProducts.map((product) => [
-              product.category_slug || `category-${product.category_id || product.id}`,
+              product.category_slug ||
+                `category-${product.category_id || product.id}`,
               {
                 id: product.category_id || product.category_slug || product.id,
-                slug: product.category_slug || `category-${product.category_id || product.id}`,
+                slug:
+                  product.category_slug ||
+                  `category-${product.category_id || product.id}`,
                 name: product.category_name || "Other Products",
                 description: product.category_description || "",
                 sort_order: 999,
               },
-            ])
-          ).values()
+            ]),
+          ).values(),
         );
 
-    const catalogProducts = normalizedProducts.length ? applyProductVariantData(normalizedProducts) : getFallbackCatalogProducts();
+    const catalogProducts = normalizedProducts.length
+      ? applyProductVariantData(normalizedProducts)
+      : getFallbackCatalogProducts();
 
     return {
       products: catalogProducts,
       categories: derivedCategories.length
         ? derivedCategories
-        : [{ slug: "ps5-controllers", name: "PS5 Controllers", description: "PlayStation 5 wireless controller range." }],
+        : [
+            {
+              slug: "ps5-controllers",
+              name: "PS5 Controllers",
+              description: "PlayStation 5 wireless controller range.",
+            },
+          ],
     };
   } catch (error) {
     const products = getFallbackCatalogProducts();
     return {
       products,
-      categories: [{ slug: "ps5-controllers", name: "PS5 Controllers", description: "PlayStation 5 wireless controller range." }],
+      categories: [
+        {
+          slug: "ps5-controllers",
+          name: "PS5 Controllers",
+          description: "PlayStation 5 wireless controller range.",
+        },
+      ],
     };
   }
 }
@@ -2893,7 +3316,10 @@ function getProductGalleryImages(product) {
   if (Array.isArray(product?.gallery_images) && product.gallery_images.length) {
     return product.gallery_images
       .filter((item) => item?.image_url)
-      .sort((left, right) => (Number(left?.sort_order) || 0) - (Number(right?.sort_order) || 0));
+      .sort(
+        (left, right) =>
+          (Number(left?.sort_order) || 0) - (Number(right?.sort_order) || 0),
+      );
   }
 
   if (product?.display_image || product?.image_url) {
@@ -2983,13 +3409,18 @@ function createHomeFeaturedCard(product) {
   const categoryUrl = `category.html?slug=${encodeURIComponent(product.category_slug)}`;
   const retailPrice = Number(product.retail_price) || 0;
   const compareAtPrice = Number(product.compare_at_price) || 0;
-  const hasComparePrice = Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
+  const hasComparePrice =
+    Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
   const productName = getProductDisplayName(product) || product.name;
   const imageMarkup = product.display_image
     ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy" decoding="async" sizes="(max-width: 720px) 72vw, 22vw">`
     : `<div class="home-product-card__image-placeholder" aria-hidden="true">TECHM8</div>`;
   const saleAmount = hasComparePrice ? compareAtPrice - retailPrice : 0;
-  const primaryBadge = hasComparePrice ? "On sale" : (product.is_featured ? "Featured" : "New");
+  const primaryBadge = hasComparePrice
+    ? "On sale"
+    : product.is_featured
+      ? "Featured"
+      : "New";
 
   return `
       <article class="home-product-card">
@@ -3029,13 +3460,21 @@ function initHomeFeaturedProducts() {
   const viewport = document.querySelector("[data-home-featured-viewport]");
   const prevButton = document.querySelector("[data-home-featured-prev]");
   const nextButton = document.querySelector("[data-home-featured-next]");
-  if (!(grid instanceof HTMLElement) || !(viewport instanceof HTMLElement)) return;
+  if (!(grid instanceof HTMLElement) || !(viewport instanceof HTMLElement))
+    return;
   const section = grid.closest(".home-products-showcase");
   let hasLoaded = false;
 
   const updateArrowState = () => {
-    if (!(prevButton instanceof HTMLButtonElement) || !(nextButton instanceof HTMLButtonElement)) return;
-    const maxScrollLeft = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    if (
+      !(prevButton instanceof HTMLButtonElement) ||
+      !(nextButton instanceof HTMLButtonElement)
+    )
+      return;
+    const maxScrollLeft = Math.max(
+      0,
+      viewport.scrollWidth - viewport.clientWidth,
+    );
     prevButton.disabled = viewport.scrollLeft <= 8;
     nextButton.disabled = viewport.scrollLeft >= maxScrollLeft - 8;
   };
@@ -3059,8 +3498,10 @@ function initHomeFeaturedProducts() {
   const render = (products) => {
     const latestProducts = selectLatestHomeProducts(products, 6);
     grid.innerHTML = latestProducts.length
-        ? latestProducts.map((product) => createHomeFeaturedCard(product)).join("")
-        : `<article class="home-product-card home-product-card--loading"><div class="home-product-card__content"><div class="home-product-card__row"><h3>No products available yet</h3><span class="home-product-card__pill">Catalog</span></div><p class="home-product-card__summary">Add products in Supabase and the newest six items will appear here automatically.</p></div></article>`;
+      ? latestProducts
+          .map((product) => createHomeFeaturedCard(product))
+          .join("")
+      : `<article class="home-product-card home-product-card--loading"><div class="home-product-card__content"><div class="home-product-card__row"><h3>No products available yet</h3><span class="home-product-card__pill">Catalog</span></div><p class="home-product-card__summary">Add products in Supabase and the newest six items will appear here automatically.</p></div></article>`;
     bindCartButtons(grid, latestProducts);
     requestAnimationFrame(updateArrowState);
   };
@@ -3078,15 +3519,18 @@ function initHomeFeaturedProducts() {
   };
 
   if ("IntersectionObserver" in window && section instanceof HTMLElement) {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries.some((entry) => entry.isIntersecting)) {
-        observer.disconnect();
-        loadProducts();
-      }
-    }, {
-      rootMargin: "220px 0px",
-      threshold: 0.12,
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          loadProducts();
+        }
+      },
+      {
+        rootMargin: "220px 0px",
+        threshold: 0.12,
+      },
+    );
     observer.observe(section);
   } else {
     loadProducts();
@@ -3094,7 +3538,10 @@ function initHomeFeaturedProducts() {
 }
 
 function bindCartButtons(container, products, options = {}) {
-  if (!(container instanceof HTMLElement) || container.dataset.cartBound === "true") {
+  if (
+    !(container instanceof HTMLElement) ||
+    container.dataset.cartBound === "true"
+  ) {
     return;
   }
 
@@ -3111,7 +3558,9 @@ function bindCartButtons(container, products, options = {}) {
     const slug = button.getAttribute("data-add-cart-slug") || "";
     const qty = Number(button.getAttribute("data-add-cart-qty") || "1") || 1;
     const source = typeof products === "function" ? products() : products;
-    const product = Array.isArray(source) ? source.find((item) => item.slug === slug) : null;
+    const product = Array.isArray(source)
+      ? source.find((item) => item.slug === slug)
+      : null;
     if (!product) return;
 
     addItemToCart(product, qty);
@@ -3149,20 +3598,39 @@ function initCategoryPage() {
       return;
     }
 
-    if (titleTarget instanceof HTMLElement) titleTarget.textContent = category.name;
-    if (descriptionTarget instanceof HTMLElement) descriptionTarget.textContent = category.description || `Browse all products in ${category.name}.`;
-    if (breadcrumbTarget instanceof HTMLElement) breadcrumbTarget.textContent = category.name;
+    if (titleTarget instanceof HTMLElement)
+      titleTarget.textContent = category.name;
+    if (descriptionTarget instanceof HTMLElement)
+      descriptionTarget.textContent =
+        category.description || `Browse all products in ${category.name}.`;
+    if (breadcrumbTarget instanceof HTMLElement)
+      breadcrumbTarget.textContent = category.name;
     if (linksTarget instanceof HTMLElement) {
       linksTarget.innerHTML = categories
-        .map((item) => `<a class="storefront-category-link ${item.slug === slug ? "is-active" : ""}" href="category.html?slug=${encodeURIComponent(item.slug)}">${escapeHtml(item.name)}</a>`)
+        .map(
+          (item) =>
+            `<a class="storefront-category-link ${item.slug === slug ? "is-active" : ""}" href="category.html?slug=${encodeURIComponent(item.slug)}">${escapeHtml(item.name)}</a>`,
+        )
         .join("");
     }
 
     const render = () => {
-      const query = searchField instanceof HTMLInputElement ? searchField.value.trim().toLowerCase() : "";
+      const query =
+        searchField instanceof HTMLInputElement
+          ? searchField.value.trim().toLowerCase()
+          : "";
       const matchingProducts = products.filter((product) => {
-        const haystack = [product.name, product.brand, product.model, product.short_description].join(" ").toLowerCase();
-        return product.category_slug === slug && (!query || haystack.includes(query));
+        const haystack = [
+          product.name,
+          product.brand,
+          product.model,
+          product.short_description,
+        ]
+          .join(" ")
+          .toLowerCase();
+        return (
+          product.category_slug === slug && (!query || haystack.includes(query))
+        );
       });
       const visibleProducts = getCatalogDisplayProducts(matchingProducts);
 
@@ -3202,20 +3670,29 @@ function initProductDetailPage() {
 
     const compareAtPrice = Number(product.compare_at_price) || 0;
     const retailPrice = Number(product.retail_price) || 0;
-    const savings = compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
+    const savings =
+      compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
     const stockText = "Available for online order or store pickup";
     const productName = getProductDisplayName(product) || product.name;
     const productColor = getProductVariantColor(product);
     const galleryImages = getOrderedProductGalleryImages(product);
     const mainImage = galleryImages[0] || null;
-    const variantOptions = Array.isArray(product.variant_options) ? product.variant_options : [];
+    const variantOptions = Array.isArray(product.variant_options)
+      ? product.variant_options
+      : [];
     const productGroupKey = product.variant_group_key || product.slug;
     const latestProducts = getLatestDisplayProducts(
-      products.filter((item) => (item.variant_group_key || item.slug) !== productGroupKey),
-      6
+      products.filter(
+        (item) => (item.variant_group_key || item.slug) !== productGroupKey,
+      ),
+      6,
     );
     rememberRecentProduct(product);
-    const recentlyViewedProducts = getRecentlyViewedProducts(products, product.slug, 6);
+    const recentlyViewedProducts = getRecentlyViewedProducts(
+      products,
+      product.slug,
+      6,
+    );
     const detailHtml = formatProductDetailHtml(product);
     const variantMarkup =
       variantOptions.length > 1
@@ -3230,7 +3707,7 @@ function initProductDetailPage() {
                       class="storefront-pdp__variant ${option.is_active ? "is-active" : ""}"
                       href="product.html?slug=${encodeURIComponent(option.slug)}"
                     >${escapeHtml(option.label)}</a>
-                  `
+                  `,
                 )
                 .join("")}
             </div>
@@ -3272,7 +3749,7 @@ function initProductDetailPage() {
                         >
                           <img src="${escapeHtml(image.image_url)}" alt="${escapeHtml(image.alt_text || product.name)}" loading="lazy">
                         </button>
-                      `
+                      `,
                     )
                     .join("")}
                 </div>
@@ -3336,9 +3813,10 @@ function initProductDetailPage() {
         linkHref: "shop.html",
         linkLabel: "View all products",
         emptyTitle: "No newer products yet",
-        emptyCopy: "New products will appear here automatically as they are added to Supabase.",
+        emptyCopy:
+          "New products will appear here automatically as they are added to Supabase.",
         products: latestProducts,
-        dataAttribute: 'data-product-latest'
+        dataAttribute: "data-product-latest",
       })}
 
       ${renderProductRailSection({
@@ -3347,9 +3825,10 @@ function initProductDetailPage() {
         linkHref: `category.html?slug=${encodeURIComponent(product.category_slug)}`,
         linkLabel: `View ${product.category_name}`,
         emptyTitle: "No recent products yet",
-        emptyCopy: "As customers browse the catalog, recently viewed products will appear here.",
+        emptyCopy:
+          "As customers browse the catalog, recently viewed products will appear here.",
         products: recentlyViewedProducts,
-        dataAttribute: 'data-product-recent'
+        dataAttribute: "data-product-recent",
       })}
     `;
 
@@ -3359,7 +3838,10 @@ function initProductDetailPage() {
     const thumbnailButtons = shell.querySelectorAll("[data-pdp-thumb]");
     if (addButton instanceof HTMLButtonElement) {
       addButton.addEventListener("click", () => {
-        const quantity = qtyField instanceof HTMLInputElement ? Math.max(1, Number(qtyField.value) || 1) : 1;
+        const quantity =
+          qtyField instanceof HTMLInputElement
+            ? Math.max(1, Number(qtyField.value) || 1)
+            : 1;
         addItemToCart(product, quantity);
         addButton.textContent = "Added to cart";
         window.setTimeout(() => {
@@ -3368,26 +3850,34 @@ function initProductDetailPage() {
       });
     }
 
-    if (mainImageTarget instanceof HTMLImageElement && thumbnailButtons.length) {
+    if (
+      mainImageTarget instanceof HTMLImageElement &&
+      thumbnailButtons.length
+    ) {
       thumbnailButtons.forEach((button) => {
         button.addEventListener("click", () => {
           if (!(button instanceof HTMLButtonElement)) return;
           const imageSrc = button.getAttribute("data-image-src") || "";
-          const imageAlt = button.getAttribute("data-image-alt") || product.name || "";
+          const imageAlt =
+            button.getAttribute("data-image-alt") || product.name || "";
           if (!imageSrc) return;
           mainImageTarget.src = imageSrc;
           mainImageTarget.alt = imageAlt;
-          thumbnailButtons.forEach((item) => item.classList.remove("is-active"));
+          thumbnailButtons.forEach((item) =>
+            item.classList.remove("is-active"),
+          );
           button.classList.add("is-active");
         });
       });
     }
 
-    shell.querySelectorAll("[data-product-latest], [data-product-recent]").forEach((target) => {
-      if (target instanceof HTMLElement) {
-        bindCartButtons(target, products);
-      }
-    });
+    shell
+      .querySelectorAll("[data-product-latest], [data-product-recent]")
+      .forEach((target) => {
+        if (target instanceof HTMLElement) {
+          bindCartButtons(target, products);
+        }
+      });
   });
 }
 
@@ -3410,9 +3900,10 @@ function renderCartLineItems(target, items) {
     return;
   }
 
-  target.innerHTML = items.map((item) => {
-    const lineTotal = (Number(item.price) || 0) * (Number(item.qty) || 0);
-    return `
+  target.innerHTML = items
+    .map((item) => {
+      const lineTotal = (Number(item.price) || 0) * (Number(item.qty) || 0);
+      return `
       <article class="storefront-cart__item">
         <a class="storefront-cart__media" href="product.html?slug=${encodeURIComponent(item.slug)}">
           ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}">` : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`}
@@ -3437,7 +3928,8 @@ function renderCartLineItems(target, items) {
         </div>
       </article>
     `;
-  }).join("");
+    })
+    .join("");
 }
 
 function renderCartSummary(target, items, options = {}) {
@@ -3446,19 +3938,28 @@ function renderCartSummary(target, items, options = {}) {
   const subtotal = getCartSubtotal(items);
   const paymentProfile = options.paymentProfile || null;
   const shippingOption = options.shippingOption || null;
-  const paymentFee = typeof options.paymentFeeOverride === "number"
-    ? options.paymentFeeOverride
-    : paymentProfile ? calculatePaymentFee(subtotal, paymentProfile) : 0;
-  const shippingFee = typeof options.shippingFeeOverride === "number"
-    ? options.shippingFeeOverride
-    : shippingOption ? calculateShippingFee(subtotal, shippingOption) : 0;
+  const paymentFee =
+    typeof options.paymentFeeOverride === "number"
+      ? options.paymentFeeOverride
+      : paymentProfile
+        ? calculatePaymentFee(subtotal, paymentProfile)
+        : 0;
+  const shippingFee =
+    typeof options.shippingFeeOverride === "number"
+      ? options.shippingFeeOverride
+      : shippingOption
+        ? calculateShippingFee(subtotal, shippingOption)
+        : 0;
   const itemCount = getCartCount(items);
-  const total = typeof options.totalOverride === "number"
-    ? options.totalOverride
-    : subtotal + paymentFee + shippingFee;
+  const total =
+    typeof options.totalOverride === "number"
+      ? options.totalOverride
+      : subtotal + paymentFee + shippingFee;
   const shippingLabel = shippingOption ? "Shipping" : "Store pickup";
   const shippingValue = shippingOption
-    ? shippingFee > 0 ? formatMoney(shippingFee) : "Free"
+    ? shippingFee > 0
+      ? formatMoney(shippingFee)
+      : "Free"
     : "To be confirmed";
   target.innerHTML = `
     <div class="storefront-summary__row">
@@ -3486,16 +3987,26 @@ function renderCartSummary(target, items, options = {}) {
 
 function selectRecommendedProducts(products, cartItems, limit = 5) {
   const safeProducts = Array.isArray(products) ? products.slice() : [];
-  const cartSlugs = new Set((Array.isArray(cartItems) ? cartItems : []).map((item) => item.slug).filter(Boolean));
+  const cartSlugs = new Set(
+    (Array.isArray(cartItems) ? cartItems : [])
+      .map((item) => item.slug)
+      .filter(Boolean),
+  );
   const cartTerms = new Set();
   const latestProducts = safeProducts
     .slice()
-    .sort((left, right) => (Number(left.catalog_index) || 0) - (Number(right.catalog_index) || 0));
+    .sort(
+      (left, right) =>
+        (Number(left.catalog_index) || 0) - (Number(right.catalog_index) || 0),
+    );
 
   (Array.isArray(cartItems) ? cartItems : []).forEach((item) => {
-    const text = [item.name, item.category_name, item.compatibility, item.brand].join(" ").toLowerCase();
+    const text = [item.name, item.category_name, item.compatibility, item.brand]
+      .join(" ")
+      .toLowerCase();
     if (/charger|adapter|magsafe|usb-c/.test(text)) cartTerms.add("power");
-    if (/controller|dualsense|playstation|xbox|nintendo/.test(text)) cartTerms.add("gaming");
+    if (/controller|dualsense|playstation|xbox|nintendo/.test(text))
+      cartTerms.add("gaming");
     if (/case|glass|protector|cover/.test(text)) cartTerms.add("protection");
     if (/cable/.test(text)) cartTerms.add("cable");
   });
@@ -3503,27 +4014,59 @@ function selectRecommendedProducts(products, cartItems, limit = 5) {
   const scored = safeProducts
     .filter((product) => product?.slug && !cartSlugs.has(product.slug))
     .map((product) => {
-      const haystack = [product.name, product.category_name, product.compatibility, product.brand, product.short_description]
+      const haystack = [
+        product.name,
+        product.category_name,
+        product.compatibility,
+        product.brand,
+        product.short_description,
+      ]
         .join(" ")
         .toLowerCase();
       let score = 0;
-      if (cartTerms.has("power") && /charger|adapter|magsafe|usb-c|cable/.test(haystack)) score += 3;
-      if (cartTerms.has("gaming") && /controller|playstation|xbox|gaming/.test(haystack)) score += 3;
-      if (cartTerms.has("protection") && /case|protector|glass|cover|charger|cable/.test(haystack)) score += 2;
-      if (cartTerms.has("cable") && /charger|adapter|usb-c|plug/.test(haystack)) score += 2;
+      if (
+        cartTerms.has("power") &&
+        /charger|adapter|magsafe|usb-c|cable/.test(haystack)
+      )
+        score += 3;
+      if (
+        cartTerms.has("gaming") &&
+        /controller|playstation|xbox|gaming/.test(haystack)
+      )
+        score += 3;
+      if (
+        cartTerms.has("protection") &&
+        /case|protector|glass|cover|charger|cable/.test(haystack)
+      )
+        score += 2;
+      if (cartTerms.has("cable") && /charger|adapter|usb-c|plug/.test(haystack))
+        score += 2;
       if (product.is_featured) score += 1;
       return { product, score };
     })
-    .sort((left, right) => right.score - left.score || Number(right.product.is_featured) - Number(left.product.is_featured));
+    .sort(
+      (left, right) =>
+        right.score - left.score ||
+        Number(right.product.is_featured) - Number(left.product.is_featured),
+    );
 
-  const related = scored.filter((item) => item.score > 0).map((item) => item.product).slice(0, limit);
+  const related = scored
+    .filter((item) => item.score > 0)
+    .map((item) => item.product)
+    .slice(0, limit);
   if (related.length >= limit) {
     return related;
   }
 
   const seen = new Set(related.map((item) => item.slug));
   latestProducts.forEach((product) => {
-    if (!product?.slug || seen.has(product.slug) || cartSlugs.has(product.slug) || related.length >= limit) return;
+    if (
+      !product?.slug ||
+      seen.has(product.slug) ||
+      cartSlugs.has(product.slug) ||
+      related.length >= limit
+    )
+      return;
     related.push(product);
     seen.add(product.slug);
   });
@@ -3533,7 +4076,7 @@ function selectRecommendedProducts(products, cartItems, limit = 5) {
 
 function renderRecommendedProducts(target, products, cartItems) {
   if (!(target instanceof HTMLElement)) return;
-  const recommendations = selectRecommendedProducts(products, cartItems, 5);
+  const recommendations = selectRecommendedProducts(products, cartItems, 6);
 
   target.innerHTML = recommendations.length
     ? recommendations.map((product) => createCatalogCard(product)).join("")
@@ -3546,20 +4089,56 @@ function initCartPage() {
 
   const itemsTarget = root.querySelector("[data-cart-items]");
   const summaryTarget = root.querySelector("[data-cart-summary]");
-  const recommendationsTarget = root.querySelector("[data-cart-recommendations]");
+  const recommendationsTarget = root.querySelector(
+    "[data-cart-recommendations]",
+  );
   const checkoutButtons = root.querySelectorAll("[data-cart-checkout]");
-  if (!(itemsTarget instanceof HTMLElement) || !(summaryTarget instanceof HTMLElement)) return;
+  const freightPostcode = root.querySelector("[data-freight-postcode]");
+  const freightButton = root.querySelector("[data-freight-button]");
+  const freightResults = root.querySelector("[data-freight-results]");
+  if (
+    !(itemsTarget instanceof HTMLElement) ||
+    !(summaryTarget instanceof HTMLElement)
+  )
+    return;
   let catalogProducts = [];
+
+  const renderFreightEstimate = () => {
+    if (
+      !(freightPostcode instanceof HTMLInputElement) ||
+      !(freightResults instanceof HTMLElement)
+    )
+      return;
+    const postcode = freightPostcode.value.replace(/\D/g, "").slice(0, 4);
+    freightPostcode.value = postcode;
+    if (postcode.length !== 4) {
+      freightResults.hidden = false;
+      freightResults.innerHTML = `<p class="cart-freight__error">Enter a valid 4 digit Australian postcode.</p>`;
+      return;
+    }
+    freightResults.hidden = false;
+    freightResults.innerHTML = `
+      <div class="cart-freight__row"><span>Standard Delivery</span><strong>$12.00</strong></div>
+      <div class="cart-freight__row"><span>Express Delivery</span><strong>$17.00</strong></div>
+      <div class="cart-freight__row"><span>Uber Direct</span><strong>N/A</strong></div>
+    `;
+  };
 
   const render = () => {
     const items = loadCart();
     renderCartLineItems(itemsTarget, items);
     renderCartSummary(summaryTarget, items);
-    if (recommendationsTarget instanceof HTMLElement && catalogProducts.length) {
+    if (
+      recommendationsTarget instanceof HTMLElement &&
+      catalogProducts.length
+    ) {
       renderRecommendedProducts(recommendationsTarget, catalogProducts, items);
     }
     checkoutButtons.forEach((button) => {
-      if (button instanceof HTMLAnchorElement || button instanceof HTMLButtonElement) {
+      if (
+        button instanceof HTMLAnchorElement ||
+        button instanceof HTMLButtonElement
+      ) {
         button.toggleAttribute("disabled", !items.length);
         if (button instanceof HTMLAnchorElement) {
           button.setAttribute("aria-disabled", items.length ? "false" : "true");
@@ -3568,6 +4147,18 @@ function initCartPage() {
       }
     });
   };
+
+  if (freightButton instanceof HTMLButtonElement) {
+    freightButton.addEventListener("click", renderFreightEstimate);
+  }
+  if (freightPostcode instanceof HTMLInputElement) {
+    freightPostcode.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        renderFreightEstimate();
+      }
+    });
+  }
 
   itemsTarget.addEventListener("input", (event) => {
     const target = event.target;
@@ -3592,14 +4183,18 @@ function initCartPage() {
     .then(({ products }) => {
       catalogProducts = Array.isArray(products) ? products : [];
       if (recommendationsTarget instanceof HTMLElement) {
-        bindCartButtons(recommendationsTarget, () => catalogProducts, { confirmText: "Added" });
+        bindCartButtons(recommendationsTarget, () => catalogProducts, {
+          confirmText: "Added",
+        });
       }
       render();
     })
     .catch(() => {
       catalogProducts = getFallbackCatalogProducts();
       if (recommendationsTarget instanceof HTMLElement) {
-        bindCartButtons(recommendationsTarget, () => catalogProducts, { confirmText: "Added" });
+        bindCartButtons(recommendationsTarget, () => catalogProducts, {
+          confirmText: "Added",
+        });
       }
       render();
     });
@@ -3622,15 +4217,26 @@ function initCheckoutPage() {
   const shippingServiceField = root.querySelector("[data-shipping-service]");
   const paymentNoteTarget = root.querySelector("[data-payment-note]");
   const storeField = root.querySelector("[data-checkout-store]");
-  const warehouseOption = root.querySelector("[data-checkout-warehouse-option]");
+  const warehouseOption = root.querySelector(
+    "[data-checkout-warehouse-option]",
+  );
   const storeDetailTarget = root.querySelector("[data-checkout-store-detail]");
   const stepTwo = root.querySelector("[data-checkout-step-two]");
   const shippingSection = root.querySelector("[data-checkout-shipping]");
-  const shippingFields = Array.from(root.querySelectorAll("[data-checkout-shipping-field]"));
+  const shippingFields = Array.from(
+    root.querySelectorAll("[data-checkout-shipping-field]"),
+  );
   const accountSetup = root.querySelector("[data-checkout-account-setup]");
   const passwordField = root.querySelector("[data-checkout-password]");
-  const passwordConfirmField = root.querySelector("[data-checkout-password-confirm]");
-  if (!(form instanceof HTMLFormElement) || !(summaryTarget instanceof HTMLElement) || !(itemsTarget instanceof HTMLElement)) return;
+  const passwordConfirmField = root.querySelector(
+    "[data-checkout-password-confirm]",
+  );
+  if (
+    !(form instanceof HTMLFormElement) ||
+    !(summaryTarget instanceof HTMLElement) ||
+    !(itemsTarget instanceof HTMLElement)
+  )
+    return;
   const submitButton = form.querySelector('button[type="submit"]');
   const paymentProfiles = [];
   const checkoutParams = new URLSearchParams(window.location.search);
@@ -3655,10 +4261,14 @@ function initCheckoutPage() {
     if (!(field instanceof HTMLElement)) return null;
     const fieldName = String(field.getAttribute("name") || "").trim();
     if (!fieldName) return null;
-    const wrapper = field.closest("label, .storefront-checkout__delivery-select");
+    const wrapper = field.closest(
+      "label, .storefront-checkout__delivery-select",
+    );
     if (!(wrapper instanceof HTMLElement)) return null;
 
-    let errorElement = wrapper.querySelector(`[data-field-error="${fieldName}"]`);
+    let errorElement = wrapper.querySelector(
+      `[data-field-error="${fieldName}"]`,
+    );
     if (!(errorElement instanceof HTMLElement)) {
       errorElement = document.createElement("p");
       errorElement.className = "storefront-field-error";
@@ -3671,7 +4281,13 @@ function initCheckoutPage() {
   };
 
   const clearFieldError = (field) => {
-    if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement)) {
+    if (
+      !(
+        field instanceof HTMLInputElement ||
+        field instanceof HTMLSelectElement ||
+        field instanceof HTMLTextAreaElement
+      )
+    ) {
       return;
     }
     field.classList.remove("is-invalid");
@@ -3685,7 +4301,13 @@ function initCheckoutPage() {
   };
 
   const setFieldError = (field, message) => {
-    if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement)) {
+    if (
+      !(
+        field instanceof HTMLInputElement ||
+        field instanceof HTMLSelectElement ||
+        field instanceof HTMLTextAreaElement
+      )
+    ) {
       return false;
     }
     field.classList.add("is-invalid");
@@ -3714,7 +4336,13 @@ function initCheckoutPage() {
   };
 
   const requireField = (field, message, topMessage = message) => {
-    if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement)) {
+    if (
+      !(
+        field instanceof HTMLInputElement ||
+        field instanceof HTMLSelectElement ||
+        field instanceof HTMLTextAreaElement
+      )
+    ) {
       return true;
     }
     if (String(field.value || "").trim()) {
@@ -3729,7 +4357,9 @@ function initCheckoutPage() {
       paymentMethodField instanceof HTMLInputElement
         ? String(paymentMethodField.value || "pay_in_store").trim()
         : "pay_in_store";
-    return paymentProfiles.find((profile) => profile.code === selectedCode) || null;
+    return (
+      paymentProfiles.find((profile) => profile.code === selectedCode) || null
+    );
   };
 
   const getSelectedShippingOption = () => {
@@ -3755,7 +4385,8 @@ function initCheckoutPage() {
   const getVisiblePaymentProfiles = () => {
     const isWarehouseDispatch = isWarehouseDispatchSelected();
     return paymentProfiles.filter((profile) => {
-      if (!profile || !profile.code || profile.is_enabled === false) return false;
+      if (!profile || !profile.code || profile.is_enabled === false)
+        return false;
       if (isWarehouseDispatch) {
         return profile.provider !== "manual";
       }
@@ -3769,7 +4400,11 @@ function initCheckoutPage() {
   };
 
   const renderStoreSelectionDetail = () => {
-    if (!(storeDetailTarget instanceof HTMLElement) || !(storeField instanceof HTMLSelectElement)) return;
+    if (
+      !(storeDetailTarget instanceof HTMLElement) ||
+      !(storeField instanceof HTMLSelectElement)
+    )
+      return;
     const storeSlug = String(storeField.value || "").trim();
     const detail = STORE_CHECKOUT_DETAILS[storeSlug];
 
@@ -3801,18 +4436,26 @@ function initCheckoutPage() {
   };
 
   const syncCheckoutMode = () => {
-    const storeSlug = storeField instanceof HTMLSelectElement ? String(storeField.value || "").trim() : "";
+    const storeSlug =
+      storeField instanceof HTMLSelectElement
+        ? String(storeField.value || "").trim()
+        : "";
     const isWarehouseDispatch = isWarehouseDispatchSelected();
     const showStepTwo = Boolean(storeSlug);
     const visibleProfiles = getVisiblePaymentProfiles();
     const selectedProfile = getSelectedPaymentProfile();
 
-    if (paymentMethodField instanceof HTMLInputElement && visibleProfiles.length) {
+    if (
+      paymentMethodField instanceof HTMLInputElement &&
+      visibleProfiles.length
+    ) {
       const selectedCode = selectedProfile?.code || "";
       if (!visibleProfiles.some((profile) => profile.code === selectedCode)) {
         const fallbackProfile = isWarehouseDispatch
           ? visibleProfiles[0]
-          : visibleProfiles.find((profile) => profile.code === "pay_in_store") || visibleProfiles[0];
+          : visibleProfiles.find(
+              (profile) => profile.code === "pay_in_store",
+            ) || visibleProfiles[0];
         paymentMethodField.value = fallbackProfile ? fallbackProfile.code : "";
       }
     }
@@ -3827,13 +4470,29 @@ function initCheckoutPage() {
     }
 
     shippingFields.forEach((field) => {
-      if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement)) {
+      if (
+        !(
+          field instanceof HTMLInputElement ||
+          field instanceof HTMLSelectElement ||
+          field instanceof HTMLTextAreaElement
+        )
+      ) {
         return;
       }
       const fieldName = String(field.getAttribute("name") || "").trim();
-      const isRequiredShippingField = ["recipient_name", "address_line_1", "suburb", "postcode", "state"].includes(fieldName);
+      const isRequiredShippingField = [
+        "recipient_name",
+        "address_line_1",
+        "suburb",
+        "postcode",
+        "state",
+      ].includes(fieldName);
       field.required = showShipping && isRequiredShippingField;
-      if (!showShipping && field instanceof HTMLInputElement && field.type !== "hidden") {
+      if (
+        !showShipping &&
+        field instanceof HTMLInputElement &&
+        field.type !== "hidden"
+      ) {
         clearFieldError(field);
       }
     });
@@ -3861,16 +4520,32 @@ function initCheckoutPage() {
     if (profile.code === "card") {
       return [
         { label: "VISA", className: "storefront-payment-option__badge--visa" },
-        { label: "Mastercard", className: "storefront-payment-option__badge--mc" },
+        {
+          label: "Mastercard",
+          className: "storefront-payment-option__badge--mc",
+        },
         { label: "AMEX", className: "storefront-payment-option__badge--amex" },
         { label: "JCB", className: "storefront-payment-option__badge--jcb" },
-        { label: "Apple Pay", className: "storefront-payment-option__badge--apple" },
+        {
+          label: "Apple Pay",
+          className: "storefront-payment-option__badge--apple",
+        },
       ];
     }
     if (profile.code === "afterpay_clearpay") {
-      return [{ label: "Afterpay", className: "storefront-payment-option__badge--afterpay" }];
+      return [
+        {
+          label: "Afterpay",
+          className: "storefront-payment-option__badge--afterpay",
+        },
+      ];
     }
-    return [{ label: "In-store", className: "storefront-payment-option__badge--manual" }];
+    return [
+      {
+        label: "In-store",
+        className: "storefront-payment-option__badge--manual",
+      },
+    ];
   };
 
   const getPaymentDescription = (profile) => {
@@ -3888,22 +4563,32 @@ function initCheckoutPage() {
   };
 
   const renderPaymentOptions = (subtotal) => {
-    if (!(paymentOptionsTarget instanceof HTMLElement) || !(paymentMethodField instanceof HTMLInputElement)) return;
+    if (
+      !(paymentOptionsTarget instanceof HTMLElement) ||
+      !(paymentMethodField instanceof HTMLInputElement)
+    )
+      return;
     const visibleProfiles = getVisiblePaymentProfiles();
     const currentCode = String(paymentMethodField.value || "").trim();
     if (!visibleProfiles.some((profile) => profile.code === currentCode)) {
-      const fallbackProfile = visibleProfiles.find((profile) => profile.code === "pay_in_store") || visibleProfiles[0] || null;
+      const fallbackProfile =
+        visibleProfiles.find((profile) => profile.code === "pay_in_store") ||
+        visibleProfiles[0] ||
+        null;
       paymentMethodField.value = fallbackProfile ? fallbackProfile.code : "";
     }
 
-    paymentOptionsTarget.innerHTML = visibleProfiles.map((profile) => {
-      const estimate = calculatePaymentFee(subtotal, profile);
-      const badges = getPaymentBadges(profile).map((badge) => {
-        return `<span class="storefront-payment-option__badge ${badge.className}">${escapeHtml(badge.label)}</span>`;
-      }).join("");
-      const isSelected = getSelectedPaymentProfile()?.code === profile.code;
+    paymentOptionsTarget.innerHTML = visibleProfiles
+      .map((profile) => {
+        const estimate = calculatePaymentFee(subtotal, profile);
+        const badges = getPaymentBadges(profile)
+          .map((badge) => {
+            return `<span class="storefront-payment-option__badge ${badge.className}">${escapeHtml(badge.label)}</span>`;
+          })
+          .join("");
+        const isSelected = getSelectedPaymentProfile()?.code === profile.code;
 
-      return `
+        return `
         <button
           class="storefront-payment-option ${isSelected ? "is-selected" : ""}"
           type="button"
@@ -3925,21 +4610,27 @@ function initCheckoutPage() {
           </span>
         </button>
       `;
-    }).join("");
+      })
+      .join("");
   };
 
   const renderShippingOptions = (subtotal) => {
-    if (!(shippingOptionsTarget instanceof HTMLElement) || !(shippingServiceField instanceof HTMLInputElement)) return;
+    if (
+      !(shippingOptionsTarget instanceof HTMLElement) ||
+      !(shippingServiceField instanceof HTMLInputElement)
+    )
+      return;
     if (!isWarehouseDispatchSelected()) {
       shippingOptionsTarget.innerHTML = "";
       return;
     }
 
     const currentOption = getSelectedShippingOption();
-    shippingOptionsTarget.innerHTML = CHECKOUT_SHIPPING_OPTIONS.map((option) => {
-      const fee = calculateShippingFee(subtotal, option);
-      const isSelected = currentOption.code === option.code;
-      return `
+    shippingOptionsTarget.innerHTML = CHECKOUT_SHIPPING_OPTIONS.map(
+      (option) => {
+        const fee = calculateShippingFee(subtotal, option);
+        const isSelected = currentOption.code === option.code;
+        return `
         <button
           class="storefront-payment-option storefront-shipping-option ${isSelected ? "is-selected" : ""}"
           type="button"
@@ -3960,7 +4651,8 @@ function initCheckoutPage() {
           </span>
         </button>
       `;
-    }).join("");
+      },
+    ).join("");
   };
 
   const renderPaymentNote = () => {
@@ -3974,16 +4666,24 @@ function initCheckoutPage() {
 
     const notes = [];
     if (profile.provider === "manual") {
-      notes.push("No online payment redirect. The store will confirm the order and collect payment in store.");
+      notes.push(
+        "No online payment redirect. The store will confirm the order and collect payment in store.",
+      );
     }
     if (profile.provider === "stripe" && profile.code === "card") {
-      notes.push("Card payment uses Stripe Checkout. Apple Pay will appear automatically there on supported Apple devices and browsers.");
+      notes.push(
+        "Card payment uses Stripe Checkout. Apple Pay will appear automatically there on supported Apple devices and browsers.",
+      );
     }
     if (profile.provider === "stripe" && profile.code === "afterpay_clearpay") {
-      notes.push("Afterpay opens in Stripe Checkout and is only shown when the cart and customer are eligible.");
+      notes.push(
+        "Afterpay opens in Stripe Checkout and is only shown when the cart and customer are eligible.",
+      );
     }
     if (profile.provider === "stripe" && profile.code === "wechat_pay") {
-      notes.push("WeChat Pay opens in Stripe Checkout. Availability depends on your Stripe account and customer region.");
+      notes.push(
+        "WeChat Pay opens in Stripe Checkout. Availability depends on your Stripe account and customer region.",
+      );
     }
     if (profile.notes) {
       notes.push(String(profile.notes).trim());
@@ -4024,7 +4724,7 @@ function initCheckoutPage() {
                 </div>
                 <div class="storefront-success__item">
                   <strong>Payment</strong>
-                  <span>${escapeHtml(payload.payment_method_label || 'Pay in store')}</span>
+                  <span>${escapeHtml(payload.payment_method_label || "Pay in store")}</span>
                 </div>
                 <div class="storefront-success__item">
                   <strong>Payment fee</strong>
@@ -4057,14 +4757,19 @@ function initCheckoutPage() {
       </section>
     `;
 
-    const successItemsTarget = root.querySelector("[data-checkout-success-items]");
-    const successSummaryTarget = root.querySelector("[data-checkout-success-summary]");
+    const successItemsTarget = root.querySelector(
+      "[data-checkout-success-items]",
+    );
+    const successSummaryTarget = root.querySelector(
+      "[data-checkout-success-summary]",
+    );
     renderCartLineItems(successItemsTarget, payload.items || []);
     renderCartSummary(successSummaryTarget, payload.items || [], {
-      paymentProfile:
-        payload.payment_method_code
-          ? paymentProfiles.find((profile) => profile.code === payload.payment_method_code) || null
-          : null,
+      paymentProfile: payload.payment_method_code
+        ? paymentProfiles.find(
+            (profile) => profile.code === payload.payment_method_code,
+          ) || null
+        : null,
       shippingOption: successShippingOption,
       paymentFeeOverride: Number(payload.payment_fee_amount ?? 0) || 0,
       shippingFeeOverride: Number(payload.shipping_fee_amount ?? 0) || 0,
@@ -4075,7 +4780,9 @@ function initCheckoutPage() {
   const render = () => {
     const items = loadCart();
     const subtotal = getCartSubtotal(items);
-    const shippingOption = isWarehouseDispatchSelected() ? getSelectedShippingOption() : null;
+    const shippingOption = isWarehouseDispatchSelected()
+      ? getSelectedShippingOption()
+      : null;
     renderStoreSelectionDetail();
     renderPaymentOptions(subtotal);
     renderShippingOptions(subtotal);
@@ -4091,14 +4798,20 @@ function initCheckoutPage() {
       setCheckoutMessage("");
     }
     if (submitButton instanceof HTMLButtonElement) {
-      const hasStoreSelection = storeField instanceof HTMLSelectElement && Boolean(String(storeField.value || "").trim());
+      const hasStoreSelection =
+        storeField instanceof HTMLSelectElement &&
+        Boolean(String(storeField.value || "").trim());
       submitButton.disabled = !items.length || !hasStoreSelection;
-      submitButton.textContent = items.length ? "Submit order request" : "Add items before checkout";
+      submitButton.textContent = items.length
+        ? "Submit order request"
+        : "Add items before checkout";
     }
   };
 
   const applyAccountPrefill = async () => {
-    activeAuthState = await prefillCustomerContactForm(form, { includeStore: true });
+    activeAuthState = await prefillCustomerContactForm(form, {
+      includeStore: true,
+    });
   };
 
   const syncAccountSetup = () => {
@@ -4143,7 +4856,13 @@ function initCheckoutPage() {
 
   form.addEventListener("input", (event) => {
     const target = event.target;
-    if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement)) {
+    if (
+      !(
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLSelectElement ||
+        target instanceof HTMLTextAreaElement
+      )
+    ) {
       return;
     }
     clearFieldError(target);
@@ -4151,7 +4870,13 @@ function initCheckoutPage() {
 
   form.addEventListener("change", (event) => {
     const target = event.target;
-    if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement)) {
+    if (
+      !(
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLSelectElement ||
+        target instanceof HTMLTextAreaElement
+      )
+    ) {
       return;
     }
     clearFieldError(target);
@@ -4164,7 +4889,10 @@ function initCheckoutPage() {
 
     let items = loadCart();
     if (!items.length) {
-      setCheckoutMessage("Your cart is empty. Add products before checking out.", "error");
+      setCheckoutMessage(
+        "Your cart is empty. Add products before checking out.",
+        "error",
+      );
       return;
     }
 
@@ -4189,7 +4917,7 @@ function initCheckoutPage() {
           missingNames
             ? `Some cart items are not linked to the product database: ${missingNames}. Remove them from the cart and try again.`
             : "Some cart items are not linked to the product database. Remove them from the cart and try again.",
-          "error"
+          "error",
         );
         return;
       }
@@ -4204,17 +4932,32 @@ function initCheckoutPage() {
     const firstName = String(formData.get("first_name") || "").trim();
     const lastName = String(formData.get("last_name") || "").trim();
     const customerName = buildProfileFullName(firstName, lastName, "") || "";
-    const phone = normalizeAustralianPhone(String(formData.get("phone") || "").trim());
-    const email = String(formData.get("email") || "").trim().toLowerCase();
-    let authAccessToken = activeAuthState?.session?.access_token || supabaseAnonKey;
+    const phone = normalizeAustralianPhone(
+      String(formData.get("phone") || "").trim(),
+    );
+    const email = String(formData.get("email") || "")
+      .trim()
+      .toLowerCase();
+    let authAccessToken =
+      activeAuthState?.session?.access_token || supabaseAnonKey;
     const storeSlug = String(formData.get("store_slug") || "").trim();
-    const paymentMethodCode = String(formData.get("payment_method_code") || "pay_in_store").trim();
+    const paymentMethodCode = String(
+      formData.get("payment_method_code") || "pay_in_store",
+    ).trim();
     const warehouseDispatch = storeSlug === "warehouse-dispatch";
-    const selectedShippingOption = warehouseDispatch ? getSelectedShippingOption() : null;
-    const shippingFeeAmount = selectedShippingOption ? calculateShippingFee(subtotal, selectedShippingOption) : 0;
-    const paymentFeeAmount = selectedProfile ? calculatePaymentFee(subtotal, selectedProfile) : 0;
+    const selectedShippingOption = warehouseDispatch
+      ? getSelectedShippingOption()
+      : null;
+    const shippingFeeAmount = selectedShippingOption
+      ? calculateShippingFee(subtotal, selectedShippingOption)
+      : 0;
+    const paymentFeeAmount = selectedProfile
+      ? calculatePaymentFee(subtotal, selectedProfile)
+      : 0;
     const checkoutPassword = String(formData.get("checkout_password") || "");
-    const checkoutPasswordConfirm = String(formData.get("checkout_password_confirm") || "");
+    const checkoutPasswordConfirm = String(
+      formData.get("checkout_password_confirm") || "",
+    );
     const firstNameField = form.elements.namedItem("first_name");
     const lastNameField = form.elements.namedItem("last_name");
     const phoneField = form.elements.namedItem("phone");
@@ -4240,72 +4983,168 @@ function initCheckoutPage() {
       country_code: String(formData.get("country_code") || "AU").trim(),
     };
 
-    if (!requireField(firstNameField, "Enter your first name.", "First name is required.")) return;
-    if (!requireField(lastNameField, "Enter your last name.", "Last name is required.")) return;
-    if (!requireField(phoneField, "Enter your phone number.", "Phone number is required.")) return;
-    if (!requireField(emailField, "Enter your email address.", "Email address is required.")) return;
+    if (
+      !requireField(
+        firstNameField,
+        "Enter your first name.",
+        "First name is required.",
+      )
+    )
+      return;
+    if (
+      !requireField(
+        lastNameField,
+        "Enter your last name.",
+        "Last name is required.",
+      )
+    )
+      return;
+    if (
+      !requireField(
+        phoneField,
+        "Enter your phone number.",
+        "Phone number is required.",
+      )
+    )
+      return;
+    if (
+      !requireField(
+        emailField,
+        "Enter your email address.",
+        "Email address is required.",
+      )
+    )
+      return;
 
     if (!isValidEmailAddress(email)) {
-      invalidateField(emailField, "Enter a valid email address, for example name@example.com.au.");
+      invalidateField(
+        emailField,
+        "Enter a valid email address, for example name@example.com.au.",
+      );
       return;
     }
 
     if (!isValidAustralianPhone(phone)) {
-      invalidateField(phoneField, "Enter a valid Australian phone number, for example 0412 345 678 or +61 412 345 678.");
+      invalidateField(
+        phoneField,
+        "Enter a valid Australian phone number, for example 0412 345 678 or +61 412 345 678.",
+      );
       return;
     }
 
     if (!activeAuthState?.user) {
       if (!checkoutPassword) {
-        invalidateField(passwordField, "Create a password for your TECHM8 account.", "Create a password to register your TECHM8 account with this order.");
+        invalidateField(
+          passwordField,
+          "Create a password for your TECHM8 account.",
+          "Create a password to register your TECHM8 account with this order.",
+        );
         return;
       }
 
       if (checkoutPassword !== checkoutPasswordConfirm) {
-        invalidateField(passwordConfirmField, "Passwords do not match.", "Password confirmation does not match.");
+        invalidateField(
+          passwordConfirmField,
+          "Passwords do not match.",
+          "Password confirmation does not match.",
+        );
         return;
       }
     }
 
     if (!storeSlug) {
-      invalidateField(storeSelectField, "Select a pickup store or dispatch point.", "Please select a pickup store or dispatch point.");
+      invalidateField(
+        storeSelectField,
+        "Select a pickup store or dispatch point.",
+        "Please select a pickup store or dispatch point.",
+      );
       return;
     }
 
     if (paymentMethodCode === "pay_in_store" && warehouseDispatch) {
-      setCheckoutMessage("Pay in store can only be used with a physical pickup store.", "error");
+      setCheckoutMessage(
+        "Pay in store can only be used with a physical pickup store.",
+        "error",
+      );
       return;
     }
 
     if (warehouseDispatch) {
       const shippingPhone = String(shippingPayload.shipping_phone || "").trim();
-      const shippingEmail = String(shippingPayload.shipping_email || "").trim().toLowerCase();
-      if (!requireField(shippingRecipientField, "Enter the recipient name.", "Warehouse Dispatch requires a full delivery address.")) return;
-      if (!requireField(shippingAddressField, "Enter the delivery address.", "Warehouse Dispatch requires a full delivery address.")) return;
-      if (!requireField(shippingSuburbField, "Enter the suburb.", "Warehouse Dispatch requires a full delivery address.")) return;
-      if (!requireField(shippingPostcodeField, "Enter the 4-digit postcode.", "Warehouse Dispatch requires a full delivery address.")) return;
-      if (!requireField(shippingStateField, "Select a state.", "Warehouse Dispatch requires a full delivery address.")) return;
+      const shippingEmail = String(shippingPayload.shipping_email || "")
+        .trim()
+        .toLowerCase();
+      if (
+        !requireField(
+          shippingRecipientField,
+          "Enter the recipient name.",
+          "Warehouse Dispatch requires a full delivery address.",
+        )
+      )
+        return;
+      if (
+        !requireField(
+          shippingAddressField,
+          "Enter the delivery address.",
+          "Warehouse Dispatch requires a full delivery address.",
+        )
+      )
+        return;
+      if (
+        !requireField(
+          shippingSuburbField,
+          "Enter the suburb.",
+          "Warehouse Dispatch requires a full delivery address.",
+        )
+      )
+        return;
+      if (
+        !requireField(
+          shippingPostcodeField,
+          "Enter the 4-digit postcode.",
+          "Warehouse Dispatch requires a full delivery address.",
+        )
+      )
+        return;
+      if (
+        !requireField(
+          shippingStateField,
+          "Select a state.",
+          "Warehouse Dispatch requires a full delivery address.",
+        )
+      )
+        return;
 
       if (shippingPhone && !isValidAustralianPhone(shippingPhone)) {
         invalidateField(
           shippingPhoneField,
           "Enter a valid Australian shipping phone number, for example 0412 345 678 or +61 412 345 678.",
-          "Please enter a valid Australian shipping phone number."
+          "Please enter a valid Australian shipping phone number.",
         );
         return;
       }
 
       if (shippingEmail && !isValidEmailAddress(shippingEmail)) {
-        invalidateField(shippingEmailField, "Enter a valid shipping email address.", "Please enter a valid shipping email address.");
+        invalidateField(
+          shippingEmailField,
+          "Enter a valid shipping email address.",
+          "Please enter a valid shipping email address.",
+        );
         return;
       }
 
       if (!/^\d{4}$/.test(shippingPayload.postcode)) {
-        invalidateField(shippingPostcodeField, "Enter a valid 4-digit Australian postcode.", "Please enter a valid 4-digit Australian postcode.");
+        invalidateField(
+          shippingPostcodeField,
+          "Enter a valid 4-digit Australian postcode.",
+          "Please enter a valid 4-digit Australian postcode.",
+        );
         return;
       }
 
-      shippingPayload.shipping_phone = shippingPhone ? normalizeAustralianPhone(shippingPhone) : "";
+      shippingPayload.shipping_phone = shippingPhone
+        ? normalizeAustralianPhone(shippingPhone)
+        : "";
       shippingPayload.shipping_email = shippingEmail;
     }
 
@@ -4327,7 +5166,9 @@ function initCheckoutPage() {
       subtotal_amount: subtotal,
       payment_fee_amount: paymentFeeAmount,
       shipping_fee_amount: shippingFeeAmount,
-      total_amount: Number((subtotal + paymentFeeAmount + shippingFeeAmount).toFixed(2)),
+      total_amount: Number(
+        (subtotal + paymentFeeAmount + shippingFeeAmount).toFixed(2),
+      ),
       source: "website",
       site_url: getConfiguredSiteBaseUrl(),
       auth_user_id: activeAuthState?.user?.id || null,
@@ -4337,7 +5178,8 @@ function initCheckoutPage() {
     };
 
     const endpoint = window.TECHM8_CONFIG?.orderEndpoint || "";
-    const checkoutSessionEndpoint = window.TECHM8_CONFIG?.checkoutSessionEndpoint || "";
+    const checkoutSessionEndpoint =
+      window.TECHM8_CONFIG?.checkoutSessionEndpoint || "";
 
     try {
       if (submitButton instanceof HTMLButtonElement) {
@@ -4346,19 +5188,20 @@ function initCheckoutPage() {
       }
 
       if (!activeAuthState?.user && activeAuthState?.supabase) {
-        const { data: signUpData, error: signUpError } = await activeAuthState.supabase.auth.signUp({
-          email,
-          password: checkoutPassword,
-          options: {
-            emailRedirectTo: getAuthRedirectUrl(),
-            data: {
-              first_name: firstName,
-              last_name: lastName,
-              full_name: customerName,
-              phone,
+        const { data: signUpData, error: signUpError } =
+          await activeAuthState.supabase.auth.signUp({
+            email,
+            password: checkoutPassword,
+            options: {
+              emailRedirectTo: getAuthRedirectUrl(),
+              data: {
+                first_name: firstName,
+                last_name: lastName,
+                full_name: customerName,
+                phone,
+              },
             },
-          },
-        });
+          });
 
         if (signUpError) {
           throw new Error(getReadableAuthError(signUpError));
@@ -4369,20 +5212,29 @@ function initCheckoutPage() {
           session: signUpData?.session || null,
           user: signUpData?.user || null,
         };
-        authAccessToken = activeAuthState?.session?.access_token || supabaseAnonKey;
+        authAccessToken =
+          activeAuthState?.session?.access_token || supabaseAnonKey;
         payload.auth_user_id = activeAuthState?.user?.id || null;
       }
 
-      if (activeAuthState?.supabase && activeAuthState?.user && activeAuthState?.session?.access_token) {
+      if (
+        activeAuthState?.supabase &&
+        activeAuthState?.user &&
+        activeAuthState?.session?.access_token
+      ) {
         try {
-          await syncCustomerProfile(activeAuthState.supabase, activeAuthState.user, {
-            full_name: payload.customer_name,
-            first_name: payload.first_name,
-            last_name: payload.last_name,
-            phone: payload.phone,
-            email: payload.email,
-            default_store_slug: payload.store_slug,
-          });
+          await syncCustomerProfile(
+            activeAuthState.supabase,
+            activeAuthState.user,
+            {
+              full_name: payload.customer_name,
+              first_name: payload.first_name,
+              last_name: payload.last_name,
+              phone: payload.phone,
+              email: payload.email,
+              default_store_slug: payload.store_slug,
+            },
+          );
         } catch (profileSyncError) {
           console.warn("Checkout profile sync skipped:", profileSyncError);
         }
@@ -4406,7 +5258,9 @@ function initCheckoutPage() {
 
         const result = await parseJsonResponse(response);
         if (!response.ok || !result.ok || !result.checkout_url) {
-          throw new Error(result.error || "Stripe Checkout could not be started.");
+          throw new Error(
+            result.error || "Stripe Checkout could not be started.",
+          );
         }
 
         window.location.href = result.checkout_url;
@@ -4431,15 +5285,33 @@ function initCheckoutPage() {
         }
 
         payload.order_code = String(result.order_code || payload.order_code);
-        payload.store_name = String(result.store_name || payload.store_name || "");
-        payload.total_amount = Number(result.total_amount ?? payload.total_amount) || payload.total_amount;
-        payload.payment_fee_amount = Number(result.payment_fee_amount ?? 0) || 0;
-        payload.shipping_fee_amount = Number(result.shipping_fee_amount ?? payload.shipping_fee_amount ?? 0) || 0;
-        payload.shipping_service_code = String(result.shipping_service_code || payload.shipping_service_code || "");
-        payload.shipping_service_name = String(result.shipping_service_name || payload.shipping_service_name || "");
-        payload.shipping_delivery_time = String(result.shipping_delivery_time || payload.shipping_delivery_time || "");
-        payload.payment_method_code = String(result.payment_method_code || payload.payment_method_code || "");
-        payload.payment_method_label = String(result.payment_method_label || payload.payment_method_label || "");
+        payload.store_name = String(
+          result.store_name || payload.store_name || "",
+        );
+        payload.total_amount =
+          Number(result.total_amount ?? payload.total_amount) ||
+          payload.total_amount;
+        payload.payment_fee_amount =
+          Number(result.payment_fee_amount ?? 0) || 0;
+        payload.shipping_fee_amount =
+          Number(
+            result.shipping_fee_amount ?? payload.shipping_fee_amount ?? 0,
+          ) || 0;
+        payload.shipping_service_code = String(
+          result.shipping_service_code || payload.shipping_service_code || "",
+        );
+        payload.shipping_service_name = String(
+          result.shipping_service_name || payload.shipping_service_name || "",
+        );
+        payload.shipping_delivery_time = String(
+          result.shipping_delivery_time || payload.shipping_delivery_time || "",
+        );
+        payload.payment_method_code = String(
+          result.payment_method_code || payload.payment_method_code || "",
+        );
+        payload.payment_method_label = String(
+          result.payment_method_label || payload.payment_method_label || "",
+        );
       } else {
         saveLocalOrder(payload);
       }
@@ -4448,7 +5320,10 @@ function initCheckoutPage() {
       saveCheckoutSuccessContext(payload);
 
       if ((selectedProfile?.provider || "manual") === "manual") {
-        const confirmationUrl = new URL("checkout-success.html", window.location.href);
+        const confirmationUrl = new URL(
+          "checkout-success.html",
+          window.location.href,
+        );
         confirmationUrl.searchParams.set("order_code", payload.order_code);
         confirmationUrl.searchParams.set("mode", "pay_in_store");
         window.location.href = confirmationUrl.toString();
@@ -4457,7 +5332,10 @@ function initCheckoutPage() {
 
       renderSuccessState(payload);
     } catch (error) {
-      setCheckoutMessage(error instanceof Error ? error.message : "Checkout submission failed.", "error");
+      setCheckoutMessage(
+        error instanceof Error ? error.message : "Checkout submission failed.",
+        "error",
+      );
       if (submitButton instanceof HTMLButtonElement) {
         submitButton.disabled = false;
         submitButton.textContent = "Submit order request";
@@ -4465,26 +5343,36 @@ function initCheckoutPage() {
     }
   });
 
-  if (paymentOptionsTarget instanceof HTMLElement && paymentMethodField instanceof HTMLInputElement) {
+  if (
+    paymentOptionsTarget instanceof HTMLElement &&
+    paymentMethodField instanceof HTMLInputElement
+  ) {
     paymentOptionsTarget.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof HTMLElement)) return;
       const option = target.closest("[data-payment-option]");
       if (!(option instanceof HTMLElement)) return;
-      const code = String(option.getAttribute("data-payment-option") || "").trim();
+      const code = String(
+        option.getAttribute("data-payment-option") || "",
+      ).trim();
       if (!code) return;
       paymentMethodField.value = code;
       render();
     });
   }
 
-  if (shippingOptionsTarget instanceof HTMLElement && shippingServiceField instanceof HTMLInputElement) {
+  if (
+    shippingOptionsTarget instanceof HTMLElement &&
+    shippingServiceField instanceof HTMLInputElement
+  ) {
     shippingOptionsTarget.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof HTMLElement)) return;
       const option = target.closest("[data-shipping-option]");
       if (!(option instanceof HTMLElement)) return;
-      const code = String(option.getAttribute("data-shipping-option") || "").trim();
+      const code = String(
+        option.getAttribute("data-shipping-option") || "",
+      ).trim();
       if (!code) return;
       shippingServiceField.value = code;
       render();
@@ -4500,10 +5388,13 @@ function initCheckoutPage() {
   loadPaymentFeeProfiles()
     .then((profiles) => {
       const supportedProfiles = profiles.filter((profile) => {
-        if (!profile || !profile.code || profile.is_enabled === false) return false;
+        if (!profile || !profile.code || profile.is_enabled === false)
+          return false;
         if (profile.provider === "manual") return true;
         if (profile.provider === "stripe") {
-          return ["card", "afterpay_clearpay", "wechat_pay"].includes(profile.code);
+          return ["card", "afterpay_clearpay", "wechat_pay"].includes(
+            profile.code,
+          );
         }
         return false;
       });
@@ -4524,11 +5415,13 @@ function initCheckoutPage() {
                 is_enabled: true,
                 notes: "",
               },
-            ])
+            ]),
       );
 
       if (paymentMethodField instanceof HTMLInputElement) {
-        const initialProfile = paymentProfiles.find((profile) => profile.code === "pay_in_store") || paymentProfiles[0];
+        const initialProfile =
+          paymentProfiles.find((profile) => profile.code === "pay_in_store") ||
+          paymentProfiles[0];
         if (initialProfile) {
           paymentMethodField.value = initialProfile.code;
         }
@@ -4560,7 +5453,8 @@ function initCheckoutPage() {
   if (isPaymentCancelled && messageTarget instanceof HTMLElement) {
     messageTarget.hidden = false;
     messageTarget.className = "booking-message is-error";
-    messageTarget.textContent = "Stripe payment was cancelled. Your cart is still here and you can try again.";
+    messageTarget.textContent =
+      "Stripe payment was cancelled. Your cart is still here and you can try again.";
   }
 }
 
@@ -4579,7 +5473,9 @@ function initCheckoutSuccessPage() {
   if (storedPayload) {
     const storeSlug = String(storedPayload.store_slug || "").trim();
     const storeDetail = STORE_CHECKOUT_DETAILS[storeSlug] || null;
-    const isPayInStore = mode === "pay_in_store" || String(storedPayload.payment_method_code || "").trim() === "pay_in_store";
+    const isPayInStore =
+      mode === "pay_in_store" ||
+      String(storedPayload.payment_method_code || "").trim() === "pay_in_store";
     const storedShippingOption = storedPayload.shipping_service_code
       ? getCheckoutShippingOption(storedPayload.shipping_service_code)
       : null;
@@ -4620,7 +5516,9 @@ function initCheckoutSuccessPage() {
               </div>
             </article>
 
-            ${storeDetail ? `
+            ${
+              storeDetail
+                ? `
               <article class="storefront-checkout__delivery-detail">
                 <div class="storefront-checkout__delivery-detail-top">
                   <div>
@@ -4639,7 +5537,9 @@ function initCheckoutSuccessPage() {
                   ${storeDetail.pageUrl ? `<a class="button button--secondary" href="${escapeHtml(storeDetail.pageUrl)}">View store page</a>` : ""}
                 </div>
               </article>
-            ` : ""}
+            `
+                : ""
+            }
 
             <div class="storefront-summary storefront-summary--embedded">
               <p class="eyebrow">Submitted items</p>
@@ -4657,8 +5557,12 @@ function initCheckoutSuccessPage() {
       </section>
     `;
 
-    const successItemsTarget = root.querySelector("[data-checkout-success-items]");
-    const successSummaryTarget = root.querySelector("[data-checkout-success-summary]");
+    const successItemsTarget = root.querySelector(
+      "[data-checkout-success-items]",
+    );
+    const successSummaryTarget = root.querySelector(
+      "[data-checkout-success-summary]",
+    );
     renderCartLineItems(successItemsTarget, storedPayload.items || []);
     renderCartSummary(successSummaryTarget, storedPayload.items || [], {
       paymentProfile: {
@@ -4693,9 +5597,9 @@ function initBookingForm() {
 
   const supabaseAnonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
   const bookingEndpoint =
-    window.TECHM8_CONFIG?.bookingEndpoint ||
-    "api/book-repair.php";
-  const isSupabaseEndpoint = /^https:\/\/.+\.supabase\.co\/functions\/v1\//.test(bookingEndpoint);
+    window.TECHM8_CONFIG?.bookingEndpoint || "api/book-repair.php";
+  const isSupabaseEndpoint =
+    /^https:\/\/.+\.supabase\.co\/functions\/v1\//.test(bookingEndpoint);
   let activeAuthState = null;
 
   const submitButton = form.querySelector("[data-booking-submit]");
@@ -4705,7 +5609,9 @@ function initBookingForm() {
   const modalType = modal?.querySelector("[data-booking-modal-type]");
   const modalTitle = modal?.querySelector("[data-booking-modal-title]");
   const modalText = modal?.querySelector("[data-booking-modal-text]");
-  const modalCloseButtons = modal?.querySelectorAll("[data-booking-modal-close]");
+  const modalCloseButtons = modal?.querySelectorAll(
+    "[data-booking-modal-close]",
+  );
 
   const setMessage = (type, text) => {
     if (!(messageBox instanceof HTMLElement)) return;
@@ -4728,7 +5634,8 @@ function initBookingForm() {
     modal.classList.add(`is-${type}`);
 
     if (modalType instanceof HTMLElement) {
-      modalType.textContent = type === "success" ? "Booking submitted" : "Submission failed";
+      modalType.textContent =
+        type === "success" ? "Booking submitted" : "Submission failed";
     }
 
     if (modalTitle instanceof HTMLElement) {
@@ -4773,8 +5680,15 @@ function initBookingForm() {
     event.preventDefault();
 
     if (!form.reportValidity()) {
-      setMessage("error", "Please complete the required fields before submitting.");
-      openModal("error", "Required fields missing", "Please complete the required fields before submitting your repair request.");
+      setMessage(
+        "error",
+        "Please complete the required fields before submitting.",
+      );
+      openModal(
+        "error",
+        "Required fields missing",
+        "Please complete the required fields before submitting your repair request.",
+      );
       return;
     }
 
@@ -4791,16 +5705,21 @@ function initBookingForm() {
     try {
       const formData = new FormData(form);
       activeAuthState = await getCurrentAuthState();
-      const authAccessToken = activeAuthState?.session?.access_token || supabaseAnonKey;
+      const authAccessToken =
+        activeAuthState?.session?.access_token || supabaseAnonKey;
       const payload = Object.fromEntries(formData.entries());
 
       if (activeAuthState?.supabase && activeAuthState?.user) {
-        await syncCustomerProfile(activeAuthState.supabase, activeAuthState.user, {
-          full_name: String(payload.customer_name || "").trim(),
-          phone: String(payload.phone || "").trim(),
-          email: String(payload.email || "").trim(),
-          default_store_slug: String(payload.store_slug || "").trim(),
-        });
+        await syncCustomerProfile(
+          activeAuthState.supabase,
+          activeAuthState.user,
+          {
+            full_name: String(payload.customer_name || "").trim(),
+            phone: String(payload.phone || "").trim(),
+            email: String(payload.email || "").trim(),
+            default_store_slug: String(payload.store_slug || "").trim(),
+          },
+        );
       }
 
       const response = await fetch(
@@ -4825,7 +5744,7 @@ function initBookingForm() {
                 Accept: "application/json",
               },
               body: formData,
-            }
+            },
       );
 
       const raw = await response.text();
@@ -4838,7 +5757,9 @@ function initBookingForm() {
       }
 
       if (!response.ok || !result.ok) {
-        throw new Error(result.error || "Repair request could not be submitted.");
+        throw new Error(
+          result.error || "Repair request could not be submitted.",
+        );
       }
 
       form.reset();
@@ -4849,16 +5770,19 @@ function initBookingForm() {
 
       setMessage(
         "success",
-        `Repair request submitted successfully. Booking code: ${result.booking_code}. A confirmation email has been sent.`
+        `Repair request submitted successfully. Booking code: ${result.booking_code}. A confirmation email has been sent.`,
       );
       openModal(
         "success",
         "Repair request submitted",
-        `Your repair request has been submitted successfully. Booking code: ${result.booking_code}.`
+        `Your repair request has been submitted successfully. Booking code: ${result.booking_code}.`,
       );
       messageBox?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     } catch (error) {
-      const errorText = error instanceof Error ? error.message : "Repair request could not be submitted.";
+      const errorText =
+        error instanceof Error
+          ? error.message
+          : "Repair request could not be submitted.";
       setMessage("error", errorText);
       openModal("error", "Repair request failed", errorText);
       messageBox?.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -4878,13 +5802,17 @@ function initNavigation() {
 
   const mobileInput = document.querySelector(".nav__mobile-input");
   const navMenu = document.querySelector(".nav__menu");
-  const navToggle = document.querySelector(".nav__toggle--open, .nav > .nav__toggle");
+  const navToggle = document.querySelector(
+    ".nav__toggle--open, .nav > .nav__toggle",
+  );
   const navOverlay = document.querySelector(".nav__overlay");
   const navCloseToggle = document.querySelector(".nav__toggle--close");
   const navDropdowns = document.querySelectorAll(".nav__dropdown");
   const navDropdownToggles = document.querySelectorAll(".nav__dropdown-toggle");
   const navSubmenuToggles = document.querySelectorAll(".nav__submenu-toggle");
-  const mobileRepairsToggles = document.querySelectorAll(".nav__mobile-repairs-toggle");
+  const mobileRepairsToggles = document.querySelectorAll(
+    ".nav__mobile-repairs-toggle",
+  );
 
   const interceptMobileRepairsToggle = (event) => {
     const target = event.target;
@@ -4896,12 +5824,18 @@ function initNavigation() {
     handleMobileRepairsActivation(event, mobileRepairsToggle);
   };
 
-  navMenu?.addEventListener("touchstart", interceptMobileRepairsToggle, { capture: true, passive: false });
-  navMenu?.addEventListener("touchend", interceptMobileRepairsToggle, { capture: true, passive: false });
+  navMenu?.addEventListener("touchstart", interceptMobileRepairsToggle, {
+    capture: true,
+    passive: false,
+  });
+  navMenu?.addEventListener("touchend", interceptMobileRepairsToggle, {
+    capture: true,
+    passive: false,
+  });
   navMenu?.addEventListener("pointerdown", interceptMobileRepairsToggle, true);
   navMenu?.addEventListener("pointerup", interceptMobileRepairsToggle, true);
   navMenu?.addEventListener("click", interceptMobileRepairsToggle, true);
-  
+
   navDropdownToggles.forEach((toggle) => {
     if (!(toggle instanceof HTMLButtonElement)) return;
     toggle.removeAttribute("onclick");
@@ -4920,20 +5854,28 @@ function initNavigation() {
     toggle.addEventListener("click", (event) => {
       handleSubmenuToggle(event, toggle);
     });
-    toggle.addEventListener("touchstart", (event) => {
-      event.stopPropagation();
-      keepMobileMenuOpen();
-    }, { passive: true });
+    toggle.addEventListener(
+      "touchstart",
+      (event) => {
+        event.stopPropagation();
+        keepMobileMenuOpen();
+      },
+      { passive: true },
+    );
   });
 
   mobileRepairsToggles.forEach((toggle) => {
     if (!(toggle instanceof HTMLButtonElement)) return;
     if (toggle.dataset.navBound === "true") return;
     toggle.dataset.navBound = "true";
-    toggle.addEventListener("touchstart", (event) => {
-      event.stopPropagation();
-      keepMobileMenuOpen();
-    }, { passive: true });
+    toggle.addEventListener(
+      "touchstart",
+      (event) => {
+        event.stopPropagation();
+        keepMobileMenuOpen();
+      },
+      { passive: true },
+    );
   });
 
   if (mobileInput && navMenu) {
@@ -5033,9 +5975,11 @@ function initNavigation() {
   });
 
   window.addEventListener("resize", () => {
-    document.querySelectorAll(".nav__dropdown--repairs.is-open").forEach((dropdown) => {
-      expandMobileRepairsContainer(dropdown);
-    });
+    document
+      .querySelectorAll(".nav__dropdown--repairs.is-open")
+      .forEach((dropdown) => {
+        expandMobileRepairsContainer(dropdown);
+      });
   });
 }
 
@@ -5056,11 +6000,17 @@ function setAuthMessage(target, message, tone = "success") {
 }
 
 function getReadableAuthError(error) {
-  const message = String(error?.message || error || "Authentication request failed.");
-  if (/Invalid login credentials/i.test(message)) return "The email or password is incorrect.";
-  if (/Email rate limit exceeded/i.test(message)) return "Too many email requests were sent. Please wait and try again.";
-  if (/User already registered/i.test(message)) return "This email is already registered. Sign in first or use a different email address.";
-  if (/provider is not enabled/i.test(message)) return "This login provider is not enabled in Supabase Auth yet.";
+  const message = String(
+    error?.message || error || "Authentication request failed.",
+  );
+  if (/Invalid login credentials/i.test(message))
+    return "The email or password is incorrect.";
+  if (/Email rate limit exceeded/i.test(message))
+    return "Too many email requests were sent. Please wait and try again.";
+  if (/User already registered/i.test(message))
+    return "This email is already registered. Sign in first or use a different email address.";
+  if (/provider is not enabled/i.test(message))
+    return "This login provider is not enabled in Supabase Auth yet.";
   return message;
 }
 
@@ -5120,7 +6070,11 @@ async function initAccountPage() {
   try {
     supabase = await getSupabaseBrowserClient();
   } catch (error) {
-    setAuthMessage(messageBox, "Supabase Auth could not be loaded on this page.", "error");
+    setAuthMessage(
+      messageBox,
+      "Supabase Auth could not be loaded on this page.",
+      "error",
+    );
     return;
   }
 
@@ -5139,7 +6093,9 @@ async function initAccountPage() {
     window.location.replace(getAccountHomeUrl());
   };
 
-  const { data: { session: initialSession } } = await supabase.auth.getSession();
+  const {
+    data: { session: initialSession },
+  } = await supabase.auth.getSession();
   await renderSession(initialSession);
 
   supabase.auth.onAuthStateChange((_event, session) => {
@@ -5188,15 +6144,18 @@ async function initAccountPage() {
       const password = String(formData.get("password") || "");
 
       try {
-          setAuthMessage(messageBox, "");
-          const { error } = await supabase.auth.signInWithPassword({ email, password });
-          if (error) throw error;
-          loginForm.reset();
-          window.location.assign(getAccountHomeUrl());
-        } catch (error) {
-          setAuthMessage(messageBox, getReadableAuthError(error), "error");
-        }
-      });
+        setAuthMessage(messageBox, "");
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+        loginForm.reset();
+        window.location.assign(getAccountHomeUrl());
+      } catch (error) {
+        setAuthMessage(messageBox, getReadableAuthError(error), "error");
+      }
+    });
   }
 
   passwordToggleButtons.forEach((button) => {
@@ -5210,10 +6169,12 @@ async function initAccountPage() {
       const nextType = input.type === "password" ? "text" : "password";
       input.type = nextType;
       button.textContent = nextType === "password" ? "Show" : "Hide";
-      button.setAttribute("aria-pressed", nextType === "text" ? "true" : "false");
+      button.setAttribute(
+        "aria-pressed",
+        nextType === "text" ? "true" : "false",
+      );
     });
   });
-
 }
 
 async function initAccountDashboardPage() {
@@ -5227,15 +6188,23 @@ async function initAccountDashboardPage() {
   const phoneTarget = root.querySelector("[data-auth-phone]");
   const statusTarget = root.querySelector("[data-auth-status]");
   const verifiedTarget = root.querySelector("[data-auth-verified]");
-  const ordersPreviewTarget = root.querySelector("[data-account-orders-preview]");
-  const repairsPreviewTarget = root.querySelector("[data-account-repairs-preview]");
+  const ordersPreviewTarget = root.querySelector(
+    "[data-account-orders-preview]",
+  );
+  const repairsPreviewTarget = root.querySelector(
+    "[data-account-repairs-preview]",
+  );
 
   let supabase;
 
   try {
     supabase = await getSupabaseBrowserClient();
   } catch (error) {
-    setAuthMessage(messageBox, "Supabase Auth could not be loaded on this page.", "error");
+    setAuthMessage(
+      messageBox,
+      "Supabase Auth could not be loaded on this page.",
+      "error",
+    );
     return;
   }
 
@@ -5272,18 +6241,34 @@ async function initAccountDashboardPage() {
       repairs = [];
     }
 
-    if (nameTarget instanceof HTMLElement) nameTarget.textContent = String(profile?.full_name || getUserDisplayName(user));
-    if (emailTarget instanceof HTMLElement) emailTarget.textContent = String(profile?.email || user.email || "No email");
-    if (phoneTarget instanceof HTMLElement) phoneTarget.textContent = String(profile?.phone || user.user_metadata?.phone || "Phone not saved");
-    if (statusTarget instanceof HTMLElement) statusTarget.textContent = verified ? "Signed in" : "Pending email verification";
+    if (nameTarget instanceof HTMLElement)
+      nameTarget.textContent = String(
+        profile?.full_name || getUserDisplayName(user),
+      );
+    if (emailTarget instanceof HTMLElement)
+      emailTarget.textContent = String(
+        profile?.email || user.email || "No email",
+      );
+    if (phoneTarget instanceof HTMLElement)
+      phoneTarget.textContent = String(
+        profile?.phone || user.user_metadata?.phone || "Phone not saved",
+      );
+    if (statusTarget instanceof HTMLElement)
+      statusTarget.textContent = verified
+        ? "Signed in"
+        : "Pending email verification";
     if (verifiedTarget instanceof HTMLElement) {
-      verifiedTarget.textContent = verified ? "Email verified" : "Verification pending";
+      verifiedTarget.textContent = verified
+        ? "Email verified"
+        : "Verification pending";
     }
     renderHistoryPreview(ordersPreviewTarget, orders, "orders");
     renderHistoryPreview(repairsPreviewTarget, repairs, "repairs");
   };
 
-  const { data: { session: initialSession } } = await supabase.auth.getSession();
+  const {
+    data: { session: initialSession },
+  } = await supabase.auth.getSession();
   await renderSession(initialSession);
 
   supabase.auth.onAuthStateChange((_event, session) => {
@@ -5315,38 +6300,62 @@ async function initRegisterPage() {
   try {
     supabase = await getSupabaseBrowserClient();
   } catch (error) {
-    setAuthMessage(messageBox, "Supabase Auth could not be loaded on this page.", "error");
+    setAuthMessage(
+      messageBox,
+      "Supabase Auth could not be loaded on this page.",
+      "error",
+    );
     return;
   }
 
-    registerForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const formData = new FormData(registerForm);
-      const fullName = String(formData.get("full_name") || "").trim();
-      const phone = normalizeAustralianPhone(String(formData.get("phone") || "").trim());
-      const email = String(formData.get("email") || "").trim().toLowerCase();
-      const password = String(formData.get("password") || "");
-      const confirmPassword = String(formData.get("confirm_password") || "");
+  registerForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(registerForm);
+    const fullName = String(formData.get("full_name") || "").trim();
+    const phone = normalizeAustralianPhone(
+      String(formData.get("phone") || "").trim(),
+    );
+    const email = String(formData.get("email") || "")
+      .trim()
+      .toLowerCase();
+    const password = String(formData.get("password") || "");
+    const confirmPassword = String(formData.get("confirm_password") || "");
 
-      if (!fullName || !phone || !email || !password) {
-        setAuthMessage(messageBox, "Please complete all required registration fields.", "error");
-        return;
-      }
+    if (!fullName || !phone || !email || !password) {
+      setAuthMessage(
+        messageBox,
+        "Please complete all required registration fields.",
+        "error",
+      );
+      return;
+    }
 
-      if (!isValidEmailAddress(email)) {
-        setAuthMessage(messageBox, "Please enter a valid email address.", "error");
-        return;
-      }
+    if (!isValidEmailAddress(email)) {
+      setAuthMessage(
+        messageBox,
+        "Please enter a valid email address.",
+        "error",
+      );
+      return;
+    }
 
-      if (!isValidAustralianPhone(phone)) {
-        setAuthMessage(messageBox, "Please enter a valid Australian phone number.", "error");
-        return;
-      }
+    if (!isValidAustralianPhone(phone)) {
+      setAuthMessage(
+        messageBox,
+        "Please enter a valid Australian phone number.",
+        "error",
+      );
+      return;
+    }
 
-      if (password !== confirmPassword) {
-        setAuthMessage(messageBox, "Password confirmation does not match.", "error");
-        return;
-      }
+    if (password !== confirmPassword) {
+      setAuthMessage(
+        messageBox,
+        "Password confirmation does not match.",
+        "error",
+      );
+      return;
+    }
 
     try {
       setAuthMessage(messageBox, "");
@@ -5367,7 +6376,10 @@ async function initRegisterPage() {
         await supabase.auth.signOut();
       }
 
-      setAuthMessage(messageBox, "Registration submitted. Check your email and verify the account before signing in.");
+      setAuthMessage(
+        messageBox,
+        "Registration submitted. Check your email and verify the account before signing in.",
+      );
       registerForm.reset();
     } catch (error) {
       setAuthMessage(messageBox, getReadableAuthError(error), "error");
@@ -5387,17 +6399,27 @@ async function initForgotPasswordPage() {
   try {
     supabase = await getSupabaseBrowserClient();
   } catch (error) {
-    setAuthMessage(messageBox, "Supabase Auth could not be loaded on this page.", "error");
+    setAuthMessage(
+      messageBox,
+      "Supabase Auth could not be loaded on this page.",
+      "error",
+    );
     return;
   }
 
   resetForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(resetForm);
-    const email = String(formData.get("email") || "").trim().toLowerCase();
+    const email = String(formData.get("email") || "")
+      .trim()
+      .toLowerCase();
 
     if (!email) {
-      setAuthMessage(messageBox, "Enter an email address to send a reset link.", "error");
+      setAuthMessage(
+        messageBox,
+        "Enter an email address to send a reset link.",
+        "error",
+      );
       return;
     }
 
@@ -5412,7 +6434,10 @@ async function initForgotPasswordPage() {
         redirectTo: getAuthRedirectUrl(),
       });
       if (error) throw error;
-      setAuthMessage(messageBox, "Password reset link sent. Check your email inbox.");
+      setAuthMessage(
+        messageBox,
+        "Password reset link sent. Check your email inbox.",
+      );
       resetForm.reset();
     } catch (error) {
       setAuthMessage(messageBox, getReadableAuthError(error), "error");
@@ -5443,9 +6468,15 @@ async function requireSignedInAccountPage(messageTarget = null) {
 
 async function initAccountSidebarSignOut() {
   const nav = document.querySelector(".account-sidebar__nav");
-  if (!(nav instanceof HTMLElement) || nav.querySelector("[data-account-sidebar-logout]")) return;
+  if (
+    !(nav instanceof HTMLElement) ||
+    nav.querySelector("[data-account-sidebar-logout]")
+  )
+    return;
 
-  const messageTarget = document.querySelector("[data-account-details-message], [data-delivery-address-message], [data-pending-orders-message], [data-completed-orders-message], [data-repair-bookings-message], [data-warranty-returns-message], [data-account-message], [data-auth-message]");
+  const messageTarget = document.querySelector(
+    "[data-account-details-message], [data-delivery-address-message], [data-pending-orders-message], [data-completed-orders-message], [data-repair-bookings-message], [data-warranty-returns-message], [data-account-message], [data-auth-message]",
+  );
   const signOutButton = document.createElement("button");
   signOutButton.type = "button";
   signOutButton.className = "account-sidebar__link account-sidebar__signout";
@@ -5498,14 +6529,24 @@ function populateAccountDetailsForm(form, profile, user) {
   fillFormField(form, "email", profile?.email || user?.email || "", true);
   fillFormField(form, "first_name", firstName, true);
   fillFormField(form, "last_name", lastName, true);
-  fillFormField(form, "phone", profile?.phone || user?.user_metadata?.phone || "", true);
+  fillFormField(
+    form,
+    "phone",
+    profile?.phone || user?.user_metadata?.phone || "",
+    true,
+  );
   fillFormField(form, "business_name", profile?.business_name || "", true);
   fillFormField(form, "address_line_1", profile?.address_line_1 || "", true);
   fillFormField(form, "address_line_2", profile?.address_line_2 || "", true);
   fillFormField(form, "suburb", profile?.suburb || "", true);
   fillFormField(form, "postcode", profile?.postcode || "", true);
   fillFormField(form, "state", profile?.state || "", true);
-  fillFormField(form, "default_store_slug", profile?.default_store_slug || "", true);
+  fillFormField(
+    form,
+    "default_store_slug",
+    profile?.default_store_slug || "",
+    true,
+  );
   setCheckboxField(form, "service_email_opt_in", profile?.service_email_opt_in);
   setCheckboxField(form, "marketing_opt_in", profile?.marketing_opt_in);
 }
@@ -5516,7 +6557,12 @@ function populateDeliveryAddressForm(form, profile, user) {
 
   fillFormField(form, "first_name", firstName, true);
   fillFormField(form, "last_name", lastName, true);
-  fillFormField(form, "phone", profile?.phone || user?.user_metadata?.phone || "", true);
+  fillFormField(
+    form,
+    "phone",
+    profile?.phone || user?.user_metadata?.phone || "",
+    true,
+  );
   fillFormField(form, "business_name", profile?.business_name || "", true);
   fillFormField(form, "address_line_1", profile?.address_line_1 || "", true);
   fillFormField(form, "address_line_2", profile?.address_line_2 || "", true);
@@ -5534,7 +6580,11 @@ function normalizeOrderSearchRecord(record) {
     record?.status,
     record?.fulfillment_status,
   ]
-    .map((value) => String(value || "").trim().toLowerCase())
+    .map((value) =>
+      String(value || "")
+        .trim()
+        .toLowerCase(),
+    )
     .join(" ");
 }
 
@@ -5547,15 +6597,32 @@ function normalizeRepairSearchRecord(record) {
     record?.repair_category,
     record?.status,
   ]
-    .map((value) => String(value || "").trim().toLowerCase())
+    .map((value) =>
+      String(value || "")
+        .trim()
+        .toLowerCase(),
+    )
     .join(" ");
 }
 
 function isCompletedOrderRecord(record) {
-  const status = String(record?.status || "").trim().toLowerCase();
-  const fulfillmentStatus = String(record?.fulfillment_status || "").trim().toLowerCase();
-  return ["completed", "complete", "closed"].includes(status)
-    || ["completed", "fulfilled", "delivered", "collected", "picked_up", "picked up"].includes(fulfillmentStatus);
+  const status = String(record?.status || "")
+    .trim()
+    .toLowerCase();
+  const fulfillmentStatus = String(record?.fulfillment_status || "")
+    .trim()
+    .toLowerCase();
+  return (
+    ["completed", "complete", "closed"].includes(status) ||
+    [
+      "completed",
+      "fulfilled",
+      "delivered",
+      "collected",
+      "picked_up",
+      "picked up",
+    ].includes(fulfillmentStatus)
+  );
 }
 
 function renderAccountOrderCards(target, records, mode = "all") {
@@ -5565,15 +6632,19 @@ function renderAccountOrderCards(target, records, mode = "all") {
     target.innerHTML = `
       <article class="account-empty-card">
         <h3>${mode === "pending" ? "No pending orders" : "No completed orders"}</h3>
-        <p>${mode === "pending"
-          ? "New and in-progress orders linked to this account will appear here."
-          : "Completed orders linked to this account will appear here once they are fulfilled."}</p>
+        <p>${
+          mode === "pending"
+            ? "New and in-progress orders linked to this account will appear here."
+            : "Completed orders linked to this account will appear here once they are fulfilled."
+        }</p>
       </article>
     `;
     return;
   }
 
-  target.innerHTML = records.map((record) => `
+  target.innerHTML = records
+    .map(
+      (record) => `
     <article class="account-order-card">
       <div class="account-order-card__head">
         <div>
@@ -5605,7 +6676,9 @@ function renderAccountOrderCards(target, records, mode = "all") {
         </div>
       </div>
     </article>
-  `).join("");
+  `,
+    )
+    .join("");
 }
 
 function renderAccountRepairCards(target, records) {
@@ -5621,7 +6694,9 @@ function renderAccountRepairCards(target, records) {
     return;
   }
 
-  target.innerHTML = records.map((record) => `
+  target.innerHTML = records
+    .map(
+      (record) => `
     <article class="account-order-card">
       <div class="account-order-card__head">
         <div>
@@ -5653,7 +6728,9 @@ function renderAccountRepairCards(target, records) {
         </div>
       </div>
     </article>
-  `).join("");
+  `,
+    )
+    .join("");
 }
 
 async function initAccountDetailsPage() {
@@ -5668,17 +6745,28 @@ async function initAccountDetailsPage() {
   if (!authState) return;
 
   try {
-    const profile = await loadResolvedCustomerProfile(authState.supabase, authState.user);
+    const profile = await loadResolvedCustomerProfile(
+      authState.supabase,
+      authState.user,
+    );
     populateAccountDetailsForm(form, profile, authState.user);
   } catch (error) {
-    setAuthMessage(messageTarget, error instanceof Error ? error.message : "Profile could not be loaded.", "error");
+    setAuthMessage(
+      messageTarget,
+      error instanceof Error ? error.message : "Profile could not be loaded.",
+      "error",
+    );
   }
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
-    const email = String(formData.get("email") || "").trim().toLowerCase();
-    const phone = normalizeAustralianPhone(String(formData.get("phone") || "").trim());
+    const email = String(formData.get("email") || "")
+      .trim()
+      .toLowerCase();
+    const phone = normalizeAustralianPhone(
+      String(formData.get("phone") || "").trim(),
+    );
     const postcode = String(formData.get("postcode") || "").trim();
 
     if (!email || !isValidEmailAddress(email)) {
@@ -5687,31 +6775,46 @@ async function initAccountDetailsPage() {
     }
 
     if (phone && !isValidAustralianPhone(phone)) {
-      setAuthMessage(messageTarget, "Enter a valid Australian phone number.", "error");
+      setAuthMessage(
+        messageTarget,
+        "Enter a valid Australian phone number.",
+        "error",
+      );
       return;
     }
 
     if (postcode && !/^\d{4}$/.test(postcode)) {
-      setAuthMessage(messageTarget, "Post code must be a valid 4-digit Australian postcode.", "error");
+      setAuthMessage(
+        messageTarget,
+        "Post code must be a valid 4-digit Australian postcode.",
+        "error",
+      );
       return;
     }
 
     try {
-      await upsertCustomerProfile(authState.supabase, authState.user, {
-        email,
-        first_name: String(formData.get("first_name") || "").trim(),
-        last_name: String(formData.get("last_name") || "").trim(),
-        phone,
-        business_name: String(formData.get("business_name") || "").trim(),
-        address_line_1: String(formData.get("address_line_1") || "").trim(),
-        address_line_2: String(formData.get("address_line_2") || "").trim(),
-        suburb: String(formData.get("suburb") || "").trim(),
-        postcode,
-        state: String(formData.get("state") || "").trim(),
-        default_store_slug: String(formData.get("default_store_slug") || "").trim(),
-        service_email_opt_in: formData.get("service_email_opt_in") === "true",
-        marketing_opt_in: formData.get("marketing_opt_in") === "true",
-      }, { allowLegacyFallback: false });
+      await upsertCustomerProfile(
+        authState.supabase,
+        authState.user,
+        {
+          email,
+          first_name: String(formData.get("first_name") || "").trim(),
+          last_name: String(formData.get("last_name") || "").trim(),
+          phone,
+          business_name: String(formData.get("business_name") || "").trim(),
+          address_line_1: String(formData.get("address_line_1") || "").trim(),
+          address_line_2: String(formData.get("address_line_2") || "").trim(),
+          suburb: String(formData.get("suburb") || "").trim(),
+          postcode,
+          state: String(formData.get("state") || "").trim(),
+          default_store_slug: String(
+            formData.get("default_store_slug") || "",
+          ).trim(),
+          service_email_opt_in: formData.get("service_email_opt_in") === "true",
+          marketing_opt_in: formData.get("marketing_opt_in") === "true",
+        },
+        { allowLegacyFallback: false },
+      );
       setAuthMessage(messageTarget, "Account details updated.");
     } catch (error) {
       const message = isMissingProfileColumnError(error)
@@ -5734,45 +6837,76 @@ async function initDeliveryAddressPage() {
   if (!authState) return;
 
   try {
-    const profile = await loadResolvedCustomerProfile(authState.supabase, authState.user);
+    const profile = await loadResolvedCustomerProfile(
+      authState.supabase,
+      authState.user,
+    );
     populateDeliveryAddressForm(form, profile, authState.user);
   } catch (error) {
-    setAuthMessage(messageTarget, error instanceof Error ? error.message : "Saved address could not be loaded.", "error");
+    setAuthMessage(
+      messageTarget,
+      error instanceof Error
+        ? error.message
+        : "Saved address could not be loaded.",
+      "error",
+    );
   }
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
-    const phone = normalizeAustralianPhone(String(formData.get("phone") || "").trim());
+    const phone = normalizeAustralianPhone(
+      String(formData.get("phone") || "").trim(),
+    );
     const postcode = String(formData.get("postcode") || "").trim();
 
-    if (!String(formData.get("address_line_1") || "").trim() || !String(formData.get("suburb") || "").trim()) {
-      setAuthMessage(messageTarget, "Address line 1 and suburb are required.", "error");
+    if (
+      !String(formData.get("address_line_1") || "").trim() ||
+      !String(formData.get("suburb") || "").trim()
+    ) {
+      setAuthMessage(
+        messageTarget,
+        "Address line 1 and suburb are required.",
+        "error",
+      );
       return;
     }
 
     if (phone && !isValidAustralianPhone(phone)) {
-      setAuthMessage(messageTarget, "Enter a valid Australian phone number.", "error");
+      setAuthMessage(
+        messageTarget,
+        "Enter a valid Australian phone number.",
+        "error",
+      );
       return;
     }
 
     if (!/^\d{4}$/.test(postcode)) {
-      setAuthMessage(messageTarget, "Post code must be a valid 4-digit Australian postcode.", "error");
+      setAuthMessage(
+        messageTarget,
+        "Post code must be a valid 4-digit Australian postcode.",
+        "error",
+      );
       return;
     }
 
     try {
-      await upsertCustomerProfile(authState.supabase, authState.user, {
-        first_name: String(formData.get("first_name") || "").trim(),
-        last_name: String(formData.get("last_name") || "").trim(),
-        phone,
-        business_name: String(formData.get("business_name") || "").trim(),
-        address_line_1: String(formData.get("address_line_1") || "").trim(),
-        address_line_2: String(formData.get("address_line_2") || "").trim(),
-        suburb: String(formData.get("suburb") || "").trim(),
-        postcode,
-        state: String(formData.get("state") || "").trim(),
-      }, { allowLegacyFallback: false });
+      await upsertCustomerProfile(
+        authState.supabase,
+        authState.user,
+        {
+          first_name: String(formData.get("first_name") || "").trim(),
+          last_name: String(formData.get("last_name") || "").trim(),
+          phone,
+          business_name: String(formData.get("business_name") || "").trim(),
+          address_line_1: String(formData.get("address_line_1") || "").trim(),
+          address_line_2: String(formData.get("address_line_2") || "").trim(),
+          suburb: String(formData.get("suburb") || "").trim(),
+          postcode,
+          state: String(formData.get("state") || "").trim(),
+        },
+        { allowLegacyFallback: false },
+      );
       setAuthMessage(messageTarget, "Delivery address updated.");
     } catch (error) {
       const message = isMissingProfileColumnError(error)
@@ -5797,25 +6931,44 @@ async function initPendingOrdersPage() {
   if (!authState) return;
 
   try {
-    const records = await loadCustomerOrders(authState.supabase, authState.user, 100);
-    const pendingRecords = records.filter((record) => !isCompletedOrderRecord(record));
+    const records = await loadCustomerOrders(
+      authState.supabase,
+      authState.user,
+      100,
+    );
+    const pendingRecords = records.filter(
+      (record) => !isCompletedOrderRecord(record),
+    );
     if (badgeTarget instanceof HTMLElement) {
       badgeTarget.textContent = String(pendingRecords.length);
     }
 
     const render = () => {
-      const query = String(queryInput?.value || "").trim().toLowerCase();
+      const query = String(queryInput?.value || "")
+        .trim()
+        .toLowerCase();
       const filtered = !query
         ? pendingRecords
-        : pendingRecords.filter((record) => normalizeOrderSearchRecord(record).includes(query));
+        : pendingRecords.filter((record) =>
+            normalizeOrderSearchRecord(record).includes(query),
+          );
       renderAccountOrderCards(listTarget, filtered, "pending");
-      setAuthMessage(messageTarget, `Showing ${filtered.length} pending order${filtered.length === 1 ? "" : "s"}.`);
+      setAuthMessage(
+        messageTarget,
+        `Showing ${filtered.length} pending order${filtered.length === 1 ? "" : "s"}.`,
+      );
     };
 
     render();
     queryInput?.addEventListener("input", render);
   } catch (error) {
-    setAuthMessage(messageTarget, error instanceof Error ? error.message : "Pending orders could not be loaded.", "error");
+    setAuthMessage(
+      messageTarget,
+      error instanceof Error
+        ? error.message
+        : "Pending orders could not be loaded.",
+      "error",
+    );
     renderAccountOrderCards(listTarget, [], "pending");
   }
 }
@@ -5833,22 +6986,41 @@ async function initCompletedOrdersPage() {
   if (!authState) return;
 
   try {
-    const records = await loadCustomerOrders(authState.supabase, authState.user, 100);
-    const completedRecords = records.filter((record) => isCompletedOrderRecord(record));
+    const records = await loadCustomerOrders(
+      authState.supabase,
+      authState.user,
+      100,
+    );
+    const completedRecords = records.filter((record) =>
+      isCompletedOrderRecord(record),
+    );
 
     const render = () => {
-      const query = String(queryInput?.value || "").trim().toLowerCase();
+      const query = String(queryInput?.value || "")
+        .trim()
+        .toLowerCase();
       const filtered = !query
         ? completedRecords
-        : completedRecords.filter((record) => normalizeOrderSearchRecord(record).includes(query));
+        : completedRecords.filter((record) =>
+            normalizeOrderSearchRecord(record).includes(query),
+          );
       renderAccountOrderCards(listTarget, filtered, "completed");
-      setAuthMessage(messageTarget, `Showing ${filtered.length} completed order${filtered.length === 1 ? "" : "s"}.`);
+      setAuthMessage(
+        messageTarget,
+        `Showing ${filtered.length} completed order${filtered.length === 1 ? "" : "s"}.`,
+      );
     };
 
     render();
     queryInput?.addEventListener("input", render);
   } catch (error) {
-    setAuthMessage(messageTarget, error instanceof Error ? error.message : "Completed orders could not be loaded.", "error");
+    setAuthMessage(
+      messageTarget,
+      error instanceof Error
+        ? error.message
+        : "Completed orders could not be loaded.",
+      "error",
+    );
     renderAccountOrderCards(listTarget, [], "completed");
   }
 }
@@ -5867,10 +7039,16 @@ async function initRepairBookingsPage() {
   if (!authState) return;
 
   try {
-    const records = await loadCustomerRepairBookings(authState.supabase, authState.user, 100);
+    const records = await loadCustomerRepairBookings(
+      authState.supabase,
+      authState.user,
+      100,
+    );
 
     const render = () => {
-      const query = String(queryInput?.value || "").trim().toLowerCase();
+      const query = String(queryInput?.value || "")
+        .trim()
+        .toLowerCase();
       const rangeDays = String(rangeSelect?.value || "all");
       const now = Date.now();
 
@@ -5890,14 +7068,23 @@ async function initRepairBookingsPage() {
       });
 
       renderAccountRepairCards(listTarget, filtered);
-      setAuthMessage(messageTarget, `Showing ${filtered.length} repair booking${filtered.length === 1 ? "" : "s"}.`);
+      setAuthMessage(
+        messageTarget,
+        `Showing ${filtered.length} repair booking${filtered.length === 1 ? "" : "s"}.`,
+      );
     };
 
     render();
     queryInput?.addEventListener("input", render);
     rangeSelect?.addEventListener("change", render);
   } catch (error) {
-    setAuthMessage(messageTarget, error instanceof Error ? error.message : "Repair bookings could not be loaded.", "error");
+    setAuthMessage(
+      messageTarget,
+      error instanceof Error
+        ? error.message
+        : "Repair bookings could not be loaded.",
+      "error",
+    );
     renderAccountRepairCards(listTarget, []);
   }
 }
@@ -5916,7 +7103,11 @@ async function initWarrantyReturnsPage() {
   if (!authState) return;
 
   if (messageTarget instanceof HTMLElement) {
-    setAuthMessage(messageTarget, "Warranty and return records are ready for backend connection. This page layout is in place.", "success");
+    setAuthMessage(
+      messageTarget,
+      "Warranty and return records are ready for backend connection. This page layout is in place.",
+      "success",
+    );
   }
 
   searchButton?.addEventListener("click", () => {
@@ -5927,7 +7118,7 @@ async function initWarrantyReturnsPage() {
         query
           ? `Warranty search for "${query}" is ready once the warranty table is connected.`
           : "Enter an RA number or product name to search once the warranty backend is connected.",
-        query ? "success" : "error"
+        query ? "success" : "error",
       );
     }
   });
@@ -5966,7 +7157,11 @@ async function initMyOrdersPage() {
   }
 
   try {
-    const records = await loadCustomerOrders(authState.supabase, authState.user, 100);
+    const records = await loadCustomerOrders(
+      authState.supabase,
+      authState.user,
+      100,
+    );
     if (messageTarget instanceof HTMLElement) {
       messageTarget.hidden = false;
       messageTarget.className = "booking-message is-success";
@@ -5977,7 +7172,10 @@ async function initMyOrdersPage() {
     if (messageTarget instanceof HTMLElement) {
       messageTarget.hidden = false;
       messageTarget.className = "booking-message is-error";
-      messageTarget.textContent = error instanceof Error ? error.message : "Order history could not be loaded.";
+      messageTarget.textContent =
+        error instanceof Error
+          ? error.message
+          : "Order history could not be loaded.";
     }
     renderHistoryList(listTarget, [], "orders");
   }
@@ -6003,7 +7201,11 @@ async function initMyRepairsPage() {
   }
 
   try {
-    const records = await loadCustomerRepairBookings(authState.supabase, authState.user, 100);
+    const records = await loadCustomerRepairBookings(
+      authState.supabase,
+      authState.user,
+      100,
+    );
     if (messageTarget instanceof HTMLElement) {
       messageTarget.hidden = false;
       messageTarget.className = "booking-message is-success";
@@ -6014,7 +7216,10 @@ async function initMyRepairsPage() {
     if (messageTarget instanceof HTMLElement) {
       messageTarget.hidden = false;
       messageTarget.className = "booking-message is-error";
-      messageTarget.textContent = error instanceof Error ? error.message : "Repair history could not be loaded.";
+      messageTarget.textContent =
+        error instanceof Error
+          ? error.message
+          : "Repair history could not be loaded.";
     }
     renderHistoryList(listTarget, [], "repairs");
   }

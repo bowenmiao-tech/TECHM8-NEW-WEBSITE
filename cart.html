@@ -1,89 +1,177 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TECHM8 Cart</title>
-  <meta name="description" content="Review products in your TECHM8 shopping cart before checkout.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="promo-banner">
-    <div class="container promo-banner__inner">
-      <span>Review selected products before moving to checkout.</span>
-      <a href="shop.html">Continue shopping</a>
-    </div>
-  </div>
-
-  <header class="site-header">
-    <div class="container nav">
-      <a class="brand" href="index.html" aria-label="TECHM8 home">
-        <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
-      </a>
-      <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
-      <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </label>
-      <nav class="nav__menu" id="primary-menu">
-        <a href="index.html">Home</a>
-        <a href="repairs.html">Repairs</a>
-        <a href="products.html">Products</a>
-        <a href="stores.html">Stores</a>
-        <a href="store-policy.html">Store Policy</a>
-        <a class="nav__cart-link" href="cart.html">Cart <span class="nav__cart-count" data-cart-count>0</span></a>
-        <a class="nav__shop-link" href="shop.html">Online Store</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="storefront-page" data-cart-page>
-    <section class="section">
-      <div class="container storefront-checkout">
-        <div class="storefront-checkout__main">
-          <div class="section-heading section-heading--split">
-            <div>
-              <p class="eyebrow">Shopping cart</p>
-              <h1>Review your selected items</h1>
-            </div>
-            <a href="shop.html">Continue shopping</a>
-          </div>
-          <div data-cart-items></div>
-
-          <div class="storefront-summary storefront-summary--embedded storefront-cart__recommendation-card">
-            <div class="section-heading section-heading--split">
-              <div>
-                <p class="eyebrow">You may also need</p>
-                <h2>Recommended products</h2>
-              </div>
-              <a href="shop.html">Browse all products</a>
-            </div>
-            <div class="storefront-grid storefront-grid--dense storefront-grid--cart" data-cart-recommendations></div>
-          </div>
-        </div>
-        <aside class="storefront-checkout__sidebar">
-          <div class="storefront-summary">
-            <p class="eyebrow">Order summary</p>
-            <div data-cart-summary></div>
-            <div class="storefront-summary__actions">
-              <a class="button button--primary" href="checkout.html" data-cart-checkout>Proceed to checkout</a>
-            </div>
-          </div>
-        </aside>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TECHM8 Cart</title>
+    <meta
+      name="description"
+      content="Review products in your TECHM8 shopping cart before checkout."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="promo-banner">
+      <div class="container promo-banner__inner">
+        <span>Review selected products before moving to checkout.</span>
+        <a href="shop.html">Continue shopping</a>
       </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer footer--bottom">
-      <p>&copy; 2026 TECHM8. All rights reserved.</p>
-      <a href="store-policy.html">Repair Terms & Conditions</a>
     </div>
-  </footer>
 
-  <script type="module" src="site-config.js"></script>
-  <script type="module" src="script.js"></script>
-</body>
+    <header class="site-header">
+      <div class="container nav">
+        <a class="brand" href="index.html" aria-label="TECHM8 home">
+          <img
+            class="brand__logo"
+            src="assets/logo-techm8.png"
+            alt="TECHM8 logo"
+          />
+        </a>
+        <input
+          class="nav__mobile-input"
+          type="checkbox"
+          id="primary-menu-toggle"
+        />
+        <label
+          class="nav__toggle"
+          for="primary-menu-toggle"
+          aria-label="Open menu"
+        >
+          <span></span><span></span><span></span>
+        </label>
+        <nav class="nav__menu" id="primary-menu">
+          <a href="index.html">Home</a>
+          <a href="repairs.html">Repairs</a>
+          <a href="products.html">Products</a>
+          <a href="stores.html">Stores</a>
+          <a href="store-policy.html">Store Policy</a>
+          <a class="nav__cart-link" href="cart.html"
+            >Cart <span class="nav__cart-count" data-cart-count>0</span></a
+          >
+          <a class="nav__shop-link" href="shop.html">Online Store</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="storefront-page" data-cart-page>
+      <section class="section section--cart">
+        <div class="container storefront-checkout storefront-checkout--cart">
+          <div class="storefront-checkout__main">
+            <div class="storefront-cart__compact-heading">
+              <p class="eyebrow">Shopping cart</p>
+              <a href="shop.html">Continue shopping</a>
+            </div>
+            <div data-cart-items></div>
+
+            <div
+              class="storefront-summary storefront-summary--embedded storefront-cart__recommendation-card"
+            >
+              <div class="section-heading section-heading--split">
+                <div>
+                  <p class="eyebrow">You may also need</p>
+                  <h2>Recommended products</h2>
+                </div>
+                <a href="shop.html">Browse all products</a>
+              </div>
+              <div
+                class="storefront-recommendation-rail"
+                data-cart-recommendations
+              ></div>
+            </div>
+          </div>
+          <aside class="storefront-checkout__sidebar storefront-cart__sidebar">
+            <div class="storefront-summary">
+              <p class="eyebrow">Order summary</p>
+              <div data-cart-summary></div>
+              <div class="storefront-summary__actions">
+                <a
+                  class="button button--primary"
+                  href="checkout.html"
+                  data-cart-checkout
+                  >Proceed to checkout</a
+                >
+              </div>
+            </div>
+            <div class="cart-side-panel cart-freight" data-freight-estimator>
+              <div class="cart-side-panel__heading">
+                <h2>Estimated Freight Calculator</h2>
+                <span aria-label="Freight estimate help">?</span>
+              </div>
+              <p>
+                We're here to make your life easier. Get an estimate on how much
+                delivery may cost.
+              </p>
+              <strong class="cart-freight__dispatch"
+                >Order within 25hrs and 5mins for Next Day Dispatch</strong
+              >
+              <div class="cart-freight__form">
+                <label class="sr-only" for="cart-freight-postcode"
+                  >Postcode</label
+                >
+                <input
+                  id="cart-freight-postcode"
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="4"
+                  placeholder="Postcode"
+                  data-freight-postcode
+                />
+                <button type="button" data-freight-button>Get Estimate</button>
+              </div>
+              <div
+                class="cart-freight__results"
+                data-freight-results
+                hidden
+              ></div>
+            </div>
+            <div class="cart-side-panel cart-trust-panel">
+              <ul class="cart-trust-list" aria-label="Store trust points">
+                <li><span>✓</span>SSL Encrypted</li>
+                <li><span>◆</span>Australia's Lowest Prices</li>
+                <li><span>AU</span>100% Australian Owned</li>
+              </ul>
+              <div class="cart-payment">
+                <p>We Accept:</p>
+                <div
+                  class="cart-payment__badges"
+                  aria-label="Accepted payment methods"
+                >
+                  <span class="payment-badge payment-badge--visa">VISA</span>
+                  <span class="payment-badge payment-badge--mastercard"
+                    >MC</span
+                  >
+                  <span class="payment-badge payment-badge--amex">AMEX</span>
+                  <span class="payment-badge payment-badge--paypal"
+                    >PayPal</span
+                  >
+                  <span class="payment-badge payment-badge--zip">zip</span>
+                  <span class="payment-badge payment-badge--bank">BANK</span>
+                  <span class="payment-badge payment-badge--apple"
+                    >Apple Pay</span
+                  >
+                  <span class="payment-badge payment-badge--google">G Pay</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer footer--bottom">
+        <p>&copy; 2026 TECHM8. All rights reserved.</p>
+        <a href="store-policy.html">Repair Terms & Conditions</a>
+      </div>
+    </footer>
+
+    <script type="module" src="site-config.js"></script>
+    <script type="module" src="script.js"></script>
+  </body>
 </html>
