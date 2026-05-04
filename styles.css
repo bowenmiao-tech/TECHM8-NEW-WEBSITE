@@ -6879,6 +6879,22 @@ h2 {
   color: #b53d3d;
 }
 
+.storefront-field-hint {
+  margin: 0.1rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.storefront-field-hint.is-error {
+  color: #b53d3d;
+}
+
+.storefront-field-hint.is-success {
+  color: #087f5b;
+}
+
 .storefront-checkout__form-grid-full {
   grid-column: 1 / -1;
 }

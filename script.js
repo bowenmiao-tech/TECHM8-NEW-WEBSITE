@@ -4241,6 +4241,9 @@ function initCheckoutPage() {
   const passwordConfirmField = root.querySelector(
     "[data-checkout-password-confirm]",
   );
+  const passwordMatchMessage = root.querySelector(
+    "[data-checkout-password-match]",
+  );
   const authStep = root.querySelector("[data-checkout-auth-step]");
   const authStatus = root.querySelector("[data-checkout-auth-status]");
   const authPanels = root.querySelector("[data-checkout-auth-panels]");
@@ -4274,6 +4277,9 @@ function initCheckoutPage() {
   );
   const registerPasswordConfirmField = root.querySelector(
     "[data-checkout-register-password-confirm]",
+  );
+  const registerPasswordMatchMessage = root.querySelector(
+    "[data-checkout-register-password-match]",
   );
   const deliveryStep = root.querySelector("[data-checkout-delivery-step]");
   const deliveryContinueButton = root.querySelector(
@@ -4428,6 +4434,65 @@ function initCheckoutPage() {
       return true;
     }
     return invalidateField(field, message, topMessage);
+  };
+
+  const updatePasswordPairState = (
+    passwordInput,
+    confirmInput,
+    matchMessage,
+  ) => {
+    if (
+      !(passwordInput instanceof HTMLInputElement) ||
+      !(confirmInput instanceof HTMLInputElement)
+    ) {
+      return true;
+    }
+
+    const password = String(passwordInput.value || "");
+    const confirmPassword = String(confirmInput.value || "");
+    const passwordMeetsRule = isValidAccountPassword(password);
+
+    if (password && !passwordMeetsRule) {
+      passwordInput.classList.add("is-invalid");
+      passwordInput.setAttribute("aria-invalid", "true");
+      passwordInput.setCustomValidity(
+        "Password must include English letters and numbers.",
+      );
+    } else {
+      clearFieldError(passwordInput);
+    }
+
+    if (!(matchMessage instanceof HTMLElement)) {
+      return passwordMeetsRule && password === confirmPassword;
+    }
+
+    matchMessage.classList.remove("is-error", "is-success");
+
+    if (!confirmPassword) {
+      matchMessage.hidden = true;
+      matchMessage.textContent = "";
+      clearFieldError(confirmInput);
+      return passwordMeetsRule;
+    }
+
+    if (password === confirmPassword && passwordMeetsRule) {
+      matchMessage.hidden = false;
+      matchMessage.textContent = "Passwords match.";
+      matchMessage.classList.add("is-success");
+      clearFieldError(confirmInput);
+      return true;
+    }
+
+    matchMessage.hidden = false;
+    matchMessage.textContent =
+      password === confirmPassword
+        ? "Password must include English letters and numbers."
+        : "Passwords do not match.";
+    matchMessage.classList.add("is-error");
+    confirmInput.classList.add("is-invalid");
+    confirmInput.setAttribute("aria-invalid", "true");
+    confirmInput.setCustomValidity(matchMessage.textContent);
+    return false;
   };
 
   const getContactFields = () => ({
@@ -5392,6 +5457,36 @@ function initCheckoutPage() {
   }
 
   if (
+    registerPasswordField instanceof HTMLInputElement &&
+    registerPasswordConfirmField instanceof HTMLInputElement
+  ) {
+    [registerPasswordField, registerPasswordConfirmField].forEach((input) => {
+      input.addEventListener("input", () => {
+        updatePasswordPairState(
+          registerPasswordField,
+          registerPasswordConfirmField,
+          registerPasswordMatchMessage,
+        );
+      });
+    });
+  }
+
+  if (
+    passwordField instanceof HTMLInputElement &&
+    passwordConfirmField instanceof HTMLInputElement
+  ) {
+    [passwordField, passwordConfirmField].forEach((input) => {
+      input.addEventListener("input", () => {
+        updatePasswordPairState(
+          passwordField,
+          passwordConfirmField,
+          passwordMatchMessage,
+        );
+      });
+    });
+  }
+
+  if (
     registerButton instanceof HTMLButtonElement &&
     registerFirstNameField instanceof HTMLInputElement &&
     registerLastNameField instanceof HTMLInputElement &&
@@ -5441,6 +5536,15 @@ function initCheckoutPage() {
       }
       if (!password) {
         setPanelMessage(registerMessageTarget, "Create a password.", "error");
+        registerPasswordField.focus();
+        return;
+      }
+      if (!isValidAccountPassword(password)) {
+        setPanelMessage(
+          registerMessageTarget,
+          "Password must include English letters and numbers.",
+          "error",
+        );
         registerPasswordField.focus();
         return;
       }
@@ -5737,6 +5841,15 @@ function initCheckoutPage() {
           passwordField,
           "Create a password for your TECHM8 account.",
           "Create a password to register your TECHM8 account with this order.",
+        );
+        return;
+      }
+
+      if (!isValidAccountPassword(checkoutPassword)) {
+        invalidateField(
+          passwordField,
+          "Password must include English letters and numbers.",
+          "Password must include English letters and numbers.",
         );
         return;
       }
@@ -6731,6 +6844,11 @@ function isValidEmailAddress(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(String(email || "").trim());
 }
 
+function isValidAccountPassword(password) {
+  const value = String(password || "");
+  return /[A-Za-z]/.test(value) && /\d/.test(value);
+}
+
 function normalizeAustralianPhone(phone) {
   const raw = String(phone || "").trim();
   const compact = raw.replace(/[^\d+]/g, "");
@@ -7008,6 +7126,76 @@ async function initRegisterPage() {
   const messageBox = root.querySelector("[data-auth-message]");
   const registerForm = root.querySelector("[data-register-form]");
   if (!(registerForm instanceof HTMLFormElement)) return;
+  const passwordField = registerForm.elements.namedItem("password");
+  const confirmPasswordField =
+    registerForm.elements.namedItem("confirm_password");
+  const passwordMatchMessage = root.querySelector(
+    "[data-password-match-message]",
+  );
+
+  const updateRegisterPasswordState = () => {
+    if (
+      !(passwordField instanceof HTMLInputElement) ||
+      !(confirmPasswordField instanceof HTMLInputElement) ||
+      !(passwordMatchMessage instanceof HTMLElement)
+    ) {
+      return true;
+    }
+
+    const password = String(passwordField.value || "");
+    const confirmPassword = String(confirmPasswordField.value || "");
+    const passwordMeetsRule = isValidAccountPassword(password);
+
+    passwordField.classList.toggle(
+      "is-invalid",
+      Boolean(password && !passwordMeetsRule),
+    );
+    passwordField.setCustomValidity(
+      password && !passwordMeetsRule
+        ? "Password must include English letters and numbers."
+        : "",
+    );
+    passwordMatchMessage.classList.remove(
+      "auth-single__hint--error",
+      "auth-single__hint--success",
+    );
+
+    if (!confirmPassword) {
+      passwordMatchMessage.hidden = true;
+      passwordMatchMessage.textContent = "";
+      confirmPasswordField.classList.remove("is-invalid");
+      confirmPasswordField.setCustomValidity("");
+      return passwordMeetsRule;
+    }
+
+    if (password === confirmPassword && passwordMeetsRule) {
+      passwordMatchMessage.hidden = false;
+      passwordMatchMessage.textContent = "Passwords match.";
+      passwordMatchMessage.classList.add("auth-single__hint--success");
+      confirmPasswordField.classList.remove("is-invalid");
+      confirmPasswordField.setCustomValidity("");
+      return true;
+    }
+
+    passwordMatchMessage.hidden = false;
+    passwordMatchMessage.textContent =
+      password === confirmPassword
+        ? "Password must include English letters and numbers."
+        : "Passwords do not match.";
+    passwordMatchMessage.classList.add("auth-single__hint--error");
+    confirmPasswordField.classList.add("is-invalid");
+    confirmPasswordField.setCustomValidity(passwordMatchMessage.textContent);
+    return false;
+  };
+
+  if (
+    passwordField instanceof HTMLInputElement &&
+    confirmPasswordField instanceof HTMLInputElement
+  ) {
+    [passwordField, confirmPasswordField].forEach((input) => {
+      input.addEventListener("input", updateRegisterPasswordState);
+    });
+  }
 
   let supabase;
   try {
@@ -7058,6 +7246,16 @@ async function initRegisterPage() {
         "Please enter a valid Australian phone number.",
         "error",
       );
+      return;
+    }
+
+    if (!isValidAccountPassword(password)) {
+      setAuthMessage(
+        messageBox,
+        "Password must include English letters and numbers.",
+        "error",
+      );
+      if (passwordField instanceof HTMLInputElement) passwordField.focus();
       return;
     }
 

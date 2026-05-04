@@ -1,263 +1,374 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Account | OZ TECH M8</title>
-  <meta name="description" content="Create your OZ TECH M8 account with email verification.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    :root {
-      --accent: #05CEAC;
-      --accent-strong: #03b899;
-      --text: #14262b;
-      --muted: #65797f;
-      --line: rgba(20, 38, 43, 0.1);
-    }
-
-    body {
-      background: linear-gradient(180deg, #f8fcfb 0%, #ffffff 50%, #f4fbfa 100%);
-    }
-
-    .auth-single {
-      min-height: calc(100vh - 15rem);
-      padding: clamp(2.5rem, 6vw, 5rem) 0;
-    }
-
-    .auth-single__wrap {
-      max-width: 36rem;
-      margin: 0 auto;
-      display: grid;
-      gap: 1rem;
-    }
-
-    .auth-single__card {
-      display: grid;
-      gap: 1rem;
-      padding: clamp(1.1rem, 3vw, 1.7rem);
-      border: 1px solid var(--line);
-      border-radius: 1.6rem;
-      background: rgba(255, 255, 255, 0.94);
-      box-shadow: 0 24px 70px rgba(7, 26, 31, 0.08);
-    }
-
-    .auth-single__eyebrow {
-      margin: 0;
-      color: var(--accent-strong);
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .auth-single h1 {
-      margin: 0;
-      color: #0f171a;
-      font-size: clamp(2.25rem, 5vw, 3.2rem);
-      line-height: 0.98;
-      letter-spacing: -0.06em;
-    }
-
-    .auth-single p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .auth-single__form {
-      display: grid;
-      gap: 0.85rem;
-    }
-
-    .auth-single__form label {
-      display: grid;
-      gap: 0.35rem;
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    .auth-single__form input {
-      width: 100%;
-      padding: 0.95rem 1rem;
-      border: 1px solid var(--line);
-      border-radius: 1rem;
-      background: #fff;
-      color: var(--text);
-      font: inherit;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .auth-single__hint {
-      margin-top: -0.15rem;
-      color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.6;
-    }
-
-    .auth-single__form input:focus {
-      outline: none;
-      border-color: rgba(5, 206, 172, 0.72);
-      box-shadow: 0 0 0 0.28rem rgba(5, 206, 172, 0.14);
-    }
-
-    .auth-single__button,
-    .auth-single__link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 3rem;
-      padding: 0.85rem 1.1rem;
-      border-radius: 999px;
-      text-decoration: none;
-      font-weight: 700;
-      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-    }
-
-    .auth-single__button:hover,
-    .auth-single__link:hover {
-      transform: translateY(-1px);
-    }
-
-    .auth-single__button {
-      border: 0;
-      background: var(--accent);
-      color: #082824;
-      box-shadow: 0 12px 28px rgba(5, 206, 172, 0.18);
-    }
-
-    .auth-single__button:hover {
-      background: var(--accent-strong);
-    }
-
-    .auth-single__link {
-      border: 1px solid var(--line);
-      background: #fff;
-      color: var(--text);
-    }
-
-    .auth-single__link:hover {
-      color: var(--accent-strong);
-      border-color: rgba(5, 206, 172, 0.42);
-    }
-
-    .auth-single__links {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.8rem;
-    }
-
-    @media (max-width: 640px) {
-      .auth-single__links {
-        grid-template-columns: 1fr;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account | OZ TECH M8</title>
+    <meta
+      name="description"
+      content="Create your OZ TECH M8 account with email verification."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      :root {
+        --accent: #05ceac;
+        --accent-strong: #03b899;
+        --text: #14262b;
+        --muted: #65797f;
+        --line: rgba(20, 38, 43, 0.1);
       }
-    }
-  </style>
-</head>
-<body>
-  <div class="promo-banner">
-    <div class="container promo-banner__inner">
-      <span>Create your customer account for future orders and repair bookings.</span>
-      <a href="account.html">Back to sign in</a>
+
+      body {
+        background: linear-gradient(
+          180deg,
+          #f8fcfb 0%,
+          #ffffff 50%,
+          #f4fbfa 100%
+        );
+      }
+
+      .auth-single {
+        min-height: calc(100vh - 15rem);
+        padding: clamp(2.5rem, 6vw, 5rem) 0;
+      }
+
+      .auth-single__wrap {
+        max-width: 36rem;
+        margin: 0 auto;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .auth-single__card {
+        display: grid;
+        gap: 1rem;
+        padding: clamp(1.1rem, 3vw, 1.7rem);
+        border: 1px solid var(--line);
+        border-radius: 1.6rem;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 24px 70px rgba(7, 26, 31, 0.08);
+      }
+
+      .auth-single__eyebrow {
+        margin: 0;
+        color: var(--accent-strong);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .auth-single h1 {
+        margin: 0;
+        color: #0f171a;
+        font-size: clamp(2.25rem, 5vw, 3.2rem);
+        line-height: 0.98;
+        letter-spacing: -0.06em;
+      }
+
+      .auth-single p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .auth-single__form {
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .auth-single__form label {
+        display: grid;
+        gap: 0.35rem;
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .auth-single__form input {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid var(--line);
+        border-radius: 1rem;
+        background: #fff;
+        color: var(--text);
+        font: inherit;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .auth-single__hint {
+        margin-top: -0.15rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+        line-height: 1.6;
+      }
+
+      .auth-single__hint--error {
+        color: #b53d3d;
+        font-weight: 600;
+      }
+
+      .auth-single__hint--success {
+        color: #087f5b;
+        font-weight: 600;
+      }
+
+      .auth-single__form input.is-invalid {
+        border-color: rgba(205, 79, 79, 0.9);
+        background: rgba(255, 249, 249, 0.96);
+      }
+
+      .auth-single__form input:focus {
+        outline: none;
+        border-color: rgba(5, 206, 172, 0.72);
+        box-shadow: 0 0 0 0.28rem rgba(5, 206, 172, 0.14);
+      }
+
+      .auth-single__button,
+      .auth-single__link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 3rem;
+        padding: 0.85rem 1.1rem;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 700;
+        transition:
+          transform 0.2s ease,
+          background 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease;
+      }
+
+      .auth-single__button:hover,
+      .auth-single__link:hover {
+        transform: translateY(-1px);
+      }
+
+      .auth-single__button {
+        border: 0;
+        background: var(--accent);
+        color: #082824;
+        box-shadow: 0 12px 28px rgba(5, 206, 172, 0.18);
+      }
+
+      .auth-single__button:hover {
+        background: var(--accent-strong);
+      }
+
+      .auth-single__link {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--text);
+      }
+
+      .auth-single__link:hover {
+        color: var(--accent-strong);
+        border-color: rgba(5, 206, 172, 0.42);
+      }
+
+      .auth-single__links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.8rem;
+      }
+
+      @media (max-width: 640px) {
+        .auth-single__links {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="promo-banner">
+      <div class="container promo-banner__inner">
+        <span
+          >Create your customer account for future orders and repair
+          bookings.</span
+        >
+        <a href="account.html">Back to sign in</a>
+      </div>
     </div>
-  </div>
 
-  <header class="site-header">
-    <div class="container nav">
-      <a class="brand" href="index.html" aria-label="TECHM8 home">
-        <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
-      </a>
-      <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
-      <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </label>
-      <nav class="nav__menu" id="primary-menu">
-        <a href="index.html">Home</a>
-        <a href="repairs.html">Repairs</a>
-        <a href="products.html">Products</a>
-        <a href="stores.html">Stores</a>
-        <a href="store-policy.html">Store Policy</a>
-        <a class="nav__cart-link" href="cart.html">Cart <span class="nav__cart-count" data-cart-count>0</span></a>
-        <a class="nav__shop-link" href="shop.html">Online Store</a>
-      </nav>
-    </div>
-  </header>
+    <header class="site-header">
+      <div class="container nav">
+        <a class="brand" href="index.html" aria-label="TECHM8 home">
+          <img
+            class="brand__logo"
+            src="assets/logo-techm8.png"
+            alt="TECHM8 logo"
+          />
+        </a>
+        <input
+          class="nav__mobile-input"
+          type="checkbox"
+          id="primary-menu-toggle"
+        />
+        <label
+          class="nav__toggle"
+          for="primary-menu-toggle"
+          aria-label="Open menu"
+        >
+          <span></span><span></span><span></span>
+        </label>
+        <nav class="nav__menu" id="primary-menu">
+          <a href="index.html">Home</a>
+          <a href="repairs.html">Repairs</a>
+          <a href="products.html">Products</a>
+          <a href="stores.html">Stores</a>
+          <a href="store-policy.html">Store Policy</a>
+          <a class="nav__cart-link" href="cart.html"
+            >Cart <span class="nav__cart-count" data-cart-count>0</span></a
+          >
+          <a class="nav__shop-link" href="shop.html">Online Store</a>
+        </nav>
+      </div>
+    </header>
 
-  <main class="auth-single" data-register-page>
-    <section class="container">
-      <div class="auth-single__wrap">
-        <div class="auth-single__card">
-          <p class="auth-single__eyebrow">Create account</p>
-          <h1>Register.</h1>
-          <p>Use your real email address. Email verification is required before full sign in.</p>
+    <main class="auth-single" data-register-page>
+      <section class="container">
+        <div class="auth-single__wrap">
+          <div class="auth-single__card">
+            <p class="auth-single__eyebrow">Create account</p>
+            <h1>Register.</h1>
+            <p>
+              Use your real email address. Email verification is required before
+              full sign in.
+            </p>
 
-          <div class="booking-message" data-auth-message hidden></div>
+            <div class="booking-message" data-auth-message hidden></div>
 
-          <form class="auth-single__form" data-register-form novalidate>
-            <label>
-              <span>Full name *</span>
-              <input type="text" name="full_name" autocomplete="name" required>
-            </label>
-            <label>
-              <span>Phone *</span>
-              <input type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="04xx xxx xxx or +61 4xx xxx xxx" required>
-            </label>
-            <p class="auth-single__hint">Australian mobile or landline format only. Example: 0412 345 678 or +61 412 345 678.</p>
-            <label>
-              <span>Email *</span>
-              <input type="email" name="email" autocomplete="email" inputmode="email" placeholder="name@example.com.au" required>
-            </label>
-            <p class="auth-single__hint">Use a valid email address that you can access in Australia.</p>
-            <label>
-              <span>Password *</span>
-              <input type="password" name="password" autocomplete="new-password" required>
-            </label>
-            <label>
-              <span>Confirm password *</span>
-              <input type="password" name="confirm_password" autocomplete="new-password" required>
-            </label>
-            <button class="auth-single__button" type="submit">Create account</button>
-          </form>
+            <form class="auth-single__form" data-register-form novalidate>
+              <label>
+                <span>Full name *</span>
+                <input
+                  type="text"
+                  name="full_name"
+                  autocomplete="name"
+                  required
+                />
+              </label>
+              <label>
+                <span>Phone *</span>
+                <input
+                  type="tel"
+                  name="phone"
+                  autocomplete="tel"
+                  inputmode="tel"
+                  placeholder="04xx xxx xxx or +61 4xx xxx xxx"
+                  required
+                />
+              </label>
+              <p class="auth-single__hint">
+                Australian mobile or landline format only. Example: 0412 345 678
+                or +61 412 345 678.
+              </p>
+              <label>
+                <span>Email *</span>
+                <input
+                  type="email"
+                  name="email"
+                  autocomplete="email"
+                  inputmode="email"
+                  placeholder="name@example.com.au"
+                  required
+                />
+              </label>
+              <p class="auth-single__hint">
+                Use a valid email address that you can access in Australia.
+              </p>
+              <label>
+                <span>Password *</span>
+                <input
+                  type="password"
+                  name="password"
+                  autocomplete="new-password"
+                  required
+                />
+              </label>
+              <p class="auth-single__hint" data-password-rule-message>
+                Password must include English letters and numbers.
+              </p>
+              <label>
+                <span>Confirm password *</span>
+                <input
+                  type="password"
+                  name="confirm_password"
+                  autocomplete="new-password"
+                  required
+                />
+              </label>
+              <p
+                class="auth-single__hint"
+                data-password-match-message
+                hidden
+              ></p>
+              <button class="auth-single__button" type="submit">
+                Create account
+              </button>
+            </form>
 
-          <div class="auth-single__links">
-            <a class="auth-single__link" href="account.html">Back to sign in</a>
-            <a class="auth-single__link" href="forgot-password.html">Forgot password</a>
+            <div class="auth-single__links">
+              <a class="auth-single__link" href="account.html"
+                >Back to sign in</a
+              >
+              <a class="auth-single__link" href="forgot-password.html"
+                >Forgot password</a
+              >
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div class="footer-brand">
-        <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
-        <p>TECHM8 repairs phones, tablets, computers, laptops and game consoles, and also supplies parts, accessories and everyday tech products.</p>
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <img
+            class="footer-brand__logo"
+            src="assets/logo-techm8.png"
+            alt="TECHM8 logo"
+          />
+          <p>
+            TECHM8 repairs phones, tablets, computers, laptops and game
+            consoles, and also supplies parts, accessories and everyday tech
+            products.
+          </p>
+        </div>
+        <div>
+          <h4>Quick links</h4>
+          <a href="repairs.html">Repairs</a>
+          <a href="products.html">Products</a>
+          <a href="stores.html">Stores</a>
+          <a href="shop.html">Online Store</a>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <a href="book-repair.html">Book a repair</a>
+          <a href="cart.html">Cart</a>
+          <a href="checkout.html">Checkout</a>
+          <a href="store-policy.html">Store Policy</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>
+            Use your nearest store page or the online checkout flow for the
+            fastest response.
+          </p>
+        </div>
       </div>
-      <div>
-        <h4>Quick links</h4>
-        <a href="repairs.html">Repairs</a>
-        <a href="products.html">Products</a>
-        <a href="stores.html">Stores</a>
-        <a href="shop.html">Online Store</a>
-      </div>
-      <div>
-        <h4>Support</h4>
-        <a href="book-repair.html">Book a repair</a>
-        <a href="cart.html">Cart</a>
-        <a href="checkout.html">Checkout</a>
-        <a href="store-policy.html">Store Policy</a>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <p>Use your nearest store page or the online checkout flow for the fastest response.</p>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
-  <script type="module" src="site-config.js"></script>
-  <script type="module" src="script.js"></script>
-</body>
+    <script type="module" src="site-config.js"></script>
+    <script type="module" src="script.js"></script>
+  </body>
 </html>
