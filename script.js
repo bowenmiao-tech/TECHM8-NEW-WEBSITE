@@ -419,6 +419,123 @@ function initStoreSearch() {
   });
 }
 
+function initStoresLocator() {
+  const root = document.querySelector("[data-store-locator]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const storeOrder = ["park-ridge", "fairfield", "toowong", "north-lakes", "brassall"];
+  const cards = Array.from(root.querySelectorAll("[data-store-card]"));
+  const searchInput = root.querySelector("[data-store-search]");
+  const countTarget = root.querySelector("[data-store-count]");
+  const mapFrame = root.querySelector("[data-store-map]");
+  const mapTitle = root.querySelector("[data-store-map-title]");
+  const mapAddress = root.querySelector("[data-store-map-address]");
+  const directionsLink = root.querySelector("[data-store-directions]");
+  const pageLink = root.querySelector("[data-store-page]");
+  const allStoresButton = root.querySelector("[data-store-all]");
+  const allStoresMapSrc = "https://www.google.com/maps?q=OZ%20Tech%20M8%20Queensland%20Australia&output=embed";
+
+  const getMapSrc = (store) => {
+    const address = String(store?.address || "").trim();
+    return `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
+  };
+
+  const showAllStores = () => {
+    cards.forEach((card) => {
+      card.classList.remove("is-active");
+      card.setAttribute("aria-pressed", "false");
+    });
+    if (mapFrame instanceof HTMLIFrameElement) {
+      mapFrame.src = allStoresMapSrc;
+      mapFrame.title = "OZ Tech M8 Queensland Google Map";
+    }
+    if (mapTitle instanceof HTMLElement) {
+      mapTitle.textContent = "All TECHM8 stores";
+    }
+    if (mapAddress instanceof HTMLElement) {
+      mapAddress.textContent = "Search result view for OZ Tech M8 stores across Queensland.";
+    }
+    if (directionsLink instanceof HTMLAnchorElement) {
+      directionsLink.href = "https://www.google.com/maps/search/?api=1&query=OZ%20Tech%20M8%20Queensland%20Australia";
+    }
+    if (pageLink instanceof HTMLAnchorElement) {
+      pageLink.href = "stores.html";
+    }
+  };
+
+  const selectStore = (slug) => {
+    const store = STORE_CHECKOUT_DETAILS[slug];
+    if (!store) return;
+
+    cards.forEach((card) => {
+      const isActive = card.getAttribute("data-store-card") === slug;
+      card.classList.toggle("is-active", isActive);
+      card.setAttribute("aria-pressed", String(isActive));
+    });
+
+    if (mapFrame instanceof HTMLIFrameElement) {
+      mapFrame.src = getMapSrc(store);
+      mapFrame.title = `OZ Tech M8 ${store.title} Google Map`;
+    }
+    if (mapTitle instanceof HTMLElement) {
+      mapTitle.textContent = store.title;
+    }
+    if (mapAddress instanceof HTMLElement) {
+      mapAddress.textContent = store.address;
+    }
+    if (directionsLink instanceof HTMLAnchorElement) {
+      directionsLink.href = store.mapUrl || getMapSrc(store);
+    }
+    if (pageLink instanceof HTMLAnchorElement) {
+      pageLink.href = store.pageUrl || "stores.html";
+    }
+  };
+
+  cards.forEach((card) => {
+    const slug = card.getAttribute("data-store-card") || "";
+    if (storeOrder.includes(slug)) {
+      card.setAttribute("aria-pressed", card.classList.contains("is-active") ? "true" : "false");
+      card.addEventListener("click", () => selectStore(slug));
+    }
+  });
+
+  if (allStoresButton instanceof HTMLButtonElement) {
+    allStoresButton.addEventListener("click", showAllStores);
+  }
+
+  if (searchInput instanceof HTMLInputElement) {
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const slug = card.getAttribute("data-store-card") || "";
+        const store = STORE_CHECKOUT_DETAILS[slug];
+        const searchable = [
+          store?.title,
+          store?.address,
+          store?.phone,
+          card.textContent,
+        ].join(" ").toLowerCase();
+        const isVisible = !query || searchable.includes(query);
+        card.hidden = !isVisible;
+        if (isVisible) visibleCount += 1;
+      });
+
+      if (countTarget instanceof HTMLElement) {
+        countTarget.textContent = `${visibleCount} store${visibleCount === 1 ? "" : "s"}`;
+      }
+    });
+  }
+
+  const initialSlug = cards.find((card) => card.classList.contains("is-active"))?.getAttribute("data-store-card") || "";
+  if (initialSlug) {
+    selectStore(initialSlug);
+  } else {
+    showAllStores();
+  }
+}
+
 function initHomeBanner() {
   const banner = document.querySelector("[data-home-banner]");
   if (!(banner instanceof HTMLElement)) return;
@@ -5776,6 +5893,7 @@ function initPage() {
   window.addEventListener("storage", () => updateCartIndicators());
   initFilters();
   initNavigation();
+  initStoresLocator();
   initHomeBanner();
   initHomeFeaturedProducts();
   initStorefront();

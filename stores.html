@@ -104,39 +104,79 @@
   </header>
 
   <main class="inner-page">
-    <section class="container inner-page__hero">
-      <p class="eyebrow">Store locations</p>
-      <h1>Find the nearest TECHM8 store.</h1>
-      <p>Each location can have its own local SEO page with directions, opening hours, repair highlights and service notes.</p>
+    <section class="store-locator-hero">
+      <div class="container store-locator-hero__inner">
+        <p class="eyebrow">Store locator</p>
+        <h1>Find your nearest OZ Tech M8 store.</h1>
+        <p>Repair support, product pickup and accessory advice across Brisbane and surrounding suburbs.</p>
+      </div>
     </section>
 
     <section class="section section--tight">
-      <div class="container store-grid">
-        <article class="store-card">
-          <h3>Park Ridge</h3>
-          <p>Shop 11, 3732 Mount Lindesay Hwy, Park Ridge QLD 4125</p>
-          <a href="stores/park-ridge.html">Open store page</a>
-        </article>
-        <article class="store-card">
-          <h3>Fairfield</h3>
-          <p>Shop 8, 180 Fairfield Rd, Fairfield QLD 4103</p>
-          <a href="stores/fairfield.html">Open store page</a>
-        </article>
-        <article class="store-card">
-          <h3>Toowong</h3>
-          <p>Ground Level Shop 53, 9 Sherwood Rd, Toowong QLD 4066</p>
-          <a href="stores/toowong.html">Open store page</a>
-        </article>
-        <article class="store-card">
-          <h3>North Lakes</h3>
-          <p>1114A N Lakes Drive, North Lakes QLD 4509</p>
-          <a href="stores/north-lakes.html">Open store page</a>
-        </article>
-        <article class="store-card">
-          <h3>Brassall</h3>
-          <p>68 Hunter St, Primewest Brassall Shopping Centre, Brassall QLD 4305</p>
-          <a href="stores/brassall.html">Open store page</a>
-        </article>
+      <div class="container store-locator" data-store-locator>
+        <aside class="store-locator__panel" aria-label="Store list">
+          <div class="store-locator__panel-head">
+            <div>
+              <p class="eyebrow">Locations</p>
+              <h2>Our stores</h2>
+            </div>
+            <span data-store-count>5 stores</span>
+          </div>
+          <label class="store-locator__search">
+            <span>Search by suburb or address</span>
+            <input type="search" placeholder="Search stores..." data-store-search>
+          </label>
+          <div class="store-locator__list">
+            <button class="store-locator__card" type="button" data-store-card="park-ridge">
+              <strong>Park Ridge</strong>
+              <span>Shop 11, 3732 Mount Lindesay Hwy, Park Ridge QLD 4125</span>
+              <small>Open map and store details</small>
+            </button>
+            <button class="store-locator__card" type="button" data-store-card="fairfield">
+              <strong>Fairfield</strong>
+              <span>Shop 8, 180 Fairfield Rd, Fairfield QLD 4103</span>
+              <small>Open map and store details</small>
+            </button>
+            <button class="store-locator__card" type="button" data-store-card="toowong">
+              <strong>Toowong</strong>
+              <span>Ground Level Shop 53, 9 Sherwood Rd, Toowong QLD 4066</span>
+              <small>Open map and store details</small>
+            </button>
+            <button class="store-locator__card" type="button" data-store-card="north-lakes">
+              <strong>North Lakes</strong>
+              <span>1114A N Lakes Drive, North Lakes QLD 4509</span>
+              <small>Open map and store details</small>
+            </button>
+            <button class="store-locator__card" type="button" data-store-card="brassall">
+              <strong>Brassall</strong>
+              <span>68 Hunter St, Primewest Brassall Shopping Centre, Brassall QLD 4305</span>
+              <small>Open map and store details</small>
+            </button>
+          </div>
+        </aside>
+
+        <div class="store-locator__map-shell">
+          <div class="store-locator__map-toolbar">
+            <div>
+              <p class="eyebrow">Google Maps</p>
+              <h2 data-store-map-title>All TECHM8 stores</h2>
+              <p data-store-map-address>Search result view for OZ Tech M8 stores across Queensland.</p>
+            </div>
+            <div class="store-locator__map-actions">
+              <button class="button button--ghost" type="button" data-store-all>Show all stores</button>
+              <a class="button button--secondary" href="https://maps.app.goo.gl/SBzYCp7G5C3UM4SdA" target="_blank" rel="noopener" data-store-directions>Directions</a>
+              <a class="button button--primary" href="stores/park-ridge.html" data-store-page>Store page</a>
+            </div>
+          </div>
+          <div class="store-locator__map">
+            <iframe
+              title="OZ Tech M8 Queensland Google Map"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=OZ%20Tech%20M8%20Queensland%20Australia&output=embed"
+              data-store-map></iframe>
+          </div>
+        </div>
       </div>
     </section>
   </main>
