@@ -6035,6 +6035,11 @@ h2 {
   gap: 1rem;
 }
 
+.storefront-checkout:not(.storefront-checkout--cart)
+  .storefront-checkout__sidebar {
+  padding-top: clamp(9rem, 16vw, 12rem);
+}
+
 .storefront-cart__compact-heading {
   display: flex;
   align-items: center;
@@ -7152,6 +7157,11 @@ h2 {
   .storefront-summary--checkout {
     position: static;
     order: -1;
+  }
+
+  .storefront-checkout:not(.storefront-checkout--cart)
+    .storefront-checkout__sidebar {
+    padding-top: 0;
   }
 
   .checkout-progress {
