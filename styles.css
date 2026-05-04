@@ -2652,6 +2652,27 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   background: rgba(7, 39, 45, 0.92);
 }
 
+.repair-category-card__icon--svg {
+  display: grid;
+  place-items: center;
+  color: var(--brand-dark);
+}
+
+.repair-category-card__icon--svg::before,
+.repair-category-card__icon--svg::after {
+  display: none;
+}
+
+.repair-category-card__icon--svg svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .repair-category-card__icon--phone::before {
   width: 1.35rem;
   height: 2.5rem;
@@ -2712,6 +2733,40 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.8);
   box-shadow: var(--shadow);
+}
+
+.repair-detail-panel--brands {
+  background:
+    radial-gradient(circle at 16% 18%, rgba(5, 206, 172, 0.18), transparent 18rem),
+    rgba(255, 255, 255, 0.88);
+}
+
+.repair-brand-wall {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+  min-height: 16rem;
+  padding: 0.25rem;
+}
+
+.repair-brand-wall__item {
+  display: grid;
+  place-items: center;
+  min-height: 6.75rem;
+  padding: 1.05rem;
+  border: 1px solid rgba(7, 39, 45, 0.08);
+  border-radius: 1.2rem;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 14px 32px rgba(7, 39, 45, 0.07);
+}
+
+.repair-brand-wall__item img {
+  display: block;
+  max-width: 100%;
+  max-height: 3.4rem;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 
 .repair-detail-panel__icon {
@@ -3562,6 +3617,25 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
   .repair-detail-panel__icon {
     min-height: 12rem;
+  }
+
+  .repair-brand-wall {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-height: 0;
+  }
+
+  .repair-brand-wall__item {
+    min-height: 5.8rem;
+  }
+
+  .repair-category-card__icon {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
+
+  .repair-category-card__icon--svg svg {
+    width: 2.1rem;
+    height: 2.1rem;
   }
 
   .repair-brand-card,
