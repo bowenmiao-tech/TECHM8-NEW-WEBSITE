@@ -4118,9 +4118,8 @@ function initCartPage() {
     }
     freightResults.hidden = false;
     freightResults.innerHTML = `
-      <div class="cart-freight__row"><span>Standard Delivery</span><strong>$12.00</strong></div>
-      <div class="cart-freight__row"><span>Express Delivery</span><strong>$17.00</strong></div>
-      <div class="cart-freight__row"><span>Uber Direct</span><strong>N/A</strong></div>
+      <div class="cart-freight__row"><span>Standard Delivery</span><strong>$15.00</strong></div>
+      <div class="cart-freight__row"><span>Express Delivery</span><strong>$18.00</strong></div>
     `;
   };
 
