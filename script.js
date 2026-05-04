@@ -717,6 +717,7 @@ const STORE_CHECKOUT_DETAILS = {
       "Collect your order from the Park Ridge store once the team confirms pickup timing.",
     address: "Shop 11, 3732 Mount Lindesay Hwy, Park Ridge QLD 4125",
     phone: "0452 488 710",
+    hours: "Mon-Sat 9:00 AM - 5:00 PM, Sun 10:00 AM - 4:00 PM",
     mapUrl: "https://maps.app.goo.gl/SBzYCp7G5C3UM4SdA",
     pageUrl: "stores/park-ridge.html",
   },
@@ -726,6 +727,7 @@ const STORE_CHECKOUT_DETAILS = {
     summary: "Pick up directly from Fairfield after order confirmation.",
     address: "Shop 8, 180 Fairfield Rd, Fairfield QLD 4103",
     phone: "0412 788 818",
+    hours: "Mon-Sat 9:00 AM - 5:00 PM, Sun 10:00 AM - 4:00 PM",
     mapUrl: "https://maps.app.goo.gl/2iQqRL4YURm5cUfy7",
     pageUrl: "stores/fairfield.html",
   },
@@ -735,6 +737,7 @@ const STORE_CHECKOUT_DETAILS = {
     summary: "Collect from the Toowong store once your order is prepared.",
     address: "Ground Level Shop 53, 9 Sherwood Rd, Toowong QLD 4066",
     phone: "0485 500 099",
+    hours: "Mon-Sat 9:00 AM - 5:00 PM, Sun 10:00 AM - 4:00 PM",
     mapUrl: "https://maps.app.goo.gl/9V7EERgpiuUjreQp7",
     pageUrl: "stores/toowong.html",
   },
@@ -745,6 +748,7 @@ const STORE_CHECKOUT_DETAILS = {
       "North Lakes pickup with confirmation from the local team before collection.",
     address: "1114A N Lakes Drive, North Lakes QLD 4509",
     phone: "0482 390 009",
+    hours: "Mon-Sat 9:00 AM - 5:00 PM, Sun 10:00 AM - 4:00 PM",
     mapUrl: "https://maps.app.goo.gl/ZdEjv8V98RxT9uCT7",
     pageUrl: "stores/north-lakes.html",
   },
@@ -756,6 +760,7 @@ const STORE_CHECKOUT_DETAILS = {
     address:
       "68 Hunter St, Primewest Brassall Shopping Centre, Brassall QLD 4305",
     phone: "0403 999 366",
+    hours: "Mon-Sat 9:00 AM - 5:00 PM, Sun 10:00 AM - 4:00 PM",
     mapUrl: "https://maps.app.goo.gl/ViJetRb1zEiMhGyZ7",
     pageUrl: "stores/brassall.html",
   },
@@ -4230,6 +4235,48 @@ function initCheckoutPage() {
   const passwordConfirmField = root.querySelector(
     "[data-checkout-password-confirm]",
   );
+  const authStep = root.querySelector("[data-checkout-auth-step]");
+  const authStatus = root.querySelector("[data-checkout-auth-status]");
+  const authPanels = root.querySelector("[data-checkout-auth-panels]");
+  const loginMessageTarget = root.querySelector(
+    "[data-checkout-login-message]",
+  );
+  const registerMessageTarget = root.querySelector(
+    "[data-checkout-register-message]",
+  );
+  const loginEmailField = root.querySelector("[data-checkout-login-email]");
+  const loginPasswordField = root.querySelector(
+    "[data-checkout-login-password]",
+  );
+  const loginButton = root.querySelector("[data-checkout-login-button]");
+  const registerButton = root.querySelector("[data-checkout-register-button]");
+  const googleButton = root.querySelector("[data-checkout-google-button]");
+  const registerFirstNameField = root.querySelector(
+    "[data-checkout-register-first-name]",
+  );
+  const registerLastNameField = root.querySelector(
+    "[data-checkout-register-last-name]",
+  );
+  const registerPhoneField = root.querySelector(
+    "[data-checkout-register-phone]",
+  );
+  const registerEmailField = root.querySelector(
+    "[data-checkout-register-email]",
+  );
+  const registerPasswordField = root.querySelector(
+    "[data-checkout-register-password]",
+  );
+  const registerPasswordConfirmField = root.querySelector(
+    "[data-checkout-register-password-confirm]",
+  );
+  const deliveryStep = root.querySelector("[data-checkout-delivery-step]");
+  const pickupPanel = root.querySelector("[data-checkout-pickup-panel]");
+  const fulfillmentFields = Array.from(
+    root.querySelectorAll("[data-checkout-fulfillment]"),
+  );
+  const fulfillmentCards = Array.from(
+    root.querySelectorAll("[data-checkout-fulfillment-card]"),
+  );
   if (
     !(form instanceof HTMLFormElement) ||
     !(summaryTarget instanceof HTMLElement) ||
@@ -4241,6 +4288,8 @@ function initCheckoutPage() {
   const checkoutParams = new URLSearchParams(window.location.search);
   const isPaymentCancelled = checkoutParams.get("payment") === "cancelled";
   let activeAuthState = null;
+  let authChecked = false;
+  let selectedFulfillment = "pickup";
   const supabaseAnonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
 
   const setCheckoutMessage = (text, tone = "error") => {
@@ -4254,6 +4303,19 @@ function initCheckoutPage() {
     messageTarget.hidden = false;
     messageTarget.className = `booking-message is-${tone}`;
     messageTarget.textContent = text;
+  };
+
+  const setPanelMessage = (target, text, tone = "success") => {
+    if (!(target instanceof HTMLElement)) return;
+    if (!text) {
+      target.hidden = true;
+      target.textContent = "";
+      target.className = "booking-message";
+      return;
+    }
+    target.hidden = false;
+    target.className = `booking-message is-${tone}`;
+    target.textContent = text;
   };
 
   const getFieldErrorElement = (field) => {
@@ -4395,7 +4457,47 @@ function initCheckoutPage() {
 
   const isWarehouseDispatchSelected = () => {
     if (!(storeField instanceof HTMLSelectElement)) return false;
-    return String(storeField.value || "").trim() === "warehouse-dispatch";
+    return (
+      selectedFulfillment === "delivery" ||
+      String(storeField.value || "").trim() === "warehouse-dispatch"
+    );
+  };
+
+  const syncFulfillmentState = () => {
+    selectedFulfillment =
+      fulfillmentFields.find(
+        (field) => field instanceof HTMLInputElement && field.checked,
+      )?.value || "pickup";
+    const isDelivery = selectedFulfillment === "delivery";
+
+    fulfillmentCards.forEach((card) => {
+      if (!(card instanceof HTMLElement)) return;
+      const input = card.querySelector("[data-checkout-fulfillment]");
+      card.classList.toggle(
+        "is-selected",
+        input instanceof HTMLInputElement && input.checked,
+      );
+    });
+
+    if (warehouseOption instanceof HTMLOptionElement) {
+      warehouseOption.hidden = !isDelivery;
+    }
+
+    if (storeField instanceof HTMLSelectElement) {
+      if (isDelivery) {
+        storeField.value = "warehouse-dispatch";
+        storeField.required = false;
+      } else {
+        storeField.required = true;
+        if (String(storeField.value || "").trim() === "warehouse-dispatch") {
+          storeField.value = "";
+        }
+      }
+    }
+
+    if (pickupPanel instanceof HTMLElement) {
+      pickupPanel.hidden = isDelivery;
+    }
   };
 
   const renderStoreSelectionDetail = () => {
@@ -4426,6 +4528,7 @@ function initCheckoutPage() {
       <div class="storefront-checkout__delivery-meta">
         <p><strong>Address</strong><span>${escapeHtml(detail.address)}</span></p>
         ${detail.phone ? `<p><strong>Phone</strong><span><a href="tel:${escapeHtml(detail.phone.replace(/\s+/g, ""))}">${escapeHtml(detail.phone)}</a></span></p>` : ""}
+        ${detail.hours ? `<p><strong>Opening hours</strong><span>${escapeHtml(detail.hours)}</span></p>` : ""}
       </div>
       <div class="storefront-checkout__delivery-actions">
         ${detail.mapUrl ? `<a class="button button--ghost" href="${escapeHtml(detail.mapUrl)}" target="_blank" rel="noopener">Open in Maps</a>` : ""}
@@ -4435,12 +4538,15 @@ function initCheckoutPage() {
   };
 
   const syncCheckoutMode = () => {
+    syncFulfillmentState();
     const storeSlug =
       storeField instanceof HTMLSelectElement
         ? String(storeField.value || "").trim()
         : "";
     const isWarehouseDispatch = isWarehouseDispatchSelected();
-    const showStepTwo = Boolean(storeSlug);
+    const isAuthenticated = Boolean(activeAuthState?.user);
+    const showDeliveryStep = authChecked && isAuthenticated;
+    const showStepTwo = showDeliveryStep && Boolean(storeSlug);
     const visibleProfiles = getVisiblePaymentProfiles();
     const selectedProfile = getSelectedPaymentProfile();
 
@@ -4461,6 +4567,28 @@ function initCheckoutPage() {
 
     if (stepTwo instanceof HTMLElement) {
       stepTwo.hidden = !showStepTwo;
+    }
+
+    if (deliveryStep instanceof HTMLElement) {
+      deliveryStep.hidden = !showDeliveryStep;
+    }
+
+    if (authStep instanceof HTMLElement) {
+      authStep.classList.toggle("is-complete", showDeliveryStep);
+    }
+
+    if (authPanels instanceof HTMLElement) {
+      authPanels.hidden = showDeliveryStep;
+    }
+
+    if (authStatus instanceof HTMLElement) {
+      authStatus.hidden = !showDeliveryStep;
+      if (showDeliveryStep) {
+        const email = String(activeAuthState?.user?.email || "").trim();
+        authStatus.innerHTML = `<strong>Signed in</strong><span>${escapeHtml(email || "TECHM8 customer")}</span>`;
+      } else {
+        authStatus.innerHTML = "";
+      }
     }
 
     const showShipping = isWarehouseDispatch;
@@ -4778,6 +4906,7 @@ function initCheckoutPage() {
 
   const render = () => {
     const items = loadCart();
+    syncFulfillmentState();
     const subtotal = getCartSubtotal(items);
     const shippingOption = isWarehouseDispatchSelected()
       ? getSelectedShippingOption()
@@ -4797,12 +4926,16 @@ function initCheckoutPage() {
       setCheckoutMessage("");
     }
     if (submitButton instanceof HTMLButtonElement) {
+      const isAuthenticated = Boolean(activeAuthState?.user);
       const hasStoreSelection =
         storeField instanceof HTMLSelectElement &&
         Boolean(String(storeField.value || "").trim());
-      submitButton.disabled = !items.length || !hasStoreSelection;
+      submitButton.disabled =
+        !items.length || !hasStoreSelection || !isAuthenticated;
       submitButton.textContent = items.length
-        ? "Submit order request"
+        ? isAuthenticated
+          ? "Submit order request"
+          : "Sign in before checkout"
         : "Add items before checkout";
     }
   };
@@ -4811,27 +4944,39 @@ function initCheckoutPage() {
     activeAuthState = await prefillCustomerContactForm(form, {
       includeStore: true,
     });
+    if (!activeAuthState) {
+      activeAuthState = await getCurrentAuthState();
+    }
+    authChecked = true;
   };
 
   const syncAccountSetup = () => {
-    const isSignedIn = Boolean(activeAuthState?.user);
     if (accountSetup instanceof HTMLElement) {
-      accountSetup.hidden = isSignedIn;
+      accountSetup.hidden = true;
     }
     if (passwordField instanceof HTMLInputElement) {
-      passwordField.required = !isSignedIn;
-      if (isSignedIn) {
-        passwordField.value = "";
-        passwordField.setCustomValidity("");
-      }
+      passwordField.required = false;
+      passwordField.value = "";
+      passwordField.setCustomValidity("");
     }
     if (passwordConfirmField instanceof HTMLInputElement) {
-      passwordConfirmField.required = !isSignedIn;
-      if (isSignedIn) {
-        passwordConfirmField.value = "";
-        passwordConfirmField.setCustomValidity("");
-      }
+      passwordConfirmField.required = false;
+      passwordConfirmField.value = "";
+      passwordConfirmField.setCustomValidity("");
     }
+  };
+
+  const completeCheckoutAuth = async (nextAuthState, successMessage = "") => {
+    activeAuthState = nextAuthState;
+    authChecked = true;
+    await applyAccountPrefill();
+    syncAccountSetup();
+    setPanelMessage(loginMessageTarget, "");
+    setPanelMessage(registerMessageTarget, "");
+    if (successMessage) {
+      setCheckoutMessage(successMessage, "success");
+    }
+    render();
   };
 
   itemsTarget.addEventListener("input", (event) => {
@@ -4881,6 +5026,208 @@ function initCheckoutPage() {
     clearFieldError(target);
   });
 
+  if (
+    loginButton instanceof HTMLButtonElement &&
+    loginEmailField instanceof HTMLInputElement &&
+    loginPasswordField instanceof HTMLInputElement
+  ) {
+    loginButton.addEventListener("click", async () => {
+      const email = String(loginEmailField.value || "")
+        .trim()
+        .toLowerCase();
+      const password = String(loginPasswordField.value || "");
+
+      if (!isValidEmailAddress(email)) {
+        setPanelMessage(
+          loginMessageTarget,
+          "Enter a valid email address.",
+          "error",
+        );
+        loginEmailField.focus();
+        return;
+      }
+      if (!password) {
+        setPanelMessage(loginMessageTarget, "Enter your password.", "error");
+        loginPasswordField.focus();
+        return;
+      }
+
+      try {
+        loginButton.disabled = true;
+        loginButton.textContent = "Logging in...";
+        setPanelMessage(loginMessageTarget, "");
+        const authState = await getCurrentAuthState();
+        if (!authState?.supabase) {
+          throw new Error("Account login is not available right now.");
+        }
+        const { data, error } =
+          await authState.supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+        if (error) throw error;
+        await completeCheckoutAuth(
+          {
+            supabase: authState.supabase,
+            session: data?.session || null,
+            user: data?.user || null,
+          },
+          "Signed in. Continue with delivery and payment.",
+        );
+      } catch (error) {
+        setPanelMessage(
+          loginMessageTarget,
+          getReadableAuthError(error),
+          "error",
+        );
+      } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = "Log in";
+      }
+    });
+  }
+
+  if (
+    registerButton instanceof HTMLButtonElement &&
+    registerFirstNameField instanceof HTMLInputElement &&
+    registerLastNameField instanceof HTMLInputElement &&
+    registerPhoneField instanceof HTMLInputElement &&
+    registerEmailField instanceof HTMLInputElement &&
+    registerPasswordField instanceof HTMLInputElement &&
+    registerPasswordConfirmField instanceof HTMLInputElement
+  ) {
+    registerButton.addEventListener("click", async () => {
+      const firstName = String(registerFirstNameField.value || "").trim();
+      const lastName = String(registerLastNameField.value || "").trim();
+      const phone = normalizeAustralianPhone(
+        String(registerPhoneField.value || "").trim(),
+      );
+      const email = String(registerEmailField.value || "")
+        .trim()
+        .toLowerCase();
+      const password = String(registerPasswordField.value || "");
+      const confirmPassword = String(registerPasswordConfirmField.value || "");
+      const customerName = buildProfileFullName(firstName, lastName, "");
+
+      if (!firstName || !lastName) {
+        setPanelMessage(
+          registerMessageTarget,
+          "Enter your first name and last name.",
+          "error",
+        );
+        return;
+      }
+      if (!isValidAustralianPhone(phone)) {
+        setPanelMessage(
+          registerMessageTarget,
+          "Enter a valid Australian phone number, for example 0412 345 678.",
+          "error",
+        );
+        registerPhoneField.focus();
+        return;
+      }
+      if (!isValidEmailAddress(email)) {
+        setPanelMessage(
+          registerMessageTarget,
+          "Enter a valid email address.",
+          "error",
+        );
+        registerEmailField.focus();
+        return;
+      }
+      if (!password) {
+        setPanelMessage(registerMessageTarget, "Create a password.", "error");
+        registerPasswordField.focus();
+        return;
+      }
+      if (password !== confirmPassword) {
+        setPanelMessage(
+          registerMessageTarget,
+          "Passwords do not match.",
+          "error",
+        );
+        registerPasswordConfirmField.focus();
+        return;
+      }
+
+      try {
+        registerButton.disabled = true;
+        registerButton.textContent = "Creating...";
+        setPanelMessage(registerMessageTarget, "");
+        const authState = await getCurrentAuthState();
+        if (!authState?.supabase) {
+          throw new Error("Account registration is not available right now.");
+        }
+        const { data, error } = await authState.supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: getAuthRedirectUrl(),
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              full_name: customerName,
+              phone,
+            },
+          },
+        });
+        if (error) throw error;
+
+        if (!data?.session || !data?.user) {
+          setPanelMessage(
+            registerMessageTarget,
+            "Account created. Please verify your email, then log in to continue checkout.",
+            "success",
+          );
+          return;
+        }
+
+        try {
+          await syncCustomerProfile(authState.supabase, data.user, {
+            first_name: firstName,
+            last_name: lastName,
+            full_name: customerName,
+            phone,
+            email,
+          });
+        } catch (profileError) {
+          console.warn(
+            "Checkout registration profile sync skipped:",
+            profileError,
+          );
+        }
+
+        await completeCheckoutAuth(
+          {
+            supabase: authState.supabase,
+            session: data.session,
+            user: data.user,
+          },
+          "Account created. Continue with delivery and payment.",
+        );
+      } catch (error) {
+        setPanelMessage(
+          registerMessageTarget,
+          getReadableAuthError(error),
+          "error",
+        );
+      } finally {
+        registerButton.disabled = false;
+        registerButton.textContent = "Create account";
+      }
+    });
+  }
+
+  if (googleButton instanceof HTMLButtonElement) {
+    googleButton.addEventListener("click", () => {
+      setPanelMessage(
+        registerMessageTarget,
+        "Google login will be enabled after the Google API configuration is connected.",
+        "error",
+      );
+    });
+  }
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearAllFieldErrors();
@@ -4928,6 +5275,15 @@ function initCheckoutPage() {
     const subtotal = getCartSubtotal(items);
     const selectedProfile = getSelectedPaymentProfile();
     activeAuthState = await getCurrentAuthState();
+    if (!activeAuthState?.user) {
+      setCheckoutMessage(
+        "Please log in or create an account before continuing checkout.",
+        "error",
+      );
+      authChecked = true;
+      render();
+      return;
+    }
     const firstName = String(formData.get("first_name") || "").trim();
     const lastName = String(formData.get("last_name") || "").trim();
     const customerName = buildProfileFullName(firstName, lastName, "") || "";
@@ -5383,6 +5739,14 @@ function initCheckoutPage() {
       render();
     });
   }
+
+  fulfillmentFields.forEach((field) => {
+    if (!(field instanceof HTMLInputElement)) return;
+    field.addEventListener("change", () => {
+      selectedFulfillment = field.value || "pickup";
+      render();
+    });
+  });
 
   loadPaymentFeeProfiles()
     .then((profiles) => {

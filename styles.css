@@ -6388,6 +6388,103 @@ h2 {
   gap: 1rem;
 }
 
+.storefront-checkout__auth-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.storefront-checkout__auth-panel,
+.storefront-checkout__auth-status {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 1px solid rgba(7, 39, 45, 0.08);
+  border-radius: 1.1rem;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.storefront-checkout__auth-panel h3,
+.storefront-checkout__auth-panel p {
+  margin: 0;
+}
+
+.storefront-checkout__auth-panel p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.storefront-checkout__auth-status {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  border-color: rgba(22, 200, 186, 0.26);
+  background: rgba(22, 200, 186, 0.08);
+}
+
+.storefront-checkout__auth-status strong {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+.storefront-checkout__auth-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.storefront-checkout__auth-actions a {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.storefront-checkout__delivery-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.storefront-checkout__choice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.8rem;
+  align-items: start;
+  min-height: 6.4rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.86);
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.storefront-checkout__choice:hover,
+.storefront-checkout__choice.is-selected {
+  border-color: rgba(22, 200, 186, 0.55);
+  box-shadow: 0 16px 36px rgba(8, 95, 91, 0.12);
+  transform: translateY(-1px);
+}
+
+.storefront-checkout__choice input {
+  margin-top: 0.2rem;
+  accent-color: var(--accent);
+}
+
+.storefront-checkout__choice span {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.storefront-checkout__choice small {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
 .storefront-checkout__delivery-select {
   display: grid;
   gap: 0.4rem;
@@ -6846,6 +6943,8 @@ h2 {
 
   .storefront-pdp__highlights,
   .storefront-pdp__facts,
+  .storefront-checkout__auth-grid,
+  .storefront-checkout__delivery-choice-grid,
   .storefront-checkout__form-grid,
   .storefront-success__grid {
     grid-template-columns: 1fr;

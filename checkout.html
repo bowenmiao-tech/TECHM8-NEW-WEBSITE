@@ -1,231 +1,595 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TECHM8 Checkout</title>
-  <meta name="description" content="Submit your TECHM8 order request and select your preferred store.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="promo-banner">
-    <div class="container promo-banner__inner">
-      <span>Submit an order request for store pickup, warehouse dispatch and follow-up.</span>
-      <a href="cart.html">Back to cart</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TECHM8 Checkout</title>
+    <meta
+      name="description"
+      content="Submit your TECHM8 order request and select your preferred store."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="promo-banner">
+      <div class="container promo-banner__inner">
+        <span
+          >Submit an order request for store pickup, warehouse dispatch and
+          follow-up.</span
+        >
+        <a href="cart.html">Back to cart</a>
+      </div>
     </div>
-  </div>
 
-  <header class="site-header">
-    <div class="container nav">
-      <a class="brand" href="index.html" aria-label="TECHM8 home">
-        <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo">
-      </a>
-      <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
-      <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </label>
-      <nav class="nav__menu" id="primary-menu">
-        <a href="index.html">Home</a>
-        <a href="repairs.html">Repairs</a>
-        <a href="products.html">Products</a>
-        <a href="stores.html">Stores</a>
-        <a href="store-policy.html">Store Policy</a>
-        <a class="nav__cart-link" href="cart.html">Cart <span class="nav__cart-count" data-cart-count>0</span></a>
-        <a class="nav__shop-link" href="shop.html">Online Store</a>
-      </nav>
-    </div>
-  </header>
+    <header class="site-header">
+      <div class="container nav">
+        <a class="brand" href="index.html" aria-label="TECHM8 home">
+          <img
+            class="brand__logo"
+            src="assets/logo-techm8.png"
+            alt="TECHM8 logo"
+          />
+        </a>
+        <input
+          class="nav__mobile-input"
+          type="checkbox"
+          id="primary-menu-toggle"
+        />
+        <label
+          class="nav__toggle"
+          for="primary-menu-toggle"
+          aria-label="Open menu"
+        >
+          <span></span><span></span><span></span>
+        </label>
+        <nav class="nav__menu" id="primary-menu">
+          <a href="index.html">Home</a>
+          <a href="repairs.html">Repairs</a>
+          <a href="products.html">Products</a>
+          <a href="stores.html">Stores</a>
+          <a href="store-policy.html">Store Policy</a>
+          <a class="nav__cart-link" href="cart.html"
+            >Cart <span class="nav__cart-count" data-cart-count>0</span></a
+          >
+          <a class="nav__shop-link" href="shop.html">Online Store</a>
+        </nav>
+      </div>
+    </header>
 
-  <main class="storefront-page" data-checkout-page>
-    <section class="section">
-      <div class="container storefront-checkout">
-        <div class="storefront-checkout__main">
-          <div class="section-heading section-heading--split">
-            <div>
-              <p class="eyebrow">Checkout</p>
-              <h1>Submit your order request</h1>
+    <main class="storefront-page" data-checkout-page>
+      <section class="section">
+        <div class="container storefront-checkout">
+          <div class="storefront-checkout__main">
+            <div class="section-heading section-heading--split">
+              <div>
+                <p class="eyebrow">Checkout</p>
+                <h1>Submit your order request</h1>
+              </div>
+              <a href="cart.html">Back to cart</a>
             </div>
-            <a href="cart.html">Back to cart</a>
-          </div>
 
-          <form class="storefront-checkout__form" data-checkout-form novalidate>
-            <div class="booking-message" data-checkout-message hidden></div>
-            <section class="storefront-checkout__step">
-              <div class="storefront-checkout__step-heading">
-                <span class="storefront-checkout__step-number">1</span>
-                <div>
-                  <h2>Select delivery method</h2>
-                  <p>Choose a store for click and collect, or switch to warehouse dispatch for direct shipping.</p>
-                </div>
-              </div>
+            <form
+              class="storefront-checkout__form"
+              data-checkout-form
+              novalidate
+            >
+              <div class="booking-message" data-checkout-message hidden></div>
 
-              <div class="storefront-checkout__delivery-card">
-                <label class="storefront-checkout__delivery-select">
-                  <span>Pickup store / dispatch point</span>
-                  <select name="store_slug" data-checkout-store required>
-                    <option value="">Select a store</option>
-                    <option value="park-ridge">Park Ridge</option>
-                    <option value="fairfield">Fairfield</option>
-                    <option value="toowong">Toowong</option>
-                    <option value="north-lakes">North Lakes</option>
-                    <option value="brassall">Brassall</option>
-                    <option value="warehouse-dispatch" data-checkout-warehouse-option>Warehouse Dispatch</option>
-                  </select>
-                </label>
-
-                <div class="storefront-checkout__delivery-detail" data-checkout-store-detail hidden></div>
-              </div>
-            </section>
-
-            <section class="storefront-checkout__step" data-checkout-step-two hidden>
-              <div class="storefront-checkout__step-heading">
-                <span class="storefront-checkout__step-number">2</span>
-                <div>
-                  <h2>Contact and payment</h2>
-                  <p>Complete your contact details, then choose the payment method that matches this delivery option.</p>
-                </div>
-              </div>
-
-              <div class="storefront-checkout__form-grid">
-                <label>
-                  <span>First name</span>
-                  <input type="text" name="first_name" autocomplete="given-name" required>
-                </label>
-                <label>
-                  <span>Last name</span>
-                  <input type="text" name="last_name" autocomplete="family-name" required>
-                </label>
-                <label>
-                  <span>Phone</span>
-                  <input type="tel" name="phone" autocomplete="tel" placeholder="0412 345 678 or +61 412 345 678" required>
-                </label>
-                <label>
-                  <span>Email</span>
-                  <input type="email" name="email" autocomplete="email" placeholder="name@example.com.au" required>
-                </label>
-                <div class="storefront-checkout__form-grid-full storefront-checkout__account-setup" data-checkout-account-setup>
-                  <span class="storefront-checkout__label">Create your TECHM8 account</span>
-                  <p class="storefront-checkout__account-copy">Set a password now so this order is linked to your customer account and future invoices can be sent to the same email.</p>
-                  <div class="storefront-checkout__form-grid">
-                    <label>
-                      <span>Password</span>
-                      <input type="password" name="checkout_password" autocomplete="new-password" data-checkout-password>
-                    </label>
-                    <label>
-                      <span>Confirm password</span>
-                      <input type="password" name="checkout_password_confirm" autocomplete="new-password" data-checkout-password-confirm>
-                    </label>
+              <section
+                class="storefront-checkout__step"
+                data-checkout-auth-step
+              >
+                <div class="storefront-checkout__step-heading">
+                  <span class="storefront-checkout__step-number">1</span>
+                  <div>
+                    <h2>Confirm your account</h2>
+                    <p>
+                      Sign in or create an account before choosing pickup or
+                      delivery.
+                    </p>
                   </div>
                 </div>
-                <div class="storefront-checkout__form-grid-full">
-                  <span class="storefront-checkout__label">Payment method</span>
-                  <div class="storefront-payment-list" data-payment-options></div>
-                  <input type="hidden" name="payment_method_code" data-payment-method value="pay_in_store" required>
-                </div>
-                <label class="storefront-checkout__form-grid-full">
-                  <span>Order notes</span>
-                  <textarea name="notes" rows="4" placeholder="Anything the store should know before contacting you?"></textarea>
-                </label>
-              </div>
 
-              <div class="storefront-checkout__shipping" data-checkout-shipping hidden>
-                <div class="booking-message is-success" data-checkout-shipping-note>
-                  Warehouse Dispatch requires a delivery address and online payment before the order can be confirmed.
+                <div
+                  class="storefront-checkout__auth-status"
+                  data-checkout-auth-status
+                  hidden
+                ></div>
+
+                <div
+                  class="storefront-checkout__auth-grid"
+                  data-checkout-auth-panels
+                >
+                  <section class="storefront-checkout__auth-panel">
+                    <h3>Log in</h3>
+                    <p>Use your TECHM8 account to continue checkout.</p>
+                    <div
+                      class="booking-message"
+                      data-checkout-login-message
+                      hidden
+                    ></div>
+                    <div class="storefront-checkout__form-grid">
+                      <label class="storefront-checkout__form-grid-full">
+                        <span>Email</span>
+                        <input
+                          type="email"
+                          name="checkout_login_email"
+                          autocomplete="email"
+                          data-checkout-login-email
+                        />
+                      </label>
+                      <label class="storefront-checkout__form-grid-full">
+                        <span>Password</span>
+                        <input
+                          type="password"
+                          name="checkout_login_password"
+                          autocomplete="current-password"
+                          data-checkout-login-password
+                        />
+                      </label>
+                    </div>
+                    <div class="storefront-checkout__auth-actions">
+                      <button
+                        class="button button--primary"
+                        type="button"
+                        data-checkout-login-button
+                      >
+                        Log in
+                      </button>
+                      <a href="forgot-password.html">Forgot password?</a>
+                    </div>
+                  </section>
+
+                  <section class="storefront-checkout__auth-panel">
+                    <h3>Create account</h3>
+                    <p>
+                      Register once so invoices and order history stay linked to
+                      your email.
+                    </p>
+                    <div
+                      class="booking-message"
+                      data-checkout-register-message
+                      hidden
+                    ></div>
+                    <div class="storefront-checkout__form-grid">
+                      <label>
+                        <span>First name</span>
+                        <input
+                          type="text"
+                          name="checkout_register_first_name"
+                          autocomplete="given-name"
+                          data-checkout-register-first-name
+                        />
+                      </label>
+                      <label>
+                        <span>Last name</span>
+                        <input
+                          type="text"
+                          name="checkout_register_last_name"
+                          autocomplete="family-name"
+                          data-checkout-register-last-name
+                        />
+                      </label>
+                      <label>
+                        <span>Phone</span>
+                        <input
+                          type="tel"
+                          name="checkout_register_phone"
+                          autocomplete="tel"
+                          placeholder="0412 345 678"
+                          data-checkout-register-phone
+                        />
+                      </label>
+                      <label>
+                        <span>Email</span>
+                        <input
+                          type="email"
+                          name="checkout_register_email"
+                          autocomplete="email"
+                          placeholder="name@example.com.au"
+                          data-checkout-register-email
+                        />
+                      </label>
+                      <label>
+                        <span>Password</span>
+                        <input
+                          type="password"
+                          name="checkout_register_password"
+                          autocomplete="new-password"
+                          data-checkout-register-password
+                        />
+                      </label>
+                      <label>
+                        <span>Confirm password</span>
+                        <input
+                          type="password"
+                          name="checkout_register_password_confirm"
+                          autocomplete="new-password"
+                          data-checkout-register-password-confirm
+                        />
+                      </label>
+                    </div>
+                    <div class="storefront-checkout__auth-actions">
+                      <button
+                        class="button button--primary"
+                        type="button"
+                        data-checkout-register-button
+                      >
+                        Create account
+                      </button>
+                      <button
+                        class="button button--ghost"
+                        type="button"
+                        data-checkout-google-button
+                      >
+                        Continue with Google
+                      </button>
+                    </div>
+                  </section>
                 </div>
-                <div class="storefront-checkout__shipping-methods">
-                  <span class="storefront-checkout__label">Shipping method</span>
-                  <div class="storefront-shipping-list" data-shipping-options></div>
-                  <input type="hidden" name="shipping_service_code" data-shipping-service value="standard_auspost">
+              </section>
+
+              <section
+                class="storefront-checkout__step"
+                data-checkout-delivery-step
+                hidden
+              >
+                <div class="storefront-checkout__step-heading">
+                  <span class="storefront-checkout__step-number">2</span>
+                  <div>
+                    <h2>Select delivery method</h2>
+                    <p>
+                      Choose a TECHM8 store for click and collect, or ship from
+                      warehouse with Australia Post.
+                    </p>
+                  </div>
                 </div>
-                <div class="storefront-checkout__form-grid">
-                  <label>
-                    <span>Recipient name</span>
-                    <input type="text" name="recipient_name" data-checkout-shipping-field>
+
+                <div class="storefront-checkout__delivery-choice-grid">
+                  <label
+                    class="storefront-checkout__choice is-selected"
+                    data-checkout-fulfillment-card
+                  >
+                    <input
+                      type="radio"
+                      name="fulfillment_choice"
+                      value="pickup"
+                      data-checkout-fulfillment
+                      checked
+                    />
+                    <span>
+                      <strong>Click & Collect</strong>
+                      <small>Pick up from one of our TECHM8 stores.</small>
+                    </span>
                   </label>
-                  <label>
-                    <span>Business name</span>
-                    <input type="text" name="company_name" data-checkout-shipping-field>
+                  <label
+                    class="storefront-checkout__choice"
+                    data-checkout-fulfillment-card
+                  >
+                    <input
+                      type="radio"
+                      name="fulfillment_choice"
+                      value="delivery"
+                      data-checkout-fulfillment
+                    />
+                    <span>
+                      <strong>Delivery</strong>
+                      <small
+                        >Ship from warehouse to your Australian address.</small
+                      >
+                    </span>
                   </label>
-                  <label>
-                    <span>Shipping phone</span>
-                    <input type="tel" name="shipping_phone" data-checkout-shipping-field>
-                  </label>
-                  <label>
-                    <span>Shipping email</span>
-                    <input type="email" name="shipping_email" data-checkout-shipping-field>
-                  </label>
-                  <label class="storefront-checkout__form-grid-full">
-                    <span>Address line 1</span>
-                    <input type="text" name="address_line_1" data-checkout-shipping-field>
-                  </label>
-                  <label class="storefront-checkout__form-grid-full">
-                    <span>Address line 2</span>
-                    <input type="text" name="address_line_2" data-checkout-shipping-field>
-                  </label>
-                  <label>
-                    <span>Suburb</span>
-                    <input type="text" name="suburb" data-checkout-shipping-field>
-                  </label>
-                  <label>
-                    <span>Postcode</span>
-                    <input type="text" name="postcode" inputmode="numeric" data-checkout-shipping-field>
-                  </label>
-                  <label>
-                    <span>State</span>
-                    <select name="state" data-checkout-shipping-field>
-                      <option value="">Select state</option>
-                      <option value="QLD">QLD</option>
-                      <option value="NSW">NSW</option>
-                      <option value="VIC">VIC</option>
-                      <option value="ACT">ACT</option>
-                      <option value="SA">SA</option>
-                      <option value="WA">WA</option>
-                      <option value="TAS">TAS</option>
-                      <option value="NT">NT</option>
+                </div>
+
+                <div
+                  class="storefront-checkout__delivery-card"
+                  data-checkout-pickup-panel
+                >
+                  <label class="storefront-checkout__delivery-select">
+                    <span>Pickup store</span>
+                    <select name="store_slug" data-checkout-store required>
+                      <option value="">Select a store</option>
+                      <option value="park-ridge">Park Ridge</option>
+                      <option value="fairfield">Fairfield</option>
+                      <option value="toowong">Toowong</option>
+                      <option value="north-lakes">North Lakes</option>
+                      <option value="brassall">Brassall</option>
+                      <option
+                        value="warehouse-dispatch"
+                        data-checkout-warehouse-option
+                        hidden
+                      >
+                        Warehouse Dispatch
+                      </option>
                     </select>
                   </label>
+
+                  <div
+                    class="storefront-checkout__delivery-detail"
+                    data-checkout-store-detail
+                    hidden
+                  ></div>
+                </div>
+
+                <div
+                  class="storefront-checkout__shipping"
+                  data-checkout-shipping
+                  hidden
+                >
+                  <div
+                    class="booking-message is-success"
+                    data-checkout-shipping-note
+                  >
+                    Delivery requires a shipping address and online payment
+                    before the order can be confirmed.
+                  </div>
+                  <div class="storefront-checkout__form-grid">
+                    <label>
+                      <span>Recipient name</span>
+                      <input
+                        type="text"
+                        name="recipient_name"
+                        data-checkout-shipping-field
+                      />
+                    </label>
+                    <label>
+                      <span>Business name</span>
+                      <input
+                        type="text"
+                        name="company_name"
+                        data-checkout-shipping-field
+                      />
+                    </label>
+                    <label>
+                      <span>Shipping phone</span>
+                      <input
+                        type="tel"
+                        name="shipping_phone"
+                        data-checkout-shipping-field
+                      />
+                    </label>
+                    <label>
+                      <span>Shipping email</span>
+                      <input
+                        type="email"
+                        name="shipping_email"
+                        data-checkout-shipping-field
+                      />
+                    </label>
+                    <label class="storefront-checkout__form-grid-full">
+                      <span>Address line 1</span>
+                      <input
+                        type="text"
+                        name="address_line_1"
+                        data-checkout-shipping-field
+                      />
+                    </label>
+                    <label class="storefront-checkout__form-grid-full">
+                      <span>Address line 2</span>
+                      <input
+                        type="text"
+                        name="address_line_2"
+                        data-checkout-shipping-field
+                      />
+                    </label>
+                    <label>
+                      <span>Suburb</span>
+                      <input
+                        type="text"
+                        name="suburb"
+                        data-checkout-shipping-field
+                      />
+                    </label>
+                    <label>
+                      <span>Postcode</span>
+                      <input
+                        type="text"
+                        name="postcode"
+                        inputmode="numeric"
+                        data-checkout-shipping-field
+                      />
+                    </label>
+                    <label>
+                      <span>State</span>
+                      <select name="state" data-checkout-shipping-field>
+                        <option value="">Select state</option>
+                        <option value="QLD">QLD</option>
+                        <option value="NSW">NSW</option>
+                        <option value="VIC">VIC</option>
+                        <option value="ACT">ACT</option>
+                        <option value="SA">SA</option>
+                        <option value="WA">WA</option>
+                        <option value="TAS">TAS</option>
+                        <option value="NT">NT</option>
+                      </select>
+                    </label>
+                    <label>
+                      <span>Country</span>
+                      <input
+                        type="text"
+                        name="country_code"
+                        value="AU"
+                        data-checkout-shipping-field
+                      />
+                    </label>
+                  </div>
+                  <div class="storefront-checkout__shipping-methods">
+                    <span class="storefront-checkout__label"
+                      >Shipping method</span
+                    >
+                    <div
+                      class="storefront-shipping-list"
+                      data-shipping-options
+                    ></div>
+                    <input
+                      type="hidden"
+                      name="shipping_service_code"
+                      data-shipping-service
+                      value="standard_auspost"
+                    />
+                  </div>
+                </div>
+              </section>
+
+              <section
+                class="storefront-checkout__step"
+                data-checkout-step-two
+                hidden
+              >
+                <div class="storefront-checkout__step-heading">
+                  <span class="storefront-checkout__step-number">3</span>
+                  <div>
+                    <h2>Contact and payment</h2>
+                    <p>
+                      Confirm your contact details and choose the payment method
+                      for this order.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="storefront-checkout__form-grid">
                   <label>
-                    <span>Country</span>
-                    <input type="text" name="country_code" value="AU" data-checkout-shipping-field>
+                    <span>First name</span>
+                    <input
+                      type="text"
+                      name="first_name"
+                      autocomplete="given-name"
+                      required
+                    />
+                  </label>
+                  <label>
+                    <span>Last name</span>
+                    <input
+                      type="text"
+                      name="last_name"
+                      autocomplete="family-name"
+                      required
+                    />
+                  </label>
+                  <label>
+                    <span>Phone</span>
+                    <input
+                      type="tel"
+                      name="phone"
+                      autocomplete="tel"
+                      placeholder="0412 345 678 or +61 412 345 678"
+                      required
+                    />
+                  </label>
+                  <label>
+                    <span>Email</span>
+                    <input
+                      type="email"
+                      name="email"
+                      autocomplete="email"
+                      placeholder="name@example.com.au"
+                      required
+                    />
+                  </label>
+                  <div
+                    class="storefront-checkout__form-grid-full storefront-checkout__account-setup"
+                    data-checkout-account-setup
+                    hidden
+                  >
+                    <span class="storefront-checkout__label"
+                      >Create your TECHM8 account</span
+                    >
+                    <p class="storefront-checkout__account-copy">
+                      Set a password now so this order is linked to your
+                      customer account and future invoices can be sent to the
+                      same email.
+                    </p>
+                    <div class="storefront-checkout__form-grid">
+                      <label>
+                        <span>Password</span>
+                        <input
+                          type="password"
+                          name="checkout_password"
+                          autocomplete="new-password"
+                          data-checkout-password
+                        />
+                      </label>
+                      <label>
+                        <span>Confirm password</span>
+                        <input
+                          type="password"
+                          name="checkout_password_confirm"
+                          autocomplete="new-password"
+                          data-checkout-password-confirm
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  <div class="storefront-checkout__form-grid-full">
+                    <span class="storefront-checkout__label"
+                      >Payment method</span
+                    >
+                    <div
+                      class="storefront-payment-list"
+                      data-payment-options
+                    ></div>
+                    <input
+                      type="hidden"
+                      name="payment_method_code"
+                      data-payment-method
+                      value="pay_in_store"
+                      required
+                    />
+                  </div>
+                  <label class="storefront-checkout__form-grid-full">
+                    <span>Order notes</span>
+                    <textarea
+                      name="notes"
+                      rows="4"
+                      placeholder="Anything the store should know before contacting you?"
+                    ></textarea>
                   </label>
                 </div>
+
+                <div
+                  class="storefront-checkout__payment-note"
+                  data-payment-note
+                  hidden
+                ></div>
+              </section>
+
+              <div class="storefront-summary storefront-summary--embedded">
+                <p class="eyebrow">Items in this request</p>
+                <div data-checkout-items></div>
               </div>
 
-              <div class="storefront-checkout__payment-note" data-payment-note hidden></div>
-            </section>
-
-            <div class="storefront-summary storefront-summary--embedded">
-              <p class="eyebrow">Items in this request</p>
-              <div data-checkout-items></div>
-            </div>
-
-            <div class="storefront-checkout__submit">
-              <button class="button button--primary" type="submit">Submit order request</button>
-            </div>
-          </form>
-        </div>
-
-        <aside class="storefront-checkout__sidebar">
-          <div class="storefront-summary">
-            <p class="eyebrow">Order summary</p>
-            <div data-checkout-summary></div>
+              <div class="storefront-checkout__submit">
+                <button class="button button--primary" type="submit">
+                  Submit order request
+                </button>
+              </div>
+            </form>
           </div>
-        </aside>
+
+          <aside class="storefront-checkout__sidebar">
+            <div class="storefront-summary">
+              <p class="eyebrow">Order summary</p>
+              <div data-checkout-summary></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer footer--bottom">
+        <p>&copy; 2026 TECHM8. All rights reserved.</p>
+        <a href="store-policy.html">Repair Terms & Conditions</a>
       </div>
-    </section>
-  </main>
+    </footer>
 
-  <footer class="site-footer">
-    <div class="container footer footer--bottom">
-      <p>&copy; 2026 TECHM8. All rights reserved.</p>
-      <a href="store-policy.html">Repair Terms & Conditions</a>
-    </div>
-  </footer>
-
-  <script type="module" src="site-config.js"></script>
-  <script type="module" src="script.js"></script>
-</body>
+    <script type="module" src="site-config.js"></script>
+    <script type="module" src="script.js"></script>
+  </body>
 </html>
