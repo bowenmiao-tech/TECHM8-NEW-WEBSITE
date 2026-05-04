@@ -4270,6 +4270,12 @@ function initCheckoutPage() {
     "[data-checkout-register-password-confirm]",
   );
   const deliveryStep = root.querySelector("[data-checkout-delivery-step]");
+  const deliveryContinueButton = root.querySelector(
+    "[data-checkout-delivery-continue]",
+  );
+  const backToDeliveryButton = root.querySelector(
+    "[data-checkout-back-to-delivery]",
+  );
   const pickupPanel = root.querySelector("[data-checkout-pickup-panel]");
   const gatedCheckoutBlocks = Array.from(
     root.querySelectorAll("[data-checkout-gated]"),
@@ -4292,6 +4298,7 @@ function initCheckoutPage() {
   const isPaymentCancelled = checkoutParams.get("payment") === "cancelled";
   let activeAuthState = null;
   let authChecked = false;
+  let checkoutStep = "auth";
   let selectedFulfillment = "pickup";
   const supabaseAnonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
 
@@ -4414,6 +4421,95 @@ function initCheckoutPage() {
       return true;
     }
     return invalidateField(field, message, topMessage);
+  };
+
+  const getContactFields = () => ({
+    firstNameField: form.elements.namedItem("first_name"),
+    lastNameField: form.elements.namedItem("last_name"),
+    phoneField: form.elements.namedItem("phone"),
+    emailField: form.elements.namedItem("email"),
+  });
+
+  const setCheckoutContactFields = ({
+    firstName = "",
+    lastName = "",
+    phone = "",
+    email = "",
+  } = {}) => {
+    const { firstNameField, lastNameField, phoneField, emailField } =
+      getContactFields();
+    if (firstNameField instanceof HTMLInputElement) {
+      firstNameField.value = String(firstName || "").trim();
+    }
+    if (lastNameField instanceof HTMLInputElement) {
+      lastNameField.value = String(lastName || "").trim();
+    }
+    if (phoneField instanceof HTMLInputElement) {
+      phoneField.value = String(phone || "").trim();
+    }
+    if (emailField instanceof HTMLInputElement) {
+      emailField.value = String(email || "")
+        .trim()
+        .toLowerCase();
+    }
+  };
+
+  const fillMissingCheckoutContact = () => {
+    const { firstNameField, lastNameField, phoneField, emailField } =
+      getContactFields();
+    const profile = activeAuthState?.profile || null;
+    const user = activeAuthState?.user || null;
+    const { firstName, lastName } = splitProfileName(profile, user);
+    const fallbackEmail = String(profile?.email || user?.email || "").trim();
+    const fallbackPhone = String(
+      profile?.phone || user?.user_metadata?.phone || "",
+    ).trim();
+    const shippingRecipientField = form.elements.namedItem("recipient_name");
+    const shippingNameParts =
+      shippingRecipientField instanceof HTMLInputElement
+        ? String(shippingRecipientField.value || "")
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean)
+        : [];
+
+    if (
+      firstNameField instanceof HTMLInputElement &&
+      !String(firstNameField.value || "").trim()
+    ) {
+      firstNameField.value = firstName || shippingNameParts[0] || "";
+    }
+    if (
+      lastNameField instanceof HTMLInputElement &&
+      !String(lastNameField.value || "").trim()
+    ) {
+      lastNameField.value =
+        lastName || shippingNameParts.slice(1).join(" ") || "";
+    }
+    if (
+      phoneField instanceof HTMLInputElement &&
+      !String(phoneField.value || "").trim()
+    ) {
+      const shippingPhoneField = form.elements.namedItem("shipping_phone");
+      phoneField.value =
+        fallbackPhone ||
+        (shippingPhoneField instanceof HTMLInputElement
+          ? String(shippingPhoneField.value || "").trim()
+          : "");
+    }
+    if (
+      emailField instanceof HTMLInputElement &&
+      !String(emailField.value || "").trim()
+    ) {
+      const shippingEmailField = form.elements.namedItem("shipping_email");
+      emailField.value =
+        fallbackEmail ||
+        (shippingEmailField instanceof HTMLInputElement
+          ? String(shippingEmailField.value || "")
+              .trim()
+              .toLowerCase()
+          : "");
+    }
   };
 
   const getSelectedPaymentProfile = () => {
@@ -4540,6 +4636,104 @@ function initCheckoutPage() {
     `;
   };
 
+  const validateDeliveryStep = ({ focus = true } = {}) => {
+    if (focus) {
+      clearAllFieldErrors();
+    }
+    const storeSelectField = form.elements.namedItem("store_slug");
+    const isWarehouseDispatch = isWarehouseDispatchSelected();
+
+    if (!storeSelectField || !(storeSelectField instanceof HTMLSelectElement)) {
+      return false;
+    }
+
+    if (!String(storeSelectField.value || "").trim()) {
+      if (!focus) return false;
+      return invalidateField(
+        storeSelectField,
+        "Select a pickup store or delivery option.",
+        "Please select Click & Collect store or Delivery.",
+      );
+    }
+
+    if (!isWarehouseDispatch) {
+      return true;
+    }
+
+    const requiredShippingFields = [
+      ["recipient_name", "Enter the recipient name."],
+      ["address_line_1", "Enter the delivery address."],
+      ["suburb", "Enter the suburb."],
+      ["postcode", "Enter the 4-digit postcode."],
+      ["state", "Select a state."],
+    ];
+
+    for (const [fieldName, message] of requiredShippingFields) {
+      const field = form.elements.namedItem(fieldName);
+      if (
+        !(
+          field instanceof HTMLInputElement ||
+          field instanceof HTMLSelectElement ||
+          field instanceof HTMLTextAreaElement
+        )
+      ) {
+        continue;
+      }
+      if (!String(field.value || "").trim()) {
+        if (!focus) return false;
+        return invalidateField(
+          field,
+          message,
+          "Delivery requires a complete shipping address.",
+        );
+      }
+    }
+
+    const postcodeField = form.elements.namedItem("postcode");
+    const postcodeValue =
+      postcodeField instanceof HTMLInputElement
+        ? String(postcodeField.value || "").trim()
+        : "";
+    if (!/^\d{4}$/.test(postcodeValue)) {
+      if (!focus) return false;
+      return invalidateField(
+        postcodeField,
+        "Enter a valid 4-digit Australian postcode.",
+        "Please enter a valid 4-digit Australian postcode.",
+      );
+    }
+
+    const shippingPhoneField = form.elements.namedItem("shipping_phone");
+    const shippingPhone =
+      shippingPhoneField instanceof HTMLInputElement
+        ? String(shippingPhoneField.value || "").trim()
+        : "";
+    if (shippingPhone && !isValidAustralianPhone(shippingPhone)) {
+      if (!focus) return false;
+      return invalidateField(
+        shippingPhoneField,
+        "Enter a valid Australian shipping phone number.",
+        "Please enter a valid Australian shipping phone number.",
+      );
+    }
+
+    const shippingEmailField = form.elements.namedItem("shipping_email");
+    const shippingEmail =
+      shippingEmailField instanceof HTMLInputElement
+        ? String(shippingEmailField.value || "").trim()
+        : "";
+    if (shippingEmail && !isValidEmailAddress(shippingEmail)) {
+      if (!focus) return false;
+      return invalidateField(
+        shippingEmailField,
+        "Enter a valid shipping email address.",
+        "Please enter a valid shipping email address.",
+      );
+    }
+
+    return true;
+  };
+
   const syncCheckoutMode = () => {
     syncFulfillmentState();
     const storeSlug =
@@ -4548,8 +4742,24 @@ function initCheckoutPage() {
         : "";
     const isWarehouseDispatch = isWarehouseDispatchSelected();
     const isAuthenticated = Boolean(activeAuthState?.user);
-    const showDeliveryStep = authChecked && isAuthenticated;
-    const showStepTwo = showDeliveryStep && Boolean(storeSlug);
+    if (!authChecked || !isAuthenticated) {
+      checkoutStep = "auth";
+    } else if (checkoutStep === "auth") {
+      checkoutStep = "delivery";
+    }
+
+    const deliveryReady = validateDeliveryStep({ focus: false });
+    if (checkoutStep === "payment" && !deliveryReady) {
+      checkoutStep = "delivery";
+    }
+
+    const showAuthStep = checkoutStep === "auth";
+    const showDeliveryStep = isAuthenticated && checkoutStep === "delivery";
+    const showStepTwo =
+      isAuthenticated &&
+      checkoutStep === "payment" &&
+      Boolean(storeSlug) &&
+      deliveryReady;
     const visibleProfiles = getVisiblePaymentProfiles();
     const selectedProfile = getSelectedPaymentProfile();
 
@@ -4577,16 +4787,20 @@ function initCheckoutPage() {
     }
 
     if (authStep instanceof HTMLElement) {
+      authStep.hidden = !showAuthStep;
+    }
+
+    if (authStep instanceof HTMLElement) {
       authStep.classList.toggle("is-complete", showDeliveryStep);
     }
 
     if (authPanels instanceof HTMLElement) {
-      authPanels.hidden = showDeliveryStep;
+      authPanels.hidden = !showAuthStep;
     }
 
     if (authStatus instanceof HTMLElement) {
-      authStatus.hidden = !showDeliveryStep;
-      if (showDeliveryStep) {
+      authStatus.hidden = showAuthStep;
+      if (!showAuthStep && isAuthenticated) {
         const email = String(activeAuthState?.user?.email || "").trim();
         authStatus.innerHTML = `<strong>Signed in</strong><span>${escapeHtml(email || "TECHM8 customer")}</span>`;
       } else {
@@ -4596,7 +4810,7 @@ function initCheckoutPage() {
 
     gatedCheckoutBlocks.forEach((block) => {
       if (block instanceof HTMLElement) {
-        block.hidden = !showDeliveryStep;
+        block.hidden = !showStepTwo;
       }
     });
 
@@ -4940,7 +5154,10 @@ function initCheckoutPage() {
         storeField instanceof HTMLSelectElement &&
         Boolean(String(storeField.value || "").trim());
       submitButton.disabled =
-        !items.length || !hasStoreSelection || !isAuthenticated;
+        !items.length ||
+        !hasStoreSelection ||
+        !isAuthenticated ||
+        checkoutStep !== "payment";
       submitButton.textContent = items.length
         ? isAuthenticated
           ? "Submit order request"
@@ -4978,6 +5195,7 @@ function initCheckoutPage() {
   const completeCheckoutAuth = async (nextAuthState, successMessage = "") => {
     activeAuthState = nextAuthState;
     authChecked = true;
+    checkoutStep = "delivery";
     await applyAccountPrefill();
     syncAccountSetup();
     setPanelMessage(loginMessageTarget, "");
@@ -5019,6 +5237,13 @@ function initCheckoutPage() {
       return;
     }
     clearFieldError(target);
+    if (
+      checkoutStep === "payment" &&
+      target.hasAttribute("data-checkout-shipping-field")
+    ) {
+      checkoutStep = "delivery";
+      render();
+    }
   });
 
   form.addEventListener("change", (event) => {
@@ -5033,6 +5258,13 @@ function initCheckoutPage() {
       return;
     }
     clearFieldError(target);
+    if (
+      checkoutStep === "payment" &&
+      target.hasAttribute("data-checkout-shipping-field")
+    ) {
+      checkoutStep = "delivery";
+      render();
+    }
   });
 
   if (
@@ -5191,6 +5423,13 @@ function initCheckoutPage() {
           return;
         }
 
+        setCheckoutContactFields({
+          firstName,
+          lastName,
+          phone,
+          email,
+        });
+
         try {
           await syncCustomerProfile(authState.supabase, data.user, {
             first_name: firstName,
@@ -5237,6 +5476,37 @@ function initCheckoutPage() {
     });
   }
 
+  if (deliveryContinueButton instanceof HTMLButtonElement) {
+    deliveryContinueButton.addEventListener("click", () => {
+      if (!activeAuthState?.user) {
+        checkoutStep = "auth";
+        setCheckoutMessage(
+          "Please log in or create an account before choosing delivery.",
+          "error",
+        );
+        render();
+        return;
+      }
+
+      if (!validateDeliveryStep({ focus: true })) {
+        return;
+      }
+
+      fillMissingCheckoutContact();
+      checkoutStep = "payment";
+      setCheckoutMessage("");
+      render();
+    });
+  }
+
+  if (backToDeliveryButton instanceof HTMLButtonElement) {
+    backToDeliveryButton.addEventListener("click", () => {
+      checkoutStep = "delivery";
+      setCheckoutMessage("");
+      render();
+    });
+  }
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearAllFieldErrors();
@@ -5280,7 +5550,7 @@ function initCheckoutPage() {
       // Continue. Server-side product validation is still authoritative.
     }
 
-    const formData = new FormData(form);
+    let formData = new FormData(form);
     const subtotal = getCartSubtotal(items);
     const selectedProfile = getSelectedPaymentProfile();
     activeAuthState = await getCurrentAuthState();
@@ -5293,6 +5563,8 @@ function initCheckoutPage() {
       render();
       return;
     }
+    fillMissingCheckoutContact();
+    formData = new FormData(form);
     const firstName = String(formData.get("first_name") || "").trim();
     const lastName = String(formData.get("last_name") || "").trim();
     const customerName = buildProfileFullName(firstName, lastName, "") || "";
@@ -5745,6 +6017,9 @@ function initCheckoutPage() {
 
   if (storeField instanceof HTMLSelectElement) {
     storeField.addEventListener("change", () => {
+      if (checkoutStep === "payment") {
+        checkoutStep = "delivery";
+      }
       render();
     });
   }
@@ -5753,6 +6028,9 @@ function initCheckoutPage() {
     if (!(field instanceof HTMLInputElement)) return;
     field.addEventListener("change", () => {
       selectedFulfillment = field.value || "pickup";
+      if (checkoutStep === "payment") {
+        checkoutStep = "delivery";
+      }
       render();
     });
   });

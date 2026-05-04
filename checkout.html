@@ -435,6 +435,16 @@
                     />
                   </div>
                 </div>
+
+                <div class="storefront-checkout__step-actions">
+                  <button
+                    class="button button--primary"
+                    type="button"
+                    data-checkout-delivery-continue
+                  >
+                    Continue to payment
+                  </button>
+                </div>
               </section>
 
               <section
@@ -445,53 +455,20 @@
                 <div class="storefront-checkout__step-heading">
                   <span class="storefront-checkout__step-number">3</span>
                   <div>
-                    <h2>Contact and payment</h2>
+                    <h2>Payment and review</h2>
                     <p>
-                      Confirm your contact details and choose the payment method
-                      for this order.
+                      Choose how you want to pay, then review and submit your
+                      order.
                     </p>
                   </div>
                 </div>
 
+                <input type="hidden" name="first_name" />
+                <input type="hidden" name="last_name" />
+                <input type="hidden" name="phone" />
+                <input type="hidden" name="email" />
+
                 <div class="storefront-checkout__form-grid">
-                  <label>
-                    <span>First name</span>
-                    <input
-                      type="text"
-                      name="first_name"
-                      autocomplete="given-name"
-                      required
-                    />
-                  </label>
-                  <label>
-                    <span>Last name</span>
-                    <input
-                      type="text"
-                      name="last_name"
-                      autocomplete="family-name"
-                      required
-                    />
-                  </label>
-                  <label>
-                    <span>Phone</span>
-                    <input
-                      type="tel"
-                      name="phone"
-                      autocomplete="tel"
-                      placeholder="0412 345 678 or +61 412 345 678"
-                      required
-                    />
-                  </label>
-                  <label>
-                    <span>Email</span>
-                    <input
-                      type="email"
-                      name="email"
-                      autocomplete="email"
-                      placeholder="name@example.com.au"
-                      required
-                    />
-                  </label>
                   <div
                     class="storefront-checkout__form-grid-full storefront-checkout__account-setup"
                     data-checkout-account-setup
@@ -550,6 +527,16 @@
                       placeholder="Anything the store should know before contacting you?"
                     ></textarea>
                   </label>
+                </div>
+
+                <div class="storefront-checkout__step-actions">
+                  <button
+                    class="button button--ghost"
+                    type="button"
+                    data-checkout-back-to-delivery
+                  >
+                    Back to delivery
+                  </button>
                 </div>
 
                 <div
