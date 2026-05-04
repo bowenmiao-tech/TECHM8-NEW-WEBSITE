@@ -6607,15 +6607,15 @@ h2 {
 
 .storefront-checkout__auth-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: 1fr;
+  gap: 1.1rem;
 }
 
 .storefront-checkout__auth-panel,
 .storefront-checkout__auth-status {
   display: grid;
-  gap: 0.9rem;
-  padding: 1rem;
+  gap: 1rem;
+  padding: clamp(1rem, 2vw, 1.25rem);
   border: 1px solid rgba(7, 39, 45, 0.08);
   border-radius: 1.1rem;
   background: rgba(255, 255, 255, 0.88);
@@ -6627,6 +6627,7 @@ h2 {
 }
 
 .storefront-checkout__auth-panel p {
+  max-width: 42rem;
   color: var(--muted);
   line-height: 1.6;
 }
