@@ -4271,6 +4271,9 @@ function initCheckoutPage() {
   );
   const deliveryStep = root.querySelector("[data-checkout-delivery-step]");
   const pickupPanel = root.querySelector("[data-checkout-pickup-panel]");
+  const gatedCheckoutBlocks = Array.from(
+    root.querySelectorAll("[data-checkout-gated]"),
+  );
   const fulfillmentFields = Array.from(
     root.querySelectorAll("[data-checkout-fulfillment]"),
   );
@@ -4590,6 +4593,12 @@ function initCheckoutPage() {
         authStatus.innerHTML = "";
       }
     }
+
+    gatedCheckoutBlocks.forEach((block) => {
+      if (block instanceof HTMLElement) {
+        block.hidden = !showDeliveryStep;
+      }
+    });
 
     const showShipping = isWarehouseDispatch;
     if (shippingSection instanceof HTMLElement) {

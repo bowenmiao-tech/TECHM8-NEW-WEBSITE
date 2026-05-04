@@ -559,12 +559,20 @@
                 ></div>
               </section>
 
-              <div class="storefront-summary storefront-summary--embedded">
+              <div
+                class="storefront-summary storefront-summary--embedded"
+                data-checkout-gated
+                hidden
+              >
                 <p class="eyebrow">Items in this request</p>
                 <div data-checkout-items></div>
               </div>
 
-              <div class="storefront-checkout__submit">
+              <div
+                class="storefront-checkout__submit"
+                data-checkout-gated
+                hidden
+              >
                 <button class="button button--primary" type="submit">
                   Submit order request
                 </button>
