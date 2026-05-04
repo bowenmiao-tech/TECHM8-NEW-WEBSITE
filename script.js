@@ -4214,7 +4214,13 @@ function initCheckoutPage() {
   const form = root.querySelector("[data-checkout-form]");
   const summaryTarget = root.querySelector("[data-checkout-summary]");
   const itemsTarget = root.querySelector("[data-checkout-items]");
+  const sidebarItemsTarget = root.querySelector(
+    "[data-checkout-sidebar-items]",
+  );
   const messageTarget = root.querySelector("[data-checkout-message]");
+  const progressSteps = Array.from(
+    root.querySelectorAll("[data-checkout-progress-step]"),
+  );
   const paymentOptionsTarget = root.querySelector("[data-payment-options]");
   const paymentMethodField = root.querySelector("[data-payment-method]");
   const shippingOptionsTarget = root.querySelector("[data-shipping-options]");
@@ -4289,7 +4295,8 @@ function initCheckoutPage() {
   if (
     !(form instanceof HTMLFormElement) ||
     !(summaryTarget instanceof HTMLElement) ||
-    !(itemsTarget instanceof HTMLElement)
+    !(itemsTarget instanceof HTMLElement) ||
+    !(sidebarItemsTarget instanceof HTMLElement)
   )
     return;
   const submitButton = form.querySelector('button[type="submit"]');
@@ -4636,6 +4643,60 @@ function initCheckoutPage() {
     `;
   };
 
+  const renderCheckoutSidebarItems = (items) => {
+    if (!(sidebarItemsTarget instanceof HTMLElement)) return;
+    if (!items.length) {
+      sidebarItemsTarget.innerHTML = `
+        <article class="storefront-summary-item storefront-summary-item--empty">
+          <p>Your cart is empty.</p>
+        </article>
+      `;
+      return;
+    }
+
+    sidebarItemsTarget.innerHTML = items
+      .map((item) => {
+        const lineTotal = (Number(item.price) || 0) * (Number(item.qty) || 0);
+        return `
+          <article class="storefront-summary-item">
+            <a class="storefront-summary-item__media" href="product.html?slug=${encodeURIComponent(item.slug)}">
+              ${
+                item.image_url
+                  ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}" loading="lazy">`
+                  : `<span>TECHM8</span>`
+              }
+            </a>
+            <div class="storefront-summary-item__body">
+              <p>Stock level: <strong>In stock</strong></p>
+              <h3><a href="product.html?slug=${encodeURIComponent(item.slug)}">${escapeHtml(item.name)}</a></h3>
+              <div class="storefront-summary-item__meta">
+                <span>QTY: ${escapeHtml(String(item.qty || 1))}</span>
+                <strong>${escapeHtml(formatMoney(lineTotal))}</strong>
+              </div>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+  };
+
+  const syncCheckoutProgress = () => {
+    const order = ["auth", "delivery", "payment"];
+    const activeIndex = Math.max(0, order.indexOf(checkoutStep));
+    progressSteps.forEach((step) => {
+      if (!(step instanceof HTMLElement)) return;
+      const stepName = String(
+        step.getAttribute("data-checkout-progress-step") || "",
+      );
+      const stepIndex = order.indexOf(stepName);
+      step.classList.toggle("is-active", stepIndex === activeIndex);
+      step.classList.toggle(
+        "is-complete",
+        stepIndex > -1 && stepIndex < activeIndex,
+      );
+    });
+  };
+
   const validateDeliveryStep = ({ focus = true } = {}) => {
     if (focus) {
       clearAllFieldErrors();
@@ -4760,6 +4821,7 @@ function initCheckoutPage() {
       checkoutStep === "payment" &&
       Boolean(storeSlug) &&
       deliveryReady;
+    syncCheckoutProgress();
     const visibleProfiles = getVisiblePaymentProfiles();
     const selectedProfile = getSelectedPaymentProfile();
 
@@ -5138,6 +5200,7 @@ function initCheckoutPage() {
     renderPaymentOptions(subtotal);
     renderShippingOptions(subtotal);
     renderCartLineItems(itemsTarget, items);
+    renderCheckoutSidebarItems(items);
     renderCartSummary(summaryTarget, items, {
       paymentProfile: getSelectedPaymentProfile(),
       shippingOption,

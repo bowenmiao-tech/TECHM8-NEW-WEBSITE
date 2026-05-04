@@ -74,6 +74,24 @@
               <a href="cart.html">Back to cart</a>
             </div>
 
+            <ol class="checkout-progress" data-checkout-progress>
+              <li class="is-active" data-checkout-progress-step="auth">
+                <span>1</span>
+                <strong>Account</strong>
+                <small>Log in or register</small>
+              </li>
+              <li data-checkout-progress-step="delivery">
+                <span>2</span>
+                <strong>Delivery</strong>
+                <small>Pickup or shipping</small>
+              </li>
+              <li data-checkout-progress-step="payment">
+                <span>3</span>
+                <strong>Payment</strong>
+                <small>Review and submit</small>
+              </li>
+            </ol>
+
             <form
               class="storefront-checkout__form"
               data-checkout-form
@@ -567,13 +585,16 @@
             </form>
           </div>
 
-          <aside
-            class="storefront-checkout__sidebar"
-            data-checkout-gated
-            hidden
-          >
-            <div class="storefront-summary">
-              <p class="eyebrow">Order summary</p>
+          <aside class="storefront-checkout__sidebar">
+            <div class="storefront-summary storefront-summary--checkout">
+              <div class="storefront-summary__heading">
+                <h2>Order Summary</h2>
+                <a href="cart.html">Edit</a>
+              </div>
+              <div
+                class="storefront-summary__items"
+                data-checkout-sidebar-items
+              ></div>
               <div data-checkout-summary></div>
             </div>
           </aside>
