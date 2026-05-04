@@ -4987,9 +4987,9 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 
 .storefront-pdp {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(23rem, 30rem);
+  grid-template-columns: minmax(0, 1.12fr) minmax(24rem, 0.88fr);
   gap: 1.1rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 .storefront-pdp__gallery,
@@ -5067,6 +5067,8 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
 }
 
 .storefront-pdp__summary {
+  display: flex;
+  flex-direction: column;
   padding: 1.35rem;
 }
 
@@ -6064,6 +6066,10 @@ h2 { font-size: clamp(2rem, 4vw, 3rem); max-width: 18ch; }
   .storefront-pdp,
   .storefront-checkout {
     grid-template-columns: 1fr;
+  }
+
+  .storefront-pdp {
+    align-items: start;
   }
 
   .storefront-pdp__highlights,
