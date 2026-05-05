@@ -959,6 +959,20 @@ function getAuthRedirectUrl() {
   return new URL("account.html", window.location.href).toString();
 }
 
+function getPasswordRecoveryRedirectUrl() {
+  const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
+  if (configuredSiteUrl) {
+    return new URL(
+      "reset-password.html",
+      configuredSiteUrl.endsWith("/")
+        ? configuredSiteUrl
+        : `${configuredSiteUrl}/`,
+    ).toString();
+  }
+
+  return new URL("reset-password.html", window.location.href).toString();
+}
+
 function getAccountHomeUrl() {
   const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
   if (configuredSiteUrl) {
@@ -7263,7 +7277,7 @@ async function initForgotPasswordPage() {
     try {
       setAuthMessage(messageBox, "");
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: getAuthRedirectUrl(),
+        redirectTo: getPasswordRecoveryRedirectUrl(),
       });
       if (error) throw error;
       setAuthMessage(
@@ -7271,6 +7285,154 @@ async function initForgotPasswordPage() {
         "Password reset link sent. Check your email inbox.",
       );
       resetForm.reset();
+    } catch (error) {
+      setAuthMessage(messageBox, getReadableAuthError(error), "error");
+    }
+  });
+}
+
+async function initResetPasswordPage() {
+  const root = document.querySelector("[data-password-update-page]");
+  if (!(root instanceof HTMLElement)) return;
+
+  const messageBox = root.querySelector("[data-auth-message]");
+  const form = root.querySelector("[data-password-update-form]");
+  if (!(form instanceof HTMLFormElement)) return;
+
+  const passwordField = form.elements.namedItem("password");
+  const confirmPasswordField = form.elements.namedItem("confirm_password");
+  const passwordMatchMessage = root.querySelector(
+    "[data-password-match-message]",
+  );
+
+  const updatePasswordState = () => {
+    if (
+      !(passwordField instanceof HTMLInputElement) ||
+      !(confirmPasswordField instanceof HTMLInputElement) ||
+      !(passwordMatchMessage instanceof HTMLElement)
+    ) {
+      return true;
+    }
+
+    const password = String(passwordField.value || "");
+    const confirmPassword = String(confirmPasswordField.value || "");
+    const passwordMeetsRule = isValidAccountPassword(password);
+
+    passwordField.classList.toggle(
+      "is-invalid",
+      Boolean(password && !passwordMeetsRule),
+    );
+    passwordField.setCustomValidity(
+      password && !passwordMeetsRule
+        ? "Password must include English letters and numbers."
+        : "",
+    );
+    passwordMatchMessage.classList.remove(
+      "auth-single__hint--error",
+      "auth-single__hint--success",
+    );
+
+    if (!confirmPassword) {
+      passwordMatchMessage.hidden = true;
+      passwordMatchMessage.textContent = "";
+      confirmPasswordField.classList.remove("is-invalid");
+      confirmPasswordField.setCustomValidity("");
+      return passwordMeetsRule;
+    }
+
+    if (password === confirmPassword && passwordMeetsRule) {
+      passwordMatchMessage.hidden = false;
+      passwordMatchMessage.textContent = "Passwords match.";
+      passwordMatchMessage.classList.add("auth-single__hint--success");
+      confirmPasswordField.classList.remove("is-invalid");
+      confirmPasswordField.setCustomValidity("");
+      return true;
+    }
+
+    passwordMatchMessage.hidden = false;
+    passwordMatchMessage.textContent =
+      password === confirmPassword
+        ? "Password must include English letters and numbers."
+        : "Passwords do not match.";
+    passwordMatchMessage.classList.add("auth-single__hint--error");
+    confirmPasswordField.classList.add("is-invalid");
+    confirmPasswordField.setCustomValidity(passwordMatchMessage.textContent);
+    return false;
+  };
+
+  if (
+    passwordField instanceof HTMLInputElement &&
+    confirmPasswordField instanceof HTMLInputElement
+  ) {
+    [passwordField, confirmPasswordField].forEach((input) => {
+      input.addEventListener("input", updatePasswordState);
+    });
+  }
+
+  let supabase;
+  try {
+    supabase = await getSupabaseBrowserClient();
+  } catch (error) {
+    setAuthMessage(
+      messageBox,
+      "Supabase Auth could not be loaded on this page.",
+      "error",
+    );
+    return;
+  }
+
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session) {
+      setAuthMessage(
+        messageBox,
+        "Open this page from the reset password email link before setting a new password.",
+        "error",
+      );
+    }
+  } catch (error) {
+    setAuthMessage(messageBox, getReadableAuthError(error), "error");
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const password = String(form.elements.namedItem("password")?.value || "");
+    const confirmPassword = String(
+      form.elements.namedItem("confirm_password")?.value || "",
+    );
+
+    if (!isValidAccountPassword(password)) {
+      setAuthMessage(
+        messageBox,
+        "Password must include English letters and numbers.",
+        "error",
+      );
+      if (passwordField instanceof HTMLInputElement) passwordField.focus();
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setAuthMessage(messageBox, "Passwords do not match.", "error");
+      if (confirmPasswordField instanceof HTMLInputElement) {
+        confirmPasswordField.focus();
+      }
+      return;
+    }
+
+    try {
+      setAuthMessage(messageBox, "");
+      const { error } = await supabase.auth.updateUser({ password });
+      if (error) throw error;
+      setAuthMessage(
+        messageBox,
+        "Password updated successfully. Redirecting to your account...",
+      );
+      setTimeout(() => {
+        window.location.assign(getAccountHomeUrl());
+      }, 900);
     } catch (error) {
       setAuthMessage(messageBox, getReadableAuthError(error), "error");
     }
@@ -8086,6 +8248,7 @@ function initPage() {
   initWarrantyReturnsPage();
   initRegisterPage();
   initForgotPasswordPage();
+  initResetPasswordPage();
   initMyOrdersPage();
   initMyRepairsPage();
 }
