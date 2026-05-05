@@ -3411,7 +3411,6 @@ function selectLatestHomeProducts(products, limit = 6) {
 
 function createHomeFeaturedCard(product) {
   const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
-  const categoryUrl = `category.html?slug=${encodeURIComponent(product.category_slug)}`;
   const retailPrice = Number(product.retail_price) || 0;
   const compareAtPrice = Number(product.compare_at_price) || 0;
   const hasComparePrice =
@@ -3420,40 +3419,22 @@ function createHomeFeaturedCard(product) {
   const imageMarkup = product.display_image
     ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy" decoding="async" sizes="(max-width: 720px) 72vw, 22vw">`
     : `<div class="home-product-card__image-placeholder" aria-hidden="true">TECHM8</div>`;
-  const saleAmount = hasComparePrice ? compareAtPrice - retailPrice : 0;
-  const primaryBadge = hasComparePrice
-    ? "On sale"
-    : product.is_featured
-      ? "Featured"
-      : "New";
 
   return `
-      <article class="home-product-card">
-        <div class="home-product-card__topline">
-          <span class="home-product-card__deal-badge ${hasComparePrice ? "is-sale" : ""}">${escapeHtml(primaryBadge)}</span>
-          <a class="home-product-card__eyebrow" href="${categoryUrl}">${escapeHtml(product.category_name || "Latest product")}</a>
-        </div>
+      <article class="home-product-card" data-product-card-link="${detailUrl}" tabindex="0" role="link" aria-label="${escapeHtml(productName)}">
         <a class="home-product-card__media" href="${detailUrl}">
           ${imageMarkup}
         </a>
         <div class="home-product-card__content">
-            <div class="home-product-card__row">
-              <span class="home-product-card__brand">${escapeHtml(product.brand || "TECHM8")}</span>
-              <span class="home-product-card__pill">${hasComparePrice ? "Deal" : "Latest"}</span>
-            </div>
             <a class="home-product-card__title-link" href="${detailUrl}">
               <h3>${escapeHtml(productName)}</h3>
             </a>
-            <p class="home-product-card__summary">${escapeHtml(product.short_description || product.description || "Latest item from the TECHM8 online catalog.")}</p>
-            ${renderVariantSummary(product, "home-product-card")}
             <div class="home-product-card__price-row">
               <strong>${escapeHtml(formatMoney(retailPrice))}</strong>
               ${hasComparePrice ? `<span class="home-product-card__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>` : ""}
             </div>
-          ${hasComparePrice ? `<p class="home-product-card__saving">Save ${escapeHtml(formatMoney(saleAmount))}</p>` : `<p class="home-product-card__saving is-muted">Standard price</p>`}
           <div class="home-product-card__actions">
             <button class="home-product-card__cart-button" type="button" data-add-cart-slug="${escapeHtml(product.slug)}" data-add-cart-qty="1">Add to cart</button>
-            <a class="home-product-card__detail-link" href="${detailUrl}">Details</a>
           </div>
         </div>
       </article>
@@ -3510,6 +3491,28 @@ function initHomeFeaturedProducts() {
     bindCartButtons(grid, latestProducts);
     requestAnimationFrame(updateArrowState);
   };
+
+  grid.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (target.closest("button, a")) return;
+    const card = target.closest("[data-product-card-link]");
+    if (!(card instanceof HTMLElement)) return;
+    const href = card.getAttribute("data-product-card-link");
+    if (href) window.location.href = href;
+  });
+
+  grid.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const card = target.closest("[data-product-card-link]");
+    if (!(card instanceof HTMLElement)) return;
+    const href = card.getAttribute("data-product-card-link");
+    if (!href) return;
+    event.preventDefault();
+    window.location.href = href;
+  });
 
   const loadProducts = () => {
     if (hasLoaded) return;
