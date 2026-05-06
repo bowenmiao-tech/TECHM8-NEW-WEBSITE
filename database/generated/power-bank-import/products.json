@@ -1,102 +1,18 @@
 ﻿[
     {
-        "sku":  "110631633",
-        "slug":  "remax-rpp-623-power-bank-20000-mah",
-        "name":  "REMAX RPP-623 Power Bank 20000 mAh",
-        "brand":  "REMAX",
-        "model":  "RPP-623",
-        "upc":  "695485122607",
-        "stock_quantity":  21,
-        "cost_price":  12.00,
-        "retail_price":  79.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "REMAX RPP-623 Power Bank 20000 mAh available for online and warehouse dispatch.",
-        "description":  "REMAX RPP-623 Power Bank 20000 mAh available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-623-power-bank-20000-mah\\01-image-1.jpg",
-                                "file_name":  "01-image-1.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-623-power-bank-20000-mah\\02-image-2.jpg",
-                                "file_name":  "02-image-2.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-623-power-bank-20000-mah\\03-image-3.jpg",
-                                "file_name":  "03-image-3.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-623-power-bank-20000-mah\\04-image-4.png",
-                                "file_name":  "04-image-4.png",
-                                "sort_order":  4
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "110621632",
-        "slug":  "remax-rpp-622-10000mah-power-bank",
-        "name":  "Remax RPP-622 10000MAH power bank",
-        "brand":  "REMAX",
-        "model":  "RPP-622",
-        "upc":  "6954851212553",
-        "stock_quantity":  21,
-        "cost_price":  8.00,
-        "retail_price":  69.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "Remax RPP-622 10000MAH power bank available for online and warehouse dispatch.",
-        "description":  "Remax RPP-622 10000MAH power bank available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-622-10000mah-power-bank\\01-image-1.jpg",
-                                "file_name":  "01-image-1.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-622-10000mah-power-bank\\02-image-2.jpg",
-                                "file_name":  "02-image-2.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-622-10000mah-power-bank\\03-image-3.jpg",
-                                "file_name":  "03-image-3.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-622-10000mah-power-bank\\04-image-4.jpg",
-                                "file_name":  "04-image-4.jpg",
-                                "sort_order":  4
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "110521611",
-        "slug":  "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-        "name":  "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+        "sku":  "TM8-wekome-wk-wd-03-mini-karaoke-speaker-w",
+        "slug":  "wekome-wk-wd-03-mini-karaoke-speaker-w",
+        "name":  "Wekome WK WD-03 Mini Karaoke Speaker W",
         "brand":  "WEKOME",
-        "model":  "WP-70",
-        "upc":  "6941027655016",
-        "stock_quantity":  17,
-        "cost_price":  15.00,
-        "retail_price":  79.95,
+        "model":  "Wekome WK WD-03 Mini Karaoke Speaker W",
+        "upc":  "6941027648759",
+        "stock_quantity":  1,
+        "cost_price":  14.50,
+        "retail_price":  89.95,
         "compare_at_price":  null,
         "condition_label":  "New",
-        "short_description":  "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.",
-        "description":  "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.",
+        "short_description":  "Wekome WK WD-03 Mini Karaoke Speaker W available for online and warehouse dispatch.",
+        "description":  "Wekome WK WD-03 Mini Karaoke Speaker W available for online and warehouse dispatch.",
         "compatibility":  "Portable charging devices",
         "category_name":  "Power Banks",
         "warehouse_location":  null,
@@ -107,19 +23,19 @@
         "image_url":  null
     },
     {
-        "sku":  "110511610",
-        "slug":  "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-        "name":  "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
-        "brand":  "WEKOME",
-        "model":  "WP-112",
-        "upc":  "6941027655030",
-        "stock_quantity":  18,
-        "cost_price":  12.00,
-        "retail_price":  69.95,
+        "sku":  "TM8-wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
+        "slug":  "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
+        "name":  "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
+        "brand":  "Unassigned",
+        "model":  "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
+        "upc":  "6941027644126",
+        "stock_quantity":  1,
+        "cost_price":  14.50,
+        "retail_price":  89.95,
         "compare_at_price":  null,
         "condition_label":  "New",
-        "short_description":  "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.",
-        "description":  "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.",
+        "short_description":  "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B available for online and warehouse dispatch.",
+        "description":  "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B available for online and warehouse dispatch.",
         "compatibility":  "Portable charging devices",
         "category_name":  "Power Banks",
         "warehouse_location":  null,
@@ -130,645 +46,88 @@
         "image_url":  null
     },
     {
-        "sku":  "110501609",
-        "slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-white",
-        "name":  "REMAX RPP-26 20000mAh Fast Charging Power Bank- White",
+        "sku":  "TM8-wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black",
+        "slug":  "wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black",
+        "name":  "WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black)",
+        "brand":  "Unassigned",
+        "model":  "WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black)",
+        "upc":  "6941027649855",
+        "stock_quantity":  1,
+        "cost_price":  14.50,
+        "retail_price":  89.95,
+        "compare_at_price":  null,
+        "condition_label":  "New",
+        "short_description":  "WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black) available for online and warehouse dispatch.",
+        "description":  "WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black) available for online and warehouse dispatch.",
+        "compatibility":  "Portable charging devices",
+        "category_name":  "Power Banks",
+        "warehouse_location":  null,
+        "color":  null,
+        "image_files":  [
+
+                        ],
+        "image_url":  null
+    },
+    {
+        "sku":  "TM8-wekome-wk-wd-03-mini-karaoke-speaker-b",
+        "slug":  "wekome-wk-wd-03-mini-karaoke-speaker-b",
+        "name":  "Wekome WK WD-03 Mini Karaoke Speaker B",
+        "brand":  "WEKOME",
+        "model":  "Wekome WK WD-03 Mini Karaoke Speaker B",
+        "upc":  "6941027648742",
+        "stock_quantity":  2,
+        "cost_price":  14.50,
+        "retail_price":  89.95,
+        "compare_at_price":  null,
+        "condition_label":  "New",
+        "short_description":  "Wekome WK WD-03 Mini Karaoke Speaker B available for online and warehouse dispatch.",
+        "description":  "Wekome WK WD-03 Mini Karaoke Speaker B available for online and warehouse dispatch.",
+        "compatibility":  "Portable charging devices",
+        "category_name":  "Power Banks",
+        "warehouse_location":  null,
+        "color":  null,
+        "image_files":  [
+
+                        ],
+        "image_url":  null
+    },
+    {
+        "sku":  "TM8-wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-w",
+        "slug":  "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-w",
+        "name":  "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W",
+        "brand":  "Unassigned",
+        "model":  "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W",
+        "upc":  "6941027644133",
+        "stock_quantity":  1,
+        "cost_price":  14.50,
+        "retail_price":  89.95,
+        "compare_at_price":  null,
+        "condition_label":  "New",
+        "short_description":  "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W available for online and warehouse dispatch.",
+        "description":  "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W available for online and warehouse dispatch.",
+        "compatibility":  "Portable charging devices",
+        "category_name":  "Power Banks",
+        "warehouse_location":  null,
+        "color":  null,
+        "image_files":  [
+
+                        ],
+        "image_url":  null
+    },
+    {
+        "sku":  "TM8-remax-rb-m62-speaker",
+        "slug":  "remax-rb-m62-speaker",
+        "name":  "Remax RB-M62 Speaker",
         "brand":  "REMAX",
-        "model":  "RPP-26",
-        "upc":  "69548512215745",
+        "model":  "Remax RB-M62 Speaker",
+        "upc":  "6954851206453",
         "stock_quantity":  8,
-        "cost_price":  10.00,
-        "retail_price":  69.95,
+        "cost_price":  0.00,
+        "retail_price":  109.00,
         "compare_at_price":  null,
         "condition_label":  "New",
-        "short_description":  "REMAX RPP-26 20000mAh Fast Charging Power Bank- White available for online and warehouse dispatch.",
-        "description":  "REMAX RPP-26 20000mAh Fast Charging Power Bank- White available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-26-20000mah-fast-charging-power-bank-white\\01-2.jpg",
-                                "file_name":  "01-2.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-26-20000mah-fast-charging-power-bank-white\\02-4.jpg",
-                                "file_name":  "02-4.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-26-20000mah-fast-charging-power-bank-white\\03-5.jpg",
-                                "file_name":  "03-5.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-26-20000mah-fast-charging-power-bank-white\\04-image-4.jpg",
-                                "file_name":  "04-image-4.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-26-20000mah-fast-charging-power-bank-white\\05-image-5.jpg",
-                                "file_name":  "05-image-5.jpg",
-                                "sort_order":  5
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "110491608",
-        "slug":  "remax-rpp-26-20000mah-fast-charging-power-bank-black",
-        "name":  "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black",
-        "brand":  "REMAX",
-        "model":  "RPP-26",
-        "upc":  "69548512215738",
-        "stock_quantity":  7,
-        "cost_price":  10.00,
-        "retail_price":  69.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black available for online and warehouse dispatch.",
-        "description":  "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-26-20000mah-fast-charging-power-bank-black\\01-2.jpg",
-                                "file_name":  "01-2.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-26-20000mah-fast-charging-power-bank-black\\02-4.jpg",
-                                "file_name":  "02-4.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-26-20000mah-fast-charging-power-bank-black\\03-5.jpg",
-                                "file_name":  "03-5.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-26-20000mah-fast-charging-power-bank-black\\04-image-4.jpg",
-                                "file_name":  "04-image-4.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-26-20000mah-fast-charging-power-bank-black\\05-image-5.jpg",
-                                "file_name":  "05-image-5.jpg",
-                                "sort_order":  5
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "110481607",
-        "slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-black",
-        "name":  "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
-        "brand":  "REMAX",
-        "model":  "RPP-23",
-        "upc":  "69548512215677",
-        "stock_quantity":  4,
-        "cost_price":  6.00,
-        "retail_price":  59.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black available for online and warehouse dispatch.",
-        "description":  "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-black\\01-2.jpg",
-                                "file_name":  "01-2.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-black\\02-4.jpg",
-                                "file_name":  "02-4.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-black\\03-5.jpg",
-                                "file_name":  "03-5.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-black\\04-6.jpg",
-                                "file_name":  "04-6.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-black\\05-image-5.jpg",
-                                "file_name":  "05-image-5.jpg",
-                                "sort_order":  5
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-black\\06-image-6.jpg",
-                                "file_name":  "06-image-6.jpg",
-                                "sort_order":  6
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "110471606",
-        "slug":  "remax-rpp-23-10000mah-fast-charging-power-bank-white",
-        "name":  "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
-        "brand":  "REMAX",
-        "model":  "RPP-23",
-        "upc":  "6954851215684",
-        "stock_quantity":  4,
-        "cost_price":  6.00,
-        "retail_price":  59.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "REMAX RPP-23 10000mAh Fast Charging Power Bank- White available for online and warehouse dispatch.",
-        "description":  "REMAX RPP-23 10000mAh Fast Charging Power Bank- White available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-white\\01-2.jpg",
-                                "file_name":  "01-2.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-white\\02-4.jpg",
-                                "file_name":  "02-4.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-white\\03-5.jpg",
-                                "file_name":  "03-5.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-white\\04-6.jpg",
-                                "file_name":  "04-6.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-white\\05-image-5.jpg",
-                                "file_name":  "05-image-5.jpg",
-                                "sort_order":  5
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-23-10000mah-fast-charging-power-bank-white\\06-image-6.jpg",
-                                "file_name":  "06-image-6.jpg",
-                                "sort_order":  6
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "105181094",
-        "slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white",
-        "name":  "Remax FCP-1 22.5W Power Bank 10000mAh Fast Charging 10000 MAh PowerBank with Cable White",
-        "brand":  "REMAX",
-        "model":  "FCP-1",
-        "upc":  "6954851246992",
-        "stock_quantity":  1,
-        "cost_price":  11.00,
-        "retail_price":  69.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "Remax FCP-1 22.5W Power Bank 10000mAh Fast Charging 10000 MAh PowerBank with Cable White available for online and warehouse dispatch.",
-        "description":  "Remax FCP-1 22.5W Power Bank 10000mAh Fast Charging 10000 MAh PowerBank with Cable White available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white\\01-01-white-background.jpg",
-                                "file_name":  "01-01-white-background.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white\\02-white-background.jpg",
-                                "file_name":  "02-white-background.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white\\03-white-background.jpg",
-                                "file_name":  "03-white-background.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white\\04-english.jpg",
-                                "file_name":  "04-english.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white\\05-package.jpg",
-                                "file_name":  "05-package.jpg",
-                                "sort_order":  5
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "105171093",
-        "slug":  "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black",
-        "name":  "Remax FCP-1 22.5W Power Bank 10000mAh Fast Charging 10000 MAh PowerBank with Cable Black",
-        "brand":  "REMAX",
-        "model":  "FCP-1",
-        "upc":  "6954851246985",
-        "stock_quantity":  0,
-        "cost_price":  11.00,
-        "retail_price":  69.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "Remax FCP-1 22.5W Power Bank 10000mAh Fast Charging 10000 MAh PowerBank with Cable Black available for online and warehouse dispatch.",
-        "description":  "Remax FCP-1 22.5W Power Bank 10000mAh Fast Charging 10000 MAh PowerBank with Cable Black available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black\\01-01-white-background.jpg",
-                                "file_name":  "01-01-white-background.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black\\02-white-background.jpg",
-                                "file_name":  "02-white-background.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black\\03-white-background.jpg",
-                                "file_name":  "03-white-background.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black\\04-english.jpg",
-                                "file_name":  "04-english.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-black\\05-package.jpg",
-                                "file_name":  "05-package.jpg",
-                                "sort_order":  5
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "105161092",
-        "slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black",
-        "name":  "REMAX FCP-2 20000mAh Power Bank 20W PD 22.5W QC Fast Charging Built-in Cables Black",
-        "brand":  "REMAX",
-        "model":  "FCP-2",
-        "upc":  "6954851247005",
-        "stock_quantity":  0,
-        "cost_price":  15.00,
-        "retail_price":  79.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "REMAX FCP-2 20000mAh Power Bank 20W PD 22.5W QC Fast Charging Built-in Cables Black available for online and warehouse dispatch.",
-        "description":  "REMAX FCP-2 20000mAh Power Bank 20W PD 22.5W QC Fast Charging Built-in Cables Black available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black\\01-01-white-background.jpg",
-                                "file_name":  "01-01-white-background.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black\\02-white-background.jpg",
-                                "file_name":  "02-white-background.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black\\03-white-background.jpg",
-                                "file_name":  "03-white-background.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black\\04-english.jpg",
-                                "file_name":  "04-english.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-black\\05-package.jpg",
-                                "file_name":  "05-package.jpg",
-                                "sort_order":  5
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "105151091",
-        "slug":  "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white",
-        "name":  "REMAX FCP-2 20000mAh Power Bank 20W PD 22.5W QC Fast Charging Built-in Cables White",
-        "brand":  "REMAX",
-        "model":  "FCP-2",
-        "upc":  "6954851247012",
-        "stock_quantity":  1,
-        "cost_price":  15.00,
-        "retail_price":  79.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "REMAX FCP-2 20000mAh Power Bank 20W PD 22.5W QC Fast Charging Built-in Cables White available for online and warehouse dispatch.",
-        "description":  "REMAX FCP-2 20000mAh Power Bank 20W PD 22.5W QC Fast Charging Built-in Cables White available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white\\01-01-white-background.jpg",
-                                "file_name":  "01-01-white-background.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white\\02-white-background.jpg",
-                                "file_name":  "02-white-background.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white\\03-white-background.jpg",
-                                "file_name":  "03-white-background.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white\\04-english.jpg",
-                                "file_name":  "04-english.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white\\05-package.jpg",
-                                "file_name":  "05-package.jpg",
-                                "sort_order":  5
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "105141090",
-        "slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black",
-        "name":  "REMAX RPP-657 Rallaen Series 10000mAh Fast Charging Power Bank Black",
-        "brand":  "REMAX",
-        "model":  "RPP-657",
-        "upc":  "6954851235958",
-        "stock_quantity":  4,
-        "cost_price":  10.00,
-        "retail_price":  59.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "REMAX RPP-657 Rallaen Series 10000mAh Fast Charging Power Bank Black available for online and warehouse dispatch.",
-        "description":  "REMAX RPP-657 Rallaen Series 10000mAh Fast Charging Power Bank Black available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black\\01-rpp-657-2-4a-10000mah.jpg",
-                                "file_name":  "01-rpp-657-2-4a-10000mah.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black\\02-rpp-657-2-4a-10000mah.jpg",
-                                "file_name":  "02-rpp-657-2-4a-10000mah.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black\\03-rpp-657-2-4a-10000mah.jpg",
-                                "file_name":  "03-rpp-657-2-4a-10000mah.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black\\04-rpp-659-2-4a-30000mah.jpg",
-                                "file_name":  "04-rpp-659-2-4a-30000mah.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-black\\05-rpp-659-2-4a-30000mah.jpg",
-                                "file_name":  "05-rpp-659-2-4a-30000mah.jpg",
-                                "sort_order":  5
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "105131089",
-        "slug":  "remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white",
-        "name":  "REMAX RPP-657 Rallaen Series 10000mAh Fast Charging Power Bank White",
-        "brand":  "REMAX",
-        "model":  "RPP-657",
-        "upc":  "6954851235965",
-        "stock_quantity":  4,
-        "cost_price":  10.00,
-        "retail_price":  59.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "REMAX RPP-657 Rallaen Series 10000mAh Fast Charging Power Bank White available for online and warehouse dispatch.",
-        "description":  "REMAX RPP-657 Rallaen Series 10000mAh Fast Charging Power Bank White available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white\\01-rpp-657-2-4a-10000mah.jpg",
-                                "file_name":  "01-rpp-657-2-4a-10000mah.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white\\02-rpp-657-2-4a-10000mah.jpg",
-                                "file_name":  "02-rpp-657-2-4a-10000mah.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white\\03-rpp-657-2-4a-10000mah.jpg",
-                                "file_name":  "03-rpp-657-2-4a-10000mah.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white\\04-rpp-659-2-4a-30000mah.jpg",
-                                "file_name":  "04-rpp-659-2-4a-30000mah.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-657-rallaen-series-10000mah-fast-charging-power-bank-white\\05-rpp-659-2-4a-30000mah.jpg",
-                                "file_name":  "05-rpp-659-2-4a-30000mah.jpg",
-                                "sort_order":  5
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "103781033",
-        "slug":  "remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-black",
-        "name":  "REMAX RPP-658 Rellaen Series 20000mAh Fast Charging Power Bank(2.4A) - Black",
-        "brand":  "REMAX",
-        "model":  "RPP-658",
-        "upc":  "6954851235910",
-        "stock_quantity":  2,
-        "cost_price":  15.00,
-        "retail_price":  69.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "REMAX RPP-658 Rellaen Series 20000mAh Fast Charging Power Bank(2.4A) - Black available for online and warehouse dispatch.",
-        "description":  "REMAX RPP-658 Rellaen Series 20000mAh Fast Charging Power Bank(2.4A) - Black available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-black\\01-rpp-658-2-4a-20000mah.jpg",
-                                "file_name":  "01-rpp-658-2-4a-20000mah.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-black\\02-rpp-658-2-4a-20000mah.jpg",
-                                "file_name":  "02-rpp-658-2-4a-20000mah.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-black\\03-rpp-658-2-4a-20000mah.jpg",
-                                "file_name":  "03-rpp-658-2-4a-20000mah.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-black\\04-rpp-658-2-4a-20000mah.jpg",
-                                "file_name":  "04-rpp-658-2-4a-20000mah.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-black\\05-rpp-658-2-4a-20000mah.jpg",
-                                "file_name":  "05-rpp-658-2-4a-20000mah.jpg",
-                                "sort_order":  5
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-black\\06-rpp-658-2-4a-20000mah-1.jpg",
-                                "file_name":  "06-rpp-658-2-4a-20000mah-1.jpg",
-                                "sort_order":  6
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "103781033",
-        "slug":  "remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white",
-        "name":  "REMAX RPP-658 Rellaen Series 20000mAh Fast Charging Power Bank(2.4A) - White",
-        "brand":  "REMAX",
-        "model":  "RPP-658",
-        "upc":  "6954851235910",
-        "stock_quantity":  0,
-        "cost_price":  15.00,
-        "retail_price":  69.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "REMAX RPP-658 Rellaen Series 20000mAh Fast Charging Power Bank(2.4A) - White available for online and warehouse dispatch.",
-        "description":  "REMAX RPP-658 Rellaen Series 20000mAh Fast Charging Power Bank(2.4A) - White available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white\\01-rpp-658-2-4a-20000mah.jpg",
-                                "file_name":  "01-rpp-658-2-4a-20000mah.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white\\02-rpp-658-2-4a-20000mah.jpg",
-                                "file_name":  "02-rpp-658-2-4a-20000mah.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white\\03-rpp-658-2-4a-20000mah.jpg",
-                                "file_name":  "03-rpp-658-2-4a-20000mah.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white\\04-rpp-658-2-4a-20000mah.jpg",
-                                "file_name":  "04-rpp-658-2-4a-20000mah.jpg",
-                                "sort_order":  4
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white\\05-rpp-658-2-4a-20000mah.jpg",
-                                "file_name":  "05-rpp-658-2-4a-20000mah.jpg",
-                                "sort_order":  5
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-658-rellaen-series-20000mah-fast-charging-power-bank-2-4a-white\\06-rpp-658-2-4a-20000mah-1.jpg",
-                                "file_name":  "06-rpp-658-2-4a-20000mah-1.jpg",
-                                "sort_order":  6
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "694102764840",
-        "slug":  "remax-rpp-117-piloteer-series-50000mah-pd-qc-fast-charging-power-bank-pd-27w-qc-22-5w",
-        "name":  "REMAX RPP-117 Piloteer Series 50000mAh PD+QC Fast Charging Power Bank(PD 27W+QC 22.5W)",
-        "brand":  "REMAX",
-        "model":  "RPP-117",
-        "upc":  null,
-        "stock_quantity":  2,
-        "cost_price":  26.00,
-        "retail_price":  199.00,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "REMAX RPP-117 Piloteer Series 50000mAh PD+QC Fast Charging Power Bank(PD 27W+QC 22.5W) available for online and warehouse dispatch.",
-        "description":  "REMAX RPP-117 Piloteer Series 50000mAh PD+QC Fast Charging Power Bank(PD 27W+QC 22.5W) available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-117-piloteer-series-50000mah-pd-qc-fast-charging-power-bank-pd-27w-qc-22-5w\\01-image-1.jpg",
-                                "file_name":  "01-image-1.jpg",
-                                "sort_order":  1
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-117-piloteer-series-50000mah-pd-qc-fast-charging-power-bank-pd-27w-qc-22-5w\\02-image-2.jpg",
-                                "file_name":  "02-image-2.jpg",
-                                "sort_order":  2
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-117-piloteer-series-50000mah-pd-qc-fast-charging-power-bank-pd-27w-qc-22-5w\\03-image-3.jpg",
-                                "file_name":  "03-image-3.jpg",
-                                "sort_order":  3
-                            },
-                            {
-                                "local_path":  "D:\\program\\TECHM8 NEW WEBSITE\\database\\generated\\power-bank-import\\images\\remax-rpp-117-piloteer-series-50000mah-pd-qc-fast-charging-power-bank-pd-27w-qc-22-5w\\04-image-4.jpg",
-                                "file_name":  "04-image-4.jpg",
-                                "sort_order":  4
-                            }
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "694102764840",
-        "slug":  "wekome-wp-59-20000-mah-power-bank-22-5w-super-fast-charging",
-        "name":  "WEKOME WP-59 20000 mAh Power Bank 22.5W super fast charging",
-        "brand":  "WEKOME",
-        "model":  "WP-59",
-        "upc":  null,
-        "stock_quantity":  0,
-        "cost_price":  15.00,
-        "retail_price":  79.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "WEKOME WP-59 20000 mAh Power Bank 22.5W super fast charging available for online and warehouse dispatch.",
-        "description":  "WEKOME WP-59 20000 mAh Power Bank 22.5W super fast charging available for online and warehouse dispatch.",
+        "short_description":  "Remax RB-M62 Speaker available for online and warehouse dispatch.",
+        "description":  "Remax RB-M62 Speaker available for online and warehouse dispatch.",
         "compatibility":  "Portable charging devices",
         "category_name":  "Power Banks",
         "warehouse_location":  null,
@@ -779,88 +138,19 @@
         "image_url":  null
     },
     {
-        "sku":  "694102764837",
-        "slug":  "wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging",
-        "name":  "WEKOME WP-59 10000 mAh Power Bank 22.5W super fast charging",
-        "brand":  "WEKOME",
-        "model":  "WP-59",
-        "upc":  null,
-        "stock_quantity":  1,
-        "cost_price":  10.00,
-        "retail_price":  69.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "WEKOME WP-59 10000 mAh Power Bank 22.5W super fast charging available for online and warehouse dispatch.",
-        "description":  "WEKOME WP-59 10000 mAh Power Bank 22.5W super fast charging available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "694102765087",
-        "slug":  "wekome-wp-80-magsafe-5000mah-power-bank",
-        "name":  "WEKOME WP-80 Magsafe 5000mAh Power Bank",
-        "brand":  "WEKOME",
-        "model":  "WP-80",
-        "upc":  null,
-        "stock_quantity":  2,
-        "cost_price":  12.00,
-        "retail_price":  69.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "WEKOME WP-80 Magsafe 5000mAh Power Bank available for online and warehouse dispatch.",
-        "description":  "WEKOME WP-80 Magsafe 5000mAh Power Bank available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "694102765085",
-        "slug":  "wekome-wp-81-magsafe-10000mah-power-bank",
-        "name":  "WEKOME WP-81 Magsafe 10000mAh Power Bank",
-        "brand":  "WEKOME",
-        "model":  "WP-81",
-        "upc":  null,
-        "stock_quantity":  0,
-        "cost_price":  15.00,
-        "retail_price":  79.95,
-        "compare_at_price":  null,
-        "condition_label":  "New",
-        "short_description":  "WEKOME WP-81 Magsafe 10000mAh Power Bank available for online and warehouse dispatch.",
-        "description":  "WEKOME WP-81 Magsafe 10000mAh Power Bank available for online and warehouse dispatch.",
-        "compatibility":  "Portable charging devices",
-        "category_name":  "Power Banks",
-        "warehouse_location":  null,
-        "color":  null,
-        "image_files":  [
-
-                        ],
-        "image_url":  null
-    },
-    {
-        "sku":  "694102765273",
-        "slug":  "wekome-wp-101-10000mah-power-bank",
-        "name":  "WEKOME WP-101 10000mAh Power Bank",
-        "brand":  "WEKOME",
-        "model":  "WP-101",
-        "upc":  null,
+        "sku":  "TM8-remax-rb-m8-wireless-speaker",
+        "slug":  "remax-rb-m8-wireless-speaker",
+        "name":  "Remax RB-M8 Wireless Speaker",
+        "brand":  "REMAX",
+        "model":  "Remax RB-M8 Wireless Speaker",
+        "upc":  "6954851211730",
         "stock_quantity":  8,
-        "cost_price":  9.00,
-        "retail_price":  49.95,
+        "cost_price":  0.00,
+        "retail_price":  99.00,
         "compare_at_price":  null,
         "condition_label":  "New",
-        "short_description":  "WEKOME WP-101 10000mAh Power Bank available for online and warehouse dispatch.",
-        "description":  "WEKOME WP-101 10000mAh Power Bank available for online and warehouse dispatch.",
+        "short_description":  "Remax RB-M8 Wireless Speaker available for online and warehouse dispatch.",
+        "description":  "Remax RB-M8 Wireless Speaker available for online and warehouse dispatch.",
         "compatibility":  "Portable charging devices",
         "category_name":  "Power Banks",
         "warehouse_location":  null,

@@ -1,15 +1,16 @@
 ﻿{
-    "generated_at":  "2026-04-21T00:42:45+10:00",
-    "source_workbook":  "tmp-products-1.xlsx",
-    "validation_workbook":  "tmp-products-2.xlsx",
-    "total_products":  22,
-    "matched_image_files":  76,
+    "generated_at":  "2026-05-06T19:56:37+10:00",
+    "source_workbook":  "E:\\垃圾箱\\products (3).xlsx",
+    "validation_workbook":  "E:\\垃圾箱\\products (3).xlsx",
+    "total_products":  7,
+    "matched_image_files":  0,
     "missing_image_matches":  [
-                                  "WP-101",
-                                  "WP-112",
-                                  "WP-59",
-                                  "WP-70",
-                                  "WP-80",
-                                  "WP-81"
+                                  "Remax RB-M62 Speaker",
+                                  "Remax RB-M8 Wireless Speaker",
+                                  "Wekome WK WD-03 Mini Karaoke Speaker B",
+                                  "Wekome WK WD-03 Mini Karaoke Speaker W",
+                                  "WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black)",
+                                  "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
+                                  "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W"
                               ]
 }
