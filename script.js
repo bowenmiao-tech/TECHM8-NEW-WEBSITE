@@ -5569,12 +5569,23 @@ function initCheckoutPage() {
   }
 
   if (googleButton instanceof HTMLButtonElement) {
-    googleButton.addEventListener("click", () => {
-      setPanelMessage(
-        registerMessageTarget,
-        "Google login will be enabled after the Google API configuration is connected.",
-        "error",
-      );
+    googleButton.addEventListener("click", async () => {
+      try {
+        setPanelMessage(registerMessageTarget, "");
+        googleButton.disabled = true;
+        googleButton.textContent = "Opening Google...";
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: new URL("checkout.html", window.location.href).toString(),
+          },
+        });
+        if (error) throw error;
+      } catch (error) {
+        googleButton.disabled = false;
+        googleButton.textContent = "Continue with Google";
+        setPanelMessage(registerMessageTarget, getReadableAuthError(error), "error");
+      }
     });
   }
 
