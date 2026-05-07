@@ -4317,6 +4317,25 @@ h2 {
   min-width: 1rem;
 }
 
+.store-profile__areas {
+  margin-top: 1.15rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid rgba(7, 39, 45, 0.08);
+}
+
+.store-profile__areas h4 {
+  margin: 0 0 0.55rem;
+  color: var(--brand-dark);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.store-profile__areas p {
+  margin: 0;
+  line-height: 1.65;
+}
+
 .store-profile__services-heading {
   margin-bottom: 1.5rem;
 }
