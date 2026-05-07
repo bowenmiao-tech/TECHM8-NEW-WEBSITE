@@ -5572,9 +5572,12 @@ function initCheckoutPage() {
     googleButton.addEventListener("click", async () => {
       try {
         setPanelMessage(registerMessageTarget, "");
+        if (!activeAuthState?.supabase?.auth?.signInWithOAuth) {
+          throw new Error("Supabase Google login is not ready. Please refresh and try again.");
+        }
         googleButton.disabled = true;
-        googleButton.textContent = "Opening Google...";
-        const { error } = await supabase.auth.signInWithOAuth({
+        googleButton.classList.add("is-loading");
+        const { error } = await activeAuthState.supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
             redirectTo: new URL("checkout.html", window.location.href).toString(),
@@ -5583,7 +5586,7 @@ function initCheckoutPage() {
         if (error) throw error;
       } catch (error) {
         googleButton.disabled = false;
-        googleButton.textContent = "Continue with Google";
+        googleButton.classList.remove("is-loading");
         setPanelMessage(registerMessageTarget, getReadableAuthError(error), "error");
       }
     });

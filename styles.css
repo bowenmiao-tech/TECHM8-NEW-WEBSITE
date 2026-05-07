@@ -1530,6 +1530,54 @@ h2 {
   box-shadow: 0 8px 20px rgba(17, 141, 149, 0.22);
 }
 
+.button--google {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  min-height: 2.75rem;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #62c7ea;
+  border-radius: 0;
+  background: #5ec8ec;
+  color: #fff;
+  box-shadow: none;
+}
+
+.button--google__icon {
+  display: inline-grid;
+  width: 2.75rem;
+  min-height: 2.75rem;
+  place-items: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.55);
+  background: #fff;
+  color: #4285f4;
+  font-family: Arial, sans-serif;
+  font-weight: 900;
+}
+
+.button--google span:last-child {
+  padding: 0 1.25rem;
+}
+
+.button--google:hover {
+  background: #49bde4;
+}
+
+.button--google.is-loading span:last-child {
+  position: relative;
+  color: transparent;
+}
+
+.button--google.is-loading span:last-child::after {
+  content: "Opening Google...";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
 .button--secondary {
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.65);
