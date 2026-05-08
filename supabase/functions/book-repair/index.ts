@@ -13,6 +13,7 @@ const allowedContactMethods = new Set(['phone', 'email', 'sms'])
 type StoreRow = {
   name?: string | null
   email?: string | null
+  phone?: string | null
   address_line_1?: string | null
   address_line_2?: string | null
   suburb?: string | null
@@ -24,6 +25,8 @@ type RepairEmailPayload = {
   bookingCode: string
   storeName: string
   storeAddress: string
+  storeMapUrl: string
+  storePhone: string
   customerName: string
   phone: string
   email: string
@@ -76,22 +79,62 @@ function formatPreferredTime(preferredDate: string, preferredTime: string) {
   return [preferredDate, preferredTime].filter(Boolean).join(' · ') || 'Not specified'
 }
 
+function buildGoogleMapsDirectionsUrl(storeName: string, storeAddress: string) {
+  const destination = [storeName, storeAddress].filter(Boolean).join(', ')
+  if (!destination) return ''
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`
+}
+
+function normalizeTelHref(phone: string) {
+  const value = String(phone ?? '').trim()
+  if (!value) return ''
+
+  const digits = value.replace(/\D/g, '')
+  if (!digits) return ''
+  if (value.startsWith('+')) return `+${digits}`
+  if (digits.startsWith('0')) return `+61${digits.slice(1)}`
+  if (digits.startsWith('61')) return `+${digits}`
+  return digits
+}
+
+type BookingRow = {
+  label: string
+  value: string
+  html?: string
+}
+
 function buildBookingRows(payload: RepairEmailPayload) {
   const device = [payload.brand, payload.deviceModel].filter(Boolean).join(' ') || payload.deviceModel
-  const rows = [
-    ['Booking code', payload.bookingCode],
-    ['Store', payload.storeName],
-    ['Store address', payload.storeAddress || 'Store address to be confirmed'],
-    ['Preferred date / time', formatPreferredTime(payload.preferredDate, payload.preferredTime)],
-    ['Repair category', prettyCategory(payload.repairCategory)],
-    ['Device', device],
-    ['Issue', payload.issueDescription],
-    ['Customer', payload.customerName],
-    ['Phone', payload.phone],
+  const storeAddress = payload.storeAddress || 'Store address to be confirmed'
+  const storePhone = payload.storePhone || 'Store phone to be confirmed'
+  const storePhoneHref = normalizeTelHref(payload.storePhone)
+  const rows: BookingRow[] = [
+    { label: 'Booking code', value: payload.bookingCode },
+    { label: 'Store', value: payload.storeName },
+    {
+      label: 'Store address',
+      value: storeAddress,
+      html: payload.storeMapUrl
+        ? `<a href="${escapeHtml(payload.storeMapUrl)}" style="color:#008f83;font-weight:700;text-decoration:underline">${escapeHtml(storeAddress)}</a>`
+        : escapeHtml(storeAddress),
+    },
+    {
+      label: 'Store phone',
+      value: storePhone,
+      html: storePhoneHref
+        ? `<a href="tel:${escapeHtml(storePhoneHref)}" style="color:#008f83;font-weight:700;text-decoration:underline">${escapeHtml(storePhone)}</a>`
+        : escapeHtml(storePhone),
+    },
+    { label: 'Preferred date / time', value: formatPreferredTime(payload.preferredDate, payload.preferredTime) },
+    { label: 'Repair category', value: prettyCategory(payload.repairCategory) },
+    { label: 'Device', value: device },
+    { label: 'Issue', value: payload.issueDescription },
+    { label: 'Customer', value: payload.customerName },
+    { label: 'Phone', value: payload.phone },
   ]
 
   if (payload.email) {
-    rows.push(['Email', payload.email])
+    rows.push({ label: 'Email', value: payload.email })
   }
 
   return rows
@@ -101,10 +144,10 @@ function renderBookingTable(payload: RepairEmailPayload) {
   return `
     <table style="border-collapse:collapse;width:100%;margin:20px 0 0">
       ${buildBookingRows(payload)
-        .map(([label, value]) => `
+        .map((row) => `
           <tr>
-            <td style="padding:11px 12px;border:1px solid #d8e7e5;background:#f4fbfa;font-weight:700;width:190px;color:#284b52">${escapeHtml(label)}</td>
-            <td style="padding:11px 12px;border:1px solid #d8e7e5;color:#10242c">${escapeHtml(value)}</td>
+            <td style="padding:11px 12px;border:1px solid #d8e7e5;background:#f4fbfa;font-weight:700;width:190px;color:#284b52">${escapeHtml(row.label)}</td>
+            <td style="padding:11px 12px;border:1px solid #d8e7e5;color:#10242c">${row.html ?? escapeHtml(row.value)}</td>
           </tr>
         `)
         .join('')}
@@ -323,7 +366,7 @@ Deno.serve(async (req) => {
     try {
       const { data: storeRow } = await supabaseAdmin
         .from('stores')
-        .select('slug, name, email, address_line_1, address_line_2, suburb, state, postcode')
+        .select('slug, name, email, phone, address_line_1, address_line_2, suburb, state, postcode')
         .eq('slug', storeSlug)
         .maybeSingle()
 
@@ -334,10 +377,14 @@ Deno.serve(async (req) => {
             .filter(Boolean),
         ),
       )
+      const storeName = String(storeRow?.name ?? storeSlug)
+      const storeAddress = formatStoreAddress(storeRow as StoreRow | null)
       const emailPayload = {
         bookingCode,
-        storeName: String(storeRow?.name ?? storeSlug),
-        storeAddress: formatStoreAddress(storeRow as StoreRow | null),
+        storeName,
+        storeAddress,
+        storeMapUrl: buildGoogleMapsDirectionsUrl(storeName, storeAddress),
+        storePhone: String(storeRow?.phone ?? '').trim(),
         customerName,
         phone,
         email,
