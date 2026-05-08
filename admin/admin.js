@@ -16,6 +16,10 @@ const ADMIN_NAV_ITEMS = [
   { href: "inventory.html", view: "inventory", label: "Inventory" },
 ];
 
+const ADMIN_LOGIN_ALIASES = {
+  bowen: "techm8contact@gmail.com",
+};
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -237,6 +241,13 @@ function getStorePageUrl(storeSlug) {
 function getSiteBaseUrl() {
   const configured = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
   return configured ? configured.replace(/\/+$/, "") : window.location.origin;
+}
+
+function resolveAdminLoginEmail(account) {
+  const normalizedAccount = String(account || "").trim().toLowerCase();
+  if (!normalizedAccount) return "";
+  if (normalizedAccount.includes("@")) return normalizedAccount;
+  return ADMIN_LOGIN_ALIASES[normalizedAccount] || "";
 }
 
 function ensureAdminModalRoot() {
@@ -2962,11 +2973,17 @@ async function initAdminLoginPage() {
     event.preventDefault();
     setAlert(messageBox, "");
     const formData = new FormData(form);
-    const email = String(formData.get("email") || "").trim().toLowerCase();
+    const account = String(formData.get("account") || "").trim();
+    const email = resolveAdminLoginEmail(account);
     const password = String(formData.get("password") || "");
 
-    if (!email || !password) {
-      setAlert(messageBox, "Enter your admin email and password.", "error");
+    if (!account || !password) {
+      setAlert(messageBox, "Enter your admin account and password.", "error");
+      return;
+    }
+
+    if (!email) {
+      setAlert(messageBox, "Admin account was not found.", "error");
       return;
     }
 
