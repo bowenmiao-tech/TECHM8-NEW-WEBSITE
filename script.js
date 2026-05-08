@@ -6435,6 +6435,212 @@ function initBookingForm() {
     button.addEventListener("click", closeModal);
   });
 
+  const getBookingField = (name) => form.elements.namedItem(name);
+  const bookingFields = {
+    repairCategory: getBookingField("repair_category"),
+    storeSlug: getBookingField("store_slug"),
+    deviceModel: getBookingField("device_model"),
+    issueDescription: getBookingField("issue_description"),
+    preferredDateDisplay: getBookingField("preferred_date_display"),
+    preferredDate: getBookingField("preferred_date"),
+    preferredTime: getBookingField("preferred_time"),
+    customerName: getBookingField("customer_name"),
+    phone: getBookingField("phone"),
+    email: getBookingField("email"),
+    preferredContactMethod: getBookingField("preferred_contact_method"),
+    privacyConsent: getBookingField("privacy_consent"),
+  };
+
+  const bookingTimeValues = new Set([
+    "Morning time (9:00 AM - 12:00 PM)",
+    "Lunch time (12:00 PM - 2:00 PM)",
+    "Afternoon time (2:00 PM - 5:00 PM)",
+  ]);
+
+  const toBookingInput = (field) =>
+    field instanceof HTMLInputElement ||
+    field instanceof HTMLSelectElement ||
+    field instanceof HTMLTextAreaElement
+      ? field
+      : null;
+
+  const clearBookingFieldError = (field) => {
+    const input = toBookingInput(field);
+    if (!input) return;
+    input.classList.remove("is-invalid");
+    input.setCustomValidity("");
+    const wrapper = input.closest(".booking-field, .booking-checkbox");
+    wrapper?.querySelector(".booking-field__error")?.remove();
+  };
+
+  const setBookingFieldError = (field, message) => {
+    const input = toBookingInput(field);
+    if (!input) return false;
+    clearBookingFieldError(input);
+    input.classList.add("is-invalid");
+    input.setCustomValidity(message);
+    const wrapper = input.closest(".booking-field, .booking-checkbox");
+    const error = document.createElement("small");
+    error.className = "booking-field__error";
+    error.textContent = message;
+    wrapper?.appendChild(error);
+    return true;
+  };
+
+  const clearAllBookingErrors = () => {
+    form
+      .querySelectorAll("input, select, textarea")
+      .forEach((field) => clearBookingFieldError(field));
+  };
+
+  const parseAustralianBookingDate = (value) => {
+    const match = String(value || "")
+      .trim()
+      .match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (!match) return null;
+    const day = Number(match[1]);
+    const month = Number(match[2]);
+    const year = Number(match[3]);
+    const date = new Date(Date.UTC(year, month - 1, day));
+    if (
+      date.getUTCFullYear() !== year ||
+      date.getUTCMonth() !== month - 1 ||
+      date.getUTCDate() !== day
+    ) {
+      return null;
+    }
+    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(
+      2,
+      "0",
+    )}`;
+  };
+
+  const isPastBookingDate = (isoDate) => {
+    const today = new Date();
+    const todayIso = new Date(
+      today.getTime() - today.getTimezoneOffset() * 60000,
+    )
+      .toISOString()
+      .slice(0, 10);
+    return isoDate < todayIso;
+  };
+
+  const validateBookingForm = () => {
+    clearAllBookingErrors();
+
+    const requiredFields = [
+      [bookingFields.repairCategory, "Please select a repair category."],
+      [bookingFields.storeSlug, "Please select a store."],
+      [bookingFields.deviceModel, "Please enter the device model."],
+      [bookingFields.issueDescription, "Please describe the repair issue."],
+      [bookingFields.preferredDateDisplay, "Please enter a preferred date."],
+      [bookingFields.preferredTime, "Please select a preferred time."],
+      [bookingFields.customerName, "Please enter your name."],
+      [bookingFields.phone, "Please enter your phone number."],
+      [bookingFields.email, "Please enter your email address."],
+      [
+        bookingFields.preferredContactMethod,
+        "Please choose a contact method.",
+      ],
+    ];
+
+    for (const [field, message] of requiredFields) {
+      const input = toBookingInput(field);
+      if (!input || !String(input.value || "").trim()) {
+        setBookingFieldError(input, message);
+        input?.focus();
+        return false;
+      }
+    }
+
+    const dateField = toBookingInput(bookingFields.preferredDateDisplay);
+    const hiddenDateField = toBookingInput(bookingFields.preferredDate);
+    const preferredDateIso = parseAustralianBookingDate(dateField?.value);
+    if (!preferredDateIso) {
+      setBookingFieldError(
+        dateField,
+        "Enter the date in Australian format: DD/MM/YYYY.",
+      );
+      dateField?.focus();
+      return false;
+    }
+    if (isPastBookingDate(preferredDateIso)) {
+      setBookingFieldError(dateField, "Preferred date cannot be in the past.");
+      dateField?.focus();
+      return false;
+    }
+    if (hiddenDateField) {
+      hiddenDateField.value = preferredDateIso;
+    }
+
+    const timeField = toBookingInput(bookingFields.preferredTime);
+    if (!bookingTimeValues.has(String(timeField?.value || ""))) {
+      setBookingFieldError(timeField, "Please choose one of the listed times.");
+      timeField?.focus();
+      return false;
+    }
+
+    const emailField = toBookingInput(bookingFields.email);
+    if (!isValidEmailAddress(emailField?.value)) {
+      setBookingFieldError(
+        emailField,
+        "Enter a valid email address, for example name@example.com.au.",
+      );
+      emailField?.focus();
+      return false;
+    }
+
+    const phoneField = toBookingInput(bookingFields.phone);
+    if (!isValidAustralianPhone(phoneField?.value)) {
+      setBookingFieldError(
+        phoneField,
+        "Enter a valid Australian phone number, for example 0412 345 678 or +61 412 345 678.",
+      );
+      phoneField?.focus();
+      return false;
+    }
+    if (phoneField) {
+      phoneField.value = normalizeAustralianPhone(phoneField.value);
+    }
+
+    const consentField =
+      bookingFields.privacyConsent instanceof HTMLInputElement
+        ? bookingFields.privacyConsent
+        : null;
+    if (!consentField?.checked) {
+      setBookingFieldError(
+        consentField,
+        "Please confirm TECHM8 can contact you about this booking.",
+      );
+      consentField?.focus();
+      return false;
+    }
+
+    return true;
+  };
+
+  form.addEventListener("input", (event) => {
+    const target = event.target;
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLSelectElement ||
+      target instanceof HTMLTextAreaElement
+    ) {
+      clearBookingFieldError(target);
+    }
+  });
+
+  form.addEventListener("change", (event) => {
+    const target = event.target;
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLSelectElement ||
+      target instanceof HTMLTextAreaElement
+    ) {
+      clearBookingFieldError(target);
+    }
+  });
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeModal();
@@ -6454,7 +6660,7 @@ function initBookingForm() {
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    if (!form.reportValidity()) {
+    if (!validateBookingForm()) {
       setMessage(
         "error",
         "Please complete the required fields before submitting.",
@@ -6483,6 +6689,11 @@ function initBookingForm() {
       const authAccessToken =
         activeAuthState?.session?.access_token || supabaseAnonKey;
       const payload = Object.fromEntries(formData.entries());
+      payload.brand = "";
+      payload.phone = normalizeAustralianPhone(String(payload.phone || ""));
+      payload.email = String(payload.email || "").trim().toLowerCase();
+      payload.preferred_date = String(payload.preferred_date || "").trim();
+      delete payload.preferred_date_display;
 
       if (activeAuthState?.supabase && activeAuthState?.user) {
         await syncCustomerProfile(

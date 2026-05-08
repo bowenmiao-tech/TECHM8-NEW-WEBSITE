@@ -9,6 +9,11 @@ const corsHeaders = {
 const allowedCategories = new Set(['phone', 'computer', 'tablet', 'gaming_console'])
 const allowedStores = new Set(['park-ridge', 'fairfield', 'north-lakes', 'toowong', 'brassall'])
 const allowedContactMethods = new Set(['phone', 'email', 'sms'])
+const allowedPreferredTimes = new Set([
+  'Morning time (9:00 AM - 12:00 PM)',
+  'Lunch time (12:00 PM - 2:00 PM)',
+  'Afternoon time (2:00 PM - 5:00 PM)',
+])
 
 type StoreRow = {
   name?: string | null
@@ -59,7 +64,53 @@ function escapeHtml(value: unknown) {
 }
 
 function isValidEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(value.trim())
+}
+
+function normalizeAustralianPhone(value: string) {
+  const raw = String(value || '').trim()
+  const compact = raw.replace(/[^\d+]/g, '')
+  const digitsOnly = raw.replace(/\D/g, '')
+
+  if (compact.startsWith('+61')) return `+61${compact.slice(3).replace(/\D/g, '')}`
+  if (compact.startsWith('61')) return `+61${compact.slice(2).replace(/\D/g, '')}`
+  if (digitsOnly.startsWith('0')) return `+61${digitsOnly.slice(1)}`
+  if (digitsOnly.length === 9 && /^[2-478]/.test(digitsOnly)) return `+61${digitsOnly}`
+
+  return compact
+}
+
+function isValidAustralianPhone(value: string) {
+  return /^\+61[2-478]\d{8}$/.test(normalizeAustralianPhone(value))
+}
+
+function isValidPreferredDate(value: string) {
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (!match) return false
+
+  const year = Number(match[1])
+  const month = Number(match[2])
+  const day = Number(match[3])
+  const date = new Date(Date.UTC(year, month - 1, day))
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) {
+    return false
+  }
+
+  const now = new Date()
+  const parts = new Intl.DateTimeFormat('en-AU', {
+    timeZone: 'Australia/Brisbane',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(now)
+  const getPart = (type: string) => parts.find((part) => part.type === type)?.value ?? ''
+  const brisbaneToday = `${getPart('year')}-${getPart('month')}-${getPart('day')}`
+
+  return value >= brisbaneToday
 }
 
 function prettyCategory(value: string) {
@@ -419,8 +470,8 @@ Deno.serve(async (req) => {
     const preferredDate = String(body.preferred_date ?? '').trim()
     const preferredTime = String(body.preferred_time ?? '').trim()
     const customerName = String(body.customer_name ?? '').trim()
-    const phone = String(body.phone ?? '').trim()
-    const email = String(body.email ?? '').trim()
+    const phone = normalizeAustralianPhone(String(body.phone ?? '').trim())
+    const email = String(body.email ?? '').trim().toLowerCase()
     const preferredContactMethod = String(body.preferred_contact_method ?? 'phone').trim()
     const privacyConsent = body.privacy_consent === true || body.privacy_consent === 'yes'
 
@@ -432,16 +483,24 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'Please select a valid store.' }, { status: 422, headers: corsHeaders })
     }
 
-    if (!deviceModel || !issueDescription || !customerName || !phone) {
+    if (!deviceModel || !issueDescription || !preferredDate || !preferredTime || !customerName || !phone || !email) {
       return Response.json({ ok: false, error: 'Please complete all required fields.' }, { status: 422, headers: corsHeaders })
     }
 
-    if (email && !isValidEmail(email)) {
-      return Response.json({ ok: false, error: 'Please enter a valid email address.' }, { status: 422, headers: corsHeaders })
+    if (!isValidPreferredDate(preferredDate)) {
+      return Response.json({ ok: false, error: 'Please enter a valid preferred date.' }, { status: 422, headers: corsHeaders })
     }
 
-    if (preferredContactMethod === 'email' && !email) {
-      return Response.json({ ok: false, error: 'Please enter an email address or choose another contact method.' }, { status: 422, headers: corsHeaders })
+    if (!allowedPreferredTimes.has(preferredTime)) {
+      return Response.json({ ok: false, error: 'Please choose a valid preferred time.' }, { status: 422, headers: corsHeaders })
+    }
+
+    if (!isValidAustralianPhone(phone)) {
+      return Response.json({ ok: false, error: 'Please enter a valid Australian phone number.' }, { status: 422, headers: corsHeaders })
+    }
+
+    if (!isValidEmail(email)) {
+      return Response.json({ ok: false, error: 'Please enter a valid email address.' }, { status: 422, headers: corsHeaders })
     }
 
     if (!allowedContactMethods.has(preferredContactMethod)) {

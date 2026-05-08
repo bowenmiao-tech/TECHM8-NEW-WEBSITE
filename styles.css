@@ -4920,6 +4920,29 @@ h2 {
   box-shadow: 0 0 0 4px rgba(22, 200, 186, 0.12);
 }
 
+.booking-field input.is-invalid,
+.booking-field select.is-invalid,
+.booking-field textarea.is-invalid {
+  border-color: rgba(205, 79, 79, 0.9);
+  background: rgba(255, 249, 249, 0.96);
+}
+
+.booking-field__hint,
+.booking-field__error {
+  margin: -0.25rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.booking-field__hint {
+  color: var(--muted);
+}
+
+.booking-field__error {
+  color: #9f2929;
+  font-weight: 700;
+}
+
 .booking-checkbox {
   display: flex;
   gap: 0.75rem;

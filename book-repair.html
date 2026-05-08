@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -161,12 +161,7 @@
               </label>
 
               <label class="booking-field">
-                <span>Brand</span>
-                <input type="text" name="brand" placeholder="Apple, Samsung, HP, Lenovo, Xbox...">
-              </label>
-
-              <label class="booking-field">
-                <span>Exact model *</span>
+                <span>Model *</span>
                 <input type="text" name="device_model" required placeholder="iPhone 13 Pro, iPad Air 5, Dell Inspiron, PS5...">
               </label>
 
@@ -176,13 +171,20 @@
               </label>
 
               <label class="booking-field">
-                <span>Preferred date</span>
-                <input type="date" name="preferred_date">
+                <span>Preferred date *</span>
+                <input type="text" name="preferred_date_display" required inputmode="numeric" autocomplete="off" placeholder="DD/MM/YYYY">
+                <input type="hidden" name="preferred_date">
+                <small class="booking-field__hint">Australian date format: DD/MM/YYYY.</small>
               </label>
 
               <label class="booking-field">
-                <span>Preferred time</span>
-                <input type="text" name="preferred_time" placeholder="Morning, after 3pm, lunch break...">
+                <span>Preferred time *</span>
+                <select name="preferred_time" required>
+                  <option value="">Select preferred time</option>
+                  <option value="Morning time (9:00 AM - 12:00 PM)">Morning time</option>
+                  <option value="Lunch time (12:00 PM - 2:00 PM)">Lunch time</option>
+                  <option value="Afternoon time (2:00 PM - 5:00 PM)">Afternoon time</option>
+                </select>
               </label>
 
               <label class="booking-field">
@@ -192,12 +194,12 @@
 
               <label class="booking-field">
                 <span>Phone *</span>
-                <input type="tel" name="phone" required placeholder="Best phone number">
+                <input type="tel" name="phone" required inputmode="tel" autocomplete="tel" placeholder="0412 345 678 or +61 412 345 678">
               </label>
 
               <label class="booking-field">
-                <span>Email</span>
-                <input type="email" name="email" placeholder="Email for confirmation">
+                <span>Email *</span>
+                <input type="email" name="email" required inputmode="email" autocomplete="email" placeholder="name@example.com.au">
               </label>
 
               <label class="booking-field">
