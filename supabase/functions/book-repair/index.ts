@@ -137,7 +137,7 @@ async function sendEmail(payload: {
   html: string
   replyTo?: string
 }) {
-  const resendApiKey = Deno.env.get('RESEND_API_KEY') ?? ''
+  const resendApiKey = Deno.env.get('RESEND_API_KEY_BOOKING') ?? Deno.env.get('RESEND_API_KEY') ?? ''
   const fromEmail = Deno.env.get('BOOKING_FROM_EMAIL') ?? ''
   const recipients = Array.from(
     new Set(payload.recipients.map((recipient) => recipient.trim().toLowerCase()).filter(Boolean)),
