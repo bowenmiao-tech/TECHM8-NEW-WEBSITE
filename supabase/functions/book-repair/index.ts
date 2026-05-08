@@ -38,6 +38,11 @@ type RepairEmailPayload = {
   preferredTime: string
 }
 
+type EmailAttachment = {
+  filename: string
+  content: string
+}
+
 function getBearerToken(req: Request) {
   const authorization = req.headers.get('authorization') ?? ''
   if (!authorization.toLowerCase().startsWith('bearer ')) return ''
@@ -95,6 +100,146 @@ function normalizeTelHref(phone: string) {
   if (digits.startsWith('0')) return `+61${digits.slice(1)}`
   if (digits.startsWith('61')) return `+${digits}`
   return digits
+}
+
+function getSiteUrl() {
+  return String(Deno.env.get('SITE_URL') ?? 'https://www.techm8australia.com/').replace(/\/+$/, '')
+}
+
+function getLogoUrl() {
+  return `${getSiteUrl()}/assets/logo-techm8.png`
+}
+
+function formatDateForCalendar(date: Date) {
+  return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
+}
+
+function formatAllDayDate(year: number, month: number, day: number) {
+  return `${year}${String(month).padStart(2, '0')}${String(day).padStart(2, '0')}`
+}
+
+function addDaysToDateParts(year: number, month: number, day: number, days: number) {
+  const date = new Date(Date.UTC(year, month - 1, day + days))
+  return {
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth() + 1,
+    day: date.getUTCDate(),
+  }
+}
+
+function parsePreferredDateParts(preferredDate: string) {
+  const match = String(preferredDate || '').match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (!match) return null
+  return {
+    year: Number(match[1]),
+    month: Number(match[2]),
+    day: Number(match[3]),
+  }
+}
+
+function parsePreferredTimeParts(preferredTime: string) {
+  const value = String(preferredTime || '').trim().toLowerCase()
+  const match = value.match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/)
+  if (!match) return null
+
+  let hour = Number(match[1])
+  const minute = Number(match[2] ?? '0')
+  const period = match[3]
+  if (hour > 23 || minute > 59) return null
+  if (period === 'pm' && hour < 12) hour += 12
+  if (period === 'am' && hour === 12) hour = 0
+  return { hour, minute }
+}
+
+function buildCalendarDetails(payload: RepairEmailPayload) {
+  return [
+    `Booking code: ${payload.bookingCode}`,
+    `Store: ${payload.storeName}`,
+    `Store phone: ${payload.storePhone || 'Not specified'}`,
+    `Repair category: ${prettyCategory(payload.repairCategory)}`,
+    `Device: ${[payload.brand, payload.deviceModel].filter(Boolean).join(' ') || payload.deviceModel}`,
+    `Issue: ${payload.issueDescription}`,
+    `Customer: ${payload.customerName}`,
+    `Customer phone: ${payload.phone}`,
+    payload.email ? `Customer email: ${payload.email}` : '',
+    '',
+    'Please bring your device and quote your booking code when you visit the store.',
+  ]
+    .filter((line) => line !== '')
+    .join('\n')
+}
+
+function toBase64(value: string) {
+  const bytes = new TextEncoder().encode(value)
+  let binary = ''
+  for (const byte of bytes) binary += String.fromCharCode(byte)
+  return btoa(binary)
+}
+
+function buildCalendarInvite(payload: RepairEmailPayload) {
+  const dateParts = parsePreferredDateParts(payload.preferredDate)
+  if (!dateParts) return null
+
+  const title = `TECHM8 Repair Booking - ${payload.storeName}`
+  const location = payload.storeAddress || payload.storeName
+  const details = buildCalendarDetails(payload)
+  const timeParts = parsePreferredTimeParts(payload.preferredTime)
+  let googleDates = ''
+  let icsDates = ''
+
+  if (timeParts) {
+    // Australia/Brisbane is UTC+10 year-round.
+    const start = new Date(Date.UTC(dateParts.year, dateParts.month - 1, dateParts.day, timeParts.hour - 10, timeParts.minute))
+    const end = new Date(start.getTime() + 60 * 60 * 1000)
+    googleDates = `${formatDateForCalendar(start)}/${formatDateForCalendar(end)}`
+    icsDates = `DTSTART:${formatDateForCalendar(start)}\r\nDTEND:${formatDateForCalendar(end)}`
+  } else {
+    const startDate = formatAllDayDate(dateParts.year, dateParts.month, dateParts.day)
+    const endParts = addDaysToDateParts(dateParts.year, dateParts.month, dateParts.day, 1)
+    const endDate = formatAllDayDate(endParts.year, endParts.month, endParts.day)
+    googleDates = `${startDate}/${endDate}`
+    icsDates = `DTSTART;VALUE=DATE:${startDate}\r\nDTEND;VALUE=DATE:${endDate}`
+  }
+
+  const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${encodeURIComponent(googleDates)}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(location)}`
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//TECHM8//Repair Booking//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${payload.bookingCode}@techm8australia.com`,
+    `DTSTAMP:${formatDateForCalendar(new Date())}`,
+    icsDates,
+    `SUMMARY:${title}`,
+    `LOCATION:${location}`,
+    `DESCRIPTION:${details.replace(/\n/g, '\\n')}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n')
+
+  return {
+    googleUrl,
+    attachment: {
+      filename: `techm8-repair-booking-${payload.bookingCode}.ics`,
+      content: toBase64(ics),
+    },
+  }
+}
+
+function renderCalendarBlock(payload: RepairEmailPayload) {
+  const invite = buildCalendarInvite(payload)
+  if (!invite) return ''
+
+  return `
+    <div style="margin:18px 0 0;padding:16px;border:1px solid #bfeae5;background:#f2fffd;border-radius:14px">
+      <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#008f83;font-weight:800">Calendar reminder</div>
+      <p style="margin:6px 0 14px;color:#284b52">Add this repair booking to your calendar so you do not miss your visit.</p>
+      <a href="${escapeHtml(invite.googleUrl)}" style="display:inline-block;background:#05ceac;color:#052d32;font-weight:800;text-decoration:none;padding:11px 16px;border-radius:999px">Add to Google Calendar</a>
+      <p style="margin:12px 0 0;color:#607981;font-size:12px">An .ics calendar file is also attached for Apple Calendar and Outlook.</p>
+    </div>
+  `
 }
 
 type BookingRow = {
@@ -161,6 +306,7 @@ function renderEmailShell(content: string) {
       <div style="max-width:720px;margin:0 auto;padding:28px 16px;font-family:Arial,Helvetica,sans-serif;color:#10242c;line-height:1.6">
         <div style="background:#ffffff;border:1px solid #cce8e4;border-radius:20px;overflow:hidden">
           <div style="padding:22px 26px;background:#052d32;color:#ffffff">
+            <img src="${escapeHtml(getLogoUrl())}" alt="TECHM8" width="180" style="display:block;width:180px;max-width:70%;height:auto;margin:0 0 16px">
             <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#05ceac;font-weight:700">OZ TECH M8</div>
             <div style="font-size:22px;font-weight:800;margin-top:4px">Repair Booking</div>
           </div>
@@ -179,6 +325,7 @@ async function sendEmail(payload: {
   subject: string
   html: string
   replyTo?: string
+  attachments?: EmailAttachment[]
 }) {
   const resendApiKey = Deno.env.get('RESEND_API_KEY_BOOKING') ?? Deno.env.get('RESEND_API_KEY') ?? ''
   const fromEmail = Deno.env.get('BOOKING_FROM_EMAIL') ?? ''
@@ -202,6 +349,7 @@ async function sendEmail(payload: {
       subject: payload.subject,
       html: payload.html,
       ...(payload.replyTo ? { reply_to: payload.replyTo } : {}),
+      ...(payload.attachments?.length ? { attachments: payload.attachments } : {}),
     }),
   })
 
@@ -218,10 +366,12 @@ async function sendCustomerRepairConfirmationEmail(payload: RepairEmailPayload) 
     return { sent: false, reason: 'missing_customer_email' }
   }
 
+  const calendarInvite = buildCalendarInvite(payload)
   const html = renderEmailShell(`
     <h1 style="margin:0 0 12px;font-size:28px;line-height:1.15;color:#10242c">Your repair booking is confirmed</h1>
     <p style="margin:0;color:#4f6b74">Thanks ${escapeHtml(payload.customerName)}. We have received your repair request and will contact you if we need more details before your visit.</p>
     ${renderBookingTable(payload)}
+    ${renderCalendarBlock(payload)}
     <p style="margin:20px 0 0;color:#4f6b74">Please bring your device and quote your booking code when you visit the store.</p>
   `)
 
@@ -229,6 +379,7 @@ async function sendCustomerRepairConfirmationEmail(payload: RepairEmailPayload) 
     recipients: [payload.email],
     subject: `Your TECHM8 repair booking is confirmed: ${payload.bookingCode}`,
     html,
+    attachments: calendarInvite ? [calendarInvite.attachment] : undefined,
   })
 }
 
