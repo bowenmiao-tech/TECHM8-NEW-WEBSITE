@@ -6545,7 +6545,9 @@ function initBookingForm() {
 
       setMessage(
         "success",
-        `Repair request submitted successfully. Booking code: ${result.booking_code}. A confirmation email has been sent.`,
+        result.customer_email_sent
+          ? `Repair request submitted successfully. Booking code: ${result.booking_code}. A confirmation email has been sent.`
+          : `Repair request submitted successfully. Booking code: ${result.booking_code}.`,
       );
       openModal(
         "success",

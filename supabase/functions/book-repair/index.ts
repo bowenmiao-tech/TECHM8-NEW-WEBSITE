@@ -10,6 +10,31 @@ const allowedCategories = new Set(['phone', 'computer', 'tablet', 'gaming_consol
 const allowedStores = new Set(['park-ridge', 'fairfield', 'north-lakes', 'toowong', 'brassall'])
 const allowedContactMethods = new Set(['phone', 'email', 'sms'])
 
+type StoreRow = {
+  name?: string | null
+  email?: string | null
+  address_line_1?: string | null
+  address_line_2?: string | null
+  suburb?: string | null
+  state?: string | null
+  postcode?: string | null
+}
+
+type RepairEmailPayload = {
+  bookingCode: string
+  storeName: string
+  storeAddress: string
+  customerName: string
+  phone: string
+  email: string
+  repairCategory: string
+  brand: string
+  deviceModel: string
+  issueDescription: string
+  preferredDate: string
+  preferredTime: string
+}
+
 function getBearerToken(req: Request) {
   const authorization = req.headers.get('authorization') ?? ''
   if (!authorization.toLowerCase().startsWith('bearer ')) return ''
@@ -25,46 +50,102 @@ function escapeHtml(value: unknown) {
     .replaceAll("'", '&#39;')
 }
 
-async function sendRepairBookingNotificationEmail(payload: {
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+function prettyCategory(value: string) {
+  return value
+    .replaceAll('_', ' ')
+    .replace(/\b\w/g, (letter) => letter.toUpperCase())
+}
+
+function formatStoreAddress(store?: StoreRow | null) {
+  if (!store) return ''
+
+  return [
+    store.address_line_1,
+    store.address_line_2,
+    [store.suburb, store.state, store.postcode].filter(Boolean).join(' '),
+  ]
+    .filter(Boolean)
+    .join(', ')
+}
+
+function formatPreferredTime(preferredDate: string, preferredTime: string) {
+  return [preferredDate, preferredTime].filter(Boolean).join(' · ') || 'Not specified'
+}
+
+function buildBookingRows(payload: RepairEmailPayload) {
+  const device = [payload.brand, payload.deviceModel].filter(Boolean).join(' ') || payload.deviceModel
+  const rows = [
+    ['Booking code', payload.bookingCode],
+    ['Store', payload.storeName],
+    ['Store address', payload.storeAddress || 'Store address to be confirmed'],
+    ['Preferred date / time', formatPreferredTime(payload.preferredDate, payload.preferredTime)],
+    ['Repair category', prettyCategory(payload.repairCategory)],
+    ['Device', device],
+    ['Issue', payload.issueDescription],
+    ['Customer', payload.customerName],
+    ['Phone', payload.phone],
+  ]
+
+  if (payload.email) {
+    rows.push(['Email', payload.email])
+  }
+
+  return rows
+}
+
+function renderBookingTable(payload: RepairEmailPayload) {
+  return `
+    <table style="border-collapse:collapse;width:100%;margin:20px 0 0">
+      ${buildBookingRows(payload)
+        .map(([label, value]) => `
+          <tr>
+            <td style="padding:11px 12px;border:1px solid #d8e7e5;background:#f4fbfa;font-weight:700;width:190px;color:#284b52">${escapeHtml(label)}</td>
+            <td style="padding:11px 12px;border:1px solid #d8e7e5;color:#10242c">${escapeHtml(value)}</td>
+          </tr>
+        `)
+        .join('')}
+    </table>
+  `
+}
+
+function renderEmailShell(content: string) {
+  return `
+    <div style="margin:0;padding:0;background:#eefaf8">
+      <div style="max-width:720px;margin:0 auto;padding:28px 16px;font-family:Arial,Helvetica,sans-serif;color:#10242c;line-height:1.6">
+        <div style="background:#ffffff;border:1px solid #cce8e4;border-radius:20px;overflow:hidden">
+          <div style="padding:22px 26px;background:#052d32;color:#ffffff">
+            <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#05ceac;font-weight:700">OZ TECH M8</div>
+            <div style="font-size:22px;font-weight:800;margin-top:4px">Repair Booking</div>
+          </div>
+          <div style="padding:26px">
+            ${content}
+          </div>
+        </div>
+        <p style="margin:18px 0 0;color:#607981;font-size:12px;text-align:center">TECHM8 Australia · Phone, tablet, computer and game console repairs</p>
+      </div>
+    </div>
+  `
+}
+
+async function sendEmail(payload: {
   recipients: string[]
-  bookingCode: string
-  storeName: string
-  customerName: string
-  phone: string
-  email: string
-  repairCategory: string
-  brand: string
-  deviceModel: string
-  issueDescription: string
-  preferredDate: string
-  preferredTime: string
+  subject: string
+  html: string
+  replyTo?: string
 }) {
   const resendApiKey = Deno.env.get('RESEND_API_KEY') ?? ''
   const fromEmail = Deno.env.get('BOOKING_FROM_EMAIL') ?? ''
+  const recipients = Array.from(
+    new Set(payload.recipients.map((recipient) => recipient.trim().toLowerCase()).filter(Boolean)),
+  )
 
-  if (!resendApiKey || !fromEmail || !payload.recipients.length) {
+  if (!resendApiKey || !fromEmail || !recipients.length) {
     return { sent: false, reason: 'missing_email_config' }
   }
-
-  const prettyCategory = payload.repairCategory.replaceAll('_', ' ')
-  const subject = `[TECHM8 Repair] ${payload.bookingCode} - ${payload.storeName}`
-  const html = `
-    <div style="font-family:Arial,sans-serif;color:#10242c;line-height:1.6">
-      <h2 style="margin:0 0 12px">New repair booking received</h2>
-      <p style="margin:0 0 16px">A customer has submitted a new repair request for <strong>${escapeHtml(payload.storeName)}</strong>.</p>
-      <table style="border-collapse:collapse;width:100%;max-width:720px">
-        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Booking code</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(payload.bookingCode)}</td></tr>
-        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Customer</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(payload.customerName)}</td></tr>
-        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Phone</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(payload.phone)}</td></tr>
-        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Email</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(payload.email)}</td></tr>
-        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Category</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(prettyCategory)}</td></tr>
-        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Device</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml([payload.brand, payload.deviceModel].filter(Boolean).join(' ') || payload.deviceModel)}</td></tr>
-        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Preferred time</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml([payload.preferredDate, payload.preferredTime].filter(Boolean).join(' · ') || 'Not specified')}</td></tr>
-        <tr><td style="padding:8px 10px;border:1px solid #d9e4e7;font-weight:700">Issue</td><td style="padding:8px 10px;border:1px solid #d9e4e7">${escapeHtml(payload.issueDescription)}</td></tr>
-      </table>
-      <p style="margin:16px 0 0;color:#4f6b74">Open the admin panel to follow up and update the booking status.</p>
-    </div>
-  `
 
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -74,18 +155,54 @@ async function sendRepairBookingNotificationEmail(payload: {
     },
     body: JSON.stringify({
       from: fromEmail,
-      to: payload.recipients,
-      subject,
-      html,
+      to: recipients,
+      subject: payload.subject,
+      html: payload.html,
+      ...(payload.replyTo ? { reply_to: payload.replyTo } : {}),
     }),
   })
 
   if (!response.ok) {
     const errorText = await response.text()
-    throw new Error(`Repair notification email failed: ${errorText}`)
+    throw new Error(`Repair booking email failed: ${errorText}`)
   }
 
   return { sent: true }
+}
+
+async function sendCustomerRepairConfirmationEmail(payload: RepairEmailPayload) {
+  if (!payload.email || !isValidEmail(payload.email)) {
+    return { sent: false, reason: 'missing_customer_email' }
+  }
+
+  const html = renderEmailShell(`
+    <h1 style="margin:0 0 12px;font-size:28px;line-height:1.15;color:#10242c">Your repair booking is confirmed</h1>
+    <p style="margin:0;color:#4f6b74">Thanks ${escapeHtml(payload.customerName)}. We have received your repair request and will contact you if we need more details before your visit.</p>
+    ${renderBookingTable(payload)}
+    <p style="margin:20px 0 0;color:#4f6b74">Please bring your device and quote your booking code when you visit the store.</p>
+  `)
+
+  return sendEmail({
+    recipients: [payload.email],
+    subject: `Your TECHM8 repair booking is confirmed: ${payload.bookingCode}`,
+    html,
+  })
+}
+
+async function sendInternalRepairNotificationEmail(payload: RepairEmailPayload & { recipients: string[] }) {
+  const html = renderEmailShell(`
+    <h1 style="margin:0 0 12px;font-size:28px;line-height:1.15;color:#10242c">New repair booking received</h1>
+    <p style="margin:0;color:#4f6b74">A customer submitted a new repair request for <strong>${escapeHtml(payload.storeName)}</strong>.</p>
+    ${renderBookingTable(payload)}
+    <p style="margin:20px 0 0;color:#4f6b74">Open the admin panel to follow up and update the booking status.</p>
+  `)
+
+  return sendEmail({
+    recipients: payload.recipients,
+    subject: `[TECHM8 Repair] ${payload.bookingCode} - ${payload.storeName}`,
+    html,
+    replyTo: payload.email && isValidEmail(payload.email) ? payload.email : undefined,
+  })
 }
 
 Deno.serve(async (req) => {
@@ -121,8 +238,16 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'Please select a valid store.' }, { status: 422, headers: corsHeaders })
     }
 
-    if (!deviceModel || !issueDescription || !customerName || !phone || !email) {
+    if (!deviceModel || !issueDescription || !customerName || !phone) {
       return Response.json({ ok: false, error: 'Please complete all required fields.' }, { status: 422, headers: corsHeaders })
+    }
+
+    if (email && !isValidEmail(email)) {
+      return Response.json({ ok: false, error: 'Please enter a valid email address.' }, { status: 422, headers: corsHeaders })
+    }
+
+    if (preferredContactMethod === 'email' && !email) {
+      return Response.json({ ok: false, error: 'Please enter an email address or choose another contact method.' }, { status: 422, headers: corsHeaders })
     }
 
     if (!allowedContactMethods.has(preferredContactMethod)) {
@@ -137,7 +262,7 @@ Deno.serve(async (req) => {
 
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
     )
 
     const bearerToken = getBearerToken(req)
@@ -151,14 +276,14 @@ Deno.serve(async (req) => {
       await supabaseAdmin.from('profiles').upsert(
         {
           id: authUser.id,
-          email: authUser.email ?? email,
+          email: authUser.email ?? (email || null),
           full_name: customerName || authUser.user_metadata?.full_name || authUser.user_metadata?.name || null,
           phone: phone || authUser.user_metadata?.phone || null,
           default_store_slug: storeSlug || null,
           avatar_url: authUser.user_metadata?.avatar_url ?? null,
           provider: authUser.app_metadata?.provider ?? null,
         },
-        { onConflict: 'id' }
+        { onConflict: 'id' },
       )
     }
 
@@ -178,7 +303,7 @@ Deno.serve(async (req) => {
         preferred_time: preferredTime || null,
         customer_name: customerName,
         phone,
-        email,
+        email: email || '',
         auth_user_id: authUser?.id ?? null,
         preferred_contact_method: preferredContactMethod,
         ip_address: forwardedFor,
@@ -192,10 +317,13 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'Booking could not be saved.' }, { status: 500, headers: corsHeaders })
     }
 
+    let customerEmailSent = false
+    let internalEmailSent = false
+
     try {
       const { data: storeRow } = await supabaseAdmin
         .from('stores')
-        .select('slug, name, email')
+        .select('slug, name, email, address_line_1, address_line_2, suburb, state, postcode')
         .eq('slug', storeSlug)
         .maybeSingle()
 
@@ -206,22 +334,30 @@ Deno.serve(async (req) => {
             .filter(Boolean),
         ),
       )
+      const emailPayload = {
+        bookingCode,
+        storeName: String(storeRow?.name ?? storeSlug),
+        storeAddress: formatStoreAddress(storeRow as StoreRow | null),
+        customerName,
+        phone,
+        email,
+        repairCategory,
+        brand,
+        deviceModel,
+        issueDescription,
+        preferredDate,
+        preferredTime,
+      }
+
+      const customerResult = await sendCustomerRepairConfirmationEmail(emailPayload)
+      customerEmailSent = Boolean(customerResult.sent)
 
       if (recipients.length) {
-        await sendRepairBookingNotificationEmail({
+        const internalResult = await sendInternalRepairNotificationEmail({
+          ...emailPayload,
           recipients,
-          bookingCode,
-          storeName: String(storeRow?.name ?? storeSlug),
-          customerName,
-          phone,
-          email,
-          repairCategory,
-          brand,
-          deviceModel,
-          issueDescription,
-          preferredDate,
-          preferredTime,
         })
+        internalEmailSent = Boolean(internalResult.sent)
       }
     } catch (notificationError) {
       console.error(notificationError)
@@ -231,9 +367,11 @@ Deno.serve(async (req) => {
       {
         ok: true,
         booking_code: bookingCode,
+        customer_email_sent: customerEmailSent,
+        internal_email_sent: internalEmailSent,
         message: 'Your repair request has been submitted.',
       },
-      { status: 200, headers: corsHeaders }
+      { status: 200, headers: corsHeaders },
     )
   } catch (error) {
     console.error(error)
