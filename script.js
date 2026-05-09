@@ -6441,7 +6441,6 @@ function initBookingForm() {
     storeSlug: getBookingField("store_slug"),
     deviceModel: getBookingField("device_model"),
     issueDescription: getBookingField("issue_description"),
-    preferredDateDisplay: getBookingField("preferred_date_display"),
     preferredDate: getBookingField("preferred_date"),
     preferredTime: getBookingField("preferred_time"),
     customerName: getBookingField("customer_name"),
@@ -6493,114 +6492,140 @@ function initBookingForm() {
       .forEach((field) => clearBookingFieldError(field));
   };
 
-  const parseAustralianBookingDate = (value) => {
-    const match = String(value || "")
-      .trim()
-      .match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-    if (!match) return null;
-    const day = Number(match[1]);
+  const getTodayIsoDate = () => {
+    const today = new Date();
+    return new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+      .toISOString()
+      .slice(0, 10);
+  };
+
+  const isValidIsoBookingDate = (value) => {
+    const match = String(value || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!match) return false;
+    const year = Number(match[1]);
     const month = Number(match[2]);
-    const year = Number(match[3]);
+    const day = Number(match[3]);
     const date = new Date(Date.UTC(year, month - 1, day));
-    if (
-      date.getUTCFullYear() !== year ||
-      date.getUTCMonth() !== month - 1 ||
-      date.getUTCDate() !== day
-    ) {
-      return null;
-    }
-    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(
-      2,
-      "0",
-    )}`;
+    return (
+      date.getUTCFullYear() === year &&
+      date.getUTCMonth() === month - 1 &&
+      date.getUTCDate() === day
+    );
+  };
+
+  const formatIsoDateAustralian = (value) => {
+    if (!isValidIsoBookingDate(value)) return "";
+    const [year, month, day] = value.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
+  const dateHelp = form.querySelector("[data-booking-date-help]");
+  const dateField = toBookingInput(bookingFields.preferredDate);
+  if (dateField instanceof HTMLInputElement) {
+    dateField.min = getTodayIsoDate();
+    dateField.lang = "en-AU";
+    const updateDateHelp = () => {
+      if (!(dateHelp instanceof HTMLElement)) return;
+      const formatted = formatIsoDateAustralian(dateField.value);
+      dateHelp.textContent = formatted
+        ? `Selected date: ${formatted}`
+        : "Choose a date from the calendar. Selected date is shown as DD/MM/YYYY.";
+    };
+    dateField.addEventListener("change", updateDateHelp);
+    dateField.addEventListener("click", () => {
+      try {
+        dateField.showPicker?.();
+      } catch (error) {
+        // Some browsers only expose the native picker through the built-in icon.
+      }
+    });
+    updateDateHelp();
+  }
+
+  const setBookingMessageList = (messages) => {
+    if (!(messageBox instanceof HTMLElement)) return;
+    messageBox.hidden = false;
+    messageBox.className = "booking-message is-error";
+    messageBox.textContent = "";
+    const title = document.createElement("strong");
+    title.textContent = "Please fix the following fields:";
+    const list = document.createElement("ul");
+    list.className = "booking-message__list";
+    messages.forEach((message) => {
+      const item = document.createElement("li");
+      item.textContent = message;
+      list.appendChild(item);
+    });
+    messageBox.append(title, list);
   };
 
   const isPastBookingDate = (isoDate) => {
-    const today = new Date();
-    const todayIso = new Date(
-      today.getTime() - today.getTimezoneOffset() * 60000,
-    )
-      .toISOString()
-      .slice(0, 10);
-    return isoDate < todayIso;
+    return isoDate < getTodayIsoDate();
   };
 
   const validateBookingForm = () => {
     clearAllBookingErrors();
+    const errors = [];
+    let firstInvalidField = null;
+
+    const addError = (field, message) => {
+      const input = toBookingInput(field);
+      setBookingFieldError(input, message);
+      if (!firstInvalidField && input) {
+        firstInvalidField = input;
+      }
+      errors.push(message);
+    };
 
     const requiredFields = [
-      [bookingFields.repairCategory, "Please select a repair category."],
-      [bookingFields.storeSlug, "Please select a store."],
-      [bookingFields.deviceModel, "Please enter the device model."],
-      [bookingFields.issueDescription, "Please describe the repair issue."],
-      [bookingFields.preferredDateDisplay, "Please enter a preferred date."],
-      [bookingFields.preferredTime, "Please select a preferred time."],
-      [bookingFields.customerName, "Please enter your name."],
-      [bookingFields.phone, "Please enter your phone number."],
-      [bookingFields.email, "Please enter your email address."],
-      [
-        bookingFields.preferredContactMethod,
-        "Please choose a contact method.",
-      ],
+      [bookingFields.repairCategory, "Repair category is required."],
+      [bookingFields.storeSlug, "Store is required."],
+      [bookingFields.deviceModel, "Model is required."],
+      [bookingFields.issueDescription, "Issue description is required."],
+      [bookingFields.preferredDate, "Preferred date is required."],
+      [bookingFields.preferredTime, "Preferred time is required."],
+      [bookingFields.customerName, "Your name is required."],
+      [bookingFields.phone, "Phone number is required."],
+      [bookingFields.email, "Email address is required."],
+      [bookingFields.preferredContactMethod, "Preferred contact method is required."],
     ];
 
     for (const [field, message] of requiredFields) {
       const input = toBookingInput(field);
       if (!input || !String(input.value || "").trim()) {
-        setBookingFieldError(input, message);
-        input?.focus();
-        return false;
+        addError(input, message);
       }
     }
 
-    const dateField = toBookingInput(bookingFields.preferredDateDisplay);
-    const hiddenDateField = toBookingInput(bookingFields.preferredDate);
-    const preferredDateIso = parseAustralianBookingDate(dateField?.value);
-    if (!preferredDateIso) {
-      setBookingFieldError(
-        dateField,
-        "Enter the date in Australian format: DD/MM/YYYY.",
-      );
-      dateField?.focus();
-      return false;
-    }
-    if (isPastBookingDate(preferredDateIso)) {
-      setBookingFieldError(dateField, "Preferred date cannot be in the past.");
-      dateField?.focus();
-      return false;
-    }
-    if (hiddenDateField) {
-      hiddenDateField.value = preferredDateIso;
+    const preferredDate = String(dateField?.value || "").trim();
+    if (preferredDate && !isValidIsoBookingDate(preferredDate)) {
+      addError(dateField, "Preferred date must be selected from the calendar.");
+    } else if (preferredDate && isPastBookingDate(preferredDate)) {
+      addError(dateField, "Preferred date cannot be in the past.");
     }
 
     const timeField = toBookingInput(bookingFields.preferredTime);
-    if (!bookingTimeValues.has(String(timeField?.value || ""))) {
-      setBookingFieldError(timeField, "Please choose one of the listed times.");
-      timeField?.focus();
-      return false;
+    const preferredTime = String(timeField?.value || "");
+    if (preferredTime && !bookingTimeValues.has(preferredTime)) {
+      addError(timeField, "Preferred time must be Morning time, Lunch time, or Afternoon time.");
     }
 
     const emailField = toBookingInput(bookingFields.email);
-    if (!isValidEmailAddress(emailField?.value)) {
-      setBookingFieldError(
+    const email = String(emailField?.value || "").trim();
+    if (email && !isValidEmailAddress(email)) {
+      addError(
         emailField,
-        "Enter a valid email address, for example name@example.com.au.",
+        "Email must be a valid address, for example name@example.com.au.",
       );
-      emailField?.focus();
-      return false;
     }
 
     const phoneField = toBookingInput(bookingFields.phone);
-    if (!isValidAustralianPhone(phoneField?.value)) {
-      setBookingFieldError(
+    const phone = String(phoneField?.value || "").trim();
+    if (phone && !isValidAustralianPhone(phone)) {
+      addError(
         phoneField,
-        "Enter a valid Australian phone number, for example 0412 345 678 or +61 412 345 678.",
+        "Phone must be a valid Australian number, for example 0412 345 678 or +61 412 345 678.",
       );
-      phoneField?.focus();
-      return false;
-    }
-    if (phoneField) {
-      phoneField.value = normalizeAustralianPhone(phoneField.value);
     }
 
     const consentField =
@@ -6608,15 +6633,23 @@ function initBookingForm() {
         ? bookingFields.privacyConsent
         : null;
     if (!consentField?.checked) {
-      setBookingFieldError(
+      addError(
         consentField,
-        "Please confirm TECHM8 can contact you about this booking.",
+        "Contact consent must be confirmed before submitting.",
       );
-      consentField?.focus();
-      return false;
     }
 
-    return true;
+    if (errors.length) {
+      setBookingMessageList(errors);
+      firstInvalidField?.focus();
+      return { valid: false, errors };
+    }
+
+    if (phoneField) {
+      phoneField.value = normalizeAustralianPhone(phoneField.value);
+    }
+
+    return { valid: true, errors: [] };
   };
 
   form.addEventListener("input", (event) => {
@@ -6660,15 +6693,12 @@ function initBookingForm() {
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    if (!validateBookingForm()) {
-      setMessage(
-        "error",
-        "Please complete the required fields before submitting.",
-      );
+    const validation = validateBookingForm();
+    if (!validation.valid) {
       openModal(
         "error",
-        "Required fields missing",
-        "Please complete the required fields before submitting your repair request.",
+        "Please complete the booking form",
+        validation.errors.join(" "),
       );
       return;
     }
@@ -6693,7 +6723,6 @@ function initBookingForm() {
       payload.phone = normalizeAustralianPhone(String(payload.phone || ""));
       payload.email = String(payload.email || "").trim().toLowerCase();
       payload.preferred_date = String(payload.preferred_date || "").trim();
-      delete payload.preferred_date_display;
 
       if (activeAuthState?.supabase && activeAuthState?.user) {
         await syncCustomerProfile(

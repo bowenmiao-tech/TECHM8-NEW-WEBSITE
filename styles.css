@@ -4977,6 +4977,15 @@ h2 {
   border: 1px solid rgba(220, 70, 70, 0.2);
 }
 
+.booking-message__list {
+  margin: 0.55rem 0 0;
+  padding-left: 1.15rem;
+}
+
+.booking-message__list li + li {
+  margin-top: 0.28rem;
+}
+
 .auth-page {
   min-height: calc(100vh - 16rem);
 }

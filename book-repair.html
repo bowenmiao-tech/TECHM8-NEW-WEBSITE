@@ -172,9 +172,8 @@
 
               <label class="booking-field">
                 <span>Preferred date *</span>
-                <input type="text" name="preferred_date_display" required inputmode="numeric" autocomplete="off" placeholder="DD/MM/YYYY">
-                <input type="hidden" name="preferred_date">
-                <small class="booking-field__hint">Australian date format: DD/MM/YYYY.</small>
+                <input type="date" name="preferred_date" required lang="en-AU" autocomplete="off">
+                <small class="booking-field__hint" data-booking-date-help>Choose a date from the calendar. Selected date is shown as DD/MM/YYYY.</small>
               </label>
 
               <label class="booking-field">
