@@ -661,6 +661,55 @@ body.admin-login-body {
   gap: 18px;
 }
 
+.admin-gallery-upload {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 6px;
+  width: 132px;
+  aspect-ratio: 1;
+  border: 1px dashed rgba(5, 206, 172, 0.7);
+  border-radius: 14px;
+  background: rgba(5, 206, 172, 0.1);
+  color: var(--admin-accent-strong);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.admin-gallery-upload:hover,
+.admin-gallery-upload.is-drag-over {
+  transform: translateY(-1px);
+  border-color: var(--admin-accent);
+  background: rgba(5, 206, 172, 0.17);
+  box-shadow: 0 16px 30px rgba(5, 206, 172, 0.14);
+}
+
+.admin-gallery-upload.is-uploading {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.admin-gallery-upload__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px dashed rgba(0, 128, 142, 0.35);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.admin-gallery-upload small {
+  max-width: 96px;
+  color: var(--admin-muted);
+  font-size: 0.72rem;
+  line-height: 1.25;
+}
+
 .admin-gallery-tile {
   position: relative;
   width: 132px;
@@ -776,6 +825,17 @@ body.admin-login-body {
 .admin-gallery-tile__remove {
   right: 10px;
   font-size: 1.2rem;
+}
+
+.admin-gallery-tile__edit {
+  width: auto;
+  min-width: 44px;
+  padding: 0 10px;
+  font-size: 0.72rem;
+}
+
+.admin-gallery-tile__edit::before {
+  content: none;
 }
 
 .admin-gallery-tile__fields {

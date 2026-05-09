@@ -1105,7 +1105,6 @@ function normalizeProductGallery(row) {
 }
 
 function renderProductGalleryRow(image, index, canEdit) {
-  const disabled = canEdit ? "" : "disabled";
   const draggable = canEdit ? "true" : "false";
   return `
     <div class="admin-gallery-tile" data-product-gallery-row draggable="${draggable}">
@@ -1118,18 +1117,23 @@ function renderProductGalleryRow(image, index, canEdit) {
           <button class="admin-gallery-tile__remove" type="button" data-gallery-action="remove" aria-label="Remove image">×</button>
         ` : ""}
       </div>
-      <div class="admin-gallery-tile__fields">
-        <input type="hidden" data-gallery-id value="${escapeHtml(image.id || "")}">
-        <label>
-          <span>Image URL</span>
-          <input type="url" data-gallery-url value="${escapeHtml(image.image_url || "")}" placeholder="https://..." ${disabled}>
-        </label>
-        <label>
-          <span>Alt text</span>
-          <input type="text" data-gallery-alt value="${escapeHtml(image.alt_text || "")}" placeholder="Product image description" ${disabled}>
-        </label>
-      </div>
+      <input type="hidden" data-gallery-id value="${escapeHtml(image.id || "")}">
+      <input type="hidden" data-gallery-url value="${escapeHtml(image.image_url || "")}">
+      <input type="hidden" data-gallery-alt value="${escapeHtml(image.alt_text || "")}">
+      ${canEdit ? `<input type="file" data-gallery-replace-input accept="image/*" hidden>` : ""}
     </div>
+  `;
+}
+
+function renderProductGalleryUploadTile(canEdit) {
+  if (!canEdit) return "";
+  return `
+    <label class="admin-gallery-upload" data-gallery-upload-dropzone>
+      <input type="file" data-gallery-upload-input accept="image/*" multiple hidden>
+      <span class="admin-gallery-upload__icon">+</span>
+      <strong>Add image</strong>
+      <small>Click or drag images here</small>
+    </label>
   `;
 }
 
@@ -1142,10 +1146,10 @@ function renderProductGalleryEditor(row, canEdit) {
           <h3>Images and videos</h3>
           <p>Drag images to reorder. The first image is the storefront thumbnail and main product image.</p>
         </div>
-        ${canEdit ? `<button class="button button--ghost" type="button" data-gallery-add>Add image</button>` : ""}
       </div>
       <div class="admin-gallery-list" data-product-gallery-list>
         ${gallery.map((image, index) => renderProductGalleryRow(image, index, canEdit)).join("")}
+        ${renderProductGalleryUploadTile(canEdit)}
       </div>
     </section>
   `;
@@ -1214,6 +1218,57 @@ function setupProductGalleryDrag(list, onChange) {
     draggedRow = null;
     onChange?.();
   });
+}
+
+function removeEmptyGalleryPlaceholders(galleryList) {
+  if (!(galleryList instanceof HTMLElement)) return;
+  galleryList.querySelectorAll("[data-product-gallery-row]").forEach((row) => {
+    const urlInput = row.querySelector("[data-gallery-url]");
+    if (urlInput instanceof HTMLInputElement && !urlInput.value.trim()) {
+      row.remove();
+    }
+  });
+}
+
+function appendUploadedGalleryImage(galleryList, imageUrl, altText, canEdit) {
+  if (!(galleryList instanceof HTMLElement)) return;
+  removeEmptyGalleryPlaceholders(galleryList);
+  const count = galleryList.querySelectorAll("[data-product-gallery-row]").length;
+  const uploadTile = galleryList.querySelector("[data-gallery-upload-dropzone]");
+  const html = renderProductGalleryRow({ image_url: imageUrl, alt_text: altText }, count, canEdit);
+  if (uploadTile instanceof HTMLElement) {
+    uploadTile.insertAdjacentHTML("beforebegin", html);
+  } else {
+    galleryList.insertAdjacentHTML("beforeend", html);
+  }
+}
+
+async function uploadProductGalleryFiles(files, options) {
+  const { galleryList, row, session, canEdit, alertTarget, onChange } = options || {};
+  if (!(galleryList instanceof HTMLElement)) return;
+  const imageFiles = Array.from(files || []).filter((file) => file instanceof File && file.type.startsWith("image/"));
+  if (!imageFiles.length) return;
+
+  const uploadTile = galleryList.querySelector("[data-gallery-upload-dropzone]");
+  uploadTile?.classList.add("is-uploading");
+  setAlert(alertTarget, `Uploading ${imageFiles.length} product image${imageFiles.length === 1 ? "" : "s"}...`, "info");
+
+  try {
+    for (const file of imageFiles) {
+      const imageUrl = await uploadProductDetailImage(file, row, session);
+      appendUploadedGalleryImage(galleryList, imageUrl, row?.name || file.name, canEdit);
+    }
+    onChange?.();
+    setAlert(alertTarget, "Product images uploaded. Click Save product to publish the gallery.", "success");
+  } catch (error) {
+    setAlert(alertTarget, error instanceof Error ? error.message : "Product image upload failed.", "error");
+  } finally {
+    uploadTile?.classList.remove("is-uploading", "is-drag-over");
+    const input = uploadTile?.querySelector("[data-gallery-upload-input]");
+    if (input instanceof HTMLInputElement) {
+      input.value = "";
+    }
+  }
 }
 
 function collectProductGallery(editorTarget) {
@@ -2646,26 +2701,75 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
         rowElement.remove();
       }
       if (action === "edit") {
-        const firstInput = rowElement.querySelector("[data-gallery-url]");
-        if (firstInput instanceof HTMLInputElement) {
-          firstInput.focus();
-          firstInput.select();
+        const replaceInput = rowElement.querySelector("[data-gallery-replace-input]");
+        if (replaceInput instanceof HTMLInputElement) {
+          replaceInput.click();
         }
       }
-      if (!galleryList.querySelector("[data-product-gallery-row]")) {
-        galleryList.insertAdjacentHTML("beforeend", renderProductGalleryRow({ image_url: "", alt_text: row.name || "" }, 0, state.canEdit));
-      }
       syncGalleryPreview();
+    });
+
+    galleryList?.addEventListener("change", async (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement) || !target.matches("[data-gallery-replace-input]")) return;
+      const file = target.files?.[0];
+      const rowElement = target.closest("[data-product-gallery-row]");
+      if (!file || !(rowElement instanceof HTMLElement)) return;
+      const urlInput = rowElement.querySelector("[data-gallery-url]");
+      const altInput = rowElement.querySelector("[data-gallery-alt]");
+      const preview = rowElement.querySelector("[data-gallery-preview]");
+      try {
+        setAlert(alertTarget, "Uploading replacement image...", "info");
+        const imageUrl = await uploadProductDetailImage(file, row, session);
+        if (urlInput instanceof HTMLInputElement) urlInput.value = imageUrl;
+        if (altInput instanceof HTMLInputElement && !altInput.value.trim()) altInput.value = row.name || file.name;
+        if (preview instanceof HTMLImageElement) preview.src = getImageOrPlaceholder(imageUrl);
+        syncGalleryPreview();
+        setAlert(alertTarget, "Product image replaced. Click Save product to publish the gallery.", "success");
+      } catch (error) {
+        setAlert(alertTarget, error instanceof Error ? error.message : "Replacement image upload failed.", "error");
+      } finally {
+        target.value = "";
+      }
     });
 
     setupProductGalleryDrag(galleryList, syncGalleryPreview);
 
-    editorTarget.querySelector("[data-gallery-add]")?.addEventListener("click", () => {
-      if (!(galleryList instanceof HTMLElement)) return;
-      const count = galleryList.querySelectorAll("[data-product-gallery-row]").length;
-      galleryList.insertAdjacentHTML("beforeend", renderProductGalleryRow({ image_url: "", alt_text: row.name || "" }, count, state.canEdit));
-      syncGalleryPreview();
+    const uploadDropzone = editorTarget.querySelector("[data-gallery-upload-dropzone]");
+    const uploadInput = editorTarget.querySelector("[data-gallery-upload-input]");
+    uploadInput?.addEventListener("change", () => {
+      uploadProductGalleryFiles(uploadInput.files, {
+        galleryList,
+        row,
+        session,
+        canEdit: state.canEdit,
+        alertTarget,
+        onChange: syncGalleryPreview,
+      });
     });
+    if (uploadDropzone instanceof HTMLElement) {
+      ["dragenter", "dragover"].forEach((type) => {
+        uploadDropzone.addEventListener(type, (event) => {
+          event.preventDefault();
+          uploadDropzone.classList.add("is-drag-over");
+        });
+      });
+      ["dragleave", "dragend"].forEach((type) => {
+        uploadDropzone.addEventListener(type, () => uploadDropzone.classList.remove("is-drag-over"));
+      });
+      uploadDropzone.addEventListener("drop", (event) => {
+        event.preventDefault();
+        uploadDropzone.classList.remove("is-drag-over");
+        uploadProductGalleryFiles(event.dataTransfer?.files, {
+          galleryList,
+          row,
+          session,
+          canEdit: state.canEdit,
+          alertTarget,
+          onChange: syncGalleryPreview,
+        });
+      });
+    }
 
     formElement?.addEventListener("submit", async (event) => {
       event.preventDefault();
