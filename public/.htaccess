@@ -1,0 +1,29 @@
+RewriteEngine On
+
+# Canonical legacy sitelinks captured by Google
+RewriteRule ^book-online/?$ /book-repair.html [R=301,L,NC]
+RewriteRule ^phone-repairs-park-ridge/?$ /stores/park-ridge.html [R=301,L,NC]
+RewriteRule ^computer-parts/?$ /products.html [R=301,L,NC]
+RewriteRule ^screen-protector/?$ /shop.html [R=301,L,NC]
+RewriteRule ^about-us/?$ /index.html [R=301,L,NC]
+RewriteRule ^macbookcharger/?$ /products.html [R=301,L,NC]
+RewriteRule ^macbook-charger/?$ /products.html [R=301,L,NC]
+
+# Common legacy store aliases
+RewriteRule ^park-ridge/?$ /stores/park-ridge.html [R=301,L,NC]
+RewriteRule ^fairfield/?$ /stores/fairfield.html [R=301,L,NC]
+RewriteRule ^toowong/?$ /stores/toowong.html [R=301,L,NC]
+RewriteRule ^north-lakes/?$ /stores/north-lakes.html [R=301,L,NC]
+RewriteRule ^brassall/?$ /stores/brassall.html [R=301,L,NC]
+
+RewriteRule ^store/park-ridge/?$ /stores/park-ridge.html [R=301,L,NC]
+RewriteRule ^store/fairfield/?$ /stores/fairfield.html [R=301,L,NC]
+RewriteRule ^store/toowong/?$ /stores/toowong.html [R=301,L,NC]
+RewriteRule ^store/north-lakes/?$ /stores/north-lakes.html [R=301,L,NC]
+RewriteRule ^store/brassall/?$ /stores/brassall.html [R=301,L,NC]
+
+RewriteRule ^stores/park-ridge/?$ /stores/park-ridge.html [R=301,L,NC]
+RewriteRule ^stores/fairfield/?$ /stores/fairfield.html [R=301,L,NC]
+RewriteRule ^stores/toowong/?$ /stores/toowong.html [R=301,L,NC]
+RewriteRule ^stores/north-lakes/?$ /stores/north-lakes.html [R=301,L,NC]
+RewriteRule ^stores/brassall/?$ /stores/brassall.html [R=301,L,NC]
