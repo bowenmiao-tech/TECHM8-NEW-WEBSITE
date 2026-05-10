@@ -1942,15 +1942,16 @@ function createRailProductCard(product) {
     savingsAmount > 0
       ? `<span class="storefront-rail-card__saving">Save ${escapeHtml(formatMoney(savingsAmount))}</span>`
       : "";
+  const navigationCache = buildProductNavigationCache(product);
 
   return `
-    <article class="storefront-rail-card">
-      <a class="storefront-rail-card__media" href="${detailUrl}">
+    <article class="storefront-rail-card" data-product-cache="${escapeHtml(navigationCache)}">
+      <a class="storefront-rail-card__media" href="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}">
         <img src="${escapeHtml(resolveProductImageUrl(product))}" alt="${escapeHtml(productName)}" loading="lazy">
       </a>
       <div class="storefront-rail-card__body">
         <p class="storefront-rail-card__eyebrow">${escapeHtml(product.brand || product.category_name || "TECHM8")}</p>
-        <a class="storefront-rail-card__title" href="${detailUrl}">${escapeHtml(productName)}</a>
+        <a class="storefront-rail-card__title" href="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}">${escapeHtml(productName)}</a>
         <div class="storefront-rail-card__price">
           <strong>${escapeHtml(formatMoney(retailPrice))}</strong>
           ${compareMarkup}
@@ -1958,7 +1959,7 @@ function createRailProductCard(product) {
         ${savingsMarkup}
         <div class="storefront-rail-card__actions">
           <button class="storefront-card__action storefront-card__action--primary" type="button" data-add-cart-slug="${escapeHtml(product.slug)}">Add to cart</button>
-          <a class="storefront-card__action storefront-card__action--secondary" href="${detailUrl}">Details</a>
+          <a class="storefront-card__action storefront-card__action--secondary" href="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}">Details</a>
         </div>
       </div>
     </article>
@@ -3331,6 +3332,328 @@ async function loadSharedCatalogData() {
   }
 }
 
+async function fetchCatalogProductBySlug(slug) {
+  const safeSlug = String(slug || "").trim();
+  const { supabaseUrl, supabaseAnonKey } = window.TECHM8_CONFIG || {};
+  if (!safeSlug || !supabaseUrl || !supabaseAnonKey) return null;
+
+  const headers = {
+    Accept: "application/json",
+    apikey: supabaseAnonKey,
+    Authorization: `Bearer ${supabaseAnonKey}`,
+  };
+  const productSelect =
+    "id,sku,slug,name,brand,model,short_description,description,detail_html,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc";
+
+  const productUrl = `${supabaseUrl}/rest/v1/products?select=${productSelect}&slug=eq.${encodeURIComponent(safeSlug)}&is_visible=eq.true&limit=1`;
+  const productResponse = await fetch(productUrl, { headers, cache: "default" });
+  if (!productResponse.ok) {
+    throw new Error("Product request failed");
+  }
+
+  const productRows = await productResponse.json();
+  if (!Array.isArray(productRows) || !productRows.length) {
+    return null;
+  }
+
+  const product = productRows[0];
+  const categoryUrl = product.category_id
+    ? `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&id=eq.${encodeURIComponent(String(product.category_id))}&limit=1`
+    : null;
+  const imagesUrl = `${supabaseUrl}/rest/v1/product_images?select=product_id,image_url,alt_text,sort_order&product_id=eq.${encodeURIComponent(String(product.id))}&order=sort_order.asc`;
+
+  const [categoryResult, imagesResult] = await Promise.allSettled([
+    categoryUrl ? fetch(categoryUrl, { headers, cache: "default" }) : Promise.resolve(null),
+    fetch(imagesUrl, { headers, cache: "default" }),
+  ]);
+
+  const categoryRows =
+    categoryResult.status === "fulfilled" &&
+    categoryResult.value &&
+    "ok" in categoryResult.value &&
+    categoryResult.value.ok
+      ? await categoryResult.value.json()
+      : [];
+  const productImages =
+    imagesResult.status === "fulfilled" && imagesResult.value.ok
+      ? await imagesResult.value.json()
+      : [];
+
+  const category = Array.isArray(categoryRows) && categoryRows.length ? categoryRows[0] : null;
+  const galleryImages = Array.isArray(productImages)
+    ? productImages
+        .filter((image) => image?.image_url)
+        .map((image) => ({
+          product_id: image.product_id,
+          image_url: image.image_url,
+          alt_text: image.alt_text || "",
+          sort_order: Number(image.sort_order) || 0,
+        }))
+        .sort(
+          (left, right) =>
+            (Number(left.sort_order) || 0) - (Number(right.sort_order) || 0),
+        )
+    : [];
+
+  const retailPrice = Number(product.retail_price);
+  const compareAtPrice = Number(product.compare_at_price);
+  const normalizedProduct = {
+    ...product,
+    catalog_index: 0,
+    retail_price: Number.isFinite(retailPrice) && retailPrice > 0 ? retailPrice : 0,
+    compare_at_price:
+      Number.isFinite(compareAtPrice) &&
+      compareAtPrice > (Number.isFinite(retailPrice) && retailPrice > 0 ? retailPrice : 0)
+        ? compareAtPrice
+        : null,
+    display_image: galleryImages[0]?.image_url || resolveProductImageUrl(product),
+    gallery_images: galleryImages.length
+      ? galleryImages
+      : product.image_url
+        ? [
+            {
+              product_id: product.id,
+              image_url: product.image_url,
+              alt_text: product.name || "",
+              sort_order: 0,
+            },
+          ]
+        : [],
+    category_slug: category?.slug || "other-products",
+    category_name: category?.name || "Other Products",
+    category_description: category?.description || "",
+  };
+
+  return applyProductVariantData([normalizedProduct])[0] || null;
+}
+
+function renderProductDetailShell(shell, product, relatedProducts = null) {
+  if (!(shell instanceof HTMLElement) || !product) return;
+
+  const compareAtPrice = Number(product.compare_at_price) || 0;
+  const retailPrice = Number(product.retail_price) || 0;
+  const savings =
+    compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
+  const stockText = "Available for online order or store pickup";
+  const productName = getProductDisplayName(product) || product.name;
+  const galleryImages = getOrderedProductGalleryImages(product);
+  const mainImage = galleryImages[0] || null;
+  const variantOptions = Array.isArray(product.variant_options)
+    ? product.variant_options
+    : [];
+  const hasRelatedCatalog =
+    Array.isArray(relatedProducts) && relatedProducts.length > 1;
+  const productGroupKey = product.variant_group_key || product.slug;
+  const latestProducts = hasRelatedCatalog
+    ? getLatestDisplayProducts(
+        relatedProducts.filter(
+          (item) => (item.variant_group_key || item.slug) !== productGroupKey,
+        ),
+        6,
+      )
+    : [];
+  rememberRecentProduct(product);
+  const recentlyViewedProducts = hasRelatedCatalog
+    ? getRecentlyViewedProducts(relatedProducts, product.slug, 6)
+    : [];
+  const detailHtml = formatProductDetailHtml(product);
+  const variantMarkup =
+    variantOptions.length > 1
+      ? `
+        <div class="storefront-pdp__variant-picker">
+          <span class="storefront-pdp__variant-label">Colour</span>
+          <div class="storefront-pdp__variant-options">
+      ${variantOptions
+              .map(
+                (option) => `
+                  <a
+                    class="storefront-pdp__variant ${option.is_active ? "is-active" : ""}"
+                    href="product.html?slug=${encodeURIComponent(option.slug)}"
+                  >${escapeHtml(option.label)}</a>
+                `,
+              )
+              .join("")}
+          </div>
+        </div>
+      `
+      : "";
+
+  const relatedMarkup = hasRelatedCatalog
+    ? `
+      ${renderProductRailSection({
+        eyebrow: "Latest products",
+        title: "New arrivals in the catalog",
+        linkHref: "shop.html",
+        linkLabel: "View all products",
+        emptyTitle: "No newer products yet",
+        emptyCopy:
+          "New products will appear here automatically as they are added to Supabase.",
+        products: latestProducts,
+        dataAttribute: "data-product-latest",
+      })}
+
+      ${renderProductRailSection({
+        eyebrow: "Recently viewed",
+        title: "Products viewed on this browser",
+        linkHref: `category.html?slug=${encodeURIComponent(product.category_slug)}`,
+        linkLabel: `View ${product.category_name}`,
+        emptyTitle: "No recent products yet",
+        emptyCopy:
+          "As customers browse the catalog, recently viewed products will appear here.",
+        products: recentlyViewedProducts,
+        dataAttribute: "data-product-recent",
+      })}
+    `
+    : "";
+
+  document.title = `${productName} | TECHM8 Online Store`;
+  shell.innerHTML = `
+    <div class="storefront-breadcrumbs">
+      <a href="index.html">Home</a>
+      <span>/</span>
+      <a href="shop.html">Online Store</a>
+      <span>/</span>
+      <a href="category.html?slug=${encodeURIComponent(product.category_slug)}">${escapeHtml(product.category_name)}</a>
+      <span>/</span>
+      <span>${escapeHtml(productName)}</span>
+    </div>
+
+    <section class="storefront-pdp">
+      <div class="storefront-pdp__gallery">
+        <div class="storefront-pdp__gallery-main">
+          ${mainImage ? `<img src="${escapeHtml(mainImage.image_url)}" alt="${escapeHtml(mainImage.alt_text || product.name)}" data-pdp-main-image loading="eager" decoding="async" fetchpriority="high">` : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`}
+        </div>
+        ${
+          galleryImages.length > 1
+            ? `
+              <div class="storefront-pdp__gallery-thumbs">
+                ${galleryImages
+                  .map(
+                    (image, index) => `
+                      <button
+                        class="storefront-pdp__thumb ${index === 0 ? "is-active" : ""}"
+                        type="button"
+                        data-pdp-thumb
+                        data-image-src="${escapeHtml(image.image_url)}"
+                        data-image-alt="${escapeHtml(image.alt_text || product.name)}"
+                        aria-label="View image ${index + 1}"
+                      >
+                        <img src="${escapeHtml(image.image_url)}" alt="${escapeHtml(image.alt_text || product.name)}" loading="lazy">
+                      </button>
+                    `,
+                  )
+                  .join("")}
+              </div>
+            `
+            : ""
+        }
+      </div>
+
+      <div class="storefront-pdp__summary">
+        <p class="eyebrow">Online store item</p>
+        <div class="storefront-pdp__brand-row">
+          <span class="storefront-pdp__brand">${escapeHtml(product.brand || "TECHM8")}</span>
+          <span class="storefront-pdp__stock">${escapeHtml(stockText)}</span>
+        </div>
+        <h1>${escapeHtml(productName)}</h1>
+        <p class="storefront-pdp__intro">${escapeHtml(product.description || product.short_description || "Retail catalog product.")}</p>
+
+        <div class="storefront-pdp__price-card">
+          <div class="storefront-pdp__price-top">
+            ${compareAtPrice > retailPrice ? `<span class="storefront-pdp__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>` : ""}
+            ${savings > 0 ? `<span class="storefront-pdp__save">Save ${escapeHtml(formatMoney(savings))}</span>` : ""}
+          </div>
+          <div class="storefront-pdp__price-main">${escapeHtml(formatMoney(retailPrice))}</div>
+        </div>
+
+        ${variantMarkup}
+
+        <div class="storefront-pdp__purchase">
+          <label class="storefront-pdp__qty">
+            <span>Qty</span>
+            <input type="number" min="1" value="1" data-product-qty>
+          </label>
+          <button class="button button--primary storefront-pdp__cart-button" type="button" data-product-add-cart>Add to cart</button>
+          <a class="button button--ghost" href="stores.html">Find in store</a>
+        </div>
+
+        <div class="storefront-pdp__highlights">
+          <div class="storefront-pdp__highlight"><strong>Brand</strong><span>${escapeHtml(product.brand || "TECHM8")}</span></div>
+          <div class="storefront-pdp__highlight"><strong>Category</strong><span>${escapeHtml(product.category_name)}</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="storefront-pdp__detail-stack">
+      <article class="storefront-pdp__panel storefront-pdp__panel--detail-html">
+        <div class="section-heading section-heading--split">
+          <div>
+            <p class="eyebrow">Product details</p>
+            <h2>Description</h2>
+          </div>
+        </div>
+        <div class="storefront-rich-content">
+          ${detailHtml}
+        </div>
+      </article>
+    </section>
+
+    ${relatedMarkup}
+  `;
+}
+
+function bindProductDetailShell(shell, product, catalogProducts = null) {
+  if (!(shell instanceof HTMLElement) || !product) return;
+
+  const addButton = shell.querySelector("[data-product-add-cart]");
+  const qtyField = shell.querySelector("[data-product-qty]");
+  const mainImageTarget = shell.querySelector("[data-pdp-main-image]");
+  const thumbnailButtons = shell.querySelectorAll("[data-pdp-thumb]");
+
+  if (addButton instanceof HTMLButtonElement) {
+    addButton.addEventListener("click", () => {
+      const quantity =
+        qtyField instanceof HTMLInputElement
+          ? Math.max(1, Number(qtyField.value) || 1)
+          : 1;
+      addItemToCart(product, quantity);
+      addButton.textContent = "Added to cart";
+      window.setTimeout(() => {
+        addButton.textContent = "Add to cart";
+      }, 1200);
+    });
+  }
+
+  if (
+    mainImageTarget instanceof HTMLImageElement &&
+    thumbnailButtons.length
+  ) {
+    thumbnailButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const imageSrc = button.getAttribute("data-image-src") || "";
+        const imageAlt =
+          button.getAttribute("data-image-alt") || product.name || "";
+        if (!imageSrc) return;
+        mainImageTarget.src = imageSrc;
+        mainImageTarget.alt = imageAlt;
+        thumbnailButtons.forEach((item) => item.classList.remove("is-active"));
+        button.classList.add("is-active");
+      });
+    });
+  }
+
+  if (Array.isArray(catalogProducts) && catalogProducts.length) {
+    shell
+      .querySelectorAll("[data-product-latest], [data-product-recent]")
+      .forEach((target) => {
+        if (target instanceof HTMLElement) {
+          bindCartButtons(target, catalogProducts);
+        }
+      });
+  }
+}
+
 function getProductGalleryImages(product) {
   if (Array.isArray(product?.gallery_images) && product.gallery_images.length) {
     return product.gallery_images
@@ -3360,6 +3683,105 @@ function getProductGalleryImages(product) {
   ];
 }
 
+const PRODUCT_NAVIGATION_CACHE_KEY = "techm8:last-product-cache:v1";
+
+function buildProductNavigationCache(product) {
+  if (!product?.slug) return "";
+  const payload = {
+    id: product.id ?? null,
+    sku: product.sku ?? "",
+    slug: product.slug,
+    name: product.name ?? "",
+    brand: product.brand ?? "",
+    model: product.model ?? "",
+    short_description: product.short_description ?? "",
+    description: product.description ?? "",
+    detail_html: product.detail_html ?? "",
+    retail_price: Number(product.retail_price) || 0,
+    compare_at_price: Number(product.compare_at_price) || null,
+    image_url: product.image_url ?? "",
+    display_image: product.display_image ?? "",
+    stock_quantity: Number(product.stock_quantity) || 0,
+    is_featured: Boolean(product.is_featured),
+    condition_label: product.condition_label ?? "",
+    compatibility: product.compatibility ?? "",
+    category_id: product.category_id ?? null,
+    category_slug: product.category_slug ?? "other-products",
+    category_name: product.category_name ?? "Other Products",
+    category_description: product.category_description ?? "",
+    created_at: product.created_at ?? null,
+    upc: product.upc ?? "",
+    variant_group_key: product.variant_group_key ?? "",
+    variant_group_value: product.variant_group_value ?? "",
+    variant_display_name: product.variant_display_name ?? "",
+    variant_options: Array.isArray(product.variant_options)
+      ? product.variant_options.map((option) => ({
+          slug: option?.slug ?? "",
+          label: option?.label ?? "",
+          is_active: Boolean(option?.is_active),
+        }))
+      : [],
+    gallery_images: getOrderedProductGalleryImages(product).map((image) => ({
+      image_url: image?.image_url ?? "",
+      alt_text: image?.alt_text ?? "",
+      sort_order: Number(image?.sort_order) || 0,
+    })),
+  };
+
+  try {
+    return encodeURIComponent(JSON.stringify(payload));
+  } catch {
+    return "";
+  }
+}
+
+function rememberEncodedProductNavigationCache(encodedValue) {
+  const safeValue = String(encodedValue || "").trim();
+  if (!safeValue) return;
+  try {
+    window.sessionStorage.setItem(PRODUCT_NAVIGATION_CACHE_KEY, safeValue);
+  } catch {
+    // Ignore session storage failures.
+  }
+}
+
+function getRememberedProductNavigationCache(slug) {
+  const safeSlug = String(slug || "").trim();
+  if (!safeSlug) return null;
+  try {
+    const encoded = window.sessionStorage.getItem(PRODUCT_NAVIGATION_CACHE_KEY);
+    if (!encoded) return null;
+    const parsed = JSON.parse(decodeURIComponent(encoded));
+    return parsed?.slug === safeSlug ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function rememberProductNavigationFromElement(target) {
+  const source =
+    target instanceof Element ? target.closest("[data-product-cache]") : null;
+  if (!(source instanceof HTMLElement)) return;
+  const encodedValue = source.getAttribute("data-product-cache");
+  if (!encodedValue) return;
+  rememberEncodedProductNavigationCache(encodedValue);
+}
+
+function initProductNavigationCache() {
+  const handleCache = (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    rememberProductNavigationFromElement(target);
+  };
+
+  document.addEventListener("pointerdown", handleCache, true);
+  document.addEventListener("click", handleCache, true);
+  document.addEventListener("touchstart", handleCache, {
+    capture: true,
+    passive: true,
+  });
+}
+
 function createCatalogCard(product) {
   const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
   const categoryUrl = `category.html?slug=${encodeURIComponent(product.category_slug)}`;
@@ -3379,14 +3801,15 @@ function createCatalogCard(product) {
       ? `<span class="storefront-card__saving">Save ${escapeHtml(formatMoney(savingsAmount))}</span>`
       : "";
   const stockLabel = "Available to order";
+  const navigationCache = buildProductNavigationCache(product);
   const imageMarkup = product.display_image
     ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy" decoding="async" sizes="(max-width: 380px) 92vw, (max-width: 720px) 44vw, (max-width: 1200px) 30vw, 18vw">`
     : `<div class="storefront-card__image storefront-card__image--placeholder" aria-hidden="true">TECHM8</div>`;
   const stockClass = "is-in-stock";
 
   return `
-    <article class="storefront-card storefront-card--commerce">
-      <a class="storefront-card__media-link" href="${detailUrl}">
+    <article class="storefront-card storefront-card--commerce" data-product-cache="${escapeHtml(navigationCache)}">
+      <a class="storefront-card__media-link" href="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}">
         <div class="storefront-card__media">${imageMarkup}</div>
       </a>
       <div class="storefront-card__body">
@@ -3394,7 +3817,7 @@ function createCatalogCard(product) {
           <a class="storefront-card__pill storefront-card__pill--link" href="${categoryUrl}">${escapeHtml(product.category_name)}</a>
           ${product.is_featured ? '<span class="storefront-card__tag">Featured</span>' : savingsPill}
         </div>
-        <a class="storefront-card__title-link" href="${detailUrl}">
+        <a class="storefront-card__title-link" href="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}">
           <h3>${escapeHtml(productName)}</h3>
         </a>
         <p class="storefront-card__summary">${escapeHtml(product.short_description || "Retail catalog product.")}</p>
@@ -3411,7 +3834,7 @@ function createCatalogCard(product) {
           <span class="storefront-card__stock ${stockClass}">${escapeHtml(stockLabel)}</span>
           <div class="storefront-card__actions">
             <button class="storefront-card__action storefront-card__action--primary" type="button" data-add-cart-slug="${escapeHtml(product.slug)}">Add to cart</button>
-            <a class="storefront-card__action storefront-card__action--secondary" href="${detailUrl}">Details</a>
+            <a class="storefront-card__action storefront-card__action--secondary" href="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}">Details</a>
           </div>
         </div>
       </div>
@@ -3430,17 +3853,18 @@ function createHomeFeaturedCard(product) {
   const hasComparePrice =
     Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
   const productName = getProductDisplayName(product) || product.name;
+  const navigationCache = buildProductNavigationCache(product);
   const imageMarkup = product.display_image
     ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy" decoding="async" sizes="(max-width: 720px) 72vw, 22vw">`
     : `<div class="home-product-card__image-placeholder" aria-hidden="true">TECHM8</div>`;
 
   return `
-      <article class="home-product-card" data-product-card-link="${detailUrl}" tabindex="0" role="link" aria-label="${escapeHtml(productName)}">
-        <a class="home-product-card__media" href="${detailUrl}">
+      <article class="home-product-card" data-product-card-link="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}" tabindex="0" role="link" aria-label="${escapeHtml(productName)}">
+        <a class="home-product-card__media" href="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}">
           ${imageMarkup}
         </a>
         <div class="home-product-card__content">
-            <a class="home-product-card__title-link" href="${detailUrl}">
+            <a class="home-product-card__title-link" href="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}">
               <h3>${escapeHtml(productName)}</h3>
             </a>
             <div class="home-product-card__price-row">
@@ -3524,6 +3948,7 @@ function initHomeFeaturedProducts() {
     if (!(card instanceof HTMLElement)) return;
     const href = card.getAttribute("data-product-card-link");
     if (!href) return;
+    rememberProductNavigationFromElement(card);
     event.preventDefault();
     window.location.href = href;
   });
@@ -3682,225 +4107,46 @@ function initProductDetailPage() {
 
   const params = new URLSearchParams(window.location.search);
   const slug = params.get("slug") || "";
+  let initialProduct = getRememberedProductNavigationCache(slug);
 
-  loadSharedCatalogData().then(({ products }) => {
-    const product = products.find((item) => item.slug === slug);
-    if (!product) {
-      shell.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing product</span><h3>Product not found</h3><p>Return to the online store and select another item.</p><div class="storefront-card__actions"><a href="shop.html">Back to online store</a></div></div></article>`;
-      return;
-    }
+  const renderNotFound = () => {
+    shell.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing product</span><h3>Product not found</h3><p>Return to the online store and select another item.</p><div class="storefront-card__actions"><a href="shop.html">Back to online store</a></div></div></article>`;
+  };
 
-    const compareAtPrice = Number(product.compare_at_price) || 0;
-    const retailPrice = Number(product.retail_price) || 0;
-    const savings =
-      compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
-    const stockText = "Available for online order or store pickup";
-    const productName = getProductDisplayName(product) || product.name;
-    const productColor = getProductVariantColor(product);
-    const galleryImages = getOrderedProductGalleryImages(product);
-    const mainImage = galleryImages[0] || null;
-    const variantOptions = Array.isArray(product.variant_options)
-      ? product.variant_options
-      : [];
-    const productGroupKey = product.variant_group_key || product.slug;
-    const latestProducts = getLatestDisplayProducts(
-      products.filter(
-        (item) => (item.variant_group_key || item.slug) !== productGroupKey,
-      ),
-      6,
-    );
-    rememberRecentProduct(product);
-    const recentlyViewedProducts = getRecentlyViewedProducts(
-      products,
-      product.slug,
-      6,
-    );
-    const detailHtml = formatProductDetailHtml(product);
-    const variantMarkup =
-      variantOptions.length > 1
-        ? `
-          <div class="storefront-pdp__variant-picker">
-            <span class="storefront-pdp__variant-label">Colour</span>
-            <div class="storefront-pdp__variant-options">
-              ${variantOptions
-                .map(
-                  (option) => `
-                    <a
-                      class="storefront-pdp__variant ${option.is_active ? "is-active" : ""}"
-                      href="product.html?slug=${encodeURIComponent(option.slug)}"
-                    >${escapeHtml(option.label)}</a>
-                  `,
-                )
-                .join("")}
-            </div>
-          </div>
-        `
-        : "";
+  if (initialProduct) {
+    renderProductDetailShell(shell, initialProduct);
+    bindProductDetailShell(shell, initialProduct);
+  }
 
-    document.title = `${productName} | TECHM8 Online Store`;
-    shell.innerHTML = `
-      <div class="storefront-breadcrumbs">
-        <a href="index.html">Home</a>
-        <span>/</span>
-        <a href="shop.html">Online Store</a>
-        <span>/</span>
-        <a href="category.html?slug=${encodeURIComponent(product.category_slug)}">${escapeHtml(product.category_name)}</a>
-        <span>/</span>
-        <span>${escapeHtml(productName)}</span>
-      </div>
-
-      <section class="storefront-pdp">
-        <div class="storefront-pdp__gallery">
-          <div class="storefront-pdp__gallery-main">
-            ${mainImage ? `<img src="${escapeHtml(mainImage.image_url)}" alt="${escapeHtml(mainImage.alt_text || product.name)}" data-pdp-main-image>` : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`}
-          </div>
-          ${
-            galleryImages.length > 1
-              ? `
-                <div class="storefront-pdp__gallery-thumbs">
-                  ${galleryImages
-                    .map(
-                      (image, index) => `
-                        <button
-                          class="storefront-pdp__thumb ${index === 0 ? "is-active" : ""}"
-                          type="button"
-                          data-pdp-thumb
-                          data-image-src="${escapeHtml(image.image_url)}"
-                          data-image-alt="${escapeHtml(image.alt_text || product.name)}"
-                          aria-label="View image ${index + 1}"
-                        >
-                          <img src="${escapeHtml(image.image_url)}" alt="${escapeHtml(image.alt_text || product.name)}" loading="lazy">
-                        </button>
-                      `,
-                    )
-                    .join("")}
-                </div>
-              `
-              : ""
+  fetchCatalogProductBySlug(slug)
+    .then((product) => {
+      if (!product) return;
+      initialProduct = product;
+      rememberEncodedProductNavigationCache(buildProductNavigationCache(product));
+      renderProductDetailShell(shell, product);
+      bindProductDetailShell(shell, product);
+    })
+    .catch(() => null)
+    .finally(() => {
+      loadSharedCatalogData()
+        .then(({ products }) => {
+          const product = products.find((item) => item.slug === slug);
+          if (!product) {
+            if (!initialProduct) {
+              renderNotFound();
+            }
+            return;
           }
-        </div>
 
-        <div class="storefront-pdp__summary">
-          <p class="eyebrow">Online store item</p>
-          <div class="storefront-pdp__brand-row">
-            <span class="storefront-pdp__brand">${escapeHtml(product.brand || "TECHM8")}</span>
-            <span class="storefront-pdp__stock">${escapeHtml(stockText)}</span>
-          </div>
-          <h1>${escapeHtml(productName)}</h1>
-          <p class="storefront-pdp__intro">${escapeHtml(product.description || product.short_description || "Retail catalog product.")}</p>
-
-          <div class="storefront-pdp__price-card">
-            <div class="storefront-pdp__price-top">
-              ${compareAtPrice > retailPrice ? `<span class="storefront-pdp__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>` : ""}
-              ${savings > 0 ? `<span class="storefront-pdp__save">Save ${escapeHtml(formatMoney(savings))}</span>` : ""}
-            </div>
-            <div class="storefront-pdp__price-main">${escapeHtml(formatMoney(retailPrice))}</div>
-          </div>
-
-          ${variantMarkup}
-
-          <div class="storefront-pdp__purchase">
-            <label class="storefront-pdp__qty">
-              <span>Qty</span>
-              <input type="number" min="1" value="1" data-product-qty>
-            </label>
-            <button class="button button--primary storefront-pdp__cart-button" type="button" data-product-add-cart>Add to cart</button>
-            <a class="button button--ghost" href="stores.html">Find in store</a>
-          </div>
-
-          <div class="storefront-pdp__highlights">
-            <div class="storefront-pdp__highlight"><strong>Brand</strong><span>${escapeHtml(product.brand || "TECHM8")}</span></div>
-            <div class="storefront-pdp__highlight"><strong>Category</strong><span>${escapeHtml(product.category_name)}</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="storefront-pdp__detail-stack">
-        <article class="storefront-pdp__panel storefront-pdp__panel--detail-html">
-          <div class="section-heading section-heading--split">
-            <div>
-              <p class="eyebrow">Product details</p>
-              <h2>Description</h2>
-            </div>
-          </div>
-          <div class="storefront-rich-content">
-            ${detailHtml}
-          </div>
-        </article>
-      </section>
-
-      ${renderProductRailSection({
-        eyebrow: "Latest products",
-        title: "New arrivals in the catalog",
-        linkHref: "shop.html",
-        linkLabel: "View all products",
-        emptyTitle: "No newer products yet",
-        emptyCopy:
-          "New products will appear here automatically as they are added to Supabase.",
-        products: latestProducts,
-        dataAttribute: "data-product-latest",
-      })}
-
-      ${renderProductRailSection({
-        eyebrow: "Recently viewed",
-        title: "Products viewed on this browser",
-        linkHref: `category.html?slug=${encodeURIComponent(product.category_slug)}`,
-        linkLabel: `View ${product.category_name}`,
-        emptyTitle: "No recent products yet",
-        emptyCopy:
-          "As customers browse the catalog, recently viewed products will appear here.",
-        products: recentlyViewedProducts,
-        dataAttribute: "data-product-recent",
-      })}
-    `;
-
-    const addButton = shell.querySelector("[data-product-add-cart]");
-    const qtyField = shell.querySelector("[data-product-qty]");
-    const mainImageTarget = shell.querySelector("[data-pdp-main-image]");
-    const thumbnailButtons = shell.querySelectorAll("[data-pdp-thumb]");
-    if (addButton instanceof HTMLButtonElement) {
-      addButton.addEventListener("click", () => {
-        const quantity =
-          qtyField instanceof HTMLInputElement
-            ? Math.max(1, Number(qtyField.value) || 1)
-            : 1;
-        addItemToCart(product, quantity);
-        addButton.textContent = "Added to cart";
-        window.setTimeout(() => {
-          addButton.textContent = "Add to cart";
-        }, 1200);
-      });
-    }
-
-    if (
-      mainImageTarget instanceof HTMLImageElement &&
-      thumbnailButtons.length
-    ) {
-      thumbnailButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          if (!(button instanceof HTMLButtonElement)) return;
-          const imageSrc = button.getAttribute("data-image-src") || "";
-          const imageAlt =
-            button.getAttribute("data-image-alt") || product.name || "";
-          if (!imageSrc) return;
-          mainImageTarget.src = imageSrc;
-          mainImageTarget.alt = imageAlt;
-          thumbnailButtons.forEach((item) =>
-            item.classList.remove("is-active"),
-          );
-          button.classList.add("is-active");
+          renderProductDetailShell(shell, product, products);
+          bindProductDetailShell(shell, product, products);
+        })
+        .catch(() => {
+          if (!initialProduct) {
+            renderNotFound();
+          }
         });
-      });
-    }
-
-    shell
-      .querySelectorAll("[data-product-latest], [data-product-recent]")
-      .forEach((target) => {
-        if (target instanceof HTMLElement) {
-          bindCartButtons(target, products);
-        }
-      });
-  });
+    });
 }
 
 function renderCartLineItems(target, items) {
@@ -8479,6 +8725,7 @@ function initPage() {
   initCookieConsentBanner();
   ensureAccountNavLink();
   ensureGlobalCartUi();
+  initProductNavigationCache();
   updateCartIndicators();
   window.addEventListener("storage", () => updateCartIndicators());
   initFilters();

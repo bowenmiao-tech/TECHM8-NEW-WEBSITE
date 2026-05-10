@@ -578,18 +578,114 @@ function fileToBase64(file) {
   });
 }
 
+function replaceFileExtension(fileName, nextExtension) {
+  const safeExtension = String(nextExtension || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+  if (!safeExtension) return fileName || "image";
+  const baseName = String(fileName || "image").replace(/\.[a-z0-9]+$/i, "");
+  return `${baseName}.${safeExtension}`;
+}
+
+async function convertImageFileToWebp(file, options = {}) {
+  if (!(file instanceof File)) return file;
+  if (!file.type.startsWith("image/")) return file;
+
+  const normalizedType = String(file.type || "").toLowerCase();
+  if (
+    normalizedType === "image/webp" ||
+    normalizedType === "image/gif" ||
+    normalizedType === "image/svg+xml"
+  ) {
+    return file;
+  }
+
+  const maxDimension = Number(options.maxDimension) > 0 ? Number(options.maxDimension) : 2200;
+  const quality = Number(options.quality) > 0 ? Number(options.quality) : 0.86;
+  const objectUrl = URL.createObjectURL(file);
+
+  try {
+    let sourceWidth = 0;
+    let sourceHeight = 0;
+    let drawSource = null;
+
+    if (typeof createImageBitmap === "function") {
+      const bitmap = await createImageBitmap(file);
+      sourceWidth = bitmap.width;
+      sourceHeight = bitmap.height;
+      drawSource = bitmap;
+    } else {
+      drawSource = await new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error("Image preview could not be prepared."));
+        image.src = objectUrl;
+      });
+      sourceWidth = drawSource.naturalWidth || drawSource.width || 0;
+      sourceHeight = drawSource.naturalHeight || drawSource.height || 0;
+    }
+
+    if (!sourceWidth || !sourceHeight || !drawSource) {
+      throw new Error("Image dimensions could not be read.");
+    }
+
+    const scale = Math.min(1, maxDimension / Math.max(sourceWidth, sourceHeight));
+    const targetWidth = Math.max(1, Math.round(sourceWidth * scale));
+    const targetHeight = Math.max(1, Math.round(sourceHeight * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+
+    const context = canvas.getContext("2d", { alpha: true });
+    if (!context) {
+      throw new Error("Image canvas is not available in this browser.");
+    }
+
+    context.drawImage(drawSource, 0, 0, targetWidth, targetHeight);
+
+    const webpBlob = await new Promise((resolve, reject) => {
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            resolve(blob);
+            return;
+          }
+          reject(new Error("Image could not be converted to WebP."));
+        },
+        "image/webp",
+        quality,
+      );
+    });
+
+    if (typeof drawSource.close === "function") {
+      drawSource.close();
+    }
+
+    return new File([webpBlob], replaceFileExtension(file.name, "webp"), {
+      type: "image/webp",
+      lastModified: Date.now(),
+    });
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
 async function uploadProductDetailImage(file, row, session) {
   if (!(file instanceof File)) throw new Error("Please choose an image file.");
   if (!file.type.startsWith("image/")) throw new Error("Only image files can be uploaded.");
   if (file.size > 8 * 1024 * 1024) throw new Error("Image is too large. Please use a file under 8MB.");
 
-  const dataBase64 = await fileToBase64(file);
+  const uploadFile = await convertImageFileToWebp(file);
+  if (uploadFile.size > 8 * 1024 * 1024) {
+    throw new Error("Image is still too large after conversion. Please resize it and try again.");
+  }
+  const dataBase64 = await fileToBase64(uploadFile);
   const result = await callAdminApi("product_detail_image_upload", {
     product_id: row.id,
     product_slug: row.slug,
-    file_name: file.name,
-    content_type: file.type || "image/jpeg",
-    extension: getFileExtension(file),
+    file_name: uploadFile.name,
+    content_type: uploadFile.type || "image/webp",
+    extension: getFileExtension(uploadFile),
     data_base64: dataBase64,
   }, session);
 
