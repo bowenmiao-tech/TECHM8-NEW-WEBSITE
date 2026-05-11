@@ -110,6 +110,139 @@ function normalizeStorageSegment(value: unknown, fallback = 'product') {
   return text || fallback
 }
 
+function slugifyProductValue(value: unknown, fallback = 'product') {
+  const text = String(value ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+  return text || fallback
+}
+
+async function ensureUniqueProductSlug(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  desiredSlug: string,
+  excludeId?: number,
+) {
+  const baseSlug = slugifyProductValue(desiredSlug, 'product')
+  let candidate = baseSlug
+  let attempt = 1
+
+  while (attempt < 500) {
+    let query = supabaseAdmin
+      .from('products')
+      .select('id')
+      .eq('slug', candidate)
+      .limit(1)
+
+    if (Number.isFinite(excludeId)) query = query.neq('id', excludeId as number)
+
+    const { data, error } = await query
+    if (error) throw error
+    if (!data?.length) return candidate
+
+    attempt += 1
+    candidate = `${baseSlug}-${attempt}`
+  }
+
+  return `${baseSlug}-${crypto.randomUUID().slice(0, 8)}`
+}
+
+async function ensureUniqueProductSku(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  desiredSku: string,
+  excludeId?: number,
+) {
+  const baseSku = String(desiredSku ?? '').trim() || `TM8-${crypto.randomUUID().slice(0, 8).toUpperCase()}`
+  let candidate = baseSku
+  let attempt = 1
+
+  while (attempt < 500) {
+    let query = supabaseAdmin
+      .from('products')
+      .select('id')
+      .eq('sku', candidate)
+      .limit(1)
+
+    if (Number.isFinite(excludeId)) query = query.neq('id', excludeId as number)
+
+    const { data, error } = await query
+    if (error) throw error
+    if (!data?.length) return candidate
+
+    attempt += 1
+    candidate = `${baseSku}-${attempt}`
+  }
+
+  return `${baseSku}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`
+}
+
+async function resolveSupplierIdByBrand(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  brand: string | null,
+) {
+  const normalizedBrand = String(brand ?? '').trim()
+  if (!normalizedBrand) return null
+
+  const { data, error } = await supabaseAdmin
+    .from('suppliers')
+    .select('id')
+    .ilike('name', normalizedBrand)
+    .limit(1)
+    .maybeSingle()
+
+  if (error) throw error
+  return data?.id ?? null
+}
+
+async function getWarehouseDispatchStoreId(supabaseAdmin: ReturnType<typeof createClient>) {
+  const { data, error } = await supabaseAdmin
+    .from('stores')
+    .select('id')
+    .eq('slug', 'warehouse-dispatch')
+    .maybeSingle()
+
+  if (error) throw error
+  return data?.id ?? null
+}
+
+async function upsertWarehouseInventory(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  productId: number,
+  quantity: number,
+  shelfLocation?: string | null,
+) {
+  const warehouseStoreId = await getWarehouseDispatchStoreId(supabaseAdmin)
+  if (!warehouseStoreId) return
+
+  const { error } = await supabaseAdmin
+    .from('product_store_inventory')
+    .upsert(
+      {
+        product_id: productId,
+        store_id: warehouseStoreId,
+        quantity,
+        shelf_location: normalizeNullableString(shelfLocation) ?? 'ONLINE',
+      },
+      { onConflict: 'product_id,store_id' },
+    )
+
+  if (error) throw error
+}
+
+function buildProductSeoTitle(name: string | null) {
+  const normalizedName = String(name ?? '').trim() || 'TECHM8 Product'
+  return `${normalizedName} | TECHM8`
+}
+
+function buildProductSeoDescription(shortDescription: string | null, name: string | null) {
+  return (
+    String(shortDescription ?? '').trim() ||
+    `${String(name ?? 'This product').trim()} available for online order and warehouse dispatch.`
+  )
+}
+
 function decodeBase64ToBytes(value: unknown) {
   const base64 = String(value ?? '').replace(/^data:[^;]+;base64,/, '').replace(/\s/g, '')
   if (!base64) return null
@@ -724,6 +857,350 @@ async function listProducts(supabaseAdmin: ReturnType<typeof createClient>, cont
   }
 }
 
+async function createProduct(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!CATALOG_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can create products.' }, 403)
+  }
+
+  const productInput = (body.product ?? body) as JsonRecord
+  const name = normalizeNullableString(productInput.name)
+  if (!name) {
+    return jsonResponse({ ok: false, error: 'Product name is required.' }, 422)
+  }
+
+  const brand = normalizeNullableString(productInput.brand)
+  const model = normalizeNullableString(productInput.model)
+  const shortDescription =
+    productInput.short_description === ''
+      ? null
+      : normalizeNullableString(productInput.short_description) ??
+        `${name} available for online order and warehouse dispatch.`
+  const slug = await ensureUniqueProductSlug(
+    supabaseAdmin,
+    normalizeNullableString(productInput.slug) ?? name,
+  )
+  const sku = await ensureUniqueProductSku(
+    supabaseAdmin,
+    normalizeNullableString(productInput.sku) ??
+      `TM8-${slugifyProductValue(model ?? name, 'product').toUpperCase()}`,
+  )
+  const supplierId = await resolveSupplierIdByBrand(supabaseAdmin, brand)
+
+  const insertPayload = {
+    sku,
+    slug,
+    name,
+    brand,
+    model,
+    upc: normalizeNullableString(productInput.upc),
+    category_id: normalizeNumber(productInput.category_id),
+    supplier_id: supplierId,
+    short_description: shortDescription,
+    description: normalizeNullableString(productInput.description) ?? shortDescription,
+    condition_label: normalizeNullableString(productInput.condition_label) ?? 'New',
+    compatibility: productInput.compatibility === '' ? null : normalizeNullableString(productInput.compatibility),
+    cost_price: normalizeNumber(productInput.cost_price) ?? 0,
+    retail_price: normalizeNumber(productInput.retail_price) ?? 0,
+    compare_at_price: normalizeNumber(productInput.compare_at_price),
+    image_url: normalizeNullableString(productInput.image_url),
+    supplier_image_url: normalizeNullableString(productInput.supplier_image_url),
+    supplier_product_url: normalizeNullableString(productInput.supplier_product_url),
+    stock_quantity: normalizeNumber(productInput.stock_quantity) ?? 0,
+    min_order_quantity: normalizeNumber(productInput.min_order_quantity) ?? 1,
+    is_featured: typeof productInput.is_featured === 'boolean' ? productInput.is_featured : false,
+    is_visible: typeof productInput.is_visible === 'boolean' ? productInput.is_visible : false,
+    seo_title: normalizeNullableString(productInput.seo_title) ?? buildProductSeoTitle(name),
+    seo_description:
+      normalizeNullableString(productInput.seo_description) ?? buildProductSeoDescription(shortDescription, name),
+    detail_html: productInput.detail_html === '' ? null : String(productInput.detail_html ?? ''),
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from('products')
+    .insert(insertPayload)
+    .select(
+      'id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at',
+    )
+    .single()
+
+  if (error) {
+    return jsonResponse({ ok: false, error: 'Product could not be created.' }, 500)
+  }
+
+  await upsertWarehouseInventory(
+    supabaseAdmin,
+    data.id,
+    Number(insertPayload.stock_quantity ?? 0),
+    normalizeNullableString(productInput.shelf_location) ?? 'ONLINE',
+  )
+
+  return jsonResponse({ ok: true, row: { ...data, images: [] } })
+}
+
+async function cloneProduct(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!CATALOG_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can clone products.' }, 403)
+  }
+
+  const productId = Number(body.id)
+  if (!Number.isFinite(productId)) {
+    return jsonResponse({ ok: false, error: 'Product id is missing.' }, 422)
+  }
+
+  const { data: source, error: sourceError } = await supabaseAdmin
+    .from('products')
+    .select('*')
+    .eq('id', productId)
+    .maybeSingle()
+
+  if (sourceError || !source) {
+    return jsonResponse({ ok: false, error: 'Source product was not found.' }, 404)
+  }
+
+  const { data: sourceImages, error: imagesError } = await supabaseAdmin
+    .from('product_images')
+    .select('image_url, alt_text, sort_order')
+    .eq('product_id', productId)
+    .order('sort_order', { ascending: true })
+    .order('id', { ascending: true })
+
+  if (imagesError) {
+    return jsonResponse({ ok: false, error: 'Source product images could not be loaded.' }, 500)
+  }
+
+  const cloneName = `${String(source.name ?? 'Product').trim()} (Copy)`
+  const cloneSlug = await ensureUniqueProductSlug(supabaseAdmin, `${String(source.slug ?? source.name ?? 'product')}-copy`)
+  const cloneSku = await ensureUniqueProductSku(supabaseAdmin, `${String(source.sku ?? 'TM8-PRODUCT')}-COPY`)
+
+  const clonePayload = {
+    sku: cloneSku,
+    slug: cloneSlug,
+    name: cloneName,
+    brand: source.brand ?? null,
+    model: source.model ?? null,
+    upc: source.upc ?? null,
+    category_id: source.category_id ?? null,
+    supplier_id: source.supplier_id ?? null,
+    short_description: source.short_description ?? null,
+    description: source.description ?? null,
+    condition_label: source.condition_label ?? 'New',
+    compatibility: source.compatibility ?? null,
+    cost_price: source.cost_price ?? 0,
+    retail_price: source.retail_price ?? 0,
+    compare_at_price: source.compare_at_price ?? null,
+    image_url: source.image_url ?? null,
+    supplier_image_url: source.supplier_image_url ?? null,
+    supplier_product_url: source.supplier_product_url ?? null,
+    stock_quantity: source.stock_quantity ?? 0,
+    min_order_quantity: source.min_order_quantity ?? 1,
+    is_featured: false,
+    is_visible: false,
+    seo_title: buildProductSeoTitle(cloneName),
+    seo_description: buildProductSeoDescription(source.short_description ?? null, cloneName),
+    detail_html: source.detail_html ?? null,
+  }
+
+  const { data: cloneRow, error: cloneError } = await supabaseAdmin
+    .from('products')
+    .insert(clonePayload)
+    .select(
+      'id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at',
+    )
+    .single()
+
+  if (cloneError || !cloneRow) {
+    return jsonResponse({ ok: false, error: 'Product clone could not be created.' }, 500)
+  }
+
+  const clonedImages = (sourceImages ?? [])
+    .map((image) => ({
+      product_id: cloneRow.id,
+      image_url: normalizeNullableString((image as { image_url?: string }).image_url),
+      alt_text: normalizeNullableString((image as { alt_text?: string }).alt_text),
+      sort_order: Number((image as { sort_order?: number }).sort_order) || 0,
+    }))
+    .filter((image) => image.image_url)
+
+  if (clonedImages.length) {
+    const { error: insertImagesError } = await supabaseAdmin
+      .from('product_images')
+      .insert(clonedImages)
+
+    if (insertImagesError) {
+      return jsonResponse({ ok: false, error: 'Cloned product images could not be saved.' }, 500)
+    }
+  }
+
+  await upsertWarehouseInventory(
+    supabaseAdmin,
+    cloneRow.id,
+    Number(clonePayload.stock_quantity ?? 0),
+    'ONLINE',
+  )
+
+  return jsonResponse({ ok: true, row: { ...cloneRow, images: clonedImages } })
+}
+
+async function importProductsFromRows(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  context: AdminContext,
+  body: JsonRecord,
+) {
+  if (!CATALOG_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can import products.' }, 403)
+  }
+
+  const rows = Array.isArray(body.rows) ? body.rows as JsonRecord[] : []
+  if (!rows.length) {
+    return jsonResponse({ ok: false, error: 'No product rows were provided.' }, 422)
+  }
+
+  const fallbackCategoryId = normalizeNumber(body.category_id)
+  const results: Array<{ sku: string; name: string; action: 'created' | 'updated' }> = []
+  let createdCount = 0
+  let updatedCount = 0
+
+  for (const row of rows) {
+    const name = normalizeNullableString(row.name)
+    if (!name) continue
+
+    const brand = normalizeNullableString(row.brand)
+    const model = normalizeNullableString(row.model)
+    const desiredSku =
+      normalizeNullableString(row.sku) ??
+      `TM8-${slugifyProductValue(model ?? name, 'product').toUpperCase()}`
+    const shortDescription =
+      row.short_description === ''
+        ? null
+        : normalizeNullableString(row.short_description) ??
+          `${name} available for online order and warehouse dispatch.`
+    const stockQuantity = normalizeNumber(row.stock_quantity) ?? 0
+    const supplierId = await resolveSupplierIdByBrand(supabaseAdmin, brand)
+
+    const { data: existing, error: existingError } = await supabaseAdmin
+      .from('products')
+      .select('id, sku, slug')
+      .eq('sku', desiredSku)
+      .maybeSingle()
+
+    if (existingError) {
+      return jsonResponse({ ok: false, error: 'Existing products could not be checked during import.' }, 500)
+    }
+
+    if (existing) {
+      const patch = {
+        name,
+        brand,
+        model,
+        upc: normalizeNullableString(row.upc),
+        category_id: normalizeNumber(row.category_id) ?? fallbackCategoryId,
+        supplier_id: supplierId,
+        short_description: shortDescription,
+        description: normalizeNullableString(row.description) ?? shortDescription,
+        condition_label: normalizeNullableString(row.condition_label) ?? 'New',
+        compatibility: row.compatibility === '' ? null : normalizeNullableString(row.compatibility),
+        cost_price: normalizeNumber(row.cost_price) ?? 0,
+        retail_price: normalizeNumber(row.retail_price) ?? 0,
+        compare_at_price: normalizeNumber(row.compare_at_price),
+        image_url: normalizeNullableString(row.image_url),
+        supplier_image_url: normalizeNullableString(row.supplier_image_url),
+        supplier_product_url: normalizeNullableString(row.supplier_product_url),
+        stock_quantity: stockQuantity,
+        min_order_quantity: normalizeNumber(row.min_order_quantity) ?? 1,
+        is_featured: typeof row.is_featured === 'boolean' ? row.is_featured : false,
+        is_visible: typeof row.is_visible === 'boolean' ? row.is_visible : true,
+        seo_title: normalizeNullableString(row.seo_title) ?? buildProductSeoTitle(name),
+        seo_description:
+          normalizeNullableString(row.seo_description) ?? buildProductSeoDescription(shortDescription, name),
+        detail_html: row.detail_html === '' ? null : String(row.detail_html ?? ''),
+      }
+
+      const { error: updateError } = await supabaseAdmin
+        .from('products')
+        .update(patch)
+        .eq('id', existing.id)
+
+      if (updateError) {
+        return jsonResponse({ ok: false, error: `Product import failed while updating ${desiredSku}.` }, 500)
+      }
+
+      await upsertWarehouseInventory(
+        supabaseAdmin,
+        existing.id,
+        stockQuantity,
+        normalizeNullableString(row.shelf_location) ?? 'ONLINE',
+      )
+
+      updatedCount += 1
+      results.push({ sku: desiredSku, name, action: 'updated' })
+      continue
+    }
+
+    const slug = await ensureUniqueProductSlug(
+      supabaseAdmin,
+      normalizeNullableString(row.slug) ?? name,
+    )
+    const uniqueSku = await ensureUniqueProductSku(supabaseAdmin, desiredSku)
+
+    const insertPayload = {
+      sku: uniqueSku,
+      slug,
+      name,
+      brand,
+      model,
+      upc: normalizeNullableString(row.upc),
+      category_id: normalizeNumber(row.category_id) ?? fallbackCategoryId,
+      supplier_id: supplierId,
+      short_description: shortDescription,
+      description: normalizeNullableString(row.description) ?? shortDescription,
+      condition_label: normalizeNullableString(row.condition_label) ?? 'New',
+      compatibility: row.compatibility === '' ? null : normalizeNullableString(row.compatibility),
+      cost_price: normalizeNumber(row.cost_price) ?? 0,
+      retail_price: normalizeNumber(row.retail_price) ?? 0,
+      compare_at_price: normalizeNumber(row.compare_at_price),
+      image_url: normalizeNullableString(row.image_url),
+      supplier_image_url: normalizeNullableString(row.supplier_image_url),
+      supplier_product_url: normalizeNullableString(row.supplier_product_url),
+      stock_quantity: stockQuantity,
+      min_order_quantity: normalizeNumber(row.min_order_quantity) ?? 1,
+      is_featured: typeof row.is_featured === 'boolean' ? row.is_featured : false,
+      is_visible: typeof row.is_visible === 'boolean' ? row.is_visible : true,
+      seo_title: normalizeNullableString(row.seo_title) ?? buildProductSeoTitle(name),
+      seo_description:
+        normalizeNullableString(row.seo_description) ?? buildProductSeoDescription(shortDescription, name),
+      detail_html: row.detail_html === '' ? null : String(row.detail_html ?? ''),
+    }
+
+    const { data: createdRow, error: createError } = await supabaseAdmin
+      .from('products')
+      .insert(insertPayload)
+      .select('id')
+      .single()
+
+    if (createError || !createdRow) {
+      return jsonResponse({ ok: false, error: `Product import failed while creating ${uniqueSku}.` }, 500)
+    }
+
+    await upsertWarehouseInventory(
+      supabaseAdmin,
+      createdRow.id,
+      stockQuantity,
+      normalizeNullableString(row.shelf_location) ?? 'ONLINE',
+    )
+
+    createdCount += 1
+    results.push({ sku: uniqueSku, name, action: 'created' })
+  }
+
+  return jsonResponse({
+    ok: true,
+    created_count: createdCount,
+    updated_count: updatedCount,
+    total: results.length,
+    rows: results,
+  })
+}
+
 async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
   if (!CATALOG_EDIT_ROLES.has(context.role)) {
     return jsonResponse({ ok: false, error: 'Only super admins can update products.' }, 403)
@@ -1083,6 +1560,18 @@ Deno.serve(async (req) => {
     if (action === 'products_list') {
       const result = await listProducts(supabaseAdmin, context, body.filters as JsonRecord ?? {})
       return jsonResponse({ ok: true, ...result, categories: sharedLists.categories })
+    }
+
+    if (action === 'product_create') {
+      return await createProduct(supabaseAdmin, context, body)
+    }
+
+    if (action === 'product_clone') {
+      return await cloneProduct(supabaseAdmin, context, body)
+    }
+
+    if (action === 'products_import_excel_rows') {
+      return await importProductsFromRows(supabaseAdmin, context, body)
     }
 
     if (action === 'product_update') {

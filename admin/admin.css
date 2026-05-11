@@ -1240,6 +1240,29 @@ body.admin-login-body {
   gap: 18px;
 }
 
+.admin-modal-form {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-import-summary {
+  padding: 14px 16px;
+  border: 1px solid rgba(5, 206, 172, 0.25);
+  border-radius: 16px;
+  background: rgba(5, 206, 172, 0.08);
+  color: var(--admin-ink);
+}
+
+.admin-import-summary strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.admin-import-summary p {
+  margin: 0;
+  color: var(--admin-muted);
+}
+
 .admin-detail-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);

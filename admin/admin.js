@@ -1,10 +1,12 @@
 const SUPABASE_BROWSER_CDN_URL = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 const QUILL_CDN_URL = "https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js";
 const QUILL_CSS_URL = "https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css";
+const XLSX_CDN_URL = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
 const DEFAULT_PRODUCT_IMAGE_URL =
   "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/placeholders/image-coming-soon.png";
 let adminSupabaseClientPromise = null;
 let adminQuillPromise = null;
+let adminXlsxPromise = null;
 const DETAIL_BLOCK_MARKER = "TECHM8_DETAIL_BLOCKS:";
 
 const ADMIN_NAV_ITEMS = [
@@ -218,6 +220,50 @@ function formatAddress(parts = []) {
     .map((part) => String(part || "").trim())
     .filter(Boolean)
     .join(", ");
+}
+
+function slugifyAdminProductValue(value, fallback = "product") {
+  const text = String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return text || fallback;
+}
+
+function parseImportNumber(value) {
+  if (value === null || value === undefined || value === "") return null;
+  const normalized = String(value)
+    .replace(/[^\d.-]/g, "")
+    .trim();
+  if (!normalized) return null;
+  const numberValue = Number(normalized);
+  return Number.isFinite(numberValue) ? numberValue : null;
+}
+
+function extractImportModelToken(value) {
+  const text = String(value || "");
+  const match = text.match(/\b((?:RPP|FCP|WP|WDC)(?:-[A-Z0-9]+)+)\b/i);
+  return match ? match[1].toUpperCase() : "";
+}
+
+function inferImportBrand(name, manufacturer) {
+  const explicit = String(manufacturer || "").trim();
+  if (explicit) return explicit.toUpperCase();
+  const text = String(name || "").toUpperCase();
+  if (/(^|\W)REMAX(\W|$)|RPP-|FCP-/.test(text)) return "REMAX";
+  if (/(^|\W)WEKOME(\W|$)|WP-|WDC-/.test(text)) return "WEKOME";
+  return "UNASSIGNED";
+}
+
+function renderAdminImportSummary(summary) {
+  return `
+    <div class="admin-import-summary">
+      <strong>${escapeHtml(summary.title || "Import complete")}</strong>
+      <p>${escapeHtml(summary.message || "")}</p>
+    </div>
+  `;
 }
 
 function getStoreMapUrl(store) {
@@ -491,6 +537,30 @@ async function ensureQuillLibrary() {
   return adminQuillPromise;
 }
 
+async function ensureXlsxLibrary() {
+  if (window.XLSX?.read) return window.XLSX;
+  if (adminXlsxPromise) return adminXlsxPromise;
+
+  adminXlsxPromise = new Promise((resolve, reject) => {
+    const existingScript = document.querySelector("script[data-xlsx-js]");
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(window.XLSX), { once: true });
+      existingScript.addEventListener("error", reject, { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = XLSX_CDN_URL;
+    script.defer = true;
+    script.setAttribute("data-xlsx-js", "true");
+    script.addEventListener("load", () => resolve(window.XLSX), { once: true });
+    script.addEventListener("error", reject, { once: true });
+    document.head.appendChild(script);
+  });
+
+  return adminXlsxPromise;
+}
+
 async function getSupabaseBrowserClient() {
   if (adminSupabaseClientPromise) return adminSupabaseClientPromise;
 
@@ -694,6 +764,212 @@ async function uploadProductDetailImage(file, row, session) {
   }
 
   return result.public_url;
+}
+
+async function readWorkbookRowsFromFile(file) {
+  if (!(file instanceof File)) {
+    throw new Error("Please choose an Excel file first.");
+  }
+  const XLSX = await ensureXlsxLibrary();
+  if (!XLSX?.read) {
+    throw new Error("Excel import library could not be loaded.");
+  }
+
+  const buffer = await file.arrayBuffer();
+  const workbook = XLSX.read(buffer, { type: "array" });
+  const firstSheetName = workbook.SheetNames?.[0];
+  if (!firstSheetName) {
+    throw new Error("The workbook does not contain any sheets.");
+  }
+
+  const sheet = workbook.Sheets[firstSheetName];
+  const rows = XLSX.utils.sheet_to_json(sheet, {
+    defval: "",
+    raw: false,
+  });
+  return Array.isArray(rows) ? rows : [];
+}
+
+function normalizeImportWorkbookRows(rows, fallbackCategoryId = "") {
+  return rows
+    .map((row) => {
+      const raw = row && typeof row === "object" ? row : {};
+      const name = String(raw["Item Name"] || raw["Name"] || "").trim();
+      if (!name) return null;
+
+      const manufacturer = String(raw["Manufacturer"] || raw["Brand"] || "").trim();
+      const brand = inferImportBrand(name, manufacturer);
+      const sku = String(raw["SKU"] || "").trim();
+      const upc = String(raw["UPC"] || "").trim();
+      const description = String(raw["Description"] || "").trim();
+      const model =
+        extractImportModelToken(raw["Model"]) ||
+        extractImportModelToken(name) ||
+        String(raw["Color"] || "").trim();
+      const stockQuantity = parseImportNumber(raw["On Hand Qty"]) ?? 0;
+      const costPrice = parseImportNumber(raw["Cost Price"]) ?? 0;
+      const retailPrice = parseImportNumber(raw["Retail Price"]) ?? 0;
+      const onlinePrice = parseImportNumber(raw["Online Price"]);
+      const promotionalPrice = parseImportNumber(raw["Promotional Price"]);
+
+      let effectiveRetailPrice = retailPrice || 0;
+      let compareAtPrice = null;
+      if (promotionalPrice !== null && promotionalPrice > 0 && (!effectiveRetailPrice || promotionalPrice < effectiveRetailPrice)) {
+        compareAtPrice = effectiveRetailPrice || null;
+        effectiveRetailPrice = promotionalPrice;
+      } else if (onlinePrice !== null && onlinePrice > 0 && (!effectiveRetailPrice || onlinePrice < effectiveRetailPrice)) {
+        compareAtPrice = effectiveRetailPrice || null;
+        effectiveRetailPrice = onlinePrice;
+      }
+
+      const slugBase = slugifyAdminProductValue(name, "product");
+      const generatedSku = sku || `TM8-${(extractImportModelToken(name) || slugBase).toUpperCase()}`;
+
+      return {
+        name,
+        brand,
+        model: model || null,
+        sku: generatedSku,
+        slug: slugBase,
+        upc: upc || null,
+        short_description: description || `${name} available for online order and warehouse dispatch.`,
+        description: description || `${name} available for online order and warehouse dispatch.`,
+        cost_price: costPrice,
+        retail_price: effectiveRetailPrice,
+        compare_at_price: compareAtPrice,
+        stock_quantity: stockQuantity,
+        condition_label: String(raw["Condition"] || "New").trim() || "New",
+        category_id: fallbackCategoryId || "",
+        shelf_location: String(raw["Physical Location"] || "").trim() || "ONLINE",
+        is_visible: true,
+        is_featured: false,
+      };
+    })
+    .filter(Boolean);
+}
+
+function openCreateProductModal({ bootstrap, session, alertTarget, onCreated }) {
+  const modalRoot = openAdminModal({
+    title: "Create product",
+    subtitle: "Add a new product shell directly from the admin panel.",
+    content: `
+      <form class="admin-modal-form" data-admin-create-product-form>
+        <div class="admin-editor__grid">
+          <label><span>Name</span><input type="text" name="name" required></label>
+          <label><span>Brand</span><input type="text" name="brand"></label>
+          <label><span>Model</span><input type="text" name="model"></label>
+          <label><span>SKU</span><input type="text" name="sku" placeholder="Optional"></label>
+          <label><span>Category</span>
+            <select name="category_id">
+              <option value="">Unassigned</option>
+              ${(bootstrap.categories || []).map((category) => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("")}
+            </select>
+          </label>
+          <label><span>Retail price</span><input type="number" step="0.01" name="retail_price" value="0"></label>
+          <label><span>Cost price</span><input type="number" step="0.01" name="cost_price" value="0"></label>
+          <label><span>Total stock</span><input type="number" step="1" name="stock_quantity" value="0"></label>
+          <label class="admin-editor__wide"><span>Short description</span><textarea name="short_description"></textarea></label>
+        </div>
+        <div class="admin-button-row">
+          <button class="button button--primary" type="submit">Create product</button>
+        </div>
+      </form>
+    `,
+  });
+
+  const form = modalRoot.querySelector("[data-admin-create-product-form]");
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    try {
+      const result = await callAdminApi("product_create", {
+        product: {
+          name: formData.get("name"),
+          brand: formData.get("brand"),
+          model: formData.get("model"),
+          sku: formData.get("sku"),
+          category_id: formData.get("category_id"),
+          retail_price: formData.get("retail_price"),
+          cost_price: formData.get("cost_price"),
+          stock_quantity: formData.get("stock_quantity"),
+          short_description: formData.get("short_description"),
+        },
+      }, session);
+      closeAdminModal();
+      setAlert(alertTarget, "Product created.", "success");
+      onCreated?.(result.row);
+    } catch (error) {
+      setAlert(alertTarget, error instanceof Error ? error.message : "Product could not be created.", "error");
+    }
+  });
+}
+
+function openImportProductsModal({ bootstrap, session, alertTarget, onImported }) {
+  const modalRoot = openAdminModal({
+    title: "Import products from Excel",
+    subtitle: "Upload the same workbook format you already use. The sheet will be parsed and written directly into Supabase.",
+    content: `
+      <form class="admin-modal-form" data-admin-import-products-form>
+        <div class="admin-editor__grid">
+          <label><span>Default category</span>
+            <select name="category_id">
+              <option value="">Keep unassigned</option>
+              ${(bootstrap.categories || []).map((category) => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("")}
+            </select>
+          </label>
+          <label class="admin-editor__wide"><span>Excel file</span><input type="file" name="workbook" accept=".xlsx,.xls,.csv" required></label>
+        </div>
+        <p class="admin-note">Expected headers: Item Name, Manufacturer, SKU, UPC, Description, Physical Location, On Hand Qty, Cost Price, Retail Price, Online Price, Promotional Price, Condition.</p>
+        <div data-admin-import-feedback></div>
+        <div class="admin-button-row">
+          <button class="button button--primary" type="submit">Import products</button>
+        </div>
+      </form>
+    `,
+  });
+
+  const form = modalRoot.querySelector("[data-admin-import-products-form]");
+  const feedback = modalRoot.querySelector("[data-admin-import-feedback]");
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const file = formData.get("workbook");
+    const categoryId = String(formData.get("category_id") || "").trim();
+    try {
+      const workbookRows = await readWorkbookRowsFromFile(file);
+      const normalizedRows = normalizeImportWorkbookRows(workbookRows, categoryId);
+      if (!normalizedRows.length) {
+        throw new Error("No valid product rows were found in the workbook.");
+      }
+      if (feedback instanceof HTMLElement) {
+        feedback.innerHTML = renderAdminImportSummary({
+          title: "Workbook parsed",
+          message: `${normalizedRows.length} product row(s) ready to import.`,
+        });
+      }
+      const result = await callAdminApi("products_import_excel_rows", {
+        category_id: categoryId || null,
+        rows: normalizedRows,
+      }, session);
+      closeAdminModal();
+      setAlert(
+        alertTarget,
+        `Import complete. Created ${result.created_count || 0}, updated ${result.updated_count || 0}.`,
+        "success",
+      );
+      onImported?.(result);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Workbook import failed.";
+      if (feedback instanceof HTMLElement) {
+        feedback.innerHTML = renderAdminImportSummary({
+          title: "Import failed",
+          message,
+        });
+      }
+      setAlert(alertTarget, message, "error");
+    }
+  });
 }
 
 async function setupProductDescriptionQuill({ editorElement, hiddenInput, row, session, canEdit, alertTarget }) {
@@ -1063,6 +1339,8 @@ function getViewTemplate(view) {
                 <p>Select a product to edit.</p>
               </div>
               <div class="admin-button-row">
+                <button class="button button--primary" type="button" data-products-new>New product</button>
+                <button class="button button--ghost" type="button" data-products-import>Import Excel</button>
                 <button class="button button--ghost" type="button" data-products-refresh>Refresh</button>
               </div>
             </div>
@@ -2635,10 +2913,12 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
   const paginationTarget = root.querySelector("[data-products-pagination]");
   const categoryFilter = root.querySelector("[data-products-category-filter]");
   const refreshButton = root.querySelector("[data-products-refresh]");
+  const newButton = root.querySelector("[data-products-new]");
+  const importButton = root.querySelector("[data-products-import]");
 
   fillCategoryOptions(categoryFilter, bootstrap.categories || []);
 
-  const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false };
+  const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false, saveFlash: null };
 
   const renderEditor = () => {
     const row = state.rows.find((item) => Number(item.id) === Number(state.selectedId));
@@ -2662,6 +2942,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
             <p>${escapeHtml(row.sku || "No SKU")} / ${escapeHtml(row.slug || "No slug")}</p>
             <div class="admin-button-row">
               <a class="button button--ghost" href="${escapeHtml(storefrontUrl)}" target="_blank" rel="noreferrer">View product page</a>
+              ${state.canEdit ? `<button class="button button--ghost" type="button" data-product-clone>Clone product</button>` : ""}
               ${state.canEdit ? `<button class="button button--primary" type="submit" form="admin-product-editor-form">Save product</button>` : ""}
             </div>
           </div>
@@ -2751,6 +3032,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
     `;
 
     const formElement = editorTarget.querySelector("[data-product-editor-form]");
+    const cloneButton = editorTarget.querySelector("[data-product-clone]");
     const descriptionInput = editorTarget.querySelector("[data-description-html]");
     const descriptionEditor = editorTarget.querySelector("[data-description-quill]");
     const galleryList = editorTarget.querySelector("[data-product-gallery-list]");
@@ -2774,6 +3056,18 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
         return null;
       });
     }
+
+    cloneButton?.addEventListener("click", async () => {
+      try {
+        const result = await callAdminApi("product_clone", { id: row.id }, session);
+        state.selectedId = Number(result.row?.id || 0) || state.selectedId;
+        state.saveFlash = { productId: state.selectedId, message: "Product cloned.", tone: "success" };
+        setAlert(alertTarget, "Product cloned successfully.", "success");
+        await load();
+      } catch (error) {
+        setAlert(alertTarget, error instanceof Error ? error.message : "Product clone failed.", "error");
+      }
+    });
 
     const syncGalleryPreview = () => {
       refreshProductGalleryRows(galleryList);
@@ -2993,6 +3287,31 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
 
   refreshButton?.addEventListener("click", () => {
     load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be refreshed.", "error"));
+  });
+
+  newButton?.addEventListener("click", () => {
+    openCreateProductModal({
+      bootstrap,
+      session,
+      alertTarget,
+      onCreated: async (row) => {
+        state.selectedId = Number(row?.id || 0) || state.selectedId;
+        state.saveFlash = { productId: state.selectedId, message: "Product created.", tone: "success" };
+        await load();
+      },
+    });
+  });
+
+  importButton?.addEventListener("click", () => {
+    openImportProductsModal({
+      bootstrap,
+      session,
+      alertTarget,
+      onImported: async () => {
+        state.page = 1;
+        await load();
+      },
+    });
   });
 
   load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be loaded.", "error"));
