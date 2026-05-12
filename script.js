@@ -1959,7 +1959,6 @@ function createRailProductCard(product) {
         ${savingsMarkup}
         <div class="storefront-rail-card__actions">
           <button class="storefront-card__action storefront-card__action--primary" type="button" data-add-cart-slug="${escapeHtml(product.slug)}">Add to cart</button>
-          <a class="storefront-card__action storefront-card__action--secondary" href="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}">Details</a>
         </div>
       </div>
     </article>
@@ -3920,7 +3919,6 @@ function createCatalogCard(product) {
         <a class="storefront-card__title-link" href="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}">
           <h3>${escapeHtml(productName)}</h3>
         </a>
-        <p class="storefront-card__summary">${escapeHtml(product.short_description || "Retail catalog product.")}</p>
         ${renderVariantSummary(product, "storefront-card")}
         <div class="storefront-card__price-row storefront-card__price-row--stacked">
           <div class="storefront-card__price-meta">${comparePrice}</div>
@@ -3934,7 +3932,6 @@ function createCatalogCard(product) {
           <span class="storefront-card__stock ${stockClass}">${escapeHtml(stockLabel)}</span>
           <div class="storefront-card__actions">
             <button class="storefront-card__action storefront-card__action--primary" type="button" data-add-cart-slug="${escapeHtml(product.slug)}">Add to cart</button>
-            <a class="storefront-card__action storefront-card__action--secondary" href="${detailUrl}" data-product-cache="${escapeHtml(navigationCache)}">Details</a>
           </div>
         </div>
       </div>

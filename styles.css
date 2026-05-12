@@ -2679,6 +2679,7 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
+  flex: 1 1 100%;
 }
 
 .storefront-card__actions a {
@@ -5825,6 +5826,7 @@ h2 {
 
 .storefront-card__actions {
   gap: 0.4rem;
+  flex: 1 1 100%;
 }
 
 .storefront-card__action {
@@ -5845,6 +5847,8 @@ h2 {
 .storefront-card__action--primary {
   background: rgba(22, 200, 186, 0.14);
   color: var(--brand-dark);
+  flex: 1 1 100%;
+  width: 100%;
 }
 
 .storefront-card__action--secondary {
