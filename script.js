@@ -2676,11 +2676,19 @@ function initStorefront() {
   if (!(root instanceof HTMLElement)) return;
 
   const categoryTarget = root.querySelector("[data-store-categories]");
+  const drawerCategoryTarget = document.querySelector(
+    "[data-store-categories-drawer]",
+  );
   const productTarget = root.querySelector("[data-store-products]");
   const searchField = root.querySelector("[data-store-search]");
   const countTarget = root.querySelector("[data-store-count]");
-  const sourceTarget = root.querySelector("[data-store-source]");
-  const sourceNoteTarget = root.querySelector("[data-store-source-note]");
+  const sortField = root.querySelector("[data-store-sort]");
+  const openCategoriesButton = root.querySelector("[data-store-open-categories]");
+  const closeCategoriesButton = document.querySelector(
+    "[data-store-close-categories]",
+  );
+  const drawerBackdrop = document.querySelector("[data-store-drawer-backdrop]");
+  const drawer = document.querySelector("[data-store-drawer]");
 
   if (
     !(categoryTarget instanceof HTMLElement) ||
@@ -2810,6 +2818,8 @@ function initStorefront() {
     categories: [],
     activeCategory: "all",
     query: "",
+    sortBy: "popular",
+    drawerOpen: false,
   };
 
   bindCartButtons(productTarget, () => state.products);
@@ -2849,13 +2859,15 @@ function initStorefront() {
     };
   };
 
-  const setSource = (title, note) => {
-    if (sourceTarget instanceof HTMLElement) {
-      sourceTarget.textContent = title;
+  const applyDrawerState = () => {
+    if (!(drawer instanceof HTMLElement) || !(drawerBackdrop instanceof HTMLElement)) {
+      return;
     }
-    if (sourceNoteTarget instanceof HTMLElement) {
-      sourceNoteTarget.textContent = note;
-    }
+    drawer.classList.toggle("is-open", state.drawerOpen);
+    drawer.setAttribute("aria-hidden", state.drawerOpen ? "false" : "true");
+    drawerBackdrop.hidden = !state.drawerOpen;
+    drawerBackdrop.classList.toggle("is-open", state.drawerOpen);
+    document.body.classList.toggle("storefront-drawer-open", state.drawerOpen);
   };
 
   const renderCategories = () => {
@@ -2863,7 +2875,7 @@ function initStorefront() {
       { slug: "all", name: "All products" },
       ...state.categories,
     ];
-    categoryTarget.innerHTML = categories
+    const categoryMarkup = categories
       .map(
         (category) => `
           <button class="storefront-category-button ${state.activeCategory === category.slug ? "is-active" : ""}" type="button" data-store-category="${escapeHtml(category.slug)}">
@@ -2873,14 +2885,25 @@ function initStorefront() {
       )
       .join("");
 
-    categoryTarget
-      .querySelectorAll("[data-store-category]")
-      .forEach((button) => {
-        button.addEventListener("click", () => {
-          state.activeCategory =
-            button.getAttribute("data-store-category") || "all";
-          renderCategories();
-          renderProducts();
+    categoryTarget.innerHTML = categoryMarkup;
+    if (drawerCategoryTarget instanceof HTMLElement) {
+      drawerCategoryTarget.innerHTML = categoryMarkup;
+    }
+
+    [categoryTarget, drawerCategoryTarget]
+      .filter((target) => target instanceof HTMLElement)
+      .forEach((target) => {
+        target.querySelectorAll("[data-store-category]").forEach((button) => {
+          button.addEventListener("click", () => {
+            state.activeCategory =
+              button.getAttribute("data-store-category") || "all";
+            if (window.innerWidth <= 960) {
+              state.drawerOpen = false;
+              applyDrawerState();
+            }
+            renderCategories();
+            renderProducts();
+          });
         });
       });
   };
@@ -2904,12 +2927,49 @@ function initStorefront() {
       return inCategory && (!query || haystack.includes(query));
     });
     const visibleProducts = getCatalogDisplayProducts(matchingProducts);
+    const sortedProducts = [...visibleProducts].sort((left, right) => {
+      switch (state.sortBy) {
+        case "newest":
+          return compareProductsByLatest(left, right);
+        case "discount": {
+          const leftDiscount =
+            Math.max(
+              0,
+              (Number(left.compare_at_price) || 0) -
+                (Number(left.retail_price) || 0),
+            ) || 0;
+          const rightDiscount =
+            Math.max(
+              0,
+              (Number(right.compare_at_price) || 0) -
+                (Number(right.retail_price) || 0),
+            ) || 0;
+          return rightDiscount - leftDiscount || compareProductsByLatest(left, right);
+        }
+        case "price-asc":
+          return (Number(left.retail_price) || 0) - (Number(right.retail_price) || 0);
+        case "price-desc":
+          return (Number(right.retail_price) || 0) - (Number(left.retail_price) || 0);
+        case "name-asc":
+          return String(getProductDisplayName(left) || left.name || "").localeCompare(
+            String(getProductDisplayName(right) || right.name || ""),
+          );
+        case "name-desc":
+          return String(getProductDisplayName(right) || right.name || "").localeCompare(
+            String(getProductDisplayName(left) || left.name || ""),
+          );
+        case "popular":
+        default:
+          return Number(Boolean(right.is_featured)) - Number(Boolean(left.is_featured)) ||
+            compareProductsByLatest(left, right);
+      }
+    });
 
     if (countTarget instanceof HTMLElement) {
-      countTarget.textContent = `${visibleProducts.length} product${visibleProducts.length === 1 ? "" : "s"} visible`;
+      countTarget.textContent = `${sortedProducts.length} product${sortedProducts.length === 1 ? "" : "s"} visible`;
     }
 
-    if (!visibleProducts.length) {
+    if (!sortedProducts.length) {
       productTarget.innerHTML = `
         <article class="storefront-card storefront-card--empty">
           <div class="storefront-card__body">
@@ -2922,7 +2982,7 @@ function initStorefront() {
       return;
     }
 
-    productTarget.innerHTML = visibleProducts
+    productTarget.innerHTML = sortedProducts
       .map((product) => createCatalogCard(product))
       .join("");
   };
@@ -2981,17 +3041,9 @@ function initStorefront() {
             (product) => product.category_id === category.id,
           ),
         );
-        setSource(
-          "Live Supabase products",
-          "This page is rendering visible product rows directly from the Supabase catalog.",
-        );
       } else {
         state.products = fallbackProducts;
         state.categories = deriveCategories(fallbackProducts);
-        setSource(
-          "Starter sample data",
-          "No live product rows were found yet, so the first 5 controller products are shown as a fallback starter catalog.",
-        );
       }
 
       renderCategories();
@@ -2999,10 +3051,6 @@ function initStorefront() {
     } catch (error) {
       state.products = fallbackProducts;
       state.categories = deriveCategories(fallbackProducts);
-      setSource(
-        "Starter sample data",
-        "Supabase could not be reached from this page, so the first 5 controller products are shown locally.",
-      );
       renderCategories();
       renderProducts();
     }
@@ -3014,6 +3062,58 @@ function initStorefront() {
       renderProducts();
     });
   }
+
+  if (sortField instanceof HTMLSelectElement) {
+    sortField.addEventListener("change", () => {
+      state.sortBy = sortField.value || "popular";
+      renderProducts();
+    });
+  }
+
+  openCategoriesButton?.addEventListener("click", () => {
+    state.drawerOpen = true;
+    applyDrawerState();
+  });
+
+  closeCategoriesButton?.addEventListener("click", () => {
+    state.drawerOpen = false;
+    applyDrawerState();
+  });
+
+  drawerBackdrop?.addEventListener("click", () => {
+    state.drawerOpen = false;
+    applyDrawerState();
+  });
+
+  if (document.body instanceof HTMLElement) {
+    document.body.classList.add("storefront-shop-page");
+  }
+
+  let lastScrollY = window.scrollY;
+  let lastDirection = "up";
+  const handleShopMobileHeader = () => {
+    if (!document.body.classList.contains("storefront-shop-page")) return;
+    if (window.innerWidth > 960) {
+      document.body.classList.remove("shop-mobile-header-hidden");
+      lastScrollY = window.scrollY;
+      return;
+    }
+    const currentY = window.scrollY;
+    const movingDown = currentY > lastScrollY + 10;
+    const movingUp = currentY < lastScrollY - 10;
+    if (movingDown && currentY > 120 && lastDirection !== "down") {
+      document.body.classList.add("shop-mobile-header-hidden");
+      lastDirection = "down";
+    } else if (movingUp && lastDirection !== "up") {
+      document.body.classList.remove("shop-mobile-header-hidden");
+      lastDirection = "up";
+    }
+    lastScrollY = currentY;
+  };
+
+  window.addEventListener("scroll", handleShopMobileHeader, { passive: true });
+  window.addEventListener("resize", handleShopMobileHeader);
+  handleShopMobileHeader();
 
   loadStorefrontData();
 }

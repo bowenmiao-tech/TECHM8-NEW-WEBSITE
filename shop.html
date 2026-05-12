@@ -104,7 +104,7 @@
     </div>
   </header>
 
-  <main class="storefront-page" data-storefront>
+  <main class="storefront-page storefront-page--shop" data-storefront>
     <section class="section" id="catalog">
       <div class="container storefront-layout">
         <aside class="storefront-sidebar">
@@ -121,15 +121,35 @@
         </aside>
 
         <div class="storefront-content">
+          <div class="storefront-mobile-searchbar" data-store-mobile-searchbar>
+            <label class="storefront-search storefront-search--mobile">
+              <span class="storefront-search__label">Search</span>
+              <input type="search" placeholder="Search by name, brand or model" data-store-search>
+            </label>
+          </div>
+
           <div class="storefront-toolbar">
             <div>
               <p class="eyebrow">Online catalog</p>
               <h2>Live products synced from your database</h2>
             </div>
-            <label class="storefront-search">
-              <span class="storefront-search__label">Search</span>
-              <input type="search" placeholder="Search by name, brand or model" data-store-search>
-            </label>
+            <div class="storefront-tools">
+              <button class="storefront-tools__button storefront-tools__button--filter" type="button" data-store-open-categories>
+                Categories
+              </button>
+              <label class="storefront-tools__sort">
+                <span>Sort by</span>
+                <select data-store-sort>
+                  <option value="popular">Most Popular</option>
+                  <option value="newest">Newest</option>
+                  <option value="discount">Discount: High to Low</option>
+                  <option value="price-asc">Price: Low to High</option>
+                  <option value="price-desc">Price: High to Low</option>
+                  <option value="name-asc">Product Name: A-Z</option>
+                  <option value="name-desc">Product Name: Z-A</option>
+                </select>
+              </label>
+            </div>
           </div>
 
           <div class="storefront-meta">
@@ -150,6 +170,17 @@
       </div>
     </section>
   </main>
+
+  <div class="storefront-drawer-backdrop" data-store-drawer-backdrop hidden></div>
+  <aside class="storefront-drawer" data-store-drawer aria-hidden="true">
+    <div class="storefront-drawer__header">
+      <strong>Categories</strong>
+      <button class="storefront-drawer__close" type="button" aria-label="Close categories" data-store-close-categories>&times;</button>
+    </div>
+    <div class="storefront-drawer__body">
+      <div class="storefront-category-list storefront-category-list--drawer" data-store-categories-drawer></div>
+    </div>
+  </aside>
 
   <footer class="site-footer">
     <div class="container footer footer--rich">

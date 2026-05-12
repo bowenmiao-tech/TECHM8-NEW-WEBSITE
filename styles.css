@@ -2398,6 +2398,121 @@ h2 {
   font: inherit;
 }
 
+.storefront-mobile-searchbar {
+  display: none;
+}
+
+.storefront-tools {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.storefront-tools__button,
+.storefront-tools__sort select {
+  min-height: 3rem;
+  border-radius: 0.95rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.9);
+  font: inherit;
+  color: var(--text);
+}
+
+.storefront-tools__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 8.6rem;
+  padding: 0 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.storefront-tools__sort {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 15rem;
+}
+
+.storefront-tools__sort span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.storefront-tools__sort select {
+  width: 100%;
+  padding: 0 2.75rem 0 0.95rem;
+  cursor: pointer;
+}
+
+.storefront-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 69;
+  background: rgba(4, 20, 24, 0.48);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.storefront-drawer-backdrop.is-open {
+  opacity: 1;
+}
+
+.storefront-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 70;
+  width: min(84vw, 22rem);
+  background: #fff;
+  box-shadow: 0 18px 40px rgba(3, 24, 28, 0.2);
+  transform: translateX(-100%);
+  transition: transform 180ms ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.storefront-drawer.is-open {
+  transform: translateX(0);
+}
+
+.storefront-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.storefront-drawer__header strong {
+  font-size: 1.1rem;
+}
+
+.storefront-drawer__close {
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.storefront-drawer__body {
+  flex: 1;
+  overflow: auto;
+  padding: 1rem;
+}
+
 .storefront-meta {
   display: flex;
   flex-wrap: wrap;
@@ -5332,12 +5447,12 @@ h2 {
   }
 
   .storefront-sidebar {
-    position: static;
+    display: none;
   }
 
   .storefront-toolbar {
-    flex-direction: column;
-    align-items: stretch;
+    gap: 0.8rem;
+    align-items: center;
   }
 
   .storefront-meta {
@@ -5381,6 +5496,83 @@ h2 {
   .storefront-detail__meta {
     grid-template-columns: 1fr;
   }
+
+  .storefront-mobile-searchbar {
+    position: sticky;
+    top: var(--shop-mobile-search-top, 5.6rem);
+    z-index: 35;
+    display: block;
+    margin-bottom: 0.4rem;
+    padding: 0.4rem 0 0.2rem;
+    background: linear-gradient(
+      180deg,
+      rgba(233, 251, 249, 0.96),
+      rgba(233, 251, 249, 0.9)
+    );
+    transition: top 180ms ease;
+  }
+
+  .storefront-search--mobile .storefront-search__label {
+    display: none;
+  }
+
+  .storefront-toolbar > div:first-child {
+    display: none;
+  }
+
+  .storefront-tools {
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .storefront-tools__button {
+    min-width: 8rem;
+  }
+
+  .storefront-tools__sort {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .storefront-tools__sort span {
+    display: none;
+  }
+
+  .storefront-meta {
+    margin-top: -0.2rem;
+  }
+
+  .storefront-meta a {
+    display: none;
+  }
+
+  .storefront-content {
+    gap: 0.75rem;
+  }
+
+  body.storefront-shop-page {
+    --shop-mobile-search-top: 5.6rem;
+  }
+
+  body.storefront-shop-page .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 42;
+    transition: transform 180ms ease;
+  }
+
+  body.storefront-shop-page.shop-mobile-header-hidden {
+    --shop-mobile-search-top: 0.45rem;
+  }
+
+  body.storefront-shop-page.shop-mobile-header-hidden .site-header {
+    transform: translateY(-100%);
+  }
+
+  body.storefront-drawer-open {
+    overflow: hidden;
+  }
 }
 
 @media (max-width: 1200px) {
@@ -5401,6 +5593,32 @@ h2 {
   .storefront-grid,
   .storefront-grid--dense {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .storefront-toolbar {
+    gap: 0.65rem;
+  }
+
+  .storefront-tools__button,
+  .storefront-tools__sort select {
+    min-height: 2.85rem;
+  }
+
+  .storefront-tools__button {
+    min-width: 7.4rem;
+    padding: 0 0.85rem;
+  }
+
+  .storefront-card__body {
+    padding: 0.72rem;
+  }
+
+  .storefront-card h3 {
+    font-size: 0.93rem;
+  }
+
+  .storefront-card__summary {
+    display: none;
   }
 }
 
