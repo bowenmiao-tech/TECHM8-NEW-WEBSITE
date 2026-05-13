@@ -3016,6 +3016,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
             <div class="admin-button-row">
               <a class="button button--ghost" href="${escapeHtml(storefrontUrl)}" target="_blank" rel="noreferrer">View product page</a>
               ${state.canEdit ? `<button class="button button--ghost" type="button" data-product-clone>Clone product</button>` : ""}
+              ${state.canEdit ? `<button class="button button--danger" type="button" data-product-delete>Delete product</button>` : ""}
               ${state.canEdit ? `<button class="button button--primary" type="submit" form="admin-product-editor-form">Save product</button>` : ""}
             </div>
           </div>
@@ -3108,6 +3109,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
 
     const formElement = editorTarget.querySelector("[data-product-editor-form]");
     const cloneButton = editorTarget.querySelector("[data-product-clone]");
+    const deleteButton = editorTarget.querySelector("[data-product-delete]");
     const categoryAddButton = editorTarget.querySelector("[data-product-category-add]");
     const categorySelect = editorTarget.querySelector("[data-product-category-select]");
     const descriptionInput = editorTarget.querySelector("[data-description-html]");
@@ -3143,6 +3145,21 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
         await load();
       } catch (error) {
         setAlert(alertTarget, error instanceof Error ? error.message : "Product clone failed.", "error");
+      }
+    });
+
+    deleteButton?.addEventListener("click", async () => {
+      const confirmed = window.confirm(`Delete ${row.name || "this product"}? This cannot be undone.`);
+      if (!confirmed) return;
+      try {
+        await callAdminApi("product_delete", { id: row.id }, session);
+        state.selectedId = null;
+        state.draft = null;
+        state.saveFlash = null;
+        setAlert(alertTarget, "Product deleted.", "success");
+        await load();
+      } catch (error) {
+        setAlert(alertTarget, error instanceof Error ? error.message : "Product delete failed.", "error");
       }
     });
 

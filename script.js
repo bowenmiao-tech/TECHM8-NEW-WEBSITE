@@ -2689,10 +2689,7 @@ function initStorefront() {
   const drawerBackdrop = document.querySelector("[data-store-drawer-backdrop]");
   const drawer = document.querySelector("[data-store-drawer]");
 
-  if (
-    !(categoryTarget instanceof HTMLElement) ||
-    !(productTarget instanceof HTMLElement)
-  ) {
+  if (!(productTarget instanceof HTMLElement)) {
     return;
   }
 
@@ -2884,7 +2881,9 @@ function initStorefront() {
       )
       .join("");
 
-    categoryTarget.innerHTML = categoryMarkup;
+    if (categoryTarget instanceof HTMLElement) {
+      categoryTarget.innerHTML = categoryMarkup;
+    }
     if (drawerCategoryTarget instanceof HTMLElement) {
       drawerCategoryTarget.innerHTML = categoryMarkup;
     }

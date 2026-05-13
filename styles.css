@@ -2330,6 +2330,10 @@ h2 {
   gap: 0.55rem;
 }
 
+.storefront-category-list--hidden {
+  display: none;
+}
+
 .storefront-category-button {
   width: 100%;
   display: inline-flex;
@@ -2540,6 +2544,27 @@ h2 {
 .storefront-grid--dense {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
+}
+
+body.storefront-shop-page .storefront-layout {
+  grid-template-columns: 1fr;
+}
+
+body.storefront-shop-page .storefront-content {
+  gap: 0.7rem;
+}
+
+body.storefront-shop-page .storefront-toolbar {
+  align-items: center;
+  justify-content: flex-end;
+}
+
+body.storefront-shop-page .storefront-meta {
+  margin-top: -0.15rem;
+}
+
+body.storefront-shop-page .storefront-grid--dense {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .storefront-card {
@@ -5580,6 +5605,10 @@ h2 {
   .storefront-grid,
   .storefront-grid--dense {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  body.storefront-shop-page .storefront-grid--dense {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 

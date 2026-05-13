@@ -1119,6 +1119,51 @@ async function cloneProduct(supabaseAdmin: ReturnType<typeof createClient>, cont
   return jsonResponse({ ok: true, row: { ...cloneRow, images: clonedImages } })
 }
 
+async function deleteProduct(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!CATALOG_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can delete products.' }, 403)
+  }
+
+  const productId = Number(body.id)
+  if (!Number.isFinite(productId)) {
+    return jsonResponse({ ok: false, error: 'Product id is missing.' }, 422)
+  }
+
+  const { data: product, error: productError } = await supabaseAdmin
+    .from('products')
+    .select('id, name')
+    .eq('id', productId)
+    .maybeSingle()
+
+  if (productError || !product) {
+    return jsonResponse({ ok: false, error: 'Product was not found.' }, 404)
+  }
+
+  const { error: detachOrderItemsError } = await supabaseAdmin
+    .from('order_items')
+    .update({ product_id: null })
+    .eq('product_id', productId)
+
+  if (detachOrderItemsError) {
+    return jsonResponse({ ok: false, error: 'Order history could not be detached from this product.' }, 500)
+  }
+
+  const { error: deleteError } = await supabaseAdmin
+    .from('products')
+    .delete()
+    .eq('id', productId)
+
+  if (deleteError) {
+    return jsonResponse({ ok: false, error: 'Product could not be deleted.' }, 500)
+  }
+
+  return jsonResponse({
+    ok: true,
+    id: productId,
+    name: product.name ?? null,
+  })
+}
+
 async function importProductsFromRows(
   supabaseAdmin: ReturnType<typeof createClient>,
   context: AdminContext,
@@ -1650,6 +1695,10 @@ Deno.serve(async (req) => {
 
     if (action === 'product_clone') {
       return await cloneProduct(supabaseAdmin, context, body)
+    }
+
+    if (action === 'product_delete') {
+      return await deleteProduct(supabaseAdmin, context, body)
     }
 
     if (action === 'products_import_excel_rows') {

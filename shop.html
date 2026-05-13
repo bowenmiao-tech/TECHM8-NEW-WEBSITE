@@ -107,19 +107,6 @@
   <main class="storefront-page storefront-page--shop" data-storefront>
     <section class="section" id="catalog">
       <div class="container storefront-layout">
-        <aside class="storefront-sidebar">
-          <div class="storefront-sidebar__panel">
-            <p class="eyebrow">Catalog</p>
-            <h2>Filter products</h2>
-            <p>Use category filters and search to move through the catalog quickly.</p>
-          </div>
-
-          <div class="storefront-sidebar__panel">
-            <h3>Categories</h3>
-            <div class="storefront-category-list" data-store-categories></div>
-          </div>
-        </aside>
-
         <div class="storefront-content">
           <div class="storefront-mobile-searchbar" data-store-mobile-searchbar>
             <label class="storefront-search storefront-search--mobile">
@@ -128,11 +115,9 @@
             </label>
           </div>
 
+          <div class="storefront-category-list storefront-category-list--hidden" data-store-categories hidden></div>
+
           <div class="storefront-toolbar">
-            <div>
-              <p class="eyebrow">Online catalog</p>
-              <h2>Live products synced from your database</h2>
-            </div>
             <div class="storefront-tools">
               <button class="storefront-tools__button storefront-tools__button--filter" type="button" data-store-open-categories>
                 Categories
@@ -154,7 +139,6 @@
 
           <div class="storefront-meta">
             <p data-store-count>Loading products...</p>
-            <a href="products.html">View general products page</a>
           </div>
 
           <div class="storefront-grid storefront-grid--dense" data-store-products>
