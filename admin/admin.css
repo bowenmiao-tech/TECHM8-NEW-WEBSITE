@@ -951,6 +951,16 @@ body.admin-login-body {
   gap: 12px;
 }
 
+.admin-editor__field-group {
+  display: grid;
+  gap: 10px;
+  align-content: end;
+}
+
+.admin-editor__field-group .button {
+  justify-self: start;
+}
+
 .admin-editor__grid--four {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }

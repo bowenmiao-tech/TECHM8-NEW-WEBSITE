@@ -972,6 +972,45 @@ function openImportProductsModal({ bootstrap, session, alertTarget, onImported }
   });
 }
 
+function openCreateCategoryModal({ bootstrap, session, alertTarget, initialName = "", initialSlug = "", onCreated }) {
+  const modalRoot = openAdminModal({
+    title: "Add category",
+    subtitle: "Create a category once, then reuse it across products and Excel imports.",
+    content: `
+      <form class="admin-modal-form" data-admin-category-form>
+        <div class="admin-editor__grid">
+          <label><span>Category name</span><input type="text" name="name" value="${escapeHtml(initialName)}" placeholder="Power Banks" required></label>
+          <label><span>Slug (optional)</span><input type="text" name="slug" value="${escapeHtml(initialSlug)}" placeholder="power-banks"></label>
+        </div>
+        <p class="admin-note">If you leave the slug blank, one will be generated automatically.</p>
+        <div class="admin-button-row">
+          <button class="button button--primary" type="submit">Create category</button>
+        </div>
+      </form>
+    `,
+  });
+
+  const form = modalRoot.querySelector("[data-admin-category-form]");
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    try {
+      const result = await callAdminApi("category_create", {
+        name: formData.get("name"),
+        slug: formData.get("slug"),
+      }, session);
+      if (Array.isArray(result.categories)) {
+        bootstrap.categories = [...result.categories];
+      }
+      closeAdminModal();
+      setAlert(alertTarget, "Category created.", "success");
+      onCreated?.(result.category, result.categories || bootstrap.categories || []);
+    } catch (error) {
+      setAlert(alertTarget, error instanceof Error ? error.message : "Category could not be created.", "error");
+    }
+  });
+}
+
 async function setupProductDescriptionQuill({ editorElement, hiddenInput, row, session, canEdit, alertTarget }) {
   if (!(editorElement instanceof HTMLElement) || !(hiddenInput instanceof HTMLInputElement)) return null;
   const Quill = await ensureQuillLibrary();
@@ -1340,6 +1379,7 @@ function getViewTemplate(view) {
               </div>
               <div class="admin-button-row">
                 <button class="button button--primary" type="button" data-products-new>New product</button>
+                <button class="button button--ghost" type="button" data-products-category-new>Add category</button>
                 <button class="button button--ghost" type="button" data-products-import>Import Excel</button>
                 <button class="button button--ghost" type="button" data-products-refresh>Refresh</button>
               </div>
@@ -1437,6 +1477,18 @@ function fillCategoryOptions(select, categories) {
     options.push(`<option value="${escapeHtml(category.id)}">${escapeHtml(category.name)}</option>`);
   });
   select.innerHTML = options.join("");
+}
+
+function renderCategorySelectOptions(categories, selectedId = "") {
+  const selectedValue = String(selectedId ?? "").trim();
+  const options = ['<option value="">Unassigned</option>'];
+  categories.forEach((category) => {
+    const optionValue = String(category.id ?? "").trim();
+    options.push(
+      `<option value="${escapeHtml(optionValue)}" ${optionValue === selectedValue ? "selected" : ""}>${escapeHtml(category.name)}</option>`,
+    );
+  });
+  return options.join("");
 }
 
 function getImageOrPlaceholder(url) {
@@ -2914,11 +2966,32 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
   const categoryFilter = root.querySelector("[data-products-category-filter]");
   const refreshButton = root.querySelector("[data-products-refresh]");
   const newButton = root.querySelector("[data-products-new]");
+  const categoryNewButton = root.querySelector("[data-products-category-new]");
   const importButton = root.querySelector("[data-products-import]");
 
   fillCategoryOptions(categoryFilter, bootstrap.categories || []);
 
   const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false, saveFlash: null };
+
+  const syncCategoryCollections = (categories, selectedCategoryId = "") => {
+    bootstrap.categories = Array.isArray(categories)
+      ? [...categories].sort((left, right) => String(left?.name || "").localeCompare(String(right?.name || "")))
+      : [];
+    const currentFilterValue = categoryFilter instanceof HTMLSelectElement ? categoryFilter.value : "";
+    fillCategoryOptions(categoryFilter, bootstrap.categories || []);
+    if (categoryFilter instanceof HTMLSelectElement) {
+      const desiredFilterValue = String(currentFilterValue || "").trim();
+      if (desiredFilterValue && [...categoryFilter.options].some((option) => option.value === desiredFilterValue)) {
+        categoryFilter.value = desiredFilterValue;
+      }
+    }
+    if (selectedCategoryId && state.selectedId) {
+      const selectedRow = state.rows.find((item) => Number(item.id) === Number(state.selectedId));
+      if (selectedRow) {
+        selectedRow.category_id = selectedCategoryId;
+      }
+    }
+  };
 
   const renderEditor = () => {
     const row = state.rows.find((item) => Number(item.id) === Number(state.selectedId));
@@ -2962,12 +3035,14 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
               <label><span>Name</span><input type="text" name="name" value="${escapeHtml(row.name || "")}" ${state.canEdit ? "" : "disabled"}></label>
               <label><span>Brand</span><input type="text" name="brand" value="${escapeHtml(row.brand || "")}" ${state.canEdit ? "" : "disabled"}></label>
               <label><span>Model</span><input type="text" name="model" value="${escapeHtml(row.model || "")}" ${state.canEdit ? "" : "disabled"}></label>
-              <label><span>Category</span>
-                <select name="category_id" ${state.canEdit ? "" : "disabled"}>
-                  <option value="">Unassigned</option>
-                  ${(bootstrap.categories || []).map((category) => `<option value="${category.id}" ${Number(row.category_id) === Number(category.id) ? "selected" : ""}>${escapeHtml(category.name)}</option>`).join("")}
-                </select>
-              </label>
+              <div class="admin-editor__field-group">
+                <label><span>Category</span>
+                  <select name="category_id" data-product-category-select ${state.canEdit ? "" : "disabled"}>
+                    ${renderCategorySelectOptions(bootstrap.categories || [], row.category_id)}
+                  </select>
+                </label>
+                ${state.canEdit ? `<button class="button button--ghost button--small" type="button" data-product-category-add>Add category</button>` : ""}
+              </div>
               <label class="admin-editor__wide"><span>Short description</span><textarea name="short_description" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.short_description || "")}</textarea></label>
             </div>
           </section>
@@ -3033,6 +3108,8 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
 
     const formElement = editorTarget.querySelector("[data-product-editor-form]");
     const cloneButton = editorTarget.querySelector("[data-product-clone]");
+    const categoryAddButton = editorTarget.querySelector("[data-product-category-add]");
+    const categorySelect = editorTarget.querySelector("[data-product-category-select]");
     const descriptionInput = editorTarget.querySelector("[data-description-html]");
     const descriptionEditor = editorTarget.querySelector("[data-description-quill]");
     const galleryList = editorTarget.querySelector("[data-product-gallery-list]");
@@ -3067,6 +3144,22 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       } catch (error) {
         setAlert(alertTarget, error instanceof Error ? error.message : "Product clone failed.", "error");
       }
+    });
+
+    categoryAddButton?.addEventListener("click", () => {
+      openCreateCategoryModal({
+        bootstrap,
+        session,
+        alertTarget,
+        onCreated: (category, categories) => {
+          syncCategoryCollections(categories, category?.id ?? "");
+          if (categorySelect instanceof HTMLSelectElement) {
+            categorySelect.innerHTML = renderCategorySelectOptions(bootstrap.categories || [], category?.id ?? "");
+            categorySelect.value = String(category?.id ?? "");
+          }
+          renderEditor();
+        },
+      });
     });
 
     const syncGalleryPreview = () => {
@@ -3298,6 +3391,18 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
         state.selectedId = Number(row?.id || 0) || state.selectedId;
         state.saveFlash = { productId: state.selectedId, message: "Product created.", tone: "success" };
         await load();
+      },
+    });
+  });
+
+  categoryNewButton?.addEventListener("click", () => {
+    openCreateCategoryModal({
+      bootstrap,
+      session,
+      alertTarget,
+      onCreated: (category, categories) => {
+        syncCategoryCollections(categories, category?.id ?? "");
+        renderEditor();
       },
     });
   });

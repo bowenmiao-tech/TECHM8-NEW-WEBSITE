@@ -149,6 +149,35 @@ async function ensureUniqueProductSlug(
   return `${baseSlug}-${crypto.randomUUID().slice(0, 8)}`
 }
 
+async function ensureUniqueCategorySlug(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  desiredSlug: string,
+  excludeId?: number,
+) {
+  const baseSlug = slugifyProductValue(desiredSlug, 'category')
+  let candidate = baseSlug
+  let attempt = 1
+
+  while (attempt < 500) {
+    let query = supabaseAdmin
+      .from('categories')
+      .select('id')
+      .eq('slug', candidate)
+      .limit(1)
+
+    if (Number.isFinite(excludeId)) query = query.neq('id', excludeId as number)
+
+    const { data, error } = await query
+    if (error) throw error
+    if (!data?.length) return candidate
+
+    attempt += 1
+    candidate = `${baseSlug}-${attempt}`
+  }
+
+  return `${baseSlug}-${crypto.randomUUID().slice(0, 8)}`
+}
+
 async function ensureUniqueProductSku(
   supabaseAdmin: ReturnType<typeof createClient>,
   desiredSku: string,
@@ -857,6 +886,55 @@ async function listProducts(supabaseAdmin: ReturnType<typeof createClient>, cont
   }
 }
 
+async function createCategory(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!CATALOG_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can create categories.' }, 403)
+  }
+
+  const name = normalizeNullableString(body.name)
+  if (!name) {
+    return jsonResponse({ ok: false, error: 'Category name is required.' }, 422)
+  }
+
+  const desiredSlug = normalizeNullableString(body.slug) ?? name
+  const { data: existing, error: existingError } = await supabaseAdmin
+    .from('categories')
+    .select('id, name, slug')
+    .ilike('name', name)
+    .limit(1)
+    .maybeSingle()
+
+  if (existingError) {
+    return jsonResponse({ ok: false, error: 'Existing categories could not be checked.' }, 500)
+  }
+
+  if (existing) {
+    return jsonResponse({ ok: false, error: 'A category with this name already exists.' }, 409)
+  }
+
+  const slug = await ensureUniqueCategorySlug(supabaseAdmin, desiredSlug)
+  const { data: category, error: insertError } = await supabaseAdmin
+    .from('categories')
+    .insert({ name, slug })
+    .select('id, slug, name')
+    .single()
+
+  if (insertError || !category) {
+    return jsonResponse({ ok: false, error: 'Category could not be created.' }, 500)
+  }
+
+  const { data: categories, error: categoriesError } = await supabaseAdmin
+    .from('categories')
+    .select('id, slug, name')
+    .order('name', { ascending: true })
+
+  return jsonResponse({
+    ok: true,
+    category,
+    categories: categoriesError ? [category] : (categories ?? [category]),
+  })
+}
+
 async function createProduct(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
   if (!CATALOG_EDIT_ROLES.has(context.role)) {
     return jsonResponse({ ok: false, error: 'Only super admins can create products.' }, 403)
@@ -1560,6 +1638,10 @@ Deno.serve(async (req) => {
     if (action === 'products_list') {
       const result = await listProducts(supabaseAdmin, context, body.filters as JsonRecord ?? {})
       return jsonResponse({ ok: true, ...result, categories: sharedLists.categories })
+    }
+
+    if (action === 'category_create') {
+      return await createCategory(supabaseAdmin, context, body)
     }
 
     if (action === 'product_create') {
