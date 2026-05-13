@@ -414,6 +414,19 @@ body.admin-login-body {
   min-width: 0;
 }
 
+.admin-products-list-panel .admin-panel__heading {
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.admin-products-list-panel .admin-button-row {
+  width: 100%;
+}
+
+.admin-products-list-panel .admin-button-row .button {
+  flex: 1 1 150px;
+}
+
 .admin-panel {
   background: var(--admin-panel);
   border: 1px solid var(--admin-border);
