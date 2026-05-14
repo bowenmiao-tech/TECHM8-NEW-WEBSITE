@@ -893,6 +893,14 @@ const DEFAULT_PRODUCT_IMAGE_URL =
   "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/placeholders/image-coming-soon.png";
 const SUPABASE_BROWSER_CDN_URL =
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+const SHARED_CATALOG_CACHE_KEY = "techm8:catalog:shared:v3";
+const SHOP_CATALOG_CACHE_KEY = "techm8:catalog:shop:v2";
+const HOME_LATEST_CATALOG_CACHE_KEY = "techm8:catalog:home-latest:v2";
+const SHARED_CATALOG_CACHE_TTL_MS = 5 * 60 * 1000;
+const SHOP_CATALOG_CACHE_TTL_MS = 3 * 60 * 1000;
+const HOME_LATEST_CATALOG_CACHE_TTL_MS = 3 * 60 * 1000;
+let sharedCatalogLoadPromise = null;
+let homeLatestCatalogLoadPromise = null;
 let supabaseBrowserClientPromise = null;
 
 function resolveProductImageUrl(product) {
@@ -903,6 +911,30 @@ function resolveProductImageUrl(product) {
 }
 
 function compareProductsByNewestRecord(left, right) {
+  const rightUpdated = getProductUpdatedTimestamp(right);
+  const leftUpdated = getProductUpdatedTimestamp(left);
+
+  if (
+    rightUpdated !== null &&
+    leftUpdated !== null &&
+    rightUpdated !== leftUpdated
+  ) {
+    return rightUpdated - leftUpdated;
+  }
+
+  if (rightUpdated !== null && leftUpdated === null) {
+    return 1;
+  }
+
+  if (rightUpdated === null && leftUpdated !== null) {
+    return -1;
+  }
+
+  const latestCompare = compareProductsByLatest(left, right);
+  if (latestCompare !== 0) {
+    return latestCompare;
+  }
+
   const rightId = Number(right?.id);
   const leftId = Number(left?.id);
 
@@ -915,6 +947,56 @@ function compareProductsByNewestRecord(left, right) {
   }
 
   return compareProductsByLatest(left, right);
+}
+
+function getProductUpdatedTimestamp(product) {
+  const updatedAt = product?.updated_at ? Date.parse(product.updated_at) : NaN;
+  return Number.isFinite(updatedAt) ? updatedAt : null;
+}
+
+function readCatalogSessionCache(key, maxAgeMs) {
+  if (!key || !Number.isFinite(maxAgeMs) || maxAgeMs <= 0) return null;
+
+  const readFromStorage = (storage) => {
+    if (!storage) return null;
+    const raw = storage.getItem(key);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+    const cachedAt = Number(parsed?.cachedAt);
+    if (!Number.isFinite(cachedAt) || Date.now() - cachedAt > maxAgeMs) {
+      storage.removeItem(key);
+      return null;
+    }
+
+    const payload = parsed?.payload;
+    if (!payload || !Array.isArray(payload.products)) return null;
+    return payload;
+  };
+
+  try {
+    return (
+      readFromStorage(window.sessionStorage) ||
+      readFromStorage(window.localStorage)
+    );
+  } catch (error) {
+    return null;
+  }
+}
+
+function writeCatalogSessionCache(key, payload) {
+  if (!key || !payload || !Array.isArray(payload.products)) return;
+
+  try {
+    const raw = JSON.stringify({
+      cachedAt: Date.now(),
+      payload,
+    });
+    window.sessionStorage.setItem(key, raw);
+    window.localStorage.setItem(key, raw);
+  } catch (error) {
+    // Ignore storage write failures and continue with network-only data.
+  }
 }
 
 function ensureAccountNavLink(relativeHref = "account.html") {
@@ -3000,29 +3082,7 @@ function initStorefront() {
       return;
     }
 
-    try {
-      const headers = {
-        Accept: "application/json",
-        apikey: supabaseAnonKey,
-        Authorization: `Bearer ${supabaseAnonKey}`,
-      };
-
-      const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,sort_order&order=sort_order.asc`;
-      const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc`;
-
-      const [categoriesResponse, productsResponse] = await Promise.all([
-        fetch(categoriesUrl, { headers, cache: "no-store" }),
-        fetch(productsUrl, { headers, cache: "no-store" }),
-      ]);
-
-      if (!categoriesResponse.ok || !productsResponse.ok) {
-        throw new Error(
-          "The product catalog could not be loaded from Supabase.",
-        );
-      }
-
-      const categories = await categoriesResponse.json();
-      const products = await productsResponse.json();
+    const applySnapshot = (categories, products) => {
       const categoriesMap = new Map(
         categories.map((category) => [category.id, category]),
       );
@@ -3046,11 +3106,55 @@ function initStorefront() {
 
       renderCategories();
       renderProducts();
+    };
+
+    const cachedPayload = readCatalogSessionCache(
+      SHOP_CATALOG_CACHE_KEY,
+      SHOP_CATALOG_CACHE_TTL_MS,
+    );
+    if (
+      cachedPayload &&
+      Array.isArray(cachedPayload.products) &&
+      Array.isArray(cachedPayload.categories)
+    ) {
+      applySnapshot(cachedPayload.categories, cachedPayload.products);
+    }
+
+    try {
+      const headers = {
+        Accept: "application/json",
+        apikey: supabaseAnonKey,
+        Authorization: `Bearer ${supabaseAnonKey}`,
+      };
+
+      const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,sort_order&order=sort_order.asc`;
+      const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc`;
+
+      const [categoriesResponse, productsResponse] = await Promise.all([
+        fetch(categoriesUrl, { headers, cache: "default" }),
+        fetch(productsUrl, { headers, cache: "default" }),
+      ]);
+
+      if (!categoriesResponse.ok || !productsResponse.ok) {
+        throw new Error(
+          "The product catalog could not be loaded from Supabase.",
+        );
+      }
+
+      const categories = await categoriesResponse.json();
+      const products = await productsResponse.json();
+      writeCatalogSessionCache(SHOP_CATALOG_CACHE_KEY, {
+        categories,
+        products,
+      });
+      applySnapshot(categories, products);
     } catch (error) {
-      state.products = fallbackProducts;
-      state.categories = deriveCategories(fallbackProducts);
-      renderCategories();
-      renderProducts();
+      if (!cachedPayload) {
+        state.products = fallbackProducts;
+        state.categories = deriveCategories(fallbackProducts);
+        renderCategories();
+        renderProducts();
+      }
     }
   };
 
@@ -3280,37 +3384,24 @@ async function loadSharedCatalogData() {
     };
   }
 
-  try {
-    const headers = {
-      Accept: "application/json",
-      apikey: supabaseAnonKey,
-      Authorization: `Bearer ${supabaseAnonKey}`,
-    };
-    const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
-    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,description,detail_html,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc,id.desc`;
-    const productImagesUrl = `${supabaseUrl}/rest/v1/product_images?select=product_id,image_url,alt_text,sort_order&order=sort_order.asc`;
+  const cachedPayload = readCatalogSessionCache(
+    SHARED_CATALOG_CACHE_KEY,
+    SHARED_CATALOG_CACHE_TTL_MS,
+  );
+  if (cachedPayload) {
+    return cachedPayload;
+  }
+  if (sharedCatalogLoadPromise) {
+    return sharedCatalogLoadPromise;
+  }
 
-    const [categoriesResult, productsResult, productImagesResult] =
-      await Promise.allSettled([
-        fetch(categoriesUrl, { headers, cache: "no-store" }),
-        fetch(productsUrl, { headers, cache: "no-store" }),
-        fetch(productImagesUrl, { headers, cache: "no-store" }),
-      ]);
+  const headers = {
+    Accept: "application/json",
+    apikey: supabaseAnonKey,
+    Authorization: `Bearer ${supabaseAnonKey}`,
+  };
 
-    if (productsResult.status !== "fulfilled" || !productsResult.value.ok) {
-      throw new Error("Products request failed");
-    }
-
-    const products = await productsResult.value.json();
-    const categories =
-      categoriesResult.status === "fulfilled" && categoriesResult.value.ok
-        ? await categoriesResult.value.json()
-        : [];
-    const productImages =
-      productImagesResult.status === "fulfilled" && productImagesResult.value.ok
-        ? await productImagesResult.value.json()
-        : [];
-
+  const buildSnapshot = (products, categories = [], productImages = []) => {
     const categoriesMap = new Map(
       categories.map((category) => [category.id, category]),
     );
@@ -3415,6 +3506,61 @@ async function loadSharedCatalogData() {
             },
           ],
     };
+  };
+
+  const fetchSnapshot = async ({
+    productSelect,
+    productLimit = null,
+    includeImages = false,
+  }) => {
+    const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
+    const limitQuery =
+      Number.isFinite(productLimit) && productLimit > 0
+        ? `&limit=${Math.floor(productLimit)}`
+        : "";
+    const productsUrl = `${supabaseUrl}/rest/v1/products?select=${productSelect}&is_visible=eq.true&order=updated_at.desc,created_at.desc,id.desc${limitQuery}`;
+    const productImagesUrl = includeImages
+      ? `${supabaseUrl}/rest/v1/product_images?select=product_id,image_url,alt_text,sort_order&order=sort_order.asc`
+      : null;
+
+    const [categoriesResult, productsResult, productImagesResult] =
+      await Promise.allSettled([
+        fetch(categoriesUrl, { headers, cache: "default" }),
+        fetch(productsUrl, { headers, cache: "default" }),
+        productImagesUrl
+          ? fetch(productImagesUrl, { headers, cache: "default" })
+          : Promise.resolve(null),
+      ]);
+
+    if (productsResult.status !== "fulfilled" || !productsResult.value.ok) {
+      throw new Error("Products request failed");
+    }
+
+    const products = await productsResult.value.json();
+    const categories =
+      categoriesResult.status === "fulfilled" && categoriesResult.value.ok
+        ? await categoriesResult.value.json()
+        : [];
+    const productImages =
+      includeImages &&
+      productImagesResult.status === "fulfilled" &&
+      productImagesResult.value &&
+      productImagesResult.value.ok
+        ? await productImagesResult.value.json()
+        : [];
+
+    return buildSnapshot(products, categories, productImages);
+  };
+
+  try {
+    sharedCatalogLoadPromise = fetchSnapshot({
+      productSelect:
+        "id,sku,slug,name,brand,model,short_description,description,detail_html,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,updated_at,upc",
+      includeImages: true,
+    });
+    const payload = await sharedCatalogLoadPromise;
+    writeCatalogSessionCache(SHARED_CATALOG_CACHE_KEY, payload);
+    return payload;
   } catch (error) {
     const products = getFallbackCatalogProducts();
     return {
@@ -3427,6 +3573,113 @@ async function loadSharedCatalogData() {
         },
       ],
     };
+  } finally {
+    sharedCatalogLoadPromise = null;
+  }
+}
+
+async function loadHomeLatestCatalogData(options = {}) {
+  const preferCache = options?.preferCache !== false;
+  const cachedPayload = readCatalogSessionCache(
+    HOME_LATEST_CATALOG_CACHE_KEY,
+    HOME_LATEST_CATALOG_CACHE_TTL_MS,
+  );
+  if (preferCache && cachedPayload) {
+    return cachedPayload;
+  }
+  if (homeLatestCatalogLoadPromise) {
+    return homeLatestCatalogLoadPromise;
+  }
+
+  const { supabaseUrl, supabaseAnonKey } = window.TECHM8_CONFIG || {};
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return {
+      products: getFallbackCatalogProducts(),
+      categories: [],
+    };
+  }
+
+  const headers = {
+    Accept: "application/json",
+    apikey: supabaseAnonKey,
+    Authorization: `Bearer ${supabaseAnonKey}`,
+  };
+
+  try {
+    const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
+    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,created_at,updated_at,upc&is_visible=eq.true&order=updated_at.desc,created_at.desc,id.desc&limit=24`;
+
+    homeLatestCatalogLoadPromise = Promise.all([
+      fetch(categoriesUrl, { headers, cache: "default" }),
+      fetch(productsUrl, { headers, cache: "default" }),
+    ]);
+
+    const [categoriesResponse, productsResponse] =
+      await homeLatestCatalogLoadPromise;
+
+    if (!productsResponse.ok) {
+      throw new Error("Latest products request failed");
+    }
+
+    const categories = categoriesResponse.ok
+      ? await categoriesResponse.json()
+      : [];
+    const products = await productsResponse.json();
+    const categoriesMap = new Map(
+      categories.map((category) => [category.id, category]),
+    );
+    const normalizedProducts = applyProductVariantData(
+      products
+        .map((product, index) => {
+          const category = categoriesMap.get(product.category_id) || null;
+          const retailPrice = Number(product.retail_price);
+          const compareAtPrice = Number(product.compare_at_price);
+          const safeRetailPrice =
+            Number.isFinite(retailPrice) && retailPrice > 0 ? retailPrice : 0;
+
+          return {
+            ...product,
+            catalog_index: index,
+            retail_price: safeRetailPrice,
+            compare_at_price:
+              Number.isFinite(compareAtPrice) &&
+              compareAtPrice > safeRetailPrice
+                ? compareAtPrice
+                : null,
+            display_image: resolveProductImageUrl(product),
+            gallery_images: product.image_url
+              ? [
+                  {
+                    product_id: product.id,
+                    image_url: product.image_url,
+                    alt_text: product.name || "",
+                    sort_order: 0,
+                  },
+                ]
+              : [],
+            category_slug: category?.slug || "other-products",
+            category_name: category?.name || "Other Products",
+            category_description: category?.description || "",
+          };
+        })
+        .sort(compareProductsByLatest),
+    );
+
+    const payload = {
+      products: normalizedProducts.length
+        ? normalizedProducts
+        : getFallbackCatalogProducts(),
+      categories,
+    };
+    writeCatalogSessionCache(HOME_LATEST_CATALOG_CACHE_KEY, payload);
+    return payload;
+  } catch (error) {
+    return {
+      products: getFallbackCatalogProducts(),
+      categories: [],
+    };
+  } finally {
+    homeLatestCatalogLoadPromise = null;
   }
 }
 
@@ -3984,6 +4237,9 @@ function initHomeFeaturedProducts() {
     return;
   const section = grid.closest(".home-products-showcase");
   let hasLoaded = false;
+  const preloadLatestProductsPromise = loadHomeLatestCatalogData().catch(
+    () => null,
+  );
 
   const updateArrowState = () => {
     if (
@@ -4052,12 +4308,28 @@ function initHomeFeaturedProducts() {
   const loadProducts = () => {
     if (hasLoaded) return;
     hasLoaded = true;
-    loadSharedCatalogData()
+    const cachedPayload = readCatalogSessionCache(
+      HOME_LATEST_CATALOG_CACHE_KEY,
+      HOME_LATEST_CATALOG_CACHE_TTL_MS,
+    );
+    if (cachedPayload?.products?.length) {
+      render(cachedPayload.products);
+    }
+
+    preloadLatestProductsPromise
+      .then((payload) => {
+        if (!payload?.products?.length) {
+          return loadHomeLatestCatalogData({ preferCache: false });
+        }
+        return payload;
+      })
       .then(({ products }) => {
         render(products);
       })
       .catch(() => {
-        render(getFallbackCatalogProducts());
+        if (!cachedPayload?.products?.length) {
+          render(getFallbackCatalogProducts());
+        }
       });
   };
 
