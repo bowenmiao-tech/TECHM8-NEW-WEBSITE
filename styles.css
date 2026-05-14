@@ -2562,13 +2562,9 @@ body.storefront-shop-page .storefront-content {
   gap: 0.7rem;
 }
 
-body.storefront-shop-page .storefront-toolbar__intro {
-  display: none;
-}
-
 body.storefront-shop-page .storefront-toolbar {
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 body.storefront-shop-page .storefront-meta {
@@ -2577,6 +2573,12 @@ body.storefront-shop-page .storefront-meta {
 
 body.storefront-shop-page .storefront-grid--dense {
   grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+body.storefront-shop-page .storefront-tools {
+  justify-content: center;
+  width: auto;
+  margin-inline: auto;
 }
 
 .storefront-card {
@@ -5488,12 +5490,6 @@ body.storefront-shop-page .storefront-grid--dense {
     display: none;
   }
 
-  body.storefront-shop-page .storefront-sidebar--shop-info {
-    display: grid;
-    position: static;
-    gap: 1rem;
-  }
-
   .storefront-toolbar {
     gap: 0.8rem;
     align-items: center;
@@ -5560,10 +5556,6 @@ body.storefront-shop-page .storefront-grid--dense {
     display: none;
   }
 
-  body.storefront-shop-page .storefront-toolbar__intro {
-    display: block;
-  }
-
   .storefront-tools {
     align-items: center;
     justify-content: space-between;
@@ -5625,8 +5617,28 @@ body.storefront-shop-page .storefront-grid--dense {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  body.storefront-shop-page .storefront-toolbar {
+    justify-content: center;
+  }
+
+  body.storefront-shop-page .storefront-tools {
+    justify-content: center;
+    width: auto;
+    margin-inline: auto;
+    gap: 0.7rem;
+  }
+
+  body.storefront-shop-page .storefront-tools__button {
+    min-width: 8.3rem;
+  }
+
+  body.storefront-shop-page .storefront-tools__sort {
+    flex: 0 0 9rem;
+    min-width: 9rem;
+  }
+
   body.storefront-shop-page .storefront-grid--dense {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -5655,6 +5667,23 @@ body.storefront-shop-page .storefront-grid--dense {
   .storefront-tools__button {
     min-width: 7.4rem;
     padding: 0 0.85rem;
+  }
+
+  body.storefront-shop-page .storefront-tools {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.7rem;
+  }
+
+  body.storefront-shop-page .storefront-tools__button,
+  body.storefront-shop-page .storefront-tools__sort {
+    width: 100%;
+    min-width: 0;
+  }
+
+  body.storefront-shop-page .storefront-tools__sort {
+    flex: initial;
   }
 
   .storefront-card__body {
@@ -7784,7 +7813,7 @@ body.storefront-shop-page .storefront-grid--dense {
 @media (max-width: 380px) {
   .storefront-grid,
   .storefront-grid--dense {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
