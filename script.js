@@ -894,8 +894,8 @@ const DEFAULT_PRODUCT_IMAGE_URL =
 const SUPABASE_BROWSER_CDN_URL =
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 const SHARED_CATALOG_CACHE_KEY = "techm8:catalog:shared:v3";
-const SHOP_CATALOG_CACHE_KEY = "techm8:catalog:shop:v2";
-const HOME_LATEST_CATALOG_CACHE_KEY = "techm8:catalog:home-latest:v2";
+const SHOP_CATALOG_CACHE_KEY = "techm8:catalog:shop:v3";
+const HOME_LATEST_CATALOG_CACHE_KEY = "techm8:catalog:home-latest:v3";
 const SHARED_CATALOG_CACHE_TTL_MS = 5 * 60 * 1000;
 const SHOP_CATALOG_CACHE_TTL_MS = 3 * 60 * 1000;
 const HOME_LATEST_CATALOG_CACHE_TTL_MS = 3 * 60 * 1000;
@@ -1924,7 +1924,7 @@ function getCatalogDisplayProducts(products) {
 
 function getLatestDisplayProducts(products, limit = 6) {
   const orderedProducts = Array.isArray(products)
-    ? products.slice().sort(compareProductsByNewestRecord)
+    ? products.slice().sort(compareProductsByLatest)
     : [];
   const visibleGroups = new Set();
   const displayProducts = [];
@@ -3118,6 +3118,21 @@ function initStorefront() {
       Array.isArray(cachedPayload.categories)
     ) {
       applySnapshot(cachedPayload.categories, cachedPayload.products);
+    } else {
+      const sharedCachedPayload = readCatalogSessionCache(
+        SHARED_CATALOG_CACHE_KEY,
+        SHARED_CATALOG_CACHE_TTL_MS,
+      );
+      if (
+        sharedCachedPayload &&
+        Array.isArray(sharedCachedPayload.products) &&
+        Array.isArray(sharedCachedPayload.categories)
+      ) {
+        applySnapshot(
+          sharedCachedPayload.categories,
+          sharedCachedPayload.products,
+        );
+      }
     }
 
     try {
@@ -3128,7 +3143,7 @@ function initStorefront() {
       };
 
       const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,sort_order&order=sort_order.asc`;
-      const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,short_description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc`;
+      const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,created_at&is_visible=eq.true&order=created_at.desc,id.desc`;
 
       const [categoriesResponse, productsResponse] = await Promise.all([
         fetch(categoriesUrl, { headers, cache: "default" }),
@@ -3607,7 +3622,7 @@ async function loadHomeLatestCatalogData(options = {}) {
 
   try {
     const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
-    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,created_at,updated_at,upc&is_visible=eq.true&order=updated_at.desc,created_at.desc,id.desc&limit=24`;
+    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc,id.desc&limit=18`;
 
     homeLatestCatalogLoadPromise = Promise.all([
       fetch(categoriesUrl, { headers, cache: "default" }),
