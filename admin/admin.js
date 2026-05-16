@@ -2743,7 +2743,37 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
 
   fillCategoryOptions(categoryFilter, bootstrap.categories || []);
 
-  const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false, saveFlash: null };
+  const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false, saveFlash: null, detailRequests: new Map() };
+
+  const mergeProductRow = (row) => {
+    if (!row?.id) return null;
+    const rowIndex = state.rows.findIndex((item) => Number(item.id) === Number(row.id));
+    const nextRow = {
+      ...(rowIndex >= 0 ? state.rows[rowIndex] : {}),
+      ...row,
+      detail_loaded: Boolean(row.detail_loaded),
+    };
+    if (rowIndex >= 0) {
+      state.rows[rowIndex] = nextRow;
+    } else {
+      state.rows.unshift(nextRow);
+    }
+    return nextRow;
+  };
+
+  const loadProductDetail = async (productId) => {
+    const id = Number(productId);
+    if (!Number.isFinite(id)) return null;
+    const existing = state.rows.find((item) => Number(item.id) === id);
+    if (existing?.detail_loaded) return existing;
+    if (!state.detailRequests.has(id)) {
+      const request = callAdminApi("product_detail", { id }, session)
+        .then((result) => mergeProductRow(result.row))
+        .finally(() => state.detailRequests.delete(id));
+      state.detailRequests.set(id, request);
+    }
+    return state.detailRequests.get(id);
+  };
 
   const renderEditor = () => {
     const row = state.rows.find((item) => item.id === state.selectedId);
@@ -2986,7 +3016,37 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
 
   fillCategoryOptions(categoryFilter, bootstrap.categories || []);
 
-  const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false, saveFlash: null };
+  const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false, saveFlash: null, detailRequests: new Map() };
+
+  const mergeProductRow = (row) => {
+    if (!row?.id) return null;
+    const rowIndex = state.rows.findIndex((item) => Number(item.id) === Number(row.id));
+    const nextRow = {
+      ...(rowIndex >= 0 ? state.rows[rowIndex] : {}),
+      ...row,
+      detail_loaded: Boolean(row.detail_loaded),
+    };
+    if (rowIndex >= 0) {
+      state.rows[rowIndex] = nextRow;
+    } else {
+      state.rows.unshift(nextRow);
+    }
+    return nextRow;
+  };
+
+  const loadProductDetail = async (productId) => {
+    const id = Number(productId);
+    if (!Number.isFinite(id)) return null;
+    const existing = state.rows.find((item) => Number(item.id) === id);
+    if (existing?.detail_loaded) return existing;
+    if (!state.detailRequests.has(id)) {
+      const request = callAdminApi("product_detail", { id }, session)
+        .then((result) => mergeProductRow(result.row))
+        .finally(() => state.detailRequests.delete(id));
+      state.detailRequests.set(id, request);
+    }
+    return state.detailRequests.get(id);
+  };
 
   const syncCategoryCollections = (categories, selectedCategoryId = "") => {
     bootstrap.categories = Array.isArray(categories)
@@ -3012,6 +3072,21 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
     const row = state.rows.find((item) => Number(item.id) === Number(state.selectedId));
     if (!row) {
       editorTarget.innerHTML = `<p class="admin-note">Select a product from the list to edit images, content, pricing and visibility.</p>`;
+      return;
+    }
+
+    if (!row.detail_loaded) {
+      editorTarget.innerHTML = `<div class="admin-loading">Loading product details...</div>`;
+      loadProductDetail(row.id)
+        .then(() => {
+          if (Number(state.selectedId) === Number(row.id)) {
+            renderEditor();
+          }
+        })
+        .catch((error) => {
+          setAlert(alertTarget, error instanceof Error ? error.message : "Product details could not be loaded.", "error");
+          editorTarget.innerHTML = `<p class="admin-note">Product details could not be loaded. Try Refresh.</p>`;
+        });
       return;
     }
 
@@ -3300,7 +3375,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       state.saveFlash = null;
       try {
         const descriptionController = descriptionControllerPromise ? await descriptionControllerPromise : null;
-        await callAdminApi("product_update", {
+        const result = await callAdminApi("product_update", {
           id: row.id,
           name: formData.get("name"),
           brand: formData.get("brand"),
@@ -3318,10 +3393,18 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
           compatibility: "",
           detail_html: descriptionController?.getHtml() ?? formData.get("detail_html"),
         }, session);
-        state.saveFlash = { productId: row.id, message: "Saved successfully.", tone: "success" };
+        const updatedRow = mergeProductRow({
+          ...row,
+          ...(result.row || {}),
+          images: Array.isArray(result.row?.images) ? result.row.images : images,
+          detail_html: result.row?.detail_html ?? descriptionController?.getHtml() ?? formData.get("detail_html"),
+          detail_loaded: true,
+        });
+        state.selectedId = Number(updatedRow?.id || row.id);
+        state.saveFlash = { productId: state.selectedId, message: "Saved successfully.", tone: "success" };
         setInlineStatus(saveStatus, state.saveFlash.message, state.saveFlash.tone);
         setAlert(alertTarget, "Product saved successfully.", "success");
-        await load();
+        renderTable();
       } catch (error) {
         const message = error instanceof Error ? error.message : "Product could not be updated.";
         setInlineStatus(saveStatus, `Save failed: ${message}`, "error");

@@ -832,7 +832,7 @@ async function listProducts(supabaseAdmin: ReturnType<typeof createClient>, cont
 
   let query = supabaseAdmin
     .from('products')
-    .select('id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at', { count: 'exact' })
+    .select('id, sku, slug, name, brand, model, category_id, short_description, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at', { count: 'exact' })
     .order('updated_at', { ascending: false })
     .range(from, to)
 
@@ -854,36 +854,51 @@ async function listProducts(supabaseAdmin: ReturnType<typeof createClient>, cont
   const { data, error, count } = await query
   if (error) throw error
 
-  const productIds = (data ?? []).map((row) => (row as { id: number }).id)
-  const { data: imageRows, error: imageError } = productIds.length
-    ? await supabaseAdmin
-        .from('product_images')
-        .select('id, product_id, image_url, alt_text, sort_order, created_at')
-        .in('product_id', productIds)
-        .order('sort_order', { ascending: true })
-        .order('id', { ascending: true })
-    : { data: [] as unknown[], error: null }
-
-  if (imageError) throw imageError
-
-  const imagesByProductId = new Map<number, unknown[]>()
-  ;(imageRows ?? []).forEach((image) => {
-    const productId = (image as { product_id: number }).product_id
-    const images = imagesByProductId.get(productId) ?? []
-    images.push(image)
-    imagesByProductId.set(productId, images)
-  })
-
   return {
-    rows: (data ?? []).map((row) => ({
-      ...row,
-      images: imagesByProductId.get((row as { id: number }).id) ?? [],
-    })),
+    rows: (data ?? []).map((row) => ({ ...row, detail_loaded: false })),
     page,
     page_size: pageSize,
     total: count ?? 0,
     can_edit: CATALOG_EDIT_ROLES.has(context.role),
   }
+}
+
+async function getProductDetail(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  const productId = Number(body.id)
+  if (!Number.isFinite(productId)) {
+    return jsonResponse({ ok: false, error: 'Product id is missing.' }, 422)
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from('products')
+    .select('id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at')
+    .eq('id', productId)
+    .maybeSingle()
+
+  if (error || !data) {
+    return jsonResponse({ ok: false, error: 'Product was not found.' }, 404)
+  }
+
+  const { data: imageRows, error: imageError } = await supabaseAdmin
+    .from('product_images')
+    .select('id, product_id, image_url, alt_text, sort_order, created_at')
+    .eq('product_id', productId)
+    .order('sort_order', { ascending: true })
+    .order('id', { ascending: true })
+
+  if (imageError) {
+    return jsonResponse({ ok: false, error: 'Product images could not be loaded.' }, 500)
+  }
+
+  return jsonResponse({
+    ok: true,
+    row: {
+      ...data,
+      images: imageRows ?? [],
+      detail_loaded: true,
+    },
+    can_edit: CATALOG_EDIT_ROLES.has(context.role),
+  })
 }
 
 async function createCategory(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
@@ -1370,7 +1385,7 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     .from('products')
     .update(cleanPatch)
     .eq('id', productId)
-    .select('id, sku, slug, name, brand, model, category_id, short_description, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at')
+    .select('id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at')
     .single()
 
   if (error) {
@@ -1398,7 +1413,14 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     }
   }
 
-  return jsonResponse({ ok: true, row: data })
+  return jsonResponse({
+    ok: true,
+    row: {
+      ...data,
+      images: normalizedImages ?? undefined,
+      detail_loaded: true,
+    },
+  })
 }
 
 async function uploadProductDetailImage(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
@@ -1621,9 +1643,9 @@ Deno.serve(async (req) => {
 
     const body = (await req.json()) as JsonRecord
     const action = String(body.action ?? '').trim()
-    const sharedLists = await getSharedLists(supabaseAdmin)
 
     if (action === 'bootstrap') {
+      const sharedLists = await getSharedLists(supabaseAdmin)
       return jsonResponse({
         ok: true,
         admin: context,
@@ -1641,11 +1663,13 @@ Deno.serve(async (req) => {
     }
 
     if (action === 'dashboard') {
+      const sharedLists = await getSharedLists(supabaseAdmin)
       const dashboard = await getDashboardData(supabaseAdmin, context)
       return jsonResponse({ ok: true, ...dashboard, stores: sharedLists.stores })
     }
 
     if (action === 'orders_list') {
+      const sharedLists = await getSharedLists(supabaseAdmin)
       const result = await listOrders(supabaseAdmin, context, body.filters as JsonRecord ?? {})
       return jsonResponse({ ok: true, ...result, stores: sharedLists.stores })
     }
@@ -1655,6 +1679,7 @@ Deno.serve(async (req) => {
     }
 
     if (action === 'repairs_list') {
+      const sharedLists = await getSharedLists(supabaseAdmin)
       const result = await listRepairs(supabaseAdmin, context, body.filters as JsonRecord ?? {})
       return jsonResponse({ ok: true, ...result, stores: sharedLists.stores })
     }
@@ -1681,8 +1706,13 @@ Deno.serve(async (req) => {
     }
 
     if (action === 'products_list') {
+      const sharedLists = await getSharedLists(supabaseAdmin)
       const result = await listProducts(supabaseAdmin, context, body.filters as JsonRecord ?? {})
       return jsonResponse({ ok: true, ...result, categories: sharedLists.categories })
+    }
+
+    if (action === 'product_detail') {
+      return await getProductDetail(supabaseAdmin, context, body)
     }
 
     if (action === 'category_create') {
@@ -1714,6 +1744,7 @@ Deno.serve(async (req) => {
     }
 
     if (action === 'inventory_list') {
+      const sharedLists = await getSharedLists(supabaseAdmin)
       const result = await listInventory(supabaseAdmin, context, body.filters as JsonRecord ?? {})
       return jsonResponse({ ok: true, ...result, stores: sharedLists.stores })
     }
