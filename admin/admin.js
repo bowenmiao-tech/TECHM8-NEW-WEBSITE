@@ -1153,6 +1153,51 @@ function openCreateCategoryModal({ bootstrap, session, alertTarget, initialName 
   });
 }
 
+function openEditCategoryModal({ bootstrap, session, alertTarget, category, onUpdated }) {
+  if (!category?.id) {
+    setAlert(alertTarget, "Select a category to edit first.", "error");
+    return;
+  }
+
+  const modalRoot = openAdminModal({
+    title: "Edit category",
+    subtitle: "Update the category name or slug used by storefront category pages.",
+    content: `
+      <form class="admin-modal-form" data-admin-category-edit-form>
+        <div class="admin-editor__grid">
+          <label><span>Category name</span><input type="text" name="name" value="${escapeHtml(category.name || "")}" placeholder="Power Banks" required></label>
+          <label><span>Slug</span><input type="text" name="slug" value="${escapeHtml(category.slug || "")}" placeholder="power-banks"></label>
+        </div>
+        <p class="admin-note">Slug is the URL-friendly category address. Changing it changes category links.</p>
+        <div class="admin-button-row">
+          <button class="button button--primary" type="submit">Save category</button>
+        </div>
+      </form>
+    `,
+  });
+
+  const form = modalRoot.querySelector("[data-admin-category-edit-form]");
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    try {
+      const result = await callAdminApi("category_update", {
+        id: category.id,
+        name: formData.get("name"),
+        slug: formData.get("slug"),
+      }, session);
+      if (Array.isArray(result.categories)) {
+        bootstrap.categories = [...result.categories];
+      }
+      closeAdminModal();
+      setAlert(alertTarget, "Category updated.", "success");
+      onUpdated?.(result.category, result.categories || bootstrap.categories || []);
+    } catch (error) {
+      setAlert(alertTarget, error instanceof Error ? error.message : "Category could not be updated.", "error");
+    }
+  });
+}
+
 async function setupProductDescriptionQuill({ editorElement, hiddenInput, row, session, canEdit, alertTarget }) {
   if (!(editorElement instanceof HTMLElement) || !(hiddenInput instanceof HTMLInputElement)) return null;
   const Quill = await ensureQuillLibrary();
@@ -1522,6 +1567,7 @@ function getViewTemplate(view) {
               <div class="admin-button-row">
                 <button class="button button--primary" type="button" data-products-new>New product</button>
                 <button class="button button--ghost" type="button" data-products-category-new>Add category</button>
+                <button class="button button--ghost" type="button" data-products-category-edit>Edit category</button>
                 <button class="button button--ghost" type="button" data-products-import>Import Excel</button>
                 <button class="button button--ghost" type="button" data-products-refresh>Refresh</button>
               </div>
@@ -3148,6 +3194,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
   const refreshButton = root.querySelector("[data-products-refresh]");
   const newButton = root.querySelector("[data-products-new]");
   const categoryNewButton = root.querySelector("[data-products-category-new]");
+  const categoryEditButton = root.querySelector("[data-products-category-edit]");
   const importButton = root.querySelector("[data-products-import]");
 
   fillCategoryOptions(categoryFilter, bootstrap.categories || []);
@@ -3274,7 +3321,12 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
                     ${renderCategorySelectOptions(bootstrap.categories || [], row.category_id)}
                   </select>
                 </label>
-                ${state.canEdit ? `<button class="button button--ghost button--small" type="button" data-product-category-add>Add category</button>` : ""}
+                ${state.canEdit ? `
+                  <div class="admin-button-row">
+                    <button class="button button--ghost button--small" type="button" data-product-category-add>Add category</button>
+                    <button class="button button--ghost button--small" type="button" data-product-category-edit>Edit category</button>
+                  </div>
+                ` : ""}
               </div>
               <label class="admin-editor__wide"><span>Short description</span><textarea name="short_description" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.short_description || "")}</textarea></label>
             </div>
@@ -3343,6 +3395,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
     const cloneButton = editorTarget.querySelector("[data-product-clone]");
     const deleteButton = editorTarget.querySelector("[data-product-delete]");
     const categoryAddButton = editorTarget.querySelector("[data-product-category-add]");
+    const categoryEditButton = editorTarget.querySelector("[data-product-category-edit]");
     const categorySelect = editorTarget.querySelector("[data-product-category-select]");
     const descriptionInput = editorTarget.querySelector("[data-description-html]");
     const descriptionEditor = editorTarget.querySelector("[data-description-quill]");
@@ -3401,6 +3454,26 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
         session,
         alertTarget,
         onCreated: (category, categories) => {
+          syncCategoryCollections(categories, category?.id ?? "");
+          if (categorySelect instanceof HTMLSelectElement) {
+            categorySelect.innerHTML = renderCategorySelectOptions(bootstrap.categories || [], category?.id ?? "");
+            categorySelect.value = String(category?.id ?? "");
+          }
+          renderEditor();
+        },
+      });
+    });
+
+    categoryEditButton?.addEventListener("click", () => {
+      const selectedCategory = (bootstrap.categories || []).find(
+        (item) => String(item.id ?? "") === String(categorySelect?.value ?? ""),
+      );
+      openEditCategoryModal({
+        bootstrap,
+        session,
+        alertTarget,
+        category: selectedCategory,
+        onUpdated: (category, categories) => {
           syncCategoryCollections(categories, category?.id ?? "");
           if (categorySelect instanceof HTMLSelectElement) {
             categorySelect.innerHTML = renderCategorySelectOptions(bootstrap.categories || [], category?.id ?? "");
@@ -3663,6 +3736,23 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       onCreated: (category, categories) => {
         syncCategoryCollections(categories, category?.id ?? "");
         renderEditor();
+      },
+    });
+  });
+
+  categoryEditButton?.addEventListener("click", () => {
+    const selectedCategory = (bootstrap.categories || []).find(
+      (item) => String(item.id ?? "") === String(categoryFilter?.value ?? ""),
+    );
+    openEditCategoryModal({
+      bootstrap,
+      session,
+      alertTarget,
+      category: selectedCategory,
+      onUpdated: (category, categories) => {
+        syncCategoryCollections(categories, category?.id ?? "");
+        renderEditor();
+        load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be refreshed.", "error"));
       },
     });
   });

@@ -950,6 +950,62 @@ async function createCategory(supabaseAdmin: ReturnType<typeof createClient>, co
   })
 }
 
+async function updateCategory(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!CATALOG_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can update categories.' }, 403)
+  }
+
+  const id = normalizeNumber(body.id)
+  if (id === null) {
+    return jsonResponse({ ok: false, error: 'Category ID is required.' }, 422)
+  }
+
+  const name = normalizeNullableString(body.name)
+  if (!name) {
+    return jsonResponse({ ok: false, error: 'Category name is required.' }, 422)
+  }
+
+  const { data: existingName, error: existingNameError } = await supabaseAdmin
+    .from('categories')
+    .select('id, name, slug')
+    .ilike('name', name)
+    .neq('id', id)
+    .limit(1)
+    .maybeSingle()
+
+  if (existingNameError) {
+    return jsonResponse({ ok: false, error: 'Existing categories could not be checked.' }, 500)
+  }
+
+  if (existingName) {
+    return jsonResponse({ ok: false, error: 'A category with this name already exists.' }, 409)
+  }
+
+  const desiredSlug = normalizeNullableString(body.slug) ?? name
+  const slug = await ensureUniqueCategorySlug(supabaseAdmin, desiredSlug, id)
+  const { data: category, error: updateError } = await supabaseAdmin
+    .from('categories')
+    .update({ name, slug })
+    .eq('id', id)
+    .select('id, slug, name')
+    .single()
+
+  if (updateError || !category) {
+    return jsonResponse({ ok: false, error: 'Category could not be updated.' }, 500)
+  }
+
+  const { data: categories, error: categoriesError } = await supabaseAdmin
+    .from('categories')
+    .select('id, slug, name')
+    .order('name', { ascending: true })
+
+  return jsonResponse({
+    ok: true,
+    category,
+    categories: categoriesError ? [category] : (categories ?? [category]),
+  })
+}
+
 async function createProduct(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
   if (!CATALOG_EDIT_ROLES.has(context.role)) {
     return jsonResponse({ ok: false, error: 'Only super admins can create products.' }, 403)
@@ -1742,6 +1798,10 @@ Deno.serve(async (req) => {
 
     if (action === 'category_create') {
       return await createCategory(supabaseAdmin, context, body)
+    }
+
+    if (action === 'category_update') {
+      return await updateCategory(supabaseAdmin, context, body)
     }
 
     if (action === 'product_create') {
