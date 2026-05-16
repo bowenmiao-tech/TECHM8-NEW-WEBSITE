@@ -1431,6 +1431,16 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     return jsonResponse({ ok: false, error: 'Product id is missing.' }, 422)
   }
 
+  const name = normalizeNullableString(body.name)
+  if (!name) {
+    return jsonResponse({ ok: false, error: 'Product name is required.' }, 422)
+  }
+
+  const stockQuantity = normalizeNumber(body.stock_quantity)
+  if (stockQuantity === null) {
+    return jsonResponse({ ok: false, error: 'Total stock is required.' }, 422)
+  }
+
   const imagesInput = Array.isArray(body.images) ? body.images : null
   const normalizedImages = imagesInput
     ? imagesInput
@@ -1446,7 +1456,7 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
   const heroImageUrl = normalizedImages?.[0]?.image_url ?? normalizeNullableString(body.image_url)
 
   const patch = {
-    name: normalizeNullableString(body.name),
+    name,
     brand: normalizeNullableString(body.brand),
     model: normalizeNullableString(body.model),
     category_id: normalizeNumber(body.category_id),
@@ -1455,7 +1465,7 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     retail_price: normalizeNumber(body.retail_price),
     compare_at_price: normalizeNumber(body.compare_at_price),
     cost_price: normalizeNumber(body.cost_price),
-    stock_quantity: normalizeNumber(body.stock_quantity),
+    stock_quantity: stockQuantity,
     is_visible: typeof body.is_visible === 'boolean' ? body.is_visible : undefined,
     is_featured: typeof body.is_featured === 'boolean' ? body.is_featured : undefined,
     image_url: heroImageUrl,
@@ -1471,7 +1481,10 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     .single()
 
   if (error) {
-    return jsonResponse({ ok: false, error: 'Product could not be updated.' }, 500)
+    if (error.code === '23503') {
+      return jsonResponse({ ok: false, error: 'Selected category does not exist.' }, 422)
+    }
+    return jsonResponse({ ok: false, error: `Product could not be updated: ${error.message}` }, 500)
   }
 
   if (normalizedImages) {
