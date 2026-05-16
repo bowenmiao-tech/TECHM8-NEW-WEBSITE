@@ -2745,13 +2745,19 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
 
   const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false, saveFlash: null, detailRequests: new Map() };
 
+  const hasEmbeddedProductDetail = (row) => (
+    Object.prototype.hasOwnProperty.call(row || {}, "detail_html") ||
+    Array.isArray(row?.images) ||
+    Array.isArray(row?.product_images)
+  );
+
   const mergeProductRow = (row) => {
     if (!row?.id) return null;
     const rowIndex = state.rows.findIndex((item) => Number(item.id) === Number(row.id));
     const nextRow = {
       ...(rowIndex >= 0 ? state.rows[rowIndex] : {}),
       ...row,
-      detail_loaded: Boolean(row.detail_loaded),
+      detail_loaded: Boolean(row.detail_loaded || hasEmbeddedProductDetail(row)),
     };
     if (rowIndex >= 0) {
       state.rows[rowIndex] = nextRow;
@@ -2977,7 +2983,10 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
         visibility: formData.get("visibility"),
       },
     }, session);
-    state.rows = result.rows || [];
+    state.rows = (result.rows || []).map((row) => ({
+      ...row,
+      detail_loaded: Boolean(row?.detail_loaded || hasEmbeddedProductDetail(row)),
+    }));
     state.meta = result;
     state.canEdit = Boolean(result.can_edit);
     if (state.selectedId && !state.rows.some((row) => row.id === state.selectedId)) {
@@ -3018,13 +3027,19 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
 
   const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false, saveFlash: null, detailRequests: new Map() };
 
+  const hasEmbeddedProductDetail = (row) => (
+    Object.prototype.hasOwnProperty.call(row || {}, "detail_html") ||
+    Array.isArray(row?.images) ||
+    Array.isArray(row?.product_images)
+  );
+
   const mergeProductRow = (row) => {
     if (!row?.id) return null;
     const rowIndex = state.rows.findIndex((item) => Number(item.id) === Number(row.id));
     const nextRow = {
       ...(rowIndex >= 0 ? state.rows[rowIndex] : {}),
       ...row,
-      detail_loaded: Boolean(row.detail_loaded),
+      detail_loaded: Boolean(row.detail_loaded || hasEmbeddedProductDetail(row)),
     };
     if (rowIndex >= 0) {
       state.rows[rowIndex] = nextRow;
@@ -3475,7 +3490,10 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
         visibility: formData.get("visibility"),
       },
     }, session);
-    state.rows = result.rows || [];
+    state.rows = (result.rows || []).map((row) => ({
+      ...row,
+      detail_loaded: Boolean(row?.detail_loaded || hasEmbeddedProductDetail(row)),
+    }));
     state.meta = result;
     state.canEdit = Boolean(result.can_edit);
     if (state.selectedId && !state.rows.some((row) => Number(row.id) === Number(state.selectedId))) {

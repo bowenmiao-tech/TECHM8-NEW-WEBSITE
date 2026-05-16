@@ -1706,9 +1706,8 @@ Deno.serve(async (req) => {
     }
 
     if (action === 'products_list') {
-      const sharedLists = await getSharedLists(supabaseAdmin)
       const result = await listProducts(supabaseAdmin, context, body.filters as JsonRecord ?? {})
-      return jsonResponse({ ok: true, ...result, categories: sharedLists.categories })
+      return jsonResponse({ ok: true, ...result })
     }
 
     if (action === 'product_detail') {
