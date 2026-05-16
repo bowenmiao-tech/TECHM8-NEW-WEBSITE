@@ -911,7 +911,7 @@ async function createCategory(supabaseAdmin: ReturnType<typeof createClient>, co
     return jsonResponse({ ok: false, error: 'Category name is required.' }, 422)
   }
 
-  const desiredSlug = normalizeNullableString(body.slug) ?? name
+  const desiredSlug = name
   const { data: existing, error: existingError } = await supabaseAdmin
     .from('categories')
     .select('id, name, slug')
@@ -941,6 +941,7 @@ async function createCategory(supabaseAdmin: ReturnType<typeof createClient>, co
   const { data: categories, error: categoriesError } = await supabaseAdmin
     .from('categories')
     .select('id, slug, name')
+    .order('sort_order', { ascending: true })
     .order('name', { ascending: true })
 
   return jsonResponse({
@@ -981,7 +982,7 @@ async function updateCategory(supabaseAdmin: ReturnType<typeof createClient>, co
     return jsonResponse({ ok: false, error: 'A category with this name already exists.' }, 409)
   }
 
-  const desiredSlug = normalizeNullableString(body.slug) ?? name
+  const desiredSlug = name
   const slug = await ensureUniqueCategorySlug(supabaseAdmin, desiredSlug, id)
   const { data: category, error: updateError } = await supabaseAdmin
     .from('categories')
@@ -997,12 +998,78 @@ async function updateCategory(supabaseAdmin: ReturnType<typeof createClient>, co
   const { data: categories, error: categoriesError } = await supabaseAdmin
     .from('categories')
     .select('id, slug, name')
+    .order('sort_order', { ascending: true })
     .order('name', { ascending: true })
 
   return jsonResponse({
     ok: true,
     category,
     categories: categoriesError ? [category] : (categories ?? [category]),
+  })
+}
+
+async function deleteCategory(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!CATALOG_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can delete categories.' }, 403)
+  }
+
+  const id = normalizeNumber(body.id)
+  if (id === null) {
+    return jsonResponse({ ok: false, error: 'Category ID is required.' }, 422)
+  }
+
+  const { data: category, error: categoryError } = await supabaseAdmin
+    .from('categories')
+    .select('id, slug, name')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (categoryError) {
+    return jsonResponse({ ok: false, error: 'Category could not be loaded.' }, 500)
+  }
+
+  if (!category) {
+    return jsonResponse({ ok: false, error: 'Category was not found.' }, 404)
+  }
+
+  const { count: productCount, error: countError } = await supabaseAdmin
+    .from('products')
+    .select('id', { count: 'exact', head: true })
+    .eq('category_id', id)
+
+  if (countError) {
+    return jsonResponse({ ok: false, error: 'Category products could not be checked.' }, 500)
+  }
+
+  const { error: detachError } = await supabaseAdmin
+    .from('products')
+    .update({ category_id: null })
+    .eq('category_id', id)
+
+  if (detachError) {
+    return jsonResponse({ ok: false, error: 'Products could not be removed from this category.' }, 500)
+  }
+
+  const { error: deleteError } = await supabaseAdmin
+    .from('categories')
+    .delete()
+    .eq('id', id)
+
+  if (deleteError) {
+    return jsonResponse({ ok: false, error: 'Category could not be deleted.' }, 500)
+  }
+
+  const { data: categories, error: categoriesError } = await supabaseAdmin
+    .from('categories')
+    .select('id, slug, name')
+    .order('sort_order', { ascending: true })
+    .order('name', { ascending: true })
+
+  return jsonResponse({
+    ok: true,
+    category,
+    detached_product_count: productCount ?? 0,
+    categories: categoriesError ? [] : (categories ?? []),
   })
 }
 
@@ -1815,6 +1882,10 @@ Deno.serve(async (req) => {
 
     if (action === 'category_update') {
       return await updateCategory(supabaseAdmin, context, body)
+    }
+
+    if (action === 'category_delete') {
+      return await deleteCategory(supabaseAdmin, context, body)
     }
 
     if (action === 'product_create') {

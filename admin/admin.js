@@ -1114,17 +1114,14 @@ function openImportProductsModal({ bootstrap, session, alertTarget, onImported }
   });
 }
 
-function openCreateCategoryModal({ bootstrap, session, alertTarget, initialName = "", initialSlug = "", onCreated }) {
+function openCreateCategoryModal({ bootstrap, session, alertTarget, initialName = "", onCreated }) {
   const modalRoot = openAdminModal({
     title: "Add category",
     subtitle: "Create a category once, then reuse it across products and Excel imports.",
     content: `
       <form class="admin-modal-form" data-admin-category-form>
-        <div class="admin-editor__grid">
-          <label><span>Category name</span><input type="text" name="name" value="${escapeHtml(initialName)}" placeholder="Power Banks" required></label>
-          <label><span>Slug (optional)</span><input type="text" name="slug" value="${escapeHtml(initialSlug)}" placeholder="power-banks"></label>
-        </div>
-        <p class="admin-note">If you leave the slug blank, one will be generated automatically.</p>
+        <label><span>Category name</span><input type="text" name="name" value="${escapeHtml(initialName)}" placeholder="Power Banks" required></label>
+        <p class="admin-note">The category URL slug is generated automatically from the name.</p>
         <div class="admin-button-row">
           <button class="button button--primary" type="submit">Create category</button>
         </div>
@@ -1139,7 +1136,6 @@ function openCreateCategoryModal({ bootstrap, session, alertTarget, initialName 
     try {
       const result = await callAdminApi("category_create", {
         name: formData.get("name"),
-        slug: formData.get("slug"),
       }, session);
       if (Array.isArray(result.categories)) {
         bootstrap.categories = [...result.categories];
@@ -1153,7 +1149,7 @@ function openCreateCategoryModal({ bootstrap, session, alertTarget, initialName 
   });
 }
 
-function openEditCategoryModal({ bootstrap, session, alertTarget, category, onUpdated }) {
+function openEditCategoryModal({ bootstrap, session, alertTarget, category, onUpdated, onDeleted }) {
   if (!category?.id) {
     setAlert(alertTarget, "Select a category to edit first.", "error");
     return;
@@ -1161,22 +1157,21 @@ function openEditCategoryModal({ bootstrap, session, alertTarget, category, onUp
 
   const modalRoot = openAdminModal({
     title: "Edit category",
-    subtitle: "Update the category name or slug used by storefront category pages.",
+    subtitle: "Update the category name used by storefront category pages.",
     content: `
       <form class="admin-modal-form" data-admin-category-edit-form>
-        <div class="admin-editor__grid">
-          <label><span>Category name</span><input type="text" name="name" value="${escapeHtml(category.name || "")}" placeholder="Power Banks" required></label>
-          <label><span>Slug</span><input type="text" name="slug" value="${escapeHtml(category.slug || "")}" placeholder="power-banks"></label>
-        </div>
-        <p class="admin-note">Slug is the URL-friendly category address. Changing it changes category links.</p>
+        <label><span>Category name</span><input type="text" name="name" value="${escapeHtml(category.name || "")}" placeholder="Power Banks" required></label>
+        <p class="admin-note">The category URL slug is generated automatically from the name.</p>
         <div class="admin-button-row">
           <button class="button button--primary" type="submit">Save category</button>
+          <button class="button button--danger" type="button" data-admin-category-delete>Delete category</button>
         </div>
       </form>
     `,
   });
 
   const form = modalRoot.querySelector("[data-admin-category-edit-form]");
+  const deleteButton = modalRoot.querySelector("[data-admin-category-delete]");
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -1184,7 +1179,6 @@ function openEditCategoryModal({ bootstrap, session, alertTarget, category, onUp
       const result = await callAdminApi("category_update", {
         id: category.id,
         name: formData.get("name"),
-        slug: formData.get("slug"),
       }, session);
       if (Array.isArray(result.categories)) {
         bootstrap.categories = [...result.categories];
@@ -1194,6 +1188,22 @@ function openEditCategoryModal({ bootstrap, session, alertTarget, category, onUp
       onUpdated?.(result.category, result.categories || bootstrap.categories || []);
     } catch (error) {
       setAlert(alertTarget, error instanceof Error ? error.message : "Category could not be updated.", "error");
+    }
+  });
+
+  deleteButton?.addEventListener("click", async () => {
+    const confirmed = window.confirm(`Delete ${category.name || "this category"}? Products in this category will be kept without a category.`);
+    if (!confirmed) return;
+    try {
+      const result = await callAdminApi("category_delete", { id: category.id }, session);
+      if (Array.isArray(result.categories)) {
+        bootstrap.categories = [...result.categories];
+      }
+      closeAdminModal();
+      setAlert(alertTarget, "Category deleted.", "success");
+      onDeleted?.(category, result.categories || bootstrap.categories || []);
+    } catch (error) {
+      setAlert(alertTarget, error instanceof Error ? error.message : "Category could not be deleted.", "error");
     }
   });
 }
@@ -3481,6 +3491,15 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
           }
           renderEditor();
         },
+        onDeleted: (_category, categories) => {
+          syncCategoryCollections(categories, "");
+          if (categorySelect instanceof HTMLSelectElement) {
+            categorySelect.innerHTML = renderCategorySelectOptions(bootstrap.categories || [], "");
+            categorySelect.value = "";
+          }
+          row.category_id = "";
+          renderEditor();
+        },
       });
     });
 
@@ -3751,6 +3770,14 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       category: selectedCategory,
       onUpdated: (category, categories) => {
         syncCategoryCollections(categories, category?.id ?? "");
+        renderEditor();
+        load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be refreshed.", "error"));
+      },
+      onDeleted: (_category, categories) => {
+        syncCategoryCollections(categories, "");
+        if (categoryFilter instanceof HTMLSelectElement) {
+          categoryFilter.value = "";
+        }
         renderEditor();
         load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be refreshed.", "error"));
       },
