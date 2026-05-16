@@ -893,9 +893,9 @@ const DEFAULT_PRODUCT_IMAGE_URL =
   "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/placeholders/image-coming-soon.png";
 const SUPABASE_BROWSER_CDN_URL =
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
-const SHARED_CATALOG_CACHE_KEY = "techm8:catalog:shared:v3";
-const SHOP_CATALOG_CACHE_KEY = "techm8:catalog:shop:v3";
-const HOME_LATEST_CATALOG_CACHE_KEY = "techm8:catalog:home-latest:v3";
+const SHARED_CATALOG_CACHE_KEY = "techm8:catalog:shared:v4";
+const SHOP_CATALOG_CACHE_KEY = "techm8:catalog:shop:v4";
+const HOME_LATEST_CATALOG_CACHE_KEY = "techm8:catalog:home-latest:v4";
 const SHARED_CATALOG_CACHE_TTL_MS = 5 * 60 * 1000;
 const SHOP_CATALOG_CACHE_TTL_MS = 3 * 60 * 1000;
 const HOME_LATEST_CATALOG_CACHE_TTL_MS = 3 * 60 * 1000;
@@ -997,6 +997,55 @@ function writeCatalogSessionCache(key, payload) {
   } catch (error) {
     // Ignore storage write failures and continue with network-only data.
   }
+}
+
+function readCatalogSessionCacheAnyAge(key) {
+  if (!key) return null;
+
+  const readFromStorage = (storage) => {
+    if (!storage) return null;
+    const raw = storage.getItem(key);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+    const payload = parsed?.payload;
+    if (!payload || !Array.isArray(payload.products)) return null;
+    return payload;
+  };
+
+  try {
+    return (
+      readFromStorage(window.sessionStorage) ||
+      readFromStorage(window.localStorage)
+    );
+  } catch (error) {
+    return null;
+  }
+}
+
+function readBestCatalogCache(cacheEntries = [], options = {}) {
+  const allowStale = options?.allowStale === true;
+  for (const entry of cacheEntries) {
+    if (!entry?.key) continue;
+    const freshPayload = readCatalogSessionCache(entry.key, entry.maxAgeMs);
+    if (freshPayload) {
+      return freshPayload;
+    }
+  }
+
+  if (!allowStale) {
+    return null;
+  }
+
+  for (const entry of cacheEntries) {
+    if (!entry?.key) continue;
+    const stalePayload = readCatalogSessionCacheAnyAge(entry.key);
+    if (stalePayload) {
+      return stalePayload;
+    }
+  }
+
+  return null;
 }
 
 function ensureAccountNavLink(relativeHref = "account.html") {
@@ -3063,7 +3112,7 @@ function initStorefront() {
     }
 
     productTarget.innerHTML = sortedProducts
-      .map((product) => createCatalogCard(product))
+      .map((product, index) => createCatalogCard(product, index))
       .join("");
   };
 
@@ -3108,31 +3157,25 @@ function initStorefront() {
       renderProducts();
     };
 
-    const cachedPayload = readCatalogSessionCache(
-      SHOP_CATALOG_CACHE_KEY,
-      SHOP_CATALOG_CACHE_TTL_MS,
+    const bestCachedPayload = readBestCatalogCache(
+      [
+        {
+          key: SHOP_CATALOG_CACHE_KEY,
+          maxAgeMs: SHOP_CATALOG_CACHE_TTL_MS,
+        },
+        {
+          key: SHARED_CATALOG_CACHE_KEY,
+          maxAgeMs: SHARED_CATALOG_CACHE_TTL_MS,
+        },
+      ],
+      { allowStale: true },
     );
     if (
-      cachedPayload &&
-      Array.isArray(cachedPayload.products) &&
-      Array.isArray(cachedPayload.categories)
+      bestCachedPayload &&
+      Array.isArray(bestCachedPayload.products) &&
+      Array.isArray(bestCachedPayload.categories)
     ) {
-      applySnapshot(cachedPayload.categories, cachedPayload.products);
-    } else {
-      const sharedCachedPayload = readCatalogSessionCache(
-        SHARED_CATALOG_CACHE_KEY,
-        SHARED_CATALOG_CACHE_TTL_MS,
-      );
-      if (
-        sharedCachedPayload &&
-        Array.isArray(sharedCachedPayload.products) &&
-        Array.isArray(sharedCachedPayload.categories)
-      ) {
-        applySnapshot(
-          sharedCachedPayload.categories,
-          sharedCachedPayload.products,
-        );
-      }
+      applySnapshot(bestCachedPayload.categories, bestCachedPayload.products);
     }
 
     try {
@@ -3164,7 +3207,7 @@ function initStorefront() {
       });
       applySnapshot(categories, products);
     } catch (error) {
-      if (!cachedPayload) {
+      if (!bestCachedPayload) {
         state.products = fallbackProducts;
         state.categories = deriveCategories(fallbackProducts);
         renderCategories();
@@ -3527,13 +3570,14 @@ async function loadSharedCatalogData() {
     productSelect,
     productLimit = null,
     includeImages = false,
+    orderClause = "created_at.desc,id.desc",
   }) => {
     const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
     const limitQuery =
       Number.isFinite(productLimit) && productLimit > 0
         ? `&limit=${Math.floor(productLimit)}`
         : "";
-    const productsUrl = `${supabaseUrl}/rest/v1/products?select=${productSelect}&is_visible=eq.true&order=updated_at.desc,created_at.desc,id.desc${limitQuery}`;
+    const productsUrl = `${supabaseUrl}/rest/v1/products?select=${productSelect}&is_visible=eq.true&order=${orderClause}${limitQuery}`;
     const productImagesUrl = includeImages
       ? `${supabaseUrl}/rest/v1/product_images?select=product_id,image_url,alt_text,sort_order&order=sort_order.asc`
       : null;
@@ -3572,6 +3616,7 @@ async function loadSharedCatalogData() {
       productSelect:
         "id,sku,slug,name,brand,model,short_description,description,detail_html,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,updated_at,upc",
       includeImages: true,
+      orderClause: "created_at.desc,id.desc",
     });
     const payload = await sharedCatalogLoadPromise;
     writeCatalogSessionCache(SHARED_CATALOG_CACHE_KEY, payload);
@@ -3622,7 +3667,7 @@ async function loadHomeLatestCatalogData(options = {}) {
 
   try {
     const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
-    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,created_at,upc&is_visible=eq.true&order=created_at.desc,id.desc&limit=18`;
+    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,created_at,updated_at,upc&is_visible=eq.true&order=created_at.desc,id.desc&limit=48`;
 
     homeLatestCatalogLoadPromise = Promise.all([
       fetch(categoriesUrl, { headers, cache: "default" }),
@@ -4148,7 +4193,7 @@ function initProductNavigationCache() {
   });
 }
 
-function createCatalogCard(product) {
+function createCatalogCard(product, index = Number.POSITIVE_INFINITY) {
   const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
   const categoryUrl = `category.html?slug=${encodeURIComponent(product.category_slug)}`;
   const retailPrice = Number(product.retail_price) || 0;
@@ -4168,8 +4213,9 @@ function createCatalogCard(product) {
       : "";
   const stockLabel = "Available to order";
   const navigationCache = buildProductNavigationCache(product);
+  const eagerImage = Number.isFinite(index) && index < 4;
   const imageMarkup = product.display_image
-    ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy" decoding="async" sizes="(max-width: 380px) 92vw, (max-width: 720px) 44vw, (max-width: 1200px) 30vw, 18vw">`
+    ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="${eagerImage ? "eager" : "lazy"}" decoding="async" ${eagerImage ? 'fetchpriority="high"' : ""} sizes="(max-width: 380px) 92vw, (max-width: 720px) 44vw, (max-width: 1200px) 30vw, 18vw">`
     : `<div class="storefront-card__image storefront-card__image--placeholder" aria-hidden="true">TECHM8</div>`;
   const stockClass = "is-in-stock";
 
@@ -4210,7 +4256,20 @@ function selectLatestHomeProducts(products, limit = 6) {
   return getLatestDisplayProducts(products, limit);
 }
 
-function createHomeFeaturedCard(product) {
+function buildHomeLatestPayload(sourcePayload, limit = 18) {
+  if (!sourcePayload || !Array.isArray(sourcePayload.products)) {
+    return null;
+  }
+
+  return {
+    products: getLatestDisplayProducts(sourcePayload.products, limit),
+    categories: Array.isArray(sourcePayload.categories)
+      ? sourcePayload.categories
+      : [],
+  };
+}
+
+function createHomeFeaturedCard(product, index = 0) {
   const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
   const retailPrice = Number(product.retail_price) || 0;
   const compareAtPrice = Number(product.compare_at_price) || 0;
@@ -4218,8 +4277,9 @@ function createHomeFeaturedCard(product) {
     Number.isFinite(compareAtPrice) && compareAtPrice > retailPrice;
   const productName = getProductDisplayName(product) || product.name;
   const navigationCache = buildProductNavigationCache(product);
+  const eagerImage = index < 2;
   const imageMarkup = product.display_image
-    ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="lazy" decoding="async" sizes="(max-width: 720px) 72vw, 22vw">`
+    ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="${eagerImage ? "eager" : "lazy"}" decoding="async" ${eagerImage ? 'fetchpriority="high"' : ""} sizes="(max-width: 720px) 72vw, 22vw">`
     : `<div class="home-product-card__image-placeholder" aria-hidden="true">TECHM8</div>`;
 
   return `
@@ -4252,9 +4312,9 @@ function initHomeFeaturedProducts() {
     return;
   const section = grid.closest(".home-products-showcase");
   let hasLoaded = false;
-  const preloadLatestProductsPromise = loadHomeLatestCatalogData().catch(
-    () => null,
-  );
+  const preloadLatestProductsPromise = loadHomeLatestCatalogData({
+    preferCache: false,
+  }).catch(() => null);
 
   const updateArrowState = () => {
     if (
@@ -4290,7 +4350,7 @@ function initHomeFeaturedProducts() {
     const latestProducts = selectLatestHomeProducts(products, 6);
     grid.innerHTML = latestProducts.length
       ? latestProducts
-          .map((product) => createHomeFeaturedCard(product))
+          .map((product, index) => createHomeFeaturedCard(product, index))
           .join("")
       : `<article class="home-product-card home-product-card--loading"><div class="home-product-card__content"><div class="home-product-card__row"><h3>No products available yet</h3><span class="home-product-card__pill">Catalog</span></div><p class="home-product-card__summary">Add products in Supabase and the newest six items will appear here automatically.</p></div></article>`;
     bindCartButtons(grid, latestProducts);
@@ -4323,12 +4383,28 @@ function initHomeFeaturedProducts() {
   const loadProducts = () => {
     if (hasLoaded) return;
     hasLoaded = true;
-    const cachedPayload = readCatalogSessionCache(
-      HOME_LATEST_CATALOG_CACHE_KEY,
-      HOME_LATEST_CATALOG_CACHE_TTL_MS,
+    const cachedLatestPayload = readBestCatalogCache(
+      [
+        {
+          key: HOME_LATEST_CATALOG_CACHE_KEY,
+          maxAgeMs: HOME_LATEST_CATALOG_CACHE_TTL_MS,
+          transform: (payload) => payload,
+        },
+        {
+          key: SHOP_CATALOG_CACHE_KEY,
+          maxAgeMs: SHOP_CATALOG_CACHE_TTL_MS,
+          transform: (payload) => buildHomeLatestPayload(payload, 18),
+        },
+        {
+          key: SHARED_CATALOG_CACHE_KEY,
+          maxAgeMs: SHARED_CATALOG_CACHE_TTL_MS,
+          transform: (payload) => buildHomeLatestPayload(payload, 18),
+        },
+      ],
+      { allowStale: true },
     );
-    if (cachedPayload?.products?.length) {
-      render(cachedPayload.products);
+    if (cachedLatestPayload?.products?.length) {
+      render(cachedLatestPayload.products);
     }
 
     preloadLatestProductsPromise
@@ -4342,29 +4418,13 @@ function initHomeFeaturedProducts() {
         render(products);
       })
       .catch(() => {
-        if (!cachedPayload?.products?.length) {
+        if (!cachedLatestPayload?.products?.length) {
           render(getFallbackCatalogProducts());
         }
       });
   };
 
-  if ("IntersectionObserver" in window && section instanceof HTMLElement) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          observer.disconnect();
-          loadProducts();
-        }
-      },
-      {
-        rootMargin: "220px 0px",
-        threshold: 0.12,
-      },
-    );
-    observer.observe(section);
-  } else {
-    loadProducts();
-  }
+  loadProducts();
 }
 
 function bindCartButtons(container, products, options = {}) {
