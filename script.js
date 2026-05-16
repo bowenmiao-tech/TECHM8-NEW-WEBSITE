@@ -700,6 +700,122 @@ function formatMoney(value) {
   }).format(amount);
 }
 
+function trackGa4Event(name, params = {}) {
+  if (!name || typeof window.trackTechM8Event !== "function") {
+    return false;
+  }
+
+  return window.trackTechM8Event(name, params);
+}
+
+function getGa4ProductUnitPrice(product) {
+  if (!product || typeof product !== "object") {
+    return 0;
+  }
+
+  const candidates = [
+    product.retail_price,
+    product.sale_price,
+    product.promotional_price,
+    product.online_price,
+    product.price,
+  ];
+
+  for (const candidate of candidates) {
+    const amount = Number(candidate);
+    if (Number.isFinite(amount) && amount >= 0) {
+      return amount;
+    }
+  }
+
+  return 0;
+}
+
+function buildGa4Item(product, quantity = 1) {
+  if (!product || typeof product !== "object") {
+    return null;
+  }
+
+  const itemName =
+    getProductDisplayName(product) ||
+    product.name ||
+    product.slug ||
+    product.sku ||
+    "TECHM8 Product";
+  const itemPrice = getGa4ProductUnitPrice(product);
+
+  return {
+    item_id: String(product.sku || product.slug || itemName),
+    item_name: String(itemName),
+    item_brand: String(product.brand || "TECHM8"),
+    item_category: String(
+      product.category_name ||
+        product.category ||
+        product.category_slug ||
+        "Products",
+    ),
+    item_variant: String(
+      product.model || product.compatibility || product.condition_label || "",
+    ),
+    price: Number(itemPrice.toFixed(2)),
+    quantity: Math.max(1, Number(quantity) || 1),
+  };
+}
+
+function buildGa4ItemsFromCart(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  return items
+    .map((item) => buildGa4Item(item, item?.qty || 1))
+    .filter(Boolean);
+}
+
+function getGa4CartValue(items) {
+  return buildGa4ItemsFromCart(items).reduce((sum, item) => {
+    return sum + item.price * item.quantity;
+  }, 0);
+}
+
+function initGa4LinkTracking() {
+  document.addEventListener(
+    "click",
+    (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+
+      const anchor = target.closest("a[href]");
+      if (!(anchor instanceof HTMLAnchorElement)) {
+        return;
+      }
+
+      const href = anchor.getAttribute("href") || "";
+      if (!href) {
+        return;
+      }
+
+      if (href.startsWith("tel:")) {
+        trackGa4Event("click_call", {
+          interaction_type: "phone",
+        });
+      }
+
+      if (
+        anchor.hasAttribute("data-map-link") ||
+        /maps\.app\.goo\.gl|google\.com\/maps|maps\.google/i.test(href)
+      ) {
+        trackGa4Event("click_map", {
+          interaction_type: "map",
+        });
+      }
+    },
+    { capture: true },
+  );
+}
+
 const STORE_NAME_MAP = {
   "park-ridge": "Park Ridge",
   fairfield: "Fairfield",
@@ -2626,17 +2742,24 @@ function reconcileCartItems(items, products) {
 function addItemToCart(product, quantity = 1) {
   const items = loadCart();
   const existing = items.find((item) => item.slug === product.slug);
+  const safeQuantity = Math.max(1, Number(quantity) || 1);
 
   if (existing) {
-    existing.qty =
-      Math.max(1, Number(existing.qty) || 1) +
-      Math.max(1, Number(quantity) || 1);
+    existing.qty = Math.max(1, Number(existing.qty) || 1) + safeQuantity;
   } else {
-    items.push(normaliseCartItem(product, quantity));
+    items.push(normaliseCartItem(product, safeQuantity));
   }
 
   saveCart(items);
   updateCartIndicators(items);
+  const gaItem = buildGa4Item(product, safeQuantity);
+  if (gaItem) {
+    trackGa4Event("add_to_cart", {
+      currency: "AUD",
+      value: Number((gaItem.price * gaItem.quantity).toFixed(2)),
+      items: [gaItem],
+    });
+  }
   return items;
 }
 
@@ -4016,6 +4139,18 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
 function bindProductDetailShell(shell, product, catalogProducts = null) {
   if (!(shell instanceof HTMLElement) || !product) return;
 
+  if (!shell.dataset.gaViewTracked) {
+    const gaItem = buildGa4Item(product, 1);
+    if (gaItem) {
+      trackGa4Event("view_item", {
+        currency: "AUD",
+        value: gaItem.price,
+        items: [gaItem],
+      });
+      shell.dataset.gaViewTracked = "true";
+    }
+  }
+
   const addButton = shell.querySelector("[data-product-add-cart]");
   const qtyField = shell.querySelector("[data-product-qty]");
   const mainImageTarget = shell.querySelector("[data-pdp-main-image]");
@@ -4857,6 +4992,28 @@ function initCartPage() {
       }
     });
   };
+
+  checkoutButtons.forEach((button) => {
+    if (
+      !(button instanceof HTMLAnchorElement) &&
+      !(button instanceof HTMLButtonElement)
+    ) {
+      return;
+    }
+
+    button.addEventListener("click", () => {
+      const items = loadCart();
+      if (!items.length) {
+        return;
+      }
+
+      trackGa4Event("begin_checkout", {
+        currency: "AUD",
+        value: Number(getGa4CartValue(items).toFixed(2)),
+        items: buildGa4ItemsFromCart(items),
+      });
+    });
+  });
 
   if (freightButton instanceof HTMLButtonElement) {
     freightButton.addEventListener("click", renderFreightEstimate);
@@ -6059,6 +6216,10 @@ function initCheckoutPage() {
             password,
           });
         if (error) throw error;
+        trackGa4Event("login", {
+          method: "email",
+          context: "checkout",
+        });
         await completeCheckoutAuth(
           {
             supabase: authState.supabase,
@@ -6204,6 +6365,10 @@ function initCheckoutPage() {
           },
         });
         if (error) throw error;
+        trackGa4Event("sign_up", {
+          method: "email",
+          context: "checkout",
+        });
 
         if (!data?.session || !data?.user) {
           setPanelMessage(
@@ -6266,6 +6431,10 @@ function initCheckoutPage() {
         }
         googleButton.disabled = true;
         googleButton.classList.add("is-loading");
+        trackGa4Event("login", {
+          method: "google",
+          context: "checkout",
+        });
         const { error } = await activeAuthState.supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
@@ -6656,6 +6825,10 @@ function initCheckoutPage() {
         if (signUpError) {
           throw new Error(getReadableAuthError(signUpError));
         }
+        trackGa4Event("sign_up", {
+          method: "email",
+          context: "checkout-submit",
+        });
 
         activeAuthState = {
           supabase: activeAuthState.supabase,
@@ -6690,6 +6863,22 @@ function initCheckoutPage() {
         }
       }
 
+      trackGa4Event("add_payment_info", {
+        currency: "AUD",
+        value: Number(payload.total_amount || 0),
+        payment_type: String(
+          selectedProfile?.label ||
+            selectedProfile?.code ||
+            payload.payment_method_code ||
+            "",
+        ),
+        shipping_tier: String(
+          selectedShippingOption?.label ||
+            (warehouseDispatch ? "Warehouse Dispatch" : "Store Pickup"),
+        ),
+        items: buildGa4ItemsFromCart(items),
+      });
+
       if (selectedProfile?.provider === "stripe") {
         if (!checkoutSessionEndpoint) {
           throw new Error("Stripe Checkout is not configured yet.");
@@ -6713,6 +6902,15 @@ function initCheckoutPage() {
           );
         }
 
+        trackGa4Event("checkout_redirect_to_stripe", {
+          payment_type: String(
+            selectedProfile?.label || selectedProfile?.code || "stripe",
+          ),
+          shipping_tier: String(
+            selectedShippingOption?.label ||
+              (warehouseDispatch ? "Warehouse Dispatch" : "Store Pickup"),
+          ),
+        });
         window.location.href = result.checkout_url;
         return;
       }
@@ -6766,6 +6964,22 @@ function initCheckoutPage() {
         saveLocalOrder(payload);
       }
 
+      trackGa4Event("purchase_request_submitted", {
+        transaction_id: String(payload.order_code || ""),
+        currency: "AUD",
+        value: Number(payload.total_amount || 0),
+        payment_type: String(
+          selectedProfile?.label ||
+            selectedProfile?.code ||
+            payload.payment_method_code ||
+            "",
+        ),
+        shipping_tier: String(
+          selectedShippingOption?.label ||
+            (warehouseDispatch ? "Warehouse Dispatch" : "Store Pickup"),
+        ),
+        items: buildGa4ItemsFromCart(items),
+      });
       clearCart();
       saveCheckoutSuccessContext(payload);
 
@@ -7466,6 +7680,11 @@ function initBookingForm() {
         );
       }
 
+      trackGa4Event("repair_booking_submitted", {
+        booking_code: String(result.booking_code || ""),
+        repair_category: String(payload.repair_category || ""),
+        store_slug: String(payload.store_slug || ""),
+      });
       form.reset();
 
       if (storeField instanceof HTMLSelectElement && storeParam) {
@@ -7817,6 +8036,10 @@ async function initAccountPage() {
     googleButton.addEventListener("click", async () => {
       try {
         setAuthMessage(messageBox, "");
+        trackGa4Event("login", {
+          method: "google",
+          context: "account",
+        });
         const { error } = await supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
@@ -7834,6 +8057,10 @@ async function initAccountPage() {
     facebookButton.addEventListener("click", async () => {
       try {
         setAuthMessage(messageBox, "");
+        trackGa4Event("login", {
+          method: "facebook",
+          context: "account",
+        });
         const { error } = await supabase.auth.signInWithOAuth({
           provider: "facebook",
           options: {
@@ -7861,6 +8088,10 @@ async function initAccountPage() {
           password,
         });
         if (error) throw error;
+        trackGa4Event("login", {
+          method: "email",
+          context: "account",
+        });
         loginForm.reset();
         window.location.assign(getAccountHomeUrl());
       } catch (error) {
