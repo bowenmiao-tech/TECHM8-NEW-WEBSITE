@@ -1202,17 +1202,37 @@ async function importProductsFromRows(
     const name = normalizeNullableString(row.name)
     if (!name) continue
 
+    const hasImportField = (key: string) => Object.prototype.hasOwnProperty.call(row, key)
+    const setStringPatch = (patch: JsonRecord, key: string, value: unknown) => {
+      const normalized = normalizeNullableString(value)
+      if (normalized !== null) patch[key] = normalized
+    }
+    const setNumberPatch = (patch: JsonRecord, key: string, value: unknown) => {
+      const normalized = normalizeNumber(value)
+      if (normalized !== null) patch[key] = normalized
+    }
+
     const brand = normalizeNullableString(row.brand)
     const model = normalizeNullableString(row.model)
     const desiredSku =
       normalizeNullableString(row.sku) ??
       `TM8-${slugifyProductValue(model ?? name, 'product').toUpperCase()}`
-    const shortDescription =
-      row.short_description === ''
+    const hasShortDescription = hasImportField('short_description')
+    const hasDescription = hasImportField('description')
+    const importedShortDescription =
+      hasShortDescription && row.short_description === ''
         ? null
-        : normalizeNullableString(row.short_description) ??
-          `${name} available for online order and warehouse dispatch.`
-    const stockQuantity = normalizeNumber(row.stock_quantity) ?? 0
+        : hasShortDescription
+          ? normalizeNullableString(row.short_description)
+          : null
+    const shortDescription = importedShortDescription ?? `${name} available for online order and warehouse dispatch.`
+    const importedDescription =
+      hasDescription && row.description === ''
+        ? null
+        : hasDescription
+          ? normalizeNullableString(row.description)
+          : null
+    const stockQuantity = normalizeNumber(row.stock_quantity)
     const supplierId = await resolveSupplierIdByBrand(supabaseAdmin, brand)
 
     const { data: existing, error: existingError } = await supabaseAdmin
@@ -1226,31 +1246,35 @@ async function importProductsFromRows(
     }
 
     if (existing) {
-      const patch = {
-        name,
-        brand,
-        model,
-        upc: normalizeNullableString(row.upc),
-        category_id: normalizeNumber(row.category_id) ?? fallbackCategoryId,
-        supplier_id: supplierId,
-        short_description: shortDescription,
-        description: normalizeNullableString(row.description) ?? shortDescription,
-        condition_label: normalizeNullableString(row.condition_label) ?? 'New',
-        compatibility: row.compatibility === '' ? null : normalizeNullableString(row.compatibility),
-        cost_price: normalizeNumber(row.cost_price) ?? 0,
-        retail_price: normalizeNumber(row.retail_price) ?? 0,
-        compare_at_price: normalizeNumber(row.compare_at_price),
-        image_url: normalizeNullableString(row.image_url),
-        supplier_image_url: normalizeNullableString(row.supplier_image_url),
-        supplier_product_url: normalizeNullableString(row.supplier_product_url),
-        stock_quantity: stockQuantity,
-        min_order_quantity: normalizeNumber(row.min_order_quantity) ?? 1,
-        is_featured: typeof row.is_featured === 'boolean' ? row.is_featured : false,
-        is_visible: typeof row.is_visible === 'boolean' ? row.is_visible : true,
-        seo_title: normalizeNullableString(row.seo_title) ?? buildProductSeoTitle(name),
-        seo_description:
-          normalizeNullableString(row.seo_description) ?? buildProductSeoDescription(shortDescription, name),
-        detail_html: row.detail_html === '' ? null : String(row.detail_html ?? ''),
+      const patch: JsonRecord = { name }
+      if (brand && brand !== 'UNASSIGNED') patch.brand = brand
+      setStringPatch(patch, 'model', row.model)
+      setStringPatch(patch, 'upc', row.upc)
+      const categoryId = normalizeNumber(row.category_id) ?? fallbackCategoryId
+      if (categoryId !== null) patch.category_id = categoryId
+      if (supplierId !== null) patch.supplier_id = supplierId
+      if (importedShortDescription !== null) patch.short_description = importedShortDescription
+      if (importedDescription !== null) patch.description = importedDescription
+      setStringPatch(patch, 'condition_label', row.condition_label)
+      if (hasImportField('compatibility')) {
+        patch.compatibility = row.compatibility === '' ? null : normalizeNullableString(row.compatibility)
+      }
+      setNumberPatch(patch, 'cost_price', row.cost_price)
+      setNumberPatch(patch, 'retail_price', row.retail_price)
+      if (hasImportField('compare_at_price')) {
+        patch.compare_at_price = normalizeNumber(row.compare_at_price)
+      }
+      setStringPatch(patch, 'image_url', row.image_url)
+      setStringPatch(patch, 'supplier_image_url', row.supplier_image_url)
+      setStringPatch(patch, 'supplier_product_url', row.supplier_product_url)
+      if (stockQuantity !== null) patch.stock_quantity = stockQuantity
+      setNumberPatch(patch, 'min_order_quantity', row.min_order_quantity)
+      if (typeof row.is_featured === 'boolean') patch.is_featured = row.is_featured
+      if (typeof row.is_visible === 'boolean') patch.is_visible = row.is_visible
+      setStringPatch(patch, 'seo_title', row.seo_title)
+      setStringPatch(patch, 'seo_description', row.seo_description)
+      if (hasImportField('detail_html')) {
+        patch.detail_html = row.detail_html === '' ? null : String(row.detail_html ?? '')
       }
 
       const { error: updateError } = await supabaseAdmin
@@ -1262,12 +1286,14 @@ async function importProductsFromRows(
         return jsonResponse({ ok: false, error: `Product import failed while updating ${desiredSku}.` }, 500)
       }
 
-      await upsertWarehouseInventory(
-        supabaseAdmin,
-        existing.id,
-        stockQuantity,
-        normalizeNullableString(row.shelf_location) ?? 'ONLINE',
-      )
+      if (stockQuantity !== null) {
+        await upsertWarehouseInventory(
+          supabaseAdmin,
+          existing.id,
+          stockQuantity,
+          normalizeNullableString(row.shelf_location) ?? 'ONLINE',
+        )
+      }
 
       updatedCount += 1
       results.push({ sku: desiredSku, name, action: 'updated' })
@@ -1299,7 +1325,7 @@ async function importProductsFromRows(
       image_url: normalizeNullableString(row.image_url),
       supplier_image_url: normalizeNullableString(row.supplier_image_url),
       supplier_product_url: normalizeNullableString(row.supplier_product_url),
-      stock_quantity: stockQuantity,
+      stock_quantity: stockQuantity ?? 0,
       min_order_quantity: normalizeNumber(row.min_order_quantity) ?? 1,
       is_featured: typeof row.is_featured === 'boolean' ? row.is_featured : false,
       is_visible: typeof row.is_visible === 'boolean' ? row.is_visible : true,
@@ -1322,7 +1348,7 @@ async function importProductsFromRows(
     await upsertWarehouseInventory(
       supabaseAdmin,
       createdRow.id,
-      stockQuantity,
+      stockQuantity ?? 0,
       normalizeNullableString(row.shelf_location) ?? 'ONLINE',
     )
 

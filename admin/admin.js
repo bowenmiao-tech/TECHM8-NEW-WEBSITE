@@ -272,6 +272,75 @@ function inferImportBrand(name, manufacturer) {
   return "UNASSIGNED";
 }
 
+const IMPORT_TEMPLATE_TEXT_PATTERNS = [
+  /this is the name of your product/i,
+  /your product name can include letters/i,
+  /the description of your product/i,
+  /specify the manufacturer or brand/i,
+  /enter the color for this specific/i,
+  /stock-keeping unit \(sku\)/i,
+  /scannable barcode/i,
+  /automatically track the movement of inventory/i,
+];
+
+function normalizeImportHeaderName(value) {
+  return String(value ?? "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+function buildImportRowLookup(row) {
+  const lookup = new Map();
+  Object.entries(row || {}).forEach(([key, value]) => {
+    lookup.set(normalizeImportHeaderName(key), value);
+  });
+  return lookup;
+}
+
+function getImportField(lookup, aliases) {
+  for (const alias of aliases) {
+    const key = normalizeImportHeaderName(alias);
+    if (!lookup.has(key)) continue;
+    const value = lookup.get(key);
+    if (value === null || value === undefined) return "";
+    return String(value).trim();
+  }
+  return "";
+}
+
+function importRowHasTemplateCopy(row) {
+  const text = Object.values(row || {})
+    .map((value) => String(value ?? "").trim())
+    .filter(Boolean)
+    .join(" ");
+  return IMPORT_TEMPLATE_TEXT_PATTERNS.some((pattern) => pattern.test(text));
+}
+
+function appendImportValue(target, key, value) {
+  if (value === null || value === undefined || value === "") return;
+  target[key] = value;
+}
+
+function appendImportNumber(target, key, value) {
+  if (value === null || value === undefined) return;
+  target[key] = value;
+}
+
+function parseImportBoolean(value) {
+  const text = String(value ?? "").trim().toLowerCase();
+  if (!text) return null;
+  if (["true", "yes", "y", "1", "visible", "published"].includes(text)) return true;
+  if (["false", "no", "n", "0", "hidden", "draft"].includes(text)) return false;
+  return null;
+}
+
+function appendImportBoolean(target, key, value) {
+  const parsed = parseImportBoolean(value);
+  if (parsed === null) return;
+  target[key] = parsed;
+}
+
 function renderAdminImportSummary(summary) {
   return `
     <div class="admin-import-summary">
@@ -809,25 +878,62 @@ function normalizeImportWorkbookRows(rows, fallbackCategoryId = "") {
   return rows
     .map((row) => {
       const raw = row && typeof row === "object" ? row : {};
-      const name = String(raw["Item Name"] || raw["Name"] || "").trim();
+      if (importRowHasTemplateCopy(raw)) return null;
+
+      const lookup = buildImportRowLookup(raw);
+      const name = getImportField(lookup, [
+        "Item Name",
+        "Name",
+        "Product Name",
+        "Title",
+      ]);
       if (!name) return null;
 
-      const manufacturer = String(raw["Manufacturer"] || raw["Brand"] || "").trim();
-      const brand = inferImportBrand(name, manufacturer);
-      const sku = String(raw["SKU"] || "").trim();
-      const upc = String(raw["UPC"] || "").trim();
-      const description = String(raw["Description"] || "").trim();
-      const model =
-        extractImportModelToken(raw["Model"]) ||
-        extractImportModelToken(name) ||
-        String(raw["Color"] || "").trim();
-      const stockQuantity = parseImportNumber(raw["On Hand Qty"]) ?? 0;
-      const costPrice = parseImportNumber(raw["Cost Price"]) ?? 0;
-      const retailPrice = parseImportNumber(raw["Retail Price"]) ?? 0;
-      const onlinePrice = parseImportNumber(raw["Online Price"]);
-      const promotionalPrice = parseImportNumber(raw["Promotional Price"]);
+      const normalizedName = normalizeImportHeaderName(name);
+      if (["item name", "name", "product name", "title"].includes(normalizedName)) return null;
 
-      let effectiveRetailPrice = retailPrice || 0;
+      const manufacturer = getImportField(lookup, [
+        "Manufacturer",
+        "Brand",
+        "Vendor",
+      ]);
+      const brand = inferImportBrand(name, manufacturer);
+      const sku = getImportField(lookup, ["SKU", "Variant SKU"]);
+      const upc = getImportField(lookup, ["UPC", "Barcode", "Variant Barcode"]);
+      const description = getImportField(lookup, [
+        "Description",
+        "Short Description",
+        "Body (HTML)",
+        "Body HTML",
+      ]);
+      const model =
+        extractImportModelToken(getImportField(lookup, ["Model"])) ||
+        extractImportModelToken(name) ||
+        getImportField(lookup, ["Color", "Option1 Value", "Option 1 Value"]);
+      const stockQuantity = parseImportNumber(getImportField(lookup, [
+        "On Hand Qty",
+        "Stock Quantity",
+        "Quantity",
+        "Inventory",
+        "Variant Inventory Qty",
+      ]));
+      const costPrice = parseImportNumber(getImportField(lookup, [
+        "Cost Price",
+        "Cost per item",
+        "Variant Cost",
+      ]));
+      const retailPrice = parseImportNumber(getImportField(lookup, [
+        "Retail Price",
+        "Price",
+        "Variant Price",
+      ]));
+      const onlinePrice = parseImportNumber(getImportField(lookup, ["Online Price"]));
+      const promotionalPrice = parseImportNumber(getImportField(lookup, [
+        "Promotional Price",
+        "Sale Price",
+      ]));
+
+      let effectiveRetailPrice = retailPrice;
       let compareAtPrice = null;
       if (promotionalPrice !== null && promotionalPrice > 0 && (!effectiveRetailPrice || promotionalPrice < effectiveRetailPrice)) {
         compareAtPrice = effectiveRetailPrice || null;
@@ -839,26 +945,47 @@ function normalizeImportWorkbookRows(rows, fallbackCategoryId = "") {
 
       const slugBase = slugifyAdminProductValue(name, "product");
       const generatedSku = sku || `TM8-${(extractImportModelToken(name) || slugBase).toUpperCase()}`;
-
-      return {
+      const normalized = {
         name,
         brand,
-        model: model || null,
         sku: generatedSku,
         slug: slugBase,
-        upc: upc || null,
-        short_description: description || `${name} available for online order and warehouse dispatch.`,
-        description: description || `${name} available for online order and warehouse dispatch.`,
-        cost_price: costPrice,
-        retail_price: effectiveRetailPrice,
-        compare_at_price: compareAtPrice,
-        stock_quantity: stockQuantity,
-        condition_label: String(raw["Condition"] || "New").trim() || "New",
-        category_id: fallbackCategoryId || "",
-        shelf_location: String(raw["Physical Location"] || "").trim() || "ONLINE",
-        is_visible: true,
-        is_featured: false,
       };
+
+      appendImportValue(normalized, "model", model);
+      appendImportValue(normalized, "upc", upc);
+      appendImportValue(normalized, "short_description", description);
+      appendImportValue(normalized, "description", description);
+      appendImportNumber(normalized, "cost_price", costPrice);
+      appendImportNumber(normalized, "retail_price", effectiveRetailPrice);
+      appendImportNumber(normalized, "compare_at_price", compareAtPrice);
+      appendImportNumber(normalized, "stock_quantity", stockQuantity);
+      appendImportValue(normalized, "condition_label", getImportField(lookup, ["Condition"]));
+      appendImportValue(normalized, "category_id", fallbackCategoryId);
+      appendImportValue(normalized, "shelf_location", getImportField(lookup, [
+        "Physical Location",
+        "Shelf Location",
+        "Location",
+      ]));
+      appendImportValue(normalized, "image_url", getImportField(lookup, [
+        "Image URL",
+        "Image Src",
+        "Image",
+      ]));
+      appendImportValue(normalized, "supplier_product_url", getImportField(lookup, [
+        "Supplier Product URL",
+        "Product URL",
+      ]));
+      appendImportBoolean(normalized, "is_visible", getImportField(lookup, [
+        "Visible",
+        "Published",
+        "Status",
+      ]));
+      appendImportBoolean(normalized, "is_featured", getImportField(lookup, [
+        "Featured",
+        "Is Featured",
+      ]));
+      return normalized;
     })
     .filter(Boolean);
 }
