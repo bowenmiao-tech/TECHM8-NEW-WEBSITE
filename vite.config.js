@@ -7,6 +7,8 @@ const IGNORED_DIRECTORIES = new Set([
   "dist",
   "node_modules",
   "public",
+  "api",
+  "database",
   "supabase"
 ]);
 

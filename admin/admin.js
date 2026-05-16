@@ -1,3 +1,18 @@
+window.TECHM8_CONFIG = window.TECHM8_CONFIG || {
+  supabaseUrl: "https://fwlronvmgqzkleofriis.supabase.co",
+  supabaseAnonKey:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3bHJvbnZtZ3F6a2xlb2ZyaWlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTIwMTYsImV4cCI6MjA5MTU2ODAxNn0.f_WFZmR8MlM49yXhnBMwKyqDDpT4EOZLGgg-TPbdrNY",
+  bookingEndpoint:
+    "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/book-repair",
+  orderEndpoint:
+    "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/submit-order",
+  checkoutSessionEndpoint:
+    "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/create-checkout-session",
+  adminEndpoint:
+    "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/admin-panel",
+  siteUrl: "https://www.techm8australia.com/",
+};
+
 const SUPABASE_BROWSER_CDN_URL = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 const QUILL_CDN_URL = "https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js";
 const QUILL_CSS_URL = "https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css";
