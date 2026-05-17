@@ -121,7 +121,7 @@ if (pageData) {
     items.length ? `<ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul>` : "";
 
   const renderSeoIntro = () => {
-    if (!pageData.seoIntro) return "";
+    if (!pageData.seoIntro || pageData.integrateSeoIntroWithHero) return "";
     return `
       <section class="section repair-seo-section">
         <div class="container repair-seo-layout">
@@ -149,6 +149,18 @@ if (pageData) {
           </aside>
         </div>
       </section>
+    `;
+  };
+
+  const renderStickyRepairCta = () => {
+    if (!pageData.stickyRepairCta) return "";
+    return `
+      <div class="repair-sticky-cta">
+        <div class="container repair-sticky-cta__inner">
+          <span>${pageData.stickyRepairCtaText || "Need a repair?"}</span>
+          <a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>
+        </div>
+      </div>
     `;
   };
 
@@ -451,9 +463,11 @@ if (pageData) {
       </div>
     </header>
 
+    ${renderStickyRepairCta()}
+
     <main>
       <section class="hero hero--service">
-        <div class="container repair-detail-hero">
+        <div class="container repair-detail-hero ${pageData.integrateSeoIntroWithHero ? "repair-detail-hero--integrated" : ""}">
           <div>
             <p class="eyebrow">${pageData.category}</p>
             <h1>${pageData.title}</h1>
@@ -463,14 +477,43 @@ if (pageData) {
                 : ""
             }
             <p class="hero__lead">${pageData.intro}</p>
+            ${
+              pageData.integrateSeoIntroWithHero && pageData.seoIntro?.paragraphs?.length
+                ? `<div class="repair-hero-seo-copy">${pageData.seoIntro.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("")}</div>`
+                : ""
+            }
             <div class="hero__actions">
               <a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>
               <a class="button button--secondary" href="${prefix}${pageData.secondaryCtaHref || "repairs.html"}">${pageData.secondaryCtaText || "Back to repairs"}</a>
             </div>
           </div>
-          <div class="repair-detail-panel">
-            ${resolveRepairVisual()}
-          </div>
+          ${
+            pageData.integrateSeoIntroWithHero
+              ? `
+                <div class="repair-detail-panel repair-detail-panel--integrated">
+                  ${pageData.seoIntro?.image ? renderImage(pageData.seoIntro, "repair-detail-panel__photo repair-detail-panel__photo--feature") : resolveRepairVisual()}
+                  ${
+                    pageData.seoIntro?.highlights?.length
+                      ? `<div class="repair-hero-highlights">${pageData.seoIntro.highlights
+                          .map(
+                            (item) => `
+                              <div class="repair-seo-highlight">
+                                <strong>${item.title}</strong>
+                                <span>${item.text}</span>
+                              </div>
+                            `
+                          )
+                          .join("")}</div>`
+                      : ""
+                  }
+                </div>
+              `
+              : `
+                <div class="repair-detail-panel">
+                  ${resolveRepairVisual()}
+                </div>
+              `
+          }
         </div>
       </section>
 
