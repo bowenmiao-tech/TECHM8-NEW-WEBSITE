@@ -135,9 +135,10 @@ a {
 
 .nav__menu {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 1rem;
+  white-space: nowrap;
 }
 .nav__menu a {
   font-weight: 600;
@@ -218,7 +219,7 @@ a {
   transition-delay: 0s;
 }
 
-@media (min-width: 961px) {
+@media (min-width: 1121px) {
   .nav__dropdown::after {
     content: "";
     position: absolute;
@@ -3565,6 +3566,323 @@ body.storefront-shop-page .storefront-tools {
   text-decoration: underline;
 }
 
+@media (max-width: 1120px) {
+  .nav {
+    align-items: center;
+  }
+
+  .nav > .nav__toggle {
+    display: inline-flex;
+    align-self: center;
+    margin-left: auto;
+  }
+
+  .nav__menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: flex;
+    width: min(82vw, 24rem);
+    max-width: 24rem;
+    height: 100vh;
+    padding: 0 0 2rem;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 24px 60px rgba(3, 24, 28, 0.24);
+    transform: translateX(104%);
+    transition: transform 220ms ease;
+    overflow-y: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    white-space: normal;
+  }
+
+  .nav__menu.is-open,
+  .nav__mobile-input:checked + .nav__toggle + .nav__menu,
+  .nav__mobile-input:checked + .nav__toggle + .nav__overlay + .nav__menu {
+    transform: translateX(0);
+  }
+
+  .nav__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    display: block;
+    background: rgba(3, 24, 28, 0.56);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease;
+  }
+
+  .nav__mobile-input:checked + .nav__toggle + .nav__overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav__overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav__menu-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1rem 0.9rem;
+    background: rgba(255, 255, 255, 0.98);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .brand--menu .brand__logo {
+    height: 2.6rem;
+    max-width: min(12rem, 55vw);
+  }
+
+  .nav__toggle--close {
+    display: inline-flex;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .nav__toggle--close span {
+    position: absolute;
+    width: 1rem;
+  }
+
+  .nav__toggle--close span:first-child {
+    transform: rotate(45deg);
+  }
+
+  .nav__toggle--close span:last-child {
+    transform: rotate(-45deg);
+  }
+
+  .nav__dropdown {
+    width: 100%;
+    border-bottom: 1px solid rgba(7, 39, 45, 0.08);
+  }
+
+  .nav__dropdown-toggle {
+    width: 100%;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    font-size: 1.05rem;
+  }
+
+  .nav__dropdown.is-open > .nav__dropdown-toggle {
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+    color: white;
+  }
+
+  .nav__dropdown.is-open > .nav__dropdown-toggle::after {
+    border-color: currentColor;
+    transform: rotate(-135deg) translateY(-0.05rem);
+  }
+
+  .nav__dropdown-menu {
+    position: static;
+    min-width: 0;
+    width: 100%;
+    margin-top: 0;
+    padding: 0;
+    grid-template-columns: 1fr;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    opacity: 0;
+    visibility: visible;
+    pointer-events: none;
+    transform: none;
+    max-height: 0;
+    overflow: hidden;
+    transition:
+      max-height 280ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 180ms ease,
+      padding 220ms ease;
+  }
+
+  .nav__dropdown--stores .nav__dropdown-menu {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .nav__dropdown.is-open .nav__dropdown-menu {
+    max-height: 80vh;
+    padding: 0.35rem 0 0.7rem;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav__dropdown--stores.is-open .nav__dropdown-menu {
+    padding: 0.6rem 1rem 1rem;
+  }
+
+  .nav__dropdown--repairs > .nav__dropdown-menu {
+    display: none;
+  }
+
+  .nav__mobile-repairs {
+    display: grid;
+    max-height: 0;
+    overflow: hidden;
+    transition:
+      max-height 220ms ease,
+      padding 220ms ease;
+  }
+
+  .nav__dropdown--repairs.is-open > .nav__mobile-repairs {
+    max-height: 120rem;
+    overflow: visible;
+    padding: 0.35rem 0 0.7rem;
+  }
+
+  .nav__mobile-repairs-group {
+    width: 100%;
+  }
+
+  .nav__mobile-repairs-toggle {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.95rem 1.25rem;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .nav__mobile-repairs-toggle::after {
+    content: "";
+    width: 0.55rem;
+    height: 0.55rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-0.1rem);
+  }
+
+  .nav__mobile-repairs-group.is-open > .nav__mobile-repairs-toggle {
+    background: rgba(17, 141, 149, 0.08);
+    color: var(--accent);
+  }
+
+  .nav__mobile-repairs-group.is-open > .nav__mobile-repairs-toggle::after {
+    transform: rotate(-135deg) translateY(-0.05rem);
+  }
+
+  .nav__mobile-repairs-panel {
+    display: grid;
+    gap: 0.45rem;
+    max-height: 0;
+    overflow: hidden;
+    padding-bottom: 0;
+    transition:
+      max-height 220ms ease,
+      padding-bottom 220ms ease;
+  }
+
+  .nav__mobile-repairs-group.is-open > .nav__mobile-repairs-panel {
+    max-height: 56rem;
+    overflow: visible;
+    padding-bottom: 0.4rem;
+  }
+
+  .nav__mobile-repairs-panel a {
+    display: block;
+    padding: 0.78rem 1.8rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .nav__dropdown-group {
+    gap: 0;
+    width: 100%;
+  }
+
+  .nav__submenu-toggle {
+    padding: 0.95rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .nav__dropdown-group.is-open > .nav__submenu-toggle {
+    background: rgba(17, 141, 149, 0.08);
+  }
+
+  .nav__submenu-panel {
+    margin-top: 0;
+    max-height: 0;
+    padding-bottom: 0.4rem;
+  }
+
+  .nav__dropdown-group a {
+    padding: 0.78rem 1.8rem;
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .nav__menu > a {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    font-size: 1.05rem;
+    border-bottom: 1px solid rgba(7, 39, 45, 0.08);
+  }
+
+  .store-switcher__grid {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .store-switcher--repairs .store-switcher__grid {
+    gap: 0.15rem;
+  }
+
+  .nav__submenu-meta {
+    font-size: 0.76rem;
+  }
+
+  .store-switcher__link {
+    min-height: 3.2rem;
+    text-transform: none;
+  }
+
+  .nav__shop-link,
+  .nav__account-link,
+  .nav__cart-link {
+    width: auto;
+    margin: 1.25rem 1.25rem 0;
+  }
+
+  .nav__shop-link {
+    padding: 0.9rem 1.3rem;
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+    box-shadow: 0 12px 24px rgba(15, 151, 155, 0.24);
+  }
+
+  .brand__logo {
+    height: 3.4rem;
+    max-width: min(16rem, 60vw);
+  }
+}
+
 @media (max-width: 960px) {
   .hero__grid,
   .section-heading--split,
@@ -5328,6 +5646,11 @@ body.storefront-shop-page .storefront-tools {
 
 .business-ndis-enquiry .section-heading {
   margin-bottom: 1.1rem;
+}
+
+.business-ndis-enquiry .booking-card {
+  max-width: 58rem;
+  margin: 0 auto;
 }
 
 .section-heading--compact {

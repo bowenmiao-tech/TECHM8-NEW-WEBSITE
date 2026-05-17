@@ -215,7 +215,7 @@ if (pageData) {
   const ndisForm = pageData.isNdisPage
     ? `
       <section class="section section--muted" id="ndis-enquiry">
-        <div class="container booking-layout business-ndis-enquiry">
+        <div class="container business-ndis-enquiry">
           <div class="booking-card">
             <div class="section-heading section-heading--compact">
               <p class="eyebrow">Submit an enquiry</p>
@@ -239,18 +239,6 @@ if (pageData) {
               <div class="booking-form__actions"><button class="button button--primary" type="submit" data-ndis-enquiry-submit>Submit enquiry</button><a class="button button--secondary" href="tel:0452488710">Call TECHM8</a></div>
             </form>
           </div>
-          <aside class="booking-sidebar">
-            <div class="booking-sidebar__card">
-              <h3>Suitable enquiry examples</h3>
-              <ul>
-                <li>Phone, tablet or laptop repair for a participant</li>
-                <li>Home visit to check a computer, printer or Wi-Fi issue</li>
-                <li>Software, app, email or accessibility setup</li>
-                <li>Device setup after purchase or replacement</li>
-                <li>Quote details for a coordinator or plan manager</li>
-              </ul>
-            </div>
-          </aside>
         </div>
       </section>`
     : "";
@@ -312,6 +300,7 @@ if (pageData) {
         </div>
       </section>
       ${ndisIntro}
+      ${ndisForm}
       <section class="section">
         <div class="container">
           <div class="section-heading">
@@ -333,7 +322,6 @@ if (pageData) {
         </div>
       </section>
       ${ndisFaqSection}
-      ${ndisForm}
     </main>
     <footer class="site-footer">
       <div class="container footer footer--rich">
