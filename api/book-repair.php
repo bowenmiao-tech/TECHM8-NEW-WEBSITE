@@ -126,6 +126,8 @@ $categoryLabels = [
     'gaming_console' => 'Gaming Console',
 ];
 
+$storeEmail = null;
+
 try {
     $pdo = new PDO(
         sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $config['db_host'], $config['db_name']),
@@ -199,6 +201,17 @@ try {
     exit;
 }
 
+try {
+    $storeStatement = $pdo->prepare('SELECT email FROM stores WHERE slug = :store_slug LIMIT 1');
+    $storeStatement->execute([':store_slug' => $storeSlug]);
+    $storeRow = $storeStatement->fetch();
+    if ($storeRow && !empty($storeRow['email']) && filter_var($storeRow['email'], FILTER_VALIDATE_EMAIL)) {
+        $storeEmail = strtolower(trim((string) $storeRow['email']));
+    }
+} catch (Throwable $exception) {
+    $storeEmail = null;
+}
+
 $storeLabel = $storeLabels[$storeSlug] ?? $storeSlug;
 $categoryLabel = $categoryLabels[$repairCategory] ?? $repairCategory;
 
@@ -244,7 +257,17 @@ $headers = [
     'Reply-To: ' . $config['admin_email'],
 ];
 
-@mail($config['admin_email'], $adminSubject, $adminMessage, implode("\r\n", $headers));
+$internalRecipients = [];
+foreach ([$config['admin_email'], $storeEmail] as $recipient) {
+    $recipient = strtolower(trim((string) $recipient));
+    if ($recipient !== '' && filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
+        $internalRecipients[$recipient] = true;
+    }
+}
+
+foreach (array_keys($internalRecipients) as $recipient) {
+    @mail($recipient, $adminSubject, $adminMessage, implode("\r\n", $headers));
+}
 @mail($email, $customerSubject, $customerMessage, implode("\r\n", $headers));
 
 echo json_encode([

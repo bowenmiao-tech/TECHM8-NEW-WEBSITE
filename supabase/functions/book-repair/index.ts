@@ -67,6 +67,16 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(value.trim())
 }
 
+function normalizeEmailRecipients(recipients: string[]) {
+  return Array.from(
+    new Set(
+      recipients
+        .map((recipient) => recipient.trim().toLowerCase())
+        .filter((recipient) => recipient && isValidEmail(recipient)),
+    ),
+  )
+}
+
 function normalizeAustralianPhone(value: string) {
   const raw = String(value || '').trim()
   const compact = raw.replace(/[^\d+]/g, '')
@@ -380,9 +390,7 @@ async function sendEmail(payload: {
 }) {
   const resendApiKey = Deno.env.get('RESEND_API_KEY_BOOKING') ?? Deno.env.get('RESEND_API_KEY') ?? ''
   const fromEmail = Deno.env.get('BOOKING_FROM_EMAIL') ?? ''
-  const recipients = Array.from(
-    new Set(payload.recipients.map((recipient) => recipient.trim().toLowerCase()).filter(Boolean)),
-  )
+  const recipients = normalizeEmailRecipients(payload.recipients)
 
   if (!resendApiKey || !fromEmail || !recipients.length) {
     return { sent: false, reason: 'missing_email_config' }
@@ -581,12 +589,7 @@ Deno.serve(async (req) => {
         .maybeSingle()
 
       const mainNotificationEmail = String(Deno.env.get('REPAIR_NOTIFICATION_EMAIL') ?? 'techm8contact@gmail.com').trim().toLowerCase()
-      const recipients = Array.from(
-        new Set(
-          [String(storeRow?.email ?? '').trim().toLowerCase(), mainNotificationEmail]
-            .filter(Boolean),
-        ),
-      )
+      const recipients = normalizeEmailRecipients([String(storeRow?.email ?? ''), mainNotificationEmail])
       const storeName = String(storeRow?.name ?? storeSlug)
       const storeAddress = formatStoreAddress(storeRow as StoreRow | null)
       const emailPayload = {
