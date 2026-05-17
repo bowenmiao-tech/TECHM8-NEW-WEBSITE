@@ -3340,6 +3340,38 @@ body.storefront-shop-page .storefront-tools {
   top: 9rem;
 }
 
+.business-ndis-logo {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(
+      circle at 24% 20%,
+      rgba(255, 255, 255, 0.88),
+      transparent 18%
+    ),
+    linear-gradient(135deg, rgba(94, 45, 145, 0.16), rgba(22, 200, 186, 0.22));
+}
+
+.business-ndis-logo::before,
+.business-ndis-logo::after {
+  display: none;
+}
+
+.business-ndis-logo span {
+  display: grid;
+  place-items: center;
+  width: min(12rem, 70%);
+  aspect-ratio: 1.9 / 1;
+  border-radius: 1rem;
+  background: #5e2d91;
+  color: #ffffff;
+  font-size: clamp(2.3rem, 8vw, 4.4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0;
+  box-shadow: 0 22px 46px rgba(7, 39, 45, 0.16);
+}
+
 .vector-desktop::before {
   width: 7rem;
   height: 4.5rem;

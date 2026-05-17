@@ -198,6 +198,10 @@ if (pageData) {
 
   const appRoot =
     document.querySelector("[data-business-service-root]") || document.body;
+  const heroIconClass = pageData.heroIconClass || "vector-laptop";
+  const heroIconLabel = pageData.heroIconLabel
+    ? `<span>${pageData.heroIconLabel}</span>`
+    : "";
 
   appRoot.innerHTML = `
     <div class="promo-banner">
@@ -244,7 +248,7 @@ if (pageData) {
             </div>
           </div>
           <div class="repair-detail-panel">
-            <div class="repair-detail-panel__icon vector-laptop" aria-hidden="true"></div>
+            <div class="repair-detail-panel__icon ${heroIconClass}" aria-hidden="true">${heroIconLabel}</div>
           </div>
         </div>
       </section>
