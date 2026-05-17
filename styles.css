@@ -3554,7 +3554,6 @@ body.storefront-shop-page .storefront-tools {
   width: 100%;
   border-radius: 1rem;
   object-fit: cover;
-  background: rgba(17, 141, 149, 0.08);
 }
 
 .issue-card__image {
@@ -3566,6 +3565,14 @@ body.storefront-shop-page .storefront-tools {
 .repair-model-card__image {
   aspect-ratio: 16 / 10;
   margin-bottom: 1rem;
+}
+
+.repair-model-card__image {
+  aspect-ratio: 16 / 9;
+  height: clamp(13rem, 24vw, 17rem);
+  object-fit: contain;
+  object-position: center;
+  border-radius: 0;
 }
 
 .repair-seo-main__image {
