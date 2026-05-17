@@ -5211,6 +5211,121 @@ body.storefront-shop-page .storefront-tools {
   font-size: 0.9rem;
 }
 
+.business-seo-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.42fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.business-seo-main,
+.business-seo-card,
+.business-faq-item {
+  border: 1px solid rgba(7, 39, 45, 0.08);
+  border-radius: 1.1rem;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--shadow);
+}
+
+.business-seo-main {
+  padding: clamp(1.2rem, 3vw, 1.8rem);
+}
+
+.business-seo-main h2,
+.business-seo-card h3,
+.business-faq-item h3 {
+  margin: 0;
+}
+
+.business-seo-main h2 {
+  margin-top: 0.25rem;
+}
+
+.business-seo-main p {
+  margin: 0.8rem 0 0;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.business-seo-list {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.business-seo-list li {
+  position: relative;
+  padding-left: 1.4rem;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.business-seo-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--brand);
+}
+
+.business-seo-aside {
+  display: grid;
+  gap: 1rem;
+}
+
+.business-seo-card,
+.business-faq-item {
+  padding: 1rem;
+}
+
+.business-seo-card h3,
+.business-faq-item h3 {
+  font-size: 1rem;
+}
+
+.business-seo-tags,
+.business-seo-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.8rem;
+}
+
+.business-seo-tags span,
+.business-seo-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(22, 200, 186, 0.11);
+  color: #0d6468;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.business-seo-link {
+  background: rgba(7, 39, 45, 0.06);
+  color: var(--text);
+}
+
+.business-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.business-faq-item p {
+  margin: 0.55rem 0 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
 .business-ndis-enquiry .section-heading {
   margin-bottom: 1.1rem;
 }
@@ -5221,6 +5336,11 @@ body.storefront-shop-page .storefront-tools {
 
 @media (max-width: 720px) {
   .business-ndis-strip__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .business-seo-layout,
+  .business-faq-grid {
     grid-template-columns: 1fr;
   }
 }

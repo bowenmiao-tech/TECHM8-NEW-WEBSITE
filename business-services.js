@@ -120,6 +120,27 @@ if (pageData) {
         </article>`,
     )
     .join("");
+  const seoServices = (pageData.seoServices || [])
+    .map((service) => `<li>${service}</li>`)
+    .join("");
+  const locationTags = (pageData.locations || [])
+    .map((location) => `<span>${location}</span>`)
+    .join("");
+  const relatedLinks = (pageData.relatedLinks || [])
+    .map(
+      (link) =>
+        `<a class="business-seo-link" href="${linkUrl(link.href)}">${link.label}</a>`,
+    )
+    .join("");
+  const faqItems = (pageData.faqs || [])
+    .map(
+      (faq) => `
+        <article class="business-faq-item">
+          <h3>${faq.question}</h3>
+          <p>${faq.answer}</p>
+        </article>`,
+    )
+    .join("");
   const ndisIntro = pageData.isNdisPage
     ? `
       <section class="section section--muted business-ndis-strip">
@@ -133,6 +154,32 @@ if (pageData) {
         </div>
       </section>`
     : "";
+  const ndisSeoSection =
+    pageData.isNdisPage && (seoServices || locationTags || relatedLinks)
+      ? `
+      <section class="section business-seo-section">
+        <div class="container business-seo-layout">
+          <div class="business-seo-main">
+            <p class="eyebrow">NDIS technology support Brisbane</p>
+            <h2>${pageData.seoHeading}</h2>
+            <p>${pageData.seoLead}</p>
+            ${seoServices ? `<ul class="business-seo-list">${seoServices}</ul>` : ""}
+          </div>
+          <aside class="business-seo-aside">
+            ${
+              locationTags
+                ? `<div class="business-seo-card"><h3>${pageData.locationHeading || "Service areas"}</h3><div class="business-seo-tags">${locationTags}</div></div>`
+                : ""
+            }
+            ${
+              relatedLinks
+                ? `<div class="business-seo-card"><h3>${pageData.relatedHeading || "Related services"}</h3><div class="business-seo-links">${relatedLinks}</div></div>`
+                : ""
+            }
+          </aside>
+        </div>
+      </section>`
+      : "";
   const ndisFundingNote = pageData.isNdisPage
     ? `
       <section class="section business-ndis-note">
@@ -153,6 +200,19 @@ if (pageData) {
         </div>
       </section>`
     : "";
+  const ndisFaqSection =
+    pageData.isNdisPage && faqItems
+      ? `
+      <section class="section business-faq-section" id="ndis-faq">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Questions</p>
+            <h2>${pageData.faqHeading || "Frequently asked questions"}</h2>
+          </div>
+          <div class="business-faq-grid">${faqItems}</div>
+        </div>
+      </section>`
+      : "";
   const ndisForm = pageData.isNdisPage
     ? `
       <section class="section section--muted" id="ndis-enquiry">
@@ -262,6 +322,7 @@ if (pageData) {
           <div class="repair-content-grid">${cards}</div>
         </div>
       </section>
+      ${ndisSeoSection}
       ${ndisFundingNote}
       <section class="section section--muted">
         <div class="container">
@@ -272,6 +333,7 @@ if (pageData) {
           <div class="repair-content-grid">${steps}</div>
         </div>
       </section>
+      ${ndisFaqSection}
       ${ndisForm}
     </main>
     <footer class="site-footer">
