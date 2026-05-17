@@ -128,30 +128,48 @@
             <span>Search by suburb or address</span>
             <input type="search" placeholder="Search stores..." data-store-search>
           </label>
+          <div class="store-locator__location">
+            <button class="button button--primary" type="button" data-store-locate>Use my current location</button>
+            <p data-store-location-status>Allow location access to see the nearest TECHM8 store first.</p>
+          </div>
+          <article class="store-locator__recommendation" hidden data-store-recommendation aria-live="polite">
+            <p class="eyebrow">Recommended nearest store</p>
+            <h3 data-store-recommendation-title></h3>
+            <p data-store-recommendation-copy></p>
+            <div class="store-locator__recommendation-actions">
+              <a class="button button--secondary" href="stores.html" data-store-recommendation-directions target="_blank" rel="noopener">Directions</a>
+              <a class="button button--primary" href="stores.html" data-store-recommendation-page>Store page</a>
+            </div>
+          </article>
           <div class="store-locator__list">
             <button class="store-locator__card" type="button" data-store-card="park-ridge">
               <strong>Park Ridge</strong>
               <span>Shop 11, 3732 Mount Lindesay Hwy, Park Ridge QLD 4125</span>
+              <em data-store-distance></em>
               <small>Open map and store details</small>
             </button>
             <button class="store-locator__card" type="button" data-store-card="fairfield">
               <strong>Fairfield</strong>
               <span>Shop 8, 180 Fairfield Rd, Fairfield QLD 4103</span>
+              <em data-store-distance></em>
               <small>Open map and store details</small>
             </button>
             <button class="store-locator__card" type="button" data-store-card="toowong">
               <strong>Toowong</strong>
               <span>Ground Level Shop 53, 9 Sherwood Rd, Toowong QLD 4066</span>
+              <em data-store-distance></em>
               <small>Open map and store details</small>
             </button>
             <button class="store-locator__card" type="button" data-store-card="north-lakes">
               <strong>North Lakes</strong>
               <span>1114A N Lakes Drive, North Lakes QLD 4509</span>
+              <em data-store-distance></em>
               <small>Open map and store details</small>
             </button>
             <button class="store-locator__card" type="button" data-store-card="brassall">
               <strong>Brassall</strong>
               <span>68 Hunter St, Primewest Brassall Shopping Centre, Brassall QLD 4305</span>
+              <em data-store-distance></em>
               <small>Open map and store details</small>
             </button>
           </div>

@@ -484,6 +484,21 @@ function initStoresLocator() {
   const directionsLink = root.querySelector("[data-store-directions]");
   const pageLink = root.querySelector("[data-store-page]");
   const allStoresButton = root.querySelector("[data-store-all]");
+  const locateButton = root.querySelector("[data-store-locate]");
+  const locationStatus = root.querySelector("[data-store-location-status]");
+  const recommendation = root.querySelector("[data-store-recommendation]");
+  const recommendationTitle = root.querySelector(
+    "[data-store-recommendation-title]",
+  );
+  const recommendationCopy = root.querySelector(
+    "[data-store-recommendation-copy]",
+  );
+  const recommendationDirections = root.querySelector(
+    "[data-store-recommendation-directions]",
+  );
+  const recommendationPage = root.querySelector(
+    "[data-store-recommendation-page]",
+  );
   const allStoresMapSrc =
     "https://www.google.com/maps?q=OZ%20Tech%20M8%20Queensland%20Australia&output=embed";
 
@@ -492,11 +507,64 @@ function initStoresLocator() {
     return `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
   };
 
+  const toRadians = (degrees) => (degrees * Math.PI) / 180;
+
+  const getDistanceKm = (from, to) => {
+    const earthRadiusKm = 6371;
+    const deltaLat = toRadians(to.latitude - from.latitude);
+    const deltaLng = toRadians(to.longitude - from.longitude);
+    const fromLat = toRadians(from.latitude);
+    const toLat = toRadians(to.latitude);
+    const a =
+      Math.sin(deltaLat / 2) ** 2 +
+      Math.cos(fromLat) * Math.cos(toLat) * Math.sin(deltaLng / 2) ** 2;
+    return (
+      earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(Math.max(0, 1 - a)))
+    );
+  };
+
+  const formatDistance = (distanceKm) => {
+    if (!Number.isFinite(distanceKm)) return "";
+    if (distanceKm < 1) return `${Math.round(distanceKm * 1000)} m away`;
+    return `${distanceKm.toFixed(distanceKm < 10 ? 1 : 0)} km away`;
+  };
+
+  const getStoresWithDistance = (position) =>
+    storeOrder
+      .map((slug) => {
+        const store = STORE_CHECKOUT_DETAILS[slug];
+        if (!store?.coordinates) return null;
+        return {
+          slug,
+          store,
+          distanceKm: getDistanceKm(position, store.coordinates),
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.distanceKm - b.distanceKm);
+
+  const setLocationStatus = (message) => {
+    if (locationStatus instanceof HTMLElement) {
+      locationStatus.textContent = message;
+    }
+  };
+
   const showAllStores = () => {
     cards.forEach((card) => {
       card.classList.remove("is-active");
       card.setAttribute("aria-pressed", "false");
+      card.style.order = "";
+      const distanceTarget = card.querySelector("[data-store-distance]");
+      if (distanceTarget instanceof HTMLElement) {
+        distanceTarget.textContent = "";
+      }
     });
+    if (recommendation instanceof HTMLElement) {
+      recommendation.hidden = true;
+    }
+    setLocationStatus(
+      "Allow location access to see the nearest TECHM8 store first.",
+    );
     if (mapFrame instanceof HTMLIFrameElement) {
       mapFrame.src = allStoresMapSrc;
       mapFrame.title = "OZ Tech M8 Queensland Google Map";
@@ -515,6 +583,55 @@ function initStoresLocator() {
     if (pageLink instanceof HTMLAnchorElement) {
       pageLink.href = "stores.html";
     }
+  };
+
+  const updateRecommendation = (nearest) => {
+    if (
+      !(recommendation instanceof HTMLElement) ||
+      !(recommendationTitle instanceof HTMLElement) ||
+      !(recommendationCopy instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    recommendation.hidden = false;
+    recommendationTitle.textContent = nearest.store.title;
+    recommendationCopy.textContent = `${formatDistance(nearest.distanceKm)}. ${nearest.store.summary}`;
+
+    if (recommendationDirections instanceof HTMLAnchorElement) {
+      recommendationDirections.href =
+        nearest.store.mapUrl || getMapSrc(nearest.store);
+    }
+    if (recommendationPage instanceof HTMLAnchorElement) {
+      recommendationPage.href = nearest.store.pageUrl || "stores.html";
+    }
+  };
+
+  const applyLocationDistances = (position) => {
+    const storesByDistance = getStoresWithDistance(position);
+    if (!storesByDistance.length) return;
+
+    const distanceBySlug = new Map(
+      storesByDistance.map((item) => [item.slug, item.distanceKm]),
+    );
+
+    cards.forEach((card) => {
+      const slug = card.getAttribute("data-store-card") || "";
+      const distanceTarget = card.querySelector("[data-store-distance]");
+      const distanceKm = distanceBySlug.get(slug);
+      if (distanceTarget instanceof HTMLElement) {
+        distanceTarget.textContent = formatDistance(distanceKm);
+      }
+      const rank = storesByDistance.findIndex((item) => item.slug === slug);
+      card.style.order = rank >= 0 ? String(rank) : "";
+    });
+
+    const nearest = storesByDistance[0];
+    updateRecommendation(nearest);
+    selectStore(nearest.slug);
+    setLocationStatus(
+      `Showing stores nearest to your current location. Closest match: ${nearest.store.title}.`,
+    );
   };
 
   const selectStore = (slug) => {
@@ -558,6 +675,44 @@ function initStoresLocator() {
 
   if (allStoresButton instanceof HTMLButtonElement) {
     allStoresButton.addEventListener("click", showAllStores);
+  }
+
+  if (locateButton instanceof HTMLButtonElement) {
+    if (!("geolocation" in navigator)) {
+      locateButton.disabled = true;
+      setLocationStatus(
+        "Your browser does not support location access. Search by suburb or choose a store from the list.",
+      );
+    } else {
+      locateButton.addEventListener("click", () => {
+        locateButton.disabled = true;
+        locateButton.textContent = "Finding nearest store...";
+        setLocationStatus("Requesting location permission from your browser.");
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            locateButton.disabled = false;
+            locateButton.textContent = "Use my current location";
+            applyLocationDistances({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          },
+          () => {
+            locateButton.disabled = false;
+            locateButton.textContent = "Use my current location";
+            setLocationStatus(
+              "Location access was not available. Search by suburb or choose a store manually.",
+            );
+          },
+          {
+            enableHighAccuracy: false,
+            maximumAge: 300000,
+            timeout: 10000,
+          },
+        );
+      });
+    }
   }
 
   if (searchInput instanceof HTMLInputElement) {
@@ -855,6 +1010,7 @@ const STORE_CHECKOUT_DETAILS = {
     hours: "Mon-Sat 9:00 AM - 5:00 PM, Sun 10:00 AM - 4:00 PM",
     mapUrl: "https://maps.app.goo.gl/SBzYCp7G5C3UM4SdA",
     pageUrl: "stores/park-ridge.html",
+    coordinates: { latitude: -27.6966, longitude: 153.0392 },
   },
   fairfield: {
     title: "Fairfield",
@@ -865,6 +1021,7 @@ const STORE_CHECKOUT_DETAILS = {
     hours: "Mon-Sat 9:00 AM - 5:00 PM, Sun 10:00 AM - 4:00 PM",
     mapUrl: "https://maps.app.goo.gl/2iQqRL4YURm5cUfy7",
     pageUrl: "stores/fairfield.html",
+    coordinates: { latitude: -27.5097, longitude: 153.0245 },
   },
   toowong: {
     title: "Toowong",
@@ -875,6 +1032,7 @@ const STORE_CHECKOUT_DETAILS = {
     hours: "Mon-Sat 9:00 AM - 5:00 PM, Sun 10:00 AM - 4:00 PM",
     mapUrl: "https://maps.app.goo.gl/9V7EERgpiuUjreQp7",
     pageUrl: "stores/toowong.html",
+    coordinates: { latitude: -27.4854, longitude: 152.9922 },
   },
   "north-lakes": {
     title: "North Lakes",
@@ -886,6 +1044,7 @@ const STORE_CHECKOUT_DETAILS = {
     hours: "Mon-Sat 9:00 AM - 5:00 PM, Sun 10:00 AM - 4:00 PM",
     mapUrl: "https://maps.app.goo.gl/ZdEjv8V98RxT9uCT7",
     pageUrl: "stores/north-lakes.html",
+    coordinates: { latitude: -27.2409, longitude: 153.0189 },
   },
   brassall: {
     title: "Brassall",
@@ -898,6 +1057,7 @@ const STORE_CHECKOUT_DETAILS = {
     hours: "Mon-Sat 9:00 AM - 5:00 PM, Sun 10:00 AM - 4:00 PM",
     mapUrl: "https://maps.app.goo.gl/ViJetRb1zEiMhGyZ7",
     pageUrl: "stores/brassall.html",
+    coordinates: { latitude: -27.5969, longitude: 152.7471 },
   },
   "warehouse-dispatch": {
     title: "Warehouse Dispatch",
