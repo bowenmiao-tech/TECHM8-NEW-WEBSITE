@@ -5141,6 +5141,58 @@ body.storefront-shop-page .storefront-tools {
   margin-top: 0.28rem;
 }
 
+.business-ndis-strip__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.business-ndis-strip h2,
+.business-ndis-note h2 {
+  margin: 0.3rem 0 0.7rem;
+}
+
+.business-ndis-strip p,
+.business-ndis-note p {
+  margin: 0;
+  color: var(--muted);
+  max-width: 68rem;
+}
+
+.business-ndis-note__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.2rem;
+}
+
+.business-ndis-note__grid span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.2rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(22, 200, 186, 0.11);
+  color: #0d6468;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.business-ndis-enquiry .section-heading {
+  margin-bottom: 1.1rem;
+}
+
+.section-heading--compact {
+  max-width: 48rem;
+}
+
+@media (max-width: 720px) {
+  .business-ndis-strip__inner {
+    grid-template-columns: 1fr;
+  }
+}
+
 .auth-page {
   min-height: calc(100vh - 16rem);
 }
