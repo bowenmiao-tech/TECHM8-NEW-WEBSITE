@@ -1535,7 +1535,6 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     stock_quantity: stockQuantity,
     is_visible: typeof body.is_visible === 'boolean' ? body.is_visible : undefined,
     is_featured: typeof body.is_featured === 'boolean' ? body.is_featured : undefined,
-    image_url: heroImageUrl,
     detail_html: body.detail_html === '' ? null : String(body.detail_html ?? ''),
   }
 
@@ -1551,7 +1550,7 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     if (error.code === '23503') {
       return jsonResponse({ ok: false, error: 'Selected category does not exist.' }, 422)
     }
-    return jsonResponse({ ok: false, error: `Product could not be updated: ${error.message}` }, 500)
+    return jsonResponse({ ok: false, error: `Product fields could not be updated: ${error.message}` }, 500)
   }
 
   if (normalizedImages) {
@@ -1561,7 +1560,7 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
       .eq('product_id', productId)
 
     if (deleteImagesError) {
-      return jsonResponse({ ok: false, error: 'Product images could not be updated.' }, 500)
+      return jsonResponse({ ok: false, error: `Product images could not be updated: ${deleteImagesError.message}` }, 500)
     }
 
     if (normalizedImages.length) {
@@ -1570,15 +1569,34 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
         .insert(normalizedImages)
 
       if (insertImagesError) {
-        return jsonResponse({ ok: false, error: 'Product images could not be saved.' }, 500)
+        return jsonResponse({ ok: false, error: `Product images could not be saved: ${insertImagesError.message}` }, 500)
       }
+    }
+  }
+
+  let imageUrlWarning: string | null = null
+  let savedHeroImageUrl = data.image_url ?? null
+  if (heroImageUrl !== undefined) {
+    const { data: imageRow, error: imageUrlError } = await supabaseAdmin
+      .from('products')
+      .update({ image_url: heroImageUrl })
+      .eq('id', productId)
+      .select('image_url')
+      .single()
+
+    if (imageUrlError) {
+      imageUrlWarning = `Main image could not be set: ${imageUrlError.message}`
+    } else {
+      savedHeroImageUrl = imageRow?.image_url ?? heroImageUrl
     }
   }
 
   return jsonResponse({
     ok: true,
+    warning: imageUrlWarning,
     row: {
       ...data,
+      image_url: savedHeroImageUrl,
       images: normalizedImages ?? undefined,
       detail_loaded: true,
     },

@@ -3635,9 +3635,13 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
           detail_loaded: true,
         });
         state.selectedId = Number(updatedRow?.id || row.id);
-        state.saveFlash = { productId: state.selectedId, message: "Saved successfully.", tone: "success" };
+        state.saveFlash = {
+          productId: state.selectedId,
+          message: result.warning || "Saved successfully.",
+          tone: result.warning ? "warning" : "success",
+        };
         setInlineStatus(saveStatus, state.saveFlash.message, state.saveFlash.tone);
-        setAlert(alertTarget, "Product saved successfully.", "success");
+        setAlert(alertTarget, result.warning || "Product saved successfully.", result.warning ? "warning" : "success");
         renderTable();
       } catch (error) {
         const message = error instanceof Error ? error.message : "Product could not be updated.";
