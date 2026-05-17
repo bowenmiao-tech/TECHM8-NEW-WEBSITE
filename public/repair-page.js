@@ -82,6 +82,16 @@ if (pageData) {
     return `<img class="${className}" src="${prefix}${item.image}" alt="${alt}" loading="lazy" decoding="async">`;
   };
 
+  const renderPageTitle = () => {
+    if (!pageData.titleLogo) return `<h1>${pageData.title}</h1>`;
+    return `
+      <div class="repair-title-lockup">
+        <h1>${pageData.title}</h1>
+        <img src="${prefix}${pageData.titleLogo}" alt="${pageData.titleLogoAlt || ""}" loading="eager" decoding="async">
+      </div>
+    `;
+  };
+
   const issueCards = pageData.issues
     .map(
       (item) => `
@@ -439,7 +449,7 @@ if (pageData) {
         <div class="container repair-detail-hero">
           <div>
             <p class="eyebrow">${pageData.category}</p>
-            <h1>${pageData.title}</h1>
+            ${renderPageTitle()}
             <p class="hero__lead">${pageData.intro}</p>
             <div class="hero__actions">
               <a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>
@@ -452,17 +462,23 @@ if (pageData) {
         </div>
       </section>
 
-      <section class="section">
-        <div class="container">
-          <div class="section-heading">
-            <p class="eyebrow">${pageData.issueLabel || "Common faults"}</p>
-            <h2>${pageData.issueHeading}</h2>
-          </div>
-          <div class="repair-content-grid">
-            ${issueCards}
-          </div>
-        </div>
-      </section>
+      ${
+        pageData.hideIssueSection
+          ? ""
+          : `
+            <section class="section">
+              <div class="container">
+                <div class="section-heading">
+                  <p class="eyebrow">${pageData.issueLabel || "Common faults"}</p>
+                  <h2>${pageData.issueHeading}</h2>
+                </div>
+                <div class="repair-content-grid">
+                  ${issueCards}
+                </div>
+              </div>
+            </section>
+          `
+      }
 
       <section class="section section--muted">
         <div class="container">
