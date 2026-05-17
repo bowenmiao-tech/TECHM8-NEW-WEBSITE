@@ -148,7 +148,6 @@ if (pageData) {
           <div>
             <p class="eyebrow">Partnership</p>
             <h2>Delivered with Proud Support Services</h2>
-            <p>TECHM8 does not directly provide NDIS support. For NDIS-related enquiries, TECHM8 can pass customer details to Proud Support Services, our partnered NDIS business, so they can contact the customer and arrange the appropriate support pathway. TECHM8 may then complete the practical electronic device repair, setup or troubleshooting work if assigned.</p>
           </div>
           <a class="button button--secondary" href="https://proudsupportservices.com.au/" target="_blank" rel="noopener">Visit Proud Support Services</a>
         </div>
