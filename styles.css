@@ -82,7 +82,7 @@ a {
 
 .repair-sticky-cta {
   position: sticky;
-  top: 6.45rem;
+  top: var(--repair-sticky-top, 6.45rem);
   z-index: 29;
   border-bottom: 1px solid rgba(7, 39, 45, 0.1);
   background: rgba(248, 255, 254, 0.92);
@@ -4235,7 +4235,7 @@ body.storefront-shop-page .storefront-tools {
   }
 
   .repair-sticky-cta {
-    top: 5.45rem;
+    top: var(--repair-sticky-top, 4.72rem);
   }
 
   .repair-sticky-cta__inner {
@@ -4249,6 +4249,30 @@ body.storefront-shop-page .storefront-tools {
   .repair-sticky-cta .button {
     width: 100%;
     justify-content: center;
+  }
+
+  .repair-final-cta .cta {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 1.6rem;
+    border-radius: 1.35rem;
+  }
+
+  .repair-final-cta .hero__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-top: 0;
+  }
+
+  .repair-final-cta .button {
+    width: 100%;
+    min-width: 0;
+    min-height: 3rem;
+    border-radius: 999px;
+    padding: 0.85rem 1rem;
+    white-space: normal;
+    text-align: center;
   }
 
   .repair-detail-hero--integrated {

@@ -258,7 +258,11 @@ if (pageData) {
             <p>${pageData.finalCta.text}</p>
           </div>
           <div class="hero__actions">
-            <a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>
+            ${
+              pageData.hideFinalBookCta
+                ? ""
+                : `<a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>`
+            }
             <a class="button button--secondary" href="${prefix}stores.html">Find a store</a>
           </div>
         </div>
@@ -483,7 +487,11 @@ if (pageData) {
                 : ""
             }
             <div class="hero__actions">
-              <a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>
+              ${
+                pageData.hideHeroBookCta
+                  ? ""
+                  : `<a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>`
+              }
               <a class="button button--secondary" href="${prefix}${pageData.secondaryCtaHref || "repairs.html"}">${pageData.secondaryCtaText || "Back to repairs"}</a>
             </div>
           </div>
@@ -629,6 +637,16 @@ if (pageData) {
   updateCartIndicators();
   window.addEventListener("storage", updateCartIndicators);
   window.addEventListener("techm8:cart-updated", updateCartIndicators);
+
+  const updateRepairStickyOffset = () => {
+    const header = document.querySelector(".site-header");
+    if (!(header instanceof HTMLElement)) return;
+    document.documentElement.style.setProperty("--repair-sticky-top", `${header.offsetHeight}px`);
+  };
+
+  updateRepairStickyOffset();
+  window.addEventListener("resize", updateRepairStickyOffset);
+  window.requestAnimationFrame(updateRepairStickyOffset);
 
   const isMobileNavigation = () => window.innerWidth <= 1120;
 
