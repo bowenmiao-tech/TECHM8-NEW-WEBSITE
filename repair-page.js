@@ -76,9 +76,21 @@ if (pageData) {
     </div>
   `;
 
+  const renderImage = (item = {}, className) => {
+    if (!item.image) return "";
+    const alt = item.alt || item.title || pageData.title || "Repair image";
+    return `<img class="${className}" src="${prefix}${item.image}" alt="${alt}" loading="lazy" decoding="async">`;
+  };
+
   const issueCards = pageData.issues
     .map(
-      (item) => `<article class="issue-card"><h3>${item.title}</h3><p>${item.text}</p></article>`
+      (item) => `
+        <article class="issue-card">
+          ${renderImage(item, "issue-card__image")}
+          <h3>${item.title}</h3>
+          <p>${item.text}</p>
+        </article>
+      `
     )
     .join("");
 
@@ -97,6 +109,7 @@ if (pageData) {
       <section class="section repair-seo-section">
         <div class="container repair-seo-layout">
           <div class="repair-seo-main">
+            ${pageData.seoIntro.image ? renderImage(pageData.seoIntro, "repair-seo-main__image") : ""}
             <p class="eyebrow">${pageData.seoIntro.label || "Repair information"}</p>
             <h2>${pageData.seoIntro.heading}</h2>
             ${(pageData.seoIntro.paragraphs || []).map((paragraph) => `<p>${paragraph}</p>`).join("")}
@@ -137,6 +150,7 @@ if (pageData) {
               .map(
                 (item) => `
                   <article class="repair-seo-card">
+                    ${renderImage(item, "repair-seo-card__image")}
                     <h3>${item.title}</h3>
                     ${item.text ? `<p>${item.text}</p>` : ""}
                     ${renderList(item.list)}
@@ -165,6 +179,7 @@ if (pageData) {
               .map(
                 (group) => `
                   <article class="repair-model-card">
+                    ${renderImage(group, "repair-model-card__image")}
                     <h3>${group.title}</h3>
                     ${renderList(group.models)}
                   </article>
@@ -261,6 +276,10 @@ if (pageData) {
   `;
 
   const resolveRepairVisual = () => {
+    if (pageData.heroImage) {
+      return `<img class="repair-detail-panel__photo" src="${prefix}${pageData.heroImage}" alt="${pageData.heroImageAlt || pageData.title}" loading="eager" decoding="async">`;
+    }
+
     const title = String(pageData.title || "").toLowerCase();
 
     if (title.includes("iphone") || title.includes("apple ipad")) {

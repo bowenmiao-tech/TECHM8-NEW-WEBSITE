@@ -3253,6 +3253,14 @@ body.storefront-shop-page .storefront-tools {
   box-shadow: var(--shadow);
 }
 
+.repair-detail-panel__photo {
+  display: block;
+  width: 100%;
+  min-height: 16rem;
+  border-radius: 1.35rem;
+  object-fit: cover;
+}
+
 .repair-detail-panel--brands {
   background:
     radial-gradient(
@@ -3516,6 +3524,38 @@ body.storefront-shop-page .storefront-tools {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.issue-card {
+  display: grid;
+  align-content: start;
+}
+
+.issue-card__image,
+.repair-seo-card__image,
+.repair-model-card__image,
+.repair-seo-main__image {
+  display: block;
+  width: 100%;
+  border-radius: 1rem;
+  object-fit: cover;
+  background: rgba(17, 141, 149, 0.08);
+}
+
+.issue-card__image {
+  aspect-ratio: 16 / 10;
+  margin-bottom: 1rem;
+}
+
+.repair-seo-card__image,
+.repair-model-card__image {
+  aspect-ratio: 16 / 10;
+  margin-bottom: 1rem;
+}
+
+.repair-seo-main__image {
+  aspect-ratio: 21 / 9;
+  margin-bottom: 1.25rem;
+}
+
 .repair-seo-section {
   padding-top: 5rem;
 }
@@ -3601,6 +3641,8 @@ body.storefront-shop-page .storefront-tools {
 
 .repair-seo-card,
 .repair-model-card {
+  display: grid;
+  align-content: start;
   padding: 1.25rem;
   border-radius: 1.1rem;
 }
@@ -3647,6 +3689,24 @@ body.storefront-shop-page .storefront-tools {
 
 .repair-final-cta .cta {
   align-items: center;
+}
+
+.repair-static-seo {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+}
+
+.repair-static-seo section {
+  margin: 0 0 2rem;
+}
+
+.repair-static-seo img {
+  display: block;
+  width: min(100%, 36rem);
+  height: auto;
+  border-radius: 1rem;
+  margin: 1rem 0;
 }
 
 .inner-page__hero,
