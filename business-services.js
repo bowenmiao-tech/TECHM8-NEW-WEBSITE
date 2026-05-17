@@ -79,10 +79,10 @@ if (pageData) {
     </div>`;
   const storeMenu = `
     <div class="nav__dropdown nav__dropdown--stores">
-      <button class="nav__dropdown-toggle" type="button" data-href="${linkUrl("stores.html")}" aria-expanded="false" onclick="return toggleMainDropdown(this, event);">Stores</button>
+      <button class="nav__dropdown-toggle" type="button" data-href="${linkUrl("stores.html")}" aria-expanded="false" onclick="return toggleMainDropdown(this, event);">Store Locator</button>
       <div class="nav__dropdown-menu nav__dropdown-menu--stores">
         <div class="store-switcher">
-          <div class="store-switcher__top"><strong>Stores</strong></div>
+          <div class="store-switcher__top"><strong>Store Locator</strong></div>
           <div class="store-switcher__grid">
             <a class="store-switcher__link" href="${linkUrl("stores/park-ridge.html")}">Park Ridge</a>
             <a class="store-switcher__link" href="${linkUrl("stores/fairfield.html")}">Fairfield</a>

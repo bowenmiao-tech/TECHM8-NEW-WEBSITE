@@ -5,11 +5,11 @@ if (pageData) {
 
   const storeDropdown = `
     <div class="nav__dropdown nav__dropdown--stores">
-      <button class="nav__dropdown-toggle" type="button" data-href="${prefix}stores.html" aria-expanded="false" onclick="return toggleMainDropdown(this, event)">Stores</button>
+      <button class="nav__dropdown-toggle" type="button" data-href="${prefix}stores.html" aria-expanded="false" onclick="return toggleMainDropdown(this, event)">Store Locator</button>
       <div class="nav__dropdown-menu nav__dropdown-menu--stores">
         <div class="store-switcher">
           <div class="store-switcher__top">
-            <strong>Stores</strong>
+            <strong>Store Locator</strong>
           </div>
           <div class="store-switcher__grid">
             <a class="store-switcher__link" href="${prefix}stores/park-ridge.html">Park Ridge</a>
@@ -575,7 +575,7 @@ if (pageData) {
           <h4>Explore</h4>
           <a href="${prefix}repairs.html">Repairs Overview</a>
           <a href="${prefix}products.html">Products</a>
-          <a href="${prefix}stores.html">Stores</a>
+          <a href="${prefix}stores.html">Store Locator</a>
           <a href="${prefix}shop.html">Online Store</a>
         </div>
         <div>
@@ -770,6 +770,39 @@ if (pageData) {
     }
   };
 
+  const isStoreLocatorDropdown = (dropdown) => {
+    if (!(dropdown instanceof HTMLElement)) return false;
+    const toggle = dropdown.querySelector(".nav__dropdown-toggle");
+    const destination = toggle?.dataset.href || toggle?.getAttribute("href") || "";
+    return dropdown.classList.contains("nav__dropdown--stores") || destination.includes("stores.html");
+  };
+
+  const decorateStoreLocatorMenu = () => {
+    document.querySelectorAll(".nav__dropdown--stores").forEach((dropdown) => {
+      const toggle = dropdown.querySelector(".nav__dropdown-toggle");
+      if (!(toggle instanceof HTMLElement)) return;
+
+      const destination = toggle.dataset.href || toggle.getAttribute("href") || `${prefix}stores.html`;
+      toggle.textContent = "Store Locator";
+
+      const title = dropdown.querySelector(".store-switcher__top strong");
+      if (title instanceof HTMLElement) {
+        title.textContent = "Store Locator";
+      }
+
+      const grid = dropdown.querySelector(".store-switcher__grid");
+      if (!(grid instanceof HTMLElement)) return;
+      if (grid.querySelector("[data-store-locator-overview]")) return;
+
+      const overviewLink = document.createElement("a");
+      overviewLink.className = "store-switcher__link store-switcher__link--overview";
+      overviewLink.href = destination;
+      overviewLink.textContent = "Store Locator";
+      overviewLink.setAttribute("data-store-locator-overview", "true");
+      grid.prepend(overviewLink);
+    });
+  };
+
   const decorateMobileRepairsAccordion = () => {
     const repairsDropdown = Array.from(document.querySelectorAll(".nav__dropdown")).find((dropdown) => {
       const toggle = dropdown.querySelector(".nav__dropdown-toggle");
@@ -837,6 +870,13 @@ if (pageData) {
     }
 
     const destination = dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
+
+    if (isStoreLocatorDropdown(dropdown) && destination) {
+      event.preventDefault();
+      window.location.href = destination;
+      return;
+    }
+
     const alreadyOpen = dropdown.classList.contains("is-open");
     const readyToNavigate = dropdownToggle.dataset.navReady === "true";
 
@@ -942,6 +982,7 @@ if (pageData) {
   };
 
   decorateMobileMenu();
+  decorateStoreLocatorMenu();
   decorateMobileRepairsAccordion();
   initStoreSearch();
 
