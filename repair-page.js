@@ -94,11 +94,28 @@ if (pageData) {
     )
     .join("");
 
-  const extraCards = pageData.extras
+  const extraCards = (pageData.extras || [])
     .map(
       (item) => `<article class="info-card"><h2>${item.title}</h2><p>${item.text}</p></article>`
     )
     .join("");
+
+  const renderExtraSection = () => {
+    if (pageData.hideExtraSection || !pageData.extras?.length) return "";
+    return `
+      <section class="section section--muted">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">${pageData.extraLabel || "Why this page helps"}</p>
+            <h2>${pageData.extraHeading}</h2>
+          </div>
+          <div class="repair-content-grid">
+            ${extraCards}
+          </div>
+        </div>
+      </section>
+    `;
+  };
 
   const renderList = (items = []) =>
     items.length ? `<ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul>` : "";
@@ -475,17 +492,7 @@ if (pageData) {
           `
       }
 
-      <section class="section section--muted">
-        <div class="container">
-          <div class="section-heading">
-            <p class="eyebrow">${pageData.extraLabel || "Why this page helps"}</p>
-            <h2>${pageData.extraHeading}</h2>
-          </div>
-          <div class="repair-content-grid">
-            ${extraCards}
-          </div>
-        </div>
-      </section>
+      ${renderExtraSection()}
 
       ${renderSeoIntro()}
       ${renderSeoCards(pageData.serviceDetails)}
