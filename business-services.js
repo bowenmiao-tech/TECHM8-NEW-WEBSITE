@@ -148,7 +148,7 @@ if (pageData) {
           <div>
             <p class="eyebrow">Partnership</p>
             <h2>Delivered with Proud Support Services</h2>
-            <p>TECHM8 works with Proud Support Services to provide practical technology support for NDIS-related enquiries. Proud Support Services can support the participant pathway while TECHM8 handles electronic device repairs, setup and technical troubleshooting.</p>
+            <p>TECHM8 does not directly provide NDIS support. For NDIS-related enquiries, TECHM8 can pass customer details to Proud Support Services, our partnered NDIS business, so they can contact the customer and arrange the appropriate support pathway. TECHM8 may then complete the practical electronic device repair, setup or troubleshooting work if assigned.</p>
           </div>
           <a class="button button--secondary" href="https://proudsupportservices.com.au/" target="_blank" rel="noopener">Visit Proud Support Services</a>
         </div>
@@ -186,15 +186,15 @@ if (pageData) {
         <div class="container">
           <div class="booking-card">
             <p class="eyebrow">NDIS assistive technology</p>
-            <h2>Repairs, maintenance and practical technology help</h2>
-            <p>NDIS guidance recognises repairs and maintenance for assistive technology. For electronic devices, TECHM8 can help clarify the device issue, provide practical repair or setup support, and prepare details that may assist participants, nominees, support coordinators or plan managers.</p>
+            <h2>Device repair enquiries connected with the right pathway</h2>
+            <p>Some NDIS-related enquiries involve repairs or maintenance for electronic assistive technology. TECHM8 can receive the device details, then connect suitable requests with Proud Support Services for NDIS pathway follow-up. If the practical technical task is assigned to TECHM8, we may help with device assessment, repair, setup or troubleshooting.</p>
             <div class="business-ndis-note__grid">
               <span>Device diagnosis</span>
               <span>Repair quotes</span>
               <span>Software setup</span>
-              <span>On-site support</span>
+              <span>Partner follow-up</span>
               <span>Accessibility settings</span>
-              <span>Follow-up contact</span>
+              <span>Technical work if assigned</span>
             </div>
           </div>
         </div>
@@ -220,8 +220,8 @@ if (pageData) {
           <div class="booking-card">
             <div class="section-heading section-heading--compact">
               <p class="eyebrow">Submit an enquiry</p>
-              <h2>Request NDIS technology support</h2>
-              <p>Leave the participant, coordinator or family contact details. TECHM8 will review the request and contact you directly.</p>
+              <h2>Submit an NDIS-related technology enquiry</h2>
+              <p>Leave the participant, coordinator or family contact details. TECHM8 will review the request and may pass it to Proud Support Services so they can contact the customer directly about the NDIS support pathway.</p>
             </div>
             <form class="booking-form" data-ndis-enquiry-form novalidate>
               <div class="booking-message" data-ndis-enquiry-message hidden></div>
@@ -234,9 +234,9 @@ if (pageData) {
                 <label class="booking-field"><span>Support location</span><input type="text" name="support_location" placeholder="Suburb or service area"></label>
                 <label class="booking-field"><span>Device type</span><select name="device_type" required><option value="">Select device type</option><option>Mobile phone</option><option>Tablet or iPad</option><option>Laptop or computer</option><option>Printer, router or Wi-Fi</option><option>Assistive technology device</option><option>Software or app support</option><option>Other electronic device</option></select></label>
                 <label class="booking-field"><span>Support type</span><select name="support_type" required><option value="">Select support type</option><option>On-site device inspection</option><option>Phone or tablet repair</option><option>Computer system check</option><option>Software installation</option><option>Accessibility settings setup</option><option>Data transfer or account setup</option><option>Wi-Fi, printer or connected device support</option><option>Quote or invoice request</option></select></label>
-                <label class="booking-field booking-field--full"><span>Tell us what support is needed</span><textarea name="support_details" rows="6" required placeholder="Example: participant needs help setting up a new iPad, installing communication apps, transferring data, checking Wi-Fi and setting accessibility options."></textarea></label>
+                <label class="booking-field booking-field--full"><span>Tell us what help is needed</span><textarea name="support_details" rows="6" required placeholder="Example: participant needs help setting up a new iPad, installing communication apps, transferring data, checking Wi-Fi and setting accessibility options."></textarea></label>
               </div>
-              <label class="booking-checkbox"><input type="checkbox" name="privacy_consent" value="yes" required><span>I agree that TECHM8 may contact me about this NDIS technology support enquiry.</span></label>
+              <label class="booking-checkbox"><input type="checkbox" name="privacy_consent" value="yes" required><span>I agree that TECHM8 may contact me about this enquiry and may share the enquiry details with its partnered NDIS business for follow-up.</span></label>
               <div class="booking-form__actions"><button class="button button--primary" type="submit" data-ndis-enquiry-submit>Submit enquiry</button><a class="button button--secondary" href="tel:0452488710">Call TECHM8</a></div>
             </form>
           </div>

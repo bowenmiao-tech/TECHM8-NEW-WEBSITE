@@ -29,7 +29,7 @@ foreach ($configCandidates as $candidate) {
 
 $toEmail = strtolower(trim((string) ($config['ndis_notification_email'] ?? 'techm8contact@gmail.com')));
 $fromEmail = strtolower(trim((string) ($config['from_email'] ?? 'no-reply@techm8australia.com')));
-$fromName = trim((string) ($config['from_name'] ?? 'TECHM8 NDIS Enquiries'));
+$fromName = trim((string) ($config['from_name'] ?? 'TECHM8 NDIS-Related Enquiries'));
 
 if (!filter_var($toEmail, FILTER_VALIDATE_EMAIL) || !filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
     http_response_code(500);
@@ -76,7 +76,8 @@ if (trim((string) ($_POST['privacy_consent'] ?? '')) !== 'yes') {
 
 $enquiryCode = 'NDIS-' . date('Ymd') . '-' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 6));
 $lines = [
-    'A new TECHM8 NDIS technology support enquiry has been submitted.',
+    'A new TECHM8 NDIS-related technology enquiry has been submitted.',
+    'Note: TECHM8 does not directly provide NDIS support. Review whether this enquiry should be passed to the partnered NDIS business for customer follow-up.',
     '',
     'Enquiry code: ' . $enquiryCode,
 ];
@@ -95,7 +96,7 @@ $headers = [
     'Reply-To: ' . $values['email'],
 ];
 
-$subject = 'New TECHM8 NDIS enquiry: ' . $enquiryCode;
+$subject = 'New TECHM8 NDIS-related enquiry: ' . $enquiryCode;
 $sent = @mail($toEmail, $subject, implode("\n", $lines), implode("\r\n", $headers));
 
 if (!$sent) {
