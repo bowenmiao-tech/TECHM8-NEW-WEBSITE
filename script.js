@@ -179,8 +179,12 @@ const MOBILE_REPAIR_GROUPS = [
     links: [
       ["Apple", "repair-services/phones/apple.html"],
       ["Samsung", "repair-services/phones/samsung.html"],
+      ["Oppo", "repair-services/phones/oppo.html"],
+      ["Huawei", "repair-services/phones/huawei.html"],
+      ["Xiaomi", "repair-services/phones/xiaomi.html"],
       ["Google", "repair-services/phones/google.html"],
-      ["Other", "repair-services/phones/others.html"],
+      ["OnePlus", "repair-services/phones/oneplus.html"],
+      ["Others", "repair-services/phones/others.html"],
     ],
   },
   {
