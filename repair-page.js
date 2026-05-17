@@ -82,16 +82,6 @@ if (pageData) {
     return `<img class="${className}" src="${prefix}${item.image}" alt="${alt}" loading="lazy" decoding="async">`;
   };
 
-  const renderPageTitle = () => {
-    if (!pageData.titleLogo) return `<h1>${pageData.title}</h1>`;
-    return `
-      <div class="repair-title-lockup">
-        <h1>${pageData.title}</h1>
-        <img src="${prefix}${pageData.titleLogo}" alt="${pageData.titleLogoAlt || ""}" loading="eager" decoding="async">
-      </div>
-    `;
-  };
-
   const issueCards = pageData.issues
     .map(
       (item) => `
@@ -449,7 +439,12 @@ if (pageData) {
         <div class="container repair-detail-hero">
           <div>
             <p class="eyebrow">${pageData.category}</p>
-            ${renderPageTitle()}
+            <h1>${pageData.title}</h1>
+            ${
+              pageData.heroLogo
+                ? `<img class="repair-hero-logo" src="${prefix}${pageData.heroLogo}" alt="${pageData.heroLogoAlt || ""}" loading="eager" decoding="async">`
+                : ""
+            }
             <p class="hero__lead">${pageData.intro}</p>
             <div class="hero__actions">
               <a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>

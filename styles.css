@@ -3245,23 +3245,6 @@ body.storefront-shop-page .storefront-tools {
   align-items: center;
 }
 
-.repair-title-lockup {
-  display: flex;
-  align-items: center;
-  gap: clamp(0.8rem, 2vw, 1.25rem);
-  flex-wrap: wrap;
-}
-
-.repair-title-lockup h1 {
-  margin: 0;
-}
-
-.repair-title-lockup img {
-  width: clamp(3rem, 7vw, 5.2rem);
-  height: clamp(3rem, 7vw, 5.2rem);
-  object-fit: contain;
-}
-
 .repair-detail-panel {
   padding: 1.6rem;
   border-radius: 1.6rem;
@@ -3270,12 +3253,20 @@ body.storefront-shop-page .storefront-tools {
   box-shadow: var(--shadow);
 }
 
+.repair-hero-logo {
+  display: block;
+  width: clamp(5rem, 12vw, 8.5rem);
+  height: clamp(5rem, 12vw, 8.5rem);
+  object-fit: contain;
+  margin: 1.45rem 0 1.35rem;
+}
+
 .repair-detail-panel__photo {
   display: block;
   width: 100%;
   min-height: 16rem;
   border-radius: 1.35rem;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .repair-detail-panel--brands {
