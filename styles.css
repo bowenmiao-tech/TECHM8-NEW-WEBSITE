@@ -3269,6 +3269,13 @@ body.storefront-shop-page .storefront-tools {
   object-fit: contain;
 }
 
+.repair-detail-panel__photo[src$="apple.png"] {
+  width: min(100%, 21rem);
+  height: min(42vw, 21rem);
+  min-height: 14rem;
+  margin: 0 auto;
+}
+
 .repair-detail-panel--brands {
   background:
     radial-gradient(
