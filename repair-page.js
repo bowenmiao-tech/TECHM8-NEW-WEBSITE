@@ -1,15 +1,3 @@
-import techm8Logo from "./assets/logo-techm8.png";
-import appleLogo from "./assets/repair-logos/apple.png";
-import googleLogo from "./assets/repair-logos/google.png";
-import huaweiLogo from "./assets/repair-logos/huawei.png";
-import nintendoLogo from "./assets/repair-logos/nintendo.svg";
-import oneplusLogo from "./assets/repair-logos/oneplus.png";
-import oppoLogo from "./assets/repair-logos/oppo.ico";
-import samsungLogo from "./assets/repair-logos/samsung.png";
-import sonyLogo from "./assets/repair-logos/sony.png";
-import xboxLogo from "./assets/repair-logos/xbox.svg";
-import xiaomiLogo from "./assets/repair-logos/xiaomi.png";
-
 const pageData = window.REPAIR_PAGE_DATA;
 
 if (pageData) {
@@ -100,151 +88,19 @@ if (pageData) {
     )
     .join("");
 
-  const renderList = (items = []) =>
-    items.length ? `<ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul>` : "";
-
-  const renderSeoIntro = () => {
-    if (!pageData.seoIntro) return "";
-    return `
-      <section class="section repair-seo-section">
-        <div class="container repair-seo-layout">
-          <div class="repair-seo-main">
-            <p class="eyebrow">${pageData.seoIntro.label || "Repair information"}</p>
-            <h2>${pageData.seoIntro.heading}</h2>
-            ${(pageData.seoIntro.paragraphs || []).map((paragraph) => `<p>${paragraph}</p>`).join("")}
-          </div>
-          <aside class="repair-seo-aside" aria-label="iPhone repair actions">
-            ${(pageData.seoIntro.highlights || [])
-              .map(
-                (item) => `
-                  <div class="repair-seo-highlight">
-                    <strong>${item.title}</strong>
-                    <span>${item.text}</span>
-                  </div>
-                `
-              )
-              .join("")}
-            <div class="repair-seo-actions">
-              <a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>
-              <a class="button button--secondary" href="${prefix}stores.html">Find a store</a>
-            </div>
-          </aside>
-        </div>
-      </section>
-    `;
-  };
-
-  const renderSeoCards = (section, className = "repair-seo-card-grid") => {
-    if (!section || !section.items?.length) return "";
-    return `
-      <section class="section ${section.muted ? "section--muted" : ""}">
-        <div class="container">
-          <div class="section-heading">
-            <p class="eyebrow">${section.label}</p>
-            <h2>${section.heading}</h2>
-            ${section.text ? `<p>${section.text}</p>` : ""}
-          </div>
-          <div class="${className}">
-            ${section.items
-              .map(
-                (item) => `
-                  <article class="repair-seo-card">
-                    <h3>${item.title}</h3>
-                    ${item.text ? `<p>${item.text}</p>` : ""}
-                    ${renderList(item.list)}
-                  </article>
-                `
-              )
-              .join("")}
-          </div>
-        </div>
-      </section>
-    `;
-  };
-
-  const renderModelGroups = () => {
-    if (!pageData.modelGroups?.items?.length) return "";
-    return `
-      <section class="section section--muted">
-        <div class="container">
-          <div class="section-heading">
-            <p class="eyebrow">${pageData.modelGroups.label}</p>
-            <h2>${pageData.modelGroups.heading}</h2>
-            ${pageData.modelGroups.text ? `<p>${pageData.modelGroups.text}</p>` : ""}
-          </div>
-          <div class="repair-model-grid">
-            ${pageData.modelGroups.items
-              .map(
-                (group) => `
-                  <article class="repair-model-card">
-                    <h3>${group.title}</h3>
-                    ${renderList(group.models)}
-                  </article>
-                `
-              )
-              .join("")}
-          </div>
-        </div>
-      </section>
-    `;
-  };
-
-  const renderFaqs = () => {
-    if (!pageData.faqs?.items?.length) return "";
-    return `
-      <section class="section repair-faq-section">
-        <div class="container">
-          <div class="section-heading">
-            <p class="eyebrow">${pageData.faqs.label || "FAQs"}</p>
-            <h2>${pageData.faqs.heading}</h2>
-          </div>
-          <div class="repair-faq-list">
-            ${pageData.faqs.items
-              .map(
-                (item) => `
-                  <details>
-                    <summary>${item.question}</summary>
-                    <p>${item.answer}</p>
-                  </details>
-                `
-              )
-              .join("")}
-          </div>
-        </div>
-      </section>
-    `;
-  };
-
-  const renderFinalCta = () => {
-    if (!pageData.finalCta) return "";
-    return `
-      <section class="section section--cta repair-final-cta">
-        <div class="container cta">
-          <div>
-            <p class="eyebrow">${pageData.finalCta.label || "Ready to repair?"}</p>
-            <h2>${pageData.finalCta.heading}</h2>
-            <p>${pageData.finalCta.text}</p>
-          </div>
-          <div class="hero__actions">
-            <a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>
-            <a class="button button--secondary" href="${prefix}stores.html">Find a store</a>
-          </div>
-        </div>
-      </section>
-    `;
-  };
+  const logoRoot = `${prefix}assets/repair-logos/`;
 
   const brandLogoMap = {
-    apple: appleLogo,
-    samsung: samsungLogo,
-    oppo: oppoLogo,
-    huawei: huaweiLogo,
-    xiaomi: xiaomiLogo,
-    google: googleLogo,
-    oneplus: oneplusLogo,
-    sony: sonyLogo,
-    xbox: xboxLogo,
-    nintendo: nintendoLogo,
+    apple: `${logoRoot}apple.png`,
+    samsung: `${logoRoot}samsung.png`,
+    oppo: `${logoRoot}oppo.ico`,
+    huawei: `${logoRoot}huawei.png`,
+    xiaomi: `${logoRoot}xiaomi.png`,
+    google: `${logoRoot}google.png`,
+    oneplus: `${logoRoot}oneplus.png`,
+    sony: `${logoRoot}sony.png`,
+    xbox: `${logoRoot}xbox.svg`,
+    nintendo: `${logoRoot}nintendo.svg`,
   };
 
   const renderBrandVisual = (slug, name, meta) => `
@@ -272,7 +128,7 @@ if (pageData) {
   const resolveRepairVisual = () => {
     const title = String(pageData.title || "").toLowerCase();
 
-    if (title.includes("iphone") || title.includes("apple ipad")) {
+    if (title.includes("apple iphone") || title.includes("apple ipad")) {
       return renderBrandVisual("apple", "Apple", "iPhone and iPad repairs");
     }
     if (title.includes("samsung phone") || title.includes("samsung tablet")) {
@@ -382,7 +238,7 @@ if (pageData) {
     <header class="site-header">
       <div class="container nav">
         <a class="brand" href="${prefix}index.html">
-          <img class="brand__logo" src="${techm8Logo}" alt="TECHM8 logo">
+          <img class="brand__logo" src="${prefix}assets/logo-techm8.png" alt="TECHM8 logo">
         </a>
         <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
         <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
@@ -433,7 +289,7 @@ if (pageData) {
             <p class="hero__lead">${pageData.intro}</p>
             <div class="hero__actions">
               <a class="button button--primary" href="${prefix}book-repair.html">Book a repair</a>
-              <a class="button button--secondary" href="${prefix}${pageData.secondaryCtaHref || "repairs.html"}">${pageData.secondaryCtaText || "Back to repairs"}</a>
+              <a class="button button--secondary" href="${prefix}repairs.html">Back to repairs</a>
             </div>
           </div>
           <div class="repair-detail-panel">
@@ -465,20 +321,12 @@ if (pageData) {
           </div>
         </div>
       </section>
-
-      ${renderSeoIntro()}
-      ${renderSeoCards(pageData.serviceDetails)}
-      ${renderModelGroups()}
-      ${renderSeoCards(pageData.whyChoose, "repair-seo-card-grid repair-seo-card-grid--wide")}
-      ${renderSeoCards(pageData.repairProcess, "repair-seo-card-grid repair-seo-card-grid--steps")}
-      ${renderFaqs()}
-      ${renderFinalCta()}
     </main>
 
     <footer class="site-footer">
       <div class="container footer footer--rich">
         <div class="footer-brand">
-          <img class="footer-brand__logo" src="${techm8Logo}" alt="TECHM8 logo">
+          <img class="footer-brand__logo" src="${prefix}assets/logo-techm8.png" alt="TECHM8 logo">
           <p>${pageData.footerText}</p>
         </div>
         <div>
