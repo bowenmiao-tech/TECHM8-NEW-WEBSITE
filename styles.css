@@ -3565,6 +3565,11 @@ body.storefront-shop-page .storefront-tools {
   margin-bottom: 1rem;
 }
 
+.repair-seo-card__image {
+  object-fit: contain;
+  background: #ffffff;
+}
+
 .repair-model-card__image {
   aspect-ratio: 16 / 9;
   height: clamp(13rem, 24vw, 17rem);
