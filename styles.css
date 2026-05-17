@@ -3269,10 +3269,10 @@ body.storefront-shop-page .storefront-tools {
   object-fit: contain;
 }
 
-.repair-detail-panel__photo[src$="apple.png"] {
-  width: min(100%, 21rem);
-  height: min(42vw, 21rem);
-  min-height: 14rem;
+.repair-detail-panel__photo[src$="iphone-hero-device.webp"] {
+  width: min(100%, 25rem);
+  height: min(42vw, 19rem);
+  min-height: 13rem;
   margin: 0 auto;
 }
 
