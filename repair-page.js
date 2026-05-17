@@ -1,15 +1,3 @@
-import techm8Logo from "./assets/logo-techm8.png";
-import appleLogo from "./assets/repair-logos/apple.png";
-import googleLogo from "./assets/repair-logos/google.png";
-import huaweiLogo from "./assets/repair-logos/huawei.png";
-import nintendoLogo from "./assets/repair-logos/nintendo.svg";
-import oneplusLogo from "./assets/repair-logos/oneplus.png";
-import oppoLogo from "./assets/repair-logos/oppo.ico";
-import samsungLogo from "./assets/repair-logos/samsung.png";
-import sonyLogo from "./assets/repair-logos/sony.png";
-import xboxLogo from "./assets/repair-logos/xbox.svg";
-import xiaomiLogo from "./assets/repair-logos/xiaomi.png";
-
 const pageData = window.REPAIR_PAGE_DATA;
 
 if (pageData) {
@@ -234,17 +222,20 @@ if (pageData) {
     `;
   };
 
+  const logoRoot = `${prefix}assets/repair-logos/`;
+  const techm8Logo = `${prefix}assets/logo-techm8.png`;
+
   const brandLogoMap = {
-    apple: appleLogo,
-    samsung: samsungLogo,
-    oppo: oppoLogo,
-    huawei: huaweiLogo,
-    xiaomi: xiaomiLogo,
-    google: googleLogo,
-    oneplus: oneplusLogo,
-    sony: sonyLogo,
-    xbox: xboxLogo,
-    nintendo: nintendoLogo,
+    apple: `${logoRoot}apple.png`,
+    samsung: `${logoRoot}samsung.png`,
+    oppo: `${logoRoot}oppo.ico`,
+    huawei: `${logoRoot}huawei.png`,
+    xiaomi: `${logoRoot}xiaomi.png`,
+    google: `${logoRoot}google.png`,
+    oneplus: `${logoRoot}oneplus.png`,
+    sony: `${logoRoot}sony.png`,
+    xbox: `${logoRoot}xbox.svg`,
+    nintendo: `${logoRoot}nintendo.svg`,
   };
 
   const renderBrandVisual = (slug, name, meta) => `
