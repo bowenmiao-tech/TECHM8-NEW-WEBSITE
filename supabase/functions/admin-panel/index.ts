@@ -75,6 +75,16 @@ function normalizeNumber(value: unknown) {
   return Number.isFinite(numberValue) ? numberValue : null
 }
 
+function normalizeComparableValue(value: unknown) {
+  if (typeof value === 'number') return Number.isFinite(value) ? Number(value.toFixed(6)) : null
+  if (typeof value === 'string') return value.trim()
+  return value ?? null
+}
+
+function valuesMatch(left: unknown, right: unknown) {
+  return normalizeComparableValue(left) === normalizeComparableValue(right)
+}
+
 function normalizeEmail(value: unknown) {
   const text = String(value ?? '').trim().toLowerCase()
   return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(text) ? text : null
@@ -1539,12 +1549,34 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
   }
 
   const cleanPatch = Object.fromEntries(Object.entries(patch).filter(([, value]) => value !== undefined))
-  const { data, error } = await supabaseAdmin
+
+  const productSelect = 'id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at'
+  const { data: existingProduct, error: existingProductError } = await supabaseAdmin
     .from('products')
-    .update(cleanPatch)
+    .select(productSelect)
     .eq('id', productId)
-    .select('id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at')
     .single()
+
+  if (existingProductError || !existingProduct) {
+    return jsonResponse({ ok: false, error: 'Product could not be loaded before saving.' }, 500)
+  }
+
+  const changedPatch = Object.fromEntries(
+    Object.entries(cleanPatch).filter(([key, value]) => !valuesMatch((existingProduct as JsonRecord)[key], value)),
+  )
+
+  let data = existingProduct
+  let error = null
+  if (Object.keys(changedPatch).length) {
+    const updateResult = await supabaseAdmin
+    .from('products')
+    .update(changedPatch)
+    .eq('id', productId)
+    .select(productSelect)
+    .single()
+    data = updateResult.data ?? existingProduct
+    error = updateResult.error
+  }
 
   if (error) {
     if (error.code === '23503') {
