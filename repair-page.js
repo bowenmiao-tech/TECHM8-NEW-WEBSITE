@@ -272,7 +272,7 @@ if (pageData) {
   const resolveRepairVisual = () => {
     const title = String(pageData.title || "").toLowerCase();
 
-    if (title.includes("apple iphone") || title.includes("apple ipad")) {
+    if (title.includes("iphone") || title.includes("apple ipad")) {
       return renderBrandVisual("apple", "Apple", "iPhone and iPad repairs");
     }
     if (title.includes("samsung phone") || title.includes("samsung tablet")) {
