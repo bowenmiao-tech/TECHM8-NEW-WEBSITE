@@ -3593,6 +3593,7 @@ body.storefront-shop-page .storefront-tools {
     transform: translateX(104%);
     transition: transform 220ms ease;
     overflow-y: auto;
+    overflow-x: hidden;
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
@@ -3813,12 +3814,20 @@ body.storefront-shop-page .storefront-tools {
   }
 
   .nav__dropdown-group {
+    position: static;
     gap: 0;
     width: 100%;
   }
 
+  .nav__dropdown-group::after {
+    display: none;
+  }
+
   .nav__submenu-toggle {
+    width: 100%;
+    justify-content: space-between;
     padding: 0.95rem 1.25rem;
+    border-radius: 0;
     font-size: 1rem;
     font-weight: 700;
   }
@@ -3828,9 +3837,30 @@ body.storefront-shop-page .storefront-tools {
   }
 
   .nav__submenu-panel {
+    position: static;
+    left: auto;
+    top: auto;
+    width: 100%;
     margin-top: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
     max-height: 0;
+    opacity: 0;
+    visibility: visible;
+    overflow: hidden;
+    pointer-events: none;
+    transform: none;
+  }
+
+  .nav__dropdown-group.is-open > .nav__submenu-panel {
+    max-height: 56rem;
     padding-bottom: 0.4rem;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
   }
 
   .nav__dropdown-group a {
@@ -8459,7 +8489,7 @@ body.storefront-shop-page .storefront-tools {
   }
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1120px) {
   .nav__dropdown--repairs > .nav__dropdown-menu {
     display: none !important;
     pointer-events: none !important;

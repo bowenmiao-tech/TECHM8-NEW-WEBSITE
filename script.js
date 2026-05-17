@@ -33,7 +33,7 @@ function initFilters() {
 }
 
 function isMobileNavigation() {
-  return window.innerWidth <= 960;
+  return window.innerWidth <= 1120;
 }
 
 function keepMobileMenuOpen() {

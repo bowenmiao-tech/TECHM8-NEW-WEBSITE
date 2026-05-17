@@ -407,7 +407,7 @@ if (pageData) {
   window.addEventListener("storage", updateCartIndicators);
   window.addEventListener("techm8:cart-updated", updateCartIndicators);
 
-  const isMobileNavigation = () => window.innerWidth <= 960;
+  const isMobileNavigation = () => window.innerWidth <= 1120;
 
   const keepMobileMenuOpen = () => {
     if (!isMobileNavigation()) return;
