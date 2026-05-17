@@ -121,11 +121,14 @@ if (pageData) {
     )
     .join("");
 
-  document.body.innerHTML = `
+  const appRoot =
+    document.querySelector("[data-business-service-root]") || document.body;
+
+  appRoot.innerHTML = `
     <div class="promo-banner">
       <div class="container promo-banner__inner">
-        <span>Business, school, NDIS and on-site technology support from TECHM8.</span>
-        <a href="${linkUrl("book-repair.html")}">Book a repair</a>
+        <span>Fast repairs, quality parts and accessories for phones, tablets, computers, laptops and game consoles.</span>
+        <a href="${linkUrl("repairs.html")}">Explore repair services</a>
       </div>
     </div>
     <header class="site-header">
