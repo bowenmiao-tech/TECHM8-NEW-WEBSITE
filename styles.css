@@ -6821,18 +6821,18 @@ body.storefront-shop-page .storefront-tools {
 .floating-repair {
   position: fixed;
   right: 1rem;
-  bottom: 4.75rem;
+  bottom: 1.15rem;
   z-index: 55;
-  display: none;
+  display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  min-height: 2.8rem;
+  gap: 0.55rem;
+  min-height: 3.15rem;
   max-width: calc(100vw - 2rem);
-  padding: 0 0.82rem;
+  padding: 0 1.05rem;
   border-radius: 999px;
   background: #061f24;
   color: #fff;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   font-weight: 800;
   line-height: 1;
   box-shadow: 0 16px 34px rgba(3, 24, 28, 0.24);
@@ -6845,8 +6845,8 @@ body.storefront-shop-page .storefront-tools {
 .floating-repair__icon {
   display: inline-flex;
   flex: 0 0 auto;
-  width: 1.05rem;
-  height: 1.05rem;
+  width: 1.18rem;
+  height: 1.18rem;
   color: var(--brand);
 }
 
@@ -8810,6 +8810,16 @@ body.storefront-shop-page .storefront-tools {
 
   .floating-repair {
     display: inline-flex;
+    bottom: 4.75rem;
+    gap: 0.45rem;
+    min-height: 2.8rem;
+    padding: 0 0.82rem;
+    font-size: 0.78rem;
+  }
+
+  .floating-repair__icon {
+    width: 1.05rem;
+    height: 1.05rem;
   }
 }
 
