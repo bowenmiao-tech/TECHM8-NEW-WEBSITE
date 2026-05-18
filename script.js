@@ -948,42 +948,91 @@ function initStoresLocator() {
     allStoresButton.addEventListener("click", showAllStores);
   }
 
-  if (locateButton instanceof HTMLButtonElement) {
+  const requestCurrentLocation = (options = {}) => {
+    const automatic = Boolean(options.automatic);
     if (!("geolocation" in navigator)) {
-      locateButton.disabled = true;
+      if (locateButton instanceof HTMLButtonElement) {
+        locateButton.disabled = true;
+      }
       setLocationStatus(
         "Your browser does not support location access. Search by suburb or choose a store from the list.",
       );
-    } else {
-      locateButton.addEventListener("click", () => {
-        locateButton.disabled = true;
-        locateButton.textContent = "Finding nearest store...";
-        setLocationStatus("Requesting location permission from your browser.");
-
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            locateButton.disabled = false;
-            locateButton.textContent = "Use my current location";
-            applyLocationDistances({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            });
-          },
-          () => {
-            locateButton.disabled = false;
-            locateButton.textContent = "Use my current location";
-            setLocationStatus(
-              "Location access was not available. Search by suburb or choose a store manually.",
-            );
-          },
-          {
-            enableHighAccuracy: false,
-            maximumAge: 300000,
-            timeout: 10000,
-          },
-        );
-      });
+      return;
     }
+
+    if (locateButton instanceof HTMLButtonElement) {
+      locateButton.disabled = true;
+      locateButton.textContent = "Finding nearest store...";
+    }
+    setLocationStatus(
+      automatic
+        ? "Allow location access in your browser to show your nearest TECHM8 store."
+        : "Requesting location permission from your browser.",
+    );
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        if (locateButton instanceof HTMLButtonElement) {
+          locateButton.disabled = false;
+          locateButton.textContent = "Use my current location";
+        }
+        applyLocationDistances({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      () => {
+        if (locateButton instanceof HTMLButtonElement) {
+          locateButton.disabled = false;
+          locateButton.textContent = "Use my current location";
+        }
+        setLocationStatus(
+          "Location access was not available. Search by suburb or choose a store manually.",
+        );
+      },
+      {
+        enableHighAccuracy: false,
+        maximumAge: 300000,
+        timeout: 10000,
+      },
+    );
+  };
+
+  const requestCurrentLocationOnLoad = () => {
+    if (!("geolocation" in navigator)) {
+      setLocationStatus(
+        "Your browser does not support location access. Search by suburb or choose a store from the list.",
+      );
+      return;
+    }
+
+    const request = () => requestCurrentLocation({ automatic: true });
+
+    if (navigator.permissions?.query) {
+      navigator.permissions
+        .query({ name: "geolocation" })
+        .then((permission) => {
+          if (permission.state === "denied") {
+            setLocationStatus(
+              "Location access is blocked in your browser. Enable it or search by suburb to find your nearest store.",
+            );
+            return;
+          }
+          window.setTimeout(request, permission.state === "granted" ? 150 : 700);
+        })
+        .catch(() => {
+          window.setTimeout(request, 700);
+        });
+      return;
+    }
+
+    window.setTimeout(request, 700);
+  };
+
+  if (locateButton instanceof HTMLButtonElement) {
+    locateButton.addEventListener("click", () => {
+      requestCurrentLocation();
+    });
   }
 
   if (addressForm instanceof HTMLFormElement) {
@@ -1031,6 +1080,8 @@ function initStoresLocator() {
   } else {
     showAllStores();
   }
+
+  requestCurrentLocationOnLoad();
 
   loadGoogleMapsApi()
     .then(initInteractiveMap)
