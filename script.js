@@ -524,7 +524,6 @@ function loadGoogleMapsApi() {
     const script = document.createElement("script");
     const params = new URLSearchParams({
       key: apiKey,
-      libraries: "places",
       callback: callbackName,
       loading: "async",
       v: "weekly",
@@ -914,22 +913,6 @@ function initStoresLocator() {
       storeMarkers.set(slug, marker);
     });
 
-    if (addressInput instanceof HTMLInputElement && maps.places?.Autocomplete) {
-      const autocomplete = new maps.places.Autocomplete(addressInput, {
-        componentRestrictions: { country: "au" },
-        fields: ["geometry", "formatted_address", "name"],
-      });
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        const location = place?.geometry?.location;
-        if (!location) return;
-        applyLocationDistances({
-          latitude: location.lat(),
-          longitude: location.lng(),
-        });
-      });
-    }
-
     fitInteractiveMap();
   };
 
@@ -1006,27 +989,9 @@ function initStoresLocator() {
       return;
     }
 
-    const request = () => requestCurrentLocation({ automatic: true });
-
-    if (navigator.permissions?.query) {
-      navigator.permissions
-        .query({ name: "geolocation" })
-        .then((permission) => {
-          if (permission.state === "denied") {
-            setLocationStatus(
-              "Location access is blocked in your browser. Enable it or search by suburb to find your nearest store.",
-            );
-            return;
-          }
-          window.setTimeout(request, permission.state === "granted" ? 150 : 700);
-        })
-        .catch(() => {
-          window.setTimeout(request, 700);
-        });
-      return;
-    }
-
-    window.setTimeout(request, 700);
+    window.setTimeout(() => {
+      requestCurrentLocation({ automatic: true });
+    }, 250);
   };
 
   if (locateButton instanceof HTMLButtonElement) {
