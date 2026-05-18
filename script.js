@@ -230,36 +230,17 @@ function buildSiteRelativeHref(path) {
   return `${getSiteRelativePrefix()}${safePath}`;
 }
 
-function isStoreLocatorDropdown(dropdown) {
-  if (!(dropdown instanceof HTMLElement)) return false;
-  const toggle = dropdown.querySelector(".nav__dropdown-toggle");
-  const destination = toggle?.dataset.href || toggle?.getAttribute("href") || "";
-  return dropdown.classList.contains("nav__dropdown--stores") || destination.includes("stores.html");
-}
-
 function decorateStoreLocatorMenu() {
   document.querySelectorAll(".nav__dropdown--stores").forEach((dropdown) => {
     const toggle = dropdown.querySelector(".nav__dropdown-toggle");
     if (!(toggle instanceof HTMLElement)) return;
 
-    const destination = toggle.dataset.href || toggle.getAttribute("href") || buildSiteRelativeHref("stores.html");
     toggle.textContent = "Store Locator";
 
     const title = dropdown.querySelector(".store-switcher__top strong");
     if (title instanceof HTMLElement) {
       title.textContent = "Store Locator";
     }
-
-    const grid = dropdown.querySelector(".store-switcher__grid");
-    if (!(grid instanceof HTMLElement)) return;
-    if (grid.querySelector("[data-store-locator-overview]")) return;
-
-    const overviewLink = document.createElement("a");
-    overviewLink.className = "store-switcher__link store-switcher__link--overview";
-    overviewLink.href = destination;
-    overviewLink.textContent = "Store Locator";
-    overviewLink.setAttribute("data-store-locator-overview", "true");
-    grid.prepend(overviewLink);
   });
 }
 
@@ -351,10 +332,18 @@ function handleDropdownToggle(event, dropdownToggle) {
   event.stopPropagation();
   const dropdown = dropdownToggle.closest(".nav__dropdown");
   if (!dropdown) return;
+  const destination =
+    dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
 
   if (isMobileNavigation()) {
     event.preventDefault();
-    const willOpen = !dropdown.classList.contains("is-open");
+    const alreadyOpen = dropdown.classList.contains("is-open");
+    if (alreadyOpen && destination) {
+      window.location.href = destination;
+      return;
+    }
+
+    const willOpen = !alreadyOpen;
     closeAllDropdowns(willOpen ? dropdown : null);
     dropdown.classList.toggle("is-open", willOpen);
     dropdownToggle.setAttribute("aria-expanded", String(willOpen));
@@ -363,15 +352,6 @@ function handleDropdownToggle(event, dropdownToggle) {
       closeAllMobileRepairsGroups();
     }
     delete dropdownToggle.dataset.navReady;
-    return;
-  }
-
-  const destination =
-    dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
-
-  if (isStoreLocatorDropdown(dropdown) && destination) {
-    event.preventDefault();
-    window.location.href = destination;
     return;
   }
 

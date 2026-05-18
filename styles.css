@@ -469,6 +469,10 @@ a {
   padding: 0.18rem 0.2rem 0.4rem;
 }
 
+.nav__dropdown-menu .store-switcher__top {
+  display: none;
+}
+
 .store-switcher__grid {
   display: grid;
   grid-template-columns: 1fr;
