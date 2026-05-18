@@ -5796,25 +5796,28 @@ body.storefront-shop-page .storefront-tools {
 }
 
 .booking-hero {
-  padding-bottom: 2rem;
+  padding-top: 1.6rem;
+  padding-bottom: 0.9rem;
 }
 
 .booking-hero__inner {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
-  gap: 1.3rem;
-  align-items: start;
+  gap: 1.15rem;
+  align-items: center;
 }
 
 .booking-hero__copy h1 {
-  max-width: 12ch;
+  max-width: 19ch;
+  font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+  line-height: 1.05;
 }
 
 .booking-hero__points {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.7rem;
-  margin-top: 1.5rem;
+  gap: 0.55rem;
+  margin-top: 1rem;
 }
 
 .booking-hero__points span,
@@ -5825,8 +5828,8 @@ body.storefront-shop-page .storefront-tools {
 .booking-hero__points span {
   display: inline-flex;
   align-items: center;
-  min-height: 2.2rem;
-  padding: 0 0.9rem;
+  min-height: 2rem;
+  padding: 0 0.75rem;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.64);
   border: 1px solid rgba(7, 39, 45, 0.1);
@@ -5836,7 +5839,7 @@ body.storefront-shop-page .storefront-tools {
 }
 
 .booking-hero__panel {
-  padding: 1.5rem;
+  padding: 1.25rem;
   border: 1px solid rgba(7, 39, 45, 0.1);
   border-radius: 1.5rem;
   background: rgba(255, 255, 255, 0.68);
@@ -5845,7 +5848,7 @@ body.storefront-shop-page .storefront-tools {
 
 .booking-hero__panel strong {
   display: block;
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.65rem;
   color: var(--brand-dark);
   font-size: 1.15rem;
 }
@@ -5854,7 +5857,11 @@ body.storefront-shop-page .storefront-tools {
   margin: 0;
   padding-left: 1.15rem;
   display: grid;
-  gap: 0.75rem;
+  gap: 0.5rem;
+}
+
+.booking-section {
+  padding-top: 0.9rem;
 }
 
 .booking-layout {
@@ -5881,16 +5888,21 @@ body.storefront-shop-page .storefront-tools {
 .booking-form__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  column-gap: 1rem;
+  row-gap: 1rem;
+  align-items: start;
 }
 
 .booking-field {
   display: grid;
-  gap: 0.55rem;
+  grid-template-rows: auto minmax(3.65rem, auto) auto;
+  gap: 0.45rem;
+  min-width: 0;
 }
 
 .booking-field--full {
   grid-column: 1 / -1;
+  grid-template-rows: auto auto auto;
 }
 
 .booking-field span,
@@ -5903,6 +5915,8 @@ body.storefront-shop-page .storefront-tools {
 .booking-field select,
 .booking-field textarea {
   width: 100%;
+  min-width: 0;
+  min-height: 3.65rem;
   padding: 0.95rem 1rem;
   border: 1px solid rgba(7, 39, 45, 0.14);
   border-radius: 1rem;
@@ -6484,9 +6498,45 @@ body.storefront-shop-page .storefront-tools {
   .booking-form__grid {
     grid-template-columns: 1fr;
   }
+
+  .booking-hero__inner {
+    align-items: start;
+  }
 }
 
 @media (max-width: 640px) {
+  .booking-hero {
+    padding-top: 0.95rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .booking-hero__copy h1 {
+    font-size: clamp(2.25rem, 11vw, 3rem);
+  }
+
+  .booking-hero .hero__lead {
+    line-height: 1.55;
+  }
+
+  .booking-hero__points {
+    gap: 0.45rem;
+    margin-top: 0.8rem;
+  }
+
+  .booking-hero__points span {
+    min-height: 1.85rem;
+    padding: 0 0.65rem;
+    font-size: 0.88rem;
+  }
+
+  .booking-hero__panel {
+    display: none;
+  }
+
+  .booking-section {
+    padding-top: 0.5rem;
+  }
+
   .booking-card,
   .booking-sidebar__card {
     padding: 1.2rem;
@@ -6836,6 +6886,10 @@ body.storefront-shop-page .storefront-tools {
   font-weight: 800;
   line-height: 1;
   box-shadow: 0 18px 40px rgba(3, 24, 28, 0.28);
+}
+
+.booking-page .floating-repair {
+  display: none;
 }
 
 .floating-repair:hover {
