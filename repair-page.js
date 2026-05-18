@@ -634,6 +634,25 @@ if (pageData) {
     document.body.appendChild(floatingCart);
   }
 
+  if (!document.querySelector("[data-floating-repair]")) {
+    const floatingRepair = document.createElement("a");
+    floatingRepair.className = "floating-repair";
+    floatingRepair.href = `${prefix}book-repair.html`;
+    floatingRepair.setAttribute("aria-label", "Book a repair");
+    floatingRepair.setAttribute("data-floating-repair", "true");
+    floatingRepair.innerHTML = `
+      <span class="floating-repair__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.7 6.3a4.1 4.1 0 0 0-5 5L4.8 16.2a1.8 1.8 0 0 0 0 2.6l.4.4a1.8 1.8 0 0 0 2.6 0l4.9-4.9a4.1 4.1 0 0 0 5-5l-2.8 2.8-2.9-2.9 2.7-2.9Z"></path>
+          <path d="M16.8 17.2 20 20.4"></path>
+          <path d="M18.4 15.6 21.6 18.8"></path>
+        </svg>
+      </span>
+      <span class="floating-repair__text">Book repair</span>
+    `;
+    document.body.appendChild(floatingRepair);
+  }
+
   updateCartIndicators();
   window.addEventListener("storage", updateCartIndicators);
   window.addEventListener("techm8:cart-updated", updateCartIndicators);
