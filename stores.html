@@ -128,6 +128,13 @@
             <span>Search by suburb or address</span>
             <input type="search" placeholder="Search stores..." data-store-search>
           </label>
+          <form class="store-locator__address-search" data-store-address-form>
+            <label for="store-address-search">Find nearest store from an address</label>
+            <div>
+              <input id="store-address-search" type="search" placeholder="Enter suburb, postcode or address" autocomplete="street-address" data-store-address-search>
+              <button class="button button--secondary" type="submit">Search</button>
+            </div>
+          </form>
           <div class="store-locator__location">
             <button class="button button--primary" type="button" data-store-locate>Use my current location</button>
             <p data-store-location-status>Allow location access to see the nearest TECHM8 store first.</p>
@@ -189,12 +196,15 @@
             </div>
           </div>
           <div class="store-locator__map">
+            <div class="store-locator__google-map" data-store-map-canvas aria-label="Interactive TECHM8 store map"></div>
             <iframe
+              class="store-locator__map-fallback"
               title="OZ Tech M8 Queensland Google Map"
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
               src="https://www.google.com/maps?q=OZ%20Tech%20M8%20Queensland%20Australia&output=embed"
-              data-store-map></iframe>
+              data-store-map
+              data-store-map-fallback></iframe>
           </div>
         </div>
       </div>

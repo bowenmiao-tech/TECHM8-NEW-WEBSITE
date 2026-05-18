@@ -11,6 +11,7 @@ window.TECHM8_CONFIG = window.TECHM8_CONFIG || {
   adminEndpoint:
     "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/admin-panel",
   siteUrl: "https://www.techm8australia.com/",
+  googleMapsApiKey: "AIzaSyAecM2vtQCDDZCSOJvx2dgdZBfsM_fz1QM",
 };
 
 function initFilters() {
@@ -504,6 +505,50 @@ function initStoreSearch() {
   });
 }
 
+function loadGoogleMapsApi() {
+  const apiKey = String(window.TECHM8_CONFIG?.googleMapsApiKey || "").trim();
+  if (!apiKey) {
+    return Promise.reject(new Error("Google Maps API key is not configured."));
+  }
+
+  if (window.google?.maps) {
+    return Promise.resolve(window.google.maps);
+  }
+
+  if (window.__techm8GoogleMapsPromise) {
+    return window.__techm8GoogleMapsPromise;
+  }
+
+  window.__techm8GoogleMapsPromise = new Promise((resolve, reject) => {
+    const callbackName = `techm8GoogleMapsReady_${Date.now()}`;
+    const script = document.createElement("script");
+    const params = new URLSearchParams({
+      key: apiKey,
+      libraries: "places",
+      callback: callbackName,
+      loading: "async",
+      v: "weekly",
+    });
+
+    window[callbackName] = () => {
+      delete window[callbackName];
+      resolve(window.google.maps);
+    };
+
+    script.src = `https://maps.googleapis.com/maps/api/js?${params.toString()}`;
+    script.async = true;
+    script.defer = true;
+    script.onerror = () => {
+      delete window[callbackName];
+      window.__techm8GoogleMapsPromise = null;
+      reject(new Error("Google Maps JavaScript API could not be loaded."));
+    };
+    document.head.appendChild(script);
+  });
+
+  return window.__techm8GoogleMapsPromise;
+}
+
 function initStoresLocator() {
   const root = document.querySelector("[data-store-locator]");
   if (!(root instanceof HTMLElement)) return;
@@ -518,6 +563,10 @@ function initStoresLocator() {
   const cards = Array.from(root.querySelectorAll("[data-store-card]"));
   const searchInput = root.querySelector("[data-store-search]");
   const countTarget = root.querySelector("[data-store-count]");
+  const addressForm = root.querySelector("[data-store-address-form]");
+  const addressInput = root.querySelector("[data-store-address-search]");
+  const mapCanvas = root.querySelector("[data-store-map-canvas]");
+  const mapShell = mapCanvas?.closest(".store-locator__map");
   const mapFrame = root.querySelector("[data-store-map]");
   const mapTitle = root.querySelector("[data-store-map-title]");
   const mapAddress = root.querySelector("[data-store-map-address]");
@@ -541,10 +590,32 @@ function initStoresLocator() {
   );
   const allStoresMapSrc =
     "https://www.google.com/maps?q=OZ%20Tech%20M8%20Queensland%20Australia&output=embed";
+  const defaultMapCenter = { latitude: -27.485, longitude: 153.02 };
+  let googleMap = null;
+  let googleMaps = null;
+  let infoWindow = null;
+  let geocoder = null;
+  let currentPosition = null;
+  let userMarker = null;
+  const storeMarkers = new Map();
 
   const getMapSrc = (store) => {
     const address = String(store?.address || "").trim();
     return `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
+  };
+
+  const getDirectionsUrl = (store, origin = currentPosition) => {
+    const destination = store?.coordinates
+      ? `${store.coordinates.latitude},${store.coordinates.longitude}`
+      : store?.address || "";
+    const params = new URLSearchParams({
+      api: "1",
+      destination,
+    });
+    if (origin?.latitude && origin?.longitude) {
+      params.set("origin", `${origin.latitude},${origin.longitude}`);
+    }
+    return `https://www.google.com/maps/dir/?${params.toString()}`;
   };
 
   const toRadians = (degrees) => (degrees * Math.PI) / 180;
@@ -589,6 +660,56 @@ function initStoresLocator() {
     }
   };
 
+  const toGoogleLatLng = (position) => ({
+    lat: position.latitude,
+    lng: position.longitude,
+  });
+
+  const fitInteractiveMap = (selectedSlug = "") => {
+    if (!googleMap || !googleMaps) return;
+
+    const bounds = new googleMaps.LatLngBounds();
+    storeOrder.forEach((slug) => {
+      const store = STORE_CHECKOUT_DETAILS[slug];
+      if (store?.coordinates) {
+        bounds.extend(toGoogleLatLng(store.coordinates));
+      }
+    });
+    if (currentPosition) {
+      bounds.extend(toGoogleLatLng(currentPosition));
+    }
+
+    if (!bounds.isEmpty()) {
+      googleMap.fitBounds(bounds, 56);
+    }
+
+    if (selectedSlug) {
+      const store = STORE_CHECKOUT_DETAILS[selectedSlug];
+      if (store?.coordinates) {
+        googleMap.panTo(toGoogleLatLng(store.coordinates));
+        googleMap.setZoom(Math.max(googleMap.getZoom() || 12, 13));
+      }
+    }
+  };
+
+  const openStoreInfoWindow = (slug) => {
+    const store = STORE_CHECKOUT_DETAILS[slug];
+    const marker = storeMarkers.get(slug);
+    if (!googleMap || !googleMaps || !infoWindow || !store || !marker) return;
+
+    infoWindow.setContent(`
+      <div class="store-locator-map-window">
+        <strong>${escapeHtml(store.title)}</strong>
+        <p>${escapeHtml(store.address)}</p>
+        <a href="${escapeHtml(getDirectionsUrl(store))}" target="_blank" rel="noopener">Directions</a>
+      </div>
+    `);
+    infoWindow.open({
+      anchor: marker,
+      map: googleMap,
+    });
+  };
+
   const showAllStores = () => {
     cards.forEach((card) => {
       card.classList.remove("is-active");
@@ -623,6 +744,7 @@ function initStoresLocator() {
     if (pageLink instanceof HTMLAnchorElement) {
       pageLink.href = "stores.html";
     }
+    fitInteractiveMap();
   };
 
   const updateRecommendation = (nearest) => {
@@ -639,8 +761,7 @@ function initStoresLocator() {
     recommendationCopy.textContent = `${formatDistance(nearest.distanceKm)}. ${nearest.store.summary}`;
 
     if (recommendationDirections instanceof HTMLAnchorElement) {
-      recommendationDirections.href =
-        nearest.store.mapUrl || getMapSrc(nearest.store);
+      recommendationDirections.href = getDirectionsUrl(nearest.store);
     }
     if (recommendationPage instanceof HTMLAnchorElement) {
       recommendationPage.href = nearest.store.pageUrl || "stores.html";
@@ -648,6 +769,7 @@ function initStoresLocator() {
   };
 
   const applyLocationDistances = (position) => {
+    currentPosition = position;
     const storesByDistance = getStoresWithDistance(position);
     if (!storesByDistance.length) return;
 
@@ -669,6 +791,25 @@ function initStoresLocator() {
     const nearest = storesByDistance[0];
     updateRecommendation(nearest);
     selectStore(nearest.slug);
+    if (googleMap && googleMaps) {
+      if (userMarker) {
+        userMarker.setMap(null);
+      }
+      userMarker = new googleMaps.Marker({
+        map: googleMap,
+        position: toGoogleLatLng(position),
+        title: "Your location",
+        icon: {
+          path: googleMaps.SymbolPath.CIRCLE,
+          scale: 8,
+          fillColor: "#0b7cff",
+          fillOpacity: 1,
+          strokeColor: "#ffffff",
+          strokeWeight: 3,
+        },
+      });
+      fitInteractiveMap(nearest.slug);
+    }
     setLocationStatus(
       `Showing stores nearest to your current location. Closest match: ${nearest.store.title}.`,
     );
@@ -695,11 +836,101 @@ function initStoresLocator() {
       mapAddress.textContent = store.address;
     }
     if (directionsLink instanceof HTMLAnchorElement) {
-      directionsLink.href = store.mapUrl || getMapSrc(store);
+      directionsLink.href = currentPosition
+        ? getDirectionsUrl(store)
+        : store.mapUrl || getMapSrc(store);
     }
     if (pageLink instanceof HTMLAnchorElement) {
       pageLink.href = store.pageUrl || "stores.html";
     }
+    if (googleMap && store.coordinates) {
+      googleMap.panTo(toGoogleLatLng(store.coordinates));
+      googleMap.setZoom(Math.max(googleMap.getZoom() || 12, 13));
+      openStoreInfoWindow(slug);
+    }
+  };
+
+  const searchAddress = (address) => {
+    const query = String(address || "").trim();
+    if (!query) {
+      setLocationStatus("Enter a suburb, postcode or address to find the nearest store.");
+      return;
+    }
+
+    if (!geocoder) {
+      setLocationStatus(
+        "Address search is still loading. Try again in a few seconds.",
+      );
+      return;
+    }
+
+    setLocationStatus("Searching for that location.");
+    geocoder.geocode(
+      {
+        address: query,
+        componentRestrictions: { country: "AU" },
+        region: "au",
+      },
+      (results, status) => {
+        const location = results?.[0]?.geometry?.location;
+        if (status !== "OK" || !location) {
+          setLocationStatus(
+            "That location could not be found. Try a Brisbane suburb, postcode or full address.",
+          );
+          return;
+        }
+        applyLocationDistances({
+          latitude: location.lat(),
+          longitude: location.lng(),
+        });
+      },
+    );
+  };
+
+  const initInteractiveMap = (maps) => {
+    if (!(mapCanvas instanceof HTMLElement)) return;
+    googleMaps = maps;
+    geocoder = new maps.Geocoder();
+    infoWindow = new maps.InfoWindow();
+    googleMap = new maps.Map(mapCanvas, {
+      center: toGoogleLatLng(defaultMapCenter),
+      zoom: 10,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: true,
+    });
+
+    mapShell?.classList.add("is-interactive");
+
+    storeOrder.forEach((slug) => {
+      const store = STORE_CHECKOUT_DETAILS[slug];
+      if (!store?.coordinates) return;
+      const marker = new maps.Marker({
+        map: googleMap,
+        position: toGoogleLatLng(store.coordinates),
+        title: store.title,
+      });
+      marker.addListener("click", () => selectStore(slug));
+      storeMarkers.set(slug, marker);
+    });
+
+    if (addressInput instanceof HTMLInputElement && maps.places?.Autocomplete) {
+      const autocomplete = new maps.places.Autocomplete(addressInput, {
+        componentRestrictions: { country: "au" },
+        fields: ["geometry", "formatted_address", "name"],
+      });
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        const location = place?.geometry?.location;
+        if (!location) return;
+        applyLocationDistances({
+          latitude: location.lat(),
+          longitude: location.lng(),
+        });
+      });
+    }
+
+    fitInteractiveMap();
   };
 
   cards.forEach((card) => {
@@ -755,6 +986,15 @@ function initStoresLocator() {
     }
   }
 
+  if (addressForm instanceof HTMLFormElement) {
+    addressForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      searchAddress(
+        addressInput instanceof HTMLInputElement ? addressInput.value : "",
+      );
+    });
+  }
+
   if (searchInput instanceof HTMLInputElement) {
     searchInput.addEventListener("input", () => {
       const query = searchInput.value.trim().toLowerCase();
@@ -791,6 +1031,14 @@ function initStoresLocator() {
   } else {
     showAllStores();
   }
+
+  loadGoogleMapsApi()
+    .then(initInteractiveMap)
+    .catch(() => {
+      setLocationStatus(
+        "Interactive Google Map is unavailable. Store search and location recommendation still work.",
+      );
+    });
 }
 
 function initHomeBanner() {
