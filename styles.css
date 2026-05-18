@@ -5819,7 +5819,7 @@ body.storefront-shop-page .storefront-tools {
 
 .booking-hero__points span,
 .booking-hero__panel li {
-  color: rgba(255, 255, 255, 0.84);
+  color: rgba(7, 39, 45, 0.78);
 }
 
 .booking-hero__points span {
@@ -5828,24 +5828,25 @@ body.storefront-shop-page .storefront-tools {
   min-height: 2.2rem;
   padding: 0 0.9rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.64);
+  border: 1px solid rgba(7, 39, 45, 0.1);
   font-size: 0.92rem;
   font-weight: 600;
+  box-shadow: 0 10px 22px rgba(3, 24, 28, 0.06);
 }
 
 .booking-hero__panel {
   padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(7, 39, 45, 0.1);
   border-radius: 1.5rem;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.68);
   box-shadow: 0 20px 44px rgba(3, 24, 28, 0.08);
 }
 
 .booking-hero__panel strong {
   display: block;
   margin-bottom: 0.9rem;
-  color: #fff;
+  color: var(--brand-dark);
   font-size: 1.15rem;
 }
 
