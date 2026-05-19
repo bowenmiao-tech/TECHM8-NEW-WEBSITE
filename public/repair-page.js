@@ -5,11 +5,11 @@ if (pageData) {
 
   const storeDropdown = `
     <div class="nav__dropdown nav__dropdown--stores">
-      <button class="nav__dropdown-toggle" type="button" data-href="${prefix}stores.html" aria-expanded="false" onclick="return toggleMainDropdown(this, event)">Stores</button>
+      <button class="nav__dropdown-toggle" type="button" data-href="${prefix}stores.html" aria-expanded="false" onclick="return toggleMainDropdown(this, event)">Store Locator</button>
       <div class="nav__dropdown-menu nav__dropdown-menu--stores">
         <div class="store-switcher">
           <div class="store-switcher__top">
-            <strong>Stores</strong>
+            <strong>Store Locator</strong>
           </div>
           <div class="store-switcher__grid">
             <a class="store-switcher__link" href="${prefix}stores/park-ridge.html">Park Ridge</a>
@@ -575,7 +575,7 @@ if (pageData) {
           <h4>Explore</h4>
           <a href="${prefix}repairs.html">Repairs Overview</a>
           <a href="${prefix}products.html">Products</a>
-          <a href="${prefix}stores.html">Stores</a>
+          <a href="${prefix}stores.html">Store Locator</a>
           <a href="${prefix}shop.html">Online Store</a>
         </div>
         <div>
@@ -632,6 +632,25 @@ if (pageData) {
       <span class="floating-cart__count" data-cart-count>0</span>
     `;
     document.body.appendChild(floatingCart);
+  }
+
+  if (!document.querySelector("[data-floating-repair]")) {
+    const floatingRepair = document.createElement("a");
+    floatingRepair.className = "floating-repair";
+    floatingRepair.href = `${prefix}book-repair.html`;
+    floatingRepair.setAttribute("aria-label", "Book a repair");
+    floatingRepair.setAttribute("data-floating-repair", "true");
+    floatingRepair.innerHTML = `
+      <span class="floating-repair__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.7 6.3a4.1 4.1 0 0 0-5 5L4.8 16.2a1.8 1.8 0 0 0 0 2.6l.4.4a1.8 1.8 0 0 0 2.6 0l4.9-4.9a4.1 4.1 0 0 0 5-5l-2.8 2.8-2.9-2.9 2.7-2.9Z"></path>
+          <path d="M16.8 17.2 20 20.4"></path>
+          <path d="M18.4 15.6 21.6 18.8"></path>
+        </svg>
+      </span>
+      <span class="floating-repair__text">Book repair</span>
+    `;
+    document.body.appendChild(floatingRepair);
   }
 
   updateCartIndicators();
@@ -770,6 +789,20 @@ if (pageData) {
     }
   };
 
+  const decorateStoreLocatorMenu = () => {
+    document.querySelectorAll(".nav__dropdown--stores").forEach((dropdown) => {
+      const toggle = dropdown.querySelector(".nav__dropdown-toggle");
+      if (!(toggle instanceof HTMLElement)) return;
+
+      toggle.textContent = "Store Locator";
+
+      const title = dropdown.querySelector(".store-switcher__top strong");
+      if (title instanceof HTMLElement) {
+        title.textContent = "Store Locator";
+      }
+    });
+  };
+
   const decorateMobileRepairsAccordion = () => {
     const repairsDropdown = Array.from(document.querySelectorAll(".nav__dropdown")).find((dropdown) => {
       const toggle = dropdown.querySelector(".nav__dropdown-toggle");
@@ -821,10 +854,17 @@ if (pageData) {
     event.stopPropagation();
     const dropdown = dropdownToggle.closest(".nav__dropdown");
     if (!dropdown) return;
+    const destination = dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
 
     if (isMobileNavigation()) {
       event.preventDefault();
-      const willOpen = !dropdown.classList.contains("is-open");
+      const alreadyOpen = dropdown.classList.contains("is-open");
+      if (alreadyOpen && destination) {
+        window.location.href = destination;
+        return;
+      }
+
+      const willOpen = !alreadyOpen;
       closeAllDropdowns(willOpen ? dropdown : null);
       dropdown.classList.toggle("is-open", willOpen);
       dropdownToggle.setAttribute("aria-expanded", String(willOpen));
@@ -836,7 +876,6 @@ if (pageData) {
       return;
     }
 
-    const destination = dropdownToggle.dataset.href || dropdownToggle.getAttribute("href");
     const alreadyOpen = dropdown.classList.contains("is-open");
     const readyToNavigate = dropdownToggle.dataset.navReady === "true";
 
@@ -942,6 +981,7 @@ if (pageData) {
   };
 
   decorateMobileMenu();
+  decorateStoreLocatorMenu();
   decorateMobileRepairsAccordion();
   initStoreSearch();
 
