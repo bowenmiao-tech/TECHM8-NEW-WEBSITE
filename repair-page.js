@@ -414,6 +414,14 @@ if (pageData) {
     return `<div class="repair-detail-panel__icon ${pageData.vectorClass}" aria-hidden="true"></div>`;
   };
 
+  document.body.classList.add("repair-page");
+  if (pageData.pageClass) {
+    pageData.pageClass
+      .split(/\s+/)
+      .filter(Boolean)
+      .forEach((className) => document.body.classList.add(className));
+  }
+
   document.body.innerHTML = `
     <div class="promo-banner">
       <div class="container promo-banner__inner">
