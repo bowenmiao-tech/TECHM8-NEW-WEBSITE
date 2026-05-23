@@ -164,6 +164,35 @@ if (pageData) {
     `;
   };
 
+  const renderHeroHighlightIcon = (icon) => {
+    const iconMap = {
+      screen: `
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="15" y="7" width="18" height="34" rx="3"></rect>
+          <path d="M24 41v-4"></path>
+          <path d="M20 12h8"></path>
+          <path d="M19 20l10 10"></path>
+          <path d="M29 20l-10 10"></path>
+        </svg>
+      `,
+      devices: `
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="7" y="10" width="20" height="25" rx="3"></rect>
+          <rect x="25" y="17" width="13" height="22" rx="2.6"></rect>
+          <rect x="36" y="23" width="7" height="17" rx="2"></rect>
+        </svg>
+      `,
+      location: `
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M24 43s14-13.2 14-25a14 14 0 0 0-28 0c0 11.8 14 25 14 25Z"></path>
+          <circle cx="24" cy="18" r="5"></circle>
+        </svg>
+      `,
+    };
+
+    return iconMap[icon] ? `<span class="repair-seo-highlight__icon">${iconMap[icon]}</span>` : "";
+  };
+
   const renderSeoCards = (section, className = "repair-seo-card-grid") => {
     if (!section || !section.items?.length) return "";
     return `
@@ -514,6 +543,7 @@ if (pageData) {
                           .map(
                             (item) => `
                               <div class="repair-seo-highlight">
+                                ${renderHeroHighlightIcon(item.icon)}
                                 <strong>${item.title}</strong>
                                 <span>${item.text}</span>
                               </div>

@@ -3465,6 +3465,152 @@ body.repair-page--compact-hero .hero--service + .section .section-heading {
   margin-bottom: 1.4rem;
 }
 
+body.repair-page--ipad .hero--service {
+  width: min(1280px, calc(100% - 2rem));
+  margin: 2rem auto 0;
+  padding: clamp(2.2rem, 5vw, 4.2rem);
+  border: 1px solid rgba(17, 141, 149, 0.16);
+  border-radius: 1.6rem;
+  background:
+    radial-gradient(circle at 88% 8%, rgba(255, 255, 255, 0.96), transparent 28rem),
+    linear-gradient(135deg, rgba(244, 255, 253, 0.96), rgba(224, 250, 248, 0.9));
+  box-shadow: 0 24px 70px rgba(3, 24, 28, 0.08);
+}
+
+body.repair-page--ipad .hero--service .container {
+  width: 100%;
+}
+
+body.repair-page--ipad .repair-detail-hero--integrated {
+  grid-template-columns: minmax(0, 0.82fr) minmax(28rem, 1.18fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+body.repair-page--ipad .repair-detail-hero h1 {
+  max-width: 14ch;
+  text-shadow: 0 8px 22px rgba(3, 24, 28, 0.08);
+}
+
+body.repair-page--ipad .repair-detail-hero h1::after {
+  content: "";
+  display: block;
+  width: 4.6rem;
+  height: 0.22rem;
+  margin-top: 1.35rem;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+body.repair-page--ipad .repair-detail-hero .hero__lead {
+  margin-top: 2rem;
+}
+
+body.repair-page--ipad .repair-hero-seo-copy {
+  gap: 1rem;
+  margin-top: 1.6rem;
+  max-width: 40rem;
+}
+
+body.repair-page--ipad .repair-hero-seo-copy p,
+body.repair-page--ipad .hero__lead {
+  color: #244f58;
+  font-size: 1.03rem;
+  line-height: 1.78;
+}
+
+body.repair-page--ipad .hero__actions {
+  margin-top: 2.6rem;
+}
+
+body.repair-page--ipad .hero__actions .button--secondary {
+  min-width: 13.5rem;
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, #1fc8bd, #0b9297);
+  box-shadow: 0 18px 38px rgba(17, 141, 149, 0.26);
+}
+
+body.repair-page--ipad .hero__actions .button--secondary::before {
+  content: "";
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-right: 0.55rem;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 22s7-6.6 7-12A7 7 0 0 0 5 10c0 5.4 7 12 7 12Z' fill='black'/%3E%3Ccircle cx='12' cy='10' r='2.7' fill='white'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+body.repair-page--ipad .repair-detail-panel--integrated {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.repair-page--ipad .repair-detail-panel--integrated .repair-detail-panel__photo {
+  aspect-ratio: 16 / 9;
+  padding: clamp(0.8rem, 2vw, 1.35rem);
+  border: 1px solid rgba(17, 141, 149, 0.14);
+  border-radius: 1.35rem;
+  background: rgba(255, 255, 255, 0.72);
+  object-fit: contain;
+  box-shadow: 0 18px 54px rgba(3, 24, 28, 0.07);
+}
+
+body.repair-page--ipad .repair-hero-highlights {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.4rem;
+}
+
+body.repair-page--ipad .repair-hero-highlights .repair-seo-highlight {
+  justify-items: center;
+  min-height: 13.5rem;
+  padding: 1.45rem 1.25rem;
+  border: 1px solid rgba(17, 141, 149, 0.12);
+  border-radius: 1.1rem;
+  background: rgba(255, 255, 255, 0.58);
+  text-align: center;
+  box-shadow: 0 18px 42px rgba(3, 24, 28, 0.06);
+}
+
+body.repair-page--ipad .repair-seo-highlight__icon {
+  display: grid;
+  place-items: center;
+  width: 4.25rem;
+  height: 4.25rem;
+  margin-bottom: 0.35rem;
+  color: var(--accent);
+}
+
+body.repair-page--ipad .repair-seo-highlight__icon svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 14px rgba(17, 141, 149, 0.12));
+}
+
+body.repair-page--ipad .repair-hero-highlights .repair-seo-highlight strong {
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  color: #008f94;
+  font-size: 1.05rem;
+}
+
+body.repair-page--ipad .repair-hero-highlights .repair-seo-highlight strong::after {
+  content: "";
+  width: 2.1rem;
+  height: 0.16rem;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+body.repair-page--ipad .repair-hero-highlights .repair-seo-highlight span {
+  max-width: 13.5rem;
+  color: #143f48;
+  line-height: 1.58;
+}
+
 .repair-detail-panel--integrated .repair-detail-panel__photo {
   width: 100%;
   min-height: 0;
@@ -4450,8 +4596,27 @@ body.repair-page--compact-hero .hero--service + .section .section-heading {
   }
 
   body.repair-page--ipad h1 {
-    max-width: 9.5ch;
+    max-width: 12ch;
     overflow-wrap: break-word;
+  }
+
+  body.repair-page--ipad .hero--service {
+    width: min(100% - 1rem, 1280px);
+    margin-top: 0.75rem;
+    padding: 2rem 1rem;
+    border-radius: 1.2rem;
+  }
+
+  body.repair-page--ipad .repair-hero-highlights {
+    grid-template-columns: 1fr;
+  }
+
+  body.repair-page--ipad .repair-detail-hero--integrated {
+    grid-template-columns: 1fr;
+  }
+
+  body.repair-page--ipad .repair-hero-highlights .repair-seo-highlight {
+    min-height: 0;
   }
 
   .repair-hero-highlights {
