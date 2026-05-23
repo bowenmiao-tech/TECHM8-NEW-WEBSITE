@@ -8202,6 +8202,326 @@ function initBookingForm() {
   });
 }
 
+function initBookingStoreFinder() {
+  const root = document.querySelector("[data-booking-store-finder]");
+  const form = document.querySelector("[data-booking-form]");
+  if (!(root instanceof HTMLElement) || !(form instanceof HTMLFormElement)) return;
+
+  const searchForm = root.querySelector("[data-booking-store-search-form]");
+  const searchInput = root.querySelector("[data-booking-store-search]");
+  const locateButton = root.querySelector("[data-booking-store-locate]");
+  const statusTarget = root.querySelector("[data-booking-store-status]");
+  const resultsTarget = root.querySelector("[data-booking-store-results]");
+  const mapFrame = root.querySelector("[data-booking-store-map]");
+  const storeField = form.elements.namedItem("store_slug");
+  const storeOrder = [
+    "park-ridge",
+    "fairfield",
+    "toowong",
+    "north-lakes",
+    "brassall",
+  ];
+  const defaultOrigin = { latitude: -27.485, longitude: 153.02 };
+  let currentOrigin = null;
+  let selectedSlug =
+    storeField instanceof HTMLSelectElement ? String(storeField.value || "") : "";
+
+  const knownLocations = [
+    { terms: ["park ridge", "4125"], latitude: -27.6966, longitude: 153.0392 },
+    { terms: ["browns plains", "4118"], latitude: -27.6627, longitude: 153.0411 },
+    { terms: ["munruben"], latitude: -27.7469, longitude: 153.0304 },
+    { terms: ["bethania", "4205"], latitude: -27.6883, longitude: 153.1594 },
+    { terms: ["fairfield", "4103"], latitude: -27.5097, longitude: 153.0245 },
+    { terms: ["annerley"], latitude: -27.5129, longitude: 153.032 },
+    { terms: ["yeronga", "4104"], latitude: -27.5152, longitude: 153.0164 },
+    { terms: ["toowong", "4066"], latitude: -27.4854, longitude: 152.9922 },
+    { terms: ["indooroopilly", "4068"], latitude: -27.499, longitude: 152.973 },
+    { terms: ["brisbane", "4000"], latitude: -27.4698, longitude: 153.0251 },
+    { terms: ["north lakes", "4509"], latitude: -27.2409, longitude: 153.0189 },
+    { terms: ["mango hill"], latitude: -27.2434, longitude: 153.0255 },
+    { terms: ["deception bay", "4508"], latitude: -27.1937, longitude: 153.0266 },
+    { terms: ["brassall", "4305"], latitude: -27.5969, longitude: 152.7471 },
+    { terms: ["ipswich", "4305"], latitude: -27.6146, longitude: 152.7609 },
+    { terms: ["redbank plains", "4301"], latitude: -27.6461, longitude: 152.8595 },
+    { terms: ["logan", "4114"], latitude: -27.6392, longitude: 153.1094 },
+  ];
+
+  const setStatus = (message) => {
+    if (statusTarget instanceof HTMLElement) {
+      statusTarget.textContent = message;
+    }
+  };
+
+  const toRadians = (degrees) => (degrees * Math.PI) / 180;
+
+  const getDistanceKm = (from, to) => {
+    const earthRadiusKm = 6371;
+    const deltaLat = toRadians(to.latitude - from.latitude);
+    const deltaLng = toRadians(to.longitude - from.longitude);
+    const fromLat = toRadians(from.latitude);
+    const toLat = toRadians(to.latitude);
+    const a =
+      Math.sin(deltaLat / 2) ** 2 +
+      Math.cos(fromLat) * Math.cos(toLat) * Math.sin(deltaLng / 2) ** 2;
+    return (
+      earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(Math.max(0, 1 - a)))
+    );
+  };
+
+  const formatDistance = (distanceKm) => {
+    if (!Number.isFinite(distanceKm)) return "";
+    if (distanceKm < 1) return `${Math.round(distanceKm * 1000)} m`;
+    return `${distanceKm.toFixed(distanceKm < 10 ? 1 : 0)} km`;
+  };
+
+  const getStoreItems = (origin = currentOrigin || defaultOrigin) =>
+    storeOrder
+      .map((slug) => {
+        const store = STORE_CHECKOUT_DETAILS[slug];
+        if (!store?.coordinates) return null;
+        return {
+          slug,
+          store,
+          distanceKm: currentOrigin
+            ? getDistanceKm(origin, store.coordinates)
+            : Number.POSITIVE_INFINITY,
+        };
+      })
+      .filter(Boolean)
+      .sort((left, right) => {
+        if (!currentOrigin) return storeOrder.indexOf(left.slug) - storeOrder.indexOf(right.slug);
+        return left.distanceKm - right.distanceKm;
+      });
+
+  const getDirectionsUrl = (store, origin = currentOrigin) => {
+    const params = new URLSearchParams({
+      api: "1",
+      destination: store?.coordinates
+        ? `${store.coordinates.latitude},${store.coordinates.longitude}`
+        : String(store?.address || ""),
+    });
+    if (origin?.latitude && origin?.longitude) {
+      params.set("origin", `${origin.latitude},${origin.longitude}`);
+    }
+    return `https://www.google.com/maps/dir/?${params.toString()}`;
+  };
+
+  const getMapSrc = (store) => {
+    const query = store?.address || "OZ Tech M8 Queensland Australia";
+    return `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+  };
+
+  const updateMap = (slug) => {
+    const store = STORE_CHECKOUT_DETAILS[slug];
+    if (mapFrame instanceof HTMLIFrameElement && store) {
+      mapFrame.src = getMapSrc(store);
+      mapFrame.title = `TECHM8 ${store.title} map`;
+    }
+  };
+
+  const selectStore = (slug, options = {}) => {
+    const store = STORE_CHECKOUT_DETAILS[slug];
+    if (!store) return;
+    selectedSlug = slug;
+    if (storeField instanceof HTMLSelectElement) {
+      storeField.value = slug;
+      storeField.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    updateMap(slug);
+    renderResults();
+    if (options.announce) {
+      setStatus(`${store.title} selected for this repair request.`);
+    }
+  };
+
+  const renderResults = () => {
+    if (!(resultsTarget instanceof HTMLElement)) return;
+    const items = getStoreItems();
+    resultsTarget.innerHTML = items
+      .map((item, index) => {
+        const isSelected = item.slug === selectedSlug;
+        const distance = Number.isFinite(item.distanceKm)
+          ? `<span class="booking-store-finder__distance">${escapeHtml(formatDistance(item.distanceKm))}</span>`
+          : "";
+        return `
+          <article class="booking-store-finder__result${isSelected ? " is-selected" : ""}" data-booking-store-card="${escapeHtml(item.slug)}">
+            <div class="booking-store-finder__result-top">
+              <div>
+                <strong>${escapeHtml(item.store.title)}</strong>
+                <span>${currentOrigin ? `#${index + 1} nearest` : "TECHM8 store"}</span>
+              </div>
+              ${distance}
+            </div>
+            <p>${escapeHtml(item.store.address)}</p>
+            <div class="booking-store-finder__actions">
+              <button type="button" data-booking-store-select="${escapeHtml(item.slug)}">${isSelected ? "Selected" : "Set as store"}</button>
+              <a href="${escapeHtml(getDirectionsUrl(item.store))}" target="_blank" rel="noopener">Directions</a>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+  };
+
+  const normalizeSearch = (value) =>
+    String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .replace(/\s+/g, " ");
+
+  const findKnownLocation = (query) => {
+    const normalized = normalizeSearch(query);
+    if (!normalized) return null;
+
+    const storeMatch = storeOrder
+      .map((slug) => STORE_CHECKOUT_DETAILS[slug])
+      .find((store) => {
+        const searchable = normalizeSearch(`${store?.title || ""} ${store?.address || ""}`);
+        return searchable.includes(normalized) || normalized.includes(normalizeSearch(store?.title));
+      });
+    if (storeMatch?.coordinates) return storeMatch.coordinates;
+
+    const known = knownLocations
+      .map((location) => {
+        const bestTerm = location.terms
+          .map((term) => normalizeSearch(term))
+          .filter((term) => normalized.includes(term))
+          .sort((left, right) => right.length - left.length)[0];
+        return bestTerm ? { ...location, score: bestTerm.length } : null;
+      })
+      .filter(Boolean)
+      .sort((left, right) => right.score - left.score)[0];
+    return known
+      ? { latitude: known.latitude, longitude: known.longitude }
+      : null;
+  };
+
+  const applyOrigin = (origin, label) => {
+    currentOrigin = origin;
+    const nearest = getStoreItems(origin)[0];
+    if (nearest) {
+      selectStore(nearest.slug);
+      setStatus(`${label} Closest store: ${nearest.store.title}.`);
+    }
+  };
+
+  const searchLocation = (query) => {
+    const trimmed = String(query || "").trim();
+    if (!trimmed) {
+      setStatus("Enter a suburb, postcode or address to sort stores by distance.");
+      return;
+    }
+
+    const known = findKnownLocation(trimmed);
+    if (known) {
+      applyOrigin(known, "Stores sorted by your search.");
+      return;
+    }
+
+    setStatus("Searching for that location.");
+    loadGoogleMapsApi()
+      .then(
+        (maps) =>
+          new Promise((resolve, reject) => {
+            const geocoder = new maps.Geocoder();
+            geocoder.geocode(
+              {
+                address: trimmed,
+                componentRestrictions: { country: "AU" },
+                region: "au",
+              },
+              (results, status) => {
+                const location = results?.[0]?.geometry?.location;
+                if (status === "OK" && location) {
+                  resolve({
+                    latitude: location.lat(),
+                    longitude: location.lng(),
+                  });
+                } else {
+                  reject(new Error("Location not found."));
+                }
+              },
+            );
+          }),
+      )
+      .then((origin) => applyOrigin(origin, "Stores sorted by your search."))
+      .catch(() => {
+        setStatus(
+          "That location could not be found. Try a suburb, postcode or nearby landmark.",
+        );
+      });
+  };
+
+  if (searchForm instanceof HTMLFormElement) {
+    searchForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      searchLocation(searchInput instanceof HTMLInputElement ? searchInput.value : "");
+    });
+  }
+
+  if (locateButton instanceof HTMLButtonElement) {
+    locateButton.addEventListener("click", () => {
+      if (!("geolocation" in navigator)) {
+        setStatus("Your browser does not support location access. Search by suburb or postcode.");
+        return;
+      }
+      locateButton.disabled = true;
+      locateButton.textContent = "Finding location...";
+      setStatus("Allow location access in your browser to sort stores by distance.");
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          locateButton.disabled = false;
+          locateButton.textContent = "Use my current location";
+          applyOrigin(
+            {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            },
+            "Stores sorted by your current location.",
+          );
+        },
+        () => {
+          locateButton.disabled = false;
+          locateButton.textContent = "Use my current location";
+          setStatus("Location access was not available. Search by suburb or postcode.");
+        },
+        {
+          enableHighAccuracy: false,
+          maximumAge: 300000,
+          timeout: 10000,
+        },
+      );
+    });
+  }
+
+  resultsTarget?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const selectButton = target.closest("[data-booking-store-select]");
+    if (!(selectButton instanceof HTMLElement)) return;
+    selectStore(selectButton.getAttribute("data-booking-store-select") || "", {
+      announce: true,
+    });
+  });
+
+  if (storeField instanceof HTMLSelectElement) {
+    storeField.addEventListener("change", () => {
+      const nextSlug = String(storeField.value || "");
+      if (nextSlug && nextSlug !== selectedSlug) {
+        selectedSlug = nextSlug;
+        updateMap(nextSlug);
+        renderResults();
+      }
+    });
+  }
+
+  renderResults();
+  if (selectedSlug) {
+    updateMap(selectedSlug);
+  }
+}
+
 function initNavigation() {
   decorateMobileMenu();
   decorateStoreLocatorMenu();
@@ -9897,6 +10217,7 @@ function initPage() {
   initCheckoutPage();
   initCheckoutSuccessPage();
   initBookingForm();
+  initBookingStoreFinder();
   initAccountPage();
   initAccountDashboardPage();
   initAccountSidebarSignOut();

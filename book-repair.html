@@ -227,25 +227,27 @@
           </form>
         </div>
 
-        <aside class="booking-sidebar">
-          <article class="booking-sidebar__card">
-            <h3>What happens next</h3>
-            <ol class="booking-sidebar__steps">
-              <li>Your request is saved in the booking database.</li>
-              <li>The selected store receives the booking details.</li>
-              <li>An email confirmation is sent to you.</li>
-              <li>The team contacts you to confirm the next step.</li>
-            </ol>
-          </article>
-
-          <article class="booking-sidebar__card">
-            <h3>Direct store pages</h3>
-            <div class="booking-sidebar__links">
-              <a href="stores/park-ridge.html">Park Ridge</a>
-              <a href="stores/fairfield.html">Fairfield</a>
-              <a href="stores/toowong.html">Toowong</a>
-              <a href="stores/north-lakes.html">North Lakes</a>
-              <a href="stores/brassall.html">Brassall</a>
+        <aside class="booking-sidebar" data-booking-store-finder>
+          <article class="booking-sidebar__card booking-store-finder">
+            <div class="booking-store-finder__heading">
+              <p class="eyebrow">Nearest Store</p>
+              <h3>Find a TECHM8 store</h3>
+            </div>
+            <form class="booking-store-finder__search" data-booking-store-search-form>
+              <label class="booking-store-finder__field">
+                <span>Suburb, postcode or address</span>
+                <input type="search" name="booking_store_location" data-booking-store-search placeholder="Park Ridge QLD 4125" autocomplete="street-address">
+              </label>
+              <button class="button button--primary" type="submit">Search nearby</button>
+            </form>
+            <button class="booking-store-finder__locate" type="button" data-booking-store-locate>
+              <span aria-hidden="true">&#8982;</span>
+              Use my current location
+            </button>
+            <p class="booking-store-finder__status" data-booking-store-status>Enter a suburb or allow location access to sort stores by distance.</p>
+            <div class="booking-store-finder__results" data-booking-store-results></div>
+            <div class="booking-store-finder__map">
+              <iframe data-booking-store-map title="TECHM8 store map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=OZ%20Tech%20M8%20Queensland%20Australia&output=embed"></iframe>
             </div>
           </article>
         </aside>
