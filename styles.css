@@ -4449,6 +4449,11 @@ body.repair-page--compact-hero .hero--service + .section .section-heading {
     gap: 1.4rem;
   }
 
+  body.repair-page--ipad h1 {
+    max-width: 9.5ch;
+    overflow-wrap: break-word;
+  }
+
   .repair-hero-highlights {
     grid-template-columns: 1fr;
   }
