@@ -120,6 +120,9 @@ if (pageData) {
   const renderList = (items = []) =>
     items.length ? `<ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul>` : "";
 
+  const resolveLocalHref = (href = "") =>
+    /^(https?:|mailto:|tel:|#)/.test(href) ? href : `${prefix}${href}`;
+
   const renderSeoIntro = () => {
     if (!pageData.seoIntro || pageData.integrateSeoIntroWithHero) return "";
     return `
@@ -245,6 +248,41 @@ if (pageData) {
               )
               .join("")}
           </div>
+        </div>
+      </section>
+    `;
+  };
+
+  const renderLocalSeo = () => {
+    if (!pageData.localSeo) return "";
+
+    const cards = (pageData.localSeo.items || [])
+      .map(
+        (item) => `
+          <article class="repair-local-seo-card">
+            <h3>${item.title}</h3>
+            ${item.text ? `<p>${item.text}</p>` : ""}
+            ${
+              item.links?.length
+                ? `<div class="repair-local-links">${item.links
+                    .map((link) => `<a href="${resolveLocalHref(link.href)}">${link.label}</a>`)
+                    .join("")}</div>`
+                : ""
+            }
+          </article>
+        `
+      )
+      .join("");
+
+    return `
+      <section class="section repair-local-seo-section">
+        <div class="container repair-local-seo">
+          <div class="repair-local-seo__intro">
+            <p class="eyebrow">${pageData.localSeo.label || "Local repair support"}</p>
+            <h2>${pageData.localSeo.heading}</h2>
+            ${pageData.localSeo.text ? `<p>${pageData.localSeo.text}</p>` : ""}
+          </div>
+          ${cards ? `<div class="repair-local-seo__grid">${cards}</div>` : ""}
         </div>
       </section>
     `;
@@ -588,6 +626,7 @@ if (pageData) {
       ${renderModelGroups()}
       ${renderSeoCards(pageData.whyChoose, "repair-seo-card-grid repair-seo-card-grid--wide")}
       ${renderSeoCards(pageData.repairProcess, "repair-seo-card-grid repair-seo-card-grid--steps")}
+      ${renderLocalSeo()}
       ${renderFaqs()}
       ${renderFinalCta()}
     </main>

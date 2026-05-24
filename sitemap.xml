@@ -67,4 +67,10 @@
   <url>
     <loc>https://www.techm8australia.com/repair-services/phones/others.html</loc>
   </url>
+  <url>
+    <loc>https://www.techm8australia.com/repair-services/tablets/apple.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
 </urlset>

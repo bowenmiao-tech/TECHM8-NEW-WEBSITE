@@ -4066,6 +4066,73 @@ body.repair-page--ipad .repair-hero-highlights .repair-seo-highlight span {
   padding-left: 1.1rem;
 }
 
+.repair-local-seo {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.repair-local-seo__intro,
+.repair-local-seo-card {
+  border: 1px solid var(--line);
+  border-radius: 1.1rem;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: var(--shadow);
+}
+
+.repair-local-seo__intro {
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.repair-local-seo__intro h2 {
+  max-width: 18ch;
+  margin-bottom: 1rem;
+}
+
+.repair-local-seo__intro p,
+.repair-local-seo-card p {
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.repair-local-seo__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.repair-local-seo-card {
+  display: grid;
+  align-content: start;
+  gap: 0.7rem;
+  padding: 1.15rem;
+}
+
+.repair-local-seo-card h3 {
+  color: var(--brand-dark);
+}
+
+.repair-local-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.repair-local-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.2rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(17, 141, 149, 0.22);
+  border-radius: 999px;
+  color: var(--brand-dark);
+  background: rgba(17, 141, 149, 0.08);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
 .repair-faq-list {
   display: grid;
   gap: 0.8rem;
@@ -4532,8 +4599,10 @@ body.repair-page--ipad .repair-hero-highlights .repair-seo-highlight span {
   .repair-detail-hero,
   .repair-content-grid,
   .repair-seo-layout,
+  .repair-local-seo,
   .repair-seo-card-grid,
   .repair-seo-card-grid--wide,
+  .repair-local-seo__grid,
   .repair-model-grid,
   .home-banner__inner,
   .home-shop-grid,
