@@ -3488,7 +3488,9 @@ body.repair-page--ipad .repair-detail-hero--integrated {
 }
 
 body.repair-page--ipad .repair-detail-hero h1 {
-  max-width: 14ch;
+  max-width: 20ch;
+  font-size: clamp(2.75rem, 5vw, 4.25rem);
+  line-height: 1.06;
   text-shadow: 0 8px 22px rgba(3, 24, 28, 0.08);
 }
 
@@ -4665,7 +4667,7 @@ body.repair-page--ipad .repair-hero-highlights .repair-seo-highlight span {
   }
 
   body.repair-page--ipad h1 {
-    max-width: 12ch;
+    max-width: 14ch;
     overflow-wrap: break-word;
   }
 
