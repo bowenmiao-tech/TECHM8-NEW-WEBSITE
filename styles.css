@@ -3613,6 +3613,21 @@ body.repair-page--ipad .repair-hero-highlights .repair-seo-highlight span {
   line-height: 1.58;
 }
 
+body.repair-page--playstation .repair-detail-hero--integrated {
+  grid-template-columns: minmax(0, 0.7fr) minmax(34rem, 1.3fr);
+  gap: clamp(2rem, 4vw, 3.25rem);
+}
+
+body.repair-page--playstation .repair-detail-panel--integrated .repair-detail-panel__photo {
+  aspect-ratio: 3 / 2;
+  padding: clamp(0.45rem, 1vw, 0.8rem);
+  object-fit: contain;
+}
+
+body.repair-page--playstation .repair-hero-highlights {
+  margin-top: 1rem;
+}
+
 .repair-detail-panel--integrated .repair-detail-panel__photo {
   width: 100%;
   min-height: 0;
