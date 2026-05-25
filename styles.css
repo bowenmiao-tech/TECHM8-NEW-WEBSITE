@@ -4150,6 +4150,78 @@ body.repair-page--playstation .repair-hero-highlights {
   font-weight: 700;
 }
 
+.repair-store-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.repair-store-card {
+  display: grid;
+  gap: 0.95rem;
+  align-content: start;
+  padding: 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: var(--shadow);
+}
+
+.repair-store-card h3 {
+  color: var(--brand-dark);
+  font-size: 1.05rem;
+}
+
+.repair-store-card__address,
+.repair-store-card dd {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.repair-store-card dl {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.repair-store-card dt {
+  color: var(--brand-dark);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.repair-store-card dd {
+  margin: 0.15rem 0 0;
+  font-size: 0.95rem;
+}
+
+.repair-store-card dd a {
+  color: var(--brand-dark);
+  font-weight: 800;
+}
+
+.repair-store-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.repair-store-card__actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.15rem;
+  padding: 0.45rem 0.72rem;
+  border: 1px solid rgba(17, 141, 149, 0.22);
+  border-radius: 999px;
+  color: var(--brand-dark);
+  background: rgba(17, 141, 149, 0.08);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
 .repair-faq-list {
   display: grid;
   gap: 0.8rem;
@@ -4620,6 +4692,7 @@ body.repair-page--playstation .repair-hero-highlights {
   .repair-seo-card-grid,
   .repair-seo-card-grid--wide,
   .repair-local-seo__grid,
+  .repair-store-grid,
   .repair-model-grid,
   .home-banner__inner,
   .home-shop-grid,

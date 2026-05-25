@@ -288,6 +288,48 @@ if (pageData) {
     `;
   };
 
+  const renderStoreLocations = () => {
+    if (!pageData.storeLocations?.items?.length) return "";
+
+    const cards = pageData.storeLocations.items
+      .map(
+        (store) => `
+          <article class="repair-store-card">
+            <div>
+              <h3>${store.title}</h3>
+              ${store.address ? `<p class="repair-store-card__address">${store.address}</p>` : ""}
+            </div>
+            <dl>
+              ${
+                store.phone
+                  ? `<div><dt>Phone</dt><dd><a href="${store.phoneHref || `tel:${store.phone.replace(/\D/g, "")}`}">${store.phone}</a></dd></div>`
+                  : ""
+              }
+              ${store.hours ? `<div><dt>Hours</dt><dd>${store.hours}</dd></div>` : ""}
+            </dl>
+            <div class="repair-store-card__actions">
+              ${store.mapHref ? `<a href="${store.mapHref}" target="_blank" rel="noopener">Google Maps</a>` : ""}
+              ${store.storeHref ? `<a href="${resolveLocalHref(store.storeHref)}">Store page</a>` : ""}
+            </div>
+          </article>
+        `
+      )
+      .join("");
+
+    return `
+      <section class="section section--muted repair-store-locations-section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">${pageData.storeLocations.label || "Store locations"}</p>
+            <h2>${pageData.storeLocations.heading}</h2>
+            ${pageData.storeLocations.text ? `<p>${pageData.storeLocations.text}</p>` : ""}
+          </div>
+          <div class="repair-store-grid">${cards}</div>
+        </div>
+      </section>
+    `;
+  };
+
   const renderFaqs = () => {
     if (!pageData.faqs?.items?.length) return "";
     return `
@@ -627,6 +669,7 @@ if (pageData) {
       ${renderSeoCards(pageData.whyChoose, "repair-seo-card-grid repair-seo-card-grid--wide")}
       ${renderSeoCards(pageData.repairProcess, "repair-seo-card-grid repair-seo-card-grid--steps")}
       ${renderLocalSeo()}
+      ${renderStoreLocations()}
       ${renderFaqs()}
       ${renderFinalCta()}
     </main>
