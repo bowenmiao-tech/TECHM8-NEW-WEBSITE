@@ -16,3 +16,56 @@ Supabase migration notes
 7. If you want booking email notifications, add a mail provider key in the function later.
 8. The frontend booking form is already prepared to call:
    https://<project-ref>.supabase.co/functions/v1/book-repair
+
+Internal products API
+
+Deploy the Edge Function in `supabase/functions/internal-products` when the internal website needs a product feed.
+
+Set these function secrets before deployment:
+
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `INTERNAL_PRODUCTS_API_KEY`
+
+Deploy with JWT verification disabled because this endpoint uses its own `x-api-key` secret:
+
+```bash
+supabase functions deploy internal-products --no-verify-jwt
+```
+
+Endpoint:
+
+```text
+GET https://<project-ref>.supabase.co/functions/v1/internal-products
+```
+
+Required header:
+
+```text
+x-api-key: <INTERNAL_PRODUCTS_API_KEY>
+```
+
+Supported query parameters:
+
+- `page`: defaults to `1`
+- `limit` or `page_size`: defaults to `200`, max `500`
+- `updated_since`: optional ISO timestamp for incremental sync
+- `store_slug`: optional store inventory filter
+- `include_hidden=true`: optional, includes products not visible on the website
+
+Example:
+
+```bash
+curl "https://<project-ref>.supabase.co/functions/v1/internal-products?limit=200" \
+  -H "x-api-key: <INTERNAL_PRODUCTS_API_KEY>"
+```
+
+Returned product fields:
+
+- `name`: product name
+- `cost_price`: cost price
+- `sale_price`: current selling price from `retail_price`
+- `store_inventory`: per-store stock rows with store name, store slug, quantity, and shelf location
+- `barcode`: product UPC/barcode
+- `thumbnail_url`: small product thumbnail URL
+- `image_url`: original product image URL
