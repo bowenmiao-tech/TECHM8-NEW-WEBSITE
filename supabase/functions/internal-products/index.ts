@@ -25,6 +25,11 @@ type ProductRow = {
   stock_quantity: number | null
   updated_at: string | null
   is_visible: boolean | null
+  categories: {
+    id: number | null
+    slug: string | null
+    name: string | null
+  } | null
 }
 
 type ProductImageRow = {
@@ -159,7 +164,7 @@ Deno.serve(async (req) => {
 
     let productsQuery = supabaseAdmin
       .from('products')
-      .select('id, sku, slug, name, upc, cost_price, retail_price, compare_at_price, image_url, stock_quantity, updated_at, is_visible', { count: 'exact' })
+      .select('id, sku, slug, name, upc, cost_price, retail_price, compare_at_price, image_url, stock_quantity, updated_at, is_visible, categories(id, slug, name)', { count: 'exact' })
       .order('updated_at', { ascending: false })
       .order('id', { ascending: false })
       .range(from, to)
@@ -232,6 +237,16 @@ Deno.serve(async (req) => {
         sku: product.sku,
         slug: product.slug,
         name: product.name,
+        category: product.categories
+          ? {
+              id: product.categories.id,
+              slug: product.categories.slug,
+              name: product.categories.name,
+            }
+          : null,
+        category_id: product.categories?.id ?? null,
+        category_slug: product.categories?.slug ?? null,
+        category_name: product.categories?.name ?? null,
         cost_price: normalizeNumber(product.cost_price),
         sale_price: normalizeNumber(product.retail_price),
         compare_at_price: normalizeNumber(product.compare_at_price),

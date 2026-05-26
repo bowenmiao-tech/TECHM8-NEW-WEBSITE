@@ -63,6 +63,10 @@ curl "https://<project-ref>.supabase.co/functions/v1/internal-products?limit=200
 Returned product fields:
 
 - `name`: product name
+- `category`: category object with id, slug, and name
+- `category_id`: category id
+- `category_slug`: category slug
+- `category_name`: category name
 - `cost_price`: cost price
 - `sale_price`: current selling price from `retail_price`
 - `store_inventory`: per-store stock rows with store name, store slug, quantity, and shelf location
