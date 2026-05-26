@@ -3628,6 +3628,14 @@ body.repair-page--playstation .repair-hero-highlights {
   margin-top: 1rem;
 }
 
+body.repair-page--playstation {
+  overflow-x: hidden;
+}
+
+html:has(body.repair-page--playstation) {
+  overflow-x: hidden;
+}
+
 .repair-detail-panel--integrated .repair-detail-panel__photo {
   width: 100%;
   min-height: 0;
@@ -4772,6 +4780,27 @@ body.repair-page--playstation .repair-hero-highlights {
 
   body.repair-page--ipad .repair-detail-hero--integrated {
     grid-template-columns: 1fr;
+  }
+
+  body.repair-page--playstation .repair-detail-hero--integrated {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  body.repair-page--playstation .repair-detail-hero h1 {
+    max-width: 12ch;
+    overflow-wrap: break-word;
+  }
+
+  body.repair-page--playstation .repair-detail-panel--integrated .repair-detail-panel__photo {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  body.repair-page--playstation .promo-banner__inner {
+    display: grid;
+    gap: 0.55rem;
   }
 
   body.repair-page--ipad .repair-hero-highlights .repair-seo-highlight {
