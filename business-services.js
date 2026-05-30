@@ -375,11 +375,6 @@ if (pageData) {
             <p class="eyebrow">School quote</p>
             <h2>Let's Support Your School Technology Program</h2>
             <p>Send through your school details, device types and repair volume. TECHM8 can help with quotes, repair reports, pickup and delivery options, and ongoing support planning.</p>
-            <div class="school-contact-details">
-              <a href="tel:0452488710">0452 488 710</a>
-              <a href="mailto:info@techm8australia.com">info@techm8australia.com</a>
-              <span>Business hours: Monday to Saturday, store hours vary by location</span>
-            </div>
           </div>
           <form class="booking-form school-quote-form" action="mailto:info@techm8australia.com" method="post" enctype="text/plain">
             <div class="booking-form__grid">
@@ -387,13 +382,11 @@ if (pageData) {
               <label class="booking-field"><span>Your name</span><input type="text" name="Contact name" required autocomplete="name"></label>
               <label class="booking-field"><span>Phone</span><input type="tel" name="Phone" required autocomplete="tel"></label>
               <label class="booking-field"><span>Email</span><input type="email" name="Email" required autocomplete="email"></label>
-              <label class="booking-field"><span>Device type</span><select name="Device type"><option>Chromebooks</option><option>iPads</option><option>Laptops</option><option>Mixed fleet</option><option>Other education technology</option></select></label>
-              <label class="booking-field"><span>Approx. quantity</span><input type="text" name="Approximate quantity" placeholder="e.g. 12 devices"></label>
+              <label class="booking-field booking-field--full"><span>Device type</span><select name="Device type"><option>Chromebooks</option><option>iPads</option><option>Laptops</option><option>Mixed fleet</option><option>Other education technology</option></select></label>
               <label class="booking-field booking-field--full"><span>What support is needed?</span><textarea name="Support details" rows="5" required></textarea></label>
             </div>
             <div class="booking-form__actions">
               <button class="button button--primary" type="submit">Request a School Quote</button>
-              <a class="button button--secondary" href="tel:0452488710">Call TECHM8</a>
             </div>
           </form>
         </div>
