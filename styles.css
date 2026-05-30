@@ -3416,7 +3416,12 @@ body.storefront-shop-page .storefront-tools {
   background: linear-gradient(180deg, rgba(232, 250, 249, 0), rgba(232, 250, 249, 0.72));
 }
 
-.repair-count-meter {
+.repair-count-section .container {
+  display: flex;
+  justify-content: center;
+}
+
+.repair-count-section .repair-count-meter {
   display: grid;
   justify-items: center;
   width: min(100%, 58rem);
@@ -3433,8 +3438,8 @@ body.storefront-shop-page .storefront-tools {
   text-align: center;
 }
 
-.repair-count-meter__label,
-.repair-count-meter__note {
+.repair-count-section .repair-count-meter__label,
+.repair-count-section .repair-count-meter__note {
   display: block;
   color: var(--muted);
   font-size: 0.84rem;
@@ -3443,7 +3448,7 @@ body.storefront-shop-page .storefront-tools {
   text-transform: uppercase;
 }
 
-.repair-count-meter__label {
+.repair-count-section .repair-count-meter__label {
   margin-bottom: clamp(1rem, 2.5vw, 1.45rem);
   color: var(--brand-dark);
   font-size: clamp(1.35rem, 3vw, 2.15rem);
@@ -3451,14 +3456,14 @@ body.storefront-shop-page .storefront-tools {
   text-transform: none;
 }
 
-.repair-count-meter__note {
+.repair-count-section .repair-count-meter__note {
   margin-top: clamp(0.9rem, 2vw, 1.2rem);
   color: rgba(7, 39, 45, 0.58);
   font-size: 0.78rem;
   letter-spacing: 0.04em;
 }
 
-.repair-count-meter__digits {
+.repair-count-section .repair-count-meter__digits {
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;
@@ -3469,7 +3474,7 @@ body.storefront-shop-page .storefront-tools {
   font-variant-numeric: tabular-nums;
 }
 
-.repair-count-meter__digit {
+.repair-count-section .repair-count-meter__digit {
   display: inline-grid;
   place-items: center;
   width: clamp(2.8rem, 8vw, 5rem);
@@ -3488,7 +3493,7 @@ body.storefront-shop-page .storefront-tools {
     0 0.75rem 1.5rem rgba(7, 39, 45, 0.1);
 }
 
-.repair-count-meter__separator {
+.repair-count-section .repair-count-meter__separator {
   display: inline-flex;
   align-items: center;
   height: clamp(3.6rem, 10vw, 6.2rem);
