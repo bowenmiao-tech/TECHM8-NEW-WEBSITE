@@ -4,7 +4,7 @@ if (pageData) {
   const prefix = pageData.prefix || "";
   const businessLinks = [
     ["NDIS Services", "business-services/ndis-technology-support.html"],
-    ["School Services", "business-services/school-device-repair.html"],
+    ["School Services", "school-services.html"],
     ["On-site Tech Services", "business-services/on-site-tech-services.html"],
     [
       "Business IT &amp; Device Support",
@@ -18,7 +18,7 @@ if (pageData) {
     ],
     [
       "School Device Repair Program Brisbane",
-      "business-services/school-device-repair.html",
+      "school-services.html",
     ],
     ["On-site Tech Services", "business-services/on-site-tech-services.html"],
     [
@@ -141,6 +141,58 @@ if (pageData) {
         </article>`,
     )
     .join("");
+  const renderList = (items = []) =>
+    items.map((item) => `<li>${item}</li>`).join("");
+  const schoolServiceCards = (pageData.schoolServices || [])
+    .map(
+      (service) => `
+        <article class="school-service-card">
+          <div class="school-service-card__top">
+            <span>${service.icon}</span>
+            <h3>${service.title}</h3>
+          </div>
+          <p>${service.text}</p>
+          <ul>${renderList(service.items)}</ul>
+        </article>`,
+    )
+    .join("");
+  const schoolFeatureCards = (pageData.schoolFeatures || [])
+    .map(
+      (feature) => `
+        <article class="school-trust-card">
+          <span>${feature.icon}</span>
+          <h3>${feature.title}</h3>
+          <p>${feature.text}</p>
+        </article>`,
+    )
+    .join("");
+  const schoolBrandCards = (pageData.schoolBrands || [])
+    .map((brand) => `<span>${brand}</span>`)
+    .join("");
+  const schoolProgramItems = renderList(pageData.schoolProgramItems || []);
+  const schoolSuitableItems = renderList(pageData.schoolSuitableFor || []);
+  const schoolTrustCards = (pageData.schoolTrust || [])
+    .map(
+      (item) => `
+        <article class="school-trust-card school-trust-card--formal">
+          <span>${item.icon}</span>
+          <h3>${item.title}</h3>
+          <p>${item.text}</p>
+        </article>`,
+    )
+    .join("");
+  const schoolAreas = (pageData.schoolAreas || [])
+    .map((area) => `<span>${area}</span>`)
+    .join("");
+  const schoolFaqItems = (pageData.schoolFaqs || [])
+    .map(
+      (faq) => `
+        <article class="business-faq-item">
+          <h3>${faq.question}</h3>
+          <p>${faq.answer}</p>
+        </article>`,
+    )
+    .join("");
   const ndisIntro = pageData.isNdisPage
     ? `
       <section class="section section--muted business-ndis-strip">
@@ -242,6 +294,150 @@ if (pageData) {
         </div>
       </section>`
     : "";
+  const schoolPageSections = pageData.isSchoolServicesPage
+    ? `
+      <section class="section school-services-overview" id="school-services">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">School repair services</p>
+            <h2>Device repair and education technology support for school teams</h2>
+            <p>Purpose-built support for principals, business managers, ICT managers, teachers and P&amp;C associations managing student and staff devices.</p>
+          </div>
+          <div class="school-service-grid">${schoolServiceCards}</div>
+        </div>
+      </section>
+      <section class="section section--muted">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Why choose TECHM8</p>
+            <h2>Reliable repair operations for busy school environments</h2>
+          </div>
+          <div class="school-trust-grid">${schoolFeatureCards}</div>
+        </div>
+      </section>
+      <section class="section school-brand-section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Supported brands</p>
+            <h2>Support for common school-owned and BYOD devices</h2>
+          </div>
+          <div class="school-brand-grid">${schoolBrandCards}</div>
+        </div>
+      </section>
+      <section class="section section--muted school-program-section">
+        <div class="container school-program-layout">
+          <div class="school-program-main">
+            <p class="eyebrow">School partnership</p>
+            <h2>Technology Support Programs for Schools</h2>
+            <p>TECHM8 supports schools with practical repair programs, device maintenance services and technology support consultations designed around school operations.</p>
+            <ul class="business-seo-list">${schoolProgramItems}</ul>
+          </div>
+          <aside class="school-program-aside">
+            <h3>Suitable for</h3>
+            <ul>${schoolSuitableItems}</ul>
+          </aside>
+        </div>
+      </section>
+      <section class="section school-portal-section">
+        <div class="container">
+          <div class="school-portal-card">
+            <div>
+              <p class="eyebrow">Coming soon</p>
+              <h2>School Repair Portal</h2>
+              <p>Schools will soon be able to track repairs, device status and repair history through a dedicated TECHM8 school portal.</p>
+            </div>
+            <span>Portal in development</span>
+          </div>
+        </div>
+      </section>
+      <section class="section section--muted" id="compliance">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Compliance and trust</p>
+            <h2>Professional documentation and contractor readiness</h2>
+            <p>Clear repair records, privacy-aware device handling and school-friendly documentation for administrative and ICT teams.</p>
+          </div>
+          <div class="school-trust-grid school-trust-grid--wide">${schoolTrustCards}</div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container business-seo-layout">
+          <div class="business-seo-main">
+            <p class="eyebrow">Service areas</p>
+            <h2>School device support across Brisbane and South East Queensland</h2>
+            <p>Pickup, delivery and consultation options are available for schools across Brisbane and surrounding regions, subject to booking and service availability.</p>
+          </div>
+          <aside class="business-seo-aside">
+            <div class="business-seo-card">
+              <h3>Areas covered</h3>
+              <div class="business-seo-tags">${schoolAreas}</div>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <section class="section section--muted" id="school-faq">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Questions</p>
+            <h2>School service FAQ</h2>
+          </div>
+          <div class="business-faq-grid">${schoolFaqItems}</div>
+        </div>
+      </section>
+      <section class="section school-contact-section" id="school-quote">
+        <div class="container school-contact-layout">
+          <div>
+            <p class="eyebrow">School quote</p>
+            <h2>Let's Support Your School Technology Program</h2>
+            <p>Send through your school details, device types and repair volume. TECHM8 can help with quotes, repair reports, pickup and delivery options, and ongoing support planning.</p>
+            <div class="school-contact-details">
+              <a href="tel:0452488710">0452 488 710</a>
+              <a href="mailto:info@techm8australia.com">info@techm8australia.com</a>
+              <span>Business hours: Monday to Saturday, store hours vary by location</span>
+            </div>
+          </div>
+          <form class="booking-form school-quote-form" action="mailto:info@techm8australia.com" method="post" enctype="text/plain">
+            <div class="booking-form__grid">
+              <label class="booking-field"><span>School name</span><input type="text" name="School name" required></label>
+              <label class="booking-field"><span>Your name</span><input type="text" name="Contact name" required autocomplete="name"></label>
+              <label class="booking-field"><span>Phone</span><input type="tel" name="Phone" required autocomplete="tel"></label>
+              <label class="booking-field"><span>Email</span><input type="email" name="Email" required autocomplete="email"></label>
+              <label class="booking-field"><span>Device type</span><select name="Device type"><option>Chromebooks</option><option>iPads</option><option>Laptops</option><option>Mixed fleet</option><option>Other education technology</option></select></label>
+              <label class="booking-field"><span>Approx. quantity</span><input type="text" name="Approximate quantity" placeholder="e.g. 12 devices"></label>
+              <label class="booking-field booking-field--full"><span>What support is needed?</span><textarea name="Support details" rows="5" required></textarea></label>
+            </div>
+            <div class="booking-form__actions">
+              <button class="button button--primary" type="submit">Request a School Quote</button>
+              <a class="button button--secondary" href="tel:0452488710">Call TECHM8</a>
+            </div>
+          </form>
+        </div>
+      </section>`
+    : "";
+  const standardPageSections = !pageData.isSchoolServicesPage
+    ? `
+      <section class="section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">${pageData.cardEyebrow || "Support options"}</p>
+            <h2>${pageData.cardHeading}</h2>
+          </div>
+          <div class="repair-content-grid">${cards}</div>
+        </div>
+      </section>
+      ${ndisSeoSection}
+      ${ndisFundingNote}
+      <section class="section section--muted">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">${pageData.stepEyebrow || "How it works"}</p>
+            <h2>${pageData.stepHeading}</h2>
+          </div>
+          <div class="repair-content-grid">${steps}</div>
+        </div>
+      </section>
+      ${ndisFaqSection}`
+    : "";
 
   const appRoot =
     document.querySelector("[data-business-service-root]") || document.body;
@@ -291,7 +487,7 @@ if (pageData) {
             <p class="hero__lead">${pageData.lead}</p>
             <div class="hero__actions">
               <a class="button button--primary" href="${linkUrl(pageData.primaryHref || "book-repair.html")}">${pageData.primaryCta || "Book a repair"}</a>
-              <a class="button button--secondary" href="${linkUrl("stores.html")}">Find a store</a>
+              <a class="button button--secondary" href="${linkUrl(pageData.secondaryHref || "stores.html")}">${pageData.secondaryCta || "Find a store"}</a>
             </div>
           </div>
           <div class="repair-detail-panel">
@@ -301,27 +497,8 @@ if (pageData) {
       </section>
       ${ndisIntro}
       ${ndisForm}
-      <section class="section">
-        <div class="container">
-          <div class="section-heading">
-            <p class="eyebrow">${pageData.cardEyebrow || "Support options"}</p>
-            <h2>${pageData.cardHeading}</h2>
-          </div>
-          <div class="repair-content-grid">${cards}</div>
-        </div>
-      </section>
-      ${ndisSeoSection}
-      ${ndisFundingNote}
-      <section class="section section--muted">
-        <div class="container">
-          <div class="section-heading">
-            <p class="eyebrow">${pageData.stepEyebrow || "How it works"}</p>
-            <h2>${pageData.stepHeading}</h2>
-          </div>
-          <div class="repair-content-grid">${steps}</div>
-        </div>
-      </section>
-      ${ndisFaqSection}
+      ${schoolPageSections}
+      ${standardPageSections}
     </main>
     <footer class="site-footer">
       <div class="container footer footer--rich">

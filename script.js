@@ -3098,9 +3098,15 @@ function ensureGlobalCartUi() {
 
   if (!document.querySelector("[data-floating-repair]")) {
     const floatingRepair = document.createElement("a");
+    const isSchoolServicesPage = document.body.classList.contains("school-services-page");
     floatingRepair.className = "floating-repair";
-    floatingRepair.href = buildSiteRelativeHref("book-repair.html");
-    floatingRepair.setAttribute("aria-label", "Book a repair");
+    floatingRepair.href = isSchoolServicesPage
+      ? buildSiteRelativeHref("school-services.html#school-quote")
+      : buildSiteRelativeHref("book-repair.html");
+    floatingRepair.setAttribute(
+      "aria-label",
+      isSchoolServicesPage ? "Request a school quote" : "Book a repair",
+    );
     floatingRepair.setAttribute("data-floating-repair", "true");
     floatingRepair.innerHTML = `
       <span class="floating-repair__icon" aria-hidden="true">
@@ -3110,7 +3116,7 @@ function ensureGlobalCartUi() {
           <path d="M18.4 15.6 21.6 18.8"></path>
         </svg>
       </span>
-      <span class="floating-repair__text">Book repair</span>
+      <span class="floating-repair__text">${isSchoolServicesPage ? "School quote" : "Book repair"}</span>
     `;
     document.body.appendChild(floatingRepair);
   }
