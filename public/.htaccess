@@ -1,5 +1,10 @@
 RewriteEngine On
 
+# Force the canonical HTTPS host before any page-specific redirects.
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} !^www\.techm8australia\.com$ [NC]
+RewriteRule ^ https://www.techm8australia.com%{REQUEST_URI} [R=301,L,NE]
+
 # Canonical legacy sitelinks captured by Google
 RewriteRule ^book-online/?$ /book-repair.html [R=301,L,NC]
 RewriteRule ^phone-repairs-park-ridge/?$ /stores/park-ridge.html [R=301,L,NC]

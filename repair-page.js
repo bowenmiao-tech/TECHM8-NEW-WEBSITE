@@ -65,9 +65,9 @@ if (pageData) {
             <div class="nav__dropdown-group">
               <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event)">Game Consoles</button>
               <div class="nav__submenu-panel">
-                <a href="${prefix}repair-services/consoles/sony.html">Sony</a>
-                <a href="${prefix}repair-services/consoles/xbox.html">Xbox</a>
-                <a href="${prefix}repair-services/consoles/nintendo.html">Nintendo</a>
+                <a href="${prefix}repair-services/consoles/sony.html">Sony - PlayStation 5</a>
+                <a href="${prefix}repair-services/consoles/xbox.html">Microsoft - Xbox</a>
+                <a href="${prefix}repair-services/consoles/nintendo.html">Nintendo - Switch</a>
               </div>
             </div>
           </div>
