@@ -301,7 +301,6 @@ if (pageData) {
           <div class="section-heading">
             <p class="eyebrow">School repair services</p>
             <h2>Device repair and education technology support for school teams</h2>
-            <p>Purpose-built support for principals, business managers, ICT managers, teachers and P&amp;C associations managing student and staff devices.</p>
           </div>
           <div class="school-service-grid">${schoolServiceCards}</div>
         </div>
@@ -319,7 +318,7 @@ if (pageData) {
         <div class="container">
           <div class="section-heading">
             <p class="eyebrow">Supported brands</p>
-            <h2>Support for common school-owned and BYOD devices</h2>
+            <h2>Common Brands</h2>
           </div>
           <div class="school-brand-grid">${schoolBrandCards}</div>
         </div>
@@ -338,18 +337,6 @@ if (pageData) {
           </aside>
         </div>
       </section>
-      <section class="section school-portal-section">
-        <div class="container">
-          <div class="school-portal-card">
-            <div>
-              <p class="eyebrow">Coming soon</p>
-              <h2>School Repair Portal</h2>
-              <p>Schools will soon be able to track repairs, device status and repair history through a dedicated TECHM8 school portal.</p>
-            </div>
-            <span>Portal in development</span>
-          </div>
-        </div>
-      </section>
       <section class="section section--muted" id="compliance">
         <div class="container">
           <div class="section-heading">
@@ -360,19 +347,17 @@ if (pageData) {
           <div class="school-trust-grid school-trust-grid--wide">${schoolTrustCards}</div>
         </div>
       </section>
-      <section class="section">
-        <div class="container business-seo-layout">
-          <div class="business-seo-main">
+      <section class="section school-area-section">
+        <div class="container school-area-layout">
+          <div class="business-seo-main school-area-main">
             <p class="eyebrow">Service areas</p>
             <h2>School device support across Brisbane and South East Queensland</h2>
             <p>Pickup, delivery and consultation options are available for schools across Brisbane and surrounding regions, subject to booking and service availability.</p>
           </div>
-          <aside class="business-seo-aside">
-            <div class="business-seo-card">
-              <h3>Areas covered</h3>
-              <div class="business-seo-tags">${schoolAreas}</div>
-            </div>
-          </aside>
+          <div class="business-seo-card school-area-card">
+            <h3>Areas covered</h3>
+            <div class="business-seo-tags">${schoolAreas}</div>
+          </div>
         </div>
       </section>
       <section class="section section--muted" id="school-faq">
