@@ -1301,12 +1301,33 @@ a {
 }
 
 .home-repair-category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 1.65rem 1.2rem;
   text-align: center;
   border: 1px solid rgba(7, 39, 45, 0.12);
   border-radius: 1.35rem;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 16px 34px rgba(3, 24, 28, 0.06);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.home-repair-category-card:hover,
+.home-repair-category-card:focus-visible {
+  border-color: rgba(17, 141, 149, 0.36);
+  box-shadow: 0 20px 42px rgba(3, 24, 28, 0.11);
+  transform: translateY(-0.16rem);
+}
+
+.home-repair-category-card:focus-visible {
+  outline: 3px solid rgba(18, 204, 187, 0.35);
+  outline-offset: 4px;
 }
 
 .home-repair-category-card__icon {
