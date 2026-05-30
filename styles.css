@@ -6576,12 +6576,12 @@ html:has(body.repair-page--console-hero) {
 
 .school-device-stack {
   position: relative;
-  min-height: clamp(24rem, 34vw, 32rem);
-  aspect-ratio: 1.42 / 1;
+  min-height: 0;
+  aspect-ratio: 1536 / 1024;
   overflow: hidden;
-  border-radius: 1.35rem;
-  background: #f7fffd;
-  box-shadow: 0 28px 70px rgba(0, 32, 34, 0.14);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .school-device-stack::before,
@@ -6617,28 +6617,11 @@ html:has(body.repair-page--console-hero) {
 }
 
 .school-device-stack__photo {
-  position: absolute;
-  inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 62% center;
-}
-
-.school-device-stack__screen {
-  position: absolute;
-  left: 1rem;
-  bottom: 1rem;
-  z-index: 4;
-  width: max-content;
-  max-width: calc(100% - 2rem);
-  padding: 0.65rem 0.8rem;
-  border-radius: 0.8rem;
-  background: #002022;
-  color: #fff;
-  font-size: 0.86rem;
-  font-weight: 800;
-  box-shadow: 0 16px 36px rgba(0, 32, 34, 0.22);
+  object-fit: contain;
+  object-position: center;
 }
 
 .school-contact-section p {
@@ -6872,7 +6855,7 @@ html:has(body.repair-page--console-hero) {
 
   .school-device-stack {
     min-height: 18rem;
-    aspect-ratio: 1.35 / 1;
+    aspect-ratio: 1536 / 1024;
   }
 
 }
