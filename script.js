@@ -1136,6 +1136,100 @@ function initHomeBanner() {
   restart();
 }
 
+function initRepairCountMeter() {
+  const meter = document.querySelector("[data-repair-count]");
+  if (!(meter instanceof HTMLElement)) return;
+
+  const digitsTarget = meter.querySelector("[data-repair-count-digits]");
+  if (!(digitsTarget instanceof HTMLElement)) return;
+
+  const startCount = Number(meter.dataset.startCount || 9895);
+  const startDate = String(meter.dataset.startDate || "2026-05-31");
+  const startDateMatch = startDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!Number.isFinite(startCount) || !startDateMatch) return;
+
+  const getBrisbaneDate = () => {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Australia/Brisbane",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(new Date());
+
+    const values = Object.fromEntries(
+      parts
+        .filter((part) => part.type !== "literal")
+        .map((part) => [part.type, Number(part.value)]),
+    );
+
+    return new Date(Date.UTC(values.year, values.month - 1, values.day));
+  };
+
+  const start = new Date(
+    Date.UTC(
+      Number(startDateMatch[1]),
+      Number(startDateMatch[2]) - 1,
+      Number(startDateMatch[3]),
+    ),
+  );
+  const today = getBrisbaneDate();
+  const dayMs = 24 * 60 * 60 * 1000;
+  const elapsedDays = Math.max(0, Math.floor((today - start) / dayMs));
+
+  const dailyIncrease = (dayIndex) => {
+    let seed = Math.imul(dayIndex + 37, 2654435761) >>> 0;
+    seed ^= seed >>> 15;
+    seed = Math.imul(seed, 2246822519) >>> 0;
+    seed ^= seed >>> 13;
+    return 3 + (seed % 8);
+  };
+
+  let total = startCount;
+  for (let day = 1; day <= elapsedDays; day += 1) {
+    total += dailyIncrease(day);
+  }
+
+  const formatCount = (value) =>
+    new Intl.NumberFormat("en-AU", { maximumFractionDigits: 0 }).format(value);
+
+  const renderDigits = (value) => {
+    const formatted = formatCount(value);
+    digitsTarget.setAttribute("aria-label", `${formatted} devices repaired`);
+    digitsTarget.innerHTML = Array.from(formatted)
+      .map((char) => {
+        if (/\d/.test(char)) {
+          return `<span class="repair-count-meter__digit" aria-hidden="true">${char}</span>`;
+        }
+        return `<span class="repair-count-meter__separator" aria-hidden="true">${char}</span>`;
+      })
+      .join("");
+  };
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) {
+    renderDigits(total);
+    return;
+  }
+
+  const animationStart = Math.max(startCount, total - 36);
+  const durationMs = 900;
+  const startedAt = performance.now();
+
+  const tick = (now) => {
+    const progress = Math.min(1, (now - startedAt) / durationMs);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(animationStart + (total - animationStart) * eased);
+    renderDigits(current);
+
+    if (progress < 1) {
+      window.requestAnimationFrame(tick);
+    }
+  };
+
+  renderDigits(animationStart);
+  window.requestAnimationFrame(tick);
+}
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -10215,6 +10309,7 @@ function initPage() {
   initNavigation();
   initStoresLocator();
   initHomeBanner();
+  initRepairCountMeter();
   initHomeFeaturedProducts();
   initStorefront();
   initCategoryPage();
