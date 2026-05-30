@@ -13,6 +13,10 @@ RewriteRule ^screen-protector/?$ /shop.html [R=301,L,NC]
 RewriteRule ^about-us/?$ /index.html [R=301,L,NC]
 RewriteRule ^macbookcharger/?$ /products.html [R=301,L,NC]
 RewriteRule ^macbook-charger/?$ /products.html [R=301,L,NC]
+RewriteRule ^business-services/school-device-repair\.html$ /school-services [R=301,L,NC]
+RewriteCond %{THE_REQUEST} \s/+school-services\.html[?\s] [NC]
+RewriteRule ^school-services\.html$ /school-services [R=301,L,NC]
+RewriteRule ^school-services/?$ /school-services.html [L,NC]
 
 # Common legacy store aliases
 RewriteRule ^park-ridge/?$ /stores/park-ridge.html [R=301,L,NC]
