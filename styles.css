@@ -6576,11 +6576,12 @@ html:has(body.repair-page--console-hero) {
 
 .school-device-stack {
   position: relative;
-  min-height: 0;
-  aspect-ratio: 2.35 / 1;
+  min-height: clamp(24rem, 34vw, 32rem);
+  aspect-ratio: 1.42 / 1;
   overflow: hidden;
-  border-radius: 1.25rem;
+  border-radius: 1.35rem;
   background: #f7fffd;
+  box-shadow: 0 28px 70px rgba(0, 32, 34, 0.14);
 }
 
 .school-device-stack::before,
@@ -6602,13 +6603,26 @@ html:has(body.repair-page--console-hero) {
   max-width: 42rem;
 }
 
+.school-services-page .repair-detail-hero {
+  grid-template-columns: minmax(0, 0.88fr) minmax(34rem, 1.12fr);
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.school-services-page .repair-detail-panel {
+  padding: 0;
+  border: 0;
+  border-radius: 1.4rem;
+  background: transparent;
+  box-shadow: none;
+}
+
 .school-device-stack__photo {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 72% center;
+  object-position: 62% center;
 }
 
 .school-device-stack__screen {
@@ -6858,6 +6872,7 @@ html:has(body.repair-page--console-hero) {
 
   .school-device-stack {
     min-height: 18rem;
+    aspect-ratio: 1.35 / 1;
   }
 
 }
