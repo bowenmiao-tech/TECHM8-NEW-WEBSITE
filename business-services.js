@@ -461,7 +461,7 @@ if (pageData) {
         <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle">
         <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu"><span></span><span></span><span></span></label>
         <nav class="nav__menu" id="primary-menu">
-          <a href="${linkUrl("index.html")}">Home</a>
+          
           ${repairMenu}
           <a href="${linkUrl("products.html")}">Products</a>
           ${storeMenu}

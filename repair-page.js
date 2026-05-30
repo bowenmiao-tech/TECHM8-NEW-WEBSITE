@@ -549,7 +549,7 @@ if (pageData) {
           <span></span><span></span><span></span>
         </label>
         <nav class="nav__menu" id="primary-menu">
-          <a href="${prefix}index.html">Home</a>
+          
           ${navDropdown}
           <a href="${prefix}products.html">Products</a>
           ${storeDropdown}
