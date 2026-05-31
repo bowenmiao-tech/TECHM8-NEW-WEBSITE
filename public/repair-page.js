@@ -560,7 +560,7 @@ if (pageData) {
                 <div class="store-switcher__top"><strong>Business Services</strong></div>
                 <div class="store-switcher__grid">
                   <a class="store-switcher__link" href="${prefix}business-services/ndis-technology-support.html">NDIS Services</a>
-                  <a class="store-switcher__link" href="${prefix}school-services.html">School Services</a>
+                  <a class="store-switcher__link" href="/school-services">School Services</a>
                   <a class="store-switcher__link" href="${prefix}business-services/on-site-tech-services.html">On-site Tech Services</a>
                   <a class="store-switcher__link" href="${prefix}business-services/business-it-device-support.html">Business IT &amp; Device Support</a>
                 </div>
@@ -687,7 +687,7 @@ if (pageData) {
           <a href="${prefix}repair-services/computers/laptop.html">Laptop Repairs</a>
           <a href="${prefix}repair-services/consoles/xbox.html">Console Repairs</a>
           <a href="${prefix}business-services/ndis-technology-support.html">NDIS Technology Support &amp; Device Repairs Brisbane</a>
-          <a href="${prefix}school-services.html">School Device Repair Program Brisbane</a>
+          <a href="/school-services">School Device Repair Program Brisbane</a>
           <a href="${prefix}business-services/on-site-tech-services.html">On-site Tech Services</a>
           <a href="${prefix}business-services/business-it-device-support.html">Business IT &amp; Device Support Brisbane</a>
         </div>

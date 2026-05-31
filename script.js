@@ -3195,7 +3195,7 @@ function ensureGlobalCartUi() {
     const isSchoolServicesPage = document.body.classList.contains("school-services-page");
     floatingRepair.className = "floating-repair";
     floatingRepair.href = isSchoolServicesPage
-      ? buildSiteRelativeHref("school-services.html#school-quote")
+      ? "/school-services#school-quote"
       : buildSiteRelativeHref("book-repair.html");
     floatingRepair.setAttribute(
       "aria-label",

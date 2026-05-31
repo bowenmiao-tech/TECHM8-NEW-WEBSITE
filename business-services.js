@@ -4,7 +4,7 @@ if (pageData) {
   const prefix = pageData.prefix || "";
   const businessLinks = [
     ["NDIS Services", "business-services/ndis-technology-support.html"],
-    ["School Services", "school-services.html"],
+    ["School Services", "/school-services"],
     ["On-site Tech Services", "business-services/on-site-tech-services.html"],
     [
       "Business IT &amp; Device Support",
@@ -18,7 +18,7 @@ if (pageData) {
     ],
     [
       "School Device Repair Program Brisbane",
-      "school-services.html",
+      "/school-services",
     ],
     ["On-site Tech Services", "business-services/on-site-tech-services.html"],
     [
@@ -27,7 +27,8 @@ if (pageData) {
     ],
   ];
 
-  const linkUrl = (url) => `${prefix}${url}`;
+  const linkUrl = (url) =>
+    /^(?:https?:|mailto:|tel:|#|\/)/.test(url) ? url : `${prefix}${url}`;
   const repairMenu = `
     <div class="nav__dropdown">
       <button class="nav__dropdown-toggle" type="button" data-href="${linkUrl("repairs.html")}" aria-expanded="false" onclick="return toggleMainDropdown(this, event);">Repairs</button>
@@ -184,6 +185,13 @@ if (pageData) {
   const schoolAreas = (pageData.schoolAreas || [])
     .map((area) => `<span>${area}</span>`)
     .join("");
+  const schoolSeoHighlights = renderList(pageData.schoolSeoHighlights || []);
+  const schoolSeoLinks = (pageData.schoolSeoLinks || [])
+    .map(
+      (link) =>
+        `<a class="business-seo-link" href="${linkUrl(link.href)}">${link.label}</a>`,
+    )
+    .join("");
   const schoolFaqItems = (pageData.schoolFaqs || [])
     .map(
       (faq) => `
@@ -296,6 +304,33 @@ if (pageData) {
     : "";
   const schoolPageSections = pageData.isSchoolServicesPage
     ? `
+      <section class="section business-seo-section">
+        <div class="container business-seo-layout">
+          <div class="business-seo-main">
+            <p class="eyebrow">School repair Brisbane</p>
+            <h2>School repair services built for Brisbane education teams</h2>
+            <p>${pageData.schoolSeoLead}</p>
+            <p>${pageData.schoolSeoSecondary}</p>
+            ${schoolSeoHighlights ? `<ul class="business-seo-list">${schoolSeoHighlights}</ul>` : ""}
+          </div>
+          <aside class="business-seo-aside">
+            <div class="business-seo-card">
+              <h3>Core school repair services</h3>
+              <div class="business-seo-tags">
+                <span>Chromebook repairs</span>
+                <span>School iPad repairs</span>
+                <span>School laptop repairs</span>
+                <span>Bulk school repairs</span>
+              </div>
+            </div>
+            ${
+              schoolSeoLinks
+                ? `<div class="business-seo-card"><h3>Related TECHM8 services</h3><div class="business-seo-links">${schoolSeoLinks}</div></div>`
+                : ""
+            }
+          </aside>
+        </div>
+      </section>
       <section class="section school-services-overview" id="school-services">
         <div class="container">
           <div class="section-heading">
