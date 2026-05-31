@@ -411,17 +411,20 @@ if (pageData) {
             <h2>Let's Support Your School Technology Program</h2>
             <p>Send through your school details, device types and repair volume. TECHM8 can help with quotes, repair reports, pickup and delivery options, and ongoing support planning.</p>
           </div>
-          <form class="booking-form school-quote-form" action="mailto:info@techm8australia.com" method="post" enctype="text/plain">
+          <form class="booking-form school-quote-form" data-school-quote-form novalidate>
+            <div class="booking-message" data-school-quote-message hidden></div>
             <div class="booking-form__grid">
-              <label class="booking-field"><span>School name</span><input type="text" name="School name" required></label>
-              <label class="booking-field"><span>Your name</span><input type="text" name="Contact name" required autocomplete="name"></label>
-              <label class="booking-field"><span>Phone</span><input type="tel" name="Phone" required autocomplete="tel"></label>
-              <label class="booking-field"><span>Email</span><input type="email" name="Email" required autocomplete="email"></label>
-              <label class="booking-field booking-field--full"><span>Device type</span><select name="Device type"><option>Chromebooks</option><option>iPads</option><option>Laptops</option><option>Mixed fleet</option><option>Other education technology</option></select></label>
-              <label class="booking-field booking-field--full"><span>What support is needed?</span><textarea name="Support details" rows="5" required></textarea></label>
+              <label class="booking-field"><span>School name</span><input type="text" name="school_name" required autocomplete="organization"></label>
+              <label class="booking-field"><span>Your name</span><input type="text" name="customer_name" required autocomplete="name"></label>
+              <label class="booking-field"><span>Phone</span><input type="tel" name="phone" required autocomplete="tel"></label>
+              <label class="booking-field"><span>Email</span><input type="email" name="email" required autocomplete="email"></label>
+              <label class="booking-field booking-field--full"><span>Device type</span><select name="device_type" required><option>Chromebooks</option><option>iPads</option><option>Laptops</option><option>Mixed fleet</option><option>Other education technology</option></select></label>
+              <label class="booking-field booking-field--full"><span>What support is needed?</span><textarea name="support_details" rows="5" required></textarea></label>
             </div>
+            <input type="hidden" name="source_page" value="/school-services">
+            <label class="booking-field" hidden aria-hidden="true"><span>Company website</span><input type="text" name="company_website" tabindex="-1" autocomplete="off"></label>
             <div class="booking-form__actions">
-              <button class="button button--primary" type="submit">Request a School Quote</button>
+              <button class="button button--primary" type="submit" data-school-quote-submit>Request a School Quote</button>
             </div>
           </form>
         </div>
@@ -547,6 +550,77 @@ if (pageData) {
       </div>
     </footer>
   `;
+
+  const schoolQuoteForm = document.querySelector("[data-school-quote-form]");
+  if (schoolQuoteForm instanceof HTMLFormElement) {
+    const messageBox = schoolQuoteForm.querySelector("[data-school-quote-message]");
+    const submitButton = schoolQuoteForm.querySelector("[data-school-quote-submit]");
+    const setSchoolQuoteMessage = (type, text) => {
+      if (!(messageBox instanceof HTMLElement)) return;
+      messageBox.hidden = false;
+      messageBox.className = `booking-message is-${type}`;
+      messageBox.textContent = text;
+    };
+    schoolQuoteForm.addEventListener("input", (event) => {
+      if (event.target instanceof HTMLElement) {
+        event.target.classList.remove("is-invalid");
+      }
+    });
+    schoolQuoteForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const requiredFields = schoolQuoteForm.querySelectorAll("[required]");
+      let firstInvalid = null;
+      requiredFields.forEach((field) => {
+        if (
+          field instanceof HTMLInputElement ||
+          field instanceof HTMLSelectElement ||
+          field instanceof HTMLTextAreaElement
+        ) {
+          const invalid = !String(field.value || "").trim();
+          field.classList.toggle("is-invalid", invalid);
+          if (invalid && !firstInvalid) firstInvalid = field;
+        }
+      });
+      const emailField = schoolQuoteForm.elements.namedItem("email");
+      if (
+        !firstInvalid &&
+        emailField instanceof HTMLInputElement &&
+        !emailField.validity.valid
+      ) {
+        emailField.classList.add("is-invalid");
+        firstInvalid = emailField;
+      }
+      if (firstInvalid) {
+        setSchoolQuoteMessage("error", "Please complete all required fields before submitting.");
+        firstInvalid.focus();
+        return;
+      }
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+      }
+      try {
+        const response = await fetch(linkUrl("/api/school-quote.php"), {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: new FormData(schoolQuoteForm),
+        });
+        const result = await response.json();
+        if (!response.ok || !result.ok) {
+          throw new Error(result.error || "School quote request could not be submitted.");
+        }
+        schoolQuoteForm.reset();
+        setSchoolQuoteMessage("success", result.message || "Your school quote request has been submitted. TECHM8 will contact you shortly.");
+      } catch (error) {
+        setSchoolQuoteMessage("error", error instanceof Error ? error.message : "School quote request could not be submitted.");
+      } finally {
+        if (submitButton instanceof HTMLButtonElement) {
+          submitButton.disabled = false;
+          submitButton.textContent = "Request a School Quote";
+        }
+      }
+    });
+  }
 
   const enquiryForm = document.querySelector("[data-ndis-enquiry-form]");
   if (enquiryForm instanceof HTMLFormElement) {
