@@ -126,7 +126,24 @@ $categoryLabels = [
     'gaming_console' => 'Gaming Console',
 ];
 
-$storeEmail = null;
+$storeEmailBySlug = [
+    'park-ridge' => 'techm8.parkridge@gmail.com',
+    'fairfield' => 'techm8.fairfield@gmail.com',
+    'north-lakes' => 'techm8.northlakes@gmail.com',
+    'toowong' => 'techm8.toowong@gmail.com',
+    'brassall' => 'techm8.brassall@gmail.com',
+];
+
+$configuredStoreEmails = isset($config['store_notification_emails']) && is_array($config['store_notification_emails'])
+    ? $config['store_notification_emails']
+    : [];
+$storeEmail = normalize_booking_email((string) (($configuredStoreEmails[$storeSlug] ?? '') ?: ($storeEmailBySlug[$storeSlug] ?? '')));
+
+function normalize_booking_email($email)
+{
+    $normalized = strtolower(trim((string) $email));
+    return $normalized !== '' && filter_var($normalized, FILTER_VALIDATE_EMAIL) ? $normalized : null;
+}
 
 try {
     $pdo = new PDO(
@@ -201,15 +218,17 @@ try {
     exit;
 }
 
-try {
-    $storeStatement = $pdo->prepare('SELECT email FROM stores WHERE slug = :store_slug LIMIT 1');
-    $storeStatement->execute([':store_slug' => $storeSlug]);
-    $storeRow = $storeStatement->fetch();
-    if ($storeRow && !empty($storeRow['email']) && filter_var($storeRow['email'], FILTER_VALIDATE_EMAIL)) {
-        $storeEmail = strtolower(trim((string) $storeRow['email']));
+if ($storeEmail === null) {
+    try {
+        $storeStatement = $pdo->prepare('SELECT email FROM stores WHERE slug = :store_slug LIMIT 1');
+        $storeStatement->execute([':store_slug' => $storeSlug]);
+        $storeRow = $storeStatement->fetch();
+        if ($storeRow) {
+            $storeEmail = normalize_booking_email((string) ($storeRow['email'] ?? ''));
+        }
+    } catch (Throwable $exception) {
+        $storeEmail = null;
     }
-} catch (Throwable $exception) {
-    $storeEmail = null;
 }
 
 $storeLabel = $storeLabels[$storeSlug] ?? $storeSlug;
@@ -258,7 +277,7 @@ $headers = [
 ];
 
 $internalRecipients = [];
-foreach ([$config['admin_email'], $storeEmail] as $recipient) {
+foreach ([$config['admin_email'], $storeEmail, $config['repair_notification_email'] ?? '', 'techm8contact@gmail.com'] as $recipient) {
     $recipient = strtolower(trim((string) $recipient));
     if ($recipient !== '' && filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
         $internalRecipients[$recipient] = true;

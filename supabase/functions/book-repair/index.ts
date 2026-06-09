@@ -9,11 +9,20 @@ const corsHeaders = {
 const allowedCategories = new Set(['phone', 'computer', 'tablet', 'gaming_console'])
 const allowedStores = new Set(['park-ridge', 'fairfield', 'north-lakes', 'toowong', 'brassall'])
 const allowedContactMethods = new Set(['phone', 'email', 'sms'])
+const centralRepairNotificationEmail = 'techm8contact@gmail.com'
 const allowedPreferredTimes = new Set([
   'Morning time (9:00 AM - 12:00 PM)',
   'Lunch time (12:00 PM - 2:00 PM)',
   'Afternoon time (2:00 PM - 5:00 PM)',
 ])
+
+const storeNotificationEmails: Record<string, string> = {
+  'park-ridge': 'techm8.parkridge@gmail.com',
+  fairfield: 'techm8.fairfield@gmail.com',
+  toowong: 'techm8.toowong@gmail.com',
+  'north-lakes': 'techm8.northlakes@gmail.com',
+  brassall: 'techm8.brassall@gmail.com',
+}
 
 type StoreRow = {
   name?: string | null
@@ -75,6 +84,24 @@ function normalizeEmailRecipients(recipients: string[]) {
         .filter((recipient) => recipient && isValidEmail(recipient)),
     ),
   )
+}
+
+function getStoreNotificationEnvValue(storeSlug: string) {
+  const suffix = storeSlug.toUpperCase().replaceAll('-', '_')
+  return (
+    String(Deno.env.get(`STORE_NOTIFICATION_EMAIL_${suffix}`) ?? '').trim() ||
+    String(Deno.env.get(`REPAIR_NOTIFICATION_EMAIL_${suffix}`) ?? '').trim()
+  )
+}
+
+function getStoreNotificationEmail(storeSlug: string, storeEmail?: string | null) {
+  const candidates = [
+    getStoreNotificationEnvValue(storeSlug),
+    String(storeNotificationEmails[storeSlug] ?? ''),
+    String(storeEmail ?? '').trim(),
+  ]
+
+  return normalizeEmailRecipients(candidates)[0] ?? ''
 }
 
 function normalizeAustralianPhone(value: string) {
@@ -588,8 +615,9 @@ Deno.serve(async (req) => {
         .eq('slug', storeSlug)
         .maybeSingle()
 
-      const mainNotificationEmail = String(Deno.env.get('REPAIR_NOTIFICATION_EMAIL') ?? 'techm8contact@gmail.com').trim().toLowerCase()
-      const recipients = normalizeEmailRecipients([String(storeRow?.email ?? ''), mainNotificationEmail])
+      const mainNotificationEmail = String(Deno.env.get('REPAIR_NOTIFICATION_EMAIL') ?? '').trim().toLowerCase()
+      const storeNotificationEmail = getStoreNotificationEmail(storeSlug, storeRow?.email)
+      const recipients = normalizeEmailRecipients([storeNotificationEmail, centralRepairNotificationEmail, mainNotificationEmail])
       const storeName = String(storeRow?.name ?? storeSlug)
       const storeAddress = formatStoreAddress(storeRow as StoreRow | null)
       const emailPayload = {
@@ -609,18 +637,33 @@ Deno.serve(async (req) => {
         preferredTime,
       }
 
-      const customerResult = await sendCustomerRepairConfirmationEmail(emailPayload)
-      customerEmailSent = Boolean(customerResult.sent)
+      const internalResult = await sendInternalRepairNotificationEmail({
+        ...emailPayload,
+        recipients,
+      })
+      internalEmailSent = Boolean(internalResult.sent)
+      if (!internalEmailSent) {
+        throw new Error(`Internal repair notification was not sent: ${internalResult.reason ?? 'unknown_reason'}`)
+      }
 
-      if (recipients.length) {
-        const internalResult = await sendInternalRepairNotificationEmail({
-          ...emailPayload,
-          recipients,
-        })
-        internalEmailSent = Boolean(internalResult.sent)
+      try {
+        const customerResult = await sendCustomerRepairConfirmationEmail(emailPayload)
+        customerEmailSent = Boolean(customerResult.sent)
+      } catch (customerNotificationError) {
+        console.error(customerNotificationError)
       }
     } catch (notificationError) {
       console.error(notificationError)
+      return Response.json(
+        {
+          ok: false,
+          booking_code: bookingCode,
+          customer_email_sent: customerEmailSent,
+          internal_email_sent: false,
+          error: 'Booking was saved, but the store notification email could not be sent.',
+        },
+        { status: 502, headers: corsHeaders },
+      )
     }
 
     return Response.json(

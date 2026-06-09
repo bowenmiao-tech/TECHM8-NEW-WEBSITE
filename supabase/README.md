@@ -5,6 +5,10 @@ Supabase migration notes
 3. Set these function secrets before deployment:
    - SUPABASE_URL
    - SUPABASE_SERVICE_ROLE_KEY
+   - RESEND_API_KEY_BOOKING or RESEND_API_KEY
+   - BOOKING_FROM_EMAIL
+   - REPAIR_NOTIFICATION_EMAIL (optional extra internal notification recipient)
+   - Optional store overrides: STORE_NOTIFICATION_EMAIL_PARK_RIDGE, STORE_NOTIFICATION_EMAIL_FAIRFIELD, STORE_NOTIFICATION_EMAIL_TOOWONG, STORE_NOTIFICATION_EMAIL_NORTH_LAKES, STORE_NOTIFICATION_EMAIL_BRASSALL
 4. Deploy the Edge Function in supabase/functions/sync-product-images when you want product photos copied into Supabase Storage instead of using external source URLs.
 5. Run the SQL in supabase/seeds/20260414_techm8_controllers.sql to create the first 5 controller products.
 6. After the products exist, trigger the sync-product-images function once. It will:
@@ -13,7 +17,7 @@ Supabase migration notes
    - upload them into Supabase Storage
    - update `products.image_url`
    - recreate the related `product_images` rows with Supabase public URLs
-7. If you want booking email notifications, add a mail provider key in the function later.
+7. Booking email notifications are sent through Resend. Each repair booking sends the internal notification to the selected store email plus techm8contact@gmail.com. REPAIR_NOTIFICATION_EMAIL can add another internal recipient.
 8. The frontend booking form is already prepared to call:
    https://<project-ref>.supabase.co/functions/v1/book-repair
 
