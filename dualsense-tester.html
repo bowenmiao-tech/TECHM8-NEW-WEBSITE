@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7YLMGHMRDG"></script>
+    <script defer src="/ga4.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DualSense Tester | TECHM8</title>
+    <meta
+      name="description"
+      content="Test DualSense, DualSense Edge and DualShock 4 controllers in the browser with TECHM8."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=dualsense-tester-20260710" />
+  </head>
+  <body class="dualsense-tester-page">
+    <div class="promo-banner">
+      <div class="container promo-banner__inner">
+        <span>Controller diagnostics for DualSense, DualSense Edge and DualShock 4.</span>
+        <a href="repair-services/consoles/sony.html">PlayStation repairs</a>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <div class="container nav">
+        <a class="brand" href="index.html" aria-label="TECHM8 home">
+          <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo" />
+        </a>
+        <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle" />
+        <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </label>
+        <nav class="nav__menu" id="primary-menu">
+          <div class="nav__dropdown">
+            <button
+              class="nav__dropdown-toggle"
+              type="button"
+              data-href="repairs.html"
+              aria-expanded="false"
+              onclick="return toggleMainDropdown(this, event);"
+            >
+              Repairs
+            </button>
+            <div class="nav__dropdown-menu">
+              <div class="store-switcher store-switcher--repairs">
+                <div class="store-switcher__top"><strong>Repairs</strong></div>
+                <div class="store-switcher__grid store-switcher__grid--repairs">
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Phones</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/phones/apple.html">Apple</a>
+                      <a href="repair-services/phones/samsung.html">Samsung</a>
+                      <a href="repair-services/phones/oppo.html">Oppo</a>
+                      <a href="repair-services/phones/huawei.html">Huawei</a>
+                      <a href="repair-services/phones/xiaomi.html">Xiaomi</a>
+                      <a href="repair-services/phones/google.html">Google</a>
+                      <a href="repair-services/phones/oneplus.html">OnePlus</a>
+                      <a href="repair-services/phones/others.html">Others</a>
+                    </div>
+                  </div>
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Tablets</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/tablets/apple.html">Apple</a>
+                      <a href="repair-services/tablets/samsung.html">Samsung</a>
+                      <a href="repair-services/tablets/other.html">Other Tablets</a>
+                    </div>
+                  </div>
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Computers</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/computers/pc-tower.html">PC Tower</a>
+                      <a href="repair-services/computers/all-in-one.html">All in One</a>
+                      <a href="repair-services/computers/laptop.html">Laptop</a>
+                      <a href="repair-services/computers/small-pc.html">Small PC</a>
+                    </div>
+                  </div>
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Game Consoles</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/consoles/sony.html">Sony - PlayStation 5</a>
+                      <a href="repair-services/consoles/xbox.html">Microsoft - Xbox</a>
+                      <a href="repair-services/consoles/nintendo.html">Nintendo - Switch</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a href="products.html">Products</a>
+          <a href="stores.html">Store Locator</a>
+          <a href="business-services.html">Business Services</a>
+          <a class="nav__shop-link" href="shop.html">Online Store</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="dualsense-hero">
+        <div class="container dualsense-hero__inner">
+          <div>
+            <p class="eyebrow">Browser controller diagnostics</p>
+            <h1>DualSense Tester</h1>
+            <p>
+              Connect a PlayStation controller by USB or Bluetooth and test inputs,
+              sensors, lights, vibration, adaptive triggers and supported Edge tools.
+            </p>
+          </div>
+          <a class="button button--primary" href="#tester">Open tester</a>
+        </div>
+      </section>
+
+      <section class="dualsense-tool" id="tester" aria-label="DualSense Tester application">
+        <div class="container">
+          <div class="dualsense-tool__notice">
+            WebHID requires Chrome or Edge on HTTPS, or localhost during development.
+          </div>
+          <iframe
+            class="dualsense-tool__frame"
+            src="/dualsense-tester/index.html"
+            title="DualSense Tester application"
+            allow="hid; usb; gamepad; autoplay"
+          ></iframe>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer footer--rich">
+        <div class="footer-brand">
+          <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo" />
+          <p>
+            TECHM8 repairs phones, tablets, computers, laptops and game consoles,
+            and also supplies parts, accessories and everyday tech products.
+          </p>
+        </div>
+        <div>
+          <h4>Services</h4>
+          <a href="repair-services/phones/apple.html">Phone Repairs</a>
+          <a href="repair-services/tablets/apple.html">Tablet Repairs</a>
+          <a href="repair-services/computers/laptop.html">Laptop Repairs</a>
+          <a href="repair-services/consoles/xbox.html">Console Repairs</a>
+          <a href="business-services/ndis-technology-support.html">NDIS Technology Support &amp; Device Repairs Brisbane</a>
+          <a href="/school-services">School Device Repair Program Brisbane</a>
+          <a href="business-services/on-site-tech-services.html">On-site Tech Services</a>
+          <a href="business-services/business-it-device-support.html">Business IT &amp; Device Support Brisbane</a>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <a href="repairs.html">Repairs Overview</a>
+          <a href="products.html">Products</a>
+          <a href="stores.html">Store Locator</a>
+          <a href="dualsense-tester.html">DualSense Tester</a>
+          <a href="shop.html">Online Store</a>
+        </div>
+        <div>
+          <h4>Need Help?</h4>
+          <p>Choose your nearest store for repairs, product advice and walk-in support.</p>
+          <a href="stores.html">Find your nearest store</a>
+          <a href="repairs.html">View repair categories</a>
+        </div>
+      </div>
+      <div class="container footer footer--bottom">
+        <p>&copy; 2026 TECHM8. All rights reserved.</p>
+        <a href="store-policy.html">Repair Terms &amp; Conditions</a><a href="dualsense-tester.html">DualSense Tester</a>
+      </div>
+    </footer>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

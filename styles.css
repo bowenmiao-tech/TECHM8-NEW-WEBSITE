@@ -3285,7 +3285,7 @@ body.storefront-shop-page .storefront-tools {
 }
 
 .footer--bottom {
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr repeat(2, auto);
   align-items: center;
   padding-top: 1.25rem;
   margin-top: 1.75rem;
@@ -3311,6 +3311,76 @@ body.storefront-shop-page .storefront-tools {
   margin: 0;
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.72);
+}
+
+.dualsense-hero {
+  padding: clamp(3rem, 6vw, 5rem) 0 clamp(1.4rem, 3vw, 2.4rem);
+  background:
+    radial-gradient(circle at 78% 12%, rgba(22, 200, 186, 0.18), transparent 22rem),
+    linear-gradient(135deg, rgba(244, 255, 253, 0.98), rgba(232, 250, 249, 0.88));
+}
+
+.dualsense-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2rem;
+  align-items: end;
+}
+
+.dualsense-hero h1 {
+  margin: 0.35rem 0 0.8rem;
+  color: var(--text);
+  font-size: clamp(2.35rem, 5vw, 4.6rem);
+  line-height: 0.95;
+}
+
+.dualsense-hero p:not(.eyebrow) {
+  max-width: 44rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.16rem);
+  line-height: 1.7;
+}
+
+.dualsense-tool {
+  padding: clamp(1.5rem, 4vw, 3rem) 0 clamp(3rem, 6vw, 5rem);
+}
+
+.dualsense-tool__notice {
+  margin-bottom: 0.85rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(17, 141, 149, 0.18);
+  border-radius: 0.8rem;
+  background: rgba(232, 250, 249, 0.82);
+  color: var(--brand-dark);
+  font-weight: 700;
+}
+
+.dualsense-tool__frame {
+  display: block;
+  width: 100%;
+  height: min(86vh, 58rem);
+  min-height: 44rem;
+  border: 1px solid rgba(7, 39, 45, 0.12);
+  border-radius: 1.15rem;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 720px) {
+  .dualsense-hero__inner {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .dualsense-hero__inner .button {
+    width: fit-content;
+  }
+
+  .dualsense-tool__frame {
+    min-height: 42rem;
+    border-radius: 0.8rem;
+  }
 }
 
 .repair-category-grid {

@@ -1,0 +1,13 @@
+DualSense Tester integration
+
+This self-hosted tester page includes built assets derived from:
+
+- daidr/dualsense-tester
+  https://github.com/daidr/dualsense-tester
+  MIT License, Copyright (c) 2023 Xuezhou Dai (daidr)
+
+- dualshock-tools/dualshock-tools.github.io
+  https://github.com/dualshock-tools/dualshock-tools.github.io
+  MIT License
+
+The TECHM8 wrapper, theme overrides, and site integration are part of this website.
