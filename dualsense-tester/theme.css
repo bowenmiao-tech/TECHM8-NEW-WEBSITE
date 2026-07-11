@@ -49,6 +49,18 @@ html.dark {
   display: none !important;
 }
 
+.connect-banner,
+.connect-page {
+  min-height: calc(100vh - 102px);
+}
+
+.connect-card {
+  min-height: calc(100vh - 126px) !important;
+  align-items: flex-start !important;
+  padding-top: clamp(44px, 8vh, 82px) !important;
+  padding-bottom: clamp(44px, 8vh, 82px) !important;
+}
+
 .el-button--primary {
   --el-button-bg-color: #16c8ba;
   --el-button-border-color: #16c8ba;
