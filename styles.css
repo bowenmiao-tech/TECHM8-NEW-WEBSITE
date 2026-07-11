@@ -3321,10 +3321,7 @@ body.storefront-shop-page .storefront-tools {
 }
 
 .dualsense-hero__inner {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 2rem;
-  align-items: end;
+  max-width: 68rem;
 }
 
 .dualsense-hero h1 {
@@ -3343,7 +3340,12 @@ body.storefront-shop-page .storefront-tools {
 }
 
 .dualsense-tool {
-  padding: clamp(1.5rem, 4vw, 3rem) 0 clamp(3rem, 6vw, 5rem);
+  padding: clamp(1.5rem, 3vw, 2.4rem) 0 clamp(3rem, 6vw, 5rem);
+}
+
+.dualsense-tool__shell {
+  width: min(100% - clamp(1.5rem, 5vw, 5rem), 92rem);
+  margin: 0 auto;
 }
 
 .dualsense-tool__notice {
@@ -3359,8 +3361,8 @@ body.storefront-shop-page .storefront-tools {
 .dualsense-tool__frame {
   display: block;
   width: 100%;
-  height: min(86vh, 58rem);
-  min-height: 44rem;
+  height: min(88vh, 64rem);
+  min-height: 50rem;
   border: 1px solid rgba(7, 39, 45, 0.12);
   border-radius: 1.15rem;
   background: var(--surface);
@@ -3368,13 +3370,8 @@ body.storefront-shop-page .storefront-tools {
 }
 
 @media (max-width: 720px) {
-  .dualsense-hero__inner {
-    grid-template-columns: 1fr;
-    align-items: start;
-  }
-
-  .dualsense-hero__inner .button {
-    width: fit-content;
+  .dualsense-tool__shell {
+    width: min(100% - 1.5rem, 92rem);
   }
 
   .dualsense-tool__frame {
