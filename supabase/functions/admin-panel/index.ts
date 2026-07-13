@@ -1,4 +1,16 @@
-import { createClient } from 'npm:@supabase/supabase-js@2'
+import {
+  createClient as createSupabaseClient,
+  type SupabaseClient,
+} from 'npm:@supabase/supabase-js@2.49.8'
+import Stripe from 'npm:stripe@16.12.0'
+import {
+  applySucceededRefund,
+  createOrderDocumentSignedUrl,
+  ensureOrderDocument,
+  finalizePaidOrder,
+  notifyOrderEvent,
+  recordOrderEvent,
+} from '../_shared/order-commerce.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -11,6 +23,7 @@ const PRODUCT_IMAGE_BUCKET = 'product-images'
 const SUPER_ADMIN_ROLE = 'super_admin'
 const CATALOG_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE])
 const ORDER_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE, 'store_manager', 'staff'])
+const ORDER_REFUND_ROLES = new Set([SUPER_ADMIN_ROLE, 'store_manager'])
 const REPAIR_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE, 'store_manager', 'staff'])
 const INVENTORY_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE, 'store_manager'])
 const CUSTOMER_EDIT_ROLES = new Set([SUPER_ADMIN_ROLE])
@@ -26,6 +39,14 @@ type AdminContext = {
 }
 
 type JsonRecord = Record<string, unknown>
+
+// Keep this large admin function intentionally schema-agnostic until generated
+// database types are added to the project. A concrete wrapper prevents
+// ReturnType<typeof createClient> from collapsing generic query results to
+// unknown under newer Deno/TypeScript versions.
+function createClient(url: string, serviceRoleKey: string): SupabaseClient<any, 'public', any> {
+  return createSupabaseClient<any, 'public', any>(url, serviceRoleKey)
+}
 
 function jsonResponse(payload: JsonRecord, status = 200) {
   return Response.json(payload, { status, headers: corsHeaders })
@@ -345,6 +366,9 @@ async function getAdminContext(supabaseAdmin: ReturnType<typeof createClient>, r
   if (!adminRow || !adminRow.is_active) {
     return { error: jsonResponse({ ok: false, error: 'You do not have admin access.' }, 403), context: null }
   }
+  if (adminRow.role !== SUPER_ADMIN_ROLE && !adminRow.store_slug) {
+    return { error: jsonResponse({ ok: false, error: 'Your admin account is not assigned to a store.' }, 403), context: null }
+  }
 
   return {
     error: null,
@@ -490,7 +514,7 @@ async function listOrders(supabaseAdmin: ReturnType<typeof createClient>, contex
 
   let query = supabaseAdmin
     .from('orders')
-    .select('id, order_code, customer_name, phone, email, store_slug, fulfillment_method, payment_method_label, payment_status, status, fulfillment_status, subtotal_amount, payment_fee_amount, total_amount, notes, tracking_number, tracking_url, created_at, updated_at', { count: 'exact' })
+    .select('id, order_code, customer_name, phone, email, store_slug, fulfillment_method, payment_method_code, payment_method_label, payment_status, status, fulfillment_status, subtotal_amount, discount_amount, payment_fee_amount, shipping_fee_amount, total_amount, amount_paid, amount_refunded, gst_amount, invoice_number, confirmation_number, notes, tracking_number, tracking_url, created_at, updated_at', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to)
 
@@ -537,6 +561,90 @@ async function listOrders(supabaseAdmin: ReturnType<typeof createClient>, contex
   }
 }
 
+async function loadAdminOrder(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  context: AdminContext,
+  orderId: number,
+) {
+  const { data: order, error } = await supabaseAdmin
+    .from('orders')
+    .select('*')
+    .eq('id', orderId)
+    .maybeSingle()
+  if (error || !order) return { error: jsonResponse({ ok: false, error: 'Order was not found.' }, 404), order: null }
+  if (!isSuperAdmin(context) && order.store_slug !== context.store_slug) {
+    return { error: jsonResponse({ ok: false, error: 'You can only access orders from your own store.' }, 403), order: null }
+  }
+  return { error: null, order }
+}
+
+async function getOrderDetailPayload(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  context: AdminContext,
+  orderId: number,
+) {
+  const access = await loadAdminOrder(supabaseAdmin, context, orderId)
+  if (access.error || !access.order) return { error: access.error, payload: null }
+  const order = access.order
+  const [itemsResult, storeResult, eventsResult, notificationsResult, documentsResult, refundsResult, shipmentsResult] = await Promise.all([
+    supabaseAdmin.from('order_items').select('*').eq('order_id', orderId).order('id', { ascending: true }),
+    supabaseAdmin.from('stores').select('id, slug, name, email, phone, address_line_1, address_line_2, suburb, state, postcode').eq('slug', order.store_slug).maybeSingle(),
+    supabaseAdmin.from('order_events').select('*').eq('order_id', orderId).order('created_at', { ascending: false }),
+    supabaseAdmin.from('order_notifications').select('id, event_key, recipient_role, recipient_email, subject, provider, provider_message_id, status, attempt_count, last_error, sent_at, created_at, updated_at').eq('order_id', orderId).order('created_at', { ascending: false }),
+    supabaseAdmin.from('order_documents').select('*').eq('order_id', orderId).order('created_at', { ascending: false }),
+    supabaseAdmin.from('order_refunds').select('*').eq('order_id', orderId).order('created_at', { ascending: false }),
+    supabaseAdmin.from('shipments').select('*').eq('order_id', orderId).order('created_at', { ascending: false }),
+  ])
+  const firstError = [
+    itemsResult.error,
+    storeResult.error,
+    eventsResult.error,
+    notificationsResult.error,
+    documentsResult.error,
+    refundsResult.error,
+    shipmentsResult.error,
+  ].find(Boolean)
+  if (firstError) throw firstError
+
+  const documents = await Promise.all((documentsResult.data ?? []).map(async (document: JsonRecord) => {
+    if (document.status !== 'ready' || !document.storage_path) return { ...document, signed_url: null }
+    try {
+      const signedUrl = await createOrderDocumentSignedUrl(supabaseAdmin, document, 900)
+      return { ...document, signed_url: signedUrl }
+    } catch {
+      return { ...document, signed_url: null }
+    }
+  }))
+
+  return {
+    error: null,
+    payload: {
+      order: {
+        ...order,
+        items: itemsResult.data ?? [],
+      },
+      store: storeResult.data ?? null,
+      events: eventsResult.data ?? [],
+      notifications: notificationsResult.data ?? [],
+      documents,
+      refunds: refundsResult.data ?? [],
+      shipments: shipmentsResult.data ?? [],
+      capabilities: {
+        can_edit: ORDER_EDIT_ROLES.has(context.role),
+        can_refund: ORDER_REFUND_ROLES.has(context.role),
+      },
+    },
+  }
+}
+
+async function getOrderDetail(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  const orderId = Number(body.id)
+  if (!Number.isFinite(orderId)) return jsonResponse({ ok: false, error: 'Order id is missing.' }, 422)
+  const result = await getOrderDetailPayload(supabaseAdmin, context, orderId)
+  if (result.error || !result.payload) return result.error!
+  return jsonResponse({ ok: true, ...result.payload })
+}
+
 async function updateOrder(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
   if (!ORDER_EDIT_ROLES.has(context.role)) {
     return jsonResponse({ ok: false, error: 'You do not have permission to edit orders.' }, 403)
@@ -547,24 +655,10 @@ async function updateOrder(supabaseAdmin: ReturnType<typeof createClient>, conte
     return jsonResponse({ ok: false, error: 'Order id is missing.' }, 422)
   }
 
-  const { data: existingOrder, error: existingError } = await supabaseAdmin
-    .from('orders')
-    .select('id, store_slug')
-    .eq('id', orderId)
-    .maybeSingle()
-
-  if (existingError || !existingOrder) {
-    return jsonResponse({ ok: false, error: 'Order was not found.' }, 404)
-  }
-
-  if (!isSuperAdmin(context) && context.store_slug && existingOrder.store_slug !== context.store_slug) {
-    return jsonResponse({ ok: false, error: 'You can only update orders from your own store.' }, 403)
-  }
+  const access = await loadAdminOrder(supabaseAdmin, context, orderId)
+  if (access.error || !access.order) return access.error!
 
   const patch = {
-    status: normalizeNullableString(body.status) ?? undefined,
-    payment_status: normalizeNullableString(body.payment_status) ?? undefined,
-    fulfillment_status: normalizeNullableString(body.fulfillment_status) ?? undefined,
     notes: body.notes === '' ? null : normalizeNullableString(body.notes),
     tracking_number: body.tracking_number === '' ? null : normalizeNullableString(body.tracking_number),
     tracking_url: body.tracking_url === '' ? null : normalizeNullableString(body.tracking_url),
@@ -575,14 +669,274 @@ async function updateOrder(supabaseAdmin: ReturnType<typeof createClient>, conte
     .from('orders')
     .update(cleanPatch)
     .eq('id', orderId)
-    .select('id, order_code, status, payment_status, fulfillment_status, notes, tracking_number, tracking_url, updated_at')
+    .select('id, order_code, notes, tracking_number, tracking_url, updated_at')
     .single()
 
   if (error) {
     return jsonResponse({ ok: false, error: 'Order could not be updated.' }, 500)
   }
 
+  await recordOrderEvent(supabaseAdmin, orderId, {
+    eventKey: `order_details_updated:${crypto.randomUUID()}`,
+    eventType: 'order_details_updated',
+    title: 'Order details updated',
+    description: 'Internal notes or tracking details were updated.',
+    actor: { type: 'admin', identifier: context.email || String(context.id) },
+    data: cleanPatch,
+  })
+
   return jsonResponse({ ok: true, row: data })
+}
+
+function refundStatus(value: unknown) {
+  const status = String(value ?? '').trim()
+  if (status === 'succeeded') return 'succeeded'
+  if (status === 'failed') return 'failed'
+  if (status === 'canceled') return 'cancelled'
+  return 'pending'
+}
+
+async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!ORDER_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'You do not have permission to process orders.' }, 403)
+  }
+  const orderId = Number(body.id)
+  const actionType = String(body.action_type ?? '').trim()
+  if (!Number.isFinite(orderId) || !actionType) {
+    return jsonResponse({ ok: false, error: 'Order id and action are required.' }, 422)
+  }
+  const access = await loadAdminOrder(supabaseAdmin, context, orderId)
+  if (access.error || !access.order) return access.error!
+  const order = access.order
+  const actor = { type: 'admin' as const, identifier: context.email || String(context.id) }
+  const now = new Date().toISOString()
+
+  if (actionType === 'mark_paid') {
+    if (order.payment_method_code !== 'pay_in_store') {
+      return jsonResponse({ ok: false, error: 'Online payments must be confirmed by Stripe.' }, 409)
+    }
+    if (order.payment_status === 'paid') {
+      return jsonResponse({ ok: false, error: 'This order is already marked paid.' }, 409)
+    }
+    await finalizePaidOrder(supabaseAdmin, orderId, actor, { method: 'pay_in_store' })
+  } else if (actionType === 'ready_for_pickup') {
+    if (order.fulfillment_method !== 'pickup') {
+      return jsonResponse({ ok: false, error: 'Only pickup orders can be marked ready for pickup.' }, 409)
+    }
+    if (!['paid', 'partially_refunded'].includes(order.payment_status)) {
+      return jsonResponse({ ok: false, error: 'Confirm payment before marking the order ready.' }, 409)
+    }
+    const { error } = await supabaseAdmin
+      .from('orders')
+      .update({ fulfillment_status: 'ready_for_pickup', status: 'confirmed' })
+      .eq('id', orderId)
+    if (error) throw error
+    await ensureOrderDocument(supabaseAdmin, orderId, 'pickup_label')
+    await recordOrderEvent(supabaseAdmin, orderId, {
+      eventKey: 'ready_for_pickup',
+      eventType: 'ready_for_pickup',
+      title: 'Ready for pickup',
+      description: 'The store marked the order ready for collection.',
+      actor,
+    })
+    await notifyOrderEvent(supabaseAdmin, orderId, 'ready_for_pickup')
+  } else if (actionType === 'mark_packed') {
+    if (!['paid', 'partially_refunded'].includes(order.payment_status)) {
+      return jsonResponse({ ok: false, error: 'Confirm payment before packing the order.' }, 409)
+    }
+    const { error } = await supabaseAdmin
+      .from('orders')
+      .update({ fulfillment_status: 'packed', status: 'packed' })
+      .eq('id', orderId)
+    if (error) throw error
+    await ensureOrderDocument(supabaseAdmin, orderId, 'packing_slip')
+    await recordOrderEvent(supabaseAdmin, orderId, {
+      eventKey: 'order_packed',
+      eventType: 'order_packed',
+      title: 'Order packed',
+      description: 'The order was marked packed.',
+      actor,
+    })
+  } else if (actionType === 'create_documents') {
+    if (!['paid', 'partially_refunded'].includes(order.payment_status)) {
+      return jsonResponse({ ok: false, error: 'Confirm payment before generating fulfilment documents.' }, 409)
+    }
+    await ensureOrderDocument(supabaseAdmin, orderId, 'packing_slip')
+    await ensureOrderDocument(
+      supabaseAdmin,
+      orderId,
+      order.fulfillment_method === 'shipping' ? 'shipping_label' : 'pickup_label',
+    )
+    await recordOrderEvent(supabaseAdmin, orderId, {
+      eventKey: `documents_generated:${crypto.randomUUID()}`,
+      eventType: 'documents_generated',
+      title: 'Fulfilment documents generated',
+      description: 'Packing slip and label were prepared.',
+      actor,
+    })
+  } else if (actionType === 'mark_shipped') {
+    if (order.fulfillment_method !== 'shipping') {
+      return jsonResponse({ ok: false, error: 'Only shipping orders can be marked shipped.' }, 409)
+    }
+    if (!['paid', 'partially_refunded'].includes(order.payment_status)) {
+      return jsonResponse({ ok: false, error: 'Confirm payment before shipping the order.' }, 409)
+    }
+    const trackingNumber = normalizeNullableString(body.tracking_number) || order.tracking_number
+    const trackingUrl = normalizeNullableString(body.tracking_url) || order.tracking_url
+    if (!trackingNumber) {
+      return jsonResponse({ ok: false, error: 'Tracking number is required before marking the order shipped.' }, 422)
+    }
+    const { error } = await supabaseAdmin
+      .from('orders')
+      .update({
+        fulfillment_status: 'shipped',
+        status: 'shipped',
+        tracking_number: trackingNumber,
+        tracking_url: trackingUrl,
+      })
+      .eq('id', orderId)
+    if (error) throw error
+    await recordOrderEvent(supabaseAdmin, orderId, {
+      eventKey: 'order_shipped',
+      eventType: 'order_shipped',
+      title: 'Order shipped',
+      description: `Tracking number: ${trackingNumber}`,
+      actor,
+      data: { tracking_number: trackingNumber, tracking_url: trackingUrl },
+    })
+    await notifyOrderEvent(supabaseAdmin, orderId, 'shipped')
+  } else if (actionType === 'cancel') {
+    const outstandingPaidAmount = Number(order.amount_paid || 0) - Number(order.amount_refunded || 0)
+    if (outstandingPaidAmount > 0.005 || ['paid', 'partially_refunded'].includes(order.payment_status)) {
+      return jsonResponse({ ok: false, error: 'This order has a captured payment. Use Refund instead of Cancel.' }, 409)
+    }
+    if (order.stripe_checkout_session_id && order.payment_status === 'pending') {
+      const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
+      if (!stripeSecretKey) return jsonResponse({ ok: false, error: 'Stripe is not configured.' }, 500)
+      const stripe = new Stripe(stripeSecretKey, { apiVersion: '2024-06-20' })
+      const session = await stripe.checkout.sessions.retrieve(order.stripe_checkout_session_id)
+      if (session.status === 'complete') {
+        return jsonResponse({ ok: false, error: 'Stripe reports this checkout as complete. Refresh payment status before cancelling.' }, 409)
+      }
+      if (session.status === 'open') await stripe.checkout.sessions.expire(session.id)
+    }
+    const reason = normalizeNullableString(body.reason) || 'Cancelled by TECHM8.'
+    const { error } = await supabaseAdmin
+      .from('orders')
+      .update({
+        status: 'cancelled',
+        fulfillment_status: 'cancelled',
+        payment_status: order.payment_status === 'pending' ? 'failed' : order.payment_status,
+        cancelled_at: now,
+        cancel_reason: reason,
+      })
+      .eq('id', orderId)
+    if (error) throw error
+    await recordOrderEvent(supabaseAdmin, orderId, {
+      eventKey: `order_cancelled:${crypto.randomUUID()}`,
+      eventType: 'order_cancelled',
+      title: 'Order cancelled',
+      description: reason,
+      actor,
+    })
+    await notifyOrderEvent(supabaseAdmin, orderId, 'cancelled')
+  } else if (actionType === 'refund') {
+    if (!ORDER_REFUND_ROLES.has(context.role)) {
+      return jsonResponse({ ok: false, error: 'Only super admins and store managers can issue refunds.' }, 403)
+    }
+    if (!['paid', 'partially_refunded'].includes(order.payment_status)) {
+      return jsonResponse({ ok: false, error: 'Only paid orders can be refunded.' }, 409)
+    }
+    const remaining = Number((Number(order.total_amount || 0) - Number(order.amount_refunded || 0)).toFixed(2))
+    const requestedAmount = normalizeNumber(body.amount)
+    const amount = requestedAmount === null ? remaining : Number(requestedAmount.toFixed(2))
+    if (amount <= 0 || amount > remaining + 0.005) {
+      return jsonResponse({ ok: false, error: `Refund amount must be between $0.01 and $${remaining.toFixed(2)}.` }, 422)
+    }
+    const reason = normalizeNullableString(body.reason) || 'Customer refund requested.'
+    const manualRefund = order.payment_method_code === 'pay_in_store'
+    const { data: refundRow, error: refundInsertError } = await supabaseAdmin
+      .from('order_refunds')
+      .insert({
+        order_id: orderId,
+        amount,
+        currency: order.currency || 'AUD',
+        reason,
+        status: manualRefund ? 'succeeded' : 'pending',
+        requested_by: actor.identifier,
+        processed_at: manualRefund ? now : null,
+      })
+      .select('*')
+      .single()
+    if (refundInsertError || !refundRow) throw refundInsertError ?? new Error('Refund could not be recorded.')
+
+    if (manualRefund) {
+      await applySucceededRefund(supabaseAdmin, orderId, refundRow, actor)
+    } else {
+      if (!order.stripe_payment_intent_id) {
+        await supabaseAdmin.from('order_refunds').update({ status: 'failed', processed_at: now, provider_response: { error: 'Missing Stripe PaymentIntent.' } }).eq('id', refundRow.id)
+        return jsonResponse({ ok: false, error: 'Stripe PaymentIntent is missing for this order.' }, 409)
+      }
+      const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
+      if (!stripeSecretKey) return jsonResponse({ ok: false, error: 'Stripe is not configured.' }, 500)
+      const stripe = new Stripe(stripeSecretKey, { apiVersion: '2024-06-20' })
+      try {
+        const stripeRefund = await stripe.refunds.create({
+          payment_intent: order.stripe_payment_intent_id,
+          amount: Math.round(amount * 100),
+          reason: 'requested_by_customer',
+          metadata: {
+            order_id: String(orderId),
+            order_code: order.order_code,
+            techm8_refund_id: String(refundRow.id),
+            requested_by: actor.identifier,
+            reason,
+          },
+        }, { idempotencyKey: `techm8-order-${orderId}-refund-${refundRow.id}` })
+        const status = refundStatus(stripeRefund.status)
+        const { data: savedRefund, error: refundUpdateError } = await supabaseAdmin
+          .from('order_refunds')
+          .update({
+            stripe_refund_id: stripeRefund.id,
+            status,
+            processed_at: ['succeeded', 'failed'].includes(status) ? now : null,
+            provider_response: {
+              payment_intent: order.stripe_payment_intent_id,
+              charge: typeof stripeRefund.charge === 'string' ? stripeRefund.charge : stripeRefund.charge?.id ?? null,
+              failure_reason: stripeRefund.failure_reason ?? null,
+            },
+          })
+          .eq('id', refundRow.id)
+          .select('*')
+          .single()
+        if (refundUpdateError) throw refundUpdateError
+        if (status === 'succeeded') await applySucceededRefund(supabaseAdmin, orderId, savedRefund, actor)
+      } catch (refundError) {
+        await supabaseAdmin
+          .from('order_refunds')
+          .update({
+            status: 'failed',
+            processed_at: now,
+            provider_response: { error: refundError instanceof Error ? refundError.message : String(refundError) },
+          })
+          .eq('id', refundRow.id)
+        throw refundError
+      }
+    }
+  } else if (actionType === 'resend_confirmation') {
+    await notifyOrderEvent(supabaseAdmin, orderId, 'order_submitted', { resendToken: crypto.randomUUID() })
+  } else if (actionType === 'resend_invoice') {
+    if (!['paid', 'partially_refunded', 'refunded'].includes(order.payment_status)) {
+      return jsonResponse({ ok: false, error: 'The invoice is available after payment is confirmed.' }, 409)
+    }
+    await notifyOrderEvent(supabaseAdmin, orderId, 'payment_confirmed', { resendToken: crypto.randomUUID() })
+  } else {
+    return jsonResponse({ ok: false, error: 'Unsupported order action.' }, 422)
+  }
+
+  const detail = await getOrderDetailPayload(supabaseAdmin, context, orderId)
+  if (detail.error || !detail.payload) return detail.error!
+  return jsonResponse({ ok: true, ...detail.payload })
 }
 
 async function listRepairs(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, filters: JsonRecord) {
@@ -1813,6 +2167,7 @@ Deno.serve(async (req) => {
         admin: context,
         capabilities: {
           can_edit_orders: ORDER_EDIT_ROLES.has(context.role),
+          can_refund_orders: ORDER_REFUND_ROLES.has(context.role),
           can_edit_repairs: REPAIR_EDIT_ROLES.has(context.role),
           can_edit_products: CATALOG_EDIT_ROLES.has(context.role),
           can_edit_inventory: INVENTORY_EDIT_ROLES.has(context.role),
@@ -1836,8 +2191,16 @@ Deno.serve(async (req) => {
       return jsonResponse({ ok: true, ...result, stores: sharedLists.stores })
     }
 
+    if (action === 'order_get') {
+      return await getOrderDetail(supabaseAdmin, context, body)
+    }
+
     if (action === 'order_update') {
       return await updateOrder(supabaseAdmin, context, body)
+    }
+
+    if (action === 'order_action') {
+      return await runOrderAction(supabaseAdmin, context, body)
     }
 
     if (action === 'repairs_list') {

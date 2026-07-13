@@ -1,4 +1,11 @@
-import { createClient } from 'npm:@supabase/supabase-js@2'
+import { createClient } from 'npm:@supabase/supabase-js@2.49.8'
+import {
+  buildFulfillmentSnapshot,
+  getBusinessProfile,
+  notifyOrderEvent,
+  recordOrderEvent,
+  snapshotStore,
+} from '../_shared/order-commerce.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,15 +19,6 @@ const shippingOptions = new Map([
   ['standard_auspost', { code: 'standard_auspost', label: 'Standard Shipping With Australia Post', deliveryTime: '3-5 business day', rate: 15, freeOver: 399 }],
   ['express_auspost', { code: 'express_auspost', label: 'Express Shipping With Australia Post', deliveryTime: '1-3 business day', rate: 18, freeOver: 599 }],
 ])
-const fallbackStores = new Map([
-  ['park-ridge', { slug: 'park-ridge', name: 'Park Ridge', is_active: true, id: null }],
-  ['fairfield', { slug: 'fairfield', name: 'Fairfield', is_active: true, id: null }],
-  ['toowong', { slug: 'toowong', name: 'Toowong', is_active: true, id: null }],
-  ['north-lakes', { slug: 'north-lakes', name: 'North Lakes', is_active: true, id: null }],
-  ['brassall', { slug: 'brassall', name: 'Brassall', is_active: true, id: null }],
-  ['warehouse-dispatch', { slug: 'warehouse-dispatch', name: 'Warehouse Dispatch', is_active: true, id: null }],
-])
-
 type CartItemInput = {
   product_id?: number | string | null
   slug?: string | null
@@ -48,6 +46,10 @@ function getBearerToken(req: Request) {
   const authorization = req.headers.get('authorization') ?? ''
   if (!authorization.toLowerCase().startsWith('bearer ')) return ''
   return authorization.slice(7).trim()
+}
+
+function validEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
 Deno.serve(async (req) => {
@@ -85,7 +87,7 @@ Deno.serve(async (req) => {
     const metadata = typeof body.metadata === 'object' && body.metadata !== null ? body.metadata : {}
     const items = Array.isArray(body.items) ? (body.items as CartItemInput[]) : []
 
-    if (!customerName || !phone || !email || !storeSlug) {
+    if (!customerName || !phone || !validEmail(email) || !storeSlug) {
       return Response.json({ ok: false, error: 'Please complete the required checkout fields.' }, { status: 422, headers: corsHeaders })
     }
 
@@ -97,12 +99,22 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'Please choose a valid fulfilment method.' }, { status: 422, headers: corsHeaders })
     }
 
+    if (fulfillmentMethod === 'shipping' && paymentMethodCode === 'pay_in_store') {
+      return Response.json({ ok: false, error: 'Pay in store is available for physical store pickup only.' }, { status: 422, headers: corsHeaders })
+    }
+
     if (!items.length) {
       return Response.json({ ok: false, error: 'Your cart is empty.' }, { status: 422, headers: corsHeaders })
     }
 
     if (fulfillmentMethod === 'shipping' && (!addressLine1 || !suburb || !state || !postcode)) {
       return Response.json({ ok: false, error: 'Shipping address is incomplete.' }, { status: 422, headers: corsHeaders })
+    }
+    if (fulfillmentMethod === 'shipping' && countryCode.toUpperCase() !== 'AU') {
+      return Response.json({ ok: false, error: 'Website shipping is currently available within Australia only.' }, { status: 422, headers: corsHeaders })
+    }
+    if (items.some((item) => !Number.isInteger(Number(item.qty)) || Number(item.qty) < 1 || Number(item.qty) > 99)) {
+      return Response.json({ ok: false, error: 'Cart item quantities must be whole numbers between 1 and 99.' }, { status: 422, headers: corsHeaders })
     }
 
     const supabaseAdmin = createClient(
@@ -111,10 +123,13 @@ Deno.serve(async (req) => {
     )
 
     const bearerToken = getBearerToken(req)
-    let authUser: Awaited<ReturnType<typeof supabaseAdmin.auth.getUser>>['data']['user'] = null
-    if (bearerToken) {
-      const { data } = await supabaseAdmin.auth.getUser(bearerToken)
-      authUser = data.user ?? null
+    if (!bearerToken) {
+      return Response.json({ ok: false, error: 'Please sign in before submitting the order.' }, { status: 401, headers: corsHeaders })
+    }
+    const { data: authData, error: authError } = await supabaseAdmin.auth.getUser(bearerToken)
+    const authUser = authData.user ?? null
+    if (authError || !authUser?.id) {
+      return Response.json({ ok: false, error: 'Your sign-in session is no longer valid.' }, { status: 401, headers: corsHeaders })
     }
 
     if (authUser?.id) {
@@ -135,7 +150,7 @@ Deno.serve(async (req) => {
     const [{ data: store, error: storeError }, { data: feeProfile, error: feeProfileError }] = await Promise.all([
       supabaseAdmin
         .from('stores')
-        .select('id, slug, name, is_active')
+        .select('id, slug, name, email, phone, address_line_1, address_line_2, suburb, state, postcode, is_active')
         .eq('slug', storeSlug)
         .maybeSingle(),
       supabaseAdmin
@@ -145,12 +160,16 @@ Deno.serve(async (req) => {
         .maybeSingle(),
     ])
 
-    const resolvedStore = store && !storeError && store.is_active
-      ? store
-      : fallbackStores.get(storeSlug) ?? null
+    if (storeError) {
+      return Response.json({ ok: false, error: 'Store configuration could not be loaded.' }, { status: 500, headers: corsHeaders })
+    }
+    const resolvedStore = store?.is_active ? store : null
 
     if (!resolvedStore || !resolvedStore.is_active) {
       return Response.json({ ok: false, error: 'Please select a valid store.' }, { status: 422, headers: corsHeaders })
+    }
+    if (fulfillmentMethod === 'pickup' && (!resolvedStore.email || !resolvedStore.address_line_1 || !resolvedStore.suburb || !resolvedStore.state || !resolvedStore.postcode)) {
+      return Response.json({ ok: false, error: 'The selected store contact or pickup address is incomplete.' }, { status: 500, headers: corsHeaders })
     }
 
     const resolvedFeeProfile = feeProfileError || !feeProfile || !feeProfile.is_enabled
@@ -210,7 +229,7 @@ Deno.serve(async (req) => {
     const lineItems = items.map((item) => {
       const slug = String(item.slug ?? '').trim()
       const product = productsBySlug.get(slug)!
-      const quantity = Math.max(1, Number(item.qty) || 1)
+      const quantity = Number(item.qty)
       const unitPrice = Number(product.retail_price) || 0
       const compareAtPrice = Number(product.compare_at_price) || null
       const lineTotal = decimal(unitPrice * quantity)
@@ -267,8 +286,23 @@ Deno.serve(async (req) => {
     paymentFeeAmount = decimal(paymentFeeAmount)
     const totalAmount = decimal(subtotalAmount - discountAmount + paymentFeeAmount + shippingFeeAmount)
     const orderCode = buildOrderCode()
+    const business = getBusinessProfile()
+    const gstAmount = business.gstRegistered && business.abn ? decimal(totalAmount / 11) : 0
+    let issuerStore = resolvedStore
+    if (fulfillmentMethod === 'shipping') {
+      const { data: parkRidgeStore, error: parkRidgeError } = await supabaseAdmin
+        .from('stores')
+        .select('id, slug, name, email, phone, address_line_1, address_line_2, suburb, state, postcode, is_active')
+        .eq('slug', 'park-ridge')
+        .eq('is_active', true)
+        .maybeSingle()
+      if (parkRidgeError || !parkRidgeStore?.email || !parkRidgeStore.address_line_1 || !parkRidgeStore.suburb || !parkRidgeStore.state || !parkRidgeStore.postcode) {
+        return Response.json({ ok: false, error: 'Park Ridge dispatch contact or address is incomplete.' }, { status: 500, headers: corsHeaders })
+      }
+      issuerStore = parkRidgeStore
+    }
 
-    const paymentStatus = resolvedFeeProfile.code === 'pay_in_store' ? 'not_required' : 'pending'
+    const paymentStatus = resolvedFeeProfile.code === 'pay_in_store' ? 'unpaid' : 'pending'
 
     const { data: insertedOrder, error: orderError } = await supabaseAdmin
       .from('orders')
@@ -277,7 +311,7 @@ Deno.serve(async (req) => {
         customer_name: customerName,
         phone,
         email,
-        auth_user_id: authUser?.id ?? null,
+        auth_user_id: authUser.id,
         preferred_contact_method: preferredContactMethod,
         store_id: resolvedStore.id,
         store_slug: resolvedStore.slug,
@@ -307,6 +341,24 @@ Deno.serve(async (req) => {
         payment_status: paymentStatus,
         status: 'submitted',
         fulfillment_status: 'new',
+        issuer_snapshot: snapshotStore(issuerStore),
+        fulfillment_snapshot: buildFulfillmentSnapshot({
+          fulfillmentMethod,
+          selectedStore: resolvedStore,
+          recipientName,
+          companyName,
+          phone: shippingPhone,
+          email: shippingEmail,
+          addressLine1,
+          addressLine2,
+          suburb,
+          state,
+          postcode,
+          countryCode,
+        }),
+        amount_paid: 0,
+        amount_refunded: 0,
+        gst_amount: gstAmount,
         source,
         metadata,
       })
@@ -331,6 +383,25 @@ Deno.serve(async (req) => {
       console.error(orderItemsError)
       await supabaseAdmin.from('orders').delete().eq('id', insertedOrder.id)
       return Response.json({ ok: false, error: 'Order items could not be saved.' }, { status: 500, headers: corsHeaders })
+    }
+
+    try {
+      await recordOrderEvent(supabaseAdmin, insertedOrder.id, {
+        eventKey: 'order_submitted',
+        eventType: 'order_submitted',
+        title: 'Order submitted',
+        description: resolvedFeeProfile.code === 'pay_in_store'
+          ? 'The order was submitted with payment due at pickup.'
+          : 'The order was submitted for processing.',
+        actor: { type: 'customer', identifier: authUser.id },
+        data: {
+          payment_method_code: resolvedFeeProfile.code,
+          fulfillment_method: fulfillmentMethod,
+        },
+      })
+      await notifyOrderEvent(supabaseAdmin, insertedOrder.id, 'order_submitted')
+    } catch (notificationError) {
+      console.error('Order was saved but confirmation processing failed.', notificationError)
     }
 
     return Response.json(
