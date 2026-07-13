@@ -564,6 +564,7 @@ body.admin-login-body {
 
 .admin-table tbody tr[role="button"] {
   cursor: pointer;
+}
 
 .admin-table tbody tr[role="button"]:focus-visible {
   outline: 3px solid rgba(0, 170, 155, 0.45);
