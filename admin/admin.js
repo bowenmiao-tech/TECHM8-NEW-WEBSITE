@@ -392,26 +392,47 @@ function ensureAdminModalRoot() {
   return modalRoot;
 }
 
+let activeAdminModalCloseHandler = null;
+let adminModalPreviouslyFocused = null;
+let adminModalKeydownHandler = null;
+
 function closeAdminModal() {
   const modalRoot = document.querySelector("[data-admin-modal-root]");
   if (!(modalRoot instanceof HTMLElement)) return;
+
+  const closeHandler = activeAdminModalCloseHandler;
+  const previouslyFocused = adminModalPreviouslyFocused;
+  activeAdminModalCloseHandler = null;
+  adminModalPreviouslyFocused = null;
+  if (adminModalKeydownHandler) {
+    document.removeEventListener("keydown", adminModalKeydownHandler);
+    adminModalKeydownHandler = null;
+  }
   modalRoot.hidden = true;
   modalRoot.innerHTML = "";
   document.body.classList.remove("admin-modal-open");
+
+  closeHandler?.();
+  if (previouslyFocused instanceof HTMLElement && previouslyFocused.isConnected) {
+    previouslyFocused.focus();
+  }
 }
 
-function openAdminModal({ title, subtitle = "", content = "" }) {
+function openAdminModal({ title, subtitle = "", content = "", className = "", onClose = null }) {
   const modalRoot = ensureAdminModalRoot();
+  const activeElement = document.activeElement;
+  adminModalPreviouslyFocused = activeElement instanceof HTMLElement ? activeElement : null;
+  activeAdminModalCloseHandler = typeof onClose === "function" ? onClose : null;
   modalRoot.hidden = false;
   modalRoot.innerHTML = `
     <div class="admin-modal-backdrop" data-admin-modal-close></div>
-    <div class="admin-modal">
+    <div class="admin-modal ${escapeHtml(className)}" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title" tabindex="-1">
       <header class="admin-modal__header">
         <div>
-          <h2>${escapeHtml(title)}</h2>
+          <h2 id="admin-modal-title">${escapeHtml(title)}</h2>
           ${subtitle ? `<p>${escapeHtml(subtitle)}</p>` : ""}
         </div>
-        <button class="admin-modal__close" type="button" data-admin-modal-close aria-label="Close">×</button>
+        <button class="admin-modal__close" type="button" data-admin-modal-close aria-label="Close">&times;</button>
       </header>
       <div class="admin-modal__body">${content}</div>
     </div>
@@ -421,6 +442,12 @@ function openAdminModal({ title, subtitle = "", content = "" }) {
   modalRoot.querySelectorAll("[data-admin-modal-close]").forEach((element) => {
     element.addEventListener("click", () => closeAdminModal());
   });
+
+  adminModalKeydownHandler = (event) => {
+    if (event.key === "Escape") closeAdminModal();
+  };
+  document.addEventListener("keydown", adminModalKeydownHandler);
+  window.requestAnimationFrame(() => modalRoot.querySelector(".admin-modal__close")?.focus());
 
   return modalRoot;
 }
@@ -1394,7 +1421,7 @@ function getViewTemplate(view) {
       `;
     case "orders":
       return `
-        <section class="admin-layout">
+        <section>
           <article class="admin-panel">
             <div class="admin-panel__heading">
               <div>
@@ -1444,15 +1471,6 @@ function getViewTemplate(view) {
             <div class="admin-table-wrap" data-orders-table></div>
             <div data-orders-pagination></div>
           </article>
-          <aside class="admin-panel">
-            <div class="admin-panel__heading">
-              <div>
-                <h2>Order detail</h2>
-                <p>Select an order to open its full operational record.</p>
-              </div>
-            </div>
-            <div data-orders-editor class="admin-note">No order selected yet.</div>
-          </aside>
         </section>
       `;
     case "repairs":
@@ -1913,13 +1931,22 @@ function collectProductGallery(editorTarget) {
 }
 
 function buildRowClickHandler(container, selector, callback) {
-  container.addEventListener("click", (event) => {
+  const activateRow = (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
     const row = target.closest(selector);
     if (!(row instanceof HTMLElement)) return;
     callback(row);
-  });
+  };
+
+  container.onclick = activateRow;
+  container.onkeydown = (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const target = event.target;
+    if (!(target instanceof HTMLElement) || !target.matches(selector)) return;
+    event.preventDefault();
+    activateRow(event);
+  };
 }
 
 function renderEmptyState(target, message) {
@@ -2495,10 +2522,10 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
   root.innerHTML = getViewTemplate("orders");
   const filterForm = root.querySelector("[data-orders-filters]");
   const tableTarget = root.querySelector("[data-orders-table]");
-  const editorTarget = root.querySelector("[data-orders-editor]");
   const paginationTarget = root.querySelector("[data-orders-pagination]");
   const storeFilter = root.querySelector("[data-orders-store-filter]");
   const refreshButton = root.querySelector("[data-orders-refresh]");
+  let editorTarget = null;
 
   fillStoreOptions(storeFilter, bootstrap.stores, bootstrap.capabilities.can_view_all_stores);
   if (!bootstrap.capabilities.can_view_all_stores && storeFilter instanceof HTMLSelectElement && bootstrap.admin.store_slug) {
@@ -2506,13 +2533,37 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
     storeFilter.disabled = true;
   }
 
-  const requestedOrderId = Number(new URLSearchParams(window.location.search).get("order_id"));
+  const requestedOrderParam = new URLSearchParams(window.location.search).get("order_id");
+  const requestedOrderId = Number(requestedOrderParam);
   const state = {
     page: 1,
-    selectedId: Number.isFinite(requestedOrderId) ? requestedOrderId : null,
+    selectedId: requestedOrderParam && Number.isFinite(requestedOrderId) && requestedOrderId > 0 ? requestedOrderId : null,
     rows: [],
     meta: null,
     detail: null,
+  };
+
+  const openOrderModal = () => {
+    const modalRoot = openAdminModal({
+      title: "Order detail",
+      subtitle: "Review and manage payment, fulfilment, documents and email delivery.",
+      className: "admin-modal--order",
+      content: `<div data-orders-editor><div class="admin-loading">Loading full order detail...</div></div>`,
+      onClose: () => {
+        editorTarget = null;
+        state.selectedId = null;
+        state.detail = null;
+        tableTarget.querySelectorAll("[data-order-row]").forEach((row) => {
+          row.classList.remove("is-selected");
+          row.setAttribute("aria-pressed", "false");
+        });
+        const url = new URL(window.location.href);
+        url.searchParams.delete("order_id");
+        window.history.replaceState({}, "", url);
+      },
+    });
+    editorTarget = modalRoot.querySelector("[data-orders-editor]");
+    return editorTarget;
   };
 
   const isPaid = (order) => ["paid", "partially_refunded", "refunded"].includes(String(order?.payment_status || ""));
@@ -2591,6 +2642,7 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
   };
 
   const renderDetail = () => {
+    if (!(editorTarget instanceof HTMLElement) || !editorTarget.isConnected) return;
     if (!state.detail?.order) {
       editorTarget.innerHTML = `<p class="admin-note">Select an order to open the full order detail.</p>`;
       return;
@@ -2781,15 +2833,25 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
   };
 
   const loadDetail = async (orderId) => {
-    if (!Number.isFinite(Number(orderId))) return;
-    editorTarget.innerHTML = `<div class="admin-loading">Loading full order detail...</div>`;
-    const result = await callAdminApi("order_get", { id: Number(orderId) }, session);
-    state.selectedId = Number(orderId);
-    state.detail = result;
+    const normalizedOrderId = Number(orderId);
+    if (!Number.isFinite(normalizedOrderId) || normalizedOrderId <= 0) return;
+    state.selectedId = normalizedOrderId;
+    const target = editorTarget instanceof HTMLElement && editorTarget.isConnected ? editorTarget : openOrderModal();
+    target.innerHTML = `<div class="admin-loading">Loading full order detail...</div>`;
     const url = new URL(window.location.href);
-    url.searchParams.set("order_id", String(orderId));
+    url.searchParams.set("order_id", String(normalizedOrderId));
     window.history.replaceState({}, "", url);
-    renderDetail();
+    try {
+      const result = await callAdminApi("order_get", { id: normalizedOrderId }, session);
+      if (!target.isConnected || state.selectedId !== normalizedOrderId) return;
+      state.detail = result;
+      renderDetail();
+    } catch (error) {
+      if (target.isConnected) {
+        target.innerHTML = `<div class="admin-empty">${escapeHtml(error instanceof Error ? error.message : "Order detail could not be loaded.")}</div>`;
+      }
+      throw error;
+    }
   };
 
   const renderTable = () => {
@@ -2803,7 +2865,7 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
         <thead><tr><th>Order</th><th>Store / fulfilment</th><th>Status</th><th>Payment</th><th>Total</th><th>Created</th></tr></thead>
         <tbody>
           ${state.rows.map((row) => `
-            <tr data-order-row="${row.id}" class="${state.selectedId === row.id ? "is-selected" : ""}">
+            <tr data-order-row="${row.id}" class="${state.selectedId === row.id ? "is-selected" : ""}" tabindex="0" role="button" aria-pressed="${state.selectedId === row.id ? "true" : "false"}" aria-label="Open order ${escapeHtml(row.order_code)}">
               <td><div class="admin-cell-title"><strong>${escapeHtml(row.order_code)}</strong><span>${escapeHtml(row.customer_name)} · ${escapeHtml(row.email)}</span></div></td>
               <td><strong>${escapeHtml(makeStoreLabel(row.store_slug, bootstrap.stores))}</strong><br><span>${escapeHtml(row.fulfillment_method)}</span></td>
               <td>${renderBadge(row.status)} ${renderBadge(row.fulfillment_status)}</td>
@@ -2819,7 +2881,11 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
     buildRowClickHandler(tableTarget, "[data-order-row]", (rowElement) => {
       const orderId = Number(rowElement.getAttribute("data-order-row"));
       state.selectedId = orderId;
-      renderTable();
+      tableTarget.querySelectorAll("[data-order-row]").forEach((row) => {
+        const isSelected = row === rowElement;
+        row.classList.toggle("is-selected", isSelected);
+        row.setAttribute("aria-pressed", String(isSelected));
+      });
       loadDetail(orderId).catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Order detail could not be loaded.", "error"));
     });
     paginationTarget.querySelector("[data-page-prev]")?.addEventListener("click", async () => {
@@ -2852,8 +2918,6 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
     renderTable();
     if (!preserveDetail && state.selectedId) {
       await loadDetail(state.selectedId);
-    } else if (!state.selectedId && state.rows.length) {
-      await loadDetail(state.rows[0].id);
     }
   };
 

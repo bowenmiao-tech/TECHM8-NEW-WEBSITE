@@ -562,6 +562,14 @@ body.admin-login-body {
   background: rgba(5, 206, 172, 0.1);
 }
 
+.admin-table tbody tr[role="button"] {
+  cursor: pointer;
+
+.admin-table tbody tr[role="button"]:focus-visible {
+  outline: 3px solid rgba(0, 170, 155, 0.45);
+  outline-offset: -3px;
+}
+
 .admin-cell-title {
   display: grid;
   gap: 4px;
@@ -1223,6 +1231,10 @@ body.admin-login-body {
   box-shadow: 0 28px 90px rgba(8, 42, 51, 0.24);
 }
 
+.admin-modal--order {
+  width: min(1280px, calc(100vw - 40px));
+}
+
 .admin-modal__header {
   position: sticky;
   top: 0;
@@ -1557,6 +1569,20 @@ body.admin-login-body {
 }
 
 @media (max-width: 560px) {
+  .admin-modal {
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .admin-modal__header,
+  .admin-modal__body {
+    padding: 16px;
+  }
+
   .admin-login__card,
   .admin-panel,
   .admin-card {
