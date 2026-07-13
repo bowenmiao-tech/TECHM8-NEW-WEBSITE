@@ -77,3 +77,44 @@ Returned product fields:
 - `barcode`: product UPC/barcode
 - `thumbnail_url`: small product thumbnail URL
 - `image_url`: original product image URL
+
+Order operations
+
+The order workflow is implemented by these Edge Functions:
+
+- `submit-order`: creates pay-in-store orders, generates the English order confirmation, and emails the customer, selected store, and central TECHM8 contact.
+- `create-checkout-session`: creates Stripe Checkout orders and captures the customer billing/contact details.
+- `stripe-webhook`: confirms Stripe payments and refunds, generates invoices or credit notes, and sends the three-party emails.
+- `order-document`: returns short-lived signed URLs for customer-owned confirmations, invoices, and credit notes.
+- `admin-panel`: provides order details, document generation, fulfilment actions, cancellation, email retry, and authorised full/partial refunds.
+
+Apply `supabase/migrations/20260713100124_order_operations_notifications_documents_refunds.sql` before deploying these functions. The migration creates private order documents, notification/refund/event ledgers, and the private `order-documents` Storage bucket.
+
+Required function secrets:
+
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `SITE_URL`
+- `RESEND_API_KEY_ORDER` (falls back to the existing booking/general Resend keys)
+- `ORDER_FROM_EMAIL` (must be a Resend-verified sender; falls back to the existing booking/general sender)
+- `TECHM8_CENTRAL_ORDER_EMAIL` (defaults to `techm8contact@gmail.com`)
+- `TECHM8_BUSINESS_NAME` (defaults to `YQM PTY LTD`)
+- `TECHM8_TRADING_NAME` (defaults to `TECHM8`)
+- `TECHM8_ABN`
+- `TECHM8_GST_REGISTERED=true` only when the business is GST registered
+
+The Stripe webhook must subscribe to:
+
+- `checkout.session.completed`
+- `checkout.session.async_payment_succeeded`
+- `checkout.session.async_payment_failed`
+- `checkout.session.expired`
+- `invoice.paid` and `invoice.payment_succeeded` for legacy Stripe-invoice orders
+- `refund.created`
+- `refund.updated`
+- `refund.failed`
+- `charge.refunded`
+
+The generated A6 shipping PDF is an internal address/packing label. It is deliberately marked as requiring postage or a carrier label; it is not a paid Australia Post/MyPost label. A carrier API account is required before postage purchase and lodgement can be automated.

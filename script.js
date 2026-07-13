@@ -2221,7 +2221,7 @@ async function prefillCustomerContactForm(form, options = {}) {
 }
 
 const CUSTOMER_ORDER_SELECT =
-  "id, order_code, customer_name, email, phone, store_slug, fulfillment_method, payment_method_code, payment_method_label, payment_status, status, fulfillment_status, subtotal_amount, discount_amount, payment_fee_amount, shipping_fee_amount, total_amount, stripe_invoice_id, stripe_invoice_number, stripe_invoice_url, stripe_invoice_pdf_url, created_at";
+  "id, order_code, customer_name, email, phone, store_slug, fulfillment_method, payment_method_code, payment_method_label, payment_status, status, fulfillment_status, subtotal_amount, discount_amount, payment_fee_amount, shipping_fee_amount, total_amount, amount_paid, amount_refunded, gst_amount, confirmation_number, invoice_number, stripe_invoice_id, stripe_invoice_number, stripe_invoice_url, stripe_invoice_pdf_url, created_at";
 
 function getSafeStripeInvoiceUrl(value) {
   try {
@@ -2243,9 +2243,37 @@ function buildCustomerInvoiceLinks(
   order,
   { primaryClass = "button button--primary", secondaryClass = "button button--ghost" } = {},
 ) {
+  const orderCode = String(order?.order_code || "").trim();
+  const paymentMethodCode = String(order?.payment_method_code || "").trim();
+  const paymentStatus = String(order?.payment_status || "").trim();
+  const canGenerateTechm8Invoice = Boolean(orderCode) && (
+    paymentMethodCode === "pay_in_store" ||
+    ["paid", "partially_refunded", "refunded"].includes(paymentStatus)
+  );
   const invoiceUrl = getSafeStripeInvoiceUrl(order?.stripe_invoice_url);
   const invoicePdfUrl = getSafeStripeInvoiceUrl(order?.stripe_invoice_pdf_url);
   const links = [];
+
+  // Historical paid orders only have Stripe invoice fields. Always route eligible
+  // orders through order-document so the first click creates the current TECHM8 PDF.
+  if (canGenerateTechm8Invoice) {
+    links.push(
+      `<button class="${escapeHtml(primaryClass)}" type="button" data-customer-order-document="invoice" data-order-code="${escapeHtml(orderCode)}">View invoice</button>`,
+    );
+    links.push(
+      `<button class="${escapeHtml(secondaryClass)}" type="button" data-customer-order-document="invoice" data-order-code="${escapeHtml(orderCode)}">Download invoice PDF</button>`,
+    );
+  }
+
+  if (orderCode) {
+    links.push(
+      `<button class="${escapeHtml(secondaryClass)}" type="button" data-customer-order-document="order_confirmation" data-order-code="${escapeHtml(orderCode)}">View order confirmation</button>`,
+    );
+  }
+
+  if (links.length) {
+    return links.join("");
+  }
 
   if (invoiceUrl) {
     links.push(
@@ -2259,6 +2287,65 @@ function buildCustomerInvoiceLinks(
   }
 
   return links.join("");
+}
+
+function getOrderDocumentEndpoint() {
+  const supabaseUrl = String(window.TECHM8_CONFIG?.supabaseUrl || "").replace(/\/+$/, "");
+  return supabaseUrl ? `${supabaseUrl}/functions/v1/order-document` : "";
+}
+
+function initCustomerOrderDocumentDownloads() {
+  document.addEventListener("click", async (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const button = target.closest("[data-customer-order-document]");
+    if (!(button instanceof HTMLButtonElement)) return;
+    event.preventDefault();
+
+    const endpoint = getOrderDocumentEndpoint();
+    const orderCode = String(button.dataset.orderCode || "").trim();
+    const documentType = String(button.dataset.customerOrderDocument || "").trim();
+    if (!endpoint || !orderCode || !documentType) return;
+    const documentWindow = window.open("about:blank", "_blank");
+    if (documentWindow) documentWindow.opener = null;
+
+    const originalText = button.textContent;
+    button.disabled = true;
+    button.textContent = "Preparing PDF...";
+    try {
+      const authState = await getCurrentAuthState();
+      const accessToken = authState?.session?.access_token;
+      const anonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
+      if (!accessToken) throw new Error("Please sign in again to access this document.");
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: anonKey,
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          order_code: orderCode,
+          document_type: documentType,
+        }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.signed_url) {
+        throw new Error(result.error || "The document could not be prepared.");
+      }
+      if (documentWindow) {
+        documentWindow.location.replace(result.signed_url);
+      } else {
+        window.location.assign(result.signed_url);
+      }
+    } catch (error) {
+      documentWindow?.close();
+      window.alert(error instanceof Error ? error.message : "The document could not be opened.");
+    } finally {
+      button.disabled = false;
+      button.textContent = originalText;
+    }
+  });
 }
 
 async function loadCustomerOrders(supabase, user, limit = 50) {
@@ -7696,8 +7783,13 @@ function initCheckoutPage() {
           session: signUpData?.session || null,
           user: signUpData?.user || null,
         };
+        if (!activeAuthState.session?.access_token) {
+          throw new Error(
+            "Please confirm your email, then sign in to continue checkout.",
+          );
+        }
         authAccessToken =
-          activeAuthState?.session?.access_token || supabaseAnonKey;
+          activeAuthState.session.access_token;
         payload.auth_user_id = activeAuthState?.user?.id || null;
       }
 
@@ -8016,13 +8108,20 @@ function initCheckoutPage() {
 
 function buildCheckoutInvoiceMarkup(order) {
   const invoiceLinks = buildCustomerInvoiceLinks(order);
-  const invoiceNumber = String(order?.stripe_invoice_number || "").trim();
+  const invoiceNumber = String(order?.invoice_number || order?.stripe_invoice_number || "").trim();
+  const confirmationNumber = String(order?.confirmation_number || "").trim();
   const paymentMethodCode = String(order?.payment_method_code || "").trim();
 
   if (invoiceLinks) {
     return `
       <p class="storefront-success__invoice-note">
-        ${invoiceNumber ? `Invoice ${escapeHtml(invoiceNumber)} is ready.` : "Your Stripe invoice is ready."}
+        ${paymentMethodCode === "pay_in_store"
+          ? invoiceNumber
+            ? `Order confirmation ${escapeHtml(confirmationNumber || order.order_code || "")} and invoice ${escapeHtml(invoiceNumber)} are ready. Payment is due at pickup.`
+            : `Order confirmation ${escapeHtml(confirmationNumber || order.order_code || "")} is ready. Payment is due at pickup.`
+          : invoiceNumber
+            ? `Invoice ${escapeHtml(invoiceNumber)} is ready.`
+            : "Your invoice is ready."}
       </p>
       <div class="storefront-success__actions">${invoiceLinks}</div>
     `;
@@ -8031,7 +8130,7 @@ function buildCheckoutInvoiceMarkup(order) {
   if (paymentMethodCode && paymentMethodCode !== "pay_in_store") {
     return `
       <p class="storefront-success__invoice-note">
-        Your paid invoice is being generated. Stripe will also send it to your checkout email.
+        Your paid invoice is being generated and will be emailed to your checkout address.
       </p>
       <div class="storefront-success__actions">
         <a class="button button--ghost" href="my-orders.html">Check My Orders</a>
@@ -8077,6 +8176,7 @@ async function refreshCheckoutInvoiceStatus(root, orderCode, storedPayload) {
         }
 
         if (
+          order.invoice_number ||
           getSafeStripeInvoiceUrl(order.stripe_invoice_url) ||
           getSafeStripeInvoiceUrl(order.stripe_invoice_pdf_url)
         ) {
@@ -10683,6 +10783,7 @@ async function initMyRepairsPage() {
 
 function initPage() {
   initCookieConsentBanner();
+  initCustomerOrderDocumentDownloads();
   ensureAccountNavLink();
   ensureGlobalCartUi();
   initProductNavigationCache();

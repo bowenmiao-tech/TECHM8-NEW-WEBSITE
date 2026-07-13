@@ -1399,7 +1399,7 @@ function getViewTemplate(view) {
             <div class="admin-panel__heading">
               <div>
                 <h2>Orders</h2>
-                <p>Review and update store pickup and warehouse dispatch orders.</p>
+                <p>Process payment, fulfilment, documents, email delivery, cancellation and refunds.</p>
               </div>
               <div class="admin-button-row">
                 <button class="button button--ghost" type="button" data-orders-refresh>Refresh</button>
@@ -1433,6 +1433,7 @@ function getViewTemplate(view) {
                   <option value="unpaid">Unpaid</option>
                   <option value="pending">Pending</option>
                   <option value="paid">Paid</option>
+                  <option value="partially_refunded">Partially refunded</option>
                   <option value="failed">Failed</option>
                   <option value="refunded">Refunded</option>
                   <option value="not_required">Not required</option>
@@ -1447,7 +1448,7 @@ function getViewTemplate(view) {
             <div class="admin-panel__heading">
               <div>
                 <h2>Order detail</h2>
-                <p>Select an order to edit status and notes.</p>
+                <p>Select an order to open its full operational record.</p>
               </div>
             </div>
             <div data-orders-editor class="admin-note">No order selected yet.</div>
@@ -2026,6 +2027,10 @@ function renderDashboardPageEnhanced(root, bootstrap, session, alertTarget) {
   };
 
   const openOrderQuickView = (order, reload) => {
+    const orderUrl = new URL("orders.html", window.location.href);
+    orderUrl.searchParams.set("order_id", String(order.id));
+    window.location.assign(orderUrl.toString());
+    return;
     const store = state.stores.find((item) => item.slug === order.store_slug) || null;
     const addressText = order.fulfillment_method === "shipping"
       ? formatAddress([
@@ -2289,7 +2294,7 @@ function renderDashboardPageEnhanced(root, bootstrap, session, alertTarget) {
   });
 }
 
-function renderOrdersPage(root, bootstrap, session, alertTarget) {
+function renderOrdersPageLegacy(root, bootstrap, session, alertTarget) {
   root.innerHTML = getViewTemplate("orders");
   const filterForm = root.querySelector("[data-orders-filters]");
   const tableTarget = root.querySelector("[data-orders-table]");
@@ -2484,6 +2489,381 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
   });
 
   load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Orders could not be loaded.", "error"));
+}
+
+function renderOrdersPage(root, bootstrap, session, alertTarget) {
+  root.innerHTML = getViewTemplate("orders");
+  const filterForm = root.querySelector("[data-orders-filters]");
+  const tableTarget = root.querySelector("[data-orders-table]");
+  const editorTarget = root.querySelector("[data-orders-editor]");
+  const paginationTarget = root.querySelector("[data-orders-pagination]");
+  const storeFilter = root.querySelector("[data-orders-store-filter]");
+  const refreshButton = root.querySelector("[data-orders-refresh]");
+
+  fillStoreOptions(storeFilter, bootstrap.stores, bootstrap.capabilities.can_view_all_stores);
+  if (!bootstrap.capabilities.can_view_all_stores && storeFilter instanceof HTMLSelectElement && bootstrap.admin.store_slug) {
+    storeFilter.value = bootstrap.admin.store_slug;
+    storeFilter.disabled = true;
+  }
+
+  const requestedOrderId = Number(new URLSearchParams(window.location.search).get("order_id"));
+  const state = {
+    page: 1,
+    selectedId: Number.isFinite(requestedOrderId) ? requestedOrderId : null,
+    rows: [],
+    meta: null,
+    detail: null,
+  };
+
+  const isPaid = (order) => ["paid", "partially_refunded", "refunded"].includes(String(order?.payment_status || ""));
+  const isActive = (order) => String(order?.status || "") !== "cancelled";
+  const getDocument = (type) => (state.detail?.documents || []).find((document) => document.document_type === type && document.status === "ready");
+
+  const addressFromSnapshot = (snapshot = {}) => formatAddress([
+    snapshot.recipient_name || snapshot.name,
+    snapshot.company_name,
+    snapshot.address_line_1,
+    snapshot.address_line_2,
+    snapshot.suburb,
+    snapshot.state,
+    snapshot.postcode,
+    snapshot.country_code || "AU",
+  ]);
+
+  const renderDocuments = () => {
+    const documents = state.detail?.documents || [];
+    if (!documents.length) return `<div class="admin-empty">No documents have been generated yet.</div>`;
+    return `
+      <div class="admin-document-grid">
+        ${documents.map((document) => `
+          <article class="admin-document-card">
+            <div>
+              <span>${escapeHtml(String(document.document_type || "").replaceAll("_", " "))}</span>
+              <strong>${escapeHtml(document.document_number || document.title || "Document")}</strong>
+              <small>${escapeHtml(document.status)} · ${formatDateTime(document.issued_at || document.created_at)}</small>
+            </div>
+            ${document.signed_url ? `<a class="button button--ghost" href="${escapeHtml(document.signed_url)}" target="_blank" rel="noopener">Open PDF</a>` : `<span>${renderBadge(document.status)}</span>`}
+          </article>
+        `).join("")}
+      </div>
+    `;
+  };
+
+  const renderTimeline = () => {
+    const events = state.detail?.events || [];
+    if (!events.length) return `<div class="admin-empty">No activity has been recorded yet.</div>`;
+    return `
+      <div class="admin-order-timeline">
+        ${events.map((event) => `
+          <article class="admin-order-timeline__item">
+            <span class="admin-order-timeline__dot"></span>
+            <div>
+              <strong>${escapeHtml(event.title || event.event_type)}</strong>
+              ${event.description ? `<p>${escapeHtml(event.description)}</p>` : ""}
+              <small>${formatDateTime(event.created_at)} · ${escapeHtml(event.actor_identifier || event.actor_type || "system")}</small>
+            </div>
+          </article>
+        `).join("")}
+      </div>
+    `;
+  };
+
+  const renderNotifications = () => {
+    const notifications = state.detail?.notifications || [];
+    if (!notifications.length) return `<div class="admin-empty">No order emails have been attempted yet.</div>`;
+    return `
+      <div class="admin-table-wrap">
+        <table class="admin-table admin-table--compact">
+          <thead><tr><th>Recipient</th><th>Event</th><th>Status</th><th>Sent</th></tr></thead>
+          <tbody>
+            ${notifications.map((notification) => `
+              <tr>
+                <td><strong>${escapeHtml(notification.recipient_role)}</strong><br><span>${escapeHtml(notification.recipient_email)}</span></td>
+                <td>${escapeHtml(notification.event_key)}</td>
+                <td>${renderBadge(notification.status)}${notification.last_error ? `<br><small>${escapeHtml(notification.last_error)}</small>` : ""}</td>
+                <td>${notification.sent_at ? formatDateTime(notification.sent_at) : "—"}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  };
+
+  const renderDetail = () => {
+    if (!state.detail?.order) {
+      editorTarget.innerHTML = `<p class="admin-note">Select an order to open the full order detail.</p>`;
+      return;
+    }
+    const detail = state.detail;
+    const order = detail.order;
+    const store = detail.store || {};
+    const fulfilmentAddress = addressFromSnapshot(order.fulfillment_snapshot || (order.fulfillment_method === "pickup" ? store : order));
+    const issuerAddress = addressFromSnapshot(order.issuer_snapshot || store);
+    const billingAddress = addressFromSnapshot(order.billing_snapshot || {});
+    const remainingRefundable = Math.max(0, Number(order.total_amount || 0) - Number(order.amount_refunded || 0));
+    const canRefund = detail.capabilities?.can_refund && ["paid", "partially_refunded"].includes(order.payment_status) && remainingRefundable > 0.005;
+    const confirmation = getDocument("order_confirmation");
+    const invoice = getDocument("invoice");
+    const label = getDocument(order.fulfillment_method === "shipping" ? "shipping_label" : "pickup_label");
+    const packingSlip = getDocument("packing_slip");
+
+    editorTarget.innerHTML = `
+      <div class="admin-order-detail">
+        <header class="admin-order-detail__header">
+          <div>
+            <p class="admin-card__label">Order</p>
+            <h2>${escapeHtml(order.order_code)}</h2>
+            <p>${formatDateTime(order.created_at)} · ${escapeHtml(makeStoreLabel(order.store_slug, bootstrap.stores))}</p>
+          </div>
+          <div class="admin-order-detail__badges">${renderBadge(order.payment_status)} ${renderBadge(order.fulfillment_status)} ${renderBadge(order.status)}</div>
+        </header>
+
+        <div class="admin-order-actions">
+          ${order.payment_method_code === "pay_in_store" && !isPaid(order) && isActive(order) ? `<button class="button button--primary" type="button" data-order-action="mark_paid">Mark as paid</button>` : ""}
+          ${order.fulfillment_method === "pickup" && isPaid(order) && !["ready_for_pickup", "completed", "cancelled"].includes(order.fulfillment_status) ? `<button class="button button--primary" type="button" data-order-action="ready_for_pickup">Ready for pickup</button>` : ""}
+          ${isPaid(order) && isActive(order) ? `<button class="button button--ghost" type="button" data-order-action="create_documents">Generate documents</button>` : ""}
+          ${isPaid(order) && isActive(order) && !["packed", "shipped", "completed"].includes(order.fulfillment_status) ? `<button class="button button--ghost" type="button" data-order-action="mark_packed">Mark packed</button>` : ""}
+          ${order.fulfillment_method === "shipping" && isPaid(order) && isActive(order) && order.fulfillment_status !== "shipped" ? `<button class="button button--primary" type="button" data-order-action="mark_shipped">Mark shipped</button>` : ""}
+          ${!isPaid(order) && isActive(order) ? `<button class="button button--danger" type="button" data-order-action="cancel">Cancel order</button>` : ""}
+          ${canRefund ? `<button class="button button--danger" type="button" data-order-action="refund" data-refund-remaining="${remainingRefundable.toFixed(2)}">Refund</button>` : ""}
+          <button class="button button--ghost" type="button" data-order-action="resend_confirmation">Resend confirmation</button>
+          ${isPaid(order) ? `<button class="button button--ghost" type="button" data-order-action="resend_invoice">Resend invoice</button>` : ""}
+        </div>
+
+        <section class="admin-order-detail__columns">
+          <article class="admin-panel admin-panel--embedded">
+            <div class="admin-panel__heading"><div><h3>Items and fulfilment</h3><p>${escapeHtml(order.fulfillment_method === "shipping" ? "Shipping order" : "Store pickup order")}</p></div></div>
+            <div class="admin-list">
+              ${(order.items || []).map((item) => `
+                <div class="admin-list-item">
+                  <div class="admin-list-item__content">
+                    <strong>${escapeHtml(item.product_name || "Item")}</strong>
+                    <span>${escapeHtml(item.sku || "No SKU")} · ${escapeHtml(item.quantity)} × ${formatMoney(item.unit_price)}</span>
+                  </div>
+                  <strong>${formatMoney(item.line_total)}</strong>
+                </div>
+              `).join("") || `<div class="admin-empty">No line items found.</div>`}
+            </div>
+            <div class="admin-address-card"><span>${order.fulfillment_method === "shipping" ? "Ship to" : "Pickup location"}</span><strong>${escapeHtml(fulfilmentAddress || "No address available")}</strong></div>
+            <div class="admin-address-card"><span>Invoice / ship from</span><strong>${escapeHtml(issuerAddress || "No issuer address available")}</strong></div>
+          </article>
+
+          <article class="admin-panel admin-panel--embedded">
+            <div class="admin-panel__heading"><div><h3>Customer and payment</h3><p>Contact, payment and refund totals.</p></div></div>
+            <div class="admin-summary-grid">
+              <div class="admin-summary-card"><span>Name</span><strong>${escapeHtml(order.customer_name || "—")}</strong></div>
+              <div class="admin-summary-card"><span>Phone</span><strong>${escapeHtml(order.phone || "—")}</strong></div>
+              <div class="admin-summary-card"><span>Email</span><strong>${escapeHtml(order.email || "—")}</strong></div>
+              <div class="admin-summary-card"><span>Payment method</span><strong>${escapeHtml(order.payment_method_label || "—")}</strong></div>
+            </div>
+            <div class="admin-address-card"><span>Billing address</span><strong>${escapeHtml(billingAddress || "Not supplied; customer contact details are on the order")}</strong></div>
+            <div class="admin-payment-lines">
+              <div><span>Subtotal</span><strong>${formatMoney(order.subtotal_amount)}</strong></div>
+              ${Number(order.discount_amount || 0) ? `<div><span>Discount</span><strong>-${formatMoney(order.discount_amount)}</strong></div>` : ""}
+              <div><span>Shipping</span><strong>${formatMoney(order.shipping_fee_amount)}</strong></div>
+              <div><span>Payment fee</span><strong>${formatMoney(order.payment_fee_amount)}</strong></div>
+              ${Number(order.gst_amount || 0) ? `<div><span>GST included</span><strong>${formatMoney(order.gst_amount)}</strong></div>` : ""}
+              <div class="is-total"><span>Total</span><strong>${formatMoney(order.total_amount)}</strong></div>
+              <div><span>Paid</span><strong>${formatMoney(order.amount_paid)}</strong></div>
+              <div><span>Refunded</span><strong>${formatMoney(order.amount_refunded)}</strong></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="admin-panel admin-panel--embedded">
+          <div class="admin-panel__heading">
+            <div><h3>Documents</h3><p>Private PDFs use short-lived links. Shipping labels are internal A6 address labels until a carrier account is connected.</p></div>
+            <div class="admin-button-row">
+              ${confirmation?.signed_url ? `<a class="button button--ghost" href="${escapeHtml(confirmation.signed_url)}" target="_blank" rel="noopener">Confirmation</a>` : ""}
+              ${invoice?.signed_url ? `<a class="button button--primary" href="${escapeHtml(invoice.signed_url)}" target="_blank" rel="noopener">Invoice</a>` : ""}
+              ${packingSlip?.signed_url ? `<a class="button button--ghost" href="${escapeHtml(packingSlip.signed_url)}" target="_blank" rel="noopener">Packing slip</a>` : ""}
+              ${label?.signed_url ? `<a class="button button--ghost" href="${escapeHtml(label.signed_url)}" target="_blank" rel="noopener">A6 label</a>` : ""}
+            </div>
+          </div>
+          ${renderDocuments()}
+        </section>
+
+        <section class="admin-order-detail__columns">
+          <article class="admin-panel admin-panel--embedded">
+            <div class="admin-panel__heading"><div><h3>Internal details</h3><p>Notes and tracking details do not change financial status.</p></div></div>
+            <form class="admin-editor__form" data-order-detail-form>
+              <label><span>Tracking number</span><input type="text" name="tracking_number" value="${escapeHtml(order.tracking_number || "")}"></label>
+              <label><span>Tracking URL</span><input type="url" name="tracking_url" value="${escapeHtml(order.tracking_url || "")}"></label>
+              <label><span>Internal notes</span><textarea name="notes">${escapeHtml(order.notes || "")}</textarea></label>
+              <button class="button button--primary" type="submit">Save details</button>
+            </form>
+          </article>
+          <article class="admin-panel admin-panel--embedded">
+            <div class="admin-panel__heading"><div><h3>Refunds</h3><p>Financial changes are reconciled with Stripe or recorded as an in-store refund.</p></div></div>
+            <div class="admin-list">
+              ${(detail.refunds || []).map((refund) => `
+                <div class="admin-list-item">
+                  <div class="admin-list-item__content"><strong>${formatMoney(refund.amount)}</strong><span>${escapeHtml(refund.reason || "No reason")} · ${formatDateTime(refund.created_at)}</span></div>
+                  ${renderBadge(refund.status)}
+                </div>
+              `).join("") || `<div class="admin-empty">No refunds recorded.</div>`}
+            </div>
+          </article>
+        </section>
+
+        <section class="admin-panel admin-panel--embedded">
+          <div class="admin-panel__heading"><div><h3>Email delivery</h3><p>Customer, selected store and central TECHM8 notification status.</p></div></div>
+          ${renderNotifications()}
+        </section>
+        <section class="admin-panel admin-panel--embedded">
+          <div class="admin-panel__heading"><div><h3>Order activity</h3><p>Payment, fulfilment, email and admin actions.</p></div></div>
+          ${renderTimeline()}
+        </section>
+      </div>
+    `;
+
+    editorTarget.querySelector("[data-order-detail-form]")?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      try {
+        await callAdminApi("order_update", {
+          id: order.id,
+          tracking_number: formData.get("tracking_number"),
+          tracking_url: formData.get("tracking_url"),
+          notes: formData.get("notes"),
+        }, session);
+        setAlert(alertTarget, "Order details saved.", "success");
+        await loadDetail(order.id);
+      } catch (error) {
+        setAlert(alertTarget, error instanceof Error ? error.message : "Order details could not be saved.", "error");
+      }
+    });
+
+    editorTarget.querySelectorAll("[data-order-action]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const actionType = button.getAttribute("data-order-action");
+        const payload = { id: order.id, action_type: actionType };
+        if (actionType === "cancel") {
+          if (!window.confirm("Cancel this unpaid order? This action sends a cancellation email.")) return;
+          payload.reason = window.prompt("Cancellation reason", "Cancelled by TECHM8.") || "Cancelled by TECHM8.";
+        }
+        if (actionType === "refund") {
+          const remaining = Number(button.getAttribute("data-refund-remaining") || 0);
+          const amountInput = window.prompt(`Refund amount (maximum ${formatMoney(remaining)})`, remaining.toFixed(2));
+          if (amountInput === null) return;
+          const amount = Number(amountInput);
+          if (!Number.isFinite(amount) || amount <= 0) {
+            setAlert(alertTarget, "Enter a valid refund amount.", "error");
+            return;
+          }
+          const reason = window.prompt("Refund reason", "Customer refund requested.");
+          if (reason === null) return;
+          if (!window.confirm(`Refund ${formatMoney(amount)} for ${order.order_code}?`)) return;
+          payload.amount = amount;
+          payload.reason = reason;
+        }
+        if (actionType === "mark_shipped") {
+          const form = editorTarget.querySelector("[data-order-detail-form]");
+          const formData = form instanceof HTMLFormElement ? new FormData(form) : null;
+          payload.tracking_number = formData?.get("tracking_number") || "";
+          payload.tracking_url = formData?.get("tracking_url") || "";
+        }
+        button.disabled = true;
+        try {
+          const result = await callAdminApi("order_action", payload, session);
+          state.detail = result;
+          setAlert(alertTarget, "Order action completed.", "success");
+          renderDetail();
+          await loadRows({ preserveDetail: true });
+        } catch (error) {
+          setAlert(alertTarget, error instanceof Error ? error.message : "Order action failed.", "error");
+        } finally {
+          button.disabled = false;
+        }
+      });
+    });
+  };
+
+  const loadDetail = async (orderId) => {
+    if (!Number.isFinite(Number(orderId))) return;
+    editorTarget.innerHTML = `<div class="admin-loading">Loading full order detail...</div>`;
+    const result = await callAdminApi("order_get", { id: Number(orderId) }, session);
+    state.selectedId = Number(orderId);
+    state.detail = result;
+    const url = new URL(window.location.href);
+    url.searchParams.set("order_id", String(orderId));
+    window.history.replaceState({}, "", url);
+    renderDetail();
+  };
+
+  const renderTable = () => {
+    if (!state.rows.length) {
+      renderEmptyState(tableTarget, "No orders matched the current filters.");
+      paginationTarget.innerHTML = "";
+      return;
+    }
+    tableTarget.innerHTML = `
+      <table class="admin-table">
+        <thead><tr><th>Order</th><th>Store / fulfilment</th><th>Status</th><th>Payment</th><th>Total</th><th>Created</th></tr></thead>
+        <tbody>
+          ${state.rows.map((row) => `
+            <tr data-order-row="${row.id}" class="${state.selectedId === row.id ? "is-selected" : ""}">
+              <td><div class="admin-cell-title"><strong>${escapeHtml(row.order_code)}</strong><span>${escapeHtml(row.customer_name)} · ${escapeHtml(row.email)}</span></div></td>
+              <td><strong>${escapeHtml(makeStoreLabel(row.store_slug, bootstrap.stores))}</strong><br><span>${escapeHtml(row.fulfillment_method)}</span></td>
+              <td>${renderBadge(row.status)} ${renderBadge(row.fulfillment_status)}</td>
+              <td>${renderBadge(row.payment_status)}<br><span>${escapeHtml(row.payment_method_label || "")}</span></td>
+              <td>${formatMoney(row.total_amount)}${Number(row.amount_refunded || 0) ? `<br><small>Refunded ${formatMoney(row.amount_refunded)}</small>` : ""}</td>
+              <td>${formatDateTime(row.created_at)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    `;
+    paginationTarget.innerHTML = renderPagination(state.meta || {});
+    buildRowClickHandler(tableTarget, "[data-order-row]", (rowElement) => {
+      const orderId = Number(rowElement.getAttribute("data-order-row"));
+      state.selectedId = orderId;
+      renderTable();
+      loadDetail(orderId).catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Order detail could not be loaded.", "error"));
+    });
+    paginationTarget.querySelector("[data-page-prev]")?.addEventListener("click", async () => {
+      state.page = Math.max(1, state.page - 1);
+      await loadRows();
+    });
+    paginationTarget.querySelector("[data-page-next]")?.addEventListener("click", async () => {
+      const totalPages = Math.max(1, Math.ceil((state.meta?.total || 0) / (state.meta?.page_size || 20)));
+      state.page = Math.min(totalPages, state.page + 1);
+      await loadRows();
+    });
+  };
+
+  const loadRows = async ({ preserveDetail = false } = {}) => {
+    setAlert(alertTarget, "");
+    tableTarget.innerHTML = `<div class="admin-loading">Loading orders...</div>`;
+    const formData = new FormData(filterForm);
+    const result = await callAdminApi("orders_list", {
+      filters: {
+        page: state.page,
+        page_size: 20,
+        search: formData.get("search"),
+        store_slug: formData.get("store_slug"),
+        status: formData.get("status"),
+        payment_status: formData.get("payment_status"),
+      },
+    }, session);
+    state.rows = result.rows || [];
+    state.meta = result;
+    renderTable();
+    if (!preserveDetail && state.selectedId) {
+      await loadDetail(state.selectedId);
+    } else if (!state.selectedId && state.rows.length) {
+      await loadDetail(state.rows[0].id);
+    }
+  };
+
+  filterForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    state.page = 1;
+    await loadRows().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Orders could not be loaded.", "error"));
+  });
+  refreshButton?.addEventListener("click", () => loadRows().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Orders could not be refreshed.", "error")));
+  loadRows().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Orders could not be loaded.", "error"));
 }
 
 function renderRepairsPage(root, bootstrap, session, alertTarget) {
