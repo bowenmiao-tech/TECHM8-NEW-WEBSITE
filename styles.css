@@ -9253,6 +9253,45 @@ html:has(body.repair-page--console-hero) {
   gap: 1rem;
 }
 
+.storefront-checkout__contact-card {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 2vw, 1.25rem);
+  border: 1px solid rgba(22, 200, 186, 0.3);
+  border-radius: 1.1rem;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(22, 200, 186, 0.12),
+      transparent 38%
+    ),
+    rgba(255, 255, 255, 0.94);
+}
+
+.storefront-checkout__contact-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+}
+
+.storefront-checkout__contact-heading h3 {
+  margin: 0.25rem 0 0;
+  font-size: 1.12rem;
+}
+
+.storefront-checkout__contact-note {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.storefront-checkout__contact-card input[readonly] {
+  color: var(--muted);
+  background: rgba(240, 246, 246, 0.92);
+  cursor: not-allowed;
+}
+
 .storefront-checkout__auth-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -9894,6 +9933,7 @@ html:has(body.repair-page--console-hero) {
   }
 
   .storefront-checkout__step-heading,
+  .storefront-checkout__contact-heading,
   .storefront-checkout__delivery-detail-top {
     grid-template-columns: 1fr;
     display: grid;

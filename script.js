@@ -2107,9 +2107,26 @@ async function upsertCustomerProfile(
 }
 
 async function syncCustomerProfile(supabase, user, overrides = {}) {
-  return upsertCustomerProfile(supabase, user, overrides, {
-    allowLegacyFallback: true,
-  });
+  let existingProfile = null;
+  try {
+    existingProfile = await fetchCustomerProfile(supabase, user);
+  } catch (error) {
+    if (!isMissingProfileColumnError(error)) {
+      throw error;
+    }
+  }
+
+  return upsertCustomerProfile(
+    supabase,
+    user,
+    {
+      ...(existingProfile || {}),
+      ...overrides,
+    },
+    {
+      allowLegacyFallback: true,
+    },
+  );
 }
 
 async function fetchCustomerProfile(supabase, user) {
@@ -6174,6 +6191,44 @@ function initCheckoutPage() {
     }
   };
 
+  const fillMissingShippingContact = () => {
+    const { firstNameField, lastNameField, phoneField, emailField } =
+      getContactFields();
+    const recipientField = form.elements.namedItem("recipient_name");
+    const shippingPhoneField = form.elements.namedItem("shipping_phone");
+    const shippingEmailField = form.elements.namedItem("shipping_email");
+    const fullName = [
+      firstNameField instanceof HTMLInputElement ? firstNameField.value : "",
+      lastNameField instanceof HTMLInputElement ? lastNameField.value : "",
+    ]
+      .map((value) => String(value || "").trim())
+      .filter(Boolean)
+      .join(" ");
+
+    if (
+      recipientField instanceof HTMLInputElement &&
+      !String(recipientField.value || "").trim()
+    ) {
+      recipientField.value = fullName;
+    }
+    if (
+      shippingPhoneField instanceof HTMLInputElement &&
+      !String(shippingPhoneField.value || "").trim() &&
+      phoneField instanceof HTMLInputElement
+    ) {
+      shippingPhoneField.value = String(phoneField.value || "").trim();
+    }
+    if (
+      shippingEmailField instanceof HTMLInputElement &&
+      !String(shippingEmailField.value || "").trim() &&
+      emailField instanceof HTMLInputElement
+    ) {
+      shippingEmailField.value = String(emailField.value || "")
+        .trim()
+        .toLowerCase();
+    }
+  };
+
   const getSelectedPaymentProfile = () => {
     const selectedCode =
       paymentMethodField instanceof HTMLInputElement
@@ -6352,10 +6407,76 @@ function initCheckoutPage() {
     });
   };
 
+  const validateCheckoutContactDetails = ({ focus = true } = {}) => {
+    const { firstNameField, lastNameField, phoneField, emailField } =
+      getContactFields();
+    const requiredFields = [
+      [firstNameField, "Enter your first name."],
+      [lastNameField, "Enter your last name."],
+      [phoneField, "Enter your phone number."],
+      [emailField, "Your account email is missing."],
+    ];
+
+    for (const [field, message] of requiredFields) {
+      if (
+        !(
+          field instanceof HTMLInputElement ||
+          field instanceof HTMLSelectElement ||
+          field instanceof HTMLTextAreaElement
+        )
+      ) {
+        continue;
+      }
+      if (!String(field.value || "").trim()) {
+        if (!focus) return false;
+        return invalidateField(
+          field,
+          message,
+          "Please complete your contact details before payment.",
+        );
+      }
+    }
+
+    const phone =
+      phoneField instanceof HTMLInputElement
+        ? String(phoneField.value || "").trim()
+        : "";
+    if (!isValidAustralianPhone(phone)) {
+      if (!focus) return false;
+      return invalidateField(
+        phoneField,
+        "Enter a valid Australian number, for example 0412 345 678 or +61 412 345 678.",
+        "Please enter a valid Australian phone number before payment.",
+      );
+    }
+
+    const email =
+      emailField instanceof HTMLInputElement
+        ? String(emailField.value || "")
+            .trim()
+            .toLowerCase()
+        : "";
+    if (!isValidEmailAddress(email)) {
+      if (!focus) return false;
+      return invalidateField(
+        emailField,
+        "Your account email is not valid. Sign out and log in again.",
+        "Your account email could not be confirmed.",
+      );
+    }
+
+    return true;
+  };
+
   const validateDeliveryStep = ({ focus = true } = {}) => {
     if (focus) {
       clearAllFieldErrors();
     }
+    fillMissingCheckoutContact();
+    if (!validateCheckoutContactDetails({ focus })) {
+      return false;
+    }
+    fillMissingShippingContact();
     const storeSelectField = form.elements.namedItem("store_slug");
     const isWarehouseDispatch = isWarehouseDispatchSelected();
 

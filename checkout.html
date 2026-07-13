@@ -282,6 +282,74 @@
                   </div>
                 </div>
 
+                <section class="storefront-checkout__contact-card">
+                  <div class="storefront-checkout__contact-heading">
+                    <div>
+                      <p class="storefront-checkout__delivery-mode">
+                        Contact details
+                      </p>
+                      <h3>How can we contact you about this order?</h3>
+                    </div>
+                    <span class="storefront-checkout__delivery-chip"
+                      >Required</span
+                    >
+                  </div>
+                  <p
+                    class="storefront-checkout__contact-note"
+                    id="checkout-phone-help"
+                  >
+                    Google sign-in does not share your phone number with
+                    TECHM8. Add it here so the store can contact you about
+                    pickup, delivery, or payment.
+                  </p>
+                  <div class="storefront-checkout__form-grid">
+                    <label>
+                      <span>First name</span>
+                      <input
+                        type="text"
+                        name="first_name"
+                        autocomplete="given-name"
+                        data-checkout-contact-field
+                        required
+                      />
+                    </label>
+                    <label>
+                      <span>Last name</span>
+                      <input
+                        type="text"
+                        name="last_name"
+                        autocomplete="family-name"
+                        data-checkout-contact-field
+                        required
+                      />
+                    </label>
+                    <label>
+                      <span>Phone number (required)</span>
+                      <input
+                        type="tel"
+                        name="phone"
+                        autocomplete="tel"
+                        inputmode="tel"
+                        placeholder="0412 345 678"
+                        aria-describedby="checkout-phone-help"
+                        data-checkout-contact-field
+                        required
+                      />
+                    </label>
+                    <label>
+                      <span>Account email</span>
+                      <input
+                        type="email"
+                        name="email"
+                        autocomplete="email"
+                        data-checkout-contact-field
+                        readonly
+                        required
+                      />
+                    </label>
+                  </div>
+                </section>
+
                 <div class="storefront-checkout__delivery-choice-grid">
                   <label
                     class="storefront-checkout__choice is-selected"
@@ -493,11 +561,6 @@
                     </p>
                   </div>
                 </div>
-
-                <input type="hidden" name="first_name" />
-                <input type="hidden" name="last_name" />
-                <input type="hidden" name="phone" />
-                <input type="hidden" name="email" />
 
                 <div class="storefront-checkout__form-grid">
                   <div
