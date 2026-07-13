@@ -128,6 +128,9 @@ Checkout is a multi-step process and must keep this logic:
 - Contact details should not be duplicated unnecessarily across steps
 - `pay_in_store` does not go to Stripe
 - `pay_in_store` should create the order directly and show a local confirmation page
+- Successful Stripe one-time payments must create a paid invoice
+- Stripe invoice number, hosted invoice URL, and PDF URL must be saved on the order
+- Customers must be able to open or download the invoice from the success and order-history pages
 
 ### Delivery / pickup rules
 
@@ -310,4 +313,3 @@ The most important business areas currently are:
 - Product admin workflow quality
 - Customer/account system stability
 - Email confirmations and operational notifications
-

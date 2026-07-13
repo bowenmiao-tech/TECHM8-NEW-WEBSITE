@@ -7,8 +7,42 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
+type SupabaseAdmin = ReturnType<typeof createClient>
+
+function buildInvoicePatch(invoice: Stripe.Invoice) {
+  return {
+    stripe_invoice_id: invoice.id,
+    stripe_invoice_number: invoice.number ?? null,
+    stripe_invoice_url: invoice.hosted_invoice_url ?? null,
+    stripe_invoice_pdf_url: invoice.invoice_pdf ?? null,
+  }
+}
+
+async function getSessionInvoicePatch(
+  stripe: Stripe,
+  session: Stripe.Checkout.Session
+) {
+  const invoiceId =
+    typeof session.invoice === 'string'
+      ? session.invoice
+      : session.invoice?.id ?? ''
+
+  if (!invoiceId) return {}
+  if (typeof session.invoice === 'object' && session.invoice) {
+    return buildInvoicePatch(session.invoice)
+  }
+
+  try {
+    const invoice = await stripe.invoices.retrieve(invoiceId)
+    return buildInvoicePatch(invoice)
+  } catch (error) {
+    console.error('Stripe invoice could not be retrieved yet.', error)
+    return { stripe_invoice_id: invoiceId }
+  }
+}
+
 async function updateOrderBySession(
-  supabaseAdmin: ReturnType<typeof createClient>,
+  supabaseAdmin: SupabaseAdmin,
   session: Stripe.Checkout.Session,
   patch: Record<string, unknown>
 ) {
@@ -28,6 +62,30 @@ async function updateOrderBySession(
   const response = orderId
     ? await supabaseAdmin.from('orders').update(updatePatch).eq('id', orderId)
     : await supabaseAdmin.from('orders').update(updatePatch).eq('stripe_checkout_session_id', sessionId)
+
+  if (response.error) {
+    throw response.error
+  }
+}
+
+async function updateOrderByInvoice(
+  supabaseAdmin: SupabaseAdmin,
+  invoice: Stripe.Invoice,
+  patch: Record<string, unknown>
+) {
+  const orderId = String(invoice.metadata?.order_id ?? '').trim()
+  const orderCode = String(invoice.metadata?.order_code ?? '').trim()
+  const updatePatch = {
+    ...patch,
+    ...buildInvoicePatch(invoice),
+  }
+
+  const query = supabaseAdmin.from('orders').update(updatePatch)
+  const response = orderId
+    ? await query.eq('id', orderId)
+    : orderCode
+      ? await query.eq('order_code', orderCode)
+      : await query.eq('stripe_invoice_id', invoice.id)
 
   if (response.error) {
     throw response.error
@@ -68,7 +126,20 @@ Deno.serve(async (req) => {
       case 'checkout.session.completed':
       case 'checkout.session.async_payment_succeeded': {
         const session = event.data.object as Stripe.Checkout.Session
+        const invoicePatch = await getSessionInvoicePatch(stripe, session)
         await updateOrderBySession(supabaseAdmin, session, {
+          payment_status: 'paid',
+          status: 'confirmed',
+          fulfillment_status: 'queued',
+          ...invoicePatch,
+        })
+        break
+      }
+
+      case 'invoice.paid':
+      case 'invoice.payment_succeeded': {
+        const invoice = event.data.object as Stripe.Invoice
+        await updateOrderByInvoice(supabaseAdmin, invoice, {
           payment_status: 'paid',
           status: 'confirmed',
           fulfillment_status: 'queued',

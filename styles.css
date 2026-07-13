@@ -7449,6 +7449,13 @@ html:has(body.repair-page--console-hero) {
   color: var(--muted);
 }
 
+.history-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
 .booking-store-finder__result p {
   margin: 0;
   font-size: 0.9rem;
@@ -9793,6 +9800,22 @@ html:has(body.repair-page--console-hero) {
   flex-wrap: wrap;
   gap: 0.7rem;
   margin-top: 1rem;
+}
+
+.storefront-success__invoice {
+  margin-top: 1.25rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--line);
+}
+
+.storefront-success__invoice:empty {
+  display: none;
+}
+
+.storefront-success__invoice-note {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 .button:disabled,

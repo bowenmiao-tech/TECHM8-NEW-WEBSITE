@@ -52,7 +52,7 @@
             <div class="storefront-success__grid">
               <div class="storefront-success__item">
                 <strong>Status</strong>
-                <span>Paid and submitted</span>
+                <span data-success-payment-status>Paid and submitted</span>
               </div>
               <div class="storefront-success__item">
                 <strong>Session</strong>
@@ -62,6 +62,14 @@
             <div class="storefront-success__actions">
               <a class="button button--primary" href="shop.html">Continue shopping</a>
               <a class="button button--ghost" href="stores.html">Find a store</a>
+            </div>
+            <div class="storefront-success__invoice" data-checkout-invoice-actions>
+              <p class="storefront-success__invoice-note">
+                Your paid invoice is being generated. Stripe will also send it to your checkout email.
+              </p>
+              <div class="storefront-success__actions">
+                <a class="button button--ghost" href="my-orders.html">Check My Orders</a>
+              </div>
             </div>
           </article>
         </div>

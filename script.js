@@ -2203,14 +2203,53 @@ async function prefillCustomerContactForm(form, options = {}) {
   };
 }
 
+const CUSTOMER_ORDER_SELECT =
+  "id, order_code, customer_name, email, phone, store_slug, fulfillment_method, payment_method_code, payment_method_label, payment_status, status, fulfillment_status, subtotal_amount, discount_amount, payment_fee_amount, shipping_fee_amount, total_amount, stripe_invoice_id, stripe_invoice_number, stripe_invoice_url, stripe_invoice_pdf_url, created_at";
+
+function getSafeStripeInvoiceUrl(value) {
+  try {
+    const url = new URL(String(value || "").trim());
+    const hostname = url.hostname.toLowerCase();
+    if (
+      url.protocol !== "https:" ||
+      (hostname !== "stripe.com" && !hostname.endsWith(".stripe.com"))
+    ) {
+      return "";
+    }
+    return url.toString();
+  } catch (_error) {
+    return "";
+  }
+}
+
+function buildCustomerInvoiceLinks(
+  order,
+  { primaryClass = "button button--primary", secondaryClass = "button button--ghost" } = {},
+) {
+  const invoiceUrl = getSafeStripeInvoiceUrl(order?.stripe_invoice_url);
+  const invoicePdfUrl = getSafeStripeInvoiceUrl(order?.stripe_invoice_pdf_url);
+  const links = [];
+
+  if (invoiceUrl) {
+    links.push(
+      `<a class="${escapeHtml(primaryClass)}" href="${escapeHtml(invoiceUrl)}" target="_blank" rel="noopener">View invoice</a>`,
+    );
+  }
+  if (invoicePdfUrl && invoicePdfUrl !== invoiceUrl) {
+    links.push(
+      `<a class="${escapeHtml(secondaryClass)}" href="${escapeHtml(invoicePdfUrl)}" target="_blank" rel="noopener">Download invoice PDF</a>`,
+    );
+  }
+
+  return links.join("");
+}
+
 async function loadCustomerOrders(supabase, user, limit = 50) {
   if (!supabase || !user?.id) return [];
 
   const { data, error } = await supabase
     .from("orders")
-    .select(
-      "id, order_code, customer_name, email, phone, store_slug, fulfillment_method, payment_method_label, payment_status, status, fulfillment_status, total_amount, created_at",
-    )
+    .select(CUSTOMER_ORDER_SELECT)
     .order("created_at", { ascending: false })
     .limit(limit);
 
@@ -2219,6 +2258,20 @@ async function loadCustomerOrders(supabase, user, limit = 50) {
   }
 
   return Array.isArray(data) ? data : [];
+}
+
+async function loadCustomerOrderByCode(supabase, user, orderCode) {
+  const safeOrderCode = String(orderCode || "").trim();
+  if (!supabase || !user?.id || !safeOrderCode) return null;
+
+  const { data, error } = await supabase
+    .from("orders")
+    .select(CUSTOMER_ORDER_SELECT)
+    .eq("order_code", safeOrderCode)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data || null;
 }
 
 async function loadCustomerRepairBookings(supabase, user, limit = 50) {
@@ -2288,6 +2341,10 @@ function renderHistoryList(target, records, kind) {
   target.innerHTML = records
     .map((record) => {
       if (kind === "orders") {
+        const invoiceLinks = buildCustomerInvoiceLinks(record, {
+          primaryClass: "button button--primary",
+          secondaryClass: "button button--ghost",
+        });
         return `
         <article class="history-card">
           <div class="history-card__top">
@@ -2305,6 +2362,7 @@ function renderHistoryList(target, records, kind) {
             <div><strong>Placed</strong><span>${escapeHtml(formatDateTime(record.created_at))}</span></div>
             <div><strong>Contact</strong><span>${escapeHtml(record.phone || "")}${record.email ? ` / ${escapeHtml(record.email)}` : ""}</span></div>
           </div>
+          ${invoiceLinks ? `<div class="history-card__actions">${invoiceLinks}</div>` : ""}
         </article>
       `;
       }
@@ -4319,7 +4377,7 @@ async function loadSharedCatalogData() {
   try {
     sharedCatalogLoadPromise = fetchSnapshot({
       productSelect:
-        "id,sku,slug,name,brand,model,short_description,description,detail_html,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,updated_at,upc",
+        "id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,updated_at,upc",
       includeImages: true,
       orderClause: "created_at.desc,id.desc",
     });
@@ -4341,6 +4399,81 @@ async function loadSharedCatalogData() {
   } finally {
     sharedCatalogLoadPromise = null;
   }
+}
+
+async function fetchCatalogProductsForCartValidation(items) {
+  const { supabaseUrl, supabaseAnonKey } = window.TECHM8_CONFIG || {};
+  const slugs = Array.from(
+    new Set(
+      (Array.isArray(items) ? items : [])
+        .map((item) => String(item?.slug || "").trim())
+        .filter(Boolean),
+    ),
+  );
+
+  if (!slugs.length) return [];
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error("Supabase catalog configuration is missing.");
+  }
+
+  const headers = {
+    Accept: "application/json",
+    apikey: supabaseAnonKey,
+    Authorization: `Bearer ${supabaseAnonKey}`,
+  };
+  const productUrl = new URL(`${supabaseUrl}/rest/v1/products`);
+  const quotedSlugs = slugs.map(
+    (slug) => `"${slug.replaceAll("\\", "\\\\").replaceAll('"', '\\"')}"`,
+  );
+  productUrl.searchParams.set(
+    "select",
+    "id,sku,slug,name,brand,model,short_description,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,created_at,updated_at,upc",
+  );
+  productUrl.searchParams.set("is_visible", "eq.true");
+  productUrl.searchParams.set("slug", `in.(${quotedSlugs.join(",")})`);
+
+  const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
+  const [productsResponse, categoriesResponse] = await Promise.all([
+    fetch(productUrl.toString(), { headers, cache: "no-store" }),
+    fetch(categoriesUrl, { headers, cache: "default" }),
+  ]);
+
+  if (!productsResponse.ok) {
+    throw new Error("Cart products could not be validated.");
+  }
+
+  const products = await productsResponse.json();
+  const categories = categoriesResponse.ok
+    ? await categoriesResponse.json()
+    : [];
+  const categoriesMap = new Map(
+    (Array.isArray(categories) ? categories : []).map((category) => [
+      category.id,
+      category,
+    ]),
+  );
+
+  return (Array.isArray(products) ? products : []).map((product, index) => {
+    const category = categoriesMap.get(product.category_id) || null;
+    const retailPrice = Number(product.retail_price);
+    const compareAtPrice = Number(product.compare_at_price);
+    const safeRetailPrice =
+      Number.isFinite(retailPrice) && retailPrice > 0 ? retailPrice : 0;
+
+    return {
+      ...product,
+      catalog_index: index,
+      retail_price: safeRetailPrice,
+      compare_at_price:
+        Number.isFinite(compareAtPrice) && compareAtPrice > safeRetailPrice
+          ? compareAtPrice
+          : null,
+      display_image: resolveProductImageUrl(product),
+      category_slug: category?.slug || "other-products",
+      category_name: category?.name || "Other Products",
+      category_description: category?.description || "",
+    };
+  });
 }
 
 async function loadHomeLatestCatalogData(options = {}) {
@@ -5290,13 +5423,28 @@ function initProductDetailPage() {
     .finally(() => {
       loadSharedCatalogData()
         .then(({ products }) => {
-          const product = products.find((item) => item.slug === slug);
-          if (!product) {
+          const catalogProduct = products.find((item) => item.slug === slug);
+          if (!catalogProduct) {
             if (!initialProduct) {
               renderNotFound();
             }
             return;
           }
+
+          const product = initialProduct
+            ? {
+                ...catalogProduct,
+                ...initialProduct,
+                display_name:
+                  catalogProduct.display_name || initialProduct.display_name,
+                variant_group_key:
+                  catalogProduct.variant_group_key ||
+                  initialProduct.variant_group_key,
+                variant_options: catalogProduct.variant_options?.length
+                  ? catalogProduct.variant_options
+                  : initialProduct.variant_options,
+              }
+            : catalogProduct;
 
           renderProductDetailShell(shell, product, products);
           bindProductDetailShell(shell, product, products);
@@ -7078,8 +7226,18 @@ function initCheckoutPage() {
     }
 
     try {
-      const { products: latestProducts } = await loadSharedCatalogData();
-      const reconciliation = reconcileCartItems(items, latestProducts);
+      const cartProducts = await fetchCatalogProductsForCartValidation(items);
+      let reconciliation = reconcileCartItems(items, cartProducts);
+
+      if (reconciliation.missing.length) {
+        try {
+          const { products: fullCatalogProducts } =
+            await loadSharedCatalogData();
+          reconciliation = reconcileCartItems(items, fullCatalogProducts);
+        } catch (_catalogError) {
+          // Keep the targeted validation result. The server remains authoritative.
+        }
+      }
 
       if (reconciliation.changed) {
         items = reconciliation.items;
@@ -7484,6 +7642,23 @@ function initCheckoutPage() {
           );
         }
 
+        payload.order_code = String(result.order_code || payload.order_code);
+        payload.total_amount =
+          Number(result.total_amount ?? payload.total_amount) ||
+          payload.total_amount;
+        payload.payment_fee_amount =
+          Number(result.payment_fee_amount ?? payload.payment_fee_amount) || 0;
+        payload.shipping_fee_amount =
+          Number(result.shipping_fee_amount ?? payload.shipping_fee_amount) || 0;
+        payload.payment_method_label = String(
+          result.payment_method_label ||
+            selectedProfile?.label ||
+            payload.payment_method_label ||
+            "",
+        );
+        payload.stripe_checkout_session_id = String(result.session_id || "");
+        saveCheckoutSuccessContext(payload);
+
         trackGa4Event("checkout_redirect_to_stripe", {
           payment_type: String(
             selectedProfile?.label || selectedProfile?.code || "stripe",
@@ -7718,6 +7893,87 @@ function initCheckoutPage() {
   }
 }
 
+function buildCheckoutInvoiceMarkup(order) {
+  const invoiceLinks = buildCustomerInvoiceLinks(order);
+  const invoiceNumber = String(order?.stripe_invoice_number || "").trim();
+  const paymentMethodCode = String(order?.payment_method_code || "").trim();
+
+  if (invoiceLinks) {
+    return `
+      <p class="storefront-success__invoice-note">
+        ${invoiceNumber ? `Invoice ${escapeHtml(invoiceNumber)} is ready.` : "Your Stripe invoice is ready."}
+      </p>
+      <div class="storefront-success__actions">${invoiceLinks}</div>
+    `;
+  }
+
+  if (paymentMethodCode && paymentMethodCode !== "pay_in_store") {
+    return `
+      <p class="storefront-success__invoice-note">
+        Your paid invoice is being generated. Stripe will also send it to your checkout email.
+      </p>
+      <div class="storefront-success__actions">
+        <a class="button button--ghost" href="my-orders.html">Check My Orders</a>
+      </div>
+    `;
+  }
+
+  return "";
+}
+
+async function refreshCheckoutInvoiceStatus(root, orderCode, storedPayload) {
+  if (!(root instanceof HTMLElement) || !orderCode || orderCode === "Pending") {
+    return;
+  }
+
+  const invoiceTarget = root.querySelector("[data-checkout-invoice-actions]");
+  if (!(invoiceTarget instanceof HTMLElement)) return;
+
+  try {
+    const authState = await getCurrentAuthState();
+    if (!authState?.supabase || !authState?.user) return;
+
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const order = await loadCustomerOrderByCode(
+        authState.supabase,
+        authState.user,
+        orderCode,
+      );
+
+      if (order) {
+        invoiceTarget.innerHTML = buildCheckoutInvoiceMarkup(order);
+        const paymentStatusTarget = root.querySelector(
+          "[data-success-payment-status]",
+        );
+        if (paymentStatusTarget instanceof HTMLElement) {
+          paymentStatusTarget.textContent = formatStatusLabel(
+            order.payment_status || "pending",
+          );
+        }
+
+        if (storedPayload) {
+          saveCheckoutSuccessContext({ ...storedPayload, ...order });
+        }
+
+        if (
+          getSafeStripeInvoiceUrl(order.stripe_invoice_url) ||
+          getSafeStripeInvoiceUrl(order.stripe_invoice_pdf_url)
+        ) {
+          return;
+        }
+      }
+
+      if (attempt < 4) {
+        await new Promise((resolve) =>
+          window.setTimeout(resolve, 1200 + attempt * 600),
+        );
+      }
+    }
+  } catch (error) {
+    console.warn("Invoice status could not be refreshed:", error);
+  }
+}
+
 function initCheckoutSuccessPage() {
   const root = document.querySelector("[data-checkout-success-page]");
   if (!(root instanceof HTMLElement)) return;
@@ -7751,7 +8007,7 @@ function initCheckoutSuccessPage() {
               <div class="storefront-success__grid">
                 <div class="storefront-success__item">
                   <strong>Status</strong>
-                  <span>${escapeHtml(isPayInStore ? "Awaiting in-store payment" : "Paid and submitted")}</span>
+                  <span data-success-payment-status>${escapeHtml(isPayInStore ? "Awaiting in-store payment" : "Paid and submitted")}</span>
                 </div>
                 <div class="storefront-success__item">
                   <strong>Store / dispatch point</strong>
@@ -7773,6 +8029,9 @@ function initCheckoutSuccessPage() {
               <div class="storefront-success__actions">
                 <a class="button button--primary" href="shop.html">Continue shopping</a>
                 ${storeDetail?.mapUrl ? `<a class="button button--ghost" href="${escapeHtml(storeDetail.mapUrl)}" target="_blank" rel="noopener">Open pickup map</a>` : `<a class="button button--ghost" href="stores.html">Find a store</a>`}
+              </div>
+              <div class="storefront-success__invoice" data-checkout-invoice-actions>
+                ${buildCheckoutInvoiceMarkup(storedPayload)}
               </div>
             </article>
 
@@ -7838,6 +8097,7 @@ function initCheckoutSuccessPage() {
       shippingFeeOverride: Number(storedPayload.shipping_fee_amount ?? 0) || 0,
       totalOverride: Number(storedPayload.total_amount ?? 0) || 0,
     });
+    refreshCheckoutInvoiceStatus(root, orderCode, storedPayload);
     return;
   }
 
@@ -7849,6 +8109,7 @@ function initCheckoutSuccessPage() {
   if (sessionTarget instanceof HTMLElement) {
     sessionTarget.textContent = sessionId || "Stripe session confirmed";
   }
+  refreshCheckoutInvoiceStatus(root, orderCode, null);
 }
 
 function initBookingForm() {
@@ -9744,6 +10005,7 @@ function renderAccountOrderCards(target, records, mode = "all") {
       <div class="account-order-card__foot">
         <span class="account-muted">${mode === "pending" ? "This order is still active." : "This order has been completed."}</span>
         <div class="account-order-card__actions">
+          ${buildCustomerInvoiceLinks(record, { primaryClass: "account-button", secondaryClass: "account-button--secondary" })}
           <a class="account-button--secondary" href="shop.html">Browse store</a>
           <a class="account-button" href="cart.html">${mode === "pending" ? "View cart" : "Shop again"}</a>
         </div>

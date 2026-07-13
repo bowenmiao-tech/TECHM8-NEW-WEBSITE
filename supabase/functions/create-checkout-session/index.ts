@@ -395,6 +395,24 @@ Deno.serve(async (req) => {
         customer_email: email,
         client_reference_id: orderCode,
         phone_number_collection: { enabled: true },
+        invoice_creation: {
+          enabled: true,
+          invoice_data: {
+            description: `TECHM8 order ${orderCode}`,
+            footer: 'Thank you for shopping with TECHM8.',
+            custom_fields: [
+              {
+                name: 'Order reference',
+                value: orderCode,
+              },
+            ],
+            metadata: {
+              order_id: String(insertedOrder.id),
+              order_code: orderCode,
+              store_slug: resolvedStore.slug,
+            },
+          },
+        },
         success_url: `${siteUrl}/checkout-success.html?session_id={CHECKOUT_SESSION_ID}&order_code=${encodeURIComponent(orderCode)}`,
         cancel_url: `${siteUrl}/checkout.html?payment=cancelled&order_code=${encodeURIComponent(orderCode)}`,
         metadata: {
@@ -435,6 +453,13 @@ Deno.serve(async (req) => {
           order_code: orderCode,
           checkout_url: session.url,
           session_id: session.id,
+          total_amount: totalAmount,
+          payment_fee_amount: paymentFeeAmount,
+          shipping_fee_amount: shippingFeeAmount,
+          shipping_service_code: shippingOption?.code ?? null,
+          shipping_service_name: shippingOption?.label ?? null,
+          payment_method_code: feeProfile.code,
+          payment_method_label: feeProfile.label,
         },
         { status: 200, headers: corsHeaders }
       )
