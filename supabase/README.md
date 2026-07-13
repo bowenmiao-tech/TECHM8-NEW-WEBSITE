@@ -118,3 +118,5 @@ The Stripe webhook must subscribe to:
 - `charge.refunded`
 
 The generated A6 shipping PDF is an internal address/packing label. It is deliberately marked as requiring postage or a carrier label; it is not a paid Australia Post/MyPost label. A carrier API account is required before postage purchase and lodgement can be automated.
+
+Pickup submissions automatically generate a packing slip and A6 Pickup Docket. These internal documents are attached to the selected store and central TECHM8 notification emails; the customer receives the order confirmation and applicable invoice only.

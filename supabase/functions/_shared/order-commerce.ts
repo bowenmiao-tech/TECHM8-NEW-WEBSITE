@@ -28,6 +28,30 @@ export type OrderEmailEvent =
   | 'cancelled'
   | 'refunded'
 
+export function internalFulfillmentDocumentTypes(
+  event: OrderEmailEvent,
+  order: { fulfillment_method?: unknown },
+): OrderDocumentType[] {
+  const fulfillmentMethod = text(order.fulfillment_method)
+  if (event === 'order_submitted' && fulfillmentMethod === 'pickup') {
+    return ['packing_slip', 'pickup_label']
+  }
+  if (event === 'payment_confirmed' && fulfillmentMethod === 'shipping') {
+    return ['packing_slip', 'shipping_label']
+  }
+  return []
+}
+
+export function documentsForRecipient(
+  role: 'customer' | 'store' | 'central',
+  customerDocuments: GeneratedOrderDocument[],
+  internalDocuments: GeneratedOrderDocument[],
+) {
+  return role === 'customer'
+    ? customerDocuments
+    : [...customerDocuments, ...internalDocuments]
+}
+
 export type GeneratedOrderDocument = {
   id: number
   type: OrderDocumentType
@@ -501,9 +525,15 @@ function emailCopy(event: OrderEmailEvent, bundle: OrderBundle, role: 'customer'
       intro = internal
         ? `A new ${order.fulfillment_method === 'shipping' ? 'shipping' : 'pickup'} order has been submitted.`
         : `Thanks ${customerName}. We have received your order.`
-      detail = order.payment_method_code === 'pay_in_store'
-        ? 'Your order confirmation and invoice are attached. Payment is due at the selected store when the order is collected.'
-        : 'Payment confirmation will be sent after the payment provider confirms the transaction.'
+      if (order.payment_method_code === 'pay_in_store') {
+        detail = internal && order.fulfillment_method === 'pickup'
+          ? 'The order confirmation, unpaid invoice, packing slip and pickup docket are attached. Payment is due when the customer collects the order.'
+          : 'Your order confirmation and invoice are attached. Payment is due at the selected store when the order is collected.'
+      } else {
+        detail = internal && order.fulfillment_method === 'pickup'
+          ? 'The order confirmation, packing slip and pickup docket are attached. Payment confirmation will follow after the payment provider confirms the transaction.'
+          : 'Payment confirmation will be sent after the payment provider confirms the transaction.'
+      }
       break
     case 'payment_confirmed':
       title = internal ? 'Paid order confirmed' : 'Payment received'
@@ -727,6 +757,7 @@ export async function notifyOrderEvent(
   const sourceRef = text(options.sourceRef)
   let document: GeneratedOrderDocument | null = null
   const documents: GeneratedOrderDocument[] = []
+  const internalDocuments: GeneratedOrderDocument[] = []
   if (event === 'order_submitted') {
     document = await ensureOrderDocument(supabaseAdmin, orderId, 'order_confirmation')
     documents.push(document)
@@ -746,6 +777,10 @@ export async function notifyOrderEvent(
     documents.push(document)
   }
 
+  for (const documentType of internalFulfillmentDocumentTypes(event, bundle.order)) {
+    internalDocuments.push(await ensureOrderDocument(supabaseAdmin, orderId, documentType))
+  }
+
   const eventKey = [event, sourceRef || 'v1', text(options.resendToken)].filter(Boolean).join(':')
   const recipients = notificationRecipients(bundle)
   const results = []
@@ -759,10 +794,10 @@ export async function notifyOrderEvent(
       subject: copy.subject,
       html: copy.html,
       replyTo: recipient.role === 'customer' ? null : text(bundle.order.email),
-      documents,
+      documents: documentsForRecipient(recipient.role, documents, internalDocuments),
     }))
   }
-  return { eventKey, document, documents, results }
+  return { eventKey, document, documents: [...documents, ...internalDocuments], results }
 }
 
 export async function finalizePaidOrder(
