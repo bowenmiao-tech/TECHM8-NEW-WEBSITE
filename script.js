@@ -2243,14 +2243,20 @@ function buildCustomerInvoiceLinks(
   order,
   { primaryClass = "button button--primary", secondaryClass = "button button--ghost" } = {},
 ) {
-  const techm8InvoiceNumber = String(order?.invoice_number || "").trim();
-  const confirmationNumber = String(order?.confirmation_number || "").trim();
   const orderCode = String(order?.order_code || "").trim();
+  const paymentMethodCode = String(order?.payment_method_code || "").trim();
+  const paymentStatus = String(order?.payment_status || "").trim();
+  const canGenerateTechm8Invoice = Boolean(orderCode) && (
+    paymentMethodCode === "pay_in_store" ||
+    ["paid", "partially_refunded", "refunded"].includes(paymentStatus)
+  );
   const invoiceUrl = getSafeStripeInvoiceUrl(order?.stripe_invoice_url);
   const invoicePdfUrl = getSafeStripeInvoiceUrl(order?.stripe_invoice_pdf_url);
   const links = [];
 
-  if (techm8InvoiceNumber && orderCode) {
+  // Historical paid orders only have Stripe invoice fields. Always route eligible
+  // orders through order-document so the first click creates the current TECHM8 PDF.
+  if (canGenerateTechm8Invoice) {
     links.push(
       `<button class="${escapeHtml(primaryClass)}" type="button" data-customer-order-document="invoice" data-order-code="${escapeHtml(orderCode)}">View invoice</button>`,
     );
@@ -2259,7 +2265,7 @@ function buildCustomerInvoiceLinks(
     );
   }
 
-  if (confirmationNumber && orderCode) {
+  if (orderCode) {
     links.push(
       `<button class="${escapeHtml(secondaryClass)}" type="button" data-customer-order-document="order_confirmation" data-order-code="${escapeHtml(orderCode)}">View order confirmation</button>`,
     );
