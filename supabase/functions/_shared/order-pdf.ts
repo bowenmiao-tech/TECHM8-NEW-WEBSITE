@@ -233,7 +233,7 @@ function documentTitle(type: OrderDocumentType, business: BusinessProfile) {
   if (type === 'credit_note') return 'Credit Note'
   if (type === 'packing_slip') return 'Packing Slip'
   if (type === 'shipping_label') return 'Shipping Address Label'
-  if (type === 'pickup_label') return 'Pickup Label'
+  if (type === 'pickup_label') return 'Pickup Docket'
   return business.gstRegistered && business.abn ? 'Tax Invoice' : 'Invoice'
 }
 
@@ -515,7 +515,7 @@ async function generateLabel(
 
   page.drawRectangle({ x: 0, y: height - 68, width, height: 68, color: INK })
   page.drawText('TECHM8', { x: margin, y: height - 38, size: 23, font: bold, color: rgb(1, 1, 1) })
-  page.drawText(type === 'shipping_label' ? 'SHIPPING ADDRESS LABEL' : 'CLICK & COLLECT LABEL', {
+  page.drawText(type === 'shipping_label' ? 'SHIPPING ADDRESS LABEL' : 'CLICK & COLLECT DOCKET', {
     x: margin,
     y: height - 56,
     size: 8,
