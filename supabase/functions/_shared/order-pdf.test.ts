@@ -1,10 +1,17 @@
 import { PDFDocument } from 'npm:pdf-lib@1.17.1'
 import {
   generateOrderPdf,
+  ORDER_PDF_BRAND_NAME,
   type BusinessProfile,
   type OrderBundle,
   type OrderDocumentType,
 } from './order-pdf.ts'
+
+Deno.test('uses the requested invoice brand name', () => {
+  if (ORDER_PDF_BRAND_NAME !== 'OZ TECH M8') {
+    throw new Error(`Unexpected PDF brand name: ${ORDER_PDF_BRAND_NAME}`)
+  }
+})
 
 const business: BusinessProfile = {
   legalName: 'YQM PTY LTD',

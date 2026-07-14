@@ -101,6 +101,7 @@ const MUTED = rgb(0.32, 0.43, 0.46)
 const TEAL = rgb(0, 0.67, 0.62)
 const PALE = rgb(0.92, 0.98, 0.97)
 const LINE = rgb(0.80, 0.88, 0.87)
+export const ORDER_PDF_BRAND_NAME = 'OZ TECH M8'
 
 function numeric(value: unknown) {
   const parsed = Number(value)
@@ -276,8 +277,8 @@ async function generateA4Document(
 ) {
   const pdf = await PDFDocument.create()
   pdf.setTitle(`${documentTitle(type, business)} ${number}`)
-  pdf.setAuthor(business.legalName)
-  pdf.setCreator('TECHM8 Order Operations')
+  pdf.setAuthor(ORDER_PDF_BRAND_NAME)
+  pdf.setCreator(`${ORDER_PDF_BRAND_NAME} Order Operations`)
   const regular = await pdf.embedFont(StandardFonts.Helvetica)
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold)
   let page = pdf.addPage(A4)
@@ -287,8 +288,7 @@ async function generateA4Document(
   const title = documentTitle(type, business)
 
   page.drawRectangle({ x: 0, y: height - 112, width, height: 112, color: INK })
-  page.drawText('TECHM8', { x: margin, y: height - 55, size: 27, font: bold, color: rgb(1, 1, 1) })
-  page.drawText(safePdfText(business.legalName), { x: margin, y: height - 77, size: 9, font: regular, color: rgb(0.78, 0.94, 0.92) })
+  page.drawText(ORDER_PDF_BRAND_NAME, { x: margin, y: height - 62, size: 27, font: bold, color: rgb(1, 1, 1) })
   const titleWidth = bold.widthOfTextAtSize(title.toUpperCase(), 18)
   page.drawText(title.toUpperCase(), {
     x: width - margin - titleWidth,
@@ -315,7 +315,7 @@ async function generateA4Document(
   drawSectionLabel(page, bold, type === 'packing_slip' ? 'Ship / collect for' : 'Bill to', rightX, y)
   y -= 17
   let leftY = y
-  leftY = drawWrapped(page, bold, `${business.legalName} trading as ${business.tradingName}`, margin, leftY, leftWidth, { size: 10.5 })
+  leftY = drawWrapped(page, bold, ORDER_PDF_BRAND_NAME, margin, leftY, leftWidth, { size: 10.5 })
   if (business.abn) {
     leftY = drawWrapped(page, regular, `ABN ${business.abn}`, margin, leftY - 1, leftWidth, { size: 9.5 })
   }
@@ -354,7 +354,7 @@ async function generateA4Document(
 
   const drawContinuationHeader = (target: PDFPage, section: string) => {
     target.drawRectangle({ x: 0, y: height - 70, width, height: 70, color: INK })
-    target.drawText('TECHM8', { x: margin, y: height - 39, size: 22, font: bold, color: rgb(1, 1, 1) })
+    target.drawText(ORDER_PDF_BRAND_NAME, { x: margin, y: height - 39, size: 22, font: bold, color: rgb(1, 1, 1) })
     const continuationTitle = `${title} - ${section}`
     const continuationWidth = bold.widthOfTextAtSize(continuationTitle, 12)
     target.drawText(continuationTitle, {
@@ -472,7 +472,7 @@ async function generateA4Document(
   page.drawLine({ start: { x: margin, y: footerY + 24 }, end: { x: width - margin, y: footerY + 24 }, thickness: 0.8, color: LINE })
   const footer = type === 'order_confirmation'
     ? bundle.order.payment_method_code === 'pay_in_store'
-      ? 'Payment is due at the selected TECHM8 store when the order is collected.'
+      ? 'Payment is due at the selected store when the order is collected.'
       : bundle.order.payment_status === 'paid'
         ? 'Payment has been received. Your paid invoice is issued separately.'
         : 'Payment confirmation and a paid invoice will be issued after payment completes.'
@@ -480,7 +480,7 @@ async function generateA4Document(
       ? 'Internal fulfilment document. Prices are shown on the customer invoice.'
       : type === 'credit_note'
         ? `This credit note adjusts invoice ${safePdfText(bundle.order.invoice_number || bundle.order.order_code)}.`
-        : 'Thank you for shopping with TECHM8.'
+        : `Thank you for shopping with ${ORDER_PDF_BRAND_NAME}.`
   drawWrapped(page, regular, footer, margin, footerY + 6, contentWidth, { size: 8.5, color: MUTED })
 
   const pages = pdf.getPages()
@@ -506,7 +506,7 @@ async function generateLabel(
 ) {
   const pdf = await PDFDocument.create()
   pdf.setTitle(`${documentTitle(type, business)} ${bundle.order.order_code}`)
-  pdf.setAuthor(business.legalName)
+  pdf.setAuthor(ORDER_PDF_BRAND_NAME)
   const regular = await pdf.embedFont(StandardFonts.Helvetica)
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold)
   const page = pdf.addPage(A6_LABEL)
@@ -514,7 +514,7 @@ async function generateLabel(
   const margin = 18
 
   page.drawRectangle({ x: 0, y: height - 68, width, height: 68, color: INK })
-  page.drawText('TECHM8', { x: margin, y: height - 38, size: 23, font: bold, color: rgb(1, 1, 1) })
+  page.drawText(ORDER_PDF_BRAND_NAME, { x: margin, y: height - 38, size: 23, font: bold, color: rgb(1, 1, 1) })
   page.drawText(type === 'shipping_label' ? 'SHIPPING ADDRESS LABEL' : 'CLICK & COLLECT DOCKET', {
     x: margin,
     y: height - 56,
