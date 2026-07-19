@@ -36,6 +36,7 @@ type ProductRow = {
 type ProductImageRow = {
   product_id: number
   image_url: string | null
+  alt_text: string | null
   sort_order: number | null
 }
 
@@ -99,7 +100,7 @@ async function readRequestInput(req: Request) {
 }
 
 function buildThumbnailUrl(imageUrl: string | null, supabaseUrl: string) {
-  const sourceUrl = String(imageUrl ?? '').trim()
+  const sourceUrl = buildPublicImageUrl(imageUrl, supabaseUrl)
   if (!sourceUrl) return null
 
   try {
@@ -121,6 +122,23 @@ function buildThumbnailUrl(imageUrl: string | null, supabaseUrl: string) {
   }
 
   return sourceUrl
+}
+
+function buildPublicImageUrl(imageUrl: string | null, supabaseUrl: string) {
+  const sourceUrl = String(imageUrl ?? '').trim()
+  if (!sourceUrl) return null
+  if (sourceUrl.startsWith('//')) return `https:${sourceUrl}`
+
+  try {
+    const url = new URL(sourceUrl)
+    if (url.protocol === 'http:') url.protocol = 'https:'
+    return url.toString()
+  } catch {
+    if (sourceUrl.startsWith('/')) {
+      return new URL(sourceUrl, Deno.env.get('PUBLIC_SITE_URL') ?? 'https://www.techm8australia.com').toString()
+    }
+    return sourceUrl
+  }
 }
 
 Deno.serve(async (req) => {
@@ -188,7 +206,7 @@ Deno.serve(async (req) => {
       productIds.length
         ? supabaseAdmin
             .from('product_images')
-            .select('product_id, image_url, sort_order')
+            .select('product_id, image_url, alt_text, sort_order')
             .in('product_id', productIds)
             .order('sort_order', { ascending: true })
             .order('id', { ascending: true })
@@ -212,10 +230,25 @@ Deno.serve(async (req) => {
       return jsonResponse({ ok: false, error: 'Inventory could not be loaded.' }, 500)
     }
 
+    const galleryImagesByProductId = new Map<number, Array<{
+      image_url: string
+      thumbnail_url: string | null
+      alt_text: string | null
+      sort_order: number
+    }>>()
     const firstImageByProductId = new Map<number, string>()
     ;((images ?? []) as ProductImageRow[]).forEach((image) => {
-      if (!image.product_id || !image.image_url || firstImageByProductId.has(image.product_id)) return
-      firstImageByProductId.set(image.product_id, image.image_url)
+      if (!image.product_id || !image.image_url) return
+      const publicUrl = buildPublicImageUrl(image.image_url, supabaseUrl)
+      if (!publicUrl) return
+      if (!galleryImagesByProductId.has(image.product_id)) galleryImagesByProductId.set(image.product_id, [])
+      galleryImagesByProductId.get(image.product_id)!.push({
+        image_url: publicUrl,
+        thumbnail_url: buildThumbnailUrl(publicUrl, supabaseUrl),
+        alt_text: image.alt_text,
+        sort_order: Number(image.sort_order) || 0,
+      })
+      if (!firstImageByProductId.has(image.product_id)) firstImageByProductId.set(image.product_id, publicUrl)
     })
 
     const inventoryByProductId = new Map<number, InventoryRow[]>()
@@ -227,7 +260,17 @@ Deno.serve(async (req) => {
     })
 
     const rows = productRows.map((product) => {
-      const imageUrl = firstImageByProductId.get(product.id) ?? product.image_url ?? null
+      const fallbackImageUrl = buildPublicImageUrl(product.image_url, supabaseUrl)
+      const imageUrl = firstImageByProductId.get(product.id) ?? fallbackImageUrl ?? null
+      const galleryImages = [...(galleryImagesByProductId.get(product.id) ?? [])]
+      if (imageUrl && !galleryImages.some((image) => image.image_url === imageUrl)) {
+        galleryImages.unshift({
+          image_url: imageUrl,
+          thumbnail_url: buildThumbnailUrl(imageUrl, supabaseUrl),
+          alt_text: product.name,
+          sort_order: 0,
+        })
+      }
       const storeInventory = (inventoryByProductId.get(product.id) ?? []).map((row) => ({
         store_slug: row.stores?.slug ?? null,
         store_name: row.stores?.name ?? null,
@@ -259,6 +302,8 @@ Deno.serve(async (req) => {
         store_inventory: storeInventory,
         image_url: imageUrl,
         thumbnail_url: buildThumbnailUrl(imageUrl, supabaseUrl),
+        gallery_images: galleryImages,
+        images: galleryImages,
         updated_at: product.updated_at,
       }
     })

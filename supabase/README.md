@@ -89,6 +89,8 @@ Returned product fields:
 - `barcode`: product UPC/barcode
 - `thumbnail_url`: small product thumbnail URL
 - `image_url`: original product image URL
+- `gallery_images`: product image gallery, with absolute `image_url` and `thumbnail_url`
+- `images`: same gallery data for POS/client compatibility
 
 Order operations
 
