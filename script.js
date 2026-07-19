@@ -1802,6 +1802,11 @@ function getConfiguredSiteBaseUrl() {
   return window.location.origin;
 }
 
+function getProductPageHref(slug) {
+  const safeSlug = String(slug || "").trim();
+  return safeSlug ? `/products/${encodeURIComponent(safeSlug)}/` : "/shop.html";
+}
+
 function getAccountDashboardUrl() {
   const configuredSiteUrl = String(window.TECHM8_CONFIG?.siteUrl || "").trim();
   if (configuredSiteUrl) {
@@ -2892,7 +2897,7 @@ function formatProductDetailHtml(product) {
 }
 
 function createRailProductCard(product) {
-  const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
+  const detailUrl = getProductPageHref(product.slug);
   const retailPrice = Number(product.retail_price) || 0;
   const compareAtPrice = Number(product.compare_at_price) || 0;
   const savingsAmount =
@@ -4821,7 +4826,7 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
                 (option) => `
                   <a
                     class="storefront-pdp__variant ${option.is_active ? "is-active" : ""}"
-                    href="product.html?slug=${encodeURIComponent(option.slug)}"
+                    href="${getProductPageHref(option.slug)}"
                   >${escapeHtml(option.label)}</a>
                 `,
               )
@@ -4836,7 +4841,7 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
       ${renderProductRailSection({
         eyebrow: "Latest products",
         title: "New arrivals in the catalog",
-        linkHref: "shop.html",
+        linkHref: "/shop.html",
         linkLabel: "View all products",
         emptyTitle: "No newer products yet",
         emptyCopy:
@@ -4848,7 +4853,7 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
       ${renderProductRailSection({
         eyebrow: "Recently viewed",
         title: "Products viewed on this browser",
-        linkHref: `category.html?slug=${encodeURIComponent(product.category_slug)}`,
+        linkHref: `/category.html?slug=${encodeURIComponent(product.category_slug)}`,
         linkLabel: `View ${product.category_name}`,
         emptyTitle: "No recent products yet",
         emptyCopy:
@@ -4862,11 +4867,11 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
   document.title = `${productName} | TECHM8 Online Store`;
   shell.innerHTML = `
     <div class="storefront-breadcrumbs">
-      <a href="index.html">Home</a>
+      <a href="/">Home</a>
       <span>/</span>
-      <a href="shop.html">Online Store</a>
+      <a href="/shop.html">Online Store</a>
       <span>/</span>
-      <a href="category.html?slug=${encodeURIComponent(product.category_slug)}">${escapeHtml(product.category_name)}</a>
+      <a href="/category.html?slug=${encodeURIComponent(product.category_slug)}">${escapeHtml(product.category_name)}</a>
       <span>/</span>
       <span>${escapeHtml(productName)}</span>
     </div>
@@ -4927,7 +4932,7 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
             <input type="number" min="1" value="1" data-product-qty>
           </label>
           <button class="button button--primary storefront-pdp__cart-button" type="button" data-product-add-cart>Add to cart</button>
-          <a class="button button--ghost" href="stores.html">Find in store</a>
+          <a class="button button--ghost" href="/stores.html">Find in store</a>
         </div>
 
         <div class="storefront-pdp__highlights">
@@ -5148,7 +5153,7 @@ function initProductNavigationCache() {
 }
 
 function createCatalogCard(product, index = Number.POSITIVE_INFINITY) {
-  const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
+  const detailUrl = getProductPageHref(product.slug);
   const categoryUrl = `category.html?slug=${encodeURIComponent(product.category_slug)}`;
   const retailPrice = Number(product.retail_price) || 0;
   const compareAtPrice = Number(product.compare_at_price) || 0;
@@ -5224,7 +5229,7 @@ function buildHomeLatestPayload(sourcePayload, limit = 18) {
 }
 
 function createHomeFeaturedCard(product, index = 0) {
-  const detailUrl = `product.html?slug=${encodeURIComponent(product.slug)}`;
+  const detailUrl = getProductPageHref(product.slug);
   const retailPrice = Number(product.retail_price) || 0;
   const compareAtPrice = Number(product.compare_at_price) || 0;
   const hasComparePrice =
@@ -5503,8 +5508,30 @@ function initProductDetailPage() {
   if (!(shell instanceof HTMLElement)) return;
 
   const params = new URLSearchParams(window.location.search);
-  const slug = params.get("slug") || "";
-  let initialProduct = getRememberedProductNavigationCache(slug);
+  const slug = root.dataset.productSlug || params.get("slug") || "";
+  if (slug) {
+    const canonicalUrl = `${getConfiguredSiteBaseUrl()}${getProductPageHref(slug)}`;
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!(canonical instanceof HTMLLinkElement)) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.append(canonical);
+    }
+    canonical.href = canonicalUrl;
+  }
+  const prerenderedProductNode = document.querySelector(
+    "script[data-prerendered-product]",
+  );
+  let prerenderedProduct = null;
+  if (prerenderedProductNode instanceof HTMLScriptElement) {
+    try {
+      prerenderedProduct = JSON.parse(prerenderedProductNode.textContent || "null");
+    } catch {
+      prerenderedProduct = null;
+    }
+  }
+  let initialProduct =
+    prerenderedProduct || getRememberedProductNavigationCache(slug);
 
   const renderNotFound = () => {
     shell.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing product</span><h3>Product not found</h3><p>Return to the online store and select another item.</p><div class="storefront-card__actions"><a href="shop.html">Back to online store</a></div></div></article>`;
@@ -5585,14 +5612,14 @@ function renderCartLineItems(target, items) {
       const lineTotal = (Number(item.price) || 0) * (Number(item.qty) || 0);
       return `
       <article class="storefront-cart__item">
-        <a class="storefront-cart__media" href="product.html?slug=${encodeURIComponent(item.slug)}">
+        <a class="storefront-cart__media" href="${getProductPageHref(item.slug)}">
           ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}">` : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`}
         </a>
         <div class="storefront-cart__details">
           <div class="storefront-cart__top">
             <div>
               <p class="storefront-cart__eyebrow">${escapeHtml(item.category_name || "Store product")}</p>
-              <h3><a href="product.html?slug=${encodeURIComponent(item.slug)}">${escapeHtml(item.name)}</a></h3>
+              <h3><a href="${getProductPageHref(item.slug)}">${escapeHtml(item.name)}</a></h3>
             </div>
             <strong>${escapeHtml(formatMoney(lineTotal))}</strong>
           </div>
@@ -6456,7 +6483,7 @@ function initCheckoutPage() {
         const lineTotal = (Number(item.price) || 0) * (Number(item.qty) || 0);
         return `
           <article class="storefront-summary-item">
-            <a class="storefront-summary-item__media" href="product.html?slug=${encodeURIComponent(item.slug)}">
+            <a class="storefront-summary-item__media" href="${getProductPageHref(item.slug)}">
               ${
                 item.image_url
                   ? `<img src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.name)}" loading="lazy">`
@@ -6465,7 +6492,7 @@ function initCheckoutPage() {
             </a>
             <div class="storefront-summary-item__body">
               <p>Stock level: <strong>In stock</strong></p>
-              <h3><a href="product.html?slug=${encodeURIComponent(item.slug)}">${escapeHtml(item.name)}</a></h3>
+              <h3><a href="${getProductPageHref(item.slug)}">${escapeHtml(item.name)}</a></h3>
               <div class="storefront-summary-item__meta">
                 <span>QTY: ${escapeHtml(String(item.qty || 1))}</span>
                 <strong>${escapeHtml(formatMoney(lineTotal))}</strong>

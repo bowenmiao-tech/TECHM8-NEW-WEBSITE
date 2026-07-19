@@ -3736,7 +3736,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
     const descriptionHtml = getEditableProductDescriptionHtml(row);
     const gallery = normalizeProductGallery(row);
     const heroImage = gallery.find((image) => image.image_url)?.image_url || row.image_url || "";
-    const storefrontUrl = `../product.html?slug=${encodeURIComponent(row.slug || "")}`;
+    const storefrontUrl = `../products/${encodeURIComponent(row.slug || "")}/`;
 
     editorTarget.innerHTML = `
       <div class="admin-editor admin-product-editor">

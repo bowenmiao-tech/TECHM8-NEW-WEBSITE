@@ -303,6 +303,16 @@ npm run build
 - When backend behavior changes, ensure matching Edge Functions are deployed
 - When frontend behavior changes, ensure the latest static site is redeployed
 
+### Generated catalog pages
+
+- Supabase remains the source of truth for products, categories, prices, stock and images.
+- `npm run prerender` reads only publicly visible catalog rows through the existing publishable/anon key and generates crawlable pages at `/products/<slug>/`.
+- Generated pages include initial product HTML, canonical metadata and `Product`/`Offer` JSON-LD. The browser then refreshes the product from Supabase so customers receive current catalog data.
+- `npm run build` runs prerendering before Vite.
+- `.github/workflows/refresh-catalog-pages.yml` checks Supabase every 30 minutes and commits only when generated output changed. It can also be run manually or triggered with the `catalog-updated` repository dispatch event.
+- `sitemap-products.xml` is generated automatically in both the repository root and `public/`, so it is available whether the site is served directly or from Vite's `dist/` output. It is advertised alongside the main sitemap in `robots.txt`.
+- Set `TECHM8_SKIP_PRODUCT_PRERENDER=1` only for an offline build where the existing generated catalog must be preserved.
+
 ## Current Business Priorities
 
 The most important business areas currently are:

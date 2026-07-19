@@ -1,0 +1,49 @@
+name: Refresh catalog pages
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [catalog-updated]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-catalog-pages
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the website
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate product and business pages
+        run: npm run prerender
+
+      - name: Publish changed generated pages
+        shell: bash
+        run: |
+          if git diff --quiet -- products sitemap-products.xml public/sitemap-products.xml business-services.html business-services; then
+            echo "Catalog pages are already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add products sitemap-products.xml public/sitemap-products.xml business-services.html business-services
+          git commit -m "chore: refresh generated catalog pages [skip ci]"
+          git push
