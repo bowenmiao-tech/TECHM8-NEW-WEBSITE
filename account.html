@@ -83,6 +83,7 @@
       min-height: 3.35rem;
       padding: 0.85rem 1rem;
       border: 1px solid var(--login-dark);
+      border-radius: 999px;
       background: #fff;
       color: var(--login-dark);
       font: inherit;
@@ -107,6 +108,24 @@
       font-size: 1.15rem;
       font-weight: 700;
       line-height: 1;
+    }
+
+    .login-provider__icon img {
+      display: block;
+      width: 1.15rem;
+      height: 1.15rem;
+    }
+
+    .login-provider--google {
+      border-color: #d5dbe3;
+      color: #3c4043;
+      box-shadow: 0 7px 18px rgba(32, 45, 58, 0.07);
+    }
+
+    .login-provider--google:hover {
+      border-color: #b8c4d1;
+      background: #f8fbff;
+      color: #202124;
     }
 
     .login-divider {
@@ -332,9 +351,9 @@
           <h1>Log in</h1>
 
           <div class="login-provider-row">
-            <button class="login-provider" type="button" data-auth-google>
-              <span class="login-provider__icon">G</span>
-              <span>Google</span>
+            <button class="login-provider login-provider--google" type="button" data-auth-google>
+              <span class="login-provider__icon" aria-hidden="true"><img src="assets/google-g.svg" alt=""></span>
+              <span>Sign in with Google</span>
             </button>
             <button class="login-provider" type="button" data-auth-facebook>
               <span class="login-provider__icon">f</span>
