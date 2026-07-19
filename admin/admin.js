@@ -3593,6 +3593,12 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
                 <option value="false" ${!row.is_visible ? "selected" : ""}>Hidden</option>
               </select>
             </label>
+            <label><span>POS visible</span>
+              <select name="is_pos_visible" ${state.canEdit ? "" : "disabled"}>
+                <option value="true" ${row.is_pos_visible !== false ? "selected" : ""}>Show in POS</option>
+                <option value="false" ${row.is_pos_visible === false ? "selected" : ""}>Hide from POS</option>
+              </select>
+            </label>
             <label><span>Featured</span>
               <select name="is_featured" ${state.canEdit ? "" : "disabled"}>
                 <option value="false" ${!row.is_featured ? "selected" : ""}>No</option>
@@ -3673,6 +3679,7 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
           cost_price: formData.get("cost_price"),
           stock_quantity: formData.get("stock_quantity"),
           is_visible: formData.get("is_visible") === "true",
+          is_pos_visible: formData.get("is_pos_visible") !== "false",
           is_featured: formData.get("is_featured") === "true",
           image_url: formData.get("image_url"),
           short_description: formData.get("short_description"),
@@ -3720,7 +3727,7 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
               <td>${formatMoney(row.retail_price)}</td>
               <td>${formatMoney(row.cost_price)}</td>
               <td>${escapeHtml(row.stock_quantity)}</td>
-              <td>${renderBadge(row.is_visible ? "visible" : "hidden")}</td>
+              <td>${renderBadge(row.is_visible ? "visible" : "hidden")} ${renderBadge(row.is_pos_visible !== false ? "POS" : "no POS")}</td>
             </tr>
           `).join("")}
         </tbody>
@@ -3964,7 +3971,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
             <div class="admin-editor-section__heading">
               <div>
                 <h3>Publishing</h3>
-                <p>Control online visibility and featured product placement.</p>
+                <p>Control online, POS and featured product placement.</p>
               </div>
             </div>
             <div class="admin-editor__grid">
@@ -3972,6 +3979,12 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
                 <select name="is_visible" ${state.canEdit ? "" : "disabled"}>
                   <option value="true" ${row.is_visible ? "selected" : ""}>Show in online store</option>
                   <option value="false" ${!row.is_visible ? "selected" : ""}>Hide from online store</option>
+                </select>
+              </label>
+              <label><span>POS visibility</span>
+                <select name="is_pos_visible" ${state.canEdit ? "" : "disabled"}>
+                  <option value="true" ${row.is_pos_visible !== false ? "selected" : ""}>Show in POS</option>
+                  <option value="false" ${row.is_pos_visible === false ? "selected" : ""}>Hide from POS</option>
                 </select>
               </label>
               <label><span>Featured product</span>
@@ -4215,6 +4228,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
           cost_price: formData.get("cost_price"),
           stock_quantity: formData.get("stock_quantity"),
           is_visible: formData.get("is_visible") === "true",
+          is_pos_visible: formData.get("is_pos_visible") !== "false",
           is_featured: formData.get("is_featured") === "true",
           image_url: images[0]?.image_url || row.image_url || "",
           images,
@@ -4266,6 +4280,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
               <small>${formatMoney(row.retail_price)} / Stock ${escapeHtml(row.stock_quantity ?? 0)}</small>
             </span>
             ${renderBadge(row.is_visible ? "visible" : "hidden")}
+            ${renderBadge(row.is_pos_visible !== false ? "POS" : "no POS")}
           </button>
         `).join("")}
       </div>

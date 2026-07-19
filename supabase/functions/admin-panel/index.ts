@@ -1210,7 +1210,7 @@ async function listProducts(supabaseAdmin: ReturnType<typeof createClient>, cont
 
   let query = supabaseAdmin
     .from('products')
-    .select('id, sku, slug, name, brand, model, category_id, short_description, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at', { count: 'exact' })
+    .select('id, sku, slug, name, brand, model, category_id, short_description, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at', { count: 'exact' })
     .order('updated_at', { ascending: false })
     .range(from, to)
 
@@ -1249,7 +1249,7 @@ async function getProductDetail(supabaseAdmin: ReturnType<typeof createClient>, 
 
   const { data, error } = await supabaseAdmin
     .from('products')
-    .select('id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at')
+    .select('id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at')
     .eq('id', productId)
     .maybeSingle()
 
@@ -1507,6 +1507,7 @@ async function createProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     min_order_quantity: normalizeNumber(productInput.min_order_quantity) ?? 1,
     is_featured: typeof productInput.is_featured === 'boolean' ? productInput.is_featured : false,
     is_visible: typeof productInput.is_visible === 'boolean' ? productInput.is_visible : false,
+    is_pos_visible: typeof productInput.is_pos_visible === 'boolean' ? productInput.is_pos_visible : true,
     seo_title: normalizeNullableString(productInput.seo_title) ?? buildProductSeoTitle(name),
     seo_description:
       normalizeNullableString(productInput.seo_description) ?? buildProductSeoDescription(shortDescription, name),
@@ -1517,7 +1518,7 @@ async function createProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     .from('products')
     .insert(insertPayload)
     .select(
-      'id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at',
+      'id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at',
     )
     .single()
 
@@ -1597,6 +1598,7 @@ async function cloneProduct(supabaseAdmin: ReturnType<typeof createClient>, cont
     min_order_quantity: source.min_order_quantity ?? 1,
     is_featured: false,
     is_visible: false,
+    is_pos_visible: source.is_pos_visible !== false,
     seo_title: buildProductSeoTitle(cloneName),
     seo_description: buildProductSeoDescription(source.short_description ?? null, cloneName),
     detail_html: detailHtml.value,
@@ -1606,7 +1608,7 @@ async function cloneProduct(supabaseAdmin: ReturnType<typeof createClient>, cont
     .from('products')
     .insert(clonePayload)
     .select(
-      'id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at',
+      'id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at',
     )
     .single()
 
@@ -1780,6 +1782,7 @@ async function importProductsFromRows(
       setNumberPatch(patch, 'min_order_quantity', row.min_order_quantity)
       if (typeof row.is_featured === 'boolean') patch.is_featured = row.is_featured
       if (typeof row.is_visible === 'boolean') patch.is_visible = row.is_visible
+      if (typeof row.is_pos_visible === 'boolean') patch.is_pos_visible = row.is_pos_visible
       setStringPatch(patch, 'seo_title', row.seo_title)
       setStringPatch(patch, 'seo_description', row.seo_description)
       if (hasImportField('detail_html')) {
@@ -1846,6 +1849,7 @@ async function importProductsFromRows(
       min_order_quantity: normalizeNumber(row.min_order_quantity) ?? 1,
       is_featured: typeof row.is_featured === 'boolean' ? row.is_featured : false,
       is_visible: typeof row.is_visible === 'boolean' ? row.is_visible : true,
+      is_pos_visible: typeof row.is_pos_visible === 'boolean' ? row.is_pos_visible : true,
       seo_title: normalizeNullableString(row.seo_title) ?? buildProductSeoTitle(name),
       seo_description:
         normalizeNullableString(row.seo_description) ?? buildProductSeoDescription(shortDescription, name),
@@ -1932,6 +1936,7 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     cost_price: normalizeNumber(body.cost_price),
     stock_quantity: stockQuantity,
     is_visible: typeof body.is_visible === 'boolean' ? body.is_visible : undefined,
+    is_pos_visible: typeof body.is_pos_visible === 'boolean' ? body.is_pos_visible : undefined,
     is_featured: typeof body.is_featured === 'boolean' ? body.is_featured : undefined,
     image_url: heroImageUrl,
     detail_html: detailHtml.value,
@@ -1942,7 +1947,7 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     .from('products')
     .update(cleanPatch)
     .eq('id', productId)
-    .select('id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_featured, image_url, compatibility, updated_at, created_at')
+    .select('id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at')
     .single()
 
   if (error) {

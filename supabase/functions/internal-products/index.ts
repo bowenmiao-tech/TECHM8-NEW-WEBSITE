@@ -25,6 +25,7 @@ type ProductRow = {
   stock_quantity: number | null
   updated_at: string | null
   is_visible: boolean | null
+  is_pos_visible: boolean | null
   categories: {
     id: number | null
     slug: string | null
@@ -156,6 +157,7 @@ Deno.serve(async (req) => {
     const to = from + pageSize - 1
     const updatedSince = normalizeNullableString(input.updated_since)
     const includeHidden = input.include_hidden === true || String(input.include_hidden ?? '').toLowerCase() === 'true'
+    const includePosHidden = input.include_pos_hidden === true || String(input.include_pos_hidden ?? '').toLowerCase() === 'true'
     const storeSlug = normalizeNullableString(input.store_slug)
 
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
@@ -164,12 +166,13 @@ Deno.serve(async (req) => {
 
     let productsQuery = supabaseAdmin
       .from('products')
-      .select('id, sku, slug, name, upc, cost_price, retail_price, compare_at_price, image_url, stock_quantity, updated_at, is_visible, categories(id, slug, name)', { count: 'exact' })
+      .select('id, sku, slug, name, upc, cost_price, retail_price, compare_at_price, image_url, stock_quantity, updated_at, is_visible, is_pos_visible, categories(id, slug, name)', { count: 'exact' })
       .order('updated_at', { ascending: false })
       .order('id', { ascending: false })
       .range(from, to)
 
     if (!includeHidden) productsQuery = productsQuery.eq('is_visible', true)
+    if (!includePosHidden) productsQuery = productsQuery.eq('is_pos_visible', true)
     if (updatedSince) productsQuery = productsQuery.gte('updated_at', updatedSince)
 
     const { data: products, error: productsError, count } = await productsQuery
@@ -252,6 +255,7 @@ Deno.serve(async (req) => {
         compare_at_price: normalizeNumber(product.compare_at_price),
         barcode: product.upc,
         total_stock: Number(product.stock_quantity) || 0,
+        is_pos_visible: product.is_pos_visible !== false,
         store_inventory: storeInventory,
         image_url: imageUrl,
         thumbnail_url: buildThumbnailUrl(imageUrl, supabaseUrl),

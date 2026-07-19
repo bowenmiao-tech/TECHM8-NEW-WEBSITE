@@ -66,6 +66,7 @@ Supported query parameters:
 - `updated_since`: optional ISO timestamp for incremental sync
 - `store_slug`: optional store inventory filter
 - `include_hidden=true`: optional, includes products not visible on the website
+- `include_pos_hidden=true`: optional, includes products hidden from POS
 
 Example:
 
@@ -82,6 +83,7 @@ Returned product fields:
 - `category_slug`: category slug
 - `category_name`: category name
 - `cost_price`: cost price
+- `is_pos_visible`: POS visibility flag
 - `sale_price`: current selling price from `retail_price`
 - `store_inventory`: per-store stock rows with store name, store slug, quantity, and shelf location
 - `barcode`: product UPC/barcode
