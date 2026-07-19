@@ -6,6 +6,12 @@ import {
   recordOrderEvent,
   snapshotStore,
 } from '../_shared/order-commerce.ts'
+import {
+  getZipEnvironment,
+  getZipReturnUrl,
+  requireZipCheckoutUri,
+  zipRequest,
+} from '../_shared/zip-payments.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -52,6 +58,16 @@ function validEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
+function absoluteSiteUrl(path: unknown) {
+  const siteUrl = String(Deno.env.get('SITE_URL') ?? '').trim().replace(/\/+$/, '')
+  if (!siteUrl || !path) return undefined
+  try {
+    return new URL(String(path), `${siteUrl}/`).toString()
+  } catch {
+    return undefined
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -65,6 +81,8 @@ Deno.serve(async (req) => {
     const body = await req.json()
 
     const customerName = String(body.customer_name ?? '').trim()
+    const firstName = String(body.first_name ?? '').trim()
+    const lastName = String(body.last_name ?? '').trim()
     const phone = String(body.phone ?? '').trim()
     const email = String(body.email ?? '').trim()
     const storeSlug = String(body.store_slug ?? '').trim()
@@ -84,6 +102,12 @@ Deno.serve(async (req) => {
     const state = String(body.state ?? '').trim()
     const postcode = String(body.postcode ?? '').trim()
     const countryCode = String(body.country_code ?? 'AU').trim() || 'AU'
+    const billingAddressLine1 = String(body.billing_address_line_1 ?? '').trim()
+    const billingAddressLine2 = String(body.billing_address_line_2 ?? '').trim()
+    const billingSuburb = String(body.billing_suburb ?? '').trim()
+    const billingState = String(body.billing_state ?? '').trim()
+    const billingPostcode = String(body.billing_postcode ?? '').trim()
+    const billingCountryCode = String(body.billing_country_code ?? 'AU').trim().toUpperCase() || 'AU'
     const metadata = typeof body.metadata === 'object' && body.metadata !== null ? body.metadata : {}
     const items = Array.isArray(body.items) ? (body.items as CartItemInput[]) : []
 
@@ -191,6 +215,24 @@ Deno.serve(async (req) => {
 
     if (!resolvedFeeProfile || !resolvedFeeProfile.is_enabled) {
       return Response.json({ ok: false, error: 'Selected payment method is not available.' }, { status: 422, headers: corsHeaders })
+    }
+    if (resolvedFeeProfile.code === 'zip') {
+      if (resolvedFeeProfile.provider !== 'zip') {
+        return Response.json({ ok: false, error: 'Zip payment is not configured as a direct Zip payment method.' }, { status: 500, headers: corsHeaders })
+      }
+      if (
+        resolvedFeeProfile.fee_type !== 'none' ||
+        Number(resolvedFeeProfile.percentage || 0) !== 0 ||
+        Number(resolvedFeeProfile.fixed_amount || 0) !== 0
+      ) {
+        return Response.json({ ok: false, error: 'Zip cannot include a customer payment surcharge.' }, { status: 500, headers: corsHeaders })
+      }
+      if (!firstName || !lastName || !billingAddressLine1 || !billingSuburb || !billingState || !/^\d{4}$/.test(billingPostcode)) {
+        return Response.json({ ok: false, error: 'Please complete the Zip billing address.' }, { status: 422, headers: corsHeaders })
+      }
+      if (billingCountryCode !== 'AU') {
+        return Response.json({ ok: false, error: 'Zip billing is currently available for Australian addresses only.' }, { status: 422, headers: corsHeaders })
+      }
     }
 
     const requestedSlugs = items
@@ -356,6 +398,19 @@ Deno.serve(async (req) => {
           postcode,
           countryCode,
         }),
+        billing_snapshot: resolvedFeeProfile.code === 'zip'
+          ? {
+              recipient_name: customerName,
+              email,
+              phone,
+              address_line_1: billingAddressLine1,
+              address_line_2: billingAddressLine2 || null,
+              suburb: billingSuburb,
+              state: billingState,
+              postcode: billingPostcode,
+              country_code: billingCountryCode,
+            }
+          : {},
         amount_paid: 0,
         amount_refunded: 0,
         gst_amount: gstAmount,
@@ -383,6 +438,128 @@ Deno.serve(async (req) => {
       console.error(orderItemsError)
       await supabaseAdmin.from('orders').delete().eq('id', insertedOrder.id)
       return Response.json({ ok: false, error: 'Order items could not be saved.' }, { status: 500, headers: corsHeaders })
+    }
+
+    if (resolvedFeeProfile.provider === 'zip' && resolvedFeeProfile.code === 'zip') {
+      try {
+        const checkout = await zipRequest<{ id?: unknown; uri?: unknown }>('/checkouts', {
+          method: 'POST',
+          idempotencyKey: `techm8-zip-checkout-${insertedOrder.id}`,
+          body: {
+            type: 'standard',
+            shopper: {
+              first_name: firstName,
+              last_name: lastName,
+              email,
+              phone,
+              billing_address: {
+                first_name: firstName,
+                last_name: lastName,
+                line1: billingAddressLine1,
+                ...(billingAddressLine2 ? { line2: billingAddressLine2 } : {}),
+                city: billingSuburb,
+                state: billingState,
+                postal_code: billingPostcode,
+                country: billingCountryCode,
+              },
+            },
+            order: {
+              reference: orderCode,
+              amount: totalAmount,
+              currency: 'AUD',
+              items: [
+                ...lineItems.map((item) => ({
+                  name: item.product_name,
+                  amount: decimal(item.unit_price),
+                  quantity: item.quantity,
+                  type: 'sku',
+                  reference: item.sku || item.product_slug,
+                  ...(absoluteSiteUrl(`product.html?slug=${encodeURIComponent(item.product_slug)}`)
+                    ? { item_uri: absoluteSiteUrl(`product.html?slug=${encodeURIComponent(item.product_slug)}`) }
+                    : {}),
+                  ...(absoluteSiteUrl(item.image_url) ? { image_uri: absoluteSiteUrl(item.image_url) } : {}),
+                })),
+                ...(shippingFeeAmount > 0
+                  ? [{
+                      name: shippingOption?.label || 'Shipping',
+                      amount: shippingFeeAmount,
+                      quantity: 1,
+                      type: 'sku',
+                      reference: shippingOption?.code || 'shipping',
+                    }]
+                  : []),
+              ],
+              shipping: fulfillmentMethod === 'shipping'
+                ? {
+                    pickup: false,
+                    address: {
+                      first_name: recipientName.split(/\s+/).filter(Boolean)[0] || firstName,
+                      last_name: recipientName.split(/\s+/).filter(Boolean).slice(1).join(' ') || lastName,
+                      line1: addressLine1,
+                      ...(addressLine2 ? { line2: addressLine2 } : {}),
+                      city: suburb,
+                      state,
+                      postal_code: postcode,
+                      country: countryCode.toUpperCase(),
+                    },
+                  }
+                : { pickup: true },
+            },
+            config: {
+              redirect_uri: getZipReturnUrl(orderCode),
+            },
+          },
+        })
+        const zipCheckoutId = String(checkout.id ?? '').trim()
+        const checkoutUrl = requireZipCheckoutUri(checkout.uri)
+        if (!zipCheckoutId) throw new Error('Zip did not return a checkout identifier.')
+
+        const { error: zipUpdateError } = await supabaseAdmin
+          .from('orders')
+          .update({
+            zip_checkout_id: zipCheckoutId,
+            zip_payment_state: 'created',
+            zip_environment: getZipEnvironment(),
+          })
+          .eq('id', insertedOrder.id)
+        if (zipUpdateError) throw zipUpdateError
+
+        await recordOrderEvent(supabaseAdmin, insertedOrder.id, {
+          eventKey: `zip_checkout_created:${zipCheckoutId}`,
+          eventType: 'payment_started',
+          title: 'Zip checkout started',
+          description: 'The customer was redirected to Zip to approve payment.',
+          actor: { type: 'customer', identifier: authUser.id },
+          data: { zip_checkout_id: zipCheckoutId, environment: getZipEnvironment() },
+        })
+
+        return Response.json(
+          {
+            ok: true,
+            order_id: insertedOrder.id,
+            order_code: insertedOrder.order_code,
+            store_name: resolvedStore.name,
+            total_amount: insertedOrder.total_amount,
+            payment_fee_amount: insertedOrder.payment_fee_amount,
+            shipping_fee_amount: insertedOrder.shipping_fee_amount,
+            shipping_service_code: insertedOrder.shipping_service_code,
+            shipping_service_name: insertedOrder.shipping_service_name,
+            shipping_delivery_time: shippingOption?.deliveryTime ?? null,
+            payment_method_code: insertedOrder.payment_method_code,
+            payment_method_label: insertedOrder.payment_method_label,
+            zip_checkout_id: zipCheckoutId,
+            checkout_url: checkoutUrl,
+          },
+          { status: 200, headers: corsHeaders },
+        )
+      } catch (zipError) {
+        console.error('Zip checkout could not be started.', zipError)
+        await supabaseAdmin.from('orders').delete().eq('id', insertedOrder.id)
+        return Response.json(
+          { ok: false, error: 'Zip payment could not be started. Please try again or choose another payment method.' },
+          { status: 502, headers: corsHeaders },
+        )
+      }
     }
 
     try {

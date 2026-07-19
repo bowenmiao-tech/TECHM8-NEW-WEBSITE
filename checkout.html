@@ -625,6 +625,93 @@
                       required
                     />
                   </div>
+                  <div
+                    class="storefront-checkout__form-grid-full storefront-checkout__zip-billing"
+                    data-zip-billing
+                    hidden
+                  >
+                    <div class="storefront-checkout__zip-billing-heading">
+                      <div>
+                        <span class="storefront-checkout__label"
+                          >Zip billing address</span
+                        >
+                        <p>
+                          Zip uses this address to verify your account. You can
+                          review and edit it before continuing to Zip.
+                        </p>
+                      </div>
+                      <span class="storefront-payment-option__badge storefront-payment-option__badge--zip"
+                        >zip</span
+                      >
+                    </div>
+                    <div class="storefront-checkout__form-grid">
+                      <label class="storefront-checkout__form-grid-full">
+                        <span>Address line 1</span>
+                        <input
+                          type="text"
+                          name="billing_address_line_1"
+                          autocomplete="billing address-line1"
+                          data-zip-billing-field
+                        />
+                      </label>
+                      <label class="storefront-checkout__form-grid-full">
+                        <span>Address line 2</span>
+                        <input
+                          type="text"
+                          name="billing_address_line_2"
+                          autocomplete="billing address-line2"
+                          data-zip-billing-field
+                        />
+                      </label>
+                      <label>
+                        <span>Suburb</span>
+                        <input
+                          type="text"
+                          name="billing_suburb"
+                          autocomplete="billing address-level2"
+                          data-zip-billing-field
+                        />
+                      </label>
+                      <label>
+                        <span>Postcode</span>
+                        <input
+                          type="text"
+                          name="billing_postcode"
+                          inputmode="numeric"
+                          autocomplete="billing postal-code"
+                          data-zip-billing-field
+                        />
+                      </label>
+                      <label>
+                        <span>State</span>
+                        <select
+                          name="billing_state"
+                          autocomplete="billing address-level1"
+                          data-zip-billing-field
+                        >
+                          <option value="">Select state</option>
+                          <option value="QLD">QLD</option>
+                          <option value="NSW">NSW</option>
+                          <option value="VIC">VIC</option>
+                          <option value="ACT">ACT</option>
+                          <option value="SA">SA</option>
+                          <option value="WA">WA</option>
+                          <option value="TAS">TAS</option>
+                          <option value="NT">NT</option>
+                        </select>
+                      </label>
+                      <label>
+                        <span>Country</span>
+                        <input
+                          type="text"
+                          name="billing_country_code"
+                          value="AU"
+                          readonly
+                          data-zip-billing-field
+                        />
+                      </label>
+                    </div>
+                  </div>
                   <label class="storefront-checkout__form-grid-full">
                     <span>Order notes</span>
                     <textarea

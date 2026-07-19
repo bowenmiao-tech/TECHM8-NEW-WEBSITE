@@ -5974,6 +5974,10 @@ function initCheckoutPage() {
   const shippingFields = Array.from(
     root.querySelectorAll("[data-checkout-shipping-field]"),
   );
+  const zipBillingSection = root.querySelector("[data-zip-billing]");
+  const zipBillingFields = Array.from(
+    root.querySelectorAll("[data-zip-billing-field]"),
+  );
   const accountSetup = root.querySelector("[data-checkout-account-setup]");
   const passwordField = root.querySelector("[data-checkout-password]");
   const passwordConfirmField = root.querySelector(
@@ -6045,7 +6049,16 @@ function initCheckoutPage() {
   const submitButton = form.querySelector('button[type="submit"]');
   const paymentProfiles = [];
   const checkoutParams = new URLSearchParams(window.location.search);
-  const isPaymentCancelled = checkoutParams.get("payment") === "cancelled";
+  const paymentReturnState = String(
+    checkoutParams.get("payment") || "",
+  ).trim();
+  const isPaymentCancelled = [
+    "cancelled",
+    "zip_declined",
+    "zip_referred",
+    "zip_cancelled",
+    "zip_failed",
+  ].includes(paymentReturnState);
   let activeAuthState = null;
   let authChecked = false;
   let checkoutStep = "auth";
@@ -6357,6 +6370,40 @@ function initCheckoutPage() {
         .trim()
         .toLowerCase();
     }
+  };
+
+  const fillMissingZipBillingAddress = () => {
+    const profile = activeAuthState?.profile || {};
+    const isDelivery = isWarehouseDispatchSelected();
+    const values = {
+      billing_address_line_1: isDelivery
+        ? form.elements.namedItem("address_line_1")?.value
+        : profile.address_line_1,
+      billing_address_line_2: isDelivery
+        ? form.elements.namedItem("address_line_2")?.value
+        : profile.address_line_2,
+      billing_suburb: isDelivery
+        ? form.elements.namedItem("suburb")?.value
+        : profile.suburb,
+      billing_postcode: isDelivery
+        ? form.elements.namedItem("postcode")?.value
+        : profile.postcode,
+      billing_state: isDelivery
+        ? form.elements.namedItem("state")?.value
+        : profile.state,
+      billing_country_code: "AU",
+    };
+
+    Object.entries(values).forEach(([name, value]) => {
+      const field = form.elements.namedItem(name);
+      if (
+        (field instanceof HTMLInputElement ||
+          field instanceof HTMLSelectElement) &&
+        !String(field.value || "").trim()
+      ) {
+        field.value = String(value || "").trim();
+      }
+    });
   };
 
   const getSelectedPaymentProfile = () => {
@@ -6729,7 +6776,7 @@ function initCheckoutPage() {
       deliveryReady;
     syncCheckoutProgress();
     const visibleProfiles = getVisiblePaymentProfiles();
-    const selectedProfile = getSelectedPaymentProfile();
+    let selectedProfile = getSelectedPaymentProfile();
 
     if (
       paymentMethodField instanceof HTMLInputElement &&
@@ -6743,8 +6790,23 @@ function initCheckoutPage() {
               (profile) => profile.code === "pay_in_store",
             ) || visibleProfiles[0];
         paymentMethodField.value = fallbackProfile ? fallbackProfile.code : "";
+        selectedProfile = getSelectedPaymentProfile();
       }
     }
+
+    const showZipBilling = showStepTwo && selectedProfile?.provider === "zip";
+    if (zipBillingSection instanceof HTMLElement) {
+      zipBillingSection.hidden = !showZipBilling;
+    }
+    zipBillingFields.forEach((field) => {
+      if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement))
+        return;
+      field.required =
+        showZipBilling &&
+        field.name !== "billing_address_line_2" &&
+        field.name !== "billing_country_code";
+    });
+    if (showZipBilling) fillMissingZipBillingAddress();
 
     if (stepTwo instanceof HTMLElement) {
       stepTwo.hidden = !showStepTwo;
@@ -6818,6 +6880,7 @@ function initCheckoutPage() {
 
   const formatFeeRule = (profile) => {
     if (!profile) return "";
+    if (profile.code === "zip") return "No surcharge";
     const percentage = Number(profile.percentage) || 0;
     const fixedAmount = Number(profile.fixed_amount) || 0;
 
@@ -6855,6 +6918,14 @@ function initCheckoutPage() {
         {
           label: "Afterpay",
           className: "storefront-payment-option__badge--afterpay",
+        },
+      ];
+    }
+    if (profile.code === "zip") {
+      return [
+        {
+          label: "zip",
+          className: "storefront-payment-option__badge--zip",
         },
       ];
     }
@@ -7069,7 +7140,9 @@ function initCheckoutPage() {
         checkoutStep !== "payment";
       submitButton.textContent = items.length
         ? isAuthenticated
-          ? "Submit order request"
+          ? getSelectedPaymentProfile()?.provider === "zip"
+            ? "Continue to Zip"
+            : "Submit order request"
           : "Sign in before checkout"
         : "Add items before checkout";
     }
@@ -7583,6 +7656,14 @@ function initCheckoutPage() {
       state: String(formData.get("state") || "").trim(),
       country_code: String(formData.get("country_code") || "AU").trim(),
     };
+    const zipBillingPayload = {
+      billing_address_line_1: String(formData.get("billing_address_line_1") || "").trim(),
+      billing_address_line_2: String(formData.get("billing_address_line_2") || "").trim(),
+      billing_suburb: String(formData.get("billing_suburb") || "").trim(),
+      billing_postcode: String(formData.get("billing_postcode") || "").trim(),
+      billing_state: String(formData.get("billing_state") || "").trim().toUpperCase(),
+      billing_country_code: String(formData.get("billing_country_code") || "AU").trim().toUpperCase(),
+    };
 
     if (
       !requireField(
@@ -7677,6 +7758,41 @@ function initCheckoutPage() {
         "error",
       );
       return;
+    }
+
+    if (selectedProfile?.provider === "zip") {
+      const requiredZipBillingFields = [
+        ["billing_address_line_1", "Enter your Zip billing address."],
+        ["billing_suburb", "Enter your Zip billing suburb."],
+        ["billing_postcode", "Enter your Zip billing postcode."],
+        ["billing_state", "Select your Zip billing state."],
+      ];
+      for (const [name, message] of requiredZipBillingFields) {
+        const field = form.elements.namedItem(name);
+        if (
+          !requireField(
+            field,
+            message,
+            "A billing address is required for Zip.",
+          )
+        )
+          return;
+      }
+      if (!/^\d{4}$/.test(zipBillingPayload.billing_postcode)) {
+        invalidateField(
+          form.elements.namedItem("billing_postcode"),
+          "Enter a valid 4-digit Australian postcode.",
+          "Please check your Zip billing postcode.",
+        );
+        return;
+      }
+      if (zipBillingPayload.billing_country_code !== "AU") {
+        setCheckoutMessage(
+          "Zip billing is currently available for Australian addresses only.",
+          "error",
+        );
+        return;
+      }
     }
 
     if (warehouseDispatch) {
@@ -7785,6 +7901,7 @@ function initCheckoutPage() {
       items,
       created_at: new Date().toISOString(),
       ...shippingPayload,
+      ...(selectedProfile?.provider === "zip" ? zipBillingPayload : {}),
     };
 
     const endpoint = window.TECHM8_CONFIG?.orderEndpoint || "";
@@ -7928,6 +8045,10 @@ function initCheckoutPage() {
         return;
       }
 
+      if (selectedProfile?.provider === "zip" && !endpoint) {
+        throw new Error("Direct Zip checkout is not configured yet.");
+      }
+
       if (endpoint) {
         const response = await fetch(endpoint, {
           method: "POST",
@@ -7973,6 +8094,22 @@ function initCheckoutPage() {
         payload.payment_method_label = String(
           result.payment_method_label || payload.payment_method_label || "",
         );
+        if (selectedProfile?.provider === "zip") {
+          if (!result.checkout_url) {
+            throw new Error("Zip checkout could not be started.");
+          }
+          payload.zip_checkout_id = String(result.zip_checkout_id || "");
+          saveCheckoutSuccessContext(payload);
+          trackGa4Event("checkout_redirect_to_zip", {
+            payment_type: "Zip Pay",
+            shipping_tier: String(
+              selectedShippingOption?.label ||
+                (warehouseDispatch ? "Warehouse Dispatch" : "Store Pickup"),
+            ),
+          });
+          window.location.href = result.checkout_url;
+          return;
+        }
       } else {
         saveLocalOrder(payload);
       }
@@ -8015,7 +8152,10 @@ function initCheckoutPage() {
       );
       if (submitButton instanceof HTMLButtonElement) {
         submitButton.disabled = false;
-        submitButton.textContent = "Submit order request";
+        submitButton.textContent =
+          selectedProfile?.provider === "zip"
+            ? "Continue to Zip"
+            : "Submit order request";
       }
     }
   });
@@ -8087,6 +8227,7 @@ function initCheckoutPage() {
             profile.code,
           );
         }
+        if (profile.provider === "zip") return profile.code === "zip";
         return false;
       });
 
@@ -8144,8 +8285,21 @@ function initCheckoutPage() {
   if (isPaymentCancelled && messageTarget instanceof HTMLElement) {
     messageTarget.hidden = false;
     messageTarget.className = "booking-message is-error";
+    const paymentReturnMessages = {
+      cancelled:
+        "Stripe payment was cancelled. Your cart is still here and you can try again.",
+      zip_declined:
+        "Zip did not approve this payment. Your cart is still here; you can try Zip again or choose another payment method.",
+      zip_referred:
+        "Zip needs additional review before it can approve this payment. Your cart is still here; please follow Zip's instructions or choose another payment method.",
+      zip_cancelled:
+        "Zip checkout was cancelled. Your cart is still here and no new charge was made.",
+      zip_failed:
+        "We could not confirm the Zip checkout. Your cart is still here; please try again or contact OZ TECH M8 with your order reference.",
+    };
     messageTarget.textContent =
-      "Stripe payment was cancelled. Your cart is still here and you can try again.";
+      paymentReturnMessages[paymentReturnState] ||
+      "Payment was not completed. Your cart is still here and you can try again.";
   }
 }
 

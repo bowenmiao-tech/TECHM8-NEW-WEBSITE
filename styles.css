@@ -9758,6 +9758,39 @@ html:has(body.repair-page--console-hero) {
   color: #0bb38d;
 }
 
+.storefront-checkout__zip-billing {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 1px solid rgba(170, 143, 255, 0.46);
+  border-radius: 1rem;
+  background: rgba(170, 143, 255, 0.08);
+}
+
+.storefront-checkout__zip-billing-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.storefront-checkout__zip-billing-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.storefront-payment-option__badge--zip {
+  border-color: #aa8fff;
+  background: #aa8fff;
+  color: #1f1036;
+  font-size: 0.9rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  text-transform: lowercase;
+}
+
 .storefront-payment-option__badge--manual {
   color: var(--accent);
 }

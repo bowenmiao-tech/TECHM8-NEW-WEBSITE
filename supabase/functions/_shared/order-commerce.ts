@@ -16,7 +16,7 @@ export const ORDER_DOCUMENT_BUCKET = 'order-documents'
 export const CENTRAL_ORDER_EMAIL = 'techm8contact@gmail.com'
 
 export type OrderActor = {
-  type: 'system' | 'customer' | 'admin' | 'stripe'
+  type: 'system' | 'customer' | 'admin' | 'stripe' | 'zip'
   identifier?: string | null
 }
 
@@ -840,7 +840,10 @@ export async function finalizePaidOrder(
 export async function applySucceededRefund(
   supabaseAdmin: SupabaseAdmin,
   orderId: number,
-  refund: RefundDocumentData & { stripe_refund_id?: string | null },
+  refund: RefundDocumentData & {
+    stripe_refund_id?: string | null
+    zip_refund_id?: string | null
+  },
   actor: OrderActor,
 ) {
   const { data: succeededRows, error: refundError } = await supabaseAdmin
@@ -872,7 +875,7 @@ export async function applySucceededRefund(
   const { error: updateError } = await supabaseAdmin.from('orders').update(patch).eq('id', orderId)
   if (updateError) throw updateError
 
-  const sourceRef = text(refund.stripe_refund_id) || text(refund.id) || crypto.randomUUID()
+  const sourceRef = text(refund.zip_refund_id) || text(refund.stripe_refund_id) || text(refund.id) || crypto.randomUUID()
   await recordOrderEvent(supabaseAdmin, orderId, {
     eventKey: `refund_succeeded:${sourceRef}`,
     eventType: 'refund_succeeded',

@@ -99,6 +99,7 @@ The order workflow is implemented by these Edge Functions:
 - `submit-order`: creates pay-in-store orders, generates the English order confirmation, and emails the customer, selected store, and central TECHM8 contact.
 - `create-checkout-session`: creates Stripe Checkout orders and captures the customer billing/contact details.
 - `stripe-webhook`: confirms Stripe payments and refunds, generates invoices or credit notes, and sends the three-party emails.
+- `zip-payment-return`: verifies a direct Zip checkout, creates and captures the Zip charge, then reuses the same invoice and three-party email workflow. Zip does not pass through Stripe.
 - `order-document`: returns short-lived signed URLs for customer-owned confirmations, invoices, and credit notes.
 - `admin-panel`: provides order details, document generation, fulfilment actions, cancellation, email retry, and authorised full/partial refunds.
 
@@ -110,6 +111,8 @@ Required function secrets:
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
+- `ZIP_API_KEY` (Zip Merchant API key; begin with a sandbox key)
+- `ZIP_ENVIRONMENT=sandbox` during certification, then `production` with the production key
 - `SITE_URL`
 - `RESEND_API_KEY_ORDER` (falls back to the existing booking/general Resend keys)
 - `ORDER_FROM_EMAIL` (must be a Resend-verified sender; falls back to the existing booking/general sender)
@@ -118,6 +121,8 @@ Required function secrets:
 - `TECHM8_TRADING_NAME` (defaults to `TECHM8`)
 - `TECHM8_ABN`
 - `TECHM8_GST_REGISTERED=true` only when the business is GST registered
+
+Apply `20260719141826_add_zip_payment_profile.sql` before enabling Zip. The migration intentionally creates the `zip` payment profile with `is_enabled=false`. Keep it disabled until the sandbox checkout, approved return, captured charge, invoice emails, cancellation, and full/partial refunds have passed Zip certification. After replacing the secret with the production key, set `ZIP_ENVIRONMENT=production` and enable only the `zip` payment profile.
 
 The Stripe webhook must subscribe to:
 

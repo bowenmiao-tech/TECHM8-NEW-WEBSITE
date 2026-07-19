@@ -187,6 +187,7 @@ async function syncRefund(supabaseAdmin: SupabaseAdmin, refund: Stripe.Refund) {
         : 'pending'
   const refundRow = {
     order_id: orderId,
+    provider: 'stripe',
     stripe_refund_id: refund.id,
     amount: Number((refund.amount / 100).toFixed(2)),
     currency: text(refund.currency).toUpperCase() || 'AUD',

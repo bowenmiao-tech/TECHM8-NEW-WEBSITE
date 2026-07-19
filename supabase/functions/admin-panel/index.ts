@@ -11,6 +11,7 @@ import {
   notifyOrderEvent,
   recordOrderEvent,
 } from '../_shared/order-commerce.ts'
+import { zipRequest } from '../_shared/zip-payments.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -737,7 +738,7 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
 
   if (actionType === 'mark_paid') {
     if (order.payment_method_code !== 'pay_in_store') {
-      return jsonResponse({ ok: false, error: 'Online payments must be confirmed by Stripe.' }, 409)
+      return jsonResponse({ ok: false, error: 'Online payments must be confirmed by their payment provider.' }, 409)
     }
     if (order.payment_status === 'paid') {
       return jsonResponse({ ok: false, error: 'This order is already marked paid.' }, 409)
@@ -879,6 +880,8 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
     }
     const reason = normalizeNullableString(body.reason) || 'Customer refund requested.'
     const manualRefund = order.payment_method_code === 'pay_in_store'
+    const zipRefund = order.payment_method_code === 'zip'
+    const refundProvider = manualRefund ? 'manual' : zipRefund ? 'zip' : 'stripe'
     const { data: refundRow, error: refundInsertError } = await supabaseAdmin
       .from('order_refunds')
       .insert({
@@ -886,6 +889,7 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
         amount,
         currency: order.currency || 'AUD',
         reason,
+        provider: refundProvider,
         status: manualRefund ? 'succeeded' : 'pending',
         requested_by: actor.identifier,
         processed_at: manualRefund ? now : null,
@@ -896,6 +900,54 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
 
     if (manualRefund) {
       await applySucceededRefund(supabaseAdmin, orderId, refundRow, actor)
+    } else if (zipRefund) {
+      if (!order.zip_charge_id) {
+        await supabaseAdmin
+          .from('order_refunds')
+          .update({ status: 'failed', processed_at: now, provider_response: { error: 'Missing Zip charge id.' } })
+          .eq('id', refundRow.id)
+        return jsonResponse({ ok: false, error: 'The Zip charge id is missing for this order.' }, 409)
+      }
+      try {
+        const zipRefundResult = await zipRequest<JsonRecord>('/refunds', {
+          method: 'POST',
+          idempotencyKey: `techm8-order-${orderId}-zip-refund-${refundRow.id}`,
+          body: {
+            charge_id: order.zip_charge_id,
+            reason,
+            amount,
+          },
+        })
+        const zipRefundId = String(zipRefundResult.id ?? '').trim()
+        if (!zipRefundId) throw new Error('Zip did not return a refund identifier.')
+        const { data: savedRefund, error: refundUpdateError } = await supabaseAdmin
+          .from('order_refunds')
+          .update({
+            provider: 'zip',
+            zip_refund_id: zipRefundId,
+            status: 'succeeded',
+            processed_at: now,
+            provider_response: {
+              charge_id: order.zip_charge_id,
+              state: zipRefundResult.state ?? zipRefundResult.status ?? 'succeeded',
+            },
+          })
+          .eq('id', refundRow.id)
+          .select('*')
+          .single()
+        if (refundUpdateError) throw refundUpdateError
+        await applySucceededRefund(supabaseAdmin, orderId, savedRefund, actor)
+      } catch (refundError) {
+        await supabaseAdmin
+          .from('order_refunds')
+          .update({
+            status: 'failed',
+            processed_at: now,
+            provider_response: { error: refundError instanceof Error ? refundError.message : String(refundError) },
+          })
+          .eq('id', refundRow.id)
+        throw refundError
+      }
     } else {
       if (!order.stripe_payment_intent_id) {
         await supabaseAdmin.from('order_refunds').update({ status: 'failed', processed_at: now, provider_response: { error: 'Missing Stripe PaymentIntent.' } }).eq('id', refundRow.id)
