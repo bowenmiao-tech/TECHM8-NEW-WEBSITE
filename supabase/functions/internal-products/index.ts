@@ -156,7 +156,7 @@ Deno.serve(async (req) => {
     const from = (page - 1) * pageSize
     const to = from + pageSize - 1
     const updatedSince = normalizeNullableString(input.updated_since)
-    const includeHidden = input.include_hidden === true || String(input.include_hidden ?? '').toLowerCase() === 'true'
+    const onlineVisibleOnly = input.online_visible_only === true || String(input.online_visible_only ?? '').toLowerCase() === 'true'
     const includePosHidden = input.include_pos_hidden === true || String(input.include_pos_hidden ?? '').toLowerCase() === 'true'
     const storeSlug = normalizeNullableString(input.store_slug)
 
@@ -171,7 +171,7 @@ Deno.serve(async (req) => {
       .order('id', { ascending: false })
       .range(from, to)
 
-    if (!includeHidden) productsQuery = productsQuery.eq('is_visible', true)
+    if (onlineVisibleOnly) productsQuery = productsQuery.eq('is_visible', true)
     if (!includePosHidden) productsQuery = productsQuery.eq('is_pos_visible', true)
     if (updatedSince) productsQuery = productsQuery.gte('updated_at', updatedSince)
 

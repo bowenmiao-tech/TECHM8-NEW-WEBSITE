@@ -65,7 +65,7 @@ Supported query parameters:
 - `limit` or `page_size`: defaults to `200`, max `500`
 - `updated_since`: optional ISO timestamp for incremental sync
 - `store_slug`: optional store inventory filter
-- `include_hidden=true`: optional, includes products not visible on the website
+- `online_visible_only=true`: optional, limits the feed to products visible on the website
 - `include_pos_hidden=true`: optional, includes products hidden from POS
 
 Example:

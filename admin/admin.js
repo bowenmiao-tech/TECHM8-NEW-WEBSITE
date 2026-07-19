@@ -1049,6 +1049,11 @@ function normalizeImportWorkbookRows(rows, fallbackCategoryId = "") {
         "Published",
         "Status",
       ]));
+      appendImportBoolean(normalized, "is_pos_visible", getImportField(lookup, [
+        "Display On Point of Sale",
+        "Display On POS",
+        "POS Visible",
+      ]));
       appendImportBoolean(normalized, "is_featured", getImportField(lookup, [
         "Featured",
         "Is Featured",
