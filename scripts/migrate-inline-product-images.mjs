@@ -12,6 +12,7 @@ const sharp = require("sharp");
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
 const shouldApply = process.argv.includes("--apply");
+const verboseOutput = process.argv.includes("--verbose");
 const productIds = process.argv
   .slice(2)
   .map((value) => Number(value))
@@ -28,25 +29,28 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error("Supabase public configuration could not be read from admin/admin.js.");
 }
 
-const productsUrl = new URL("/rest/v1/products", supabaseUrl);
-productsUrl.searchParams.set("select", "id,slug,name,detail_html");
-productsUrl.searchParams.set("id", `in.(${productIds.join(",")})`);
-productsUrl.searchParams.set("order", "id.asc");
+const products = [];
+for (const productId of productIds) {
+  const productsUrl = new URL("/rest/v1/products", supabaseUrl);
+  productsUrl.searchParams.set("select", "id,slug,name,detail_html");
+  productsUrl.searchParams.set("id", `eq.${productId}`);
+  productsUrl.searchParams.set("limit", "1");
 
-const response = await fetch(productsUrl, {
-  headers: {
-    Accept: "application/json",
-    apikey: supabaseAnonKey,
-    Authorization: `Bearer ${supabaseAnonKey}`,
-  },
-});
-if (!response.ok) {
-  throw new Error(`Products could not be loaded (${response.status}).`);
-}
-
-const products = await response.json();
-if (!Array.isArray(products) || products.length !== productIds.length) {
-  throw new Error("One or more requested products could not be loaded.");
+  const response = await fetch(productsUrl, {
+    headers: {
+      Accept: "application/json",
+      apikey: supabaseAnonKey,
+      Authorization: `Bearer ${supabaseAnonKey}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`Product ${productId} could not be loaded (${response.status}).`);
+  }
+  const rows = await response.json();
+  if (!Array.isArray(rows) || rows.length !== 1) {
+    throw new Error(`Product ${productId} could not be loaded.`);
+  }
+  products.push(rows[0]);
 }
 
 const outputDirectory = await mkdtemp(join(tmpdir(), "techm8-inline-product-images-"));
@@ -206,4 +210,33 @@ if (shouldApply) {
   }
 }
 
-console.log(JSON.stringify({ applied: shouldApply, outputDirectory, uploadDirectory, updateSqlPath, restoreSqlPath, manifestPath, products: manifest }, null, 2));
+const summary = {
+  applied: shouldApply,
+  outputDirectory,
+  uploadDirectory,
+  updateSqlPath,
+  restoreSqlPath,
+  manifestPath,
+  product_count: manifest.length,
+  image_count: manifest.reduce((total, product) => total + product.image_count, 0),
+  original_html_chars: manifest.reduce((total, product) => total + product.original_html_chars, 0),
+  updated_html_chars: manifest.reduce((total, product) => total + product.updated_html_chars, 0),
+  source_image_bytes: manifest.reduce(
+    (total, product) => total + product.files.reduce((subtotal, file) => subtotal + file.source_bytes, 0),
+    0,
+  ),
+  webp_image_bytes: manifest.reduce(
+    (total, product) => total + product.files.reduce((subtotal, file) => subtotal + file.webp_bytes, 0),
+    0,
+  ),
+  products: verboseOutput
+    ? manifest
+    : manifest.map((product) => ({
+        product_id: product.product_id,
+        slug: product.slug,
+        image_count: product.image_count,
+        original_html_chars: product.original_html_chars,
+        updated_html_chars: product.updated_html_chars,
+      })),
+};
+console.log(JSON.stringify(summary, null, 2));

@@ -213,6 +213,18 @@ if (pageData) {
         </div>
       </section>`
     : "";
+  const directAnswerSection = pageData.directAnswer
+    ? `
+      <section class="section business-answer-section">
+        <div class="container">
+          <div class="booking-card">
+            <p class="eyebrow">Direct answer</p>
+            <h2>${pageData.answerHeading || `What ${pageData.eyebrow || "business technology"} support is available?`}</h2>
+            <p>${pageData.directAnswer}</p>
+          </div>
+        </div>
+      </section>`
+    : "";
   const ndisSeoSection =
     pageData.isNdisPage && (seoServices || locationTags || relatedLinks)
       ? `
@@ -272,6 +284,51 @@ if (pageData) {
         </div>
       </section>`
       : "";
+  const standardSeoSection =
+    !pageData.isNdisPage && (pageData.seoLead || seoServices || locationTags || relatedLinks)
+      ? `
+      <section class="section section--muted business-seo-section">
+        <div class="container business-seo-layout">
+          <div class="business-seo-main">
+            <h2>${pageData.seoHeading || pageData.h1}</h2>
+            ${pageData.seoLead ? `<p>${pageData.seoLead}</p>` : ""}
+            ${seoServices ? `<ul class="business-seo-list">${seoServices}</ul>` : ""}
+          </div>
+          ${
+            locationTags || relatedLinks
+              ? `<aside class="business-seo-aside">
+                  ${locationTags ? `<div class="business-seo-card"><h3>${pageData.locationHeading || "Service areas"}</h3><div class="business-seo-tags">${locationTags}</div></div>` : ""}
+                  ${relatedLinks ? `<div class="business-seo-card"><h3>${pageData.relatedHeading || "Related services"}</h3><div class="business-seo-links">${relatedLinks}</div></div>` : ""}
+                </aside>`
+              : ""
+          }
+        </div>
+      </section>`
+      : "";
+  const standardFaqSection =
+    !pageData.isNdisPage && faqItems
+      ? `
+      <section class="section business-faq-section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Questions</p>
+            <h2>${pageData.faqHeading || "Frequently asked questions"}</h2>
+          </div>
+          <div class="business-faq-grid">${faqItems}</div>
+        </div>
+      </section>`
+      : "";
+  const providerDetailsSection = `
+      <section class="section">
+        <div class="container">
+          <div class="booking-card">
+            <p class="eyebrow">Provider details</p>
+            <h2>Who provides this service?</h2>
+            <p>TECHM8 is the trading name of YQM PTY LTD (ABN 12 645 861 463). TECHM8 operates stores in Park Ridge, Fairfield, Toowong, North Lakes and Brassall and provides device repair, product and practical technology support. Service scope, location, timing and price are confirmed after the enquiry is reviewed.</p>
+            <p><a href="${linkUrl("stores.html")}">View TECHM8 store contact details</a>.</p>
+          </div>
+        </div>
+      </section>`;
   const ndisForm = pageData.isNdisPage
     ? `
       <section class="section section--muted" id="ndis-enquiry">
@@ -441,6 +498,7 @@ if (pageData) {
           <div class="repair-content-grid">${cards}</div>
         </div>
       </section>
+      ${standardSeoSection}
       ${ndisSeoSection}
       ${ndisFundingNote}
       <section class="section section--muted">
@@ -452,6 +510,7 @@ if (pageData) {
           <div class="repair-content-grid">${steps}</div>
         </div>
       </section>
+      ${standardFaqSection}
       ${ndisFaqSection}`
     : "";
 
@@ -511,10 +570,12 @@ if (pageData) {
           </div>
         </div>
       </section>
+      ${directAnswerSection}
       ${ndisIntro}
       ${ndisForm}
       ${schoolPageSections}
       ${standardPageSections}
+      ${providerDetailsSection}
     </main>
     <footer class="site-footer">
       <div class="container footer footer--rich">
