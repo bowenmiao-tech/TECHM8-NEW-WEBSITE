@@ -293,15 +293,39 @@ function buildProductSeoDescription(shortDescription: string | null, name: strin
   )
 }
 
-function decodeBase64ToBytes(value: unknown) {
-  const base64 = String(value ?? '').replace(/^data:[^;]+;base64,/, '').replace(/\s/g, '')
-  if (!base64) return null
-  const binary = atob(base64)
-  const bytes = new Uint8Array(binary.length)
-  for (let index = 0; index < binary.length; index += 1) {
-    bytes[index] = binary.charCodeAt(index)
+function normalizeProductDetailHtmlInput(value: unknown) {
+  const html = String(value ?? '').trim()
+  if (!html) return { value: null, error: null }
+  if (/data:image\/[a-z0-9.+-]+;base64,/i.test(html)) {
+    return {
+      value: null,
+      error: 'Product description images must be converted to WebP and uploaded before saving.',
+    }
   }
-  return bytes
+  return { value: html, error: null }
+}
+
+function decodeBase64ToBytes(value: unknown) {
+  try {
+    const base64 = String(value ?? '').replace(/^data:[^;]+;base64,/, '').replace(/\s/g, '')
+    if (!base64) return null
+    const binary = atob(base64)
+    const bytes = new Uint8Array(binary.length)
+    for (let index = 0; index < binary.length; index += 1) {
+      bytes[index] = binary.charCodeAt(index)
+    }
+    return bytes
+  } catch (_error) {
+    return null
+  }
+}
+
+function isWebpImage(bytes: Uint8Array) {
+  return (
+    bytes.byteLength >= 12 &&
+    String.fromCharCode(...bytes.slice(0, 4)) === 'RIFF' &&
+    String.fromCharCode(...bytes.slice(8, 12)) === 'WEBP'
+  )
 }
 
 function getBrisbaneDayBounds() {
@@ -1455,6 +1479,10 @@ async function createProduct(supabaseAdmin: ReturnType<typeof createClient>, con
       `TM8-${slugifyProductValue(model ?? name, 'product').toUpperCase()}`,
   )
   const supplierId = await resolveSupplierIdByBrand(supabaseAdmin, brand)
+  const detailHtml = normalizeProductDetailHtmlInput(productInput.detail_html)
+  if (detailHtml.error) {
+    return jsonResponse({ ok: false, error: detailHtml.error }, 422)
+  }
 
   const insertPayload = {
     sku,
@@ -1482,7 +1510,7 @@ async function createProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     seo_title: normalizeNullableString(productInput.seo_title) ?? buildProductSeoTitle(name),
     seo_description:
       normalizeNullableString(productInput.seo_description) ?? buildProductSeoDescription(shortDescription, name),
-    detail_html: productInput.detail_html === '' ? null : String(productInput.detail_html ?? ''),
+    detail_html: detailHtml.value,
   }
 
   const { data, error } = await supabaseAdmin
@@ -1541,6 +1569,10 @@ async function cloneProduct(supabaseAdmin: ReturnType<typeof createClient>, cont
   const cloneName = `${String(source.name ?? 'Product').trim()} (Copy)`
   const cloneSlug = await ensureUniqueProductSlug(supabaseAdmin, `${String(source.slug ?? source.name ?? 'product')}-copy`)
   const cloneSku = await ensureUniqueProductSku(supabaseAdmin, `${String(source.sku ?? 'TM8-PRODUCT')}-COPY`)
+  const detailHtml = normalizeProductDetailHtmlInput(source.detail_html)
+  if (detailHtml.error) {
+    return jsonResponse({ ok: false, error: detailHtml.error }, 422)
+  }
 
   const clonePayload = {
     sku: cloneSku,
@@ -1567,7 +1599,7 @@ async function cloneProduct(supabaseAdmin: ReturnType<typeof createClient>, cont
     is_visible: false,
     seo_title: buildProductSeoTitle(cloneName),
     seo_description: buildProductSeoDescription(source.short_description ?? null, cloneName),
-    detail_html: source.detail_html ?? null,
+    detail_html: detailHtml.value,
   }
 
   const { data: cloneRow, error: cloneError } = await supabaseAdmin
@@ -1751,7 +1783,11 @@ async function importProductsFromRows(
       setStringPatch(patch, 'seo_title', row.seo_title)
       setStringPatch(patch, 'seo_description', row.seo_description)
       if (hasImportField('detail_html')) {
-        patch.detail_html = row.detail_html === '' ? null : String(row.detail_html ?? '')
+        const detailHtml = normalizeProductDetailHtmlInput(row.detail_html)
+        if (detailHtml.error) {
+          return jsonResponse({ ok: false, error: `${desiredSku}: ${detailHtml.error}` }, 422)
+        }
+        patch.detail_html = detailHtml.value
       }
 
       const { error: updateError } = await supabaseAdmin
@@ -1782,6 +1818,10 @@ async function importProductsFromRows(
       normalizeNullableString(row.slug) ?? name,
     )
     const uniqueSku = await ensureUniqueProductSku(supabaseAdmin, desiredSku)
+    const detailHtml = normalizeProductDetailHtmlInput(row.detail_html)
+    if (detailHtml.error) {
+      return jsonResponse({ ok: false, error: `${uniqueSku}: ${detailHtml.error}` }, 422)
+    }
 
     const insertPayload = {
       sku: uniqueSku,
@@ -1809,7 +1849,7 @@ async function importProductsFromRows(
       seo_title: normalizeNullableString(row.seo_title) ?? buildProductSeoTitle(name),
       seo_description:
         normalizeNullableString(row.seo_description) ?? buildProductSeoDescription(shortDescription, name),
-      detail_html: row.detail_html === '' ? null : String(row.detail_html ?? ''),
+      detail_html: detailHtml.value,
     }
 
     const { data: createdRow, error: createError } = await supabaseAdmin
@@ -1875,6 +1915,10 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     : null
 
   const heroImageUrl = normalizedImages?.[0]?.image_url ?? normalizeNullableString(body.image_url)
+  const detailHtml = normalizeProductDetailHtmlInput(body.detail_html)
+  if (detailHtml.error) {
+    return jsonResponse({ ok: false, error: detailHtml.error }, 422)
+  }
 
   const patch = {
     name,
@@ -1890,7 +1934,7 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     is_visible: typeof body.is_visible === 'boolean' ? body.is_visible : undefined,
     is_featured: typeof body.is_featured === 'boolean' ? body.is_featured : undefined,
     image_url: heroImageUrl,
-    detail_html: body.detail_html === '' ? null : String(body.detail_html ?? ''),
+    detail_html: detailHtml.value,
   }
 
   const cleanPatch = Object.fromEntries(Object.entries(patch).filter(([, value]) => value !== undefined))
@@ -1959,17 +2003,13 @@ async function uploadProductDetailImage(supabaseAdmin: ReturnType<typeof createC
   }
 
   const contentType = String(body.content_type ?? '').trim().toLowerCase()
-  if (!contentType.startsWith('image/')) {
-    return jsonResponse({ ok: false, error: 'Only image files can be uploaded.' }, 422)
+  if (contentType !== 'image/webp' || !isWebpImage(bytes)) {
+    return jsonResponse({ ok: false, error: 'Product images must be converted to WebP before upload.' }, 422)
   }
 
-  const extensionInput = String(body.extension ?? '').trim().toLowerCase().replace(/[^a-z0-9]/g, '')
-  const extension = ['webp', 'png', 'jpg', 'jpeg', 'gif'].includes(extensionInput)
-    ? (extensionInput === 'jpeg' ? 'jpg' : extensionInput)
-    : (contentType.includes('png') ? 'png' : contentType.includes('webp') ? 'webp' : 'jpg')
   const productSlug = normalizeStorageSegment(body.product_slug, `product-${productId}`)
   const randomSuffix = crypto.randomUUID().slice(0, 8)
-  const storagePath = `product-details/${productSlug}/${Date.now()}-${randomSuffix}.${extension}`
+  const storagePath = `product-details/${productSlug}/${Date.now()}-${randomSuffix}.webp`
 
   const { error: uploadError } = await supabaseAdmin
     .storage

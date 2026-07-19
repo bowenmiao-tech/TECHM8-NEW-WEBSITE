@@ -2,7 +2,7 @@ name: Refresh catalog pages
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "17 */6 * * *"
   workflow_dispatch:
   repository_dispatch:
     types: [catalog-updated]

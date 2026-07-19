@@ -1,5 +1,15 @@
 Supabase migration notes
 
+Catalog static-page refresh
+
+- `catalog-refresh-hook` accepts authenticated database change notifications and sends the existing `catalog-updated` repository dispatch to GitHub.
+- Apply `supabase/migrations/20260719052408_catalog_refresh_webhook.sql` and deploy the function with JWT verification disabled because it uses the dedicated `x-webhook-secret` header.
+- Set `CATALOG_WEBHOOK_SECRET`, `GITHUB_CATALOG_DISPATCH_TOKEN`, and `GITHUB_REPOSITORY=bowenmiao-tech/TECHM8-NEW-WEBSITE` as Edge Function secrets.
+- Store the function URL under `catalog_refresh_webhook_url` and the same random webhook secret under `catalog_refresh_webhook_secret` in Supabase Vault. Never commit either secret.
+- The GitHub token should be restricted to `bowenmiao-tech/TECHM8-NEW-WEBSITE` with only `Contents: Read and write`, which GitHub requires for repository dispatch events.
+- Run `powershell -ExecutionPolicy Bypass -File scripts/configure-catalog-refresh.ps1` once after creating that token. The script accepts it through hidden input, creates a separate random webhook secret, stores both securely, and sends a test dispatch.
+- Changes to `products`, `product_images`, or `categories` trigger one notification per SQL statement. The six-hour GitHub schedule remains only as a recovery fallback.
+
 1. Run the SQL in supabase/migrations/20260413_initial_schema.sql inside the Supabase SQL editor.
 2. Deploy the Edge Function in supabase/functions/book-repair.
 3. Set these function secrets before deployment:

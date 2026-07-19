@@ -772,17 +772,8 @@ async function convertImageFileToWebp(file, options = {}) {
   if (!(file instanceof File)) return file;
   if (!file.type.startsWith("image/")) return file;
 
-  const normalizedType = String(file.type || "").toLowerCase();
-  if (
-    normalizedType === "image/webp" ||
-    normalizedType === "image/gif" ||
-    normalizedType === "image/svg+xml"
-  ) {
-    return file;
-  }
-
-  const maxDimension = Number(options.maxDimension) > 0 ? Number(options.maxDimension) : 2200;
-  const quality = Number(options.quality) > 0 ? Number(options.quality) : 0.86;
+  const maxDimension = Number(options.maxDimension) > 0 ? Number(options.maxDimension) : 2000;
+  const quality = Number(options.quality) > 0 ? Number(options.quality) : 0.82;
   const objectUrl = URL.createObjectURL(file);
 
   try {
@@ -854,7 +845,9 @@ async function convertImageFileToWebp(file, options = {}) {
 async function uploadProductDetailImage(file, row, session) {
   if (!(file instanceof File)) throw new Error("Please choose an image file.");
   if (!file.type.startsWith("image/")) throw new Error("Only image files can be uploaded.");
-  if (file.size > 8 * 1024 * 1024) throw new Error("Image is too large. Please use a file under 8MB.");
+  if (file.size > 30 * 1024 * 1024) {
+    throw new Error("The source image is too large. Please use a file under 30MB.");
+  }
 
   const uploadFile = await convertImageFileToWebp(file);
   if (uploadFile.size > 8 * 1024 * 1024) {
@@ -875,6 +868,54 @@ async function uploadProductDetailImage(file, row, session) {
   }
 
   return result.public_url;
+}
+
+function inlineImageDataUrlToFile(dataUrl, index = 0) {
+  const match = String(dataUrl || "").match(/^data:(image\/[a-z0-9.+-]+);base64,([\s\S]+)$/i);
+  if (!match) throw new Error("The pasted image data could not be read.");
+
+  let binary = "";
+  try {
+    binary = atob(match[2].replace(/\s/g, ""));
+  } catch (_error) {
+    throw new Error("The pasted image data is invalid.");
+  }
+
+  const bytes = new Uint8Array(binary.length);
+  for (let byteIndex = 0; byteIndex < binary.length; byteIndex += 1) {
+    bytes[byteIndex] = binary.charCodeAt(byteIndex);
+  }
+
+  const sourceType = match[1].toLowerCase();
+  const sourceExtension = sourceType.includes("png")
+    ? "png"
+    : sourceType.includes("webp")
+      ? "webp"
+      : sourceType.includes("gif")
+        ? "gif"
+        : sourceType.includes("svg")
+          ? "svg"
+          : "jpg";
+
+  return new File(
+    [bytes],
+    `pasted-product-image-${Date.now()}-${index + 1}.${sourceExtension}`,
+    { type: sourceType, lastModified: Date.now() },
+  );
+}
+
+function getTransferredImageFiles(transfer) {
+  if (!transfer) return [];
+
+  const itemFiles = Array.from(transfer.items || [])
+    .filter((item) => item.kind === "file" && String(item.type || "").startsWith("image/"))
+    .map((item) => item.getAsFile())
+    .filter((file) => file instanceof File);
+
+  if (itemFiles.length) return itemFiles;
+  return Array.from(transfer.files || []).filter(
+    (file) => file instanceof File && file.type.startsWith("image/"),
+  );
 }
 
 async function readWorkbookRowsFromFile(file) {
@@ -1266,6 +1307,62 @@ async function setupProductDescriptionQuill({ editorElement, hiddenInput, row, s
     hiddenInput.value = normalizeQuillHtml(quill.root.innerHTML);
   };
 
+  let descriptionImageWork = Promise.resolve();
+  const queueDescriptionImageWork = (work) => {
+    descriptionImageWork = descriptionImageWork.then(work, work);
+    return descriptionImageWork;
+  };
+
+  const insertUploadedImages = async (files) => {
+    const imageFiles = Array.from(files || []).filter(
+      (file) => file instanceof File && file.type.startsWith("image/"),
+    );
+    if (!imageFiles.length) return;
+
+    setAlert(
+      alertTarget,
+      `Converting and uploading ${imageFiles.length} description image${imageFiles.length === 1 ? "" : "s"}...`,
+      "info",
+    );
+    const range = quill.getSelection(true);
+    let insertAt = typeof range?.index === "number" ? range.index : Math.max(0, quill.getLength() - 1);
+
+    for (const file of imageFiles) {
+      const imageUrl = await uploadProductDetailImage(file, row, session);
+      quill.insertEmbed(insertAt, "image", imageUrl, "user");
+      insertAt += 1;
+    }
+    quill.setSelection(insertAt, 0);
+    syncHiddenInput();
+    setAlert(alertTarget, "Description images converted to WebP and uploaded.", "success");
+  };
+
+  const replaceInlineDescriptionImages = async () => {
+    const inlineImages = Array.from(quill.root.querySelectorAll('img[src^="data:image/"]'));
+    if (!inlineImages.length) return 0;
+
+    setAlert(
+      alertTarget,
+      `Converting and uploading ${inlineImages.length} embedded description image${inlineImages.length === 1 ? "" : "s"}...`,
+      "info",
+    );
+    const uploadedBySource = new Map();
+    for (let index = 0; index < inlineImages.length; index += 1) {
+      const image = inlineImages[index];
+      const source = image.getAttribute("src") || "";
+      let imageUrl = uploadedBySource.get(source);
+      if (!imageUrl) {
+        const file = inlineImageDataUrlToFile(source, index);
+        imageUrl = await uploadProductDetailImage(file, row, session);
+        uploadedBySource.set(source, imageUrl);
+      }
+      image.setAttribute("src", imageUrl);
+    }
+    syncHiddenInput();
+    setAlert(alertTarget, "Embedded images converted to WebP and uploaded.", "success");
+    return inlineImages.length;
+  };
+
   quill.on("text-change", syncHiddenInput);
   syncHiddenInput();
 
@@ -1293,11 +1390,62 @@ async function setupProductDescriptionQuill({ editorElement, hiddenInput, row, s
       }, { once: true });
       input.click();
     });
+
+    quill.root.addEventListener("paste", (event) => {
+      const imageFiles = getTransferredImageFiles(event.clipboardData);
+      if (imageFiles.length) {
+        event.preventDefault();
+        event.stopPropagation();
+        void queueDescriptionImageWork(() => insertUploadedImages(imageFiles)).catch((error) => {
+          setAlert(
+            alertTarget,
+            error instanceof Error ? error.message : "Pasted images could not be uploaded.",
+            "error",
+          );
+        });
+        return;
+      }
+
+      const pastedHtml = String(event.clipboardData?.getData("text/html") || "");
+      if (/data:image\/[a-z0-9.+-]+;base64,/i.test(pastedHtml)) {
+        window.setTimeout(() => {
+          void queueDescriptionImageWork(replaceInlineDescriptionImages).catch((error) => {
+            setAlert(
+              alertTarget,
+              error instanceof Error ? error.message : "Embedded images could not be uploaded.",
+              "error",
+            );
+          });
+        }, 0);
+      }
+    }, true);
+
+    quill.root.addEventListener("dragover", (event) => {
+      if (getTransferredImageFiles(event.dataTransfer).length) {
+        event.preventDefault();
+      }
+    }, true);
+
+    quill.root.addEventListener("drop", (event) => {
+      const imageFiles = getTransferredImageFiles(event.dataTransfer);
+      if (!imageFiles.length) return;
+      event.preventDefault();
+      event.stopPropagation();
+      void queueDescriptionImageWork(() => insertUploadedImages(imageFiles)).catch((error) => {
+        setAlert(
+          alertTarget,
+          error instanceof Error ? error.message : "Dropped images could not be uploaded.",
+          "error",
+        );
+      });
+    }, true);
   }
 
   return {
     quill,
-    getHtml: () => {
+    getHtml: async () => {
+      await descriptionImageWork;
+      await queueDescriptionImageWork(replaceInlineDescriptionImages);
       syncHiddenInput();
       return hiddenInput.value;
     },
@@ -4053,6 +4201,9 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       state.saveFlash = null;
       try {
         const descriptionController = descriptionControllerPromise ? await descriptionControllerPromise : null;
+        const preparedDetailHtml = descriptionController
+          ? await descriptionController.getHtml()
+          : formData.get("detail_html");
         const result = await callAdminApi("product_update", {
           id: row.id,
           name: formData.get("name"),
@@ -4069,13 +4220,13 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
           images,
           short_description: formData.get("short_description"),
           compatibility: "",
-          detail_html: descriptionController?.getHtml() ?? formData.get("detail_html"),
+          detail_html: preparedDetailHtml,
         }, session);
         const updatedRow = mergeProductRow({
           ...row,
           ...(result.row || {}),
           images: Array.isArray(result.row?.images) ? result.row.images : images,
-          detail_html: result.row?.detail_html ?? descriptionController?.getHtml() ?? formData.get("detail_html"),
+          detail_html: result.row?.detail_html ?? preparedDetailHtml,
           detail_loaded: true,
         });
         state.selectedId = Number(updatedRow?.id || row.id);
