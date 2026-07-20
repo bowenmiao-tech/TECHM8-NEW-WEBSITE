@@ -18,6 +18,7 @@ const allowedFulfillmentMethods = new Set(['pickup', 'shipping'])
 const allowedStripePaymentMethods = new Map<string, Stripe.Checkout.SessionCreateParams.PaymentMethodType[]>([
   ['card', ['card']],
   ['afterpay_clearpay', ['afterpay_clearpay']],
+  ['zip', ['zip']],
   ['wechat_pay', ['wechat_pay']],
 ])
 const shippingOptions = new Map([
@@ -289,6 +290,12 @@ Deno.serve(async (req) => {
 
     paymentFeeAmount = decimal(paymentFeeAmount)
     const totalAmount = decimal(subtotalAmount - discountAmount + paymentFeeAmount + shippingFeeAmount)
+    if (paymentMethodCode === 'zip' && (totalAmount < 1 || totalAmount > 50_000)) {
+      return Response.json(
+        { ok: false, error: 'Zip is available for orders between A$1.00 and A$50,000.00.' },
+        { status: 422, headers: corsHeaders },
+      )
+    }
     const orderCode = buildOrderCode()
     const business = getBusinessProfile()
     const gstAmount = business.gstRegistered && business.abn ? decimal(totalAmount / 11) : 0

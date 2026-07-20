@@ -42,6 +42,15 @@ type AdminContext = {
 
 type JsonRecord = Record<string, unknown>
 
+type StripeZipStatus = {
+  configured: boolean
+  available: boolean
+  preference: string | null
+  value: string | null
+  livemode: boolean | null
+  error: string | null
+}
+
 // Keep this large admin function intentionally schema-agnostic until generated
 // database types are added to the project. A concrete wrapper prevents
 // ReturnType<typeof createClient> from collapsing generic query results to
@@ -293,6 +302,62 @@ function buildProductSeoDescription(shortDescription: string | null, name: strin
     String(shortDescription ?? '').trim() ||
     `${String(name ?? 'This product').trim()} available for online order and warehouse dispatch.`
   )
+}
+
+async function getStripeZipStatus(): Promise<StripeZipStatus> {
+  const stripeSecretKey = String(Deno.env.get('STRIPE_SECRET_KEY') || '').trim()
+  if (!stripeSecretKey) {
+    return {
+      configured: false,
+      available: false,
+      preference: null,
+      value: null,
+      livemode: null,
+      error: 'Stripe is not configured.',
+    }
+  }
+
+  try {
+    const response = await fetch('https://api.stripe.com/v1/payment_method_configurations?limit=100', {
+      headers: {
+        Authorization: `Bearer ${stripeSecretKey}`,
+        'Stripe-Version': '2024-09-30.acacia',
+      },
+      signal: AbortSignal.timeout(8_000),
+    })
+    const payload = await response.json()
+    if (!response.ok) {
+      throw new Error(String(payload?.error?.message || 'Stripe payment method settings could not be loaded.'))
+    }
+    const configurations = Array.isArray(payload?.data) ? payload.data : []
+    const configuration = configurations.find((item: JsonRecord) => item.active === true && item.is_default === true)
+      ?? configurations.find((item: JsonRecord) => item.active === true)
+      ?? configurations[0]
+    if (!configuration) throw new Error('No Stripe payment method configuration was found.')
+    const zip = configuration.zip && typeof configuration.zip === 'object'
+      ? configuration.zip as JsonRecord
+      : {}
+    const displayPreference = zip.display_preference && typeof zip.display_preference === 'object'
+      ? zip.display_preference as JsonRecord
+      : {}
+    return {
+      configured: true,
+      available: zip.available === true,
+      preference: normalizeNullableString(displayPreference.preference),
+      value: normalizeNullableString(displayPreference.value),
+      livemode: typeof configuration.livemode === 'boolean' ? configuration.livemode : null,
+      error: null,
+    }
+  } catch (error) {
+    return {
+      configured: true,
+      available: false,
+      preference: null,
+      value: null,
+      livemode: null,
+      error: error instanceof Error ? error.message : String(error),
+    }
+  }
 }
 
 function normalizeProductDetailHtmlInput(value: unknown) {
@@ -683,15 +748,18 @@ async function getPaymentSettings(supabaseAdmin: ReturnType<typeof createClient>
   const zipProfile = (profiles ?? []).find((profile) => profile.code === 'zip')
   const paypalProfile = (profiles ?? []).find((profile) => profile.code === 'paypal')
   if (!zipProfile) return jsonResponse({ ok: false, error: 'The Zip payment profile was not found.' }, 404)
+  const stripeZipStatus = zipProfile.provider === 'stripe' ? await getStripeZipStatus() : null
   return jsonResponse({
     ok: true,
     zip: {
       ...zipProfile,
-      environment: String(Deno.env.get('ZIP_ENVIRONMENT') || 'sandbox').trim().toLowerCase(),
-      api_key_configured: Boolean(String(Deno.env.get('ZIP_API_KEY') || '').trim()),
-      certification_approved: ['1', 'true', 'yes'].includes(
-        String(Deno.env.get('ZIP_CERTIFIED') || '').trim().toLowerCase(),
-      ),
+      stripe_managed: zipProfile.provider === 'stripe',
+      stripe_configured: stripeZipStatus?.configured ?? false,
+      stripe_available: stripeZipStatus?.available ?? false,
+      stripe_preference: stripeZipStatus?.preference ?? null,
+      stripe_value: stripeZipStatus?.value ?? null,
+      stripe_livemode: stripeZipStatus?.livemode ?? null,
+      stripe_configuration_error: stripeZipStatus?.error ?? null,
     },
     paypal: paypalProfile
       ? {
@@ -758,27 +826,21 @@ async function updatePaymentSettings(
       paypal: { ...data, environment, credentials_configured: credentialsConfigured, webhook_configured: webhookConfigured },
     })
   }
-  const environment = String(Deno.env.get('ZIP_ENVIRONMENT') || 'sandbox').trim().toLowerCase()
-  const certificationApproved = ['1', 'true', 'yes'].includes(
-    String(Deno.env.get('ZIP_CERTIFIED') || '').trim().toLowerCase(),
-  )
+  let stripeZipStatus: StripeZipStatus | null = null
   if (body.is_enabled) {
-    if (!String(Deno.env.get('ZIP_API_KEY') || '').trim()) {
-      return jsonResponse({ ok: false, error: 'The Zip API key is not configured.' }, 409)
-    }
-    if (!['sandbox', 'production'].includes(environment)) {
-      return jsonResponse({ ok: false, error: 'The Zip environment is invalid.' }, 409)
-    }
-    if (!certificationApproved) {
+    stripeZipStatus = await getStripeZipStatus()
+    if (!stripeZipStatus.available || stripeZipStatus.value !== 'on') {
       return jsonResponse({
         ok: false,
-        error: 'Zip certification approval has not been recorded. Checkout must remain disabled.',
+        error: stripeZipStatus.error
+          ? `Stripe Zip availability could not be verified: ${stripeZipStatus.error}`
+          : 'Stripe has not made Zip available for this account yet. Keep Zip disabled and contact Stripe to request eligibility.',
       }, 409)
     }
-    if (body.confirmation !== 'ZIP_CERTIFICATION_APPROVED') {
+    if (body.confirmation !== 'ZIP_STRIPE_CONFIGURATION_VERIFIED') {
       return jsonResponse({
         ok: false,
-        error: 'Confirm Zip certification approval before enabling checkout.',
+        error: 'Confirm the Stripe Zip checkout and refund configuration before enabling checkout.',
       }, 409)
     }
   }
@@ -786,10 +848,12 @@ async function updatePaymentSettings(
     .from('payment_fee_profiles')
     .update({
       is_enabled: body.is_enabled,
-      provider: 'zip',
-      fee_type: 'none',
-      percentage: 0,
-      fixed_amount: 0,
+      label: 'Zip',
+      provider: 'stripe',
+      fee_type: 'combined',
+      percentage: 5.49,
+      fixed_amount: 0.30,
+      notes: 'Stripe-managed Zip checkout. Customer fee mirrors the standard AU Zip rate: 5.49% + A$0.30.',
     })
     .eq('code', 'zip')
     .select('id, code, label, provider, fee_type, percentage, fixed_amount, is_enabled, notes, updated_at')
@@ -799,9 +863,13 @@ async function updatePaymentSettings(
     ok: true,
     zip: {
       ...data,
-      environment,
-      api_key_configured: Boolean(String(Deno.env.get('ZIP_API_KEY') || '').trim()),
-      certification_approved: certificationApproved,
+      stripe_managed: data.provider === 'stripe',
+      stripe_configured: stripeZipStatus?.configured ?? true,
+      stripe_available: stripeZipStatus?.available ?? false,
+      stripe_preference: stripeZipStatus?.preference ?? null,
+      stripe_value: stripeZipStatus?.value ?? null,
+      stripe_livemode: stripeZipStatus?.livemode ?? null,
+      stripe_configuration_error: stripeZipStatus?.error ?? null,
     },
   })
 }
@@ -1032,6 +1100,8 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
     const reason = normalizeNullableString(body.reason) || 'Customer refund requested.'
     const manualRefund = order.payment_method_code === 'pay_in_store'
     const zipRefund = order.payment_method_code === 'zip'
+      && Boolean(order.zip_charge_id)
+      && !order.stripe_payment_intent_id
     const paypalRefund = order.payment_method_code === 'paypal'
     const refundProvider = manualRefund ? 'manual' : zipRefund ? 'zip' : paypalRefund ? 'paypal' : 'stripe'
     if (zipRefund || paypalRefund) {

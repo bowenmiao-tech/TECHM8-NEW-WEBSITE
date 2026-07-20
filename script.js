@@ -6982,7 +6982,7 @@ function initCheckoutPage() {
 
   const formatFeeRule = (profile) => {
     if (!profile) return "";
-    if (["zip", "paypal"].includes(profile.code)) return "No surcharge";
+    if (profile.code === "paypal") return "No surcharge";
     const percentage = Number(profile.percentage) || 0;
     const fixedAmount = Number(profile.fixed_amount) || 0;
 
@@ -7250,7 +7250,7 @@ function initCheckoutPage() {
         checkoutStep !== "payment";
       submitButton.textContent = items.length
         ? isAuthenticated
-          ? getSelectedPaymentProfile()?.provider === "zip"
+          ? getSelectedPaymentProfile()?.code === "zip"
             ? "Continue to Zip"
             : getSelectedPaymentProfile()?.provider === "paypal"
               ? "Continue to PayPal"
@@ -8289,7 +8289,7 @@ function initCheckoutPage() {
       if (submitButton instanceof HTMLButtonElement) {
         submitButton.disabled = false;
         submitButton.textContent =
-          selectedProfile?.provider === "zip"
+          selectedProfile?.code === "zip"
             ? "Continue to Zip"
             : selectedProfile?.provider === "paypal"
               ? "Continue to PayPal"
@@ -8361,11 +8361,10 @@ function initCheckoutPage() {
           return false;
         if (profile.provider === "manual") return true;
         if (profile.provider === "stripe") {
-          return ["card", "afterpay_clearpay", "wechat_pay"].includes(
+          return ["card", "afterpay_clearpay", "zip", "wechat_pay"].includes(
             profile.code,
           );
         }
-        if (profile.provider === "zip") return profile.code === "zip";
         if (profile.provider === "paypal") return profile.code === "paypal";
         return false;
       });

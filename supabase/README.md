@@ -99,7 +99,7 @@ The order workflow is implemented by these Edge Functions:
 - `submit-order`: creates pay-in-store orders, generates the English order confirmation, and emails the customer, selected store, and central TECHM8 contact.
 - `create-checkout-session`: creates Stripe Checkout orders and captures the customer billing/contact details.
 - `stripe-webhook`: confirms Stripe payments and refunds, generates invoices or credit notes, and sends the three-party emails.
-- `zip-payment-return`: verifies a direct Zip checkout, creates and captures the Zip charge, then reuses the same invoice and three-party email workflow. Zip does not pass through Stripe.
+- `zip-payment-return`: legacy compatibility for direct Zip orders created before the Stripe migration. New Zip orders use `create-checkout-session` and `stripe-webhook`, matching Afterpay.
 - `paypal-payment-return`: verifies a direct PayPal Orders v2 approval, captures it idempotently, and reuses the same invoice and three-party email workflow. PayPal does not pass through Stripe.
 - `paypal-webhook`: verifies PayPal webhook signatures, captures approved orders when the browser return is missed, reconciles completed captures, and synchronises PayPal refunds.
 - `order-document`: returns short-lived signed URLs for customer-owned confirmations, invoices, and credit notes.
@@ -113,8 +113,7 @@ Required function secrets:
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
-- `ZIP_API_KEY` (Zip Merchant API key; begin with a sandbox key)
-- `ZIP_ENVIRONMENT=sandbox` during certification, then `production` with the production key
+- `ZIP_API_KEY` and `ZIP_ENVIRONMENT` are required only while reconciling legacy direct-Zip orders. New Zip payments are managed by Stripe.
 - `SITE_URL`
 - `RESEND_API_KEY_ORDER` (falls back to the existing booking/general Resend keys)
 - `ORDER_FROM_EMAIL` (must be a Resend-verified sender; falls back to the existing booking/general sender)
@@ -124,7 +123,7 @@ Required function secrets:
 - `TECHM8_ABN`
 - `TECHM8_GST_REGISTERED=true` only when the business is GST registered
 
-Apply `20260719141826_add_zip_payment_profile.sql` before enabling Zip. The migration intentionally creates the `zip` payment profile with `is_enabled=false`. Keep it disabled until the sandbox checkout, approved return, captured charge, invoice emails, cancellation, and full/partial refunds have passed Zip certification. After replacing the secret with the production key, set `ZIP_ENVIRONMENT=production` and enable only the `zip` payment profile.
+Apply `20260720115834_migrate_zip_to_stripe.sql` to move Zip to Stripe Checkout. The migration keeps the independent `zip` option disabled until Stripe availability and the redirect flow have been verified. When enabled, it charges the configured 5.49% + A$0.30 customer fee and reuses the same Stripe webhook, invoice, three-party email, cancellation, and full/partial refund flow as Afterpay.
 
 Apply `20260720004200_add_paypal_payment_profile.sql` before enabling PayPal. It intentionally creates the `paypal` profile with `is_enabled=false`. Configure `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`, and `PAYPAL_ENVIRONMENT=sandbox`; subscribe the app webhook to `https://fwlronvmgqzkleofriis.supabase.co/functions/v1/paypal-webhook`; then test checkout, cancellation, return, verified webhook capture, invoice emails, and full/partial refunds. Move to the Live app credentials and `PAYPAL_ENVIRONMENT=production` only after the sandbox flow passes.
 

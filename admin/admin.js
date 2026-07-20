@@ -2710,21 +2710,29 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
       return;
     }
     const enabled = Boolean(zip.is_enabled);
-    const environment = String(zip.environment || "sandbox").toLowerCase();
+    const stripeAvailable = zip.stripe_available === true && zip.stripe_value === "on";
+    const stripeStatus = zip.stripe_configuration_error
+      ? "availability check failed"
+      : stripeAvailable
+        ? "available"
+        : "not yet available for this Stripe account";
+    const zipPercentage = Number(zip.percentage || 0);
+    const zipFixedAmount = Number(zip.fixed_amount || 0);
+    const zipFeeLabel = `${zipPercentage.toFixed(2).replace(/0+$/, "").replace(/\.$/, "")}% + ${formatMoney(zipFixedAmount)}`;
     zipSettingsTarget.innerHTML = `
       <div class="admin-panel__heading">
         <div>
           <p class="admin-card__label">Payment method control</p>
-          <h2>Zip Pay ${renderBadge(enabled ? "enabled" : "disabled")}</h2>
-          <p>${environment === "production" ? "Production" : "Sandbox"} environment · API key ${zip.api_key_configured ? "configured" : "missing"} · certification ${zip.certification_approved ? "approved" : "not yet approved"}. ${enabled ? "Customers can currently choose Zip at checkout." : "Customers cannot currently choose Zip at checkout."}</p>
+          <h2>Zip ${renderBadge(enabled ? "enabled" : "disabled")}</h2>
+          <p>Managed by Stripe · ${stripeStatus} · customer fee ${zipFeeLabel}. ${enabled ? "Customers can currently choose Zip at checkout." : "Customers cannot currently choose Zip at checkout."}</p>
         </div>
         <div class="admin-button-row">
-          <button class="button ${enabled ? "button--danger" : "button--primary"}" type="button" data-zip-toggle ${!enabled && !zip.certification_approved ? "disabled" : ""}>
-            ${enabled ? "Disable Zip now" : zip.certification_approved ? "Enable Zip" : "Waiting for certification"}
+          <button class="button ${enabled ? "button--danger" : "button--primary"}" type="button" data-zip-toggle ${!enabled && !stripeAvailable ? "disabled" : ""}>
+            ${enabled ? "Disable Zip now" : stripeAvailable ? "Enable Zip" : "Waiting for Stripe eligibility"}
           </button>
         </div>
       </div>
-      ${!enabled ? `<p class="admin-note">Keep Zip disabled until sandbox testing and Zip certification are approved. This control is the emergency payment kill switch after launch.</p>` : ""}
+      ${!enabled ? `<p class="admin-note">${stripeAvailable ? "Zip uses the same Stripe Checkout, webhook, invoice and refund flow as Afterpay. This control is the emergency payment kill switch." : "Stripe currently reports Zip as unavailable for this account. The checkout option will stay hidden until Stripe grants eligibility."}</p>` : ""}
       <hr class="admin-divider">
       <div class="admin-panel__heading">
         <div>
@@ -2745,7 +2753,7 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
       if (!(button instanceof HTMLButtonElement)) return;
       const nextEnabled = !enabled;
       const confirmed = window.confirm(nextEnabled
-        ? "Enable Zip checkout only if Zip has approved certification and the configured key/environment are correct. Continue?"
+        ? "Enable Stripe-managed Zip checkout with the configured customer fee. Continue?"
         : "Disable Zip checkout immediately for all customers?");
       if (!confirmed) return;
       button.disabled = true;
@@ -2753,7 +2761,7 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
         const result = await callAdminApi("payment_settings_update", {
           code: "zip",
           is_enabled: nextEnabled,
-          confirmation: nextEnabled ? "ZIP_CERTIFICATION_APPROVED" : "",
+          confirmation: nextEnabled ? "ZIP_STRIPE_CONFIGURATION_VERIFIED" : "",
         }, session);
         state.zipSettings = result.zip;
         renderZipSettings();
