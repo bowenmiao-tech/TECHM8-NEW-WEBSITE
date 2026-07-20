@@ -6,6 +6,12 @@ import {
   recordOrderEvent,
   snapshotStore,
 } from '../_shared/order-commerce.ts'
+import {
+  loadStripePaymentConfiguration,
+  STRIPE_CHECKOUT_PROFILE_CODES,
+  stripeCheckoutPaymentMethodTypes,
+  type StripeCheckoutProfileCode,
+} from '../_shared/stripe-payment-methods.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -15,12 +21,7 @@ const corsHeaders = {
 
 const allowedContactMethods = new Set(['phone', 'email', 'sms'])
 const allowedFulfillmentMethods = new Set(['pickup', 'shipping'])
-const allowedStripePaymentMethods = new Map<string, Stripe.Checkout.SessionCreateParams.PaymentMethodType[]>([
-  ['card', ['card']],
-  ['afterpay_clearpay', ['afterpay_clearpay']],
-  ['zip', ['zip']],
-  ['wechat_pay', ['wechat_pay']],
-])
+const allowedStripePaymentMethods = new Set<string>(STRIPE_CHECKOUT_PROFILE_CODES)
 const shippingOptions = new Map([
   ['standard_auspost', { code: 'standard_auspost', label: 'Standard Shipping With Australia Post', deliveryTime: '3-5 business day', rate: 15, freeOver: 399 }],
   ['express_auspost', { code: 'express_auspost', label: 'Express Shipping With Australia Post', deliveryTime: '1-3 business day', rate: 18, freeOver: 599 }],
@@ -195,8 +196,23 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'The selected store contact or pickup address is incomplete.' }, { status: 500, headers: corsHeaders })
     }
 
-    if (feeProfileError || !feeProfile || !feeProfile.is_enabled || feeProfile.provider !== 'stripe') {
+    if (feeProfileError || !feeProfile || feeProfile.provider !== 'stripe') {
       return Response.json({ ok: false, error: 'Selected payment method is not available for online payment.' }, { status: 422, headers: corsHeaders })
+    }
+
+    let stripePaymentMethodTypes: Stripe.Checkout.SessionCreateParams.PaymentMethodType[]
+    try {
+      const stripeConfiguration = await loadStripePaymentConfiguration(stripeSecretKey)
+      stripePaymentMethodTypes = stripeCheckoutPaymentMethodTypes(
+        stripeConfiguration,
+        paymentMethodCode as StripeCheckoutProfileCode,
+      )
+    } catch (configurationError) {
+      console.error(configurationError)
+      return Response.json(
+        { ok: false, error: `${feeProfile.label} is not currently available in Stripe Checkout.` },
+        { status: 422, headers: corsHeaders },
+      )
     }
 
     const requestedSlugs = items
@@ -497,7 +513,7 @@ Deno.serve(async (req) => {
 
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
-        payment_method_types: allowedStripePaymentMethods.get(paymentMethodCode)!,
+        payment_method_types: stripePaymentMethodTypes,
         customer: stripeCustomer.id,
         locale: 'en',
         client_reference_id: orderCode,

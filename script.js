@@ -10,6 +10,8 @@ window.TECHM8_CONFIG = window.TECHM8_CONFIG || {
     "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/create-checkout-session",
   adminEndpoint:
     "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/admin-panel",
+  paymentMethodsEndpoint:
+    "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/payment-methods",
   siteUrl: "https://www.techm8australia.com/",
   googleMapsApiKey: "AIzaSyAecM2vtQCDDZCSOJvx2dgdZBfsM_fz1QM",
   zipPublicKey: "",
@@ -3656,7 +3658,8 @@ function saveLocalOrder(payload) {
 }
 
 async function loadPaymentFeeProfiles() {
-  const { supabaseUrl, supabaseAnonKey } = window.TECHM8_CONFIG || {};
+  const { supabaseUrl, supabaseAnonKey, paymentMethodsEndpoint } =
+    window.TECHM8_CONFIG || {};
 
   if (!supabaseUrl || !supabaseAnonKey) {
     return [
@@ -3673,8 +3676,11 @@ async function loadPaymentFeeProfiles() {
   }
 
   try {
+    const endpoint =
+      String(paymentMethodsEndpoint || "").trim() ||
+      `${supabaseUrl}/functions/v1/payment-methods`;
     const response = await fetch(
-      `${supabaseUrl}/rest/v1/payment_fee_profiles?select=code,label,provider,fee_type,percentage,fixed_amount,is_enabled,sort_order,notes&is_enabled=eq.true&order=sort_order.asc`,
+      endpoint,
       {
         headers: {
           Accept: "application/json",
@@ -3688,7 +3694,8 @@ async function loadPaymentFeeProfiles() {
       throw new Error("Payment fee profiles could not be loaded.");
     }
 
-    const rows = await response.json();
+    const payload = await response.json();
+    const rows = Array.isArray(payload?.profiles) ? payload.profiles : [];
     return Array.isArray(rows) && rows.length
       ? rows
       : [
@@ -3701,6 +3708,16 @@ async function loadPaymentFeeProfiles() {
             fixed_amount: 0,
             is_enabled: true,
           },
+          {
+            code: "card",
+            label: "Card & wallets",
+            provider: "stripe",
+            fee_type: "combined",
+            percentage: 1.7,
+            fixed_amount: 0.3,
+            is_enabled: true,
+            sort_order: 20,
+          },
         ];
   } catch (error) {
     return [
@@ -3712,6 +3729,16 @@ async function loadPaymentFeeProfiles() {
         percentage: 0,
         fixed_amount: 0,
         is_enabled: true,
+      },
+      {
+        code: "card",
+        label: "Card & wallets",
+        provider: "stripe",
+        fee_type: "combined",
+        percentage: 1.7,
+        fixed_amount: 0.3,
+        is_enabled: true,
+        sort_order: 20,
       },
     ];
   }
@@ -7013,6 +7040,14 @@ function initCheckoutPage() {
           label: "Apple Pay",
           className: "storefront-payment-option__badge--apple",
         },
+        {
+          label: "Google Pay",
+          className: "storefront-payment-option__badge--google",
+        },
+        {
+          label: "Link",
+          className: "storefront-payment-option__badge--link",
+        },
       ];
     }
     if (profile.code === "afterpay_clearpay") {
@@ -7028,6 +7063,22 @@ function initCheckoutPage() {
         {
           label: "zip",
           className: "storefront-payment-option__badge--zip",
+        },
+      ];
+    }
+    if (profile.code === "klarna") {
+      return [
+        {
+          label: "Klarna",
+          className: "storefront-payment-option__badge--klarna",
+        },
+      ];
+    }
+    if (profile.code === "wechat_pay") {
+      return [
+        {
+          label: "WeChat Pay",
+          className: "storefront-payment-option__badge--wechat",
         },
       ];
     }
@@ -8361,11 +8412,10 @@ function initCheckoutPage() {
           return false;
         if (profile.provider === "manual") return true;
         if (profile.provider === "stripe") {
-          return ["card", "afterpay_clearpay", "zip", "wechat_pay"].includes(
+          return ["card", "afterpay_clearpay", "klarna", "zip", "wechat_pay"].includes(
             profile.code,
           );
         }
-        if (profile.provider === "paypal") return profile.code === "paypal";
         return false;
       });
 

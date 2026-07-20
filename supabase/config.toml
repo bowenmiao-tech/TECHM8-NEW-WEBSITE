@@ -24,3 +24,8 @@ entrypoint = "./functions/paypal-payment-return/index.ts"
 enabled = true
 verify_jwt = false
 entrypoint = "./functions/paypal-webhook/index.ts"
+
+[functions.payment-methods]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/payment-methods/index.ts"

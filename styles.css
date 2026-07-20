@@ -9795,8 +9795,30 @@ html:has(body.repair-page--console-hero) {
   color: #111;
 }
 
+.storefront-payment-option__badge--google {
+  color: #4285f4;
+}
+
+.storefront-payment-option__badge--link {
+  border-color: #00d66f;
+  background: #00d66f;
+  color: #071f16;
+}
+
 .storefront-payment-option__badge--afterpay {
   color: #0bb38d;
+}
+
+.storefront-payment-option__badge--klarna {
+  border-color: #ffb3c7;
+  background: #ffb3c7;
+  color: #111;
+}
+
+.storefront-payment-option__badge--wechat {
+  border-color: #07c160;
+  background: #07c160;
+  color: #061d10;
 }
 
 .storefront-checkout__zip-billing {

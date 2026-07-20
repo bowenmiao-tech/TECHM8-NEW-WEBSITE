@@ -10,6 +10,8 @@ window.TECHM8_CONFIG = window.TECHM8_CONFIG || {
     "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/create-checkout-session",
   adminEndpoint:
     "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/admin-panel",
+  paymentMethodsEndpoint:
+    "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/payment-methods",
   siteUrl: "https://www.techm8australia.com/",
 };
 
@@ -1575,7 +1577,7 @@ function getViewTemplate(view) {
     case "orders":
       return `
         <section>
-          <article class="admin-panel admin-payment-control" data-zip-settings hidden></article>
+          <article class="admin-panel admin-payment-control" data-payment-methods hidden></article>
           <article class="admin-panel">
             <div class="admin-panel__heading">
               <div>
@@ -2679,7 +2681,7 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
   const paginationTarget = root.querySelector("[data-orders-pagination]");
   const storeFilter = root.querySelector("[data-orders-store-filter]");
   const refreshButton = root.querySelector("[data-orders-refresh]");
-  const zipSettingsTarget = root.querySelector("[data-zip-settings]");
+  const paymentMethodsTarget = root.querySelector("[data-payment-methods]");
   let editorTarget = null;
 
   fillStoreOptions(storeFilter, bootstrap.stores, bootstrap.capabilities.can_view_all_stores);
@@ -2696,113 +2698,69 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
     rows: [],
     meta: null,
     detail: null,
-    zipSettings: null,
-    paypalSettings: null,
+    paymentMethods: null,
   };
 
-  const renderZipSettings = () => {
-    if (!(zipSettingsTarget instanceof HTMLElement) || !bootstrap.capabilities.can_manage_payments) return;
-    zipSettingsTarget.hidden = false;
-    const zip = state.zipSettings;
-    const paypal = state.paypalSettings;
-    if (!zip || !paypal) {
-      zipSettingsTarget.innerHTML = `<div class="admin-loading">Loading payment method status...</div>`;
+  const renderSyncedPaymentMethods = () => {
+    if (!(paymentMethodsTarget instanceof HTMLElement) || !bootstrap.capabilities.can_manage_payments) return;
+    paymentMethodsTarget.hidden = false;
+    const methods = state.paymentMethods;
+    if (!Array.isArray(methods)) {
+      paymentMethodsTarget.innerHTML = `<div class="admin-loading">Loading payment method status...</div>`;
       return;
     }
-    const enabled = Boolean(zip.is_enabled);
-    const stripeAvailable = zip.stripe_available === true && zip.stripe_value === "on";
-    const stripeStatus = zip.stripe_configuration_error
-      ? "availability check failed"
-      : stripeAvailable
-        ? "available"
-        : "not yet available for this Stripe account";
-    const zipPercentage = Number(zip.percentage || 0);
-    const zipFixedAmount = Number(zip.fixed_amount || 0);
-    const zipFeeLabel = `${zipPercentage.toFixed(2).replace(/0+$/, "").replace(/\.$/, "")}% + ${formatMoney(zipFixedAmount)}`;
-    zipSettingsTarget.innerHTML = `
+    const stripeMethods = methods.filter((method) => method.provider === "stripe");
+    paymentMethodsTarget.innerHTML = `
       <div class="admin-panel__heading">
         <div>
-          <p class="admin-card__label">Payment method control</p>
-          <h2>Zip ${renderBadge(enabled ? "enabled" : "disabled")}</h2>
-          <p>Managed by Stripe · ${stripeStatus} · customer fee ${zipFeeLabel}. ${enabled ? "Customers can currently choose Zip at checkout." : "Customers cannot currently choose Zip at checkout."}</p>
-        </div>
-        <div class="admin-button-row">
-          <button class="button ${enabled ? "button--danger" : "button--primary"}" type="button" data-zip-toggle ${!enabled && !stripeAvailable ? "disabled" : ""}>
-            ${enabled ? "Disable Zip now" : stripeAvailable ? "Enable Zip" : "Waiting for Stripe eligibility"}
-          </button>
+          <p class="admin-card__label">Stripe Default configuration</p>
+          <h2>Checkout payment methods</h2>
+          <p>Checkout follows Stripe automatically. Disable a method in Stripe and it will disappear from the website without a separate TECHM8 switch.</p>
         </div>
       </div>
-      ${!enabled ? `<p class="admin-note">${stripeAvailable ? "Zip uses the same Stripe Checkout, webhook, invoice and refund flow as Afterpay. This control is the emergency payment kill switch." : "Stripe currently reports Zip as unavailable for this account. The checkout option will stay hidden until Stripe grants eligibility."}</p>` : ""}
-      <hr class="admin-divider">
-      <div class="admin-panel__heading">
-        <div>
-          <p class="admin-card__label">Independent payment method</p>
-          <h2>PayPal ${renderBadge(paypal.is_enabled ? "enabled" : "disabled")}</h2>
-          <p>${String(paypal.environment || "sandbox").toLowerCase() === "production" ? "Production" : "Sandbox"} environment · API credentials ${paypal.credentials_configured ? "configured" : "missing"} · verified webhook ${paypal.webhook_configured ? "configured" : "missing"}. ${paypal.is_enabled ? "Customers can currently choose PayPal at checkout." : "Customers cannot currently choose PayPal at checkout."}</p>
-        </div>
-        <div class="admin-button-row">
-          <button class="button ${paypal.is_enabled ? "button--danger" : "button--primary"}" type="button" data-paypal-toggle ${!paypal.is_enabled && (!paypal.credentials_configured || !paypal.webhook_configured) ? "disabled" : ""}>
-            ${paypal.is_enabled ? "Disable PayPal now" : paypal.credentials_configured && paypal.webhook_configured ? "Enable PayPal" : "Configuration required"}
-          </button>
-        </div>
+      <div class="admin-list">
+        ${stripeMethods.map((method) => {
+          const percentage = Number(method.percentage || 0);
+          const fixedAmount = Number(method.fixed_amount || 0);
+          const percentageLabel = percentage.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+          const fee = method.fee_type === "combined"
+            ? `${percentageLabel}% + ${formatMoney(fixedAmount)}`
+            : method.fee_type === "percent"
+              ? `${percentageLabel}%`
+              : method.fee_type === "fixed"
+                ? formatMoney(fixedAmount)
+                : "No extra fee";
+          return `
+            <div class="admin-list-item">
+              <div class="admin-list-item__content">
+                <strong>${escapeHtml(method.label || method.code)}</strong>
+                <span>Customer fee ${escapeHtml(fee)}</span>
+              </div>
+              ${renderBadge("available")}
+            </div>
+          `;
+        }).join("") || `<div class="admin-empty">Stripe has not returned any available online payment methods.</div>`}
       </div>
-      ${!paypal.is_enabled ? `<p class="admin-note">Keep PayPal disabled until sandbox checkout, return verification, invoice emails and full/partial refunds have passed.</p>` : ""}
     `;
-    zipSettingsTarget.querySelector("[data-zip-toggle]")?.addEventListener("click", async (event) => {
-      const button = event.currentTarget;
-      if (!(button instanceof HTMLButtonElement)) return;
-      const nextEnabled = !enabled;
-      const confirmed = window.confirm(nextEnabled
-        ? "Enable Stripe-managed Zip checkout with the configured customer fee. Continue?"
-        : "Disable Zip checkout immediately for all customers?");
-      if (!confirmed) return;
-      button.disabled = true;
-      try {
-        const result = await callAdminApi("payment_settings_update", {
-          code: "zip",
-          is_enabled: nextEnabled,
-          confirmation: nextEnabled ? "ZIP_STRIPE_CONFIGURATION_VERIFIED" : "",
-        }, session);
-        state.zipSettings = result.zip;
-        renderZipSettings();
-        setAlert(alertTarget, `Zip checkout ${nextEnabled ? "enabled" : "disabled"}.`, "success");
-      } catch (error) {
-        setAlert(alertTarget, error instanceof Error ? error.message : "Zip payment setting could not be changed.", "error");
-        button.disabled = false;
-      }
-    });
-    zipSettingsTarget.querySelector("[data-paypal-toggle]")?.addEventListener("click", async (event) => {
-      const button = event.currentTarget;
-      if (!(button instanceof HTMLButtonElement)) return;
-      const nextEnabled = !Boolean(paypal.is_enabled);
-      const confirmed = window.confirm(nextEnabled
-        ? "Enable PayPal only after sandbox checkout, webhook, invoice email and refund testing have passed. Continue?"
-        : "Disable PayPal checkout immediately for all customers?");
-      if (!confirmed) return;
-      button.disabled = true;
-      try {
-        const result = await callAdminApi("payment_settings_update", {
-          code: "paypal",
-          is_enabled: nextEnabled,
-          confirmation: nextEnabled ? "PAYPAL_CONFIGURATION_VERIFIED" : "",
-        }, session);
-        state.paypalSettings = result.paypal;
-        renderZipSettings();
-        setAlert(alertTarget, `PayPal checkout ${nextEnabled ? "enabled" : "disabled"}.`, "success");
-      } catch (error) {
-        setAlert(alertTarget, error instanceof Error ? error.message : "PayPal payment setting could not be changed.", "error");
-        button.disabled = false;
-      }
-    });
   };
 
-  const loadZipSettings = async () => {
+  const loadSyncedPaymentMethods = async () => {
     if (!bootstrap.capabilities.can_manage_payments) return;
-    renderZipSettings();
-    const result = await callAdminApi("payment_settings_get", {}, session);
-    state.zipSettings = result.zip;
-    state.paypalSettings = result.paypal;
-    renderZipSettings();
+    renderSyncedPaymentMethods();
+    const endpoint = String(window.TECHM8_CONFIG?.paymentMethodsEndpoint || "").trim()
+      || `${window.TECHM8_CONFIG?.supabaseUrl}/functions/v1/payment-methods`;
+    const response = await fetch(endpoint, {
+      headers: {
+        Accept: "application/json",
+        apikey: window.TECHM8_CONFIG?.supabaseAnonKey || "",
+      },
+    });
+    const result = await response.json();
+    if (!response.ok || !result.ok || !Array.isArray(result.profiles)) {
+      throw new Error(result.error || "Payment methods could not be loaded.");
+    }
+    state.paymentMethods = result.profiles;
+    renderSyncedPaymentMethods();
   };
 
   const openOrderModal = () => {
@@ -3207,10 +3165,10 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
   });
   refreshButton?.addEventListener("click", () => {
     loadRows().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Orders could not be refreshed.", "error"));
-    loadZipSettings().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Zip payment status could not be refreshed.", "error"));
+    loadSyncedPaymentMethods().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Payment method status could not be refreshed.", "error"));
   });
   loadRows().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Orders could not be loaded.", "error"));
-  loadZipSettings().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Zip payment status could not be loaded.", "error"));
+  loadSyncedPaymentMethods().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Payment method status could not be loaded.", "error"));
 }
 
 function renderRepairsPage(root, bootstrap, session, alertTarget) {
