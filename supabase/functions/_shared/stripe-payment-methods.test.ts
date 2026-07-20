@@ -1,11 +1,19 @@
 import {
   isStripeProfileAvailable,
   parseStripePaymentConfiguration,
+  stripeCheckoutPaymentMethodOptions,
   stripeCheckoutPaymentMethodTypes,
 } from "./stripe-payment-methods.ts";
 
 function assert(condition: unknown, message: string) {
   if (!condition) throw new Error(message);
+}
+
+function assertEquals(actual: unknown, expected: unknown) {
+  assert(
+    JSON.stringify(actual) === JSON.stringify(expected),
+    `Expected ${JSON.stringify(expected)}, received ${JSON.stringify(actual)}.`,
+  );
 }
 
 const configurationPayload = {
@@ -76,4 +84,11 @@ Deno.test("rejects a Stripe method that is enabled in settings but unavailable t
     rejected,
     "unavailable Zip should be rejected before checkout creation",
   );
+});
+
+Deno.test("sets the required web client option for WeChat Pay checkout", () => {
+  assertEquals(stripeCheckoutPaymentMethodOptions("wechat_pay"), {
+    wechat_pay: { client: "web" },
+  });
+  assertEquals(stripeCheckoutPaymentMethodOptions("card"), undefined);
 });

@@ -130,3 +130,14 @@ export function stripeCheckoutPaymentMethodTypes(
   }
   return [code];
 }
+
+export function stripeCheckoutPaymentMethodOptions(
+  code: StripeCheckoutProfileCode,
+): Stripe.Checkout.SessionCreateParams.PaymentMethodOptions | undefined {
+  if (code !== "wechat_pay") return undefined;
+  return {
+    wechat_pay: {
+      client: "web",
+    },
+  };
+}

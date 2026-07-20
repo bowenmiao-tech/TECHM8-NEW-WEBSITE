@@ -9,6 +9,7 @@ import {
 import {
   loadStripePaymentConfiguration,
   STRIPE_CHECKOUT_PROFILE_CODES,
+  stripeCheckoutPaymentMethodOptions,
   stripeCheckoutPaymentMethodTypes,
   type StripeCheckoutProfileCode,
 } from '../_shared/stripe-payment-methods.ts'
@@ -201,10 +202,14 @@ Deno.serve(async (req) => {
     }
 
     let stripePaymentMethodTypes: Stripe.Checkout.SessionCreateParams.PaymentMethodType[]
+    let stripePaymentMethodOptions: Stripe.Checkout.SessionCreateParams.PaymentMethodOptions | undefined
     try {
       const stripeConfiguration = await loadStripePaymentConfiguration(stripeSecretKey)
       stripePaymentMethodTypes = stripeCheckoutPaymentMethodTypes(
         stripeConfiguration,
+        paymentMethodCode as StripeCheckoutProfileCode,
+      )
+      stripePaymentMethodOptions = stripeCheckoutPaymentMethodOptions(
         paymentMethodCode as StripeCheckoutProfileCode,
       )
     } catch (configurationError) {
@@ -514,6 +519,7 @@ Deno.serve(async (req) => {
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
         payment_method_types: stripePaymentMethodTypes,
+        ...(stripePaymentMethodOptions ? { payment_method_options: stripePaymentMethodOptions } : {}),
         customer: stripeCustomer.id,
         locale: 'en',
         client_reference_id: orderCode,
