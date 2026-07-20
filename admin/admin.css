@@ -1352,6 +1352,24 @@ body.admin-login-body {
   gap: 18px;
 }
 
+.admin-payment-control {
+  margin-bottom: 18px;
+}
+
+.admin-reference {
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.88rem !important;
+}
+
+.admin-refund-reference {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  min-width: 150px;
+  color: var(--admin-muted);
+}
+
 .admin-order-detail__header,
 .admin-order-actions,
 .admin-document-card,

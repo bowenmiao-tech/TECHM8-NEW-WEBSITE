@@ -3,7 +3,7 @@ import {
   finalizePaidOrder,
   recordOrderEvent,
 } from '../_shared/order-commerce.ts'
-import { zipRequest } from '../_shared/zip-payments.ts'
+import { isTransientZipError, zipRequest } from '../_shared/zip-payments.ts'
 
 type JsonRecord = Record<string, unknown>
 
@@ -50,11 +50,15 @@ Deno.serve(async (req) => {
   const returnedCheckoutId = text(url.searchParams.get('checkoutId') || url.searchParams.get('checkout_id'))
   if (!orderCode) return siteRedirect('checkout.html', { payment: 'zip_failed' })
 
+  const supabaseAdmin = createClient(
+    Deno.env.get('SUPABASE_URL') ?? '',
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+  )
+  let orderId: number | null = null
+  let zipCheckoutId = ''
+  let chargeWasConfirmed = false
+
   try {
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-    )
     const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
       .select('id, order_code, payment_method_code, payment_status, status, total_amount, currency, zip_checkout_id, zip_charge_id')
@@ -63,6 +67,8 @@ Deno.serve(async (req) => {
     if (orderError || !order || order.payment_method_code !== 'zip' || !order.zip_checkout_id) {
       return siteRedirect('checkout.html', { payment: 'zip_failed', order_code: orderCode })
     }
+    orderId = Number(order.id)
+    zipCheckoutId = text(order.zip_checkout_id)
     if (returnedCheckoutId && returnedCheckoutId !== order.zip_checkout_id) {
       await recordOrderEvent(supabaseAdmin, order.id, {
         eventKey: `zip_checkout_mismatch:${crypto.randomUUID()}`,
@@ -134,6 +140,7 @@ Deno.serve(async (req) => {
     if (!chargeId || !['approved', 'captured', 'authorised'].includes(chargeState)) {
       throw new Error('Zip did not confirm the payment charge.')
     }
+    chargeWasConfirmed = true
 
     const { error: zipUpdateError } = await supabaseAdmin
       .from('orders')
@@ -160,6 +167,34 @@ Deno.serve(async (req) => {
     return siteRedirect('checkout-success.html', { order_code: orderCode, payment: 'zip' })
   } catch (error) {
     console.error('Zip payment return failed.', error)
+    if (orderId) {
+      const transientProviderError = isTransientZipError(error)
+      try {
+        if (!chargeWasConfirmed) {
+          await supabaseAdmin
+            .from('orders')
+            .update({ zip_payment_state: 'charge_error' })
+            .eq('id', orderId)
+            .neq('payment_status', 'paid')
+        }
+        await recordOrderEvent(supabaseAdmin, orderId, {
+          eventKey: `zip_processing_error:${crypto.randomUUID()}`,
+          eventType: 'payment_attention_required',
+          title: chargeWasConfirmed ? 'Zip order completion requires attention' : 'Zip charge requires reconciliation',
+          description: chargeWasConfirmed
+            ? 'Zip confirmed the charge, but the order completion workflow did not finish.'
+            : 'The Zip response could not be confirmed. Do not create a second charge; retry with the same order checkout or reconcile it in Zip Merchant Centre.',
+          actor: { type: 'zip', identifier: zipCheckoutId || null },
+          data: {
+            charge_confirmed: chargeWasConfirmed,
+            transient_provider_error: transientProviderError,
+            error: error instanceof Error ? error.message : String(error),
+          },
+        })
+      } catch (stateError) {
+        console.error('Zip reconciliation state could not be recorded.', stateError)
+      }
+    }
     return retryPage(req, orderCode)
   }
 })

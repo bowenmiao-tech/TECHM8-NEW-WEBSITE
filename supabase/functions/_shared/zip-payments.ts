@@ -1,11 +1,18 @@
 export type ZipEnvironment = 'sandbox' | 'production'
 export type ZipJson = Record<string, unknown>
 
-const ZIP_API_VERSION = '2021-08-25'
+export const ZIP_API_VERSION = '2021-08-25'
 const ZIP_BASE_URLS: Record<ZipEnvironment, string> = {
   sandbox: 'https://sand.merchant-api.com/merchant',
   production: 'https://merchant-api.com/merchant',
 }
+
+export const ZIP_RETRY_SCHEDULE = [
+  { delayBeforeMs: 0, timeoutMs: 20000 },
+  { delayBeforeMs: 10000, timeoutMs: 10000 },
+  { delayBeforeMs: 5000, timeoutMs: 5000 },
+  { delayBeforeMs: 5000, timeoutMs: 5000 },
+] as const
 
 export class ZipApiError extends Error {
   status: number
@@ -17,6 +24,12 @@ export class ZipApiError extends Error {
     this.status = status
     this.payload = payload
   }
+}
+
+export function isTransientZipError(error: unknown) {
+  if (error instanceof ZipApiError) return error.status === 429 || error.status >= 500
+  if (error instanceof DOMException && error.name === 'AbortError') return true
+  return error instanceof TypeError
 }
 
 function text(value: unknown) {
@@ -67,6 +80,10 @@ export function requireZipCheckoutUri(value: unknown) {
   return url.toString()
 }
 
+function wait(delayMs: number) {
+  return delayMs > 0 ? new Promise((resolve) => setTimeout(resolve, delayMs)) : Promise.resolve()
+}
+
 export async function zipRequest<T extends ZipJson>(
   path: string,
   options: {
@@ -80,9 +97,11 @@ export async function zipRequest<T extends ZipJson>(
   const url = `${baseUrl}${path.startsWith('/') ? path : `/${path}`}`
   let lastError: unknown = null
 
-  for (let attempt = 0; attempt < 2; attempt += 1) {
+  for (let attempt = 0; attempt < ZIP_RETRY_SCHEDULE.length; attempt += 1) {
+    const schedule = ZIP_RETRY_SCHEDULE[attempt]
+    await wait(schedule.delayBeforeMs)
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 15000)
+    const timeoutId = setTimeout(() => controller.abort(), schedule.timeoutMs)
     try {
       const response = await fetch(url, {
         method,
@@ -110,11 +129,10 @@ export async function zipRequest<T extends ZipJson>(
         response.status,
         payload,
       )
-      if ((response.status < 500 && response.status !== 429) || attempt === 1) throw error
-      lastError = error
+      throw error
     } catch (error) {
       lastError = error
-      if (error instanceof ZipApiError || attempt === 1) throw error
+      if (!isTransientZipError(error) || attempt === ZIP_RETRY_SCHEDULE.length - 1) throw error
     } finally {
       clearTimeout(timeoutId)
     }

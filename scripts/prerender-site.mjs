@@ -456,6 +456,7 @@ function renderProductPage(product) {
           <h1>${escapeHtml(product.name)}</h1>
           <p class="storefront-pdp__intro">${escapeHtml(visibleDescription)}</p>
           <div class="storefront-pdp__price-card"><div class="storefront-pdp__price-top">${comparePrice}</div><div class="storefront-pdp__price-main">${escapeHtml(money(product.retail_price))}</div></div>
+          <div class="zip-widget-slot" data-zip-product-widget data-zip-price="${escapeHtml(String(product.retail_price))}" hidden></div>
           <div class="storefront-pdp__highlights"><div class="storefront-pdp__highlight"><strong>Brand</strong><span>${escapeHtml(product.brand || "TECHM8")}</span></div><div class="storefront-pdp__highlight"><strong>Category</strong><span>${escapeHtml(product.category_name)}</span></div></div>
         </div>
       </section>

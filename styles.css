@@ -3289,11 +3289,23 @@ body.storefront-shop-page .storefront-tools {
 }
 
 .footer--bottom {
-  grid-template-columns: 1fr repeat(2, auto);
+  grid-template-columns: 1fr repeat(3, auto);
   align-items: center;
   padding-top: 1.25rem;
   margin-top: 1.75rem;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.zip-footer-link {
+  display: inline-flex !important;
+  align-items: center;
+  min-height: 2rem;
+}
+
+.zip-footer-link img {
+  display: block;
+  width: auto;
+  height: 1.5rem;
 }
 
 .footer-brand__logo {
@@ -9255,6 +9267,35 @@ html:has(body.repair-page--console-hero) {
 .storefront-checkout__delivery-card {
   display: grid;
   gap: 1rem;
+}
+
+.zip-widget-slot {
+  min-height: 1.75rem;
+  margin: 0.65rem 0 1rem;
+}
+
+.zip-information-page {
+  min-height: 55vh;
+}
+
+.zip-information-shell {
+  overflow: hidden;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.zip-information-fallback {
+  display: grid;
+  gap: 0.8rem;
+  max-width: 46rem;
+}
+
+.zip-information-fallback h1,
+.zip-information-fallback p {
+  margin: 0;
 }
 
 .storefront-checkout__contact-card {

@@ -37,8 +37,10 @@ export type OrderBundle = {
     phone?: string | null
     email?: string | null
     fulfillment_method?: string | null
+    payment_method_code?: string | null
     payment_method_label?: string | null
     payment_status?: string | null
+    zip_receipt_number?: string | null
     status?: string | null
     subtotal_amount?: number | string | null
     discount_amount?: number | string | null
@@ -340,6 +342,9 @@ async function generateA4Document(
     ['Payment method', bundle.order.payment_method_label || '-'],
     ['Payment status', statusText(bundle.order.payment_status)],
     ['Fulfilment', bundle.order.fulfillment_method === 'shipping' ? 'Shipping' : 'Store pickup'],
+    ...(bundle.order.payment_method_code === 'zip' && bundle.order.zip_receipt_number
+      ? [['Zip receipt', bundle.order.zip_receipt_number]]
+      : []),
   ]
   const metaColumnWidth = contentWidth / 3
   meta.forEach(([label, value], index) => {
@@ -350,7 +355,7 @@ async function generateA4Document(
     drawSectionLabel(page, bold, label, x, itemY)
     drawWrapped(page, regular, safePdfText(value), x, itemY - 15, metaColumnWidth - 12, { size: 9.5 })
   })
-  y -= 96
+  y -= Math.ceil(meta.length / 3) * 42 + 12
 
   const drawContinuationHeader = (target: PDFPage, section: string) => {
     target.drawRectangle({ x: 0, y: height - 70, width, height: 70, color: INK })

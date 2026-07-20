@@ -12,7 +12,100 @@ window.TECHM8_CONFIG = window.TECHM8_CONFIG || {
     "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/admin-panel",
   siteUrl: "https://www.techm8australia.com/",
   googleMapsApiKey: "AIzaSyAecM2vtQCDDZCSOJvx2dgdZBfsM_fz1QM",
+  zipPublicKey: "",
+  zipWidgetEnvironment: "production",
+  zipMarketingEnabled: false,
 };
+
+const ZIP_WIDGET_SCRIPT_URL =
+  "https://static.zip.co/lib/js/zm-widget-js/dist/zip-widget.min.js";
+let zipWidgetLibraryPromise = null;
+
+function getZipMarketingConfig() {
+  const publicKey = String(window.TECHM8_CONFIG?.zipPublicKey || "").trim();
+  const environment =
+    String(window.TECHM8_CONFIG?.zipWidgetEnvironment || "production")
+      .trim()
+      .toLowerCase() === "sandbox"
+      ? "sandbox"
+      : "production";
+  return {
+    publicKey,
+    environment,
+    enabled:
+      window.TECHM8_CONFIG?.zipMarketingEnabled === true && Boolean(publicKey),
+  };
+}
+
+function ensureZipWidgetLibrary() {
+  if (zipWidgetLibraryPromise) return zipWidgetLibraryPromise;
+  const existing = document.querySelector("script[data-techm8-zip-widget-library]");
+  if (existing instanceof HTMLScriptElement) {
+    zipWidgetLibraryPromise = Promise.resolve(existing);
+    return zipWidgetLibraryPromise;
+  }
+  zipWidgetLibraryPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = ZIP_WIDGET_SCRIPT_URL;
+    script.async = true;
+    script.dataset.techm8ZipWidgetLibrary = "true";
+    script.addEventListener("load", () => resolve(script), { once: true });
+    script.addEventListener("error", () => reject(new Error("Zip messaging could not be loaded.")), { once: true });
+    document.head.append(script);
+  });
+  return zipWidgetLibraryPromise;
+}
+
+function initZipMarketingAssets(root = document) {
+  const config = getZipMarketingConfig();
+  if (!config.enabled) return;
+
+  const scope = root instanceof Element || root instanceof Document ? root : document;
+  const productAndCartWidgets = scope.querySelectorAll(
+    "[data-zip-product-widget], [data-zip-cart-widget]",
+  );
+  productAndCartWidgets.forEach((widget) => {
+    if (!(widget instanceof HTMLElement)) return;
+    const price = Number(widget.dataset.zipPrice || "0");
+    if (!(price > 0)) return;
+    widget.hidden = false;
+    widget.style.cursor = "pointer";
+    widget.setAttribute("data-zm-widget", "popup");
+    widget.setAttribute("data-zm-region", "au");
+    widget.setAttribute("data-env", config.environment);
+    widget.setAttribute("data-zm-merchant", config.publicKey);
+    widget.setAttribute("data-zm-price", price.toFixed(2));
+    widget.setAttribute("data-zm-asset", "productwidget");
+    widget.setAttribute("data-zm-popup-asset", "termsdialog");
+  });
+
+  scope.querySelectorAll("[data-zip-landing-widget]").forEach((widget) => {
+    if (!(widget instanceof HTMLElement)) return;
+    widget.hidden = false;
+    widget.setAttribute("zm-asset", "landingpage");
+    widget.setAttribute("zm-widget", "inline");
+    widget.setAttribute("data-zm-region", "au");
+    widget.setAttribute("data-env", config.environment);
+    widget.setAttribute("data-zm-merchant", config.publicKey);
+    const fallback = widget.parentElement?.querySelector("[data-zip-landing-fallback]");
+    if (fallback instanceof HTMLElement) fallback.hidden = true;
+  });
+
+  document.querySelectorAll(".site-footer .footer--bottom").forEach((footer) => {
+    if (!(footer instanceof HTMLElement) || footer.querySelector("[data-zip-footer-link]")) return;
+    const link = document.createElement("a");
+    link.href = "/zip.html";
+    link.dataset.zipFooterLink = "true";
+    link.className = "zip-footer-link";
+    link.setAttribute("aria-label", "Learn about paying with Zip");
+    link.innerHTML = `<img src="https://static.zip.co/developers/assets/default/footer-tile/footer-tile-new.png" alt="Zip payment icon" height="24" loading="lazy">`;
+    footer.append(link);
+  });
+
+  if (productAndCartWidgets.length || scope.querySelector("[data-zip-landing-widget]")) {
+    ensureZipWidgetLibrary().catch((error) => console.error(error));
+  }
+}
 
 function initFilters() {
   const filterButtons = document.querySelectorAll("[data-filter]");
@@ -4923,6 +5016,7 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
           </div>
           <div class="storefront-pdp__price-main">${escapeHtml(formatMoney(retailPrice))}</div>
         </div>
+        <div class="zip-widget-slot" data-zip-product-widget data-zip-price="${escapeHtml(String(retailPrice))}" hidden></div>
 
         ${variantMarkup}
 
@@ -4974,6 +5068,7 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
 
     ${relatedMarkup}
   `;
+  initZipMarketingAssets(shell);
 }
 
 function bindProductDetailShell(shell, product, catalogProducts = null) {
@@ -5706,6 +5801,11 @@ function renderCartSummary(target, items, options = {}) {
       <strong>${escapeHtml(formatMoney(total))}</strong>
     </div>
   `;
+  const cartWidget = target.parentElement?.querySelector("[data-zip-cart-widget]");
+  if (cartWidget instanceof HTMLElement) {
+    cartWidget.dataset.zipPrice = String(total);
+    initZipMarketingAssets(target.parentElement);
+  }
 }
 
 function selectRecommendedProducts(products, cartItems, limit = 5) {
@@ -7761,6 +7861,14 @@ function initCheckoutPage() {
     }
 
     if (selectedProfile?.provider === "zip") {
+      if (!isValidAustralianMobile(phone)) {
+        invalidateField(
+          phoneField,
+          "Zip requires an Australian mobile number, for example 0412 345 678.",
+          "Please enter a valid Australian mobile number for Zip.",
+        );
+        return;
+      }
       const requiredZipBillingFields = [
         ["billing_address_line_1", "Enter your Zip billing address."],
         ["billing_suburb", "Enter your Zip billing suburb."],
@@ -9554,6 +9662,10 @@ function isValidAustralianPhone(phone) {
   return /^\+61[2-478]\d{8}$/.test(normalizeAustralianPhone(phone));
 }
 
+function isValidAustralianMobile(phone) {
+  return /^\+614\d{8}$/.test(normalizeAustralianPhone(phone));
+}
+
 function isEmailConfirmed(user) {
   return Boolean(user?.email_confirmed_at || user?.confirmed_at);
 }
@@ -11014,6 +11126,7 @@ function initPage() {
   initResetPasswordPage();
   initMyOrdersPage();
   initMyRepairsPage();
+  initZipMarketingAssets();
 }
 
 if (document.readyState === "loading") {

@@ -1575,6 +1575,7 @@ function getViewTemplate(view) {
     case "orders":
       return `
         <section>
+          <article class="admin-panel admin-payment-control" data-zip-settings hidden></article>
           <article class="admin-panel">
             <div class="admin-panel__heading">
               <div>
@@ -2678,6 +2679,7 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
   const paginationTarget = root.querySelector("[data-orders-pagination]");
   const storeFilter = root.querySelector("[data-orders-store-filter]");
   const refreshButton = root.querySelector("[data-orders-refresh]");
+  const zipSettingsTarget = root.querySelector("[data-zip-settings]");
   let editorTarget = null;
 
   fillStoreOptions(storeFilter, bootstrap.stores, bootstrap.capabilities.can_view_all_stores);
@@ -2694,6 +2696,65 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
     rows: [],
     meta: null,
     detail: null,
+    zipSettings: null,
+  };
+
+  const renderZipSettings = () => {
+    if (!(zipSettingsTarget instanceof HTMLElement) || !bootstrap.capabilities.can_manage_payments) return;
+    zipSettingsTarget.hidden = false;
+    const zip = state.zipSettings;
+    if (!zip) {
+      zipSettingsTarget.innerHTML = `<div class="admin-loading">Loading Zip payment status...</div>`;
+      return;
+    }
+    const enabled = Boolean(zip.is_enabled);
+    const environment = String(zip.environment || "sandbox").toLowerCase();
+    zipSettingsTarget.innerHTML = `
+      <div class="admin-panel__heading">
+        <div>
+          <p class="admin-card__label">Payment method control</p>
+          <h2>Zip Pay ${renderBadge(enabled ? "enabled" : "disabled")}</h2>
+          <p>${environment === "production" ? "Production" : "Sandbox"} environment · API key ${zip.api_key_configured ? "configured" : "missing"} · certification ${zip.certification_approved ? "approved" : "not yet approved"}. ${enabled ? "Customers can currently choose Zip at checkout." : "Customers cannot currently choose Zip at checkout."}</p>
+        </div>
+        <div class="admin-button-row">
+          <button class="button ${enabled ? "button--danger" : "button--primary"}" type="button" data-zip-toggle ${!enabled && !zip.certification_approved ? "disabled" : ""}>
+            ${enabled ? "Disable Zip now" : zip.certification_approved ? "Enable Zip" : "Waiting for certification"}
+          </button>
+        </div>
+      </div>
+      ${!enabled ? `<p class="admin-note">Keep Zip disabled until sandbox testing and Zip certification are approved. This control is the emergency payment kill switch after launch.</p>` : ""}
+    `;
+    zipSettingsTarget.querySelector("[data-zip-toggle]")?.addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      if (!(button instanceof HTMLButtonElement)) return;
+      const nextEnabled = !enabled;
+      const confirmed = window.confirm(nextEnabled
+        ? "Enable Zip checkout only if Zip has approved certification and the configured key/environment are correct. Continue?"
+        : "Disable Zip checkout immediately for all customers?");
+      if (!confirmed) return;
+      button.disabled = true;
+      try {
+        const result = await callAdminApi("payment_settings_update", {
+          code: "zip",
+          is_enabled: nextEnabled,
+          confirmation: nextEnabled ? "ZIP_CERTIFICATION_APPROVED" : "",
+        }, session);
+        state.zipSettings = result.zip;
+        renderZipSettings();
+        setAlert(alertTarget, `Zip checkout ${nextEnabled ? "enabled" : "disabled"}.`, "success");
+      } catch (error) {
+        setAlert(alertTarget, error instanceof Error ? error.message : "Zip payment setting could not be changed.", "error");
+        button.disabled = false;
+      }
+    });
+  };
+
+  const loadZipSettings = async () => {
+    if (!bootstrap.capabilities.can_manage_payments) return;
+    renderZipSettings();
+    const result = await callAdminApi("payment_settings_get", {}, session);
+    state.zipSettings = result.zip;
+    renderZipSettings();
   };
 
   const openOrderModal = () => {
@@ -2861,6 +2922,13 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
               <div class="admin-summary-card"><span>Phone</span><strong>${escapeHtml(order.phone || "—")}</strong></div>
               <div class="admin-summary-card"><span>Email</span><strong>${escapeHtml(order.email || "—")}</strong></div>
               <div class="admin-summary-card"><span>Payment method</span><strong>${escapeHtml(order.payment_method_label || "—")}</strong></div>
+              ${order.payment_method_code === "zip" ? `
+                <div class="admin-summary-card"><span>Zip state</span><strong>${escapeHtml(order.zip_payment_state || "Not recorded")}</strong></div>
+                <div class="admin-summary-card"><span>Zip environment</span><strong>${escapeHtml(order.zip_environment || "Not recorded")}</strong></div>
+                <div class="admin-summary-card"><span>Zip checkout ID</span><strong class="admin-reference">${escapeHtml(order.zip_checkout_id || "Not recorded")}</strong></div>
+                <div class="admin-summary-card"><span>Zip charge ID</span><strong class="admin-reference">${escapeHtml(order.zip_charge_id || "Not recorded")}</strong></div>
+                <div class="admin-summary-card"><span>Zip receipt</span><strong class="admin-reference">${escapeHtml(order.zip_receipt_number || "Not recorded")}</strong></div>
+              ` : ""}
             </div>
             <div class="admin-address-card"><span>Billing address</span><strong>${escapeHtml(billingAddress || "Not supplied; customer contact details are on the order")}</strong></div>
             <div class="admin-payment-lines">
@@ -2900,12 +2968,15 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
             </form>
           </article>
           <article class="admin-panel admin-panel--embedded">
-            <div class="admin-panel__heading"><div><h3>Refunds</h3><p>Financial changes are reconciled with Stripe or recorded as an in-store refund.</p></div></div>
+            <div class="admin-panel__heading"><div><h3>Refunds</h3><p>Financial changes are reconciled with Stripe or Zip, or recorded as an in-store refund.</p></div></div>
             <div class="admin-list">
               ${(detail.refunds || []).map((refund) => `
                 <div class="admin-list-item">
                   <div class="admin-list-item__content"><strong>${formatMoney(refund.amount)}</strong><span>${escapeHtml(refund.reason || "No reason")} · ${formatDateTime(refund.created_at)}</span></div>
-                  ${renderBadge(refund.status)}
+                  <div class="admin-refund-reference">
+                    ${renderBadge(refund.status)}
+                    <small>${escapeHtml(refund.provider || "provider")} · ${escapeHtml(refund.zip_refund_id || refund.stripe_refund_id || "No provider reference")}</small>
+                  </div>
                 </div>
               `).join("") || `<div class="admin-empty">No refunds recorded.</div>`}
             </div>
@@ -3079,8 +3150,12 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
     state.page = 1;
     await loadRows().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Orders could not be loaded.", "error"));
   });
-  refreshButton?.addEventListener("click", () => loadRows().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Orders could not be refreshed.", "error")));
+  refreshButton?.addEventListener("click", () => {
+    loadRows().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Orders could not be refreshed.", "error"));
+    loadZipSettings().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Zip payment status could not be refreshed.", "error"));
+  });
   loadRows().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Orders could not be loaded.", "error"));
+  loadZipSettings().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Zip payment status could not be loaded.", "error"));
 }
 
 function renderRepairsPage(root, bootstrap, session, alertTarget) {

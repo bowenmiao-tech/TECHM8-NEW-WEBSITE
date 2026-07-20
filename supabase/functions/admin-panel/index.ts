@@ -11,7 +11,7 @@ import {
   notifyOrderEvent,
   recordOrderEvent,
 } from '../_shared/order-commerce.ts'
-import { zipRequest } from '../_shared/zip-payments.ts'
+import { isTransientZipError, zipRequest } from '../_shared/zip-payments.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -670,6 +670,89 @@ async function getOrderDetail(supabaseAdmin: ReturnType<typeof createClient>, co
   return jsonResponse({ ok: true, ...result.payload })
 }
 
+async function getPaymentSettings(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext) {
+  if (!isSuperAdmin(context)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can manage payment methods.' }, 403)
+  }
+  const { data: zipProfile, error } = await supabaseAdmin
+    .from('payment_fee_profiles')
+    .select('id, code, label, provider, fee_type, percentage, fixed_amount, is_enabled, notes, updated_at')
+    .eq('code', 'zip')
+    .maybeSingle()
+  if (error) throw error
+  if (!zipProfile) return jsonResponse({ ok: false, error: 'The Zip payment profile was not found.' }, 404)
+  return jsonResponse({
+    ok: true,
+    zip: {
+      ...zipProfile,
+      environment: String(Deno.env.get('ZIP_ENVIRONMENT') || 'sandbox').trim().toLowerCase(),
+      api_key_configured: Boolean(String(Deno.env.get('ZIP_API_KEY') || '').trim()),
+      certification_approved: ['1', 'true', 'yes'].includes(
+        String(Deno.env.get('ZIP_CERTIFIED') || '').trim().toLowerCase(),
+      ),
+    },
+  })
+}
+
+async function updatePaymentSettings(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  context: AdminContext,
+  body: JsonRecord,
+) {
+  if (!isSuperAdmin(context)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can manage payment methods.' }, 403)
+  }
+  if (String(body.code || '').trim() !== 'zip' || typeof body.is_enabled !== 'boolean') {
+    return jsonResponse({ ok: false, error: 'A valid Zip payment setting is required.' }, 422)
+  }
+  const environment = String(Deno.env.get('ZIP_ENVIRONMENT') || 'sandbox').trim().toLowerCase()
+  const certificationApproved = ['1', 'true', 'yes'].includes(
+    String(Deno.env.get('ZIP_CERTIFIED') || '').trim().toLowerCase(),
+  )
+  if (body.is_enabled) {
+    if (!String(Deno.env.get('ZIP_API_KEY') || '').trim()) {
+      return jsonResponse({ ok: false, error: 'The Zip API key is not configured.' }, 409)
+    }
+    if (!['sandbox', 'production'].includes(environment)) {
+      return jsonResponse({ ok: false, error: 'The Zip environment is invalid.' }, 409)
+    }
+    if (!certificationApproved) {
+      return jsonResponse({
+        ok: false,
+        error: 'Zip certification approval has not been recorded. Checkout must remain disabled.',
+      }, 409)
+    }
+    if (body.confirmation !== 'ZIP_CERTIFICATION_APPROVED') {
+      return jsonResponse({
+        ok: false,
+        error: 'Confirm Zip certification approval before enabling checkout.',
+      }, 409)
+    }
+  }
+  const { data, error } = await supabaseAdmin
+    .from('payment_fee_profiles')
+    .update({
+      is_enabled: body.is_enabled,
+      provider: 'zip',
+      fee_type: 'none',
+      percentage: 0,
+      fixed_amount: 0,
+    })
+    .eq('code', 'zip')
+    .select('id, code, label, provider, fee_type, percentage, fixed_amount, is_enabled, notes, updated_at')
+    .single()
+  if (error) throw error
+  return jsonResponse({
+    ok: true,
+    zip: {
+      ...data,
+      environment,
+      api_key_configured: Boolean(String(Deno.env.get('ZIP_API_KEY') || '').trim()),
+      certification_approved: certificationApproved,
+    },
+  })
+}
+
 async function updateOrder(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
   if (!ORDER_EDIT_ROLES.has(context.role)) {
     return jsonResponse({ ok: false, error: 'You do not have permission to edit orders.' }, 403)
@@ -882,6 +965,22 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
     const manualRefund = order.payment_method_code === 'pay_in_store'
     const zipRefund = order.payment_method_code === 'zip'
     const refundProvider = manualRefund ? 'manual' : zipRefund ? 'zip' : 'stripe'
+    if (zipRefund) {
+      const { data: pendingZipRefund, error: pendingZipRefundError } = await supabaseAdmin
+        .from('order_refunds')
+        .select('id, amount, created_at')
+        .eq('order_id', orderId)
+        .eq('provider', 'zip')
+        .eq('status', 'pending')
+        .maybeSingle()
+      if (pendingZipRefundError) throw pendingZipRefundError
+      if (pendingZipRefund) {
+        return jsonResponse({
+          ok: false,
+          error: 'A Zip refund is already awaiting provider reconciliation. Do not submit another refund.',
+        }, 409)
+      }
+    }
     const { data: refundRow, error: refundInsertError } = await supabaseAdmin
       .from('order_refunds')
       .insert({
@@ -896,6 +995,12 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
       })
       .select('*')
       .single()
+    if (refundInsertError?.code === '23505' && zipRefund) {
+      return jsonResponse({
+        ok: false,
+        error: 'A Zip refund is already awaiting provider reconciliation. Do not submit another refund.',
+      }, 409)
+    }
     if (refundInsertError || !refundRow) throw refundInsertError ?? new Error('Refund could not be recorded.')
 
     if (manualRefund) {
@@ -908,6 +1013,9 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
           .eq('id', refundRow.id)
         return jsonResponse({ ok: false, error: 'The Zip charge id is missing for this order.' }, 409)
       }
+      let providerConfirmed = false
+      let confirmedZipRefundId = ''
+      let confirmedZipRefundState: unknown = null
       try {
         const zipRefundResult = await zipRequest<JsonRecord>('/refunds', {
           method: 'POST',
@@ -920,6 +1028,9 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
         })
         const zipRefundId = String(zipRefundResult.id ?? '').trim()
         if (!zipRefundId) throw new Error('Zip did not return a refund identifier.')
+        providerConfirmed = true
+        confirmedZipRefundId = zipRefundId
+        confirmedZipRefundState = zipRefundResult.state ?? zipRefundResult.status ?? 'succeeded'
         const { data: savedRefund, error: refundUpdateError } = await supabaseAdmin
           .from('order_refunds')
           .update({
@@ -929,7 +1040,7 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
             processed_at: now,
             provider_response: {
               charge_id: order.zip_charge_id,
-              state: zipRefundResult.state ?? zipRefundResult.status ?? 'succeeded',
+              state: confirmedZipRefundState,
             },
           })
           .eq('id', refundRow.id)
@@ -938,14 +1049,64 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
         if (refundUpdateError) throw refundUpdateError
         await applySucceededRefund(supabaseAdmin, orderId, savedRefund, actor)
       } catch (refundError) {
+        const message = refundError instanceof Error ? refundError.message : String(refundError)
+        if (providerConfirmed) {
+          await supabaseAdmin
+            .from('order_refunds')
+            .update({
+              provider: 'zip',
+              zip_refund_id: confirmedZipRefundId,
+              status: 'succeeded',
+              processed_at: now,
+              provider_response: {
+                charge_id: order.zip_charge_id,
+                state: confirmedZipRefundState,
+                local_reconciliation_required: true,
+                error: message,
+              },
+            })
+            .eq('id', refundRow.id)
+          await recordOrderEvent(supabaseAdmin, orderId, {
+            eventKey: `zip_refund_reconciliation:${refundRow.id}`,
+            eventType: 'refund_attention_required',
+            title: 'Zip refund requires local reconciliation',
+            description: 'Zip confirmed the refund, but the local order totals or documents did not finish updating.',
+            actor,
+            data: { refund_id: refundRow.id, zip_refund_id: confirmedZipRefundId, error: message },
+          })
+          return jsonResponse({
+            ok: false,
+            error: 'Zip confirmed the refund, but the order needs local reconciliation. Do not submit another refund.',
+          }, 409)
+        }
+
+        const providerResponsePending = isTransientZipError(refundError)
         await supabaseAdmin
           .from('order_refunds')
           .update({
-            status: 'failed',
-            processed_at: now,
-            provider_response: { error: refundError instanceof Error ? refundError.message : String(refundError) },
+            status: providerResponsePending ? 'pending' : 'failed',
+            processed_at: providerResponsePending ? null : now,
+            provider_response: {
+              error: message,
+              reconciliation_required: providerResponsePending,
+              idempotency_key: `techm8-order-${orderId}-zip-refund-${refundRow.id}`,
+            },
           })
           .eq('id', refundRow.id)
+        if (providerResponsePending) {
+          await recordOrderEvent(supabaseAdmin, orderId, {
+            eventKey: `zip_refund_pending:${refundRow.id}`,
+            eventType: 'refund_attention_required',
+            title: 'Zip refund response pending',
+            description: 'The provider response was not confirmed after the retry window. Do not submit another refund until it is reconciled.',
+            actor,
+            data: { refund_id: refundRow.id, error: message },
+          })
+          return jsonResponse({
+            ok: false,
+            error: 'The Zip refund response is still pending. Do not submit another refund; reconcile this refund in Zip Merchant Centre first.',
+          }, 409)
+        }
         throw refundError
       }
     } else {
@@ -2270,6 +2431,7 @@ Deno.serve(async (req) => {
           can_edit_inventory: INVENTORY_EDIT_ROLES.has(context.role),
           can_edit_customers: CUSTOMER_EDIT_ROLES.has(context.role),
           can_view_all_stores: isSuperAdmin(context),
+          can_manage_payments: isSuperAdmin(context),
         },
         stores: sharedLists.stores,
         categories: sharedLists.categories,
@@ -2298,6 +2460,14 @@ Deno.serve(async (req) => {
 
     if (action === 'order_action') {
       return await runOrderAction(supabaseAdmin, context, body)
+    }
+
+    if (action === 'payment_settings_get') {
+      return await getPaymentSettings(supabaseAdmin, context)
+    }
+
+    if (action === 'payment_settings_update') {
+      return await updatePaymentSettings(supabaseAdmin, context, body)
     }
 
     if (action === 'repairs_list') {

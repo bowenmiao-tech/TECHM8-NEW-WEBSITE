@@ -58,6 +58,13 @@ function validEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
+function normalizeAustralianMobile(value: string) {
+  const digits = value.replace(/\D/g, '')
+  if (/^04\d{8}$/.test(digits)) return `+61${digits.slice(1)}`
+  if (/^614\d{8}$/.test(digits)) return `+${digits}`
+  return ''
+}
+
 function absoluteSiteUrl(path: unknown) {
   const siteUrl = String(Deno.env.get('SITE_URL') ?? '').trim().replace(/\/+$/, '')
   if (!siteUrl || !path) return undefined
@@ -84,6 +91,7 @@ Deno.serve(async (req) => {
     const firstName = String(body.first_name ?? '').trim()
     const lastName = String(body.last_name ?? '').trim()
     const phone = String(body.phone ?? '').trim()
+    const zipPhone = normalizeAustralianMobile(phone)
     const email = String(body.email ?? '').trim()
     const storeSlug = String(body.store_slug ?? '').trim()
     const preferredContactMethod = String(body.preferred_contact_method ?? 'phone').trim()
@@ -232,6 +240,9 @@ Deno.serve(async (req) => {
       }
       if (billingCountryCode !== 'AU') {
         return Response.json({ ok: false, error: 'Zip billing is currently available for Australian addresses only.' }, { status: 422, headers: corsHeaders })
+      }
+      if (!zipPhone) {
+        return Response.json({ ok: false, error: 'Zip requires a valid Australian mobile number, for example 0412 345 678.' }, { status: 422, headers: corsHeaders })
       }
     }
 
@@ -402,7 +413,7 @@ Deno.serve(async (req) => {
           ? {
               recipient_name: customerName,
               email,
-              phone,
+              phone: zipPhone,
               address_line_1: billingAddressLine1,
               address_line_2: billingAddressLine2 || null,
               suburb: billingSuburb,
@@ -451,7 +462,7 @@ Deno.serve(async (req) => {
               first_name: firstName,
               last_name: lastName,
               email,
-              phone,
+              phone: zipPhone,
               billing_address: {
                 first_name: firstName,
                 last_name: lastName,
@@ -484,7 +495,7 @@ Deno.serve(async (req) => {
                       name: shippingOption?.label || 'Shipping',
                       amount: shippingFeeAmount,
                       quantity: 1,
-                      type: 'sku',
+                      type: 'shipping',
                       reference: shippingOption?.code || 'shipping',
                     }]
                   : []),

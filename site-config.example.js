@@ -6,5 +6,8 @@ window.TECHM8_CONFIG = {
   checkoutSessionEndpoint: 'https://your-project-ref.supabase.co/functions/v1/create-checkout-session',
   adminEndpoint: 'https://your-project-ref.supabase.co/functions/v1/admin-panel',
   siteUrl: 'https://your-domain.example/',
-  googleMapsApiKey: 'your-browser-restricted-google-maps-api-key'
+  googleMapsApiKey: 'your-browser-restricted-google-maps-api-key',
+  zipPublicKey: 'your-zip-public-key',
+  zipWidgetEnvironment: 'sandbox',
+  zipMarketingEnabled: false
 };
