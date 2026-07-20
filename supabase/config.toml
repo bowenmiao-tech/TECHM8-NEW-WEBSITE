@@ -14,3 +14,13 @@ entrypoint = "./functions/catalog-refresh-hook/index.ts"
 enabled = true
 verify_jwt = false
 entrypoint = "./functions/zip-payment-return/index.ts"
+
+[functions.paypal-payment-return]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/paypal-payment-return/index.ts"
+
+[functions.paypal-webhook]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/paypal-webhook/index.ts"

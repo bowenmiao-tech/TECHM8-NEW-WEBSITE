@@ -12,6 +12,13 @@ import {
   requireZipCheckoutUri,
   zipRequest,
 } from '../_shared/zip-payments.ts'
+import {
+  getPayPalEnvironment,
+  getPayPalLink,
+  getPayPalReturnUrl,
+  paypalRequest,
+  requirePayPalApprovalUrl,
+} from '../_shared/paypal-payments.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -243,6 +250,18 @@ Deno.serve(async (req) => {
       }
       if (!zipPhone) {
         return Response.json({ ok: false, error: 'Zip requires a valid Australian mobile number, for example 0412 345 678.' }, { status: 422, headers: corsHeaders })
+      }
+    }
+    if (resolvedFeeProfile.code === 'paypal') {
+      if (resolvedFeeProfile.provider !== 'paypal') {
+        return Response.json({ ok: false, error: 'PayPal is not configured as a direct PayPal payment method.' }, { status: 500, headers: corsHeaders })
+      }
+      if (
+        resolvedFeeProfile.fee_type !== 'none' ||
+        Number(resolvedFeeProfile.percentage || 0) !== 0 ||
+        Number(resolvedFeeProfile.fixed_amount || 0) !== 0
+      ) {
+        return Response.json({ ok: false, error: 'PayPal cannot include a customer payment surcharge.' }, { status: 500, headers: corsHeaders })
       }
     }
 
@@ -568,6 +587,107 @@ Deno.serve(async (req) => {
         await supabaseAdmin.from('orders').delete().eq('id', insertedOrder.id)
         return Response.json(
           { ok: false, error: 'Zip payment could not be started. Please try again or choose another payment method.' },
+          { status: 502, headers: corsHeaders },
+        )
+      }
+    }
+
+    if (resolvedFeeProfile.provider === 'paypal' && resolvedFeeProfile.code === 'paypal') {
+      try {
+        const paypalOrder = await paypalRequest<Record<string, unknown>>('/v2/checkout/orders', {
+          method: 'POST',
+          idempotencyKey: `techm8-paypal-order-${insertedOrder.id}`,
+          body: {
+            intent: 'CAPTURE',
+            purchase_units: [{
+              reference_id: 'OZ_TECH_M8',
+              custom_id: orderCode,
+              invoice_id: orderCode,
+              description: `OZ TECH M8 order ${orderCode}`,
+              amount: {
+                currency_code: 'AUD',
+                value: totalAmount.toFixed(2),
+              },
+              ...(fulfillmentMethod === 'shipping'
+                ? {
+                    shipping: {
+                      name: { full_name: recipientName },
+                      address: {
+                        address_line_1: addressLine1,
+                        ...(addressLine2 ? { address_line_2: addressLine2 } : {}),
+                        admin_area_2: suburb,
+                        admin_area_1: state,
+                        postal_code: postcode,
+                        country_code: countryCode.toUpperCase(),
+                      },
+                    },
+                  }
+                : {}),
+            }],
+            payment_source: {
+              paypal: {
+                experience_context: {
+                  brand_name: 'OZ TECH M8',
+                  locale: 'en-AU',
+                  landing_page: 'LOGIN',
+                  user_action: 'PAY_NOW',
+                  shipping_preference: fulfillmentMethod === 'shipping'
+                    ? 'SET_PROVIDED_ADDRESS'
+                    : 'NO_SHIPPING',
+                  return_url: getPayPalReturnUrl(orderCode),
+                  cancel_url: getPayPalReturnUrl(orderCode, true),
+                },
+              },
+            },
+          },
+        })
+        const paypalOrderId = String(paypalOrder.id ?? '').trim()
+        const approvalUrl = requirePayPalApprovalUrl(getPayPalLink(paypalOrder, 'payer-action') || getPayPalLink(paypalOrder, 'approve'))
+        if (!paypalOrderId) throw new Error('PayPal did not return an order identifier.')
+
+        const { error: paypalUpdateError } = await supabaseAdmin
+          .from('orders')
+          .update({
+            paypal_order_id: paypalOrderId,
+            paypal_payment_state: String(paypalOrder.status ?? 'PAYER_ACTION_REQUIRED').trim().toLowerCase(),
+            paypal_environment: getPayPalEnvironment(),
+          })
+          .eq('id', insertedOrder.id)
+        if (paypalUpdateError) throw paypalUpdateError
+
+        await recordOrderEvent(supabaseAdmin, insertedOrder.id, {
+          eventKey: `paypal_order_created:${paypalOrderId}`,
+          eventType: 'payment_started',
+          title: 'PayPal checkout started',
+          description: 'The customer was redirected to PayPal to approve payment.',
+          actor: { type: 'customer', identifier: authUser.id },
+          data: { paypal_order_id: paypalOrderId, environment: getPayPalEnvironment() },
+        })
+
+        return Response.json(
+          {
+            ok: true,
+            order_id: insertedOrder.id,
+            order_code: insertedOrder.order_code,
+            store_name: resolvedStore.name,
+            total_amount: insertedOrder.total_amount,
+            payment_fee_amount: insertedOrder.payment_fee_amount,
+            shipping_fee_amount: insertedOrder.shipping_fee_amount,
+            shipping_service_code: insertedOrder.shipping_service_code,
+            shipping_service_name: insertedOrder.shipping_service_name,
+            shipping_delivery_time: shippingOption?.deliveryTime ?? null,
+            payment_method_code: insertedOrder.payment_method_code,
+            payment_method_label: insertedOrder.payment_method_label,
+            paypal_order_id: paypalOrderId,
+            checkout_url: approvalUrl,
+          },
+          { status: 200, headers: corsHeaders },
+        )
+      } catch (paypalError) {
+        console.error('PayPal checkout could not be started.', paypalError)
+        await supabaseAdmin.from('orders').delete().eq('id', insertedOrder.id)
+        return Response.json(
+          { ok: false, error: 'PayPal checkout could not be started. Please try again or choose another payment method.' },
           { status: 502, headers: corsHeaders },
         )
       }

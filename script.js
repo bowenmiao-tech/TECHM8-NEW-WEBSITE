@@ -6158,6 +6158,8 @@ function initCheckoutPage() {
     "zip_referred",
     "zip_cancelled",
     "zip_failed",
+    "paypal_cancelled",
+    "paypal_failed",
   ].includes(paymentReturnState);
   let activeAuthState = null;
   let authChecked = false;
@@ -6980,7 +6982,7 @@ function initCheckoutPage() {
 
   const formatFeeRule = (profile) => {
     if (!profile) return "";
-    if (profile.code === "zip") return "No surcharge";
+    if (["zip", "paypal"].includes(profile.code)) return "No surcharge";
     const percentage = Number(profile.percentage) || 0;
     const fixedAmount = Number(profile.fixed_amount) || 0;
 
@@ -7026,6 +7028,14 @@ function initCheckoutPage() {
         {
           label: "zip",
           className: "storefront-payment-option__badge--zip",
+        },
+      ];
+    }
+    if (profile.code === "paypal") {
+      return [
+        {
+          label: "PayPal",
+          className: "storefront-payment-option__badge--paypal",
         },
       ];
     }
@@ -7242,7 +7252,9 @@ function initCheckoutPage() {
         ? isAuthenticated
           ? getSelectedPaymentProfile()?.provider === "zip"
             ? "Continue to Zip"
-            : "Submit order request"
+            : getSelectedPaymentProfile()?.provider === "paypal"
+              ? "Continue to PayPal"
+              : "Submit order request"
           : "Sign in before checkout"
         : "Add items before checkout";
     }
@@ -8153,8 +8165,8 @@ function initCheckoutPage() {
         return;
       }
 
-      if (selectedProfile?.provider === "zip" && !endpoint) {
-        throw new Error("Direct Zip checkout is not configured yet.");
+      if (["zip", "paypal"].includes(selectedProfile?.provider) && !endpoint) {
+        throw new Error(`${selectedProfile?.label || "Selected payment"} checkout is not configured yet.`);
       }
 
       if (endpoint) {
@@ -8218,6 +8230,22 @@ function initCheckoutPage() {
           window.location.href = result.checkout_url;
           return;
         }
+        if (selectedProfile?.provider === "paypal") {
+          if (!result.checkout_url) {
+            throw new Error("PayPal checkout could not be started.");
+          }
+          payload.paypal_order_id = String(result.paypal_order_id || "");
+          saveCheckoutSuccessContext(payload);
+          trackGa4Event("checkout_redirect_to_paypal", {
+            payment_type: "PayPal",
+            shipping_tier: String(
+              selectedShippingOption?.label ||
+                (warehouseDispatch ? "Warehouse Dispatch" : "Store Pickup"),
+            ),
+          });
+          window.location.href = result.checkout_url;
+          return;
+        }
       } else {
         saveLocalOrder(payload);
       }
@@ -8263,7 +8291,9 @@ function initCheckoutPage() {
         submitButton.textContent =
           selectedProfile?.provider === "zip"
             ? "Continue to Zip"
-            : "Submit order request";
+            : selectedProfile?.provider === "paypal"
+              ? "Continue to PayPal"
+              : "Submit order request";
       }
     }
   });
@@ -8336,6 +8366,7 @@ function initCheckoutPage() {
           );
         }
         if (profile.provider === "zip") return profile.code === "zip";
+        if (profile.provider === "paypal") return profile.code === "paypal";
         return false;
       });
 
@@ -8404,6 +8435,10 @@ function initCheckoutPage() {
         "Zip checkout was cancelled. Your cart is still here and no new charge was made.",
       zip_failed:
         "We could not confirm the Zip checkout. Your cart is still here; please try again or contact OZ TECH M8 with your order reference.",
+      paypal_cancelled:
+        "PayPal checkout was cancelled. Your cart is still here and no new charge was made.",
+      paypal_failed:
+        "We could not confirm the PayPal checkout. Your cart is still here; please try again or contact OZ TECH M8 with your order reference.",
     };
     messageTarget.textContent =
       paymentReturnMessages[paymentReturnState] ||

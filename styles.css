@@ -9832,6 +9832,14 @@ html:has(body.repair-page--console-hero) {
   text-transform: lowercase;
 }
 
+.storefront-payment-option__badge--paypal {
+  border-color: #0070ba;
+  background: #fff;
+  color: #003087;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
 .storefront-payment-option__badge--manual {
   color: var(--accent);
 }

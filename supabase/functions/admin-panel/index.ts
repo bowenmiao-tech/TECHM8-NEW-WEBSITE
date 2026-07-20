@@ -12,6 +12,7 @@ import {
   recordOrderEvent,
 } from '../_shared/order-commerce.ts'
 import { isTransientZipError, zipRequest } from '../_shared/zip-payments.ts'
+import { isTransientPayPalError, paypalRequest } from '../_shared/paypal-payments.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -674,12 +675,13 @@ async function getPaymentSettings(supabaseAdmin: ReturnType<typeof createClient>
   if (!isSuperAdmin(context)) {
     return jsonResponse({ ok: false, error: 'Only super admins can manage payment methods.' }, 403)
   }
-  const { data: zipProfile, error } = await supabaseAdmin
+  const { data: profiles, error } = await supabaseAdmin
     .from('payment_fee_profiles')
     .select('id, code, label, provider, fee_type, percentage, fixed_amount, is_enabled, notes, updated_at')
-    .eq('code', 'zip')
-    .maybeSingle()
+    .in('code', ['zip', 'paypal'])
   if (error) throw error
+  const zipProfile = (profiles ?? []).find((profile) => profile.code === 'zip')
+  const paypalProfile = (profiles ?? []).find((profile) => profile.code === 'paypal')
   if (!zipProfile) return jsonResponse({ ok: false, error: 'The Zip payment profile was not found.' }, 404)
   return jsonResponse({
     ok: true,
@@ -691,6 +693,17 @@ async function getPaymentSettings(supabaseAdmin: ReturnType<typeof createClient>
         String(Deno.env.get('ZIP_CERTIFIED') || '').trim().toLowerCase(),
       ),
     },
+    paypal: paypalProfile
+      ? {
+          ...paypalProfile,
+          environment: String(Deno.env.get('PAYPAL_ENVIRONMENT') || 'sandbox').trim().toLowerCase(),
+          credentials_configured: Boolean(
+            String(Deno.env.get('PAYPAL_CLIENT_ID') || '').trim() &&
+            String(Deno.env.get('PAYPAL_CLIENT_SECRET') || '').trim()
+          ),
+          webhook_configured: Boolean(String(Deno.env.get('PAYPAL_WEBHOOK_ID') || '').trim()),
+        }
+      : null,
   })
 }
 
@@ -702,8 +715,48 @@ async function updatePaymentSettings(
   if (!isSuperAdmin(context)) {
     return jsonResponse({ ok: false, error: 'Only super admins can manage payment methods.' }, 403)
   }
-  if (String(body.code || '').trim() !== 'zip' || typeof body.is_enabled !== 'boolean') {
-    return jsonResponse({ ok: false, error: 'A valid Zip payment setting is required.' }, 422)
+  const code = String(body.code || '').trim()
+  if (!['zip', 'paypal'].includes(code) || typeof body.is_enabled !== 'boolean') {
+    return jsonResponse({ ok: false, error: 'A valid payment setting is required.' }, 422)
+  }
+  if (code === 'paypal') {
+    const environment = String(Deno.env.get('PAYPAL_ENVIRONMENT') || 'sandbox').trim().toLowerCase()
+    const credentialsConfigured = Boolean(
+      String(Deno.env.get('PAYPAL_CLIENT_ID') || '').trim() &&
+      String(Deno.env.get('PAYPAL_CLIENT_SECRET') || '').trim()
+    )
+    const webhookConfigured = Boolean(String(Deno.env.get('PAYPAL_WEBHOOK_ID') || '').trim())
+    if (body.is_enabled) {
+      if (!credentialsConfigured) {
+        return jsonResponse({ ok: false, error: 'PayPal API credentials are not configured.' }, 409)
+      }
+      if (!webhookConfigured) {
+        return jsonResponse({ ok: false, error: 'PayPal webhook verification is not configured.' }, 409)
+      }
+      if (!['sandbox', 'production'].includes(environment)) {
+        return jsonResponse({ ok: false, error: 'The PayPal environment is invalid.' }, 409)
+      }
+      if (body.confirmation !== 'PAYPAL_CONFIGURATION_VERIFIED') {
+        return jsonResponse({ ok: false, error: 'Confirm PayPal checkout and refund testing before enabling checkout.' }, 409)
+      }
+    }
+    const { data, error } = await supabaseAdmin
+      .from('payment_fee_profiles')
+      .update({
+        is_enabled: body.is_enabled,
+        provider: 'paypal',
+        fee_type: 'none',
+        percentage: 0,
+        fixed_amount: 0,
+      })
+      .eq('code', 'paypal')
+      .select('id, code, label, provider, fee_type, percentage, fixed_amount, is_enabled, notes, updated_at')
+      .single()
+    if (error) throw error
+    return jsonResponse({
+      ok: true,
+      paypal: { ...data, environment, credentials_configured: credentialsConfigured, webhook_configured: webhookConfigured },
+    })
   }
   const environment = String(Deno.env.get('ZIP_ENVIRONMENT') || 'sandbox').trim().toLowerCase()
   const certificationApproved = ['1', 'true', 'yes'].includes(
@@ -801,6 +854,14 @@ function refundStatus(value: unknown) {
   if (status === 'succeeded') return 'succeeded'
   if (status === 'failed') return 'failed'
   if (status === 'canceled') return 'cancelled'
+  return 'pending'
+}
+
+function paypalRefundStatus(value: unknown) {
+  const status = String(value ?? '').trim().toUpperCase()
+  if (status === 'COMPLETED') return 'succeeded'
+  if (status === 'FAILED') return 'failed'
+  if (status === 'CANCELLED') return 'cancelled'
   return 'pending'
 }
 
@@ -928,6 +989,13 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
       }
       if (session.status === 'open') await stripe.checkout.sessions.expire(session.id)
     }
+    if (order.paypal_order_id && order.payment_status === 'pending') {
+      const paypalOrder = await paypalRequest<JsonRecord>(`/v2/checkout/orders/${encodeURIComponent(order.paypal_order_id)}`)
+      const paypalStatus = String(paypalOrder.status || '').trim().toUpperCase()
+      if (paypalStatus === 'COMPLETED') {
+        return jsonResponse({ ok: false, error: 'PayPal reports this order as completed. Refresh payment status before cancelling.' }, 409)
+      }
+    }
     const reason = normalizeNullableString(body.reason) || 'Cancelled by TECHM8.'
     const { error } = await supabaseAdmin
       .from('orders')
@@ -964,20 +1032,22 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
     const reason = normalizeNullableString(body.reason) || 'Customer refund requested.'
     const manualRefund = order.payment_method_code === 'pay_in_store'
     const zipRefund = order.payment_method_code === 'zip'
-    const refundProvider = manualRefund ? 'manual' : zipRefund ? 'zip' : 'stripe'
-    if (zipRefund) {
-      const { data: pendingZipRefund, error: pendingZipRefundError } = await supabaseAdmin
+    const paypalRefund = order.payment_method_code === 'paypal'
+    const refundProvider = manualRefund ? 'manual' : zipRefund ? 'zip' : paypalRefund ? 'paypal' : 'stripe'
+    if (zipRefund || paypalRefund) {
+      const providerLabel = zipRefund ? 'Zip' : 'PayPal'
+      const { data: pendingProviderRefund, error: pendingProviderRefundError } = await supabaseAdmin
         .from('order_refunds')
         .select('id, amount, created_at')
         .eq('order_id', orderId)
-        .eq('provider', 'zip')
+        .eq('provider', refundProvider)
         .eq('status', 'pending')
         .maybeSingle()
-      if (pendingZipRefundError) throw pendingZipRefundError
-      if (pendingZipRefund) {
+      if (pendingProviderRefundError) throw pendingProviderRefundError
+      if (pendingProviderRefund) {
         return jsonResponse({
           ok: false,
-          error: 'A Zip refund is already awaiting provider reconciliation. Do not submit another refund.',
+          error: `A ${providerLabel} refund is already awaiting provider reconciliation. Do not submit another refund.`,
         }, 409)
       }
     }
@@ -995,10 +1065,10 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
       })
       .select('*')
       .single()
-    if (refundInsertError?.code === '23505' && zipRefund) {
+    if (refundInsertError?.code === '23505' && (zipRefund || paypalRefund)) {
       return jsonResponse({
         ok: false,
-        error: 'A Zip refund is already awaiting provider reconciliation. Do not submit another refund.',
+        error: `A ${zipRefund ? 'Zip' : 'PayPal'} refund is already awaiting provider reconciliation. Do not submit another refund.`,
       }, 409)
     }
     if (refundInsertError || !refundRow) throw refundInsertError ?? new Error('Refund could not be recorded.')
@@ -1105,6 +1175,112 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
           return jsonResponse({
             ok: false,
             error: 'The Zip refund response is still pending. Do not submit another refund; reconcile this refund in Zip Merchant Centre first.',
+          }, 409)
+        }
+        throw refundError
+      }
+    } else if (paypalRefund) {
+      if (!order.paypal_capture_id) {
+        await supabaseAdmin
+          .from('order_refunds')
+          .update({ status: 'failed', processed_at: now, provider_response: { error: 'Missing PayPal capture id.' } })
+          .eq('id', refundRow.id)
+        return jsonResponse({ ok: false, error: 'The PayPal transaction id is missing for this order.' }, 409)
+      }
+
+      let providerConfirmed = false
+      let confirmedPayPalRefundId = ''
+      let confirmedPayPalStatus = 'pending'
+      try {
+        const paypalRefundResult = await paypalRequest<JsonRecord>(
+          `/v2/payments/captures/${encodeURIComponent(order.paypal_capture_id)}/refund`,
+          {
+            method: 'POST',
+            idempotencyKey: `techm8-order-${orderId}-paypal-refund-${refundRow.id}`,
+            body: {
+              amount: { value: amount.toFixed(2), currency_code: String(order.currency || 'AUD').toUpperCase() },
+              note_to_payer: reason.slice(0, 255),
+            },
+          },
+        )
+        const paypalRefundId = String(paypalRefundResult.id || '').trim()
+        if (!paypalRefundId) throw new Error('PayPal did not return a refund identifier.')
+        providerConfirmed = true
+        confirmedPayPalRefundId = paypalRefundId
+        confirmedPayPalStatus = paypalRefundStatus(paypalRefundResult.status)
+
+        const { data: savedRefund, error: refundUpdateError } = await supabaseAdmin
+          .from('order_refunds')
+          .update({
+            provider: 'paypal',
+            paypal_refund_id: paypalRefundId,
+            status: confirmedPayPalStatus,
+            processed_at: ['succeeded', 'failed', 'cancelled'].includes(confirmedPayPalStatus) ? now : null,
+            provider_response: paypalRefundResult,
+          })
+          .eq('id', refundRow.id)
+          .select('*')
+          .single()
+        if (refundUpdateError) throw refundUpdateError
+        if (confirmedPayPalStatus === 'succeeded') {
+          await applySucceededRefund(supabaseAdmin, orderId, savedRefund, actor)
+        }
+      } catch (refundError) {
+        const message = refundError instanceof Error ? refundError.message : String(refundError)
+        if (providerConfirmed) {
+          await supabaseAdmin
+            .from('order_refunds')
+            .update({
+              provider: 'paypal',
+              paypal_refund_id: confirmedPayPalRefundId,
+              status: confirmedPayPalStatus,
+              processed_at: ['succeeded', 'failed', 'cancelled'].includes(confirmedPayPalStatus) ? now : null,
+              provider_response: {
+                capture_id: order.paypal_capture_id,
+                local_reconciliation_required: true,
+                error: message,
+              },
+            })
+            .eq('id', refundRow.id)
+          await recordOrderEvent(supabaseAdmin, orderId, {
+            eventKey: `paypal_refund_reconciliation:${refundRow.id}`,
+            eventType: 'refund_attention_required',
+            title: 'PayPal refund requires local reconciliation',
+            description: 'PayPal accepted the refund, but the local order totals or documents did not finish updating.',
+            actor,
+            data: { refund_id: refundRow.id, paypal_refund_id: confirmedPayPalRefundId, error: message },
+          })
+          return jsonResponse({
+            ok: false,
+            error: 'PayPal accepted the refund, but the order needs local reconciliation. Do not submit another refund.',
+          }, 409)
+        }
+
+        const providerResponsePending = isTransientPayPalError(refundError)
+        await supabaseAdmin
+          .from('order_refunds')
+          .update({
+            status: providerResponsePending ? 'pending' : 'failed',
+            processed_at: providerResponsePending ? null : now,
+            provider_response: {
+              error: message,
+              reconciliation_required: providerResponsePending,
+              idempotency_key: `techm8-order-${orderId}-paypal-refund-${refundRow.id}`,
+            },
+          })
+          .eq('id', refundRow.id)
+        if (providerResponsePending) {
+          await recordOrderEvent(supabaseAdmin, orderId, {
+            eventKey: `paypal_refund_pending:${refundRow.id}`,
+            eventType: 'refund_attention_required',
+            title: 'PayPal refund response pending',
+            description: 'The provider response was not confirmed. Do not submit another refund until it is reconciled.',
+            actor,
+            data: { refund_id: refundRow.id, error: message },
+          })
+          return jsonResponse({
+            ok: false,
+            error: 'The PayPal refund response is still pending. Do not submit another refund; reconcile this refund in PayPal first.',
           }, 409)
         }
         throw refundError

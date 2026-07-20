@@ -2697,14 +2697,16 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
     meta: null,
     detail: null,
     zipSettings: null,
+    paypalSettings: null,
   };
 
   const renderZipSettings = () => {
     if (!(zipSettingsTarget instanceof HTMLElement) || !bootstrap.capabilities.can_manage_payments) return;
     zipSettingsTarget.hidden = false;
     const zip = state.zipSettings;
-    if (!zip) {
-      zipSettingsTarget.innerHTML = `<div class="admin-loading">Loading Zip payment status...</div>`;
+    const paypal = state.paypalSettings;
+    if (!zip || !paypal) {
+      zipSettingsTarget.innerHTML = `<div class="admin-loading">Loading payment method status...</div>`;
       return;
     }
     const enabled = Boolean(zip.is_enabled);
@@ -2723,6 +2725,20 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
         </div>
       </div>
       ${!enabled ? `<p class="admin-note">Keep Zip disabled until sandbox testing and Zip certification are approved. This control is the emergency payment kill switch after launch.</p>` : ""}
+      <hr class="admin-divider">
+      <div class="admin-panel__heading">
+        <div>
+          <p class="admin-card__label">Independent payment method</p>
+          <h2>PayPal ${renderBadge(paypal.is_enabled ? "enabled" : "disabled")}</h2>
+          <p>${String(paypal.environment || "sandbox").toLowerCase() === "production" ? "Production" : "Sandbox"} environment · API credentials ${paypal.credentials_configured ? "configured" : "missing"} · verified webhook ${paypal.webhook_configured ? "configured" : "missing"}. ${paypal.is_enabled ? "Customers can currently choose PayPal at checkout." : "Customers cannot currently choose PayPal at checkout."}</p>
+        </div>
+        <div class="admin-button-row">
+          <button class="button ${paypal.is_enabled ? "button--danger" : "button--primary"}" type="button" data-paypal-toggle ${!paypal.is_enabled && (!paypal.credentials_configured || !paypal.webhook_configured) ? "disabled" : ""}>
+            ${paypal.is_enabled ? "Disable PayPal now" : paypal.credentials_configured && paypal.webhook_configured ? "Enable PayPal" : "Configuration required"}
+          </button>
+        </div>
+      </div>
+      ${!paypal.is_enabled ? `<p class="admin-note">Keep PayPal disabled until sandbox checkout, return verification, invoice emails and full/partial refunds have passed.</p>` : ""}
     `;
     zipSettingsTarget.querySelector("[data-zip-toggle]")?.addEventListener("click", async (event) => {
       const button = event.currentTarget;
@@ -2747,6 +2763,29 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
         button.disabled = false;
       }
     });
+    zipSettingsTarget.querySelector("[data-paypal-toggle]")?.addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      if (!(button instanceof HTMLButtonElement)) return;
+      const nextEnabled = !Boolean(paypal.is_enabled);
+      const confirmed = window.confirm(nextEnabled
+        ? "Enable PayPal only after sandbox checkout, webhook, invoice email and refund testing have passed. Continue?"
+        : "Disable PayPal checkout immediately for all customers?");
+      if (!confirmed) return;
+      button.disabled = true;
+      try {
+        const result = await callAdminApi("payment_settings_update", {
+          code: "paypal",
+          is_enabled: nextEnabled,
+          confirmation: nextEnabled ? "PAYPAL_CONFIGURATION_VERIFIED" : "",
+        }, session);
+        state.paypalSettings = result.paypal;
+        renderZipSettings();
+        setAlert(alertTarget, `PayPal checkout ${nextEnabled ? "enabled" : "disabled"}.`, "success");
+      } catch (error) {
+        setAlert(alertTarget, error instanceof Error ? error.message : "PayPal payment setting could not be changed.", "error");
+        button.disabled = false;
+      }
+    });
   };
 
   const loadZipSettings = async () => {
@@ -2754,6 +2793,7 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
     renderZipSettings();
     const result = await callAdminApi("payment_settings_get", {}, session);
     state.zipSettings = result.zip;
+    state.paypalSettings = result.paypal;
     renderZipSettings();
   };
 
@@ -2929,6 +2969,13 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
                 <div class="admin-summary-card"><span>Zip charge ID</span><strong class="admin-reference">${escapeHtml(order.zip_charge_id || "Not recorded")}</strong></div>
                 <div class="admin-summary-card"><span>Zip receipt</span><strong class="admin-reference">${escapeHtml(order.zip_receipt_number || "Not recorded")}</strong></div>
               ` : ""}
+              ${order.payment_method_code === "paypal" ? `
+                <div class="admin-summary-card"><span>PayPal state</span><strong>${escapeHtml(order.paypal_payment_state || "Not recorded")}</strong></div>
+                <div class="admin-summary-card"><span>PayPal environment</span><strong>${escapeHtml(order.paypal_environment || "Not recorded")}</strong></div>
+                <div class="admin-summary-card"><span>PayPal order ID</span><strong class="admin-reference">${escapeHtml(order.paypal_order_id || "Not recorded")}</strong></div>
+                <div class="admin-summary-card"><span>PayPal transaction ID</span><strong class="admin-reference">${escapeHtml(order.paypal_capture_id || "Not recorded")}</strong></div>
+                <div class="admin-summary-card"><span>PayPal payer ID</span><strong class="admin-reference">${escapeHtml(order.paypal_payer_id || "Not recorded")}</strong></div>
+              ` : ""}
             </div>
             <div class="admin-address-card"><span>Billing address</span><strong>${escapeHtml(billingAddress || "Not supplied; customer contact details are on the order")}</strong></div>
             <div class="admin-payment-lines">
@@ -2975,7 +3022,7 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
                   <div class="admin-list-item__content"><strong>${formatMoney(refund.amount)}</strong><span>${escapeHtml(refund.reason || "No reason")} · ${formatDateTime(refund.created_at)}</span></div>
                   <div class="admin-refund-reference">
                     ${renderBadge(refund.status)}
-                    <small>${escapeHtml(refund.provider || "provider")} · ${escapeHtml(refund.zip_refund_id || refund.stripe_refund_id || "No provider reference")}</small>
+                    <small>${escapeHtml(refund.provider || "provider")} · ${escapeHtml(refund.paypal_refund_id || refund.zip_refund_id || refund.stripe_refund_id || "No provider reference")}</small>
                   </div>
                 </div>
               `).join("") || `<div class="admin-empty">No refunds recorded.</div>`}

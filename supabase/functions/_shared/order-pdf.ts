@@ -41,6 +41,7 @@ export type OrderBundle = {
     payment_method_label?: string | null
     payment_status?: string | null
     zip_receipt_number?: string | null
+    paypal_capture_id?: string | null
     status?: string | null
     subtotal_amount?: number | string | null
     discount_amount?: number | string | null
@@ -344,6 +345,9 @@ async function generateA4Document(
     ['Fulfilment', bundle.order.fulfillment_method === 'shipping' ? 'Shipping' : 'Store pickup'],
     ...(bundle.order.payment_method_code === 'zip' && bundle.order.zip_receipt_number
       ? [['Zip receipt', bundle.order.zip_receipt_number]]
+      : []),
+    ...(bundle.order.payment_method_code === 'paypal' && bundle.order.paypal_capture_id
+      ? [['PayPal transaction', bundle.order.paypal_capture_id]]
       : []),
   ]
   const metaColumnWidth = contentWidth / 3
