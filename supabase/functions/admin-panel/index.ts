@@ -513,7 +513,7 @@ async function getDashboardData(supabaseAdmin: ReturnType<typeof createClient>, 
   }
 
   const [todayOrdersCount, pendingOrdersCount, todayRepairCount, openRepairCount, lowStockCount] = await Promise.all([
-    countQuery('orders', 'id', (query) => query.gte('created_at', start).lte('created_at', end)),
+    countQuery('orders', 'id', (query) => query.gte('created_at', start).lte('created_at', end).neq('status', 'abandoned')),
     countQuery('orders', 'id', (query) => query.in('status', ['submitted', 'confirmed', 'packed'])),
     countQuery('repair_bookings', 'id', (query) => query.gte('created_at', start).lte('created_at', end)),
     countQuery('repair_bookings', 'id', (query) => query.in('status', ['new', 'contacted', 'in_progress'])),
@@ -523,6 +523,7 @@ async function getDashboardData(supabaseAdmin: ReturnType<typeof createClient>, 
   let recentOrdersQuery = supabaseAdmin
     .from('orders')
     .select('id, order_code, customer_name, phone, email, store_slug, fulfillment_method, recipient_name, company_name, shipping_phone, shipping_email, address_line_1, address_line_2, suburb, state, postcode, country_code, payment_method_label, payment_status, status, fulfillment_status, subtotal_amount, payment_fee_amount, shipping_fee_amount, total_amount, notes, tracking_number, tracking_url, created_at')
+    .neq('status', 'abandoned')
     .order('created_at', { ascending: false })
     .limit(8)
 
@@ -553,7 +554,7 @@ async function getDashboardData(supabaseAdmin: ReturnType<typeof createClient>, 
         .select('total_amount')
         .gte('created_at', start)
         .lte('created_at', end)
-        .neq('status', 'cancelled')
+        .not('status', 'in', '(cancelled,abandoned)')
       if (scopedStoreSlug) query = query.eq('store_slug', scopedStoreSlug)
       return query
     })(),
@@ -945,6 +946,12 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
   const access = await loadAdminOrder(supabaseAdmin, context, orderId)
   if (access.error || !access.order) return access.error!
   const order = access.order
+  if (order.status === 'abandoned' || order.payment_status === 'expired') {
+    return jsonResponse({
+      ok: false,
+      error: 'This checkout expired before payment and is not an active order. No order action is available.',
+    }, 409)
+  }
   const actor = { type: 'admin' as const, identifier: context.email || String(context.id) }
   const now = new Date().toISOString()
 

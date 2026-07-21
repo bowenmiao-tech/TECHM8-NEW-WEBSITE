@@ -1,9 +1,9 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.49.8'
 import Stripe from 'npm:stripe@16.12.0'
+import { buildExpiredCheckoutTransition } from '../_shared/checkout-lifecycle.ts'
 import {
   applySucceededRefund,
   finalizePaidOrder,
-  notifyOrderEvent,
   recordOrderEvent,
 } from '../_shared/order-commerce.ts'
 
@@ -87,6 +87,54 @@ async function updateOrderBySession(
   if (error) throw error
   if (!data?.id) throw new Error('Stripe event could not be matched to an order.')
   return Number(data.id)
+}
+
+async function abandonExpiredCheckout(
+  supabaseAdmin: SupabaseAdmin,
+  session: Stripe.Checkout.Session,
+  stripeEventId: string,
+) {
+  const sessionId = text(session.id)
+  const orderId = text(session.metadata?.order_id)
+  const expiresAt = Number(session.expires_at) > 0
+    ? new Date(Number(session.expires_at) * 1000).toISOString()
+    : new Date().toISOString()
+  const transition = buildExpiredCheckoutTransition(sessionId, stripeEventId, expiresAt)
+  const paymentIntentId = typeof session.payment_intent === 'string'
+    ? session.payment_intent
+    : session.payment_intent?.id ?? null
+  const updatePatch = {
+    ...transition.orderPatch,
+    ...buildSessionCustomerPatch(session),
+    stripe_payment_intent_id: paymentIntentId,
+    stripe_checkout_session_id: sessionId,
+    stripe_customer_id: typeof session.customer === 'string' ? session.customer : session.customer?.id ?? null,
+  }
+
+  let updateQuery = supabaseAdmin
+    .from('orders')
+    .update(updatePatch)
+    .eq('payment_status', 'pending')
+    .eq('status', 'submitted')
+    .eq('fulfillment_status', 'new')
+  updateQuery = orderId
+    ? updateQuery.eq('id', orderId)
+    : updateQuery.eq('stripe_checkout_session_id', sessionId)
+  const { data: updatedOrder, error: updateError } = await updateQuery.select('id').maybeSingle()
+  if (updateError) throw updateError
+  if (updatedOrder?.id) {
+    return { orderId: Number(updatedOrder.id), transitioned: true, event: transition.event }
+  }
+
+  let lookupQuery = supabaseAdmin.from('orders').select('id')
+  lookupQuery = orderId
+    ? lookupQuery.eq('id', orderId)
+    : lookupQuery.eq('stripe_checkout_session_id', sessionId)
+  const { data: existingOrder, error: lookupError } = await lookupQuery.maybeSingle()
+  if (lookupError) throw lookupError
+  if (!existingOrder?.id) throw new Error('Stripe expiry event could not be matched to an order.')
+
+  return { orderId: Number(existingOrder.id), transitioned: false, event: transition.event }
 }
 
 async function updateOrderByInvoice(
@@ -337,21 +385,10 @@ Deno.serve(async (req) => {
 
       case 'checkout.session.expired': {
         const session = event.data.object as Stripe.Checkout.Session
-        const orderId = await updateOrderBySession(supabaseAdmin, session, {
-          payment_status: 'failed',
-          status: 'cancelled',
-          fulfillment_status: 'cancelled',
-          cancelled_at: new Date().toISOString(),
-          cancel_reason: 'Stripe Checkout session expired.',
-        })
-        await recordOrderEvent(supabaseAdmin, orderId, {
-          eventKey: `order_cancelled:${session.id}`,
-          eventType: 'order_cancelled',
-          title: 'Order cancelled',
-          description: 'The Stripe Checkout session expired before payment completed.',
-          actor: { type: 'stripe', identifier: event.id },
-        })
-        await notifyOrderEvent(supabaseAdmin, orderId, 'cancelled')
+        const transition = await abandonExpiredCheckout(supabaseAdmin, session, event.id)
+        if (transition.transitioned) {
+          await recordOrderEvent(supabaseAdmin, transition.orderId, transition.event)
+        }
         break
       }
 

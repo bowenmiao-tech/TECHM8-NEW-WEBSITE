@@ -1607,6 +1607,7 @@ function getViewTemplate(view) {
                   <option value="shipped">Shipped</option>
                   <option value="completed">Completed</option>
                   <option value="cancelled">Cancelled</option>
+                  <option value="abandoned">Abandoned checkout</option>
                 </select>
               </label>
               <label class="admin-filter">
@@ -1618,6 +1619,7 @@ function getViewTemplate(view) {
                   <option value="paid">Paid</option>
                   <option value="partially_refunded">Partially refunded</option>
                   <option value="failed">Failed</option>
+                  <option value="expired">Expired</option>
                   <option value="refunded">Refunded</option>
                   <option value="not_required">Not required</option>
                 </select>
@@ -2273,17 +2275,17 @@ function renderDashboardPageEnhanced(root, bootstrap, session, alertTarget) {
               <div class="admin-editor__grid">
                 <label><span>Status</span>
                   <select name="status">
-                    ${["submitted", "confirmed", "packed", "shipped", "completed", "cancelled"].map((value) => `<option value="${value}" ${order.status === value ? "selected" : ""}>${value}</option>`).join("")}
+                    ${["submitted", "confirmed", "packed", "shipped", "completed", "cancelled", "abandoned"].map((value) => `<option value="${value}" ${order.status === value ? "selected" : ""}>${value}</option>`).join("")}
                   </select>
                 </label>
                 <label><span>Payment</span>
                   <select name="payment_status">
-                    ${["unpaid", "pending", "paid", "failed", "refunded", "not_required"].map((value) => `<option value="${value}" ${order.payment_status === value ? "selected" : ""}>${value}</option>`).join("")}
+                    ${["unpaid", "pending", "paid", "failed", "refunded", "not_required", "expired"].map((value) => `<option value="${value}" ${order.payment_status === value ? "selected" : ""}>${value}</option>`).join("")}
                   </select>
                 </label>
                 <label><span>Fulfilment</span>
                   <select name="fulfillment_status">
-                    ${["new", "queued", "ready_for_pickup", "packed", "label_created", "shipped", "completed", "cancelled"].map((value) => `<option value="${value}" ${order.fulfillment_status === value ? "selected" : ""}>${value}</option>`).join("")}
+                    ${["new", "queued", "ready_for_pickup", "packed", "label_created", "shipped", "completed", "cancelled", "not_started"].map((value) => `<option value="${value}" ${order.fulfillment_status === value ? "selected" : ""}>${value}</option>`).join("")}
                   </select>
                 </label>
                 <label><span>Tracking number</span><input type="text" name="tracking_number" value="${escapeHtml(order.tracking_number || "")}"></label>
@@ -2517,17 +2519,17 @@ function renderOrdersPageLegacy(root, bootstrap, session, alertTarget) {
           <div class="admin-editor__grid">
             <label><span>Status</span>
               <select name="status">
-                ${["submitted", "confirmed", "packed", "shipped", "completed", "cancelled"].map((value) => `<option value="${value}" ${row.status === value ? "selected" : ""}>${value}</option>`).join("")}
+                ${["submitted", "confirmed", "packed", "shipped", "completed", "cancelled", "abandoned"].map((value) => `<option value="${value}" ${row.status === value ? "selected" : ""}>${value}</option>`).join("")}
               </select>
             </label>
             <label><span>Payment</span>
               <select name="payment_status">
-                ${["unpaid", "pending", "paid", "failed", "refunded", "not_required"].map((value) => `<option value="${value}" ${row.payment_status === value ? "selected" : ""}>${value}</option>`).join("")}
+                ${["unpaid", "pending", "paid", "failed", "refunded", "not_required", "expired"].map((value) => `<option value="${value}" ${row.payment_status === value ? "selected" : ""}>${value}</option>`).join("")}
               </select>
             </label>
             <label><span>Fulfilment</span>
               <select name="fulfillment_status">
-                ${["new", "queued", "ready_for_pickup", "packed", "label_created", "shipped", "completed", "cancelled"].map((value) => `<option value="${value}" ${row.fulfillment_status === value ? "selected" : ""}>${value}</option>`).join("")}
+                ${["new", "queued", "ready_for_pickup", "packed", "label_created", "shipped", "completed", "cancelled", "not_started"].map((value) => `<option value="${value}" ${row.fulfillment_status === value ? "selected" : ""}>${value}</option>`).join("")}
               </select>
             </label>
             <label><span>Tracking number</span><input type="text" name="tracking_number" value="${escapeHtml(row.tracking_number || "")}"></label>
@@ -2787,7 +2789,7 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
   };
 
   const isPaid = (order) => ["paid", "partially_refunded", "refunded"].includes(String(order?.payment_status || ""));
-  const isActive = (order) => String(order?.status || "") !== "cancelled";
+  const isActive = (order) => !["cancelled", "abandoned"].includes(String(order?.status || ""));
   const getDocument = (type) => (state.detail?.documents || []).find((document) => document.document_type === type && document.status === "ready");
 
   const addressFromSnapshot = (snapshot = {}) => formatAddress([
@@ -2899,7 +2901,7 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
           ${order.fulfillment_method === "shipping" && isPaid(order) && isActive(order) && order.fulfillment_status !== "shipped" ? `<button class="button button--primary" type="button" data-order-action="mark_shipped">Mark shipped</button>` : ""}
           ${!isPaid(order) && isActive(order) ? `<button class="button button--danger" type="button" data-order-action="cancel">Cancel order</button>` : ""}
           ${canRefund ? `<button class="button button--danger" type="button" data-order-action="refund" data-refund-remaining="${remainingRefundable.toFixed(2)}">Refund</button>` : ""}
-          <button class="button button--ghost" type="button" data-order-action="resend_confirmation">Resend confirmation</button>
+          ${isActive(order) ? `<button class="button button--ghost" type="button" data-order-action="resend_confirmation">Resend confirmation</button>` : ""}
           ${isPaid(order) ? `<button class="button button--ghost" type="button" data-order-action="resend_invoice">Resend invoice</button>` : ""}
         </div>
 
