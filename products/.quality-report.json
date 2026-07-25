@@ -1,7 +1,7 @@
 {
   "catalog_updated_at": "2026-07-19T05:38:19.071421+00:00",
-  "total_products": 85,
-  "indexable_products": 83,
+  "total_products": 83,
+  "indexable_products": 81,
   "limited_products": 2,
   "products": [
     {
@@ -456,29 +456,6 @@
       "id": 105,
       "slug": "msi-mag-coreliquid-a13-240-liquid-cooler",
       "name": "MSI MAG CORELIQUID A13 240 Liquid Cooler",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 104,
-      "slug": "12gb-zotac-rtx-5070-amp-white-gpu-copy",
-      "name": "16GB MSI RTX 5080 VENTUS 3X OC WHITE GPU",
-      "indexable": true,
-      "score": 84,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters",
-        "copy-style-slug-review-needed"
-      ]
-    },
-    {
-      "id": 103,
-      "slug": "12gb-zotac-rtx-5070-amp-white-gpu",
-      "name": "12GB ZOTAC RTX 5070 AMP WHITE GPU",
       "indexable": true,
       "score": 92,
       "blockers": [],
