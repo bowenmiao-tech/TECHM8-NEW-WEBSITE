@@ -1,8 +1,8 @@
 {
   "catalog_updated_at": "2026-07-19T05:38:19.071421+00:00",
-  "total_products": 85,
+  "total_products": 83,
   "indexable_products": 81,
-  "limited_products": 4,
+  "limited_products": 2,
   "products": [
     {
       "id": 98,
@@ -836,33 +836,6 @@
       ],
       "warnings": [
         "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 103,
-      "slug": "12gb-zotac-rtx-5070-amp-white-gpu",
-      "name": "12GB ZOTAC RTX 5070 AMP WHITE GPU",
-      "indexable": false,
-      "score": 57,
-      "blockers": [
-        "hidden-product"
-      ],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 104,
-      "slug": "12gb-zotac-rtx-5070-amp-white-gpu-copy",
-      "name": "16GB MSI RTX 5080 VENTUS 3X OC WHITE GPU",
-      "indexable": false,
-      "score": 49,
-      "blockers": [
-        "hidden-product"
-      ],
-      "warnings": [
-        "description-under-90-characters",
-        "copy-style-slug-review-needed"
       ]
     }
   ]
