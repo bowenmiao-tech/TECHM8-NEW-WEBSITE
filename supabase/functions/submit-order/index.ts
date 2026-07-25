@@ -1,5 +1,9 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.49.8'
 import {
+  getInvalidCartQuantity,
+  getMaxCartQuantity,
+} from '../_shared/cart-quantity.ts'
+import {
   buildFulfillmentSnapshot,
   getBusinessProfile,
   notifyOrderEvent,
@@ -152,8 +156,10 @@ Deno.serve(async (req) => {
     if (fulfillmentMethod === 'shipping' && countryCode.toUpperCase() !== 'AU') {
       return Response.json({ ok: false, error: 'Website shipping is currently available within Australia only.' }, { status: 422, headers: corsHeaders })
     }
-    if (items.some((item) => !Number.isInteger(Number(item.qty)) || Number(item.qty) < 1 || Number(item.qty) > 99)) {
-      return Response.json({ ok: false, error: 'Cart item quantities must be whole numbers between 1 and 99.' }, { status: 422, headers: corsHeaders })
+    const invalidQuantityItem = getInvalidCartQuantity(items)
+    if (invalidQuantityItem) {
+      const maxQuantity = getMaxCartQuantity(invalidQuantityItem)
+      return Response.json({ ok: false, error: `Cart item quantities must be whole numbers between 1 and ${maxQuantity}.` }, { status: 422, headers: corsHeaders })
     }
 
     const supabaseAdmin = createClient(

@@ -3488,6 +3488,29 @@ function updateCartIndicators(items = loadCart()) {
   });
 }
 
+const DEFAULT_CART_ITEM_MAX_QUANTITY = 99;
+const CART_ITEM_MAX_QUANTITY_BY_SLUG = Object.freeze({
+  "techm8-everyday-accessory": 9999,
+});
+
+function getCartItemMaxQuantity(slug) {
+  return (
+    CART_ITEM_MAX_QUANTITY_BY_SLUG[String(slug || "").trim().toLowerCase()] ||
+    DEFAULT_CART_ITEM_MAX_QUANTITY
+  );
+}
+
+function normaliseCartQuantity(slug, quantity) {
+  const numericQuantity = Number(quantity);
+  const wholeQuantity = Number.isFinite(numericQuantity)
+    ? Math.floor(numericQuantity)
+    : 1;
+  return Math.min(
+    getCartItemMaxQuantity(slug),
+    Math.max(1, wholeQuantity),
+  );
+}
+
 function normaliseCartItem(product, quantity = 1) {
   const price = Number(product.retail_price) || 0;
   const compareAtPrice = Number(product.compare_at_price) || 0;
@@ -3504,7 +3527,7 @@ function normaliseCartItem(product, quantity = 1) {
     short_description: product.short_description || "",
     price,
     compare_at_price: compareAtPrice > price ? compareAtPrice : null,
-    qty: Math.max(1, Number(quantity) || 1),
+    qty: normaliseCartQuantity(product.slug, quantity),
   };
 }
 
@@ -3540,7 +3563,7 @@ function reconcileCartItems(items, products) {
     const name = String(item?.name || "")
       .trim()
       .toLowerCase();
-    const qty = Math.max(1, Number(item?.qty) || 1);
+    const qty = normaliseCartQuantity(slug, item?.qty);
 
     let product = null;
     if (slug && productsBySlug.has(slug)) {
@@ -3586,10 +3609,13 @@ function reconcileCartItems(items, products) {
 function addItemToCart(product, quantity = 1) {
   const items = loadCart();
   const existing = items.find((item) => item.slug === product.slug);
-  const safeQuantity = Math.max(1, Number(quantity) || 1);
+  const safeQuantity = normaliseCartQuantity(product.slug, quantity);
 
   if (existing) {
-    existing.qty = Math.max(1, Number(existing.qty) || 1) + safeQuantity;
+    existing.qty = normaliseCartQuantity(
+      product.slug,
+      Number(existing.qty || 0) + safeQuantity,
+    );
   } else {
     items.push(normaliseCartItem(product, safeQuantity));
   }
@@ -3610,7 +3636,7 @@ function addItemToCart(product, quantity = 1) {
 function updateCartItemQuantity(slug, quantity) {
   const items = loadCart().map((item) =>
     item.slug === slug
-      ? { ...item, qty: Math.max(1, Number(quantity) || 1) }
+      ? { ...item, qty: normaliseCartQuantity(slug, quantity) }
       : item,
   );
   saveCart(items);
@@ -5050,7 +5076,7 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
         <div class="storefront-pdp__purchase">
           <label class="storefront-pdp__qty">
             <span>Qty</span>
-            <input type="number" min="1" value="1" data-product-qty>
+            <input type="number" min="1" max="${escapeHtml(String(getCartItemMaxQuantity(product.slug)))}" value="1" data-product-qty>
           </label>
           <button class="button button--primary storefront-pdp__cart-button" type="button" data-product-add-cart>Add to cart</button>
           <a class="button button--ghost" href="/stores.html">Find in store</a>
@@ -5122,7 +5148,7 @@ function bindProductDetailShell(shell, product, catalogProducts = null) {
     addButton.addEventListener("click", () => {
       const quantity =
         qtyField instanceof HTMLInputElement
-          ? Math.max(1, Number(qtyField.value) || 1)
+          ? normaliseCartQuantity(product.slug, qtyField.value)
           : 1;
       addItemToCart(product, quantity);
       addButton.textContent = "Added to cart";
@@ -5765,7 +5791,7 @@ function renderCartLineItems(target, items) {
           <div class="storefront-cart__controls">
             <label>
               <span>Qty</span>
-              <input type="number" min="1" value="${escapeHtml(String(item.qty))}" data-cart-qty="${escapeHtml(item.slug)}">
+              <input type="number" min="1" max="${escapeHtml(String(getCartItemMaxQuantity(item.slug)))}" value="${escapeHtml(String(item.qty))}" data-cart-qty="${escapeHtml(item.slug)}">
             </label>
             <span class="storefront-cart__price">${escapeHtml(formatMoney(item.price))} each</span>
             <button class="storefront-cart__remove" type="button" data-cart-remove="${escapeHtml(item.slug)}">Remove</button>
