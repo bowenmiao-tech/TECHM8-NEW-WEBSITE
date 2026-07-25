@@ -209,12 +209,10 @@ function wrapTextareaSelection(textarea, before, after, placeholder = "Text") {
 
 function formatMoney(value) {
   const amount = Number(value) || 0;
-  return new Intl.NumberFormat("en-AU", {
-    style: "currency",
-    currency: "AUD",
+  return `AU$${new Intl.NumberFormat("en-AU", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(amount);
+  }).format(amount)}`;
 }
 
 function formatDateTime(value) {

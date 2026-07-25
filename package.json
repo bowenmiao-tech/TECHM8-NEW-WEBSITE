@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "prerender": "node scripts/prerender-site.mjs",
-    "build": "npm run prerender && vite build",
+    "validate:pricing": "node scripts/validate-product-pricing.mjs",
+    "build": "npm run prerender && npm run validate:pricing && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {

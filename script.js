@@ -1340,11 +1340,10 @@ function formatMoney(value) {
     return "";
   }
 
-  return new Intl.NumberFormat("en-AU", {
-    style: "currency",
-    currency: "AUD",
+  return `AU$${new Intl.NumberFormat("en-AU", {
     minimumFractionDigits: 2,
-  }).format(amount);
+    maximumFractionDigits: 2,
+  }).format(amount)}`;
 }
 
 function trackGa4Event(name, params = {}) {
@@ -4847,7 +4846,7 @@ async function fetchCatalogProductBySlug(slug) {
     Authorization: `Bearer ${supabaseAnonKey}`,
   };
   const productSelect =
-    "id,sku,slug,name,brand,model,short_description,description,detail_html,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,upc";
+    "id,sku,slug,name,brand,model,short_description,description,detail_html,retail_price,compare_at_price,image_url,stock_quantity,is_featured,is_visible,condition_label,compatibility,category_id,created_at,upc";
 
   const productUrl = `${supabaseUrl}/rest/v1/products?select=${productSelect}&slug=eq.${encodeURIComponent(safeSlug)}&is_visible=eq.true&limit=1`;
   const productResponse = await fetch(productUrl, { headers, cache: "default" });
@@ -4936,9 +4935,12 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
 
   const compareAtPrice = Number(product.compare_at_price) || 0;
   const retailPrice = Number(product.retail_price) || 0;
+  const isCatalogVisible = product.is_visible !== false;
   const savings =
     compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
-  const stockText = "Available for online order or store pickup";
+  const stockText = isCatalogVisible
+    ? "Available for online order or store pickup"
+    : "Currently unavailable";
   const productName = getProductDisplayName(product) || product.name;
   const galleryImages = getOrderedProductGalleryImages(product);
   const mainImage = galleryImages[0] || null;
@@ -5062,7 +5064,7 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
         <h1>${escapeHtml(productName)}</h1>
         <p class="storefront-pdp__intro">${escapeHtml(product.description || product.short_description || "Retail catalog product.")}</p>
 
-        <div class="storefront-pdp__price-card">
+        <div class="storefront-pdp__price-card" data-product-price="${escapeHtml(retailPrice.toFixed(2))}" data-price-currency="AUD">
           <div class="storefront-pdp__price-top">
             ${compareAtPrice > retailPrice ? `<span class="storefront-pdp__compare">${escapeHtml(formatMoney(compareAtPrice))}</span>` : ""}
             ${savings > 0 ? `<span class="storefront-pdp__save">Save ${escapeHtml(formatMoney(savings))}</span>` : ""}
@@ -5073,14 +5075,25 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
 
         ${variantMarkup}
 
-        <div class="storefront-pdp__purchase">
-          <label class="storefront-pdp__qty">
-            <span>Qty</span>
-            <input type="number" min="1" max="${escapeHtml(String(getCartItemMaxQuantity(product.slug)))}" value="1" data-product-qty>
-          </label>
-          <button class="button button--primary storefront-pdp__cart-button" type="button" data-product-add-cart>Add to cart</button>
-          <a class="button button--ghost" href="/stores.html">Find in store</a>
-        </div>
+        ${
+          isCatalogVisible
+            ? `
+              <div class="storefront-pdp__purchase">
+                <label class="storefront-pdp__qty">
+                  <span>Qty</span>
+                  <input type="number" min="1" max="${escapeHtml(String(getCartItemMaxQuantity(product.slug)))}" value="1" data-product-qty>
+                </label>
+                <button class="button button--primary storefront-pdp__cart-button" type="button" data-product-add-cart>Add to cart</button>
+                <a class="button button--ghost" href="/stores.html">Find in store</a>
+              </div>
+            `
+            : `
+              <div class="storefront-pdp__purchase">
+                <p>This item is not currently available for online purchase.</p>
+                <a class="button button--ghost" href="/shop.html">Browse available products</a>
+              </div>
+            `
+        }
 
         <div class="storefront-pdp__highlights">
           <div class="storefront-pdp__highlight"><strong>Brand</strong><span>${escapeHtml(product.brand || "TECHM8")}</span></div>
@@ -5237,6 +5250,7 @@ function buildProductNavigationCache(product) {
     display_image: product.display_image ?? "",
     stock_quantity: Number(product.stock_quantity) || 0,
     is_featured: Boolean(product.is_featured),
+    is_visible: product.is_visible !== false,
     condition_label: product.condition_label ?? "",
     compatibility: product.compatibility ?? "",
     category_id: product.category_id ?? null,
@@ -5994,8 +6008,8 @@ function initCartPage() {
     }
     freightResults.hidden = false;
     freightResults.innerHTML = `
-      <div class="cart-freight__row"><span>Standard Delivery</span><strong>$15.00</strong></div>
-      <div class="cart-freight__row"><span>Express Delivery</span><strong>$18.00</strong></div>
+      <div class="cart-freight__row"><span>Standard Delivery</span><strong>${escapeHtml(formatMoney(15))}</strong></div>
+      <div class="cart-freight__row"><span>Express Delivery</span><strong>${escapeHtml(formatMoney(18))}</strong></div>
     `;
   };
 

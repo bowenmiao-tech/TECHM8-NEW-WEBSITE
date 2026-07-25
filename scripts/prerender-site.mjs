@@ -1,15 +1,18 @@
-import { readFile, writeFile, mkdir, rm } from "node:fs/promises";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { join, resolve } from "node:path";
 import vm from "node:vm";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const SITE_URL = "https://www.techm8australia.com";
+const CATALOG_CURRENCY = "AUD";
 const PRODUCTS_DIR = join(ROOT, "products");
 const PRODUCT_MANIFEST = join(PRODUCTS_DIR, ".generated-manifest.json");
 const PRODUCT_QUALITY_REPORT = join(PRODUCTS_DIR, ".quality-report.json");
 const PRODUCT_SITEMAP = join(ROOT, "sitemap-products.xml");
 const PUBLIC_PRODUCT_SITEMAP = join(ROOT, "public", "sitemap-products.xml");
+const MERCHANT_FEED = join(ROOT, "merchant-products.xml");
+const PUBLIC_MERCHANT_FEED = join(ROOT, "public", "merchant-products.xml");
 const BUSINESS_FILES = [
   "business-services.html",
   "business-services/ndis-technology-support.html",
@@ -49,6 +52,7 @@ const TEMPLATE_CONTENT_PATTERNS = [
   /stock-keeping unit \(sku\) is a scannable barcode/i,
   /this column indicates the current condition/i,
   /this is your universal product code/i,
+  /(?:^|[^a-z0-9])(?:[a-z][a-z0-9_ ]*\+)?[a-z]{1,3}\d+:[a-z]{1,3}\d+(?:[^a-z0-9]|$)/i,
 ];
 
 function getProductDescription(product) {
@@ -77,6 +81,9 @@ function assessProductQuality(product) {
     .filter(Boolean)
     .join(" ");
 
+  if (product.is_visible === false) {
+    blockers.push("hidden-product");
+  }
   if (TEMPLATE_CONTENT_PATTERNS.some((pattern) => pattern.test(sourceText))) {
     blockers.push("template-placeholder-content");
   }
@@ -132,10 +139,10 @@ const safeSlug = (value = "") => {
 };
 
 const money = (value) =>
-  new Intl.NumberFormat("en-AU", {
-    style: "currency",
-    currency: "AUD",
-  }).format(Number(value) || 0);
+  `AU$${new Intl.NumberFormat("en-AU", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(value) || 0)}`;
 
 async function readPublicSupabaseConfig() {
   const script = await readFile(join(ROOT, "script.js"), "utf8");
@@ -194,6 +201,7 @@ async function loadCatalog() {
     "stock_quantity",
     "retail_price",
     "compare_at_price",
+    "is_visible",
     "image_url",
     "category_id",
     "created_at",
@@ -204,7 +212,7 @@ async function loadCatalog() {
 
   const [products, categories] = await Promise.all([
     fetchJson(
-      `${url}/rest/v1/products?select=${productSelect}&is_visible=eq.true&order=updated_at.desc,id.desc&limit=1000`,
+      `${url}/rest/v1/products?select=${productSelect}&order=updated_at.desc,id.desc&limit=1000`,
       key,
     ),
     fetchJson(
@@ -310,7 +318,7 @@ function productJsonLd(product) {
       "@type": "Offer",
       url: canonical,
       price: product.retail_price.toFixed(2),
-      priceCurrency: "AUD",
+      priceCurrency: CATALOG_CURRENCY,
       itemCondition: getSchemaCondition(product.condition_label),
       availability:
         Number.isFinite(product.stock_quantity) && product.stock_quantity <= 0
@@ -411,12 +419,14 @@ function renderProductPage(product) {
       ? `<span class="storefront-pdp__compare">${escapeHtml(money(product.compare_at_price))}</span>`
       : "";
   const stockCopy =
-    Number.isFinite(product.stock_quantity) && product.stock_quantity <= 0
+    product.is_visible === false
+      ? "Currently unavailable"
+      : Number.isFinite(product.stock_quantity) && product.stock_quantity <= 0
       ? "Currently out of stock online"
       : "Availability is checked live before checkout";
 
   return `<!doctype html>
-<html lang="en">
+<html lang="en-AU">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -429,7 +439,9 @@ function renderProductPage(product) {
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${canonical}">
   ${image ? `<meta property="og:image" content="${escapeHtml(image.image_url)}">` : ""}
-  ${quality.indexable ? `<script type="application/ld+json">${productJsonLd(product).replaceAll("<", "\\u003c")}</script>` : ""}
+  <meta property="product:price:amount" content="${product.retail_price.toFixed(2)}">
+  <meta property="product:price:currency" content="${CATALOG_CURRENCY}">
+${quality.indexable ? `  <script type="application/ld+json">${productJsonLd(product).replaceAll("<", "\\u003c")}</script>` : ""}
   <script type="application/json" data-prerendered-product>${embeddedProduct}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -455,7 +467,7 @@ function renderProductPage(product) {
           <div class="storefront-pdp__brand-row"><span class="storefront-pdp__brand">${escapeHtml(product.brand || "TECHM8")}</span><span class="storefront-pdp__stock">${escapeHtml(stockCopy)}</span></div>
           <h1>${escapeHtml(product.name)}</h1>
           <p class="storefront-pdp__intro">${escapeHtml(visibleDescription)}</p>
-          <div class="storefront-pdp__price-card"><div class="storefront-pdp__price-top">${comparePrice}</div><div class="storefront-pdp__price-main">${escapeHtml(money(product.retail_price))}</div></div>
+          <div class="storefront-pdp__price-card" data-product-price="${product.retail_price.toFixed(2)}" data-price-currency="${CATALOG_CURRENCY}"><div class="storefront-pdp__price-top">${comparePrice}</div><div class="storefront-pdp__price-main">${escapeHtml(money(product.retail_price))}</div></div>
           <div class="zip-widget-slot" data-zip-product-widget data-zip-price="${escapeHtml(String(product.retail_price))}" hidden></div>
           <div class="storefront-pdp__highlights"><div class="storefront-pdp__highlight"><strong>Brand</strong><span>${escapeHtml(product.brand || "TECHM8")}</span></div><div class="storefront-pdp__highlight"><strong>Category</strong><span>${escapeHtml(product.category_name)}</span></div></div>
         </div>
@@ -659,30 +671,53 @@ async function loadPreviousManifest() {
   }
 }
 
+async function loadRetiredProducts(previousSlugs, currentSlugs) {
+  const retiredProducts = [];
+  const currentSet = new Set(currentSlugs);
+
+  for (const slug of previousSlugs) {
+    if (currentSet.has(slug)) continue;
+    const pagePath = join(PRODUCTS_DIR, slug, "index.html");
+    if (!existsSync(pagePath)) continue;
+
+    try {
+      const html = await readFile(pagePath, "utf8");
+      const embeddedProduct = html.match(
+        /<script type="application\/json" data-prerendered-product>([\s\S]*?)<\/script>/i,
+      )?.[1];
+      if (!embeddedProduct) continue;
+
+      const product = JSON.parse(embeddedProduct);
+      if (safeSlug(product?.slug) !== slug) continue;
+
+      retiredProducts.push({
+        ...product,
+        is_visible: false,
+        stock_quantity: 0,
+      });
+    } catch {
+      console.warn(`Could not preserve retired product page: ${slug}`);
+    }
+  }
+
+  return retiredProducts;
+}
+
 async function writeProducts(products) {
-  const currentSlugs = products.map((product) => product.slug);
-  const qualityResults = products.map((product) => ({
+  const activeSlugs = products.map((product) => product.slug);
+  const previousSlugs = await loadPreviousManifest();
+  const retiredProducts = await loadRetiredProducts(previousSlugs, activeSlugs);
+  const allProducts = [...products, ...retiredProducts];
+  const currentSlugs = allProducts.map((product) => product.slug);
+  const qualityResults = allProducts.map((product) => ({
     product,
     quality: assessProductQuality(product),
   }));
   const indexableProducts = qualityResults
     .filter((item) => item.quality.indexable)
     .map((item) => item.product);
-  const currentSet = new Set(currentSlugs);
-  const previousSlugs = await loadPreviousManifest();
-  const resolvedProductsDir = resolve(PRODUCTS_DIR);
-
   await mkdir(PRODUCTS_DIR, { recursive: true });
-  for (const slug of previousSlugs) {
-    if (currentSet.has(slug)) continue;
-    const target = resolve(PRODUCTS_DIR, slug);
-    if (dirname(target) !== resolvedProductsDir) {
-      throw new Error(`Refusing to remove an unsafe generated path: ${target}`);
-    }
-    await rm(target, { recursive: true, force: true });
-  }
-
-  for (const product of products) {
+  for (const product of allProducts) {
     const folder = join(PRODUCTS_DIR, product.slug);
     await mkdir(folder, { recursive: true });
     await writeFile(join(folder, "index.html"), renderProductPage(product), "utf8");
@@ -699,14 +734,14 @@ async function writeProducts(products) {
     `${JSON.stringify(
       {
         catalog_updated_at:
-          products
+          allProducts
             .map((product) => String(product.updated_at || product.created_at || ""))
             .filter(Boolean)
             .sort()
             .at(-1) || null,
-        total_products: products.length,
+        total_products: allProducts.length,
         indexable_products: indexableProducts.length,
-        limited_products: products.length - indexableProducts.length,
+        limited_products: allProducts.length - indexableProducts.length,
         products: qualityResults.map(({ product, quality }) => ({
           id: product.id,
           slug: product.slug,
@@ -735,6 +770,66 @@ ${indexableProducts
 `;
   await writeFile(PRODUCT_SITEMAP, sitemap, "utf8");
   await writeFile(PUBLIC_PRODUCT_SITEMAP, sitemap, "utf8");
+
+  const merchantFeed = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+  <channel>
+    <title>TECHM8 Online Store</title>
+    <link>${SITE_URL}/shop.html</link>
+    <description>TECHM8 products priced in Australian dollars.</description>
+${indexableProducts
+  .map((product) => {
+    const canonical = `${SITE_URL}/products/${product.slug}/`;
+    const description = truncate(
+      product.seo_description ||
+        product.short_description ||
+        product.description ||
+        `${product.name} available from the TECHM8 online store.`,
+      5000,
+    );
+    const validGtin = getValidGtin(product.upc);
+    const availability =
+      Number.isFinite(product.stock_quantity) && product.stock_quantity <= 0
+        ? "out_of_stock"
+        : "in_stock";
+    const schemaCondition = getSchemaCondition(product.condition_label);
+    const condition = schemaCondition.includes("Refurbished")
+      ? "refurbished"
+      : schemaCondition.includes("Used")
+        ? "used"
+        : "new";
+    const additionalImages = product.gallery_images
+      .slice(1, 11)
+      .map(
+        (image) =>
+          `      <g:additional_image_link>${escapeHtml(image.image_url)}</g:additional_image_link>`,
+      )
+      .join("\n");
+    return `    <item>
+      <g:id>${escapeHtml(product.sku || `techm8-${product.id}`)}</g:id>
+      <title>${escapeHtml(product.name)}</title>
+      <description>${escapeHtml(description)}</description>
+      <link>${canonical}</link>
+      <g:image_link>${escapeHtml(product.display_image)}</g:image_link>
+${additionalImages ? `${additionalImages}\n` : ""}      <g:availability>${availability}</g:availability>
+      <g:price>${product.retail_price.toFixed(2)} ${CATALOG_CURRENCY}</g:price>
+      <g:condition>${condition}</g:condition>
+      ${product.brand ? `<g:brand>${escapeHtml(product.brand)}</g:brand>` : ""}
+      ${validGtin ? `<g:gtin>${validGtin}</g:gtin>` : ""}
+    </item>`;
+  })
+  .join("\n")}
+  </channel>
+</rss>
+`;
+  await writeFile(MERCHANT_FEED, merchantFeed, "utf8");
+  await writeFile(PUBLIC_MERCHANT_FEED, merchantFeed, "utf8");
+
+  return {
+    totalProducts: allProducts.length,
+    limitedProducts: allProducts.length - indexableProducts.length,
+    retiredProducts: retiredProducts.length,
+  };
 }
 
 async function main() {
@@ -747,14 +842,11 @@ async function main() {
 
   const products = await loadCatalog();
   if (!products.length) {
-    throw new Error("Supabase returned no visible products; generated pages were left unchanged.");
+    throw new Error("Supabase returned no products; generated pages were left unchanged.");
   }
-  await writeProducts(products);
-  const limitedCount = products.filter(
-    (product) => !assessProductQuality(product).indexable,
-  ).length;
+  const result = await writeProducts(products);
   console.log(
-    `Prerendered ${products.length} product pages (${limitedCount} noindex pending content review) and ${BUSINESS_FILES.length} business pages.`,
+    `Prerendered ${result.totalProducts} product pages (${result.limitedProducts} noindex, including ${result.retiredProducts} retired) and ${BUSINESS_FILES.length} business pages.`,
   );
 }
 
