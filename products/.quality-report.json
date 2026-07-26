@@ -1,9 +1,22 @@
 {
-  "catalog_updated_at": "2026-07-19T05:38:19.071421+00:00",
+  "catalog_updated_at": "2026-07-26T03:48:52.247163+00:00",
   "total_products": 83,
   "indexable_products": 81,
   "limited_products": 2,
   "products": [
+    {
+      "id": 47,
+      "slug": "techm8-everyday-accessory",
+      "name": "TECHM8 Everyday Accessory",
+      "indexable": false,
+      "score": 57,
+      "blockers": [
+        "missing-product-image"
+      ],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 98,
       "slug": "wekome-wdc-50-240w-charging-cable",
@@ -821,19 +834,6 @@
       "indexable": true,
       "score": 92,
       "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 47,
-      "slug": "techm8-everyday-accessory",
-      "name": "TECHM8 Everyday Accessory",
-      "indexable": false,
-      "score": 57,
-      "blockers": [
-        "missing-product-image"
-      ],
       "warnings": [
         "description-under-90-characters"
       ]
