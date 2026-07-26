@@ -5126,7 +5126,6 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
         </div>
         <div class="storefront-rich-content">
           <p>Prices are shown in Australian dollars. Online stock and pickup availability are checked again before checkout or collection.</p>
-          <p>Eligible unopened online purchases may be submitted for a change-of-mind return review within 7 days. Online-store products include six-month return-to-base warranty support, subject to the published terms.</p>
           <p><a href="/store-policy.html">Read the shipping, returns and warranty policy</a>.</p>
         </div>
       </article>
