@@ -1815,7 +1815,7 @@ function readBestCatalogCache(cacheEntries = [], options = {}) {
   return null;
 }
 
-function ensureAccountNavLink(relativeHref = "account.html") {
+function ensureAccountNavLink(relativeHref = "/account.html") {
   document.querySelectorAll(".nav__menu").forEach((menu) => {
     if (
       !(menu instanceof HTMLElement) ||
@@ -1854,7 +1854,7 @@ function getAuthRedirectUrl() {
     ).toString();
   }
 
-  return new URL("account.html", window.location.href).toString();
+  return new URL("/account.html", window.location.origin).toString();
 }
 
 function getPasswordRecoveryRedirectUrl() {
@@ -1868,7 +1868,7 @@ function getPasswordRecoveryRedirectUrl() {
     ).toString();
   }
 
-  return new URL("reset-password.html", window.location.href).toString();
+  return new URL("/reset-password.html", window.location.origin).toString();
 }
 
 function getAccountHomeUrl() {
@@ -1882,7 +1882,7 @@ function getAccountHomeUrl() {
     ).toString();
   }
 
-  return new URL("account-details.html", window.location.href).toString();
+  return new URL("/account-details.html", window.location.origin).toString();
 }
 
 function getConfiguredSiteBaseUrl() {
@@ -1912,7 +1912,7 @@ function getAccountDashboardUrl() {
     ).toString();
   }
 
-  return new URL("account-dashboard.html", window.location.href).toString();
+  return new URL("/account-dashboard.html", window.location.origin).toString();
 }
 
 async function ensureSupabaseBrowserLibrary() {
@@ -3186,7 +3186,7 @@ function initCookieConsentBanner() {
       <p class="cookie-consent__eyebrow">Privacy preferences</p>
       <h2>We use cookies to improve your TECHM8 experience.</h2>
       <p>Essential cookies keep the cart and checkout working. With your permission, we also remember recently viewed products on this browser so we can show more relevant product suggestions.</p>
-      <a href="store-policy.html">View privacy and store policies</a>
+      <a href="/store-policy.html">View privacy and store policies</a>
     </div>
     <div class="cookie-consent__actions">
       <button class="cookie-consent__button cookie-consent__button--ghost" type="button" data-cookie-settings>Settings</button>
@@ -5620,7 +5620,7 @@ function initCategoryPage() {
     const category = categories.find((item) => item.slug === slug);
 
     if (!category) {
-      productsTarget.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing category</span><h3>Category not found</h3><p>Return to the online store and choose another category.</p><div class="storefront-card__actions"><a href="shop.html">Back to online store</a></div></div></article>`;
+      productsTarget.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing category</span><h3>Category not found</h3><p>Return to the online store and choose another category.</p><div class="storefront-card__actions"><a href="/shop.html">Back to online store</a></div></div></article>`;
       return;
     }
 
@@ -5635,7 +5635,7 @@ function initCategoryPage() {
       linksTarget.innerHTML = categories
         .map(
           (item) =>
-            `<a class="storefront-category-link ${item.slug === slug ? "is-active" : ""}" href="category.html?slug=${encodeURIComponent(item.slug)}">${escapeHtml(item.name)}</a>`,
+            `<a class="storefront-category-link ${item.slug === slug ? "is-active" : ""}" href="/category.html?slug=${encodeURIComponent(item.slug)}">${escapeHtml(item.name)}</a>`,
         )
         .join("");
     }
@@ -5686,6 +5686,14 @@ function initProductDetailPage() {
 
   const params = new URLSearchParams(window.location.search);
   const slug = root.dataset.productSlug || params.get("slug") || "";
+  if (
+    slug &&
+    !root.dataset.productSlug &&
+    window.location.pathname.endsWith("/product.html")
+  ) {
+    window.location.replace(getProductPageHref(slug));
+    return;
+  }
   if (slug) {
     const canonicalUrl = `${getConfiguredSiteBaseUrl()}${getProductPageHref(slug)}`;
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -5711,7 +5719,7 @@ function initProductDetailPage() {
     prerenderedProduct || getRememberedProductNavigationCache(slug);
 
   const renderNotFound = () => {
-    shell.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing product</span><h3>Product not found</h3><p>Return to the online store and select another item.</p><div class="storefront-card__actions"><a href="shop.html">Back to online store</a></div></div></article>`;
+    shell.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing product</span><h3>Product not found</h3><p>Return to the online store and select another item.</p><div class="storefront-card__actions"><a href="/shop.html">Back to online store</a></div></div></article>`;
   };
 
   if (initialProduct) {
@@ -5776,7 +5784,7 @@ function renderCartLineItems(target, items) {
           <h3>Your cart is empty</h3>
           <p>Add products from the online store before checking out.</p>
           <div class="storefront-card__actions">
-            <a href="shop.html">Return to online store</a>
+            <a href="/shop.html">Return to online store</a>
           </div>
         </div>
       </article>
@@ -7267,8 +7275,8 @@ function initCheckoutPage() {
                 </div>
               </div>
               <div class="storefront-success__actions">
-                <a class="button button--primary" href="shop.html">Continue shopping</a>
-                <a class="button button--ghost" href="stores.html">Find a store</a>
+                <a class="button button--primary" href="/shop.html">Continue shopping</a>
+                <a class="button button--ghost" href="/stores.html">Find a store</a>
               </div>
             </article>
 
@@ -7694,7 +7702,7 @@ function initCheckoutPage() {
         const { error } = await activeAuthState.supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
-            redirectTo: new URL("checkout.html", window.location.href).toString(),
+            redirectTo: new URL("/checkout.html", window.location.origin).toString(),
           },
         });
         if (error) throw error;
@@ -8561,7 +8569,7 @@ function buildCheckoutInvoiceMarkup(order) {
         Your paid invoice is being generated and will be emailed to your checkout address.
       </p>
       <div class="storefront-success__actions">
-        <a class="button button--ghost" href="my-orders.html">Check My Orders</a>
+        <a class="button button--ghost" href="/my-orders.html">Check My Orders</a>
       </div>
     `;
   }
@@ -8641,6 +8649,39 @@ function initCheckoutSuccessPage() {
     const isPayInStore =
       mode === "pay_in_store" ||
       String(storedPayload.payment_method_code || "").trim() === "pay_in_store";
+    const transactionId = String(
+      storedPayload.order_code || orderCode || "",
+    ).trim();
+    if (!isPayInStore && transactionId && transactionId !== "Pending") {
+      const purchaseStorageKey = `techm8_ga4_purchase_${transactionId}`;
+      let purchaseTracked = false;
+      try {
+        purchaseTracked = window.localStorage.getItem(purchaseStorageKey) === "1";
+      } catch {
+        purchaseTracked = false;
+      }
+
+      if (!purchaseTracked) {
+        trackGa4Event("purchase", {
+          transaction_id: transactionId,
+          currency: "AUD",
+          value: Number(storedPayload.total_amount || 0),
+          tax: Number(storedPayload.gst_amount || 0),
+          shipping: Number(storedPayload.shipping_fee_amount || 0),
+          payment_type: String(
+            storedPayload.payment_method_label ||
+              storedPayload.payment_method_code ||
+              "online",
+          ),
+          items: buildGa4ItemsFromCart(storedPayload.items || []),
+        });
+        try {
+          window.localStorage.setItem(purchaseStorageKey, "1");
+        } catch {
+          // GA4 also de-duplicates ecommerce events by transaction_id.
+        }
+      }
+    }
     const storedShippingOption = storedPayload.shipping_service_code
       ? getCheckoutShippingOption(storedPayload.shipping_service_code)
       : null;
@@ -8676,8 +8717,8 @@ function initCheckoutSuccessPage() {
                 </div>
               </div>
               <div class="storefront-success__actions">
-                <a class="button button--primary" href="shop.html">Continue shopping</a>
-                ${storeDetail?.mapUrl ? `<a class="button button--ghost" href="${escapeHtml(storeDetail.mapUrl)}" target="_blank" rel="noopener">Open pickup map</a>` : `<a class="button button--ghost" href="stores.html">Find a store</a>`}
+                <a class="button button--primary" href="/shop.html">Continue shopping</a>
+                ${storeDetail?.mapUrl ? `<a class="button button--ghost" href="${escapeHtml(storeDetail.mapUrl)}" target="_blank" rel="noopener">Open pickup map</a>` : `<a class="button button--ghost" href="/stores.html">Find a store</a>`}
               </div>
               <div class="storefront-success__invoice" data-checkout-invoice-actions>
                 ${buildCheckoutInvoiceMarkup(storedPayload)}
@@ -10659,8 +10700,8 @@ function renderAccountOrderCards(target, records, mode = "all") {
         <span class="account-muted">${mode === "pending" ? "This order is still active." : "This order has been completed."}</span>
         <div class="account-order-card__actions">
           ${buildCustomerInvoiceLinks(record, { primaryClass: "account-button", secondaryClass: "account-button--secondary" })}
-          <a class="account-button--secondary" href="shop.html">Browse store</a>
-          <a class="account-button" href="cart.html">${mode === "pending" ? "View cart" : "Shop again"}</a>
+          <a class="account-button--secondary" href="/shop.html">Browse store</a>
+          <a class="account-button" href="/cart.html">${mode === "pending" ? "View cart" : "Shop again"}</a>
         </div>
       </div>
     </article>
@@ -10711,8 +10752,8 @@ function renderAccountRepairCards(target, records) {
       <div class="account-order-card__foot">
         <span class="account-muted">Use the store page or book a new repair if you need to follow up.</span>
         <div class="account-order-card__actions">
-          <a class="account-button--secondary" href="stores.html">Find store</a>
-          <a class="account-button" href="book-repair.html">Book again</a>
+          <a class="account-button--secondary" href="/stores.html">Find store</a>
+          <a class="account-button" href="/book-repair.html">Book again</a>
         </div>
       </div>
     </article>
@@ -11112,7 +11153,7 @@ async function initWarrantyReturnsPage() {
   });
 
   returnButton?.addEventListener("click", () => {
-    window.location.assign("store-policy.html");
+    window.location.assign("/store-policy.html");
   });
 
   if (listTarget instanceof HTMLElement && !listTarget.children.length) {
@@ -11215,6 +11256,7 @@ async function initMyRepairsPage() {
 
 function initPage() {
   initCookieConsentBanner();
+  initGa4LinkTracking();
   initCustomerOrderDocumentDownloads();
   ensureAccountNavLink();
   ensureGlobalCartUi();

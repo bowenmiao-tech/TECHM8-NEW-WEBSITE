@@ -2,4 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.techm8australia.com/sitemap.xml
-Sitemap: https://www.techm8australia.com/sitemap-products.xml

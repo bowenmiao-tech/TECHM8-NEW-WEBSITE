@@ -1,4 +1,4 @@
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import vm from "node:vm";
@@ -11,6 +11,10 @@ const PRODUCT_MANIFEST = join(PRODUCTS_DIR, ".generated-manifest.json");
 const PRODUCT_QUALITY_REPORT = join(PRODUCTS_DIR, ".quality-report.json");
 const PRODUCT_SITEMAP = join(ROOT, "sitemap-products.xml");
 const PUBLIC_PRODUCT_SITEMAP = join(ROOT, "public", "sitemap-products.xml");
+const SITEMAP_INDEX = join(ROOT, "sitemap.xml");
+const PUBLIC_SITEMAP_INDEX = join(ROOT, "public", "sitemap.xml");
+const PAGE_SITEMAP = join(ROOT, "sitemap-pages.xml");
+const PUBLIC_PAGE_SITEMAP = join(ROOT, "public", "sitemap-pages.xml");
 const MERCHANT_FEED = join(ROOT, "merchant-products.xml");
 const PUBLIC_MERCHANT_FEED = join(ROOT, "public", "merchant-products.xml");
 const BUSINESS_FILES = [
@@ -357,6 +361,7 @@ function productJsonLd(product) {
           propertyID: "ABN",
           value: "12 645 861 463",
         },
+        areaServed: { "@type": "Country", name: "Australia" },
       },
       {
         "@type": "BreadcrumbList",
@@ -560,7 +565,10 @@ function renderBusinessJsonLd(data, file) {
         propertyID: "ABN",
         value: "12 645 861 463",
       },
-      areaServed: data.locations || ["Brisbane", "Logan", "Ipswich", "Moreton Bay"],
+      areaServed: [
+        { "@type": "Country", name: "Australia" },
+        ...(data.locations || ["Brisbane", "Logan", "Ipswich", "Moreton Bay"]),
+      ],
     },
     {
       "@type": "WebPage",
@@ -610,7 +618,10 @@ function renderBusinessJsonLd(data, file) {
       description: data.directAnswer || data.seoLead || data.lead,
       url: canonical,
       provider: { "@id": organizationId },
-      areaServed: data.locations || ["Brisbane"],
+      areaServed: [
+        { "@type": "Country", name: "Australia" },
+        ...(data.locations || ["Brisbane"]),
+      ],
       termsOfService: `${SITE_URL}/store-policy.html`,
     });
   }
@@ -832,10 +843,65 @@ ${additionalImages ? `${additionalImages}\n` : ""}      <g:availability>${availa
   };
 }
 
+async function writeSitemapIndex() {
+  let pageSitemap;
+  if (existsSync(PAGE_SITEMAP)) {
+    pageSitemap = await readFile(PAGE_SITEMAP, "utf8");
+  } else {
+    const currentSitemap = await readFile(SITEMAP_INDEX, "utf8");
+    if (!/<urlset\b/i.test(currentSitemap)) {
+      throw new Error("The page sitemap source is missing or invalid.");
+    }
+    pageSitemap = currentSitemap;
+  }
+
+  const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${SITE_URL}/sitemap-pages.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>${SITE_URL}/sitemap-products.xml</loc>
+  </sitemap>
+</sitemapindex>
+`;
+
+  await writeFile(PAGE_SITEMAP, pageSitemap, "utf8");
+  await writeFile(PUBLIC_PAGE_SITEMAP, pageSitemap, "utf8");
+  await writeFile(SITEMAP_INDEX, sitemapIndex, "utf8");
+  await writeFile(PUBLIC_SITEMAP_INDEX, sitemapIndex, "utf8");
+}
+
+async function normalizeAustralianHtmlLanguage(directory = ROOT) {
+  const excludedDirectories = new Set([".git", "dist", "node_modules", "public"]);
+  const entries = await readdir(directory, { withFileTypes: true });
+  for (const entry of entries) {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) {
+      if (!excludedDirectories.has(entry.name)) {
+        await normalizeAustralianHtmlLanguage(path);
+      }
+      continue;
+    }
+    if (!entry.isFile() || !entry.name.toLowerCase().endsWith(".html")) continue;
+
+    const html = await readFile(path, "utf8");
+    const normalized = html.replace(
+      /<html\s+lang=(["'])en\1/i,
+      '<html lang="en-AU"',
+    );
+    if (normalized !== html) {
+      await writeFile(path, normalized, "utf8");
+    }
+  }
+}
+
 async function main() {
   await prerenderBusinessPages();
 
   if (process.env.TECHM8_SKIP_PRODUCT_PRERENDER === "1") {
+    await writeSitemapIndex();
+    await normalizeAustralianHtmlLanguage();
     console.log("Business pages prerendered; product generation was skipped.");
     return;
   }
@@ -845,6 +911,8 @@ async function main() {
     throw new Error("Supabase returned no products; generated pages were left unchanged.");
   }
   const result = await writeProducts(products);
+  await writeSitemapIndex();
+  await normalizeAustralianHtmlLanguage();
   console.log(
     `Prerendered ${result.totalProducts} product pages (${result.limitedProducts} noindex, including ${result.retiredProducts} retired) and ${BUSINESS_FILES.length} business pages.`,
   );
