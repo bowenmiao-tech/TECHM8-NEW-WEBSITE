@@ -25,9 +25,15 @@
   </url>
   <url>
     <loc>https://www.techm8australia.com/blog.html</loc>
-    <lastmod>2026-07-19</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.techm8australia.com/blog/how-to-sign-out-app-store-ios-26.html</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.techm8australia.com/blog/why-phone-battery-drains-fast.html</loc>
