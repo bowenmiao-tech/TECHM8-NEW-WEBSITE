@@ -37,7 +37,10 @@ const GENERIC_REPAIR_FILES = [
   "repair-services/tablets/other.html",
   "repair-services/tablets/samsung.html",
 ];
-const PUBLIC_LEGACY_PRODUCT_DIR = join(ROOT, "public", "product-page");
+const LEGACY_PRODUCT_DIRS = [
+  join(ROOT, "product-page"),
+  join(ROOT, "public", "product-page"),
+];
 const CONTENT_REVIEW_DATE = "2026-08-01";
 
 const escapeHtml = (value = "") =>
@@ -918,15 +921,17 @@ function renderLegacyProductRedirect(product) {
 }
 
 async function writeLegacyProductRedirects(products) {
-  await mkdir(PUBLIC_LEGACY_PRODUCT_DIR, { recursive: true });
-  for (const product of products) {
-    const folder = join(PUBLIC_LEGACY_PRODUCT_DIR, product.slug);
-    await mkdir(folder, { recursive: true });
-    await writeFile(
-      join(folder, "index.html"),
-      renderLegacyProductRedirect(product),
-      "utf8",
-    );
+  for (const directory of LEGACY_PRODUCT_DIRS) {
+    await mkdir(directory, { recursive: true });
+    for (const product of products) {
+      const folder = join(directory, product.slug);
+      await mkdir(folder, { recursive: true });
+      await writeFile(
+        join(folder, "index.html"),
+        renderLegacyProductRedirect(product),
+        "utf8",
+      );
+    }
   }
 }
 

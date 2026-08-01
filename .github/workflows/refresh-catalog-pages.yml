@@ -41,12 +41,12 @@ jobs:
       - name: Publish changed generated pages
         shell: bash
         run: |
-          if git diff --quiet -- products sitemap.xml sitemap-pages.xml sitemap-products.xml public/product-page public/sitemap.xml public/sitemap-pages.xml public/sitemap-products.xml merchant-products.xml public/merchant-products.xml business-services.html business-services repair-services; then
+          if git diff --quiet -- products product-page sitemap.xml sitemap-pages.xml sitemap-products.xml public/product-page public/sitemap.xml public/sitemap-pages.xml public/sitemap-products.xml merchant-products.xml public/merchant-products.xml business-services.html business-services repair-services; then
             echo "Catalog pages are already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add products sitemap.xml sitemap-pages.xml sitemap-products.xml public/product-page public/sitemap.xml public/sitemap-pages.xml public/sitemap-products.xml merchant-products.xml public/merchant-products.xml business-services.html business-services repair-services
+          git add products product-page sitemap.xml sitemap-pages.xml sitemap-products.xml public/product-page public/sitemap.xml public/sitemap-pages.xml public/sitemap-products.xml merchant-products.xml public/merchant-products.xml business-services.html business-services repair-services
           git commit -m "chore: refresh generated catalog pages [skip ci]"
           git push
