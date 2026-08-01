@@ -23,6 +23,22 @@ const BUSINESS_FILES = [
   "business-services/on-site-tech-services.html",
   "business-services/business-it-device-support.html",
 ];
+const GENERIC_REPAIR_FILES = [
+  "repair-services/computers/all-in-one.html",
+  "repair-services/computers/laptop.html",
+  "repair-services/computers/pc-tower.html",
+  "repair-services/computers/small-pc.html",
+  "repair-services/phones/google.html",
+  "repair-services/phones/huawei.html",
+  "repair-services/phones/oneplus.html",
+  "repair-services/phones/oppo.html",
+  "repair-services/phones/others.html",
+  "repair-services/phones/xiaomi.html",
+  "repair-services/tablets/other.html",
+  "repair-services/tablets/samsung.html",
+];
+const PUBLIC_LEGACY_PRODUCT_DIR = join(ROOT, "public", "product-page");
+const CONTENT_REVIEW_DATE = "2026-08-01";
 
 const escapeHtml = (value = "") =>
   String(value)
@@ -672,6 +688,173 @@ async function prerenderBusinessPages() {
   }
 }
 
+function extractRepairPageData(html, file) {
+  const match = html.match(
+    /<script[^>]*>\s*(window\.REPAIR_PAGE_DATA\s*=\s*\{[\s\S]*?\};)\s*<\/script>/i,
+  );
+  if (!match) throw new Error(`Repair page data was not found in ${file}`);
+  const sandbox = { window: {} };
+  vm.runInNewContext(match[1], sandbox, { timeout: 1000, filename: file });
+  return { assignment: match[1], data: sandbox.window.REPAIR_PAGE_DATA };
+}
+
+function renderGenericRepairJsonLd(data, file) {
+  const canonical = `${SITE_URL}/${file}`;
+  const organizationId = `${SITE_URL}/#organization`;
+  const directAnswer = `TECHM8 assesses ${String(data.title || "device repairs").toLowerCase()} at stores in Park Ridge, Fairfield, Toowong, North Lakes and Brassall, Queensland. Repair availability, parts, turnaround time and price are confirmed after the device and fault are identified.`;
+  const faqs = [
+    {
+      question: `Does TECHM8 repair ${data.title || "this type of device"}?`,
+      answer: directAnswer,
+    },
+    {
+      question: "Do I need to book before visiting a TECHM8 store?",
+      answer:
+        "Walk-in enquiries are welcome, but booking first helps the store confirm the device model, fault and likely parts requirement before the visit.",
+    },
+    {
+      question: "Is the repair price confirmed before work begins?",
+      answer:
+        "Yes. TECHM8 confirms the proposed repair scope and price before approved work begins. Final availability depends on inspection and parts supply.",
+    },
+  ];
+
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": organizationId,
+        name: "TECHM8",
+        alternateName: "OZ Tech M8",
+        legalName: "YQM PTY LTD",
+        url: `${SITE_URL}/`,
+        logo: `${SITE_URL}/assets/logo-techm8.png`,
+        identifier: {
+          "@type": "PropertyValue",
+          propertyID: "ABN",
+          value: "12 645 861 463",
+        },
+        areaServed: { "@type": "Country", name: "Australia" },
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${canonical}#webpage`,
+        url: canonical,
+        name: data.title,
+        description: data.intro,
+        inLanguage: "en-AU",
+        dateModified: CONTENT_REVIEW_DATE,
+        author: { "@id": organizationId },
+        reviewedBy: { "@id": organizationId },
+      },
+      {
+        "@type": "Service",
+        "@id": `${canonical}#service`,
+        name: data.title,
+        serviceType: data.category || "Device repair",
+        description: directAnswer,
+        url: canonical,
+        provider: { "@id": organizationId },
+        areaServed: [
+          { "@type": "Country", name: "Australia" },
+          "Brisbane",
+          "Logan",
+          "Ipswich",
+          "Moreton Bay",
+        ],
+        termsOfService: `${SITE_URL}/store-policy.html`,
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${canonical}#faq`,
+        mainEntity: faqs.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: { "@type": "Answer", text: item.answer },
+        })),
+      },
+    ],
+  });
+}
+
+function renderGenericRepairPage(data, file, assignment) {
+  const canonical = `${SITE_URL}/${file}`;
+  const title = `${data.title} Brisbane & Queensland | TECHM8`;
+  const description = truncate(
+    `TECHM8 provides ${String(data.title || "device repair").toLowerCase()} assessment at Park Ridge, Fairfield, Toowong, North Lakes and Brassall stores in Queensland.`,
+    160,
+  );
+  const directAnswer = `TECHM8 assesses ${String(data.title || "device repairs").toLowerCase()} at stores in Park Ridge, Fairfield, Toowong, North Lakes and Brassall, Queensland. Repair availability, parts, turnaround time and price are confirmed after the device and fault are identified.`;
+  const issues = (data.issues || [])
+    .map(
+      (item) =>
+        `<article class="issue-card"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></article>`,
+    )
+    .join("");
+  const extras = (data.extras || [])
+    .map(
+      (item) =>
+        `<article class="info-card"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></article>`,
+    )
+    .join("");
+  const assignmentScript = assignment.replaceAll("<", "\\u003c");
+
+  return `<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}">
+  <meta name="author" content="TECHM8 Australia">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <link rel="canonical" href="${canonical}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtml(title)}">
+  <meta property="og:description" content="${escapeHtml(description)}">
+  <meta property="og:url" content="${canonical}">
+  <meta property="og:image" content="${SITE_URL}/assets/logo-techm8.png">
+  <script type="application/ld+json">${renderGenericRepairJsonLd(data, file).replaceAll("<", "\\u003c")}</script>
+  <script data-repair-page-data>${assignmentScript}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7YLMGHMRDG"></script>
+  <script defer src="/ga4.js"></script>
+</head>
+<body class="repair-page" data-generic-repair-prerendered>
+  <div class="promo-banner"><div class="container promo-banner__inner"><span>${escapeHtml(data.banner || `${data.title} support in Queensland`)}</span><a href="/stores.html">Find a store</a></div></div>
+  <header class="site-header"><div class="container nav">
+    <a class="brand" href="/" aria-label="TECHM8 home"><img class="brand__logo" src="/assets/logo-techm8.png" alt="TECHM8 logo"></a>
+    <nav class="nav__menu"><a href="/repairs.html">Repairs</a><a href="/blog.html">Tech Insights</a><a href="/stores.html">Store Locator</a><a href="/business-services.html">Business Services</a><a class="nav__shop-link" href="/shop.html">Online Store</a></nav>
+  </div></header>
+  <main>
+    <section class="hero hero--service"><div class="container repair-detail-hero"><div><p class="eyebrow">${escapeHtml(data.category || "Device repairs")}</p><h1>${escapeHtml(data.title)}</h1><p class="hero__lead">${escapeHtml(data.intro || description)}</p><div class="hero__actions"><a class="button button--primary" href="/book-repair.html">Book a repair</a><a class="button button--secondary" href="/stores.html">Find a Queensland store</a></div></div><div class="repair-detail-panel"><div class="repair-detail-panel__icon ${escapeHtml(data.vectorClass || "vector-phone")}" aria-hidden="true"></div></div></div></section>
+    <section class="section repair-seo-section"><div class="container repair-seo-layout"><div class="repair-seo-main"><p class="eyebrow">Direct answer</p><h2>Does TECHM8 provide ${escapeHtml(String(data.title || "device repairs").toLowerCase())}?</h2><p>${escapeHtml(directAnswer)}</p><p><strong>Content reviewed by:</strong> TECHM8 repair team &middot; <strong>Last updated:</strong> 1 August 2026</p></div><aside class="repair-seo-aside" aria-label="Provider details"><div class="repair-seo-highlight"><strong>Australian business</strong><span>YQM PTY LTD, ABN 12 645 861 463</span></div><div class="repair-seo-highlight"><strong>Currency</strong><span>Quotes and prices are in Australian dollars.</span></div></aside></div></section>
+    <section class="section"><div class="container"><div class="section-heading"><p class="eyebrow">Common faults</p><h2>${escapeHtml(data.issueHeading || `Common ${data.title} requests`)}</h2></div><div class="repair-content-grid">${issues}</div></div></section>
+    ${extras ? `<section class="section section--muted"><div class="container"><div class="section-heading"><p class="eyebrow">What to expect</p><h2>${escapeHtml(data.extraHeading || "Repair assessment information")}</h2></div><div class="repair-content-grid">${extras}</div></div></section>` : ""}
+    <section class="section"><div class="container"><div class="section-heading"><p class="eyebrow">Local service locations</p><h2>Choose a TECHM8 store in South East Queensland</h2><p>Repair capability and parts availability vary by device model. Contact or book with the nearest store before travelling.</p></div><div class="repair-content-grid"><article class="info-card"><h3>Brisbane</h3><p><a href="/stores/fairfield.html">Fairfield</a> and <a href="/stores/toowong.html">Toowong</a></p></article><article class="info-card"><h3>Logan</h3><p><a href="/stores/park-ridge.html">Park Ridge</a></p></article><article class="info-card"><h3>Moreton Bay</h3><p><a href="/stores/north-lakes.html">North Lakes</a></p></article><article class="info-card"><h3>Ipswich</h3><p><a href="/stores/brassall.html">Brassall</a></p></article></div></div></section>
+    <section class="section section--muted"><div class="container"><div class="section-heading"><p class="eyebrow">Repair process</p><h2>Assessment before approved work begins</h2></div><div class="repair-content-grid"><article class="info-card"><h3>1. Identify the device</h3><p>Provide the brand, model and fault symptoms when booking.</p></article><article class="info-card"><h3>2. Confirm the repair path</h3><p>The store checks likely parts, availability, timing and price.</p></article><article class="info-card"><h3>3. Approve the work</h3><p>Repairs begin after the proposed scope and price are accepted.</p></article></div></div></section>
+    <section class="section"><div class="container"><div class="booking-card"><p class="eyebrow">Provider details</p><h2>Who provides this repair service?</h2><p>TECHM8 is the trading name of YQM PTY LTD (ABN 12 645 861 463), an Australian device repair and technology retailer with stores in Park Ridge, Fairfield, Toowong, North Lakes and Brassall.</p><p><a href="/stores.html">View store addresses, opening hours and contact details</a>.</p></div></div></section>
+  </main>
+  <footer class="site-footer"><div class="container footer footer--bottom"><p>&copy; 2026 TECHM8. All rights reserved.</p><a href="/store-policy.html">Repair Terms &amp; Conditions</a></div></footer>
+  <script type="module" src="/script.js"></script>
+</body>
+</html>
+`;
+}
+
+async function prerenderGenericRepairPages() {
+  for (const file of GENERIC_REPAIR_FILES) {
+    const path = join(ROOT, file);
+    const html = await readFile(path, "utf8");
+    const { assignment, data } = extractRepairPageData(html, file);
+    await writeFile(path, renderGenericRepairPage(data, file, assignment), "utf8");
+  }
+}
+
 async function loadPreviousManifest() {
   if (!existsSync(PRODUCT_MANIFEST)) return [];
   try {
@@ -714,6 +897,39 @@ async function loadRetiredProducts(previousSlugs, currentSlugs) {
   return retiredProducts;
 }
 
+function renderLegacyProductRedirect(product) {
+  const destination = `${SITE_URL}/products/${product.slug}/`;
+  return `<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(product.name)} | TECHM8</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="${destination}">
+  <meta http-equiv="refresh" content="0; url=${destination}">
+  <script>window.location.replace(${JSON.stringify(destination)});</script>
+</head>
+<body>
+  <main><h1>${escapeHtml(product.name)}</h1><p>This product has moved to the TECHM8 online store.</p><p><a href="${destination}">Open the current product page</a></p></main>
+</body>
+</html>
+`;
+}
+
+async function writeLegacyProductRedirects(products) {
+  await mkdir(PUBLIC_LEGACY_PRODUCT_DIR, { recursive: true });
+  for (const product of products) {
+    const folder = join(PUBLIC_LEGACY_PRODUCT_DIR, product.slug);
+    await mkdir(folder, { recursive: true });
+    await writeFile(
+      join(folder, "index.html"),
+      renderLegacyProductRedirect(product),
+      "utf8",
+    );
+  }
+}
+
 async function writeProducts(products) {
   const activeSlugs = products.map((product) => product.slug);
   const previousSlugs = await loadPreviousManifest();
@@ -733,6 +949,7 @@ async function writeProducts(products) {
     await mkdir(folder, { recursive: true });
     await writeFile(join(folder, "index.html"), renderProductPage(product), "utf8");
   }
+  await writeLegacyProductRedirects(allProducts);
 
   await writeFile(
     PRODUCT_MANIFEST,
@@ -855,6 +1072,21 @@ async function writeSitemapIndex() {
     pageSitemap = currentSitemap;
   }
 
+  const additionalRepairEntries = GENERIC_REPAIR_FILES.filter(
+    (file) => !pageSitemap.includes(`<loc>${SITE_URL}/${file}</loc>`),
+  )
+    .map(
+      (file) =>
+        `  <url>\n    <loc>${SITE_URL}/${file}</loc>\n    <lastmod>${CONTENT_REVIEW_DATE}</lastmod>\n  </url>`,
+    )
+    .join("\n");
+  if (additionalRepairEntries) {
+    pageSitemap = pageSitemap.replace(
+      /\s*<\/urlset>/i,
+      `\n${additionalRepairEntries}\n</urlset>`,
+    );
+  }
+
   const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
@@ -898,6 +1130,7 @@ async function normalizeAustralianHtmlLanguage(directory = ROOT) {
 
 async function main() {
   await prerenderBusinessPages();
+  await prerenderGenericRepairPages();
 
   if (process.env.TECHM8_SKIP_PRODUCT_PRERENDER === "1") {
     await writeSitemapIndex();

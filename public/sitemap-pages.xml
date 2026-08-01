@@ -109,4 +109,44 @@
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
+  <url>
+    <loc>https://www.techm8australia.com/repair-services/computers/all-in-one.html</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.techm8australia.com/repair-services/computers/laptop.html</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.techm8australia.com/repair-services/computers/pc-tower.html</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.techm8australia.com/repair-services/computers/small-pc.html</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.techm8australia.com/repair-services/phones/huawei.html</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.techm8australia.com/repair-services/phones/oneplus.html</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.techm8australia.com/repair-services/phones/oppo.html</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.techm8australia.com/repair-services/phones/xiaomi.html</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.techm8australia.com/repair-services/tablets/other.html</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.techm8australia.com/repair-services/tablets/samsung.html</loc>
+    <lastmod>2026-08-01</lastmod>
+  </url>
 </urlset>
