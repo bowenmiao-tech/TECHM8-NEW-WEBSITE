@@ -83,6 +83,10 @@ The admin product page must support these workflows:
 - Product cards do **not** show short description text
 - `Add to cart` should be the main CTA and should be visually wider
 - Stock data is stored, but stock should **not** block ordering on the storefront
+- Products with `product_group_id` are displayed as one product card using the group's name and main image
+- Sellable colours remain separate product rows with independent SKU, barcode, price, and stock
+- A grouped product detail page shows colour links, and choosing a colour opens that exact sellable variant
+- Do not infer grouping from similar device names when an explicit product group exists
 
 ### Product detail page rules
 
