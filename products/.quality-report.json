@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-08-12T09:55:11.987674+00:00",
+  "catalog_updated_at": "2026-08-12T14:22:24.337387+00:00",
   "total_products": 83,
   "indexable_products": 81,
   "limited_products": 2,
   "products": [
+    {
+      "id": 83,
+      "slug": "remax-g6-wireless-gamebubs",
+      "name": "Remax G6  Wireless GameBubs",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 86,
       "slug": "remax-tws-43-wireless-earbuds",
@@ -30,17 +41,6 @@
       "id": 84,
       "slug": "remax-pd-bt230-bt260-wireless-earbuds",
       "name": "Remax PD BT230/BT260 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 83,
-      "slug": "remax-g6-wireless-gamebubs",
-      "name": "Remax G6  Wireless GameBubs",
       "indexable": true,
       "score": 92,
       "blockers": [],

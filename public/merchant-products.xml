@@ -5,6 +5,19 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>6972174155067</g:id>
+      <title>Remax G6  Wireless GameBubs</title>
+      <description>Remax G6 Wireless GameBubs available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-g6-wireless-gamebubs/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-g6-wireless-gamebubs/1779116676372-2f97f69d.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-g6-wireless-gamebubs/1779116677900-7b59e535.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>129.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+      
+    </item>
+    <item>
       <g:id>6954851256618</g:id>
       <title>Remax TWS-43 Wireless Earbuds</title>
       <description>Remax TWS-43 Wireless Earbuds available for online order and warehouse dispatch.</description>
@@ -40,19 +53,6 @@
       <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-pd-bt230-bt260-wireless-earbuds/1779116836166-8eb3a591.webp</g:additional_image_link>
       <g:availability>in_stock</g:availability>
       <g:price>89.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-      
-    </item>
-    <item>
-      <g:id>6972174155067</g:id>
-      <title>Remax G6  Wireless GameBubs</title>
-      <description>Remax G6 Wireless GameBubs available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-g6-wireless-gamebubs/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-g6-wireless-gamebubs/1779116676372-2f97f69d.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-g6-wireless-gamebubs/1779116677900-7b59e535.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>129.00 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       
