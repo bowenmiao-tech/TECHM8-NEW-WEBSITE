@@ -9,6 +9,7 @@ import {
   StoreSnapshot,
   generateOrderPdf,
 } from './order-pdf.ts'
+import { isAustraliaPostTrackingUrl } from './order-tracking.ts'
 
 type SupabaseAdmin = any
 
@@ -506,6 +507,19 @@ function renderOrderTable(bundle: OrderBundle) {
   `
 }
 
+export function renderShipmentTrackingBlock(trackingNumber: unknown, trackingUrl: unknown) {
+  const number = text(trackingNumber)
+  const url = text(trackingUrl)
+  if (!number || !isAustraliaPostTrackingUrl(url)) return ''
+  return `
+    <div style="margin:22px 0;padding:20px;border-radius:16px;background:#eefaf8;text-align:center">
+      <p style="margin:0 0 14px;color:#4f6b74">Australia Post tracking number<br><strong style="color:#10242c">${escapeHtml(number)}</strong></p>
+      <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:13px 22px;border-radius:999px;background:#08a896;color:#ffffff;font-weight:800;text-decoration:none">Track your parcel</a>
+      <p style="margin:13px 0 0;color:#607981;font-size:12px;word-break:break-all">${escapeHtml(url)}</p>
+    </div>
+  `
+}
+
 function emailCopy(event: OrderEmailEvent, bundle: OrderBundle, role: 'customer' | 'store' | 'central', refund?: RefundDocumentData | null) {
   const order = bundle.order
   const internal = role !== 'customer'
@@ -577,6 +591,7 @@ function emailCopy(event: OrderEmailEvent, bundle: OrderBundle, role: 'customer'
     <p style="margin:0;color:#4f6b74">${escapeHtml(intro)}</p>
     ${renderOrderTable(bundle)}
     <p style="margin:18px 0 0;color:#4f6b74">${escapeHtml(detail)}</p>
+    ${event === 'shipped' ? renderShipmentTrackingBlock(order.tracking_number, order.tracking_url) : ''}
     ${internal ? '<p style="margin:18px 0 0;color:#4f6b74">Open the TECHM8 admin panel to review and process this order.</p>' : ''}
   `)
   return { subject, html }
@@ -751,6 +766,7 @@ export async function notifyOrderEvent(
     sourceRef?: string | null
     refund?: RefundDocumentData | null
     resendToken?: string | null
+    recipientRoles?: Array<'customer' | 'store' | 'central'>
   } = {},
 ) {
   const bundle = await loadOrderBundle(supabaseAdmin, orderId)
@@ -782,7 +798,8 @@ export async function notifyOrderEvent(
   }
 
   const eventKey = [event, sourceRef || 'v1', text(options.resendToken)].filter(Boolean).join(':')
-  const recipients = notificationRecipients(bundle)
+  const recipientRoles = options.recipientRoles?.length ? new Set(options.recipientRoles) : null
+  const recipients = notificationRecipients(bundle).filter((recipient) => !recipientRoles || recipientRoles.has(recipient.role))
   const results = []
   for (const recipient of recipients) {
     const copy = emailCopy(event, bundle, recipient.role, options.refund)

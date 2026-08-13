@@ -21,10 +21,21 @@ const QUILL_CSS_URL = "https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.
 const XLSX_CDN_URL = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
 const DEFAULT_PRODUCT_IMAGE_URL =
   "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/placeholders/image-coming-soon.png";
+const AUSTRALIA_POST_TRACKING_BASE_URL = "https://auspost.com.au/mypost/track/details/";
 let adminSupabaseClientPromise = null;
 let adminQuillPromise = null;
 let adminXlsxPromise = null;
 const DETAIL_BLOCK_MARKER = "TECHM8_DETAIL_BLOCKS:";
+
+function normalizeAustraliaPostTrackingNumber(value) {
+  return String(value || "").trim().replace(/\s+/g, "").toUpperCase();
+}
+
+function buildAustraliaPostTrackingUrl(value) {
+  const trackingNumber = normalizeAustraliaPostTrackingNumber(value);
+  if (!/^[A-Z0-9]{8,40}$/.test(trackingNumber)) return "";
+  return `${AUSTRALIA_POST_TRACKING_BASE_URL}${encodeURIComponent(trackingNumber)}`;
+}
 
 const ADMIN_NAV_ITEMS = [
   { href: "dashboard.html", view: "dashboard", label: "Dashboard" },
@@ -2896,7 +2907,6 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
           ${order.fulfillment_method === "pickup" && isPaid(order) && !["ready_for_pickup", "completed", "cancelled"].includes(order.fulfillment_status) ? `<button class="button button--primary" type="button" data-order-action="ready_for_pickup">Ready for pickup</button>` : ""}
           ${isPaid(order) && isActive(order) ? `<button class="button button--ghost" type="button" data-order-action="create_documents">Generate documents</button>` : ""}
           ${isPaid(order) && isActive(order) && !["packed", "shipped", "completed"].includes(order.fulfillment_status) ? `<button class="button button--ghost" type="button" data-order-action="mark_packed">Mark packed</button>` : ""}
-          ${order.fulfillment_method === "shipping" && isPaid(order) && isActive(order) && order.fulfillment_status !== "shipped" ? `<button class="button button--primary" type="button" data-order-action="mark_shipped">Mark shipped</button>` : ""}
           ${!isPaid(order) && isActive(order) ? `<button class="button button--danger" type="button" data-order-action="cancel">Cancel order</button>` : ""}
           ${canRefund ? `<button class="button button--danger" type="button" data-order-action="refund" data-refund-remaining="${remainingRefundable.toFixed(2)}">Refund</button>` : ""}
           ${isActive(order) ? `<button class="button button--ghost" type="button" data-order-action="resend_confirmation">Resend confirmation</button>` : ""}
@@ -2972,12 +2982,15 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
 
         <section class="admin-order-detail__columns">
           <article class="admin-panel admin-panel--embedded">
-            <div class="admin-panel__heading"><div><h3>Internal details</h3><p>Notes and tracking details do not change financial status.</p></div></div>
+            <div class="admin-panel__heading"><div><h3>Internal details</h3><p>${order.fulfillment_method === "shipping" ? "Enter the Australia Post tracking number. Saving marks the order shipped and emails the customer." : "Internal notes do not change financial status."}</p></div></div>
             <form class="admin-editor__form" data-order-detail-form>
-              <label><span>Tracking number</span><input type="text" name="tracking_number" value="${escapeHtml(order.tracking_number || "")}"></label>
-              <label><span>Tracking URL</span><input type="url" name="tracking_url" value="${escapeHtml(order.tracking_url || "")}"></label>
+              ${order.fulfillment_method === "shipping" ? `
+                <label><span>Australia Post tracking number</span><input type="text" name="tracking_number" value="${escapeHtml(order.tracking_number || "")}" autocomplete="off" inputmode="text" data-tracking-number placeholder="Enter tracking number"></label>
+                <label><span>Tracking URL — created automatically</span><input type="url" name="tracking_url" value="${escapeHtml(order.tracking_url || buildAustraliaPostTrackingUrl(order.tracking_number))}" readonly data-tracking-url></label>
+                <p class="admin-note" data-tracking-help>${order.tracking_number ? "Saving the same tracking number will not send a duplicate email." : "The official Australia Post tracking link will appear here."}</p>
+              ` : ""}
               <label><span>Internal notes</span><textarea name="notes">${escapeHtml(order.notes || "")}</textarea></label>
-              <button class="button button--primary" type="submit">Save details</button>
+              <button class="button button--primary" type="submit" data-order-detail-submit>${order.fulfillment_method === "shipping" && order.tracking_number ? "Save tracking & notify customer" : "Save details"}</button>
             </form>
           </article>
           <article class="admin-panel admin-panel--embedded">
@@ -3007,20 +3020,62 @@ function renderOrdersPage(root, bootstrap, session, alertTarget) {
       </div>
     `;
 
+    const trackingNumberInput = editorTarget.querySelector("[data-tracking-number]");
+    const trackingUrlInput = editorTarget.querySelector("[data-tracking-url]");
+    const trackingHelp = editorTarget.querySelector("[data-tracking-help]");
+    const detailSubmitButton = editorTarget.querySelector("[data-order-detail-submit]");
+    const syncTrackingUrl = () => {
+      if (!(trackingNumberInput instanceof HTMLInputElement) || !(trackingUrlInput instanceof HTMLInputElement)) return;
+      const trackingNumber = normalizeAustraliaPostTrackingNumber(trackingNumberInput.value);
+      const trackingUrl = buildAustraliaPostTrackingUrl(trackingNumber);
+      trackingUrlInput.value = trackingUrl;
+      if (detailSubmitButton instanceof HTMLButtonElement) {
+        detailSubmitButton.textContent = trackingNumber ? "Save tracking & notify customer" : "Save details";
+      }
+      if (trackingHelp instanceof HTMLElement) {
+        trackingHelp.textContent = !trackingNumber
+          ? "The official Australia Post tracking link will appear here."
+          : trackingUrl
+            ? "Saving will mark this order shipped and send the customer a tracking email. Duplicate emails are prevented."
+            : "Enter a valid Australia Post tracking number using 8 to 40 letters and numbers.";
+      }
+    };
+    trackingNumberInput?.addEventListener("input", syncTrackingUrl);
+    syncTrackingUrl();
+
     editorTarget.querySelector("[data-order-detail-form]")?.addEventListener("submit", async (event) => {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
+      const trackingNumber = normalizeAustraliaPostTrackingNumber(formData.get("tracking_number"));
+      if (order.fulfillment_method === "shipping" && trackingNumber && !buildAustraliaPostTrackingUrl(trackingNumber)) {
+        setAlert(alertTarget, "Enter a valid Australia Post tracking number using 8 to 40 letters and numbers.", "error");
+        return;
+      }
+      if (detailSubmitButton instanceof HTMLButtonElement) detailSubmitButton.disabled = true;
       try {
-        await callAdminApi("order_update", {
+        const result = await callAdminApi("order_update", {
           id: order.id,
-          tracking_number: formData.get("tracking_number"),
-          tracking_url: formData.get("tracking_url"),
+          tracking_number: trackingNumber,
           notes: formData.get("notes"),
         }, session);
-        setAlert(alertTarget, "Order details saved.", "success");
+        if (result.shipment?.email_sent) {
+          setAlert(
+            alertTarget,
+            result.shipment.email_skipped
+              ? "Tracking details saved. The customer dispatch email was already sent, so no duplicate was sent."
+              : "Order marked shipped and the customer tracking email was sent.",
+            "success",
+          );
+        } else if (result.shipment) {
+          setAlert(alertTarget, `Tracking details saved, but the customer email could not be sent: ${result.shipment.email_error || "Unknown email error"}`, "error");
+        } else {
+          setAlert(alertTarget, "Order details saved.", "success");
+        }
         await loadDetail(order.id);
       } catch (error) {
         setAlert(alertTarget, error instanceof Error ? error.message : "Order details could not be saved.", "error");
+      } finally {
+        if (detailSubmitButton instanceof HTMLButtonElement) detailSubmitButton.disabled = false;
       }
     });
 

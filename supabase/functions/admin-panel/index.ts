@@ -13,6 +13,11 @@ import {
 } from '../_shared/order-commerce.ts'
 import { isTransientZipError, zipRequest } from '../_shared/zip-payments.ts'
 import { isTransientPayPalError, paypalRequest } from '../_shared/paypal-payments.ts'
+import {
+  buildAustraliaPostTrackingUrl,
+  isValidAustraliaPostTrackingNumber,
+  normalizeAustraliaPostTrackingNumber,
+} from '../_shared/order-tracking.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -887,11 +892,37 @@ async function updateOrder(supabaseAdmin: ReturnType<typeof createClient>, conte
 
   const access = await loadAdminOrder(supabaseAdmin, context, orderId)
   if (access.error || !access.order) return access.error!
+  const order = access.order
+
+  const trackingInputProvided = Object.prototype.hasOwnProperty.call(body, 'tracking_number')
+  const trackingNumber = trackingInputProvided
+    ? normalizeAustraliaPostTrackingNumber(body.tracking_number)
+    : normalizeAustraliaPostTrackingNumber(order.tracking_number)
+  if (trackingNumber && !isValidAustraliaPostTrackingNumber(trackingNumber)) {
+    return jsonResponse({
+      ok: false,
+      error: 'Enter a valid Australia Post tracking number using 8 to 40 letters and numbers.',
+    }, 422)
+  }
+  if (order.fulfillment_method === 'shipping' && trackingNumber && !['paid', 'partially_refunded'].includes(order.payment_status)) {
+    return jsonResponse({ ok: false, error: 'Confirm payment before saving dispatch tracking.' }, 409)
+  }
+
+  const trackingUrl = trackingNumber ? buildAustraliaPostTrackingUrl(trackingNumber) : ''
+  const shouldProcessShipment = order.fulfillment_method === 'shipping' && Boolean(trackingNumber)
+  const shouldMarkShipped = shouldProcessShipment
+    && (order.fulfillment_status !== 'shipped' || order.status !== 'shipped')
 
   const patch = {
     notes: body.notes === '' ? null : normalizeNullableString(body.notes),
-    tracking_number: body.tracking_number === '' ? null : normalizeNullableString(body.tracking_number),
-    tracking_url: body.tracking_url === '' ? null : normalizeNullableString(body.tracking_url),
+    ...(trackingInputProvided ? {
+      tracking_number: trackingNumber || null,
+      tracking_url: trackingUrl || null,
+    } : {}),
+    ...(shouldMarkShipped ? {
+      fulfillment_status: 'shipped',
+      status: 'shipped',
+    } : {}),
   }
 
   const cleanPatch = Object.fromEntries(Object.entries(patch).filter(([, value]) => value !== undefined))
@@ -899,23 +930,54 @@ async function updateOrder(supabaseAdmin: ReturnType<typeof createClient>, conte
     .from('orders')
     .update(cleanPatch)
     .eq('id', orderId)
-    .select('id, order_code, notes, tracking_number, tracking_url, updated_at')
+    .select('id, order_code, status, fulfillment_status, notes, tracking_number, tracking_url, updated_at')
     .single()
 
   if (error) {
     return jsonResponse({ ok: false, error: 'Order could not be updated.' }, 500)
   }
 
-  await recordOrderEvent(supabaseAdmin, orderId, {
-    eventKey: `order_details_updated:${crypto.randomUUID()}`,
-    eventType: 'order_details_updated',
-    title: 'Order details updated',
-    description: 'Internal notes or tracking details were updated.',
-    actor: { type: 'admin', identifier: context.email || String(context.id) },
-    data: cleanPatch,
-  })
+  const actor = { type: 'admin' as const, identifier: context.email || String(context.id) }
+  if (shouldMarkShipped) {
+    await recordOrderEvent(supabaseAdmin, orderId, {
+      eventKey: `order_shipped:${trackingNumber}`,
+      eventType: 'order_shipped',
+      title: 'Order shipped',
+      description: `Australia Post tracking number: ${trackingNumber}`,
+      actor,
+      data: { tracking_number: trackingNumber, tracking_url: trackingUrl },
+    })
+  } else {
+    await recordOrderEvent(supabaseAdmin, orderId, {
+      eventKey: `order_details_updated:${crypto.randomUUID()}`,
+      eventType: 'order_details_updated',
+      title: 'Order details updated',
+      description: 'Internal notes or tracking details were updated.',
+      actor,
+      data: cleanPatch,
+    })
+  }
 
-  return jsonResponse({ ok: true, row: data })
+  let shipment: JsonRecord | null = null
+  if (shouldProcessShipment) {
+    const notification = await notifyOrderEvent(supabaseAdmin, orderId, 'shipped', {
+      sourceRef: `auspost:${trackingNumber}`,
+      recipientRoles: ['customer'],
+    })
+    const emailResult = notification.results[0] as JsonRecord | undefined
+    shipment = {
+      tracking_number: trackingNumber,
+      tracking_url: trackingUrl,
+      status_updated: shouldMarkShipped,
+      email_sent: Boolean(emailResult?.sent),
+      email_skipped: Boolean(emailResult?.skipped),
+      email_error: emailResult?.sent
+        ? null
+        : String(emailResult?.reason || (notification.results.length ? 'The customer email could not be sent.' : 'The order has no valid customer email address.')),
+    }
+  }
+
+  return jsonResponse({ ok: true, row: data, shipment })
 }
 
 function refundStatus(value: unknown) {
@@ -1025,11 +1087,17 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
     if (!['paid', 'partially_refunded'].includes(order.payment_status)) {
       return jsonResponse({ ok: false, error: 'Confirm payment before shipping the order.' }, 409)
     }
-    const trackingNumber = normalizeNullableString(body.tracking_number) || order.tracking_number
-    const trackingUrl = normalizeNullableString(body.tracking_url) || order.tracking_url
+    const trackingNumber = normalizeAustraliaPostTrackingNumber(body.tracking_number || order.tracking_number)
     if (!trackingNumber) {
       return jsonResponse({ ok: false, error: 'Tracking number is required before marking the order shipped.' }, 422)
     }
+    if (!isValidAustraliaPostTrackingNumber(trackingNumber)) {
+      return jsonResponse({
+        ok: false,
+        error: 'Enter a valid Australia Post tracking number using 8 to 40 letters and numbers.',
+      }, 422)
+    }
+    const trackingUrl = buildAustraliaPostTrackingUrl(trackingNumber)
     const { error } = await supabaseAdmin
       .from('orders')
       .update({
@@ -1041,14 +1109,17 @@ async function runOrderAction(supabaseAdmin: ReturnType<typeof createClient>, co
       .eq('id', orderId)
     if (error) throw error
     await recordOrderEvent(supabaseAdmin, orderId, {
-      eventKey: 'order_shipped',
+      eventKey: `order_shipped:${trackingNumber}`,
       eventType: 'order_shipped',
       title: 'Order shipped',
       description: `Tracking number: ${trackingNumber}`,
       actor,
       data: { tracking_number: trackingNumber, tracking_url: trackingUrl },
     })
-    await notifyOrderEvent(supabaseAdmin, orderId, 'shipped')
+    await notifyOrderEvent(supabaseAdmin, orderId, 'shipped', {
+      sourceRef: `auspost:${trackingNumber}`,
+      recipientRoles: ['customer'],
+    })
   } else if (actionType === 'cancel') {
     const outstandingPaidAmount = Number(order.amount_paid || 0) - Number(order.amount_refunded || 0)
     if (outstandingPaidAmount > 0.005 || ['paid', 'partially_refunded'].includes(order.payment_status)) {

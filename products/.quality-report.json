@@ -1,9 +1,84 @@
 {
-  "catalog_updated_at": "2026-07-26T03:48:52.247163+00:00",
+  "catalog_updated_at": "2026-08-12T14:22:24.337387+00:00",
   "total_products": 83,
   "indexable_products": 81,
   "limited_products": 2,
   "products": [
+    {
+      "id": 83,
+      "slug": "remax-g6-wireless-gamebubs",
+      "name": "Remax G6  Wireless GameBubs",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 86,
+      "slug": "remax-tws-43-wireless-earbuds",
+      "name": "Remax TWS-43 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 85,
+      "slug": "remax-pd-bt533n-pro-wireless-earbuds",
+      "name": "Remax PD-BT533N PRO Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 84,
+      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
+      "name": "Remax PD BT230/BT260 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 82,
+      "slug": "wk-v04-wireless-earbuds",
+      "name": "WK V04 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 81,
+      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
+      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 1,
+      "slug": "dualsense-wireless-controller-sterling-silver-playstation-5",
+      "name": "DualSense Wireless Controller - Sterling Silver - PlayStation 5",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 47,
       "slug": "techm8-everyday-accessory",
@@ -126,48 +201,6 @@
       "id": 87,
       "slug": "remax-rp-w87-22-5w-4-in-1-multifunctional-night-lamp-and-folding-holder-wireless-charger",
       "name": "Remax RP-W87 22.5w 4 in 1 multifunctional night lamp & folding holder wireless charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 86,
-      "slug": "remax-tws-43-wireless-earbuds",
-      "name": "Remax TWS-43 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 85,
-      "slug": "remax-pd-bt533n-pro-wireless-earbuds",
-      "name": "Remax PD-BT533N PRO Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 83,
-      "slug": "remax-g6-wireless-gamebubs",
-      "name": "Remax G6  Wireless GameBubs",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 81,
-      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
-      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -421,17 +454,6 @@
       ]
     },
     {
-      "id": 1,
-      "slug": "dualsense-wireless-controller-sterling-silver-playstation-5",
-      "name": "DualSense Wireless Controller - Sterling Silver - PlayStation 5",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 3,
       "slug": "dualsense-wireless-controller-gray-camouflage",
       "name": "DualSense Wireless Controller - Gray Camouflage",
@@ -469,28 +491,6 @@
       "id": 105,
       "slug": "msi-mag-coreliquid-a13-240-liquid-cooler",
       "name": "MSI MAG CORELIQUID A13 240 Liquid Cooler",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 82,
-      "slug": "wk-v04-wireless-earbuds",
-      "name": "WK V04 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 84,
-      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
-      "name": "Remax PD BT230/BT260 Wireless Earbuds",
       "indexable": true,
       "score": 92,
       "blockers": [],
