@@ -5908,6 +5908,7 @@ function initProductDetailPage() {
   }
   let initialProduct =
     prerenderedProduct || getRememberedProductNavigationCache(slug);
+  let liveCatalogConfirmedMissing = false;
 
   const renderNotFound = () => {
     shell.innerHTML = `<article class="storefront-card storefront-card--empty"><div class="storefront-card__body"><span class="storefront-card__pill">Missing product</span><h3>Product not found</h3><p>Return to the online store and select another item.</p><div class="storefront-card__actions"><a href="/shop.html">Back to online store</a></div></div></article>`;
@@ -5920,7 +5921,17 @@ function initProductDetailPage() {
 
   fetchCatalogProductBySlug(slug)
     .then((product) => {
-      if (!product) return;
+      if (!product) {
+        liveCatalogConfirmedMissing = true;
+        initialProduct = null;
+        try {
+          window.sessionStorage.removeItem(PRODUCT_NAVIGATION_CACHE_KEY);
+        } catch {
+          // Ignore unavailable session storage.
+        }
+        renderNotFound();
+        return;
+      }
       initialProduct = product;
       rememberEncodedProductNavigationCache(buildProductNavigationCache(product));
       renderProductDetailShell(shell, product);
@@ -5932,7 +5943,7 @@ function initProductDetailPage() {
         .then(({ products }) => {
           const catalogProduct = products.find((item) => item.slug === slug);
           if (!catalogProduct) {
-            if (!initialProduct) {
+            if (liveCatalogConfirmedMissing || !initialProduct) {
               renderNotFound();
             }
             return;

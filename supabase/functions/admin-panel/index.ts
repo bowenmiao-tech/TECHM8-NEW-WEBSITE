@@ -147,6 +147,23 @@ function normalizeStorageSegment(value: unknown, fallback = 'product') {
   return text || fallback
 }
 
+function getProductImageStoragePath(value: unknown) {
+  const imageUrl = normalizeNullableString(value)
+  if (!imageUrl) return null
+
+  try {
+    const parsed = new URL(imageUrl)
+    const marker = `/storage/v1/object/public/${PRODUCT_IMAGE_BUCKET}/`
+    const markerIndex = parsed.pathname.indexOf(marker)
+    if (markerIndex < 0) return null
+    const storagePath = decodeURIComponent(parsed.pathname.slice(markerIndex + marker.length))
+    if (!storagePath || storagePath.startsWith('/') || storagePath.includes('..')) return null
+    return storagePath
+  } catch {
+    return null
+  }
+}
+
 function slugifyProductValue(value: unknown, fallback = 'product') {
   const text = String(value ?? '')
     .trim()
@@ -2191,43 +2208,107 @@ async function deleteProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     return jsonResponse({ ok: false, error: 'Only super admins can delete products.' }, 403)
   }
 
-  const productId = Number(body.id)
-  if (!Number.isFinite(productId)) {
-    return jsonResponse({ ok: false, error: 'Product id is missing.' }, 422)
+  const productIds = Array.from(new Set(
+    (Array.isArray(body.ids) ? body.ids : [body.id])
+      .map((value) => Number(value))
+      .filter((value) => Number.isFinite(value) && value > 0),
+  )).slice(0, 100)
+
+  if (!productIds.length) {
+    return jsonResponse({ ok: false, error: 'At least one product is required.' }, 422)
   }
 
-  const { data: product, error: productError } = await supabaseAdmin
+  const { data: products, error: productError } = await supabaseAdmin
     .from('products')
-    .select('id, name')
-    .eq('id', productId)
-    .maybeSingle()
+    .select('id, name, image_url')
+    .in('id', productIds)
 
-  if (productError || !product) {
-    return jsonResponse({ ok: false, error: 'Product was not found.' }, 404)
+  if (productError) {
+    return jsonResponse({ ok: false, error: 'Products could not be checked before deletion.' }, 500)
+  }
+  if ((products ?? []).length !== productIds.length) {
+    return jsonResponse({ ok: false, error: 'One or more products were not found. Refresh the list and try again.' }, 409)
   }
 
-  const { error: detachOrderItemsError } = await supabaseAdmin
-    .from('order_items')
-    .update({ product_id: null })
-    .eq('product_id', productId)
+  const { data: imageRows, error: imageError } = await supabaseAdmin
+    .from('product_images')
+    .select('image_url')
+    .in('product_id', productIds)
 
-  if (detachOrderItemsError) {
-    return jsonResponse({ ok: false, error: 'Order history could not be detached from this product.' }, 500)
+  if (imageError) {
+    return jsonResponse({ ok: false, error: 'Product images could not be checked before deletion.' }, 500)
   }
 
-  const { error: deleteError } = await supabaseAdmin
+  const candidateImageUrls = Array.from(new Set([
+    ...(products ?? []).map((product) => normalizeNullableString((product as { image_url?: string }).image_url)),
+    ...(imageRows ?? []).map((image) => normalizeNullableString((image as { image_url?: string }).image_url)),
+  ].filter((value): value is string => Boolean(value))))
+
+  const { data: deletedProducts, error: deleteError } = await supabaseAdmin
     .from('products')
     .delete()
-    .eq('id', productId)
+    .in('id', productIds)
+    .select('id, name')
 
   if (deleteError) {
-    return jsonResponse({ ok: false, error: 'Product could not be deleted.' }, 500)
+    return jsonResponse({ ok: false, error: `Products could not be deleted: ${deleteError.message}` }, 500)
+  }
+  if ((deletedProducts ?? []).length !== productIds.length) {
+    return jsonResponse({ ok: false, error: 'One or more products could not be deleted.' }, 409)
+  }
+
+  let storageCleanupWarning: string | null = null
+  if (candidateImageUrls.length) {
+    const stillReferenced = new Set<string>()
+    let canCleanStorage = true
+    for (let index = 0; index < candidateImageUrls.length; index += 100) {
+      const urlBatch = candidateImageUrls.slice(index, index + 100)
+      const [productReferenceResult, galleryReferenceResult, orderReferenceResult] = await Promise.all([
+        supabaseAdmin.from('products').select('image_url').in('image_url', urlBatch),
+        supabaseAdmin.from('product_images').select('image_url').in('image_url', urlBatch),
+        supabaseAdmin.from('order_items').select('image_url').in('image_url', urlBatch),
+      ])
+      if (productReferenceResult.error || galleryReferenceResult.error || orderReferenceResult.error) {
+        canCleanStorage = false
+        storageCleanupWarning = 'Products were deleted, but unused image files were retained because shared-image checks could not be completed.'
+        break
+      }
+      const productReferences = productReferenceResult.data
+      const galleryReferences = galleryReferenceResult.data
+      const orderReferences = orderReferenceResult.data
+      ;[...(productReferences ?? []), ...(galleryReferences ?? []), ...(orderReferences ?? [])]
+        .map((row) => normalizeNullableString((row as { image_url?: string }).image_url))
+        .filter((value): value is string => Boolean(value))
+        .forEach((value) => stillReferenced.add(value))
+    }
+
+    const unusedStoragePaths = canCleanStorage
+      ? Array.from(new Set(
+          candidateImageUrls
+            .filter((imageUrl) => !stillReferenced.has(imageUrl))
+            .map(getProductImageStoragePath)
+            .filter((value): value is string => Boolean(value)),
+        ))
+      : []
+
+    for (let index = 0; index < unusedStoragePaths.length; index += 1000) {
+      const { error: storageError } = await supabaseAdmin
+        .storage
+        .from(PRODUCT_IMAGE_BUCKET)
+        .remove(unusedStoragePaths.slice(index, index + 1000))
+      if (storageError) {
+        storageCleanupWarning = 'Products were deleted, but one or more unused image files could not be removed.'
+        break
+      }
+    }
   }
 
   return jsonResponse({
     ok: true,
-    id: productId,
-    name: product.name ?? null,
+    ids: productIds,
+    rows: deletedProducts ?? [],
+    deleted_count: deletedProducts?.length ?? 0,
+    storage_warning: storageCleanupWarning,
   })
 }
 

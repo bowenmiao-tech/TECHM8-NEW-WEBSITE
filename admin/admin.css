@@ -1386,6 +1386,10 @@ body.admin-login-body {
   width: min(1280px, calc(100vw - 40px));
 }
 
+.admin-modal--danger {
+  width: min(680px, calc(100vw - 40px));
+}
+
 .admin-modal__header {
   position: sticky;
   top: 0;
@@ -1429,6 +1433,74 @@ body.admin-login-body {
 .admin-modal-form {
   display: grid;
   gap: 18px;
+}
+
+.admin-delete-confirmation__warning {
+  padding: 16px 18px;
+  border: 1px solid rgba(207, 77, 100, 0.24);
+  border-radius: 18px;
+  background: rgba(207, 77, 100, 0.08);
+  color: #7f2637;
+}
+
+.admin-delete-confirmation__warning strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1.05rem;
+}
+
+.admin-delete-confirmation__warning p,
+.admin-delete-confirmation__status {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.admin-delete-confirmation__products {
+  max-height: 180px;
+  margin: 0;
+  padding: 12px 12px 12px 34px;
+  overflow: auto;
+  border: 1px solid var(--admin-border);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.admin-delete-confirmation__products li + li {
+  margin-top: 7px;
+}
+
+.admin-delete-confirmation__field {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.admin-delete-confirmation__field input {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 14px;
+  border: 1px solid rgba(207, 77, 100, 0.28);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--admin-text);
+  font: inherit;
+}
+
+.admin-delete-confirmation__field input:focus {
+  outline: 3px solid rgba(207, 77, 100, 0.14);
+  border-color: #b63d53;
+}
+
+.admin-delete-confirmation__status.is-error {
+  color: #8e283d;
+}
+
+.admin-delete-confirmation__status.is-info {
+  color: var(--admin-muted);
+}
+
+.admin-delete-confirmation__actions {
+  justify-content: flex-end;
 }
 
 .admin-import-summary {

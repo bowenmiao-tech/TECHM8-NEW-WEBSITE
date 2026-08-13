@@ -463,6 +463,82 @@ function openAdminModal({ title, subtitle = "", content = "", className = "", on
   return modalRoot;
 }
 
+function openProductDeleteConfirmation({ products, session, onDeleted }) {
+  const selectedProducts = (products || [])
+    .filter((product) => Number.isFinite(Number(product?.id)))
+    .map((product) => ({ id: Number(product.id), name: String(product.name || "Untitled product") }));
+  if (!selectedProducts.length) return;
+
+  const count = selectedProducts.length;
+  const visibleNames = selectedProducts.slice(0, 6);
+  const remainingCount = Math.max(0, count - visibleNames.length);
+  const modalRoot = openAdminModal({
+    title: `Permanently delete ${count} product${count === 1 ? "" : "s"}?`,
+    subtitle: "This removes the selected products from both the website and POS.",
+    className: "admin-modal--danger",
+    content: `
+      <form class="admin-modal-form admin-delete-confirmation" data-product-delete-confirmation>
+        <div class="admin-delete-confirmation__warning">
+          <strong>This action cannot be undone.</strong>
+          <p>Product, POS stock, price history and catalog images will be removed. Previous orders keep their original product name, quantity and price.</p>
+        </div>
+        <ul class="admin-delete-confirmation__products">
+          ${visibleNames.map((product) => `<li>${escapeHtml(product.name)}</li>`).join("")}
+          ${remainingCount ? `<li>and ${remainingCount} more product${remainingCount === 1 ? "" : "s"}</li>` : ""}
+        </ul>
+        <label class="admin-delete-confirmation__field">
+          <span>Type <strong>DELETE</strong> to confirm</span>
+          <input type="text" name="confirmation" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="DELETE" data-product-delete-confirmation-input>
+        </label>
+        <p class="admin-delete-confirmation__status" data-product-delete-status hidden></p>
+        <div class="admin-button-row admin-delete-confirmation__actions">
+          <button class="button button--ghost" type="button" data-admin-modal-close>Cancel</button>
+          <button class="button button--danger" type="submit" data-product-delete-confirm disabled>Permanently delete from POS and website</button>
+        </div>
+      </form>
+    `,
+  });
+
+  const form = modalRoot.querySelector("[data-product-delete-confirmation]");
+  const input = modalRoot.querySelector("[data-product-delete-confirmation-input]");
+  const deleteButton = modalRoot.querySelector("[data-product-delete-confirm]");
+  const statusTarget = modalRoot.querySelector("[data-product-delete-status]");
+  const syncConfirmation = () => {
+    if (deleteButton instanceof HTMLButtonElement) {
+      deleteButton.disabled = !(input instanceof HTMLInputElement && input.value.trim() === "DELETE");
+    }
+  };
+  input?.addEventListener("input", syncConfirmation);
+  window.requestAnimationFrame(() => input?.focus());
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!(input instanceof HTMLInputElement) || input.value.trim() !== "DELETE") return;
+    if (deleteButton instanceof HTMLButtonElement) {
+      deleteButton.disabled = true;
+      deleteButton.textContent = "Deleting...";
+    }
+    setInlineStatus(statusTarget, "Deleting products from both channels...", "info");
+    try {
+      const result = await callAdminApi("product_delete", {
+        ids: selectedProducts.map((product) => product.id),
+      }, session);
+      closeAdminModal();
+      await onDeleted?.(result, selectedProducts);
+    } catch (error) {
+      setInlineStatus(
+        statusTarget,
+        error instanceof Error ? error.message : "Products could not be deleted.",
+        "error",
+      );
+      if (deleteButton instanceof HTMLButtonElement) {
+        deleteButton.disabled = false;
+        deleteButton.textContent = "Permanently delete from POS and website";
+      }
+    }
+  });
+}
+
 function printOrderDocument(order, stores) {
   const store = (stores || []).find((item) => item.slug === order.store_slug) || null;
   const addressText = order.fulfillment_method === "shipping"
@@ -1793,6 +1869,7 @@ function getViewTemplate(view) {
                 <button class="button button--ghost button--small" type="button" data-products-bulk-field="is_visible" data-products-bulk-value="false">Hide from website</button>
                 <button class="button button--ghost button--small" type="button" data-products-bulk-field="is_pos_visible" data-products-bulk-value="true">Show in POS</button>
                 <button class="button button--ghost button--small" type="button" data-products-bulk-field="is_pos_visible" data-products-bulk-value="false">Hide from POS</button>
+                <button class="button button--danger button--small" type="button" data-products-bulk-delete>Permanently delete</button>
                 <button class="button button--ghost button--small" type="button" data-products-clear-selection>Clear</button>
               </div>
             </div>
@@ -4236,19 +4313,22 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       }
     });
 
-    deleteButton?.addEventListener("click", async () => {
-      const confirmed = window.confirm(`Delete ${row.name || "this product"}? This cannot be undone.`);
-      if (!confirmed) return;
-      try {
-        await callAdminApi("product_delete", { id: row.id }, session);
-        state.selectedId = null;
-        state.draft = null;
-        state.saveFlash = null;
-        setAlert(alertTarget, "Product deleted.", "success");
-        await load();
-      } catch (error) {
-        setAlert(alertTarget, error instanceof Error ? error.message : "Product delete failed.", "error");
-      }
+    deleteButton?.addEventListener("click", () => {
+      openProductDeleteConfirmation({
+        products: [row],
+        session,
+        onDeleted: async (result) => {
+          state.selectedId = null;
+          state.selectedIds.delete(Number(row.id));
+          state.saveFlash = null;
+          setAlert(
+            alertTarget,
+            result.storage_warning || "Product permanently deleted from POS and website.",
+            result.storage_warning ? "info" : "success",
+          );
+          await load();
+        },
+      });
     });
 
     categoryAddButton?.addEventListener("click", () => {
@@ -4458,6 +4538,10 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
     bulkActions?.querySelectorAll("[data-products-bulk-field]").forEach((button) => {
       if (button instanceof HTMLButtonElement) button.disabled = !state.canEdit || selectedCount === 0;
     });
+    const bulkDeleteButton = bulkActions?.querySelector("[data-products-bulk-delete]");
+    if (bulkDeleteButton instanceof HTMLButtonElement) {
+      bulkDeleteButton.disabled = !state.canEdit || selectedCount === 0;
+    }
   };
 
   const updateVisibility = async (ids, field, value, { confirmBulk = false } = {}) => {
@@ -4670,6 +4754,25 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       const field = button.getAttribute("data-products-bulk-field") || "";
       const value = button.getAttribute("data-products-bulk-value") === "true";
       void updateVisibility([...state.selectedIds], field, value, { confirmBulk: true });
+    });
+  });
+  bulkActions?.querySelector("[data-products-bulk-delete]")?.addEventListener("click", () => {
+    const productsToDelete = state.rows.filter((row) => state.selectedIds.has(Number(row.id)));
+    openProductDeleteConfirmation({
+      products: productsToDelete,
+      session,
+      onDeleted: async (result, deletedProducts) => {
+        const deletedIds = new Set(deletedProducts.map((product) => Number(product.id)));
+        deletedIds.forEach((id) => state.selectedIds.delete(id));
+        if (deletedIds.has(Number(state.selectedId))) state.selectedId = null;
+        state.saveFlash = null;
+        setAlert(
+          alertTarget,
+          result.storage_warning || `${result.deleted_count || deletedIds.size} products permanently deleted from POS and website.`,
+          result.storage_warning ? "info" : "success",
+        );
+        await load();
+      },
     });
   });
   bulkActions?.querySelector("[data-products-clear-selection]")?.addEventListener("click", () => {
