@@ -1,77 +1,54 @@
 {
-  "catalog_updated_at": "2026-08-12T14:22:24.337387+00:00",
-  "total_products": 83,
+  "catalog_updated_at": "2026-08-13T15:18:59.834791+00:00",
+  "total_products": 84,
   "indexable_products": 81,
-  "limited_products": 2,
+  "limited_products": 3,
   "products": [
     {
-      "id": 83,
-      "slug": "remax-g6-wireless-gamebubs",
-      "name": "Remax G6  Wireless GameBubs",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 86,
-      "slug": "remax-tws-43-wireless-earbuds",
-      "name": "Remax TWS-43 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 85,
-      "slug": "remax-pd-bt533n-pro-wireless-earbuds",
-      "name": "Remax PD-BT533N PRO Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 84,
-      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
-      "name": "Remax PD BT230/BT260 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 82,
-      "slug": "wk-v04-wireless-earbuds",
-      "name": "WK V04 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 81,
-      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
-      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
       "warnings": []
     },
     {
-      "id": 1,
-      "slug": "dualsense-wireless-controller-sterling-silver-playstation-5",
-      "name": "DualSense Wireless Controller - Sterling Silver - PlayStation 5",
+      "id": 109,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable-copy",
+      "name": "WEKOME WDC-C33 2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "copy-style-slug-review-needed"
+      ]
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 106,
+      "slug": "msi-mag-coreliquid-a13-240-liquid-cooler-copy",
+      "name": "MSI MAG CORELIQUID A13 360 Liquid Cooler",
+      "indexable": true,
+      "score": 84,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters",
+        "copy-style-slug-review-needed"
+      ]
+    },
+    {
+      "id": 105,
+      "slug": "msi-mag-coreliquid-a13-240-liquid-cooler",
+      "name": "MSI MAG CORELIQUID A13 240 Liquid Cooler",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -80,14 +57,43 @@
       ]
     },
     {
-      "id": 47,
-      "slug": "techm8-everyday-accessory",
-      "name": "TECHM8 Everyday Accessory",
-      "indexable": false,
-      "score": 57,
-      "blockers": [
-        "missing-product-image"
-      ],
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M ULTRA TOUGH LIGHTING CABLE",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 101,
+      "slug": "3-in-1-cabin-crew-charging-cable",
+      "name": "3 in 1 Cabin Crew Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough Type c to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M ULTRA TOUGH TYPE C TO TYPE C CABLE",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
       "warnings": [
         "description-under-90-characters"
       ]
@@ -270,12 +276,56 @@
       "warnings": []
     },
     {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 72,
+      "slug": "100w-wall-charger",
+      "name": "100W Wall Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 71,
+      "slug": "45w-dual-type-c-fast-wall-charger",
+      "name": "30W Type c & Usb Wall Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
       "id": 70,
       "slug": "155w-gan-usb-c-wall-charger-quick-6-ports-type-c-pd-fast-charging",
       "name": "155W GaN USB C wall Charger Quick 6 Ports Type C PD Fast Charging",
       "indexable": true,
       "score": 100,
       "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
       "warnings": []
     },
     {
@@ -383,293 +433,22 @@
       ]
     },
     {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 109,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable-copy",
-      "name": "WEKOME WDC-C33 2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "copy-style-slug-review-needed"
-      ]
-    },
-    {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M ULTRA TOUGH TYPE C TO TYPE C CABLE",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough Type c to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 101,
-      "slug": "3-in-1-cabin-crew-charging-cable",
-      "name": "3 in 1 Cabin Crew Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M ULTRA TOUGH LIGHTING CABLE",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 3,
-      "slug": "dualsense-wireless-controller-gray-camouflage",
-      "name": "DualSense Wireless Controller - Gray Camouflage",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 2,
-      "slug": "dualsense-wireless-controller-cosmic-red-playstation-5",
-      "name": "DualSense Wireless Controller - Cosmic Red - PlayStation 5",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 106,
-      "slug": "msi-mag-coreliquid-a13-240-liquid-cooler-copy",
-      "name": "MSI MAG CORELIQUID A13 360 Liquid Cooler",
-      "indexable": true,
-      "score": 84,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters",
-        "copy-style-slug-review-needed"
-      ]
-    },
-    {
-      "id": 105,
-      "slug": "msi-mag-coreliquid-a13-240-liquid-cooler",
-      "name": "MSI MAG CORELIQUID A13 240 Liquid Cooler",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
+      "id": 47,
+      "slug": "techm8-everyday-accessory",
+      "name": "TECHM8 Everyday Accessory",
       "indexable": false,
-      "score": 65,
+      "score": 57,
       "blockers": [
-        "template-placeholder-content"
+        "missing-product-image"
       ],
-      "warnings": []
-    },
-    {
-      "id": 71,
-      "slug": "45w-dual-type-c-fast-wall-charger",
-      "name": "30W Type c & Usb Wall Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
       "warnings": [
         "description-under-90-characters"
       ]
     },
     {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 72,
-      "slug": "100w-wall-charger",
-      "name": "100W Wall Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 20,
-      "slug": "new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty",
-      "name": "45W MagSafe 2 Power Adapter for MacBook Air",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 19,
-      "slug": "60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont",
-      "name": "60W MagSafe 2 Power Adapter for MacBook Air and MacBook Pro",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 18,
-      "slug": "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
-      "name": "85W MagSafe 2 Power Adapter for MacBook Pro with Retina Display",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 17,
-      "slug": "new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
-      "name": "30W USB-C MacBook Charger with Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 16,
-      "slug": "new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
-      "name": "61W USB-C MacBook Charger with Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 15,
-      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
-      "name": "87W USB-C MacBook Charger with Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 14,
-      "slug": "copy-of-brand-new-45w-magsafe-1-power-adapter-for-macbook-air-six-months-warranty",
-      "name": "45W MagSafe 1 Power Adapter for MacBook Air",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "copy-style-slug-review-needed"
-      ]
-    },
-    {
-      "id": 13,
-      "slug": "brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro",
-      "name": "60W MagSafe 1 Power Adapter for MacBook Air and MacBook Pro",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 4,
-      "slug": "copy-of-dualsense-wireless-controller-playstation-5-black",
-      "name": "DualSense Wireless Controller - PlayStation 5 - Black",
-      "indexable": true,
-      "score": 84,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters",
-        "copy-style-slug-review-needed"
-      ]
-    },
-    {
-      "id": 5,
-      "slug": "dualsense-wireless-controller-playstation-5-white",
-      "name": "DualSense Wireless Controller - PlayStation 5 - White",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 12,
-      "slug": "brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty",
-      "name": "85W MagSafe 1 Power Adapter for MacBook Pro",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 23,
-      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 25,
-      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-white",
-      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 40,
-      "slug": "wekome-wp-80-magsafe-5000mah-power-bank",
-      "name": "WEKOME WP-80 Magsafe 5000mAh Power Bank",
+      "id": 42,
+      "slug": "wekome-wp-101-10000mah-power-bank",
+      "name": "WEKOME WP-101 10000mAh Power Bank",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -689,36 +468,9 @@
       ]
     },
     {
-      "id": 26,
-      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 27,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 28,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 42,
-      "slug": "wekome-wp-101-10000mah-power-bank",
-      "name": "WEKOME WP-101 10000mAh Power Bank",
+      "id": 40,
+      "slug": "wekome-wp-80-magsafe-5000mah-power-bank",
+      "name": "WEKOME WP-80 Magsafe 5000mAh Power Bank",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -808,9 +560,54 @@
       "warnings": []
     },
     {
+      "id": 28,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 27,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 26,
+      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 25,
+      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-white",
+      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- White",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
       "id": 24,
       "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
       "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 23,
+      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -837,6 +634,220 @@
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 20,
+      "slug": "new-45w-magsafe-2-power-adapter-for-macbook-air-six-months-warranty",
+      "name": "45W MagSafe 2 Power Adapter for MacBook Air",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 19,
+      "slug": "60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont",
+      "name": "60W MagSafe 2 Power Adapter for MacBook Air and MacBook Pro",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 18,
+      "slug": "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
+      "name": "85W MagSafe 2 Power Adapter for MacBook Pro with Retina Display",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 17,
+      "slug": "new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+      "name": "30W USB-C MacBook Charger with Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 16,
+      "slug": "new-61w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+      "name": "61W USB-C MacBook Charger with Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 15,
+      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+      "name": "87W USB-C MacBook Charger with Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 14,
+      "slug": "copy-of-brand-new-45w-magsafe-1-power-adapter-for-macbook-air-six-months-warranty",
+      "name": "45W MagSafe 1 Power Adapter for MacBook Air",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "copy-style-slug-review-needed"
+      ]
+    },
+    {
+      "id": 13,
+      "slug": "brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro",
+      "name": "60W MagSafe 1 Power Adapter for MacBook Air and MacBook Pro",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 12,
+      "slug": "brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty",
+      "name": "85W MagSafe 1 Power Adapter for MacBook Pro",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 5,
+      "slug": "dualsense-wireless-controller-playstation-5-white",
+      "name": "DualSense Wireless Controller - PlayStation 5 - White",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "copy-of-dualsense-wireless-controller-playstation-5-black",
+      "name": "DualSense Wireless Controller - PlayStation 5 - Black",
+      "indexable": true,
+      "score": 84,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters",
+        "copy-style-slug-review-needed"
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "dualsense-wireless-controller-gray-camouflage",
+      "name": "DualSense Wireless Controller - Gray Camouflage",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "dualsense-wireless-controller-cosmic-red-playstation-5",
+      "name": "DualSense Wireless Controller - Cosmic Red - PlayStation 5",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1,
+      "slug": "dualsense-wireless-controller-sterling-silver-playstation-5",
+      "name": "DualSense Wireless Controller - Sterling Silver - PlayStation 5",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2169,
+      "slug": "repairdesk-misc-7148-adhesive-silicone-card-holder-black",
+      "name": "Adhesive Silicone Card Holder - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 83,
+      "slug": "remax-g6-wireless-gamebubs",
+      "name": "Remax G6  Wireless GameBubs",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 86,
+      "slug": "remax-tws-43-wireless-earbuds",
+      "name": "Remax TWS-43 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 85,
+      "slug": "remax-pd-bt533n-pro-wireless-earbuds",
+      "name": "Remax PD-BT533N PRO Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 84,
+      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
+      "name": "Remax PD BT230/BT260 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 82,
+      "slug": "wk-v04-wireless-earbuds",
+      "name": "WK V04 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 81,
+      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
+      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
     }
   ]
 }

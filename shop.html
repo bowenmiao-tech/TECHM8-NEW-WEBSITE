@@ -158,13 +158,26 @@
   </main>
 
   <div class="storefront-drawer-backdrop" data-store-drawer-backdrop hidden></div>
-  <aside class="storefront-drawer" data-store-drawer aria-hidden="true">
+  <aside class="storefront-drawer" data-store-drawer aria-hidden="true" aria-label="Product categories">
     <div class="storefront-drawer__header">
-      <strong>Categories</strong>
+      <div>
+        <strong>Shop by category</strong>
+        <span>Choose a department, then a product type</span>
+      </div>
       <button class="storefront-drawer__close" type="button" aria-label="Close categories" data-store-close-categories>&times;</button>
     </div>
     <div class="storefront-drawer__body">
-      <div class="storefront-category-list storefront-category-list--drawer" data-store-categories-drawer></div>
+      <nav class="storefront-category-groups" aria-label="Product departments" data-store-category-groups></nav>
+      <section class="storefront-category-panel">
+        <div class="storefront-category-panel__heading">
+          <div>
+            <span>Department</span>
+            <h2 data-store-category-parent-title>All products</h2>
+          </div>
+          <button type="button" data-store-category-parent-view>View all</button>
+        </div>
+        <div class="storefront-category-list storefront-category-list--drawer" data-store-categories-drawer></div>
+      </section>
     </div>
   </aside>
 

@@ -161,6 +161,16 @@ const safeSlug = (value = "") => {
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) ? slug : "";
 };
 
+const taxonomySlug = (value = "") =>
+  String(value)
+    .trim()
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "other";
+
 const money = (value) =>
   `AU$${new Intl.NumberFormat("en-AU", {
     minimumFractionDigits: 2,
@@ -227,19 +237,20 @@ async function loadCatalog() {
     "is_visible",
     "image_url",
     "category_id",
+    "pos_category_id",
     "created_at",
     "updated_at",
     "upc",
     "seo_description",
   ].join(",");
 
-  const [products, categories] = await Promise.all([
+  const [products, taxonomyRows] = await Promise.all([
     fetchJson(
       `${url}/rest/v1/products?select=${productSelect}&order=updated_at.desc,id.desc&limit=1000`,
       key,
     ),
     fetchJson(
-      `${url}/rest/v1/categories?select=id,slug,name,description&order=sort_order.asc&limit=1000`,
+      `${url}/rest/v1/pos_category_taxonomy?select=id,category_name,subcategory_name,category_sort,subcategory_sort,active&active=eq.true&order=category_sort.asc,subcategory_sort.asc&limit=1000`,
       key,
     ),
   ]);
@@ -258,7 +269,22 @@ async function loadCatalog() {
     images.push(...rows);
   }
 
-  const categoryById = new Map(categories.map((item) => [item.id, item]));
+  const categoryById = new Map(
+    taxonomyRows.map((item) => {
+      const parentName = String(item.category_name || "Other Products").trim();
+      const name = String(item.subcategory_name || parentName).trim();
+      const parentSlug = taxonomySlug(parentName);
+      return [
+        item.id,
+        {
+          ...item,
+          slug: `${parentSlug}--${taxonomySlug(name)}`,
+          name,
+          description: `Browse ${name} in ${parentName}.`,
+        },
+      ];
+    }),
+  );
   const imagesByProduct = new Map();
   for (const image of images) {
     if (!image?.product_id || !image?.image_url) continue;
@@ -270,7 +296,7 @@ async function loadCatalog() {
   return products
     .filter((product) => safeSlug(product.slug))
     .map((product) => {
-      const category = categoryById.get(product.category_id) || null;
+      const category = categoryById.get(product.pos_category_id) || null;
       const gallery = (imagesByProduct.get(product.id) || [])
         .sort(
           (left, right) =>
@@ -1047,8 +1073,8 @@ ${indexableProducts
 ${additionalImages ? `${additionalImages}\n` : ""}      <g:availability>${availability}</g:availability>
       <g:price>${product.retail_price.toFixed(2)} ${CATALOG_CURRENCY}</g:price>
       <g:condition>${condition}</g:condition>
-      ${product.brand ? `<g:brand>${escapeHtml(product.brand)}</g:brand>` : ""}
-      ${validGtin ? `<g:gtin>${validGtin}</g:gtin>` : ""}
+${product.brand ? `      <g:brand>${escapeHtml(product.brand)}</g:brand>` : ""}
+${validGtin ? `      <g:gtin>${validGtin}</g:gtin>` : ""}
     </item>`;
   })
   .join("\n")}

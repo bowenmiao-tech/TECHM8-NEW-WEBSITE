@@ -1660,9 +1660,9 @@ const DEFAULT_PRODUCT_IMAGE_URL =
   "https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/placeholders/image-coming-soon.png";
 const SUPABASE_BROWSER_CDN_URL =
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
-const SHARED_CATALOG_CACHE_KEY = "techm8:catalog:shared:v5";
-const SHOP_CATALOG_CACHE_KEY = "techm8:catalog:shop:v5";
-const HOME_LATEST_CATALOG_CACHE_KEY = "techm8:catalog:home-latest:v5";
+const SHARED_CATALOG_CACHE_KEY = "techm8:catalog:shared:v6";
+const SHOP_CATALOG_CACHE_KEY = "techm8:catalog:shop:v6";
+const HOME_LATEST_CATALOG_CACHE_KEY = "techm8:catalog:home-latest:v6";
 const PRODUCT_GROUP_CATALOG_SELECT =
   "product_group_id,variant_name,variant_color,product_groups(id,code,slug,name,main_image_url,product_family)";
 const SHARED_CATALOG_CACHE_TTL_MS = 5 * 60 * 1000;
@@ -1901,7 +1901,51 @@ function getConfiguredSiteBaseUrl() {
 
 function getProductPageHref(slug) {
   const safeSlug = String(slug || "").trim();
+  return safeSlug
+    ? `/product.html?slug=${encodeURIComponent(safeSlug)}`
+    : "/shop.html";
+}
+
+function getProductCanonicalHref(slug) {
+  const safeSlug = String(slug || "").trim();
   return safeSlug ? `/products/${encodeURIComponent(safeSlug)}/` : "/shop.html";
+}
+
+function getCatalogSlug(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "other";
+}
+
+function normalizePosCatalogTaxonomy(rows) {
+  return (Array.isArray(rows) ? rows : [])
+    .filter((row) => row?.active !== false)
+    .map((row) => {
+      const parentName = String(row.category_name || "Other Products").trim();
+      const name = String(row.subcategory_name || parentName).trim();
+      const parentSlug = getCatalogSlug(parentName);
+      return {
+        id: row.id,
+        slug: `${parentSlug}--${getCatalogSlug(name)}`,
+        name,
+        parent_name: parentName,
+        parent_slug: parentSlug,
+        sort_order: Number(row.subcategory_sort) || 999,
+        parent_sort_order: Number(row.category_sort) || 999,
+        description: `Browse ${name} in ${parentName}.`,
+      };
+    })
+    .sort(
+      (left, right) =>
+        left.parent_sort_order - right.parent_sort_order ||
+        left.sort_order - right.sort_order ||
+        left.name.localeCompare(right.name),
+    );
 }
 
 function getAccountDashboardUrl() {
@@ -3866,6 +3910,15 @@ function initStorefront() {
   const drawerCategoryTarget = document.querySelector(
     "[data-store-categories-drawer]",
   );
+  const drawerCategoryGroupsTarget = document.querySelector(
+    "[data-store-category-groups]",
+  );
+  const drawerCategoryParentTitle = document.querySelector(
+    "[data-store-category-parent-title]",
+  );
+  const drawerCategoryParentView = document.querySelector(
+    "[data-store-category-parent-view]",
+  );
   const productTarget = root.querySelector("[data-store-products]");
   const searchField = root.querySelector("[data-store-search]");
   const countTarget = root.querySelector("[data-store-count]");
@@ -4001,6 +4054,7 @@ function initStorefront() {
     products: [],
     categories: [],
     activeCategory: "all",
+    activeParent: "all",
     query: "",
     sortBy: "popular",
     drawerOpen: false,
@@ -4018,6 +4072,8 @@ function initStorefront() {
           id: product.category_id || key,
           slug: product.category_slug || key,
           name: product.category_name || "Other Products",
+          parent_name: product.category_parent_name || "Other Products",
+          parent_slug: product.category_parent_slug || "other-products",
         });
       }
     });
@@ -4025,7 +4081,7 @@ function initStorefront() {
   };
 
   const normalizeProduct = (product, categoriesMap) => {
-    const category = categoriesMap.get(product.category_id) || null;
+    const category = categoriesMap.get(product.pos_category_id) || null;
     const retailPrice = Number(product.retail_price);
     const compareAtPrice = Number(product.compare_at_price);
     const hasValidComparePrice =
@@ -4037,6 +4093,10 @@ function initStorefront() {
         category?.name || product.category_name || "Other Products",
       category_slug:
         category?.slug || product.category_slug || "other-products",
+      category_parent_name:
+        category?.parent_name || product.category_parent_name || "Other Products",
+      category_parent_slug:
+        category?.parent_slug || product.category_parent_slug || "other-products",
       display_image: resolveProductImageUrl(product),
       retail_price: retailPrice,
       compare_at_price: hasValidComparePrice ? compareAtPrice : null,
@@ -4049,17 +4109,14 @@ function initStorefront() {
     }
     drawer.classList.toggle("is-open", state.drawerOpen);
     drawer.setAttribute("aria-hidden", state.drawerOpen ? "false" : "true");
+    openCategoriesButton?.setAttribute("aria-expanded", state.drawerOpen ? "true" : "false");
     drawerBackdrop.hidden = !state.drawerOpen;
     drawerBackdrop.classList.toggle("is-open", state.drawerOpen);
     document.body.classList.toggle("storefront-drawer-open", state.drawerOpen);
   };
 
   const renderCategories = () => {
-    const categories = [
-      { slug: "all", name: "All products" },
-      ...state.categories,
-    ];
-    const categoryMarkup = categories
+    const categoryMarkup = [{ slug: "all", name: "All products" }, ...state.categories]
       .map(
         (category) => `
           <button class="storefront-category-button ${state.activeCategory === category.slug ? "is-active" : ""}" type="button" data-store-category="${escapeHtml(category.slug)}">
@@ -4069,29 +4126,96 @@ function initStorefront() {
       )
       .join("");
 
+    const parentMap = new Map();
+    state.categories.forEach((category) => {
+      const parentSlug = category.parent_slug || "other-products";
+      if (!parentMap.has(parentSlug)) {
+        parentMap.set(parentSlug, {
+          slug: parentSlug,
+          name: category.parent_name || "Other Products",
+          sort_order: Number(category.parent_sort_order) || 999,
+          categories: [],
+        });
+      }
+      parentMap.get(parentSlug).categories.push(category);
+    });
+    const parents = [...parentMap.values()].sort(
+      (left, right) => left.sort_order - right.sort_order || left.name.localeCompare(right.name),
+    );
+    if (state.activeParent === "all" && parents.length) {
+      state.activeParent = parents[0].slug;
+    }
+    const activeParent = parents.find((parent) => parent.slug === state.activeParent) || parents[0] || null;
+
     if (categoryTarget instanceof HTMLElement) {
       categoryTarget.innerHTML = categoryMarkup;
     }
+    if (drawerCategoryGroupsTarget instanceof HTMLElement) {
+      drawerCategoryGroupsTarget.innerHTML = `
+        <button class="storefront-category-group ${state.activeCategory === "all" ? "is-active" : ""}" type="button" data-store-category-all>
+          <span>All products</span><small>${state.products.length}</small>
+        </button>
+        ${parents.map((parent) => {
+          const productCount = state.products.filter((product) => product.category_parent_slug === parent.slug).length;
+          return `
+            <button class="storefront-category-group ${activeParent?.slug === parent.slug ? "is-current" : ""}" type="button" data-store-category-parent="${escapeHtml(parent.slug)}">
+              <span>${escapeHtml(parent.name)}</span><small>${productCount}</small>
+            </button>
+          `;
+        }).join("")}
+      `;
+    }
+    if (drawerCategoryParentTitle instanceof HTMLElement) {
+      drawerCategoryParentTitle.textContent = activeParent?.name || "All products";
+    }
+    if (drawerCategoryParentView instanceof HTMLButtonElement) {
+      drawerCategoryParentView.hidden = !activeParent;
+      drawerCategoryParentView.dataset.storeCategoryParentView = activeParent?.slug || "all";
+      drawerCategoryParentView.textContent = activeParent ? `View all ${activeParent.name}` : "View all";
+    }
     if (drawerCategoryTarget instanceof HTMLElement) {
-      drawerCategoryTarget.innerHTML = categoryMarkup;
+      drawerCategoryTarget.innerHTML = activeParent
+        ? activeParent.categories.map((category) => `
+            <button class="storefront-category-button ${state.activeCategory === category.slug ? "is-active" : ""}" type="button" data-store-category="${escapeHtml(category.slug)}">
+              <span>${escapeHtml(category.name)}</span><span aria-hidden="true">›</span>
+            </button>
+          `).join("")
+        : "";
     }
 
-    [categoryTarget, drawerCategoryTarget]
-      .filter((target) => target instanceof HTMLElement)
-      .forEach((target) => {
-        target.querySelectorAll("[data-store-category]").forEach((button) => {
-          button.addEventListener("click", () => {
-            state.activeCategory =
-              button.getAttribute("data-store-category") || "all";
-            if (window.innerWidth <= 960) {
-              state.drawerOpen = false;
-              applyDrawerState();
-            }
-            renderCategories();
-            renderProducts();
-          });
+    [categoryTarget, drawerCategoryTarget].forEach((target) => {
+      if (!(target instanceof HTMLElement)) return;
+      target.querySelectorAll("[data-store-category]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.activeCategory = button.getAttribute("data-store-category") || "all";
+          state.drawerOpen = false;
+          applyDrawerState();
+          renderCategories();
+          renderProducts();
         });
       });
+    });
+    drawerCategoryGroupsTarget?.querySelector("[data-store-category-all]")?.addEventListener("click", () => {
+      state.activeCategory = "all";
+      state.drawerOpen = false;
+      applyDrawerState();
+      renderCategories();
+      renderProducts();
+    });
+    drawerCategoryGroupsTarget?.querySelectorAll("[data-store-category-parent]").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.activeParent = button.getAttribute("data-store-category-parent") || "all";
+        renderCategories();
+      });
+    });
+    if (drawerCategoryParentView instanceof HTMLButtonElement) drawerCategoryParentView.onclick = () => {
+      const parentSlug = drawerCategoryParentView.dataset.storeCategoryParentView || "all";
+      state.activeCategory = parentSlug === "all" ? "all" : `parent:${parentSlug}`;
+      state.drawerOpen = false;
+      applyDrawerState();
+      renderCategories();
+      renderProducts();
+    };
   };
 
   const renderProducts = () => {
@@ -4099,13 +4223,16 @@ function initStorefront() {
     const matchingProducts = state.products.filter((product) => {
       const inCategory =
         state.activeCategory === "all" ||
-        product.category_slug === state.activeCategory;
+        (state.activeCategory.startsWith("parent:")
+          ? product.category_parent_slug === state.activeCategory.slice(7)
+          : product.category_slug === state.activeCategory);
       const haystack = [
         product.name,
         product.brand,
         product.model,
         product.short_description,
         product.category_name,
+        product.category_parent_name,
       ]
         .join(" ")
         .toLowerCase();
@@ -4188,7 +4315,8 @@ function initStorefront() {
       return;
     }
 
-    const applySnapshot = (categories, products) => {
+    const applySnapshot = (taxonomyRows, products) => {
+      const categories = normalizePosCatalogTaxonomy(taxonomyRows);
       const categoriesMap = new Map(
         categories.map((category) => [category.id, category]),
       );
@@ -4202,9 +4330,12 @@ function initStorefront() {
         state.products = normalizedProducts;
         state.categories = categories.filter((category) =>
           normalizedProducts.some(
-            (product) => product.category_id === category.id,
+            (product) => product.pos_category_id === category.id,
           ),
         );
+        if (!state.categories.some((category) => category.parent_slug === state.activeParent)) {
+          state.activeParent = state.categories[0]?.parent_slug || "all";
+        }
       } else {
         state.products = fallbackProducts;
         state.categories = deriveCategories(fallbackProducts);
@@ -4242,8 +4373,8 @@ function initStorefront() {
         Authorization: `Bearer ${supabaseAnonKey}`,
       };
 
-      const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,sort_order&order=sort_order.asc`;
-      const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,created_at,${PRODUCT_GROUP_CATALOG_SELECT}&is_visible=eq.true&order=created_at.desc,id.desc`;
+      const categoriesUrl = `${supabaseUrl}/rest/v1/pos_category_taxonomy?select=id,category_name,subcategory_name,category_sort,subcategory_sort,active&active=eq.true&order=category_sort.asc,subcategory_sort.asc`;
+      const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,pos_category_id,created_at,${PRODUCT_GROUP_CATALOG_SELECT}&is_visible=eq.true&order=created_at.desc,id.desc`;
 
       const [categoriesResponse, productsResponse] = await Promise.all([
         fetch(categoriesUrl, { headers, cache: "default" }),
@@ -4290,6 +4421,9 @@ function initStorefront() {
   openCategoriesButton?.addEventListener("click", () => {
     state.drawerOpen = true;
     applyDrawerState();
+    window.setTimeout(() => {
+      drawerCategoryGroupsTarget?.querySelector(".is-current, .is-active, button")?.focus();
+    }, 190);
   });
 
   closeCategoriesButton?.addEventListener("click", () => {
@@ -4516,7 +4650,8 @@ async function loadSharedCatalogData() {
     Authorization: `Bearer ${supabaseAnonKey}`,
   };
 
-  const buildSnapshot = (products, categories = [], productImages = []) => {
+  const buildSnapshot = (products, taxonomyRows = [], productImages = []) => {
+    const categories = normalizePosCatalogTaxonomy(taxonomyRows);
     const categoriesMap = new Map(
       categories.map((category) => [category.id, category]),
     );
@@ -4537,7 +4672,7 @@ async function loadSharedCatalogData() {
 
     const normalizedProducts = products
       .map((product, index) => {
-        const category = categoriesMap.get(product.category_id) || null;
+        const category = categoriesMap.get(product.pos_category_id) || null;
         const retailPrice = Number(product.retail_price);
         const compareAtPrice = Number(product.compare_at_price);
         const safeRetailPrice =
@@ -4581,6 +4716,8 @@ async function loadSharedCatalogData() {
           category_slug: category?.slug || "other-products",
           category_name: category?.name || "Other Products",
           category_description: category?.description || "",
+          category_parent_name: category?.parent_name || "Other Products",
+          category_parent_slug: category?.parent_slug || "other-products",
         };
       })
       .sort(compareProductsByLatest);
@@ -4629,7 +4766,7 @@ async function loadSharedCatalogData() {
     includeImages = false,
     orderClause = "created_at.desc,id.desc",
   }) => {
-    const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
+    const categoriesUrl = `${supabaseUrl}/rest/v1/pos_category_taxonomy?select=id,category_name,subcategory_name,category_sort,subcategory_sort,active&active=eq.true&order=category_sort.asc,subcategory_sort.asc`;
     const limitQuery =
       Number.isFinite(productLimit) && productLimit > 0
         ? `&limit=${Math.floor(productLimit)}`
@@ -4671,7 +4808,7 @@ async function loadSharedCatalogData() {
   try {
     sharedCatalogLoadPromise = fetchSnapshot({
       productSelect: [
-        "id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,created_at,updated_at,upc",
+        "id,sku,slug,name,brand,model,short_description,description,retail_price,compare_at_price,image_url,stock_quantity,is_featured,condition_label,compatibility,category_id,pos_category_id,created_at,updated_at,upc",
         PRODUCT_GROUP_CATALOG_SELECT,
       ].join(","),
       includeImages: true,
@@ -4724,14 +4861,14 @@ async function fetchCatalogProductsForCartValidation(items) {
   productUrl.searchParams.set(
     "select",
     [
-      "id,sku,slug,name,brand,model,short_description,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,created_at,updated_at,upc",
+      "id,sku,slug,name,brand,model,short_description,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,pos_category_id,created_at,updated_at,upc",
       PRODUCT_GROUP_CATALOG_SELECT,
     ].join(","),
   );
   productUrl.searchParams.set("is_visible", "eq.true");
   productUrl.searchParams.set("slug", `in.(${quotedSlugs.join(",")})`);
 
-  const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
+  const categoriesUrl = `${supabaseUrl}/rest/v1/pos_category_taxonomy?select=id,category_name,subcategory_name,category_sort,subcategory_sort,active&active=eq.true&order=category_sort.asc,subcategory_sort.asc`;
   const [productsResponse, categoriesResponse] = await Promise.all([
     fetch(productUrl.toString(), { headers, cache: "no-store" }),
     fetch(categoriesUrl, { headers, cache: "default" }),
@@ -4742,9 +4879,8 @@ async function fetchCatalogProductsForCartValidation(items) {
   }
 
   const products = await productsResponse.json();
-  const categories = categoriesResponse.ok
-    ? await categoriesResponse.json()
-    : [];
+  const taxonomyRows = categoriesResponse.ok ? await categoriesResponse.json() : [];
+  const categories = normalizePosCatalogTaxonomy(taxonomyRows);
   const categoriesMap = new Map(
     (Array.isArray(categories) ? categories : []).map((category) => [
       category.id,
@@ -4753,7 +4889,7 @@ async function fetchCatalogProductsForCartValidation(items) {
   );
 
   return (Array.isArray(products) ? products : []).map((product, index) => {
-    const category = categoriesMap.get(product.category_id) || null;
+    const category = categoriesMap.get(product.pos_category_id) || null;
     const retailPrice = Number(product.retail_price);
     const compareAtPrice = Number(product.compare_at_price);
     const safeRetailPrice =
@@ -4771,7 +4907,16 @@ async function fetchCatalogProductsForCartValidation(items) {
       category_slug: category?.slug || "other-products",
       category_name: category?.name || "Other Products",
       category_description: category?.description || "",
+      category_parent_name: category?.parent_name || "Other Products",
+      category_parent_slug: category?.parent_slug || "other-products",
     };
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !state.drawerOpen) return;
+    state.drawerOpen = false;
+    applyDrawerState();
+    openCategoriesButton?.focus();
   });
 }
 
@@ -4803,8 +4948,8 @@ async function loadHomeLatestCatalogData(options = {}) {
   };
 
   try {
-    const categoriesUrl = `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&order=sort_order.asc`;
-    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,created_at,updated_at,upc,${PRODUCT_GROUP_CATALOG_SELECT}&is_visible=eq.true&order=created_at.desc,id.desc&limit=96`;
+    const categoriesUrl = `${supabaseUrl}/rest/v1/pos_category_taxonomy?select=id,category_name,subcategory_name,category_sort,subcategory_sort,active&active=eq.true&order=category_sort.asc,subcategory_sort.asc`;
+    const productsUrl = `${supabaseUrl}/rest/v1/products?select=id,sku,slug,name,brand,model,retail_price,compare_at_price,image_url,is_featured,condition_label,compatibility,category_id,pos_category_id,created_at,updated_at,upc,${PRODUCT_GROUP_CATALOG_SELECT}&is_visible=eq.true&order=created_at.desc,id.desc&limit=96`;
 
     homeLatestCatalogLoadPromise = Promise.all([
       fetch(categoriesUrl, { headers, cache: "default" }),
@@ -4818,9 +4963,8 @@ async function loadHomeLatestCatalogData(options = {}) {
       throw new Error("Latest products request failed");
     }
 
-    const categories = categoriesResponse.ok
-      ? await categoriesResponse.json()
-      : [];
+    const taxonomyRows = categoriesResponse.ok ? await categoriesResponse.json() : [];
+    const categories = normalizePosCatalogTaxonomy(taxonomyRows);
     const products = await productsResponse.json();
     const categoriesMap = new Map(
       categories.map((category) => [category.id, category]),
@@ -4828,7 +4972,7 @@ async function loadHomeLatestCatalogData(options = {}) {
     const normalizedProducts = applyProductVariantData(
       products
         .map((product, index) => {
-          const category = categoriesMap.get(product.category_id) || null;
+          const category = categoriesMap.get(product.pos_category_id) || null;
           const retailPrice = Number(product.retail_price);
           const compareAtPrice = Number(product.compare_at_price);
           const safeRetailPrice =
@@ -4857,6 +5001,8 @@ async function loadHomeLatestCatalogData(options = {}) {
             category_slug: category?.slug || "other-products",
             category_name: category?.name || "Other Products",
             category_description: category?.description || "",
+            category_parent_name: category?.parent_name || "Other Products",
+            category_parent_slug: category?.parent_slug || "other-products",
           };
         })
         .sort(compareProductsByLatest),
@@ -4891,7 +5037,7 @@ async function fetchCatalogProductBySlug(slug) {
     Authorization: `Bearer ${supabaseAnonKey}`,
   };
   const productSelect = [
-    "id,sku,slug,name,brand,model,short_description,description,detail_html,retail_price,compare_at_price,image_url,stock_quantity,is_featured,is_visible,condition_label,compatibility,category_id,created_at,upc",
+    "id,sku,slug,name,brand,model,short_description,description,detail_html,retail_price,compare_at_price,image_url,stock_quantity,is_featured,is_visible,condition_label,compatibility,category_id,pos_category_id,created_at,upc",
     PRODUCT_GROUP_CATALOG_SELECT,
   ].join(",");
 
@@ -4907,8 +5053,8 @@ async function fetchCatalogProductBySlug(slug) {
   }
 
   const product = productRows[0];
-  const categoryUrl = product.category_id
-    ? `${supabaseUrl}/rest/v1/categories?select=id,slug,name,description,sort_order&id=eq.${encodeURIComponent(String(product.category_id))}&limit=1`
+  const categoryUrl = product.pos_category_id
+    ? `${supabaseUrl}/rest/v1/pos_category_taxonomy?select=id,category_name,subcategory_name,category_sort,subcategory_sort,active&id=eq.${encodeURIComponent(String(product.pos_category_id))}&active=eq.true&limit=1`
     : null;
   const imagesUrl = `${supabaseUrl}/rest/v1/product_images?select=product_id,image_url,alt_text,sort_order&product_id=eq.${encodeURIComponent(String(product.id))}&order=sort_order.asc`;
 
@@ -4929,7 +5075,7 @@ async function fetchCatalogProductBySlug(slug) {
       ? await imagesResult.value.json()
       : [];
 
-  const category = Array.isArray(categoryRows) && categoryRows.length ? categoryRows[0] : null;
+  const category = normalizePosCatalogTaxonomy(categoryRows)[0] || null;
   const galleryImages = Array.isArray(productImages)
     ? productImages
         .filter((image) => image?.image_url)
@@ -4972,6 +5118,8 @@ async function fetchCatalogProductBySlug(slug) {
     category_slug: category?.slug || "other-products",
     category_name: category?.name || "Other Products",
     category_description: category?.description || "",
+    category_parent_name: category?.parent_name || "Other Products",
+    category_parent_slug: category?.parent_slug || "other-products",
   };
 
   return applyProductVariantData([normalizedProduct])[0] || null;
@@ -5737,16 +5885,8 @@ function initProductDetailPage() {
 
   const params = new URLSearchParams(window.location.search);
   const slug = root.dataset.productSlug || params.get("slug") || "";
-  if (
-    slug &&
-    !root.dataset.productSlug &&
-    window.location.pathname.endsWith("/product.html")
-  ) {
-    window.location.replace(getProductPageHref(slug));
-    return;
-  }
   if (slug) {
-    const canonicalUrl = `${getConfiguredSiteBaseUrl()}${getProductPageHref(slug)}`;
+    const canonicalUrl = `${getConfiguredSiteBaseUrl()}${getProductCanonicalHref(slug)}`;
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!(canonical instanceof HTMLLinkElement)) {
       canonical = document.createElement("link");
