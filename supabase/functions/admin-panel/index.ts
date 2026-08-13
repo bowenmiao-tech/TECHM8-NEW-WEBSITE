@@ -1747,7 +1747,7 @@ async function listProducts(supabaseAdmin: ReturnType<typeof createClient>, cont
 
   let query = supabaseAdmin
     .from('products')
-    .select('id, sku, slug, name, brand, model, category_id, short_description, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at', { count: 'exact' })
+    .select('id, sku, slug, name, brand, category_id, retail_price, stock_quantity, is_visible, is_pos_visible, image_url, updated_at', { count: 'exact' })
     .order('updated_at', { ascending: false })
     .range(from, to)
 
@@ -1757,6 +1757,10 @@ async function listProducts(supabaseAdmin: ReturnType<typeof createClient>, cont
   const visibility = normalizeNullableString(filters.visibility)
   if (visibility === 'visible') query = query.eq('is_visible', true)
   if (visibility === 'hidden') query = query.eq('is_visible', false)
+
+  const posVisibility = normalizeNullableString(filters.pos_visibility)
+  if (posVisibility === 'visible') query = query.eq('is_pos_visible', true)
+  if (posVisibility === 'hidden') query = query.eq('is_pos_visible', false)
 
   const featured = normalizeNullableString(filters.featured)
   if (featured === 'featured') query = query.eq('is_featured', true)
@@ -2525,6 +2529,45 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
   })
 }
 
+async function updateProductVisibility(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
+  if (!CATALOG_EDIT_ROLES.has(context.role)) {
+    return jsonResponse({ ok: false, error: 'Only super admins can change product visibility.' }, 403)
+  }
+
+  const field = String(body.field ?? '').trim()
+  if (field !== 'is_visible' && field !== 'is_pos_visible') {
+    return jsonResponse({ ok: false, error: 'Visibility field is invalid.' }, 422)
+  }
+  if (typeof body.value !== 'boolean') {
+    return jsonResponse({ ok: false, error: 'Visibility value must be true or false.' }, 422)
+  }
+
+  const ids = Array.from(new Set(
+    (Array.isArray(body.ids) ? body.ids : [body.id])
+      .map((value) => Number(value))
+      .filter((value) => Number.isFinite(value) && value > 0),
+  )).slice(0, 100)
+
+  if (!ids.length) {
+    return jsonResponse({ ok: false, error: 'At least one product is required.' }, 422)
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from('products')
+    .update({ [field]: body.value })
+    .in('id', ids)
+    .select('id, is_visible, is_pos_visible, updated_at')
+
+  if (error) {
+    return jsonResponse({ ok: false, error: `Product visibility could not be updated: ${error.message}` }, 500)
+  }
+  if ((data ?? []).length !== ids.length) {
+    return jsonResponse({ ok: false, error: 'One or more products could not be updated.' }, 409)
+  }
+
+  return jsonResponse({ ok: true, rows: data ?? [] })
+}
+
 async function uploadProductDetailImage(supabaseAdmin: ReturnType<typeof createClient>, context: AdminContext, body: JsonRecord) {
   if (!CATALOG_EDIT_ROLES.has(context.role)) {
     return jsonResponse({ ok: false, error: 'Only super admins can upload product images.' }, 403)
@@ -2860,6 +2903,10 @@ Deno.serve(async (req) => {
 
     if (action === 'product_update') {
       return await updateProduct(supabaseAdmin, context, body)
+    }
+
+    if (action === 'product_visibility_update') {
+      return await updateProductVisibility(supabaseAdmin, context, body)
     }
 
     if (action === 'product_detail_image_upload') {

@@ -1745,20 +1745,11 @@ function getViewTemplate(view) {
     case "products":
       return `
         <section class="admin-products-workspace">
-          <article class="admin-panel admin-products-editor-panel">
-            <div class="admin-panel__heading">
-              <div>
-                <h2>Product editor</h2>
-                <p>Edit storefront content, images, pricing and product visibility.</p>
-              </div>
-            </div>
-            <div data-products-editor class="admin-note">No product selected yet.</div>
-          </article>
-          <aside class="admin-panel admin-products-list-panel">
+          <article class="admin-panel admin-products-list-panel">
             <div class="admin-panel__heading">
               <div>
                 <h2>Products</h2>
-                <p>Select a product to edit.</p>
+                <p>Change website and POS visibility directly. Open the editor only when product details need updating.</p>
               </div>
               <div class="admin-button-row">
                 <button class="button button--primary" type="button" data-products-new>New product</button>
@@ -1778,18 +1769,46 @@ function getViewTemplate(view) {
                 <select name="category_id" data-products-category-filter></select>
               </label>
               <label class="admin-filter">
-                <span>Visibility</span>
+                <span>Website</span>
                 <select name="visibility">
                   <option value="">All products</option>
-                  <option value="visible">Visible</option>
-                  <option value="hidden">Hidden</option>
+                  <option value="visible">Shown on website</option>
+                  <option value="hidden">Hidden from website</option>
                 </select>
               </label>
-              <button class="button button--primary" type="submit">Apply</button>
+              <label class="admin-filter">
+                <span>POS</span>
+                <select name="pos_visibility">
+                  <option value="">All products</option>
+                  <option value="visible">Shown in POS</option>
+                  <option value="hidden">Hidden from POS</option>
+                </select>
+              </label>
+              <button class="button button--primary" type="submit">Search</button>
             </form>
+            <div class="admin-products-bulk-bar" data-products-bulk-actions hidden>
+              <strong data-products-selected-count>0 selected</strong>
+              <div class="admin-button-row">
+                <button class="button button--ghost button--small" type="button" data-products-bulk-field="is_visible" data-products-bulk-value="true">Show on website</button>
+                <button class="button button--ghost button--small" type="button" data-products-bulk-field="is_visible" data-products-bulk-value="false">Hide from website</button>
+                <button class="button button--ghost button--small" type="button" data-products-bulk-field="is_pos_visible" data-products-bulk-value="true">Show in POS</button>
+                <button class="button button--ghost button--small" type="button" data-products-bulk-field="is_pos_visible" data-products-bulk-value="false">Hide from POS</button>
+                <button class="button button--ghost button--small" type="button" data-products-clear-selection>Clear</button>
+              </div>
+            </div>
             <div class="admin-table-wrap" data-products-table></div>
             <div data-products-pagination></div>
-          </aside>
+          </article>
+          <article class="admin-panel admin-products-editor-panel" data-products-editor-panel hidden>
+            <div class="admin-panel__heading">
+              <div>
+                <h2>Product editor</h2>
+                <p>Images, descriptions, pricing and other product details.</p>
+              </div>
+              <button class="button button--ghost" type="button" data-products-editor-close>Close editor</button>
+            </div>
+            <div data-products-editor class="admin-note">Select Edit on a product to load its details.</div>
+          </article>
         </section>
       `;
     case "inventory":
@@ -3677,10 +3696,11 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
   const mergeProductRow = (row) => {
     if (!row?.id) return null;
     const rowIndex = state.rows.findIndex((item) => Number(item.id) === Number(row.id));
+    const existingRow = rowIndex >= 0 ? state.rows[rowIndex] : null;
     const nextRow = {
-      ...(rowIndex >= 0 ? state.rows[rowIndex] : {}),
+      ...(existingRow || {}),
       ...row,
-      detail_loaded: Boolean(row.detail_loaded || hasEmbeddedProductDetail(row)),
+      detail_loaded: Boolean(row.detail_loaded || existingRow?.detail_loaded || hasEmbeddedProductDetail(row)),
     };
     if (rowIndex >= 0) {
       state.rows[rowIndex] = nextRow;
@@ -3946,6 +3966,8 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
   const filterForm = root.querySelector("[data-products-filters]");
   const tableTarget = root.querySelector("[data-products-table]");
   const editorTarget = root.querySelector("[data-products-editor]");
+  const editorPanel = root.querySelector("[data-products-editor-panel]");
+  const editorCloseButton = root.querySelector("[data-products-editor-close]");
   const paginationTarget = root.querySelector("[data-products-pagination]");
   const categoryFilter = root.querySelector("[data-products-category-filter]");
   const refreshButton = root.querySelector("[data-products-refresh]");
@@ -3953,10 +3975,24 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
   const categoryNewButton = root.querySelector("[data-products-category-new]");
   const categoryEditButton = root.querySelector("[data-products-category-edit]");
   const importButton = root.querySelector("[data-products-import]");
+  const bulkActions = root.querySelector("[data-products-bulk-actions]");
+  const selectedCountTarget = root.querySelector("[data-products-selected-count]");
 
   fillCategoryOptions(categoryFilter, bootstrap.categories || []);
 
-  const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false, saveFlash: null, detailRequests: new Map() };
+  const state = {
+    page: 1,
+    selectedId: null,
+    selectedIds: new Set(),
+    pendingVisibilityIds: new Set(),
+    rows: [],
+    meta: null,
+    canEdit: false,
+    saveFlash: null,
+    detailRequests: new Map(),
+    loadSequence: 0,
+    searchTimer: null,
+  };
 
   const hasEmbeddedProductDetail = (row) => (
     Object.prototype.hasOwnProperty.call(row || {}, "detail_html") ||
@@ -3967,10 +4003,11 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
   const mergeProductRow = (row) => {
     if (!row?.id) return null;
     const rowIndex = state.rows.findIndex((item) => Number(item.id) === Number(row.id));
+    const existingRow = rowIndex >= 0 ? state.rows[rowIndex] : null;
     const nextRow = {
-      ...(rowIndex >= 0 ? state.rows[rowIndex] : {}),
+      ...(existingRow || {}),
       ...row,
-      detail_loaded: Boolean(row.detail_loaded || hasEmbeddedProductDetail(row)),
+      detail_loaded: Boolean(row.detail_loaded || existingRow?.detail_loaded || hasEmbeddedProductDetail(row)),
     };
     if (rowIndex >= 0) {
       state.rows[rowIndex] = nextRow;
@@ -4017,9 +4054,12 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
   const renderEditor = () => {
     const row = state.rows.find((item) => Number(item.id) === Number(state.selectedId));
     if (!row) {
-      editorTarget.innerHTML = `<p class="admin-note">Select a product from the list to edit images, content, pricing and visibility.</p>`;
+      if (editorPanel instanceof HTMLElement) editorPanel.hidden = true;
+      editorTarget.innerHTML = `<p class="admin-note">Select Edit on a product to load its details.</p>`;
       return;
     }
+
+    if (editorPanel instanceof HTMLElement) editorPanel.hidden = false;
 
     if (!row.detail_loaded) {
       editorTarget.innerHTML = `<div class="admin-loading">Loading product details...</div>`;
@@ -4409,37 +4449,152 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
     });
   };
 
+  const renderBulkActions = () => {
+    const selectedCount = state.selectedIds.size;
+    if (bulkActions instanceof HTMLElement) bulkActions.hidden = selectedCount === 0;
+    if (selectedCountTarget instanceof HTMLElement) {
+      selectedCountTarget.textContent = `${selectedCount} product${selectedCount === 1 ? "" : "s"} selected`;
+    }
+    bulkActions?.querySelectorAll("[data-products-bulk-field]").forEach((button) => {
+      if (button instanceof HTMLButtonElement) button.disabled = !state.canEdit || selectedCount === 0;
+    });
+  };
+
+  const updateVisibility = async (ids, field, value, { confirmBulk = false } = {}) => {
+    const productIds = [...new Set(ids.map(Number).filter((id) => Number.isFinite(id)))];
+    if (!productIds.length || !["is_visible", "is_pos_visible"].includes(field)) return;
+    if (confirmBulk) {
+      const destination = field === "is_visible" ? "website" : "POS";
+      const action = value ? "show" : "hide";
+      if (!window.confirm(`${action[0].toUpperCase()}${action.slice(1)} ${productIds.length} products in ${destination}? The other channel will not change.`)) return;
+    }
+
+    const previousValues = new Map();
+    state.rows.forEach((row) => {
+      if (!productIds.includes(Number(row.id))) return;
+      previousValues.set(Number(row.id), row[field]);
+      row[field] = value;
+      state.pendingVisibilityIds.add(Number(row.id));
+    });
+    if (productIds.includes(Number(state.selectedId))) {
+      const editorField = editorTarget.querySelector(`[name="${field}"]`);
+      if (editorField instanceof HTMLSelectElement) editorField.value = String(value);
+    }
+    renderTable();
+
+    try {
+      const result = await callAdminApi("product_visibility_update", {
+        ids: productIds,
+        field,
+        value,
+      }, session);
+      (result.rows || []).forEach((updatedRow) => mergeProductRow(updatedRow));
+      const selectedUpdate = (result.rows || []).find((row) => Number(row.id) === Number(state.selectedId));
+      if (selectedUpdate) {
+        const editorField = editorTarget.querySelector(`[name="${field}"]`);
+        if (editorField instanceof HTMLSelectElement) editorField.value = String(selectedUpdate[field]);
+      }
+      setAlert(
+        alertTarget,
+        `${productIds.length} product${productIds.length === 1 ? "" : "s"} updated successfully.`,
+        "success",
+      );
+    } catch (error) {
+      state.rows.forEach((row) => {
+        if (previousValues.has(Number(row.id))) row[field] = previousValues.get(Number(row.id));
+      });
+      if (previousValues.has(Number(state.selectedId))) {
+        const editorField = editorTarget.querySelector(`[name="${field}"]`);
+        if (editorField instanceof HTMLSelectElement) {
+          editorField.value = String(previousValues.get(Number(state.selectedId)));
+        }
+      }
+      setAlert(alertTarget, error instanceof Error ? error.message : "Product visibility could not be updated.", "error");
+    } finally {
+      productIds.forEach((id) => state.pendingVisibilityIds.delete(id));
+      renderTable();
+    }
+  };
+
   const renderTable = () => {
     if (!state.rows.length) {
       renderEmptyState(tableTarget, "No products matched the current filters.");
       paginationTarget.innerHTML = "";
-      renderEditor();
+      renderBulkActions();
       return;
     }
 
+    const allPageSelected = state.rows.every((row) => state.selectedIds.has(Number(row.id)));
     tableTarget.innerHTML = `
-      <div class="admin-product-list">
-        ${state.rows.map((row) => `
-          <button class="admin-product-list__item ${Number(state.selectedId) === Number(row.id) ? "is-selected" : ""}" type="button" data-product-row="${row.id}">
-            <img src="${escapeHtml(getImageOrPlaceholder(row.image_url))}" alt="${escapeHtml(row.name || "")}">
-            <span>
-              <strong>${escapeHtml(row.name || "Untitled product")}</strong>
-              <small>${escapeHtml(row.sku || "No SKU")} / ${escapeHtml(row.brand || "No brand")}</small>
-              <small>${formatMoney(row.retail_price)} / Stock ${escapeHtml(row.stock_quantity ?? 0)}</small>
-            </span>
-            ${renderBadge(row.is_visible ? "visible" : "hidden")}
-            ${renderBadge(row.is_pos_visible !== false ? "POS" : "no POS")}
-          </button>
-        `).join("")}
+      <div class="admin-product-list admin-product-list--quick">
+        <div class="admin-product-list__header" aria-hidden="true">
+          <label class="admin-product-select"><input type="checkbox" data-products-select-page ${allPageSelected ? "checked" : ""} aria-label="Select all products on this page"></label>
+          <span>Product</span>
+          <span>Stock</span>
+          <span>Website</span>
+          <span>POS</span>
+          <span>Details</span>
+        </div>
+        ${state.rows.map((row) => {
+          const id = Number(row.id);
+          const isPending = state.pendingVisibilityIds.has(id);
+          return `
+            <article class="admin-product-list__item ${Number(state.selectedId) === id ? "is-selected" : ""} ${isPending ? "is-saving" : ""}" data-product-row="${id}">
+              <label class="admin-product-select">
+                <input type="checkbox" data-product-select="${id}" ${state.selectedIds.has(id) ? "checked" : ""} aria-label="Select ${escapeHtml(row.name || "product")}">
+              </label>
+              <div class="admin-product-list__identity">
+                <img src="${escapeHtml(getImageOrPlaceholder(row.image_url))}" alt="" loading="lazy" decoding="async" fetchpriority="low">
+                <span>
+                  <strong>${escapeHtml(row.name || "Untitled product")}</strong>
+                  <small>${escapeHtml(row.sku || "No SKU")} / ${escapeHtml(row.brand || "No brand")}</small>
+                  <small>${formatMoney(row.retail_price)}</small>
+                </span>
+              </div>
+              <span class="admin-product-stock">${escapeHtml(row.stock_quantity ?? 0)}</span>
+              <label class="admin-channel-toggle">
+                <input type="checkbox" role="switch" data-product-visibility="${id}" data-visibility-field="is_visible" ${row.is_visible ? "checked" : ""} ${!state.canEdit || isPending ? "disabled" : ""} aria-label="Show ${escapeHtml(row.name || "product")} on website">
+                <span class="admin-channel-toggle__track" aria-hidden="true"></span>
+                <span class="admin-channel-toggle__label">${row.is_visible ? "Shown" : "Hidden"}</span>
+              </label>
+              <label class="admin-channel-toggle">
+                <input type="checkbox" role="switch" data-product-visibility="${id}" data-visibility-field="is_pos_visible" ${row.is_pos_visible !== false ? "checked" : ""} ${!state.canEdit || isPending ? "disabled" : ""} aria-label="Show ${escapeHtml(row.name || "product")} in POS">
+                <span class="admin-channel-toggle__track" aria-hidden="true"></span>
+                <span class="admin-channel-toggle__label">${row.is_pos_visible !== false ? "Shown" : "Hidden"}</span>
+              </label>
+              <button class="button button--ghost button--small" type="button" data-product-edit="${id}">Edit</button>
+            </article>
+          `;
+        }).join("")}
       </div>
     `;
 
     paginationTarget.innerHTML = renderPagination(state.meta || {});
-    tableTarget.querySelectorAll("[data-product-row]").forEach((button) => {
+    tableTarget.querySelector("[data-products-select-page]")?.addEventListener("change", (event) => {
+      const checked = Boolean(event.currentTarget.checked);
+      state.rows.forEach((row) => checked ? state.selectedIds.add(Number(row.id)) : state.selectedIds.delete(Number(row.id)));
+      renderTable();
+    });
+    tableTarget.querySelectorAll("[data-product-select]").forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        const id = Number(checkbox.getAttribute("data-product-select"));
+        checkbox.checked ? state.selectedIds.add(id) : state.selectedIds.delete(id);
+        renderTable();
+      });
+    });
+    tableTarget.querySelectorAll("[data-product-visibility]").forEach((toggle) => {
+      toggle.addEventListener("change", () => {
+        const id = Number(toggle.getAttribute("data-product-visibility"));
+        const field = toggle.getAttribute("data-visibility-field") || "";
+        void updateVisibility([id], field, Boolean(toggle.checked));
+      });
+    });
+    tableTarget.querySelectorAll("[data-product-edit]").forEach((button) => {
       button.addEventListener("click", () => {
-        state.selectedId = Number(button.getAttribute("data-product-row"));
+        state.selectedId = Number(button.getAttribute("data-product-edit"));
         renderTable();
         renderEditor();
+        editorPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
     paginationTarget.querySelector("[data-page-prev]")?.addEventListener("click", async () => {
@@ -4447,45 +4602,85 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       await load();
     });
     paginationTarget.querySelector("[data-page-next]")?.addEventListener("click", async () => {
-      const totalPages = Math.max(1, Math.ceil((state.meta?.total || 0) / (state.meta?.page_size || 20)));
+      const totalPages = Math.max(1, Math.ceil((state.meta?.total || 0) / (state.meta?.page_size || 50)));
       state.page = Math.min(totalPages, state.page + 1);
       await load();
     });
-    renderEditor();
+    renderBulkActions();
   };
 
   const load = async () => {
+    const sequence = ++state.loadSequence;
     setAlert(alertTarget, "");
-    tableTarget.innerHTML = `<div class="admin-loading">Loading products...</div>`;
+    state.selectedIds.clear();
+    if (!state.rows.length) tableTarget.innerHTML = `<div class="admin-loading">Loading products...</div>`;
+    tableTarget.setAttribute("aria-busy", "true");
     const formData = new FormData(filterForm);
-    const result = await callAdminApi("products_list", {
-      filters: {
-        page: state.page,
-        page_size: 20,
-        search: formData.get("search"),
-        category_id: formData.get("category_id"),
-        visibility: formData.get("visibility"),
-      },
-    }, session);
-    state.rows = (result.rows || []).map((row) => ({
-      ...row,
-      detail_loaded: Boolean(row?.detail_loaded || hasEmbeddedProductDetail(row)),
-    }));
-    state.meta = result;
-    state.canEdit = Boolean(result.can_edit);
-    if (state.selectedId && !state.rows.some((row) => Number(row.id) === Number(state.selectedId))) {
-      state.selectedId = state.rows[0]?.id || null;
+    try {
+      const result = await callAdminApi("products_list", {
+        filters: {
+          page: state.page,
+          page_size: 50,
+          search: formData.get("search"),
+          category_id: formData.get("category_id"),
+          visibility: formData.get("visibility"),
+          pos_visibility: formData.get("pos_visibility"),
+        },
+      }, session);
+      if (sequence !== state.loadSequence) return;
+      state.rows = (result.rows || []).map((row) => ({
+        ...row,
+        detail_loaded: Boolean(row?.detail_loaded || hasEmbeddedProductDetail(row)),
+      }));
+      state.meta = result;
+      state.canEdit = Boolean(result.can_edit);
+      if (state.selectedId && !state.rows.some((row) => Number(row.id) === Number(state.selectedId))) {
+        state.selectedId = null;
+      }
+      renderTable();
+      renderEditor();
+    } finally {
+      if (sequence === state.loadSequence) tableTarget.removeAttribute("aria-busy");
     }
-    if (!state.selectedId && state.rows.length) {
-      state.selectedId = state.rows[0].id;
-    }
-    renderTable();
   };
 
   filterForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     state.page = 1;
     await load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be loaded.", "error"));
+  });
+
+  const searchInput = filterForm.querySelector('input[name="search"]');
+  searchInput?.addEventListener("input", () => {
+    window.clearTimeout(state.searchTimer);
+    state.searchTimer = window.setTimeout(() => {
+      state.page = 1;
+      load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be loaded.", "error"));
+    }, 300);
+  });
+  filterForm.querySelectorAll('select[name="category_id"], select[name="visibility"], select[name="pos_visibility"]').forEach((select) => {
+    select.addEventListener("change", () => {
+      state.page = 1;
+      load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be loaded.", "error"));
+    });
+  });
+
+  bulkActions?.querySelectorAll("[data-products-bulk-field]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const field = button.getAttribute("data-products-bulk-field") || "";
+      const value = button.getAttribute("data-products-bulk-value") === "true";
+      void updateVisibility([...state.selectedIds], field, value, { confirmBulk: true });
+    });
+  });
+  bulkActions?.querySelector("[data-products-clear-selection]")?.addEventListener("click", () => {
+    state.selectedIds.clear();
+    renderTable();
+  });
+
+  editorCloseButton?.addEventListener("click", () => {
+    state.selectedId = null;
+    renderTable();
+    renderEditor();
   });
 
   refreshButton?.addEventListener("click", () => {
