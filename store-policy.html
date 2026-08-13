@@ -5,8 +5,78 @@
 <script defer src="/ga4.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TECHM8 Store Policy</title>
+  <title>Shipping, Returns &amp; Warranty Policy | TECHM8 Australia</title>
   <meta name="description" content="TECHM8 store policy covering shipping, returns and warranty information for online shopping orders.">
+  <meta name="robots" content="index, follow, max-snippet:-1">
+  <link rel="canonical" href="https://www.techm8australia.com/store-policy.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.techm8australia.com/#organization",
+        "name": "TECHM8",
+        "legalName": "YQM PTY LTD",
+        "url": "https://www.techm8australia.com/",
+        "identifier": {"@type":"PropertyValue","propertyID":"ABN","value":"12 645 861 463"},
+        "hasMerchantReturnPolicy": {"@id":"https://www.techm8australia.com/store-policy.html#return-policy"},
+        "hasShippingService": {"@id":"https://www.techm8australia.com/store-policy.html#qld-standard-shipping"}
+      },
+      {
+        "@type": "MerchantReturnPolicy",
+        "@id": "https://www.techm8australia.com/store-policy.html#return-policy",
+        "applicableCountry": "AU",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 7,
+        "merchantReturnLink": "https://www.techm8australia.com/store-policy.html#returns",
+        "returnMethod": ["https://schema.org/ReturnByMail", "https://schema.org/ReturnInStore"],
+        "returnFees": "https://schema.org/FreeReturn",
+        "itemCondition": "https://schema.org/NewCondition"
+      },
+      {
+        "@type": "ShippingService",
+        "@id": "https://www.techm8australia.com/store-policy.html#qld-standard-shipping",
+        "name": "TECHM8 Queensland standard shipping",
+        "description": "AU$9.50 standard shipping for orders under AU$80 and free standard shipping for orders of AU$80 or more within Queensland.",
+        "fulfillmentType": "https://schema.org/FulfillmentTypeDelivery",
+        "handlingTime": {
+          "@type": "ServicePeriod",
+          "duration": {"@type":"QuantitativeValue","minValue":0,"maxValue":1,"unitCode":"DAY"},
+          "businessDays": ["https://schema.org/Monday","https://schema.org/Tuesday","https://schema.org/Wednesday","https://schema.org/Thursday","https://schema.org/Friday"]
+        },
+        "shippingConditions": [
+          {
+            "@type": "ShippingConditions",
+            "shippingDestination": {"@type":"DefinedRegion","addressCountry":"AU","addressRegion":"QLD"},
+            "orderValue": {"@type":"MonetaryAmount","minValue":0,"maxValue":79.99,"currency":"AUD"},
+            "shippingRate": {"@type":"MonetaryAmount","value":9.50,"currency":"AUD"},
+            "transitTime": {"@type":"ServicePeriod","duration":{"@type":"QuantitativeValue","minValue":1,"maxValue":7,"unitCode":"DAY"}}
+          },
+          {
+            "@type": "ShippingConditions",
+            "shippingDestination": {"@type":"DefinedRegion","addressCountry":"AU","addressRegion":"QLD"},
+            "orderValue": {"@type":"MonetaryAmount","minValue":80,"currency":"AUD"},
+            "shippingRate": {"@type":"MonetaryAmount","value":0,"currency":"AUD"},
+            "transitTime": {"@type":"ServicePeriod","duration":{"@type":"QuantitativeValue","minValue":1,"maxValue":7,"unitCode":"DAY"}}
+          }
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.techm8australia.com/store-policy.html#webpage",
+        "url": "https://www.techm8australia.com/store-policy.html",
+        "name": "TECHM8 shipping, returns and warranty policy",
+        "inLanguage": "en-AU",
+        "dateModified": "2026-08-14",
+        "about": [
+          {"@id":"https://www.techm8australia.com/store-policy.html#return-policy"},
+          {"@id":"https://www.techm8australia.com/store-policy.html#qld-standard-shipping"}
+        ]
+      }
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">

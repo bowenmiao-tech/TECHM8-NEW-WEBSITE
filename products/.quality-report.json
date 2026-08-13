@@ -1,9 +1,548 @@
 {
-  "catalog_updated_at": "2026-08-13T15:18:59.834791+00:00",
-  "total_products": 84,
-  "indexable_products": 81,
-  "limited_products": 3,
+  "catalog_updated_at": "2026-08-13T15:53:44.591871+00:00",
+  "total_products": 132,
+  "indexable_products": 89,
+  "limited_products": 43,
   "products": [
+    {
+      "id": 2180,
+      "slug": "repairdesk-misc-7144-adhesive-silicone-card-holder-pink",
+      "name": "Adhesive Silicone Card Holder - Pink",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2179,
+      "slug": "repairdesk-misc-7145-adhesive-silicone-card-holder-blue",
+      "name": "Adhesive Silicone Card Holder - Blue",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2171,
+      "slug": "repairdesk-misc-7146-adhesive-silicone-card-holder-yellow",
+      "name": "Adhesive Silicone Card Holder - Yellow",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2170,
+      "slug": "repairdesk-misc-7147-adhesive-silicone-card-holder-green",
+      "name": "Adhesive Silicone Card Holder - Green",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2169,
+      "slug": "repairdesk-misc-7148-adhesive-silicone-card-holder-black",
+      "name": "Adhesive Silicone Card Holder - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2167,
+      "slug": "repairdesk-misc-8036-magsafe-card-wallet-brown",
+      "name": "MagSafe Card Wallet - Brown",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2166,
+      "slug": "repairdesk-misc-8038-magsafe-card-wallet-green",
+      "name": "MagSafe Card Wallet - Green",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2165,
+      "slug": "repairdesk-misc-8039-magsafe-card-wallet-red",
+      "name": "MagSafe Card Wallet - Red",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2164,
+      "slug": "repairdesk-misc-8040-magsafe-card-wallet-orange",
+      "name": "MagSafe Card Wallet - Orange",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2163,
+      "slug": "repairdesk-misc-8041-magsafe-card-wallet-navy",
+      "name": "MagSafe Card Wallet - Navy",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2161,
+      "slug": "repairdesk-misc-8411-phone-lanyard-strap",
+      "name": "Phone Lanyard Strap",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2160,
+      "slug": "repairdesk-misc-8412-phone-strap-adapter-patch",
+      "name": "Phone Strap Adapter Patch",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2155,
+      "slug": "repairdesk-misc-8974-card-strap-holder",
+      "name": "Card Strap Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2152,
+      "slug": "repairdesk-misc-10851-magsafe-multi-wallet-grey",
+      "name": "MagSafe Multi-Wallet - Grey",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2151,
+      "slug": "repairdesk-misc-10852-magsafe-multi-wallet-black",
+      "name": "MagSafe Multi-Wallet - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2150,
+      "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
+      "name": "MagSafe Multi-Wallet - Brown",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2149,
+      "slug": "repairdesk-misc-10854-magsafe-silicone-phone-grip-black",
+      "name": "MagSafe Silicone Phone Grip - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2148,
+      "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
+      "name": "MagSafe Silicone Phone Grip - Sky Blue",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2147,
+      "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
+      "name": "MagSafe Silicone Phone Grip - Pink",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2146,
+      "slug": "repairdesk-misc-10857-magsafe-silicone-phone-grip-purple",
+      "name": "MagSafe Silicone Phone Grip - Purple",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2145,
+      "slug": "repairdesk-misc-10888-magsafe-stand-wallet-black",
+      "name": "MagSafe Stand Wallet - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2083,
+      "slug": "repairdesk-accessory-6770-silver-aluminium-adjustable-laptop-stand",
+      "name": "Silver Aluminium Adjustable Laptop Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2082,
+      "slug": "repairdesk-accessory-6771-black-aluminium-adjustable-laptop-stand",
+      "name": "Black Aluminium Adjustable Laptop Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2081,
+      "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
+      "name": "2M Stand Selfie Live Stream Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2069,
+      "slug": "repairdesk-accessory-6031-stander",
+      "name": "Stander",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2068,
+      "slug": "repairdesk-accessory-6181-remax-alien-series-phone-holder-green",
+      "name": "Remax Alien Series Phone Holder Green",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2067,
+      "slug": "repairdesk-accessory-6553-remax-p12-multifunctional-selfie-stick",
+      "name": "Remax P12 Multifunctional Selfie Stick",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2066,
+      "slug": "repairdesk-accessory-8867-2m-stand-8809",
+      "name": "2M Stand 8809",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2065,
+      "slug": "repairdesk-accessory-10264-remax-rm-c60-phone-stand",
+      "name": "Remax RM-C60 Phone Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2061,
+      "slug": "repairdesk-accessory-10924-remax-p10-multifunctional-selfie-stick",
+      "name": "Remax P10 Multifunctional Selfie Stick",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2060,
+      "slug": "repairdesk-accessory-10989-c141-desktop-mobile-phone-holder",
+      "name": "C141 Desktop Mobile Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2059,
+      "slug": "repairdesk-accessory-11139-remax-selfie-stick-holder-with-lights-p60",
+      "name": "Remax Selfie Stick Holder with Lights P60",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2058,
+      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
+      "name": "WEKOME Desktop Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1590,
+      "slug": "tm8-car-6034",
+      "name": "Replacement Metal Plate for Magnetic Phone Holders",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1589,
+      "slug": "tm8-car-6576",
+      "name": "Car Phone Holder 3",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1588,
+      "slug": "tm8-car-6580",
+      "name": "Car Phone Holder 5",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1585,
+      "slug": "tm8-car-6606",
+      "name": "WEKOME WP-U203 Car Phone Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1584,
+      "slug": "tm8-car-6659",
+      "name": "Metal Motorcycle Phone Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1583,
+      "slug": "tm8-car-6660",
+      "name": "Magnetic Dashboard and Air Vent Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1582,
+      "slug": "tm8-car-6671",
+      "name": "Car Back Seat Phone Mount",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1581,
+      "slug": "tm8-car-6989",
+      "name": "Car Phone Holder 2",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1578,
+      "slug": "tm8-car-8154",
+      "name": "MagSafe Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1577,
+      "slug": "tm8-car-8866",
+      "name": "Tesla Model 3/Y Mobile Phone Holder Adapter",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1574,
+      "slug": "tm8-car-9976",
+      "name": "Magnetic Air Vent Hook Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1573,
+      "slug": "tm8-car-9977",
+      "name": "Magnetic Stick-On Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1572,
+      "slug": "tm8-car-10362",
+      "name": "Bike Phone Holder Z02 + MT01",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1571,
+      "slug": "tm8-car-10742",
+      "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1569,
+      "slug": "tm8-car-10834",
+      "name": "Remax RM-C36 Rotatable Car Phone Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1568,
+      "slug": "tm8-car-11126",
+      "name": "Remax RM-C42 Pro Magnetic Rotating Zinc Alloy Car Mount",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 110,
       "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
@@ -457,28 +996,6 @@
       ]
     },
     {
-      "id": 41,
-      "slug": "wekome-wp-81-magsafe-10000mah-power-bank",
-      "name": "WEKOME WP-81 Magsafe 10000mAh Power Bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 40,
-      "slug": "wekome-wp-80-magsafe-5000mah-power-bank",
-      "name": "WEKOME WP-80 Magsafe 5000mAh Power Bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 39,
       "slug": "wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging",
       "name": "WEKOME WP-59 10000 mAh Power Bank 22.5W super fast charging",
@@ -775,17 +1292,6 @@
       ]
     },
     {
-      "id": 2169,
-      "slug": "repairdesk-misc-7148-adhesive-silicone-card-holder-black",
-      "name": "Adhesive Silicone Card Holder - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 83,
       "slug": "remax-g6-wireless-gamebubs",
       "name": "Remax G6  Wireless GameBubs",
@@ -848,6 +1354,32 @@
       "score": 100,
       "blockers": [],
       "warnings": []
+    },
+    {
+      "id": 41,
+      "slug": "wekome-wp-81-magsafe-10000mah-power-bank",
+      "name": "WEKOME WP-81 Magsafe 10000mAh Power Bank",
+      "indexable": false,
+      "score": 57,
+      "blockers": [
+        "hidden-product"
+      ],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 40,
+      "slug": "wekome-wp-80-magsafe-5000mah-power-bank",
+      "name": "WEKOME WP-80 Magsafe 5000mAh Power Bank",
+      "indexable": false,
+      "score": 57,
+      "blockers": [
+        "hidden-product"
+      ],
+      "warnings": [
+        "description-under-90-characters"
+      ]
     }
   ]
 }

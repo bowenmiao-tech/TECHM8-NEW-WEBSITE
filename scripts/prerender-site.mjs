@@ -42,6 +42,13 @@ const LEGACY_PRODUCT_DIRS = [
   join(ROOT, "public", "product-page"),
 ];
 const CONTENT_REVIEW_DATE = "2026-08-01";
+const RETIRED_LEGACY_PRODUCT_SLUGS = [
+  "samsung-full-cover-nano-glass-matte-anti-screen-protector-tm8-sp05",
+  "meetion-wireless-mouse-black-r560",
+  "three-in-one-cable-knitted-denim-with-blue-light-1m",
+  "wireless-chocolate-keyboard-wk841",
+  "airpods-silicone-cases",
+];
 
 const escapeHtml = (value = "") =>
   String(value)
@@ -385,6 +392,7 @@ function productJsonLd(product) {
           "https://schema.org/ReturnByMail",
           "https://schema.org/ReturnInStore",
         ],
+        returnFees: "https://schema.org/FreeReturn",
       },
     };
   }
@@ -407,6 +415,12 @@ function productJsonLd(product) {
           value: "12 645 861 463",
         },
         areaServed: { "@type": "Country", name: "Australia" },
+        hasMerchantReturnPolicy: {
+          "@id": `${SITE_URL}/store-policy.html#return-policy`,
+        },
+        hasShippingService: {
+          "@id": `${SITE_URL}/store-policy.html#qld-standard-shipping`,
+        },
       },
       {
         "@type": "BreadcrumbList",
@@ -946,7 +960,26 @@ function renderLegacyProductRedirect(product) {
 `;
 }
 
+function renderRetiredLegacyRedirect(slug) {
+  const destination = `${SITE_URL}/shop.html`;
+  return `<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product no longer available | TECHM8</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="${destination}">
+  <meta http-equiv="refresh" content="0; url=${destination}">
+  <script>window.location.replace(${JSON.stringify(destination)});</script>
+</head>
+<body><main><h1>Product no longer available</h1><p><a href="${destination}">Browse current TECHM8 products</a></p></main></body>
+</html>
+`;
+}
+
 async function writeLegacyProductRedirects(products) {
+  const activeSlugs = new Set(products.map((product) => product.slug));
   for (const directory of LEGACY_PRODUCT_DIRS) {
     await mkdir(directory, { recursive: true });
     for (const product of products) {
@@ -955,6 +988,16 @@ async function writeLegacyProductRedirects(products) {
       await writeFile(
         join(folder, "index.html"),
         renderLegacyProductRedirect(product),
+        "utf8",
+      );
+    }
+    for (const slug of RETIRED_LEGACY_PRODUCT_SLUGS) {
+      if (activeSlugs.has(slug)) continue;
+      const folder = join(directory, slug);
+      await mkdir(folder, { recursive: true });
+      await writeFile(
+        join(folder, "index.html"),
+        renderRetiredLegacyRedirect(slug),
         "utf8",
       );
     }
