@@ -3304,8 +3304,8 @@ function initCookieConsentBanner() {
       </label>
       <label class="cookie-settings__option">
         <span>
-          <strong>Analytics ready</strong>
-          <small>Reserved for future Google Analytics or Meta reporting. No third-party analytics is loaded by this banner today.</small>
+          <strong>Analytics</strong>
+          <small>Allow Google Analytics to measure site usage and help us improve loading, navigation and services.</small>
         </span>
         <input type="checkbox" data-cookie-analytics>
       </label>
@@ -5548,9 +5548,10 @@ function createCatalogCard(product, index = Number.POSITIVE_INFINITY) {
       : "";
   const stockLabel = "Available to order";
   const navigationCache = buildProductNavigationCache(product);
-  const eagerImage = Number.isFinite(index) && index < 4;
+  const eagerImage = Number.isFinite(index) && index < 2;
+  const highPriorityImage = Number.isFinite(index) && index === 0;
   const imageMarkup = product.display_image
-    ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="${eagerImage ? "eager" : "lazy"}" decoding="async" ${eagerImage ? 'fetchpriority="high"' : ""} sizes="(max-width: 380px) 92vw, (max-width: 720px) 44vw, (max-width: 1200px) 30vw, 18vw">`
+    ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="${eagerImage ? "eager" : "lazy"}" decoding="async" ${highPriorityImage ? 'fetchpriority="high"' : ""} sizes="(max-width: 380px) 92vw, (max-width: 720px) 44vw, (max-width: 1200px) 30vw, 18vw">`
     : `<div class="storefront-card__image storefront-card__image--placeholder" aria-hidden="true">TECHM8</div>`;
   const stockClass = "is-in-stock";
 

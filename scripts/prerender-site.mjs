@@ -511,7 +511,6 @@ ${quality.indexable ? `  <script type="application/ld+json">${productJsonLd(prod
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7YLMGHMRDG"></script>
   <script defer src="/ga4.js"></script>
 </head>
 <body>
@@ -864,7 +863,6 @@ function renderGenericRepairPage(data, file, assignment) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7YLMGHMRDG"></script>
   <script defer src="/ga4.js"></script>
 </head>
 <body class="repair-page" data-generic-repair-prerendered>
