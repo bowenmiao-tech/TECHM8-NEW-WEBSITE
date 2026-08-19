@@ -741,61 +741,6 @@
       ]
     },
     {
-      "id": 2180,
-      "slug": "repairdesk-misc-7144-adhesive-silicone-card-holder-pink",
-      "name": "Adhesive Silicone Card Holder - Pink",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2179,
-      "slug": "repairdesk-misc-7145-adhesive-silicone-card-holder-blue",
-      "name": "Adhesive Silicone Card Holder - Blue",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2171,
-      "slug": "repairdesk-misc-7146-adhesive-silicone-card-holder-yellow",
-      "name": "Adhesive Silicone Card Holder - Yellow",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2170,
-      "slug": "repairdesk-misc-7147-adhesive-silicone-card-holder-green",
-      "name": "Adhesive Silicone Card Holder - Green",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2169,
-      "slug": "repairdesk-misc-7148-adhesive-silicone-card-holder-black",
-      "name": "Adhesive Silicone Card Holder - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2166,
       "slug": "repairdesk-misc-8038-magsafe-card-wallet-green",
       "name": "MagSafe Card Wallet - Green",
@@ -821,17 +766,6 @@
       "id": 2163,
       "slug": "repairdesk-misc-8041-magsafe-card-wallet-navy",
       "name": "MagSafe Card Wallet - Navy",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2160,
-      "slug": "repairdesk-misc-8412-phone-strap-adapter-patch",
-      "name": "Phone Strap Adapter Patch",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -1496,6 +1430,78 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2180,
+      "slug": "repairdesk-misc-7144-adhesive-silicone-card-holder-pink",
+      "name": "Adhesive Silicone Card Holder - Pink",
+      "indexable": false,
+      "score": 30,
+      "blockers": [
+        "hidden-product",
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2179,
+      "slug": "repairdesk-misc-7145-adhesive-silicone-card-holder-blue",
+      "name": "Adhesive Silicone Card Holder - Blue",
+      "indexable": false,
+      "score": 30,
+      "blockers": [
+        "hidden-product",
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2171,
+      "slug": "repairdesk-misc-7146-adhesive-silicone-card-holder-yellow",
+      "name": "Adhesive Silicone Card Holder - Yellow",
+      "indexable": false,
+      "score": 30,
+      "blockers": [
+        "hidden-product",
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2170,
+      "slug": "repairdesk-misc-7147-adhesive-silicone-card-holder-green",
+      "name": "Adhesive Silicone Card Holder - Green",
+      "indexable": false,
+      "score": 30,
+      "blockers": [
+        "hidden-product",
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2169,
+      "slug": "repairdesk-misc-7148-adhesive-silicone-card-holder-black",
+      "name": "Adhesive Silicone Card Holder - Black",
+      "indexable": false,
+      "score": 30,
+      "blockers": [
+        "hidden-product",
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2160,
+      "slug": "repairdesk-misc-8412-phone-strap-adapter-patch",
+      "name": "Phone Strap Adapter Patch",
+      "indexable": false,
+      "score": 30,
+      "blockers": [
+        "hidden-product",
+        "description-under-40-characters"
+      ],
       "warnings": []
     },
     {
