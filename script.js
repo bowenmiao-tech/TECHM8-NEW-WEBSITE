@@ -1154,8 +1154,21 @@ function initHomeBanner() {
     totalCount.textContent = String(slides.length);
   }
 
+  const hydrateSlideImage = (slide) => {
+    if (!(slide instanceof HTMLElement)) return;
+    const image = slide.querySelector("img[data-src]");
+    if (!(image instanceof HTMLImageElement)) return;
+    image.src = image.dataset.src || "";
+    if (image.dataset.srcset) image.srcset = image.dataset.srcset;
+    if (image.dataset.sizes) image.sizes = image.dataset.sizes;
+    delete image.dataset.src;
+    delete image.dataset.srcset;
+    delete image.dataset.sizes;
+  };
+
   const render = (index) => {
     current = (index + slides.length) % slides.length;
+    hydrateSlideImage(slides[current]);
     slides.forEach((slide, slideIndex) => {
       slide.classList.toggle("is-active", slideIndex === current);
     });
@@ -1167,11 +1180,12 @@ function initHomeBanner() {
     }
   };
 
-  const restart = () => {
-    window.clearInterval(timer);
-    timer = window.setInterval(() => {
+  const restart = (delay = 5000) => {
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => {
       render(current + 1);
-    }, 5000);
+      restart();
+    }, delay);
   };
 
   dots.forEach((dot, index) => {
@@ -1192,7 +1206,7 @@ function initHomeBanner() {
   });
 
   banner.addEventListener("mouseenter", () => {
-    window.clearInterval(timer);
+    window.clearTimeout(timer);
   });
 
   banner.addEventListener("mouseleave", () => {
@@ -1228,7 +1242,12 @@ function initHomeBanner() {
   });
 
   render(0);
-  restart();
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      slides[0]?.removeAttribute("data-banner-initial");
+    });
+  });
+  restart(10000);
 }
 
 function initRepairCountMeter() {

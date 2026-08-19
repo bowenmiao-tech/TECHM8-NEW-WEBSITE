@@ -632,6 +632,10 @@ a {
   transition-delay: 0s;
 }
 
+.home-banner__slide[data-banner-initial] {
+  transition: none;
+}
+
 .home-banner__flat-link {
   display: block;
   overflow: hidden;
