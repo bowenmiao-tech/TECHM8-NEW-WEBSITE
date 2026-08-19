@@ -507,9 +507,6 @@ function renderProductPage(product) {
   <meta property="product:price:currency" content="${CATALOG_CURRENCY}">
 ${quality.indexable ? `  <script type="application/ld+json">${productJsonLd(product).replaceAll("<", "\\u003c")}</script>` : ""}
   <script type="application/json" data-prerendered-product>${embeddedProduct}</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <script defer src="/ga4.js"></script>
 </head>
@@ -517,7 +514,7 @@ ${quality.indexable ? `  <script type="application/ld+json">${productJsonLd(prod
   <!-- GENERATED: TECHM8 product prerender. Supabase remains the source of truth. -->
   <div class="promo-banner"><div class="container promo-banner__inner"><span>TECHM8 online store product</span><a href="/shop.html">Back to online store</a></div></div>
   <header class="site-header"><div class="container nav">
-    <a class="brand" href="/" aria-label="TECHM8 home"><img class="brand__logo" src="/assets/logo-techm8.png" alt="TECHM8 logo"></a>
+    <a class="brand" href="/" aria-label="TECHM8 home"><img class="brand__logo" src="/assets/logo-techm8.png" srcset="/assets/logo-techm8-512.webp 512w, /assets/logo-techm8.png 2285w" sizes="(max-width: 420px) 200px, (max-width: 720px) 240px, 305px" alt="TECHM8 logo" width="2285" height="527" decoding="async"></a>
     <nav class="nav__menu"><a href="/repairs.html">Repairs</a><a href="/blog.html">Tech Insights</a><a href="/stores.html">Store Locator</a><a href="/business-services.html">Business Services</a><a class="nav__cart-link" href="/cart.html">Cart <span class="nav__cart-count" data-cart-count>0</span></a><a class="nav__shop-link" href="/shop.html">Online Store</a></nav>
   </div></header>
   <main class="storefront-page storefront-page--detail" data-product-page data-product-slug="${escapeHtml(product.slug)}" data-content-quality="${quality.indexable ? "indexable" : "limited"}">
@@ -859,16 +856,13 @@ function renderGenericRepairPage(data, file, assignment) {
   <meta property="og:image" content="${SITE_URL}/assets/logo-techm8.png">
   <script type="application/ld+json">${renderGenericRepairJsonLd(data, file).replaceAll("<", "\\u003c")}</script>
   <script data-repair-page-data>${assignmentScript}</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <script defer src="/ga4.js"></script>
 </head>
 <body class="repair-page" data-generic-repair-prerendered>
   <div class="promo-banner"><div class="container promo-banner__inner"><span>${escapeHtml(data.banner || `${data.title} support in Queensland`)}</span><a href="/stores.html">Find a store</a></div></div>
   <header class="site-header"><div class="container nav">
-    <a class="brand" href="/" aria-label="TECHM8 home"><img class="brand__logo" src="/assets/logo-techm8.png" alt="TECHM8 logo"></a>
+    <a class="brand" href="/" aria-label="TECHM8 home"><img class="brand__logo" src="/assets/logo-techm8.png" srcset="/assets/logo-techm8-512.webp 512w, /assets/logo-techm8.png 2285w" sizes="(max-width: 420px) 200px, (max-width: 720px) 240px, 305px" alt="TECHM8 logo" width="2285" height="527" decoding="async"></a>
     <nav class="nav__menu"><a href="/repairs.html">Repairs</a><a href="/blog.html">Tech Insights</a><a href="/stores.html">Store Locator</a><a href="/business-services.html">Business Services</a><a class="nav__shop-link" href="/shop.html">Online Store</a></nav>
   </div></header>
   <main>

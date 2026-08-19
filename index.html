@@ -58,20 +58,16 @@
       ]
     }
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://fwlronvmgqzkleofriis.supabase.co" crossorigin />
     <link rel="preconnect" href="https://dghyt15qon7us.cloudfront.net" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
       rel="preload"
       as="image"
-      href="assets/banner-home-wp70-wide.webp"
-      imagesrcset="assets/banner-home-wp70-wide.webp 1672w"
-      imagesizes="(max-width: 720px) 100vw, 1180px"
+      href="assets/banner-home-wp70-720.webp"
+      imagesrcset="assets/banner-home-wp70-720.webp 720w, assets/banner-home-wp70-1024.webp 1024w, assets/banner-home-wp70-1200.webp 1200w, assets/banner-home-wp70-wide.webp 1672w"
+      imagesizes="(max-width: 720px) calc(100vw - 2rem), 1180px"
+      type="image/webp"
+      fetchpriority="high"
     />
     <link rel="stylesheet" href="styles.css?v=repair-category-links-20260531" />
   </head>
@@ -92,7 +88,12 @@
           <img
             class="brand__logo"
             src="assets/logo-techm8.png"
+            srcset="assets/logo-techm8-512.webp 512w, assets/logo-techm8.png 2285w"
+            sizes="(max-width: 420px) 200px, (max-width: 720px) 240px, 305px"
             alt="TECHM8 logo"
+            width="2285"
+            height="527"
+            decoding="async"
           />
         </a>
         <input
@@ -260,6 +261,8 @@
               >
                 <img
                   src="assets/banner-home-wp70-wide.webp"
+                  srcset="assets/banner-home-wp70-720.webp 720w, assets/banner-home-wp70-1024.webp 1024w, assets/banner-home-wp70-1200.webp 1200w, assets/banner-home-wp70-wide.webp 1672w"
+                  sizes="(max-width: 720px) calc(100vw - 2rem), 1180px"
                   alt="WP-70 magnetic power bank banner"
                   width="1672"
                   height="941"
@@ -279,6 +282,8 @@
               >
                 <img
                   src="assets/banner-home-ps5-controllers-wide.webp"
+                  srcset="assets/banner-home-ps5-controllers-720.webp 720w, assets/banner-home-ps5-controllers-1024.webp 1024w, assets/banner-home-ps5-controllers-1200.webp 1200w, assets/banner-home-ps5-controllers-wide.webp 1672w"
+                  sizes="(max-width: 720px) calc(100vw - 2rem), 1180px"
                   alt="PS5 controller colour range banner"
                   width="1672"
                   height="941"
@@ -702,7 +707,13 @@
           <img
             class="footer-brand__logo"
             src="assets/logo-techm8.png"
+            srcset="assets/logo-techm8-512.webp 512w, assets/logo-techm8.png 2285w"
+            sizes="(max-width: 720px) 240px, 278px"
             alt="TECHM8 logo"
+            width="2285"
+            height="527"
+            loading="lazy"
+            decoding="async"
           />
           <p>
             TECHM8 repairs phones, tablets, computers, laptops and game

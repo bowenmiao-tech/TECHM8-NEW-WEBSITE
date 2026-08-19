@@ -1,9 +1,196 @@
 {
-  "catalog_updated_at": "2026-08-15T16:19:53.841624+00:00",
-  "total_products": 132,
-  "indexable_products": 89,
-  "limited_products": 43,
+  "catalog_updated_at": "2026-08-19T10:23:12.714422+00:00",
+  "total_products": 149,
+  "indexable_products": 95,
+  "limited_products": 54,
   "products": [
+    {
+      "id": 2158,
+      "slug": "repairdesk-misc-8483-drone-map",
+      "name": "Drone Map",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2062,
+      "slug": "repairdesk-accessory-10267-remax-f23-icying-series-bladeless-neckband-fan-white",
+      "name": "Remax F23 Icying Series Bladeless Neckband Fan White",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2063,
+      "slug": "repairdesk-accessory-10266-remax-portable-mini-handheld-fan-f34",
+      "name": "Remax Portable Mini Handheld Fan F34",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2064,
+      "slug": "repairdesk-accessory-10265-remax-f37-usb-fan",
+      "name": "Remax F37 USB Fan",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1717,
+      "slug": "tm8-cch-6575",
+      "name": "35W USB-C + Dual USB-A Car Charger - Black",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1713,
+      "slug": "tm8-cch-7588",
+      "name": "35W USB-C + Dual USB-A Car Charger - White",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1714,
+      "slug": "tm8-cch-7152",
+      "name": "Dual Socket + USB Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1716,
+      "slug": "tm8-cch-7150",
+      "name": "45W Dual USB-C Car Charger - White",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1712,
+      "slug": "tm8-cch-9322",
+      "name": "K28 USB-A + USB-C Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1715,
+      "slug": "tm8-cch-7151",
+      "name": "45W Dual USB-C Car Charger - Black",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1732,
+      "slug": "repairdesk-computer-11064-t-wold-s3-speaker",
+      "name": "T-Wold S3 Speaker",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2045,
+      "slug": "repairdesk-accessory-10382-wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2044,
+      "slug": "repairdesk-accessory-10383-wekome-yb06-wired-earphone-aux-in-ear",
+      "name": "WEKOME YB06 Wired Earphone Aux IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2043,
+      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
+      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2042,
+      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
+      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2036,
+      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
+      "name": "USB-C WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2035,
+      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
+      "name": "AUX WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 1,
       "slug": "dualsense-wireless-controller-sterling-silver-playstation-5",
@@ -609,31 +796,9 @@
       "warnings": []
     },
     {
-      "id": 2167,
-      "slug": "repairdesk-misc-8036-magsafe-card-wallet-brown",
-      "name": "MagSafe Card Wallet - Brown",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2166,
       "slug": "repairdesk-misc-8038-magsafe-card-wallet-green",
       "name": "MagSafe Card Wallet - Green",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2165,
-      "slug": "repairdesk-misc-8039-magsafe-card-wallet-red",
-      "name": "MagSafe Card Wallet - Red",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -664,31 +829,9 @@
       "warnings": []
     },
     {
-      "id": 2161,
-      "slug": "repairdesk-misc-8411-phone-lanyard-strap",
-      "name": "Phone Lanyard Strap",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2160,
       "slug": "repairdesk-misc-8412-phone-strap-adapter-patch",
       "name": "Phone Strap Adapter Patch",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2155,
-      "slug": "repairdesk-misc-8974-card-strap-holder",
-      "name": "Card Strap Holder",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -1353,6 +1496,54 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2167,
+      "slug": "repairdesk-misc-8036-magsafe-card-wallet-brown",
+      "name": "MagSafe Card Wallet - Brown",
+      "indexable": false,
+      "score": 30,
+      "blockers": [
+        "hidden-product",
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2165,
+      "slug": "repairdesk-misc-8039-magsafe-card-wallet-red",
+      "name": "MagSafe Card Wallet - Red",
+      "indexable": false,
+      "score": 30,
+      "blockers": [
+        "hidden-product",
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2161,
+      "slug": "repairdesk-misc-8411-phone-lanyard-strap",
+      "name": "Phone Lanyard Strap",
+      "indexable": false,
+      "score": 30,
+      "blockers": [
+        "hidden-product",
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2155,
+      "slug": "repairdesk-misc-8974-card-strap-holder",
+      "name": "Card Strap Holder",
+      "indexable": false,
+      "score": 30,
+      "blockers": [
+        "hidden-product",
+        "description-under-40-characters"
+      ],
       "warnings": []
     },
     {

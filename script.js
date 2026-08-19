@@ -5615,7 +5615,7 @@ function createHomeFeaturedCard(product, index = 0) {
   const navigationCache = buildProductNavigationCache(product);
   const eagerImage = index < 2;
   const imageMarkup = product.display_image
-    ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="${eagerImage ? "eager" : "lazy"}" decoding="async" ${eagerImage ? 'fetchpriority="high"' : ""} sizes="(max-width: 720px) 72vw, 22vw">`
+    ? `<img src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" width="640" height="640" loading="${eagerImage ? "eager" : "lazy"}" decoding="async" ${eagerImage ? 'fetchpriority="high"' : ""} sizes="(max-width: 720px) 72vw, 22vw">`
     : `<div class="home-product-card__image-placeholder" aria-hidden="true">TECHM8</div>`;
 
   return `
