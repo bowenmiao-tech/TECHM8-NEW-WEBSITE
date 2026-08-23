@@ -11456,3 +11456,119 @@ html:has(body.repair-page--console-hero) {
     font-size: 0.76rem;
   }
 }
+
+/* Booking page: keep the repair form reachable in the first viewport */
+body.booking-page .booking-hero {
+  padding-top: 1.05rem;
+  padding-bottom: 0.5rem;
+}
+
+body.booking-page .booking-hero__inner {
+  gap: 1rem;
+}
+
+body.booking-page .booking-hero__copy h1 {
+  max-width: 24ch;
+  font-size: clamp(1.95rem, 3.2vw, 2.85rem);
+  line-height: 1.08;
+}
+
+body.booking-page .booking-hero .hero__lead {
+  max-width: 60ch;
+  margin-top: 0.55rem;
+  line-height: 1.55;
+}
+
+body.booking-page .booking-hero__points {
+  margin-top: 0.75rem;
+}
+
+body.booking-page .booking-hero__panel {
+  padding: 1rem 1.15rem;
+}
+
+body.booking-page .booking-hero__panel strong {
+  margin-bottom: 0.45rem;
+  font-size: 1.05rem;
+}
+
+body.booking-page .booking-hero__panel ul {
+  gap: 0.35rem;
+}
+
+body.booking-page .booking-section {
+  padding-top: 0.55rem;
+}
+
+body.booking-page .booking-card .section-heading {
+  gap: 0.4rem;
+  margin-bottom: 1.15rem;
+}
+
+.booking-card__assurance {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+body.booking-page .booking-seo-section {
+  padding-top: 2.5rem;
+}
+
+@media (max-width: 960px) {
+  body.booking-page .booking-hero__inner {
+    gap: 0.85rem;
+  }
+}
+
+@media (max-width: 640px) {
+  body.booking-page .booking-hero {
+    padding-top: 0.65rem;
+    padding-bottom: 0.25rem;
+  }
+
+  body.booking-page .booking-hero__copy h1 {
+    font-size: clamp(1.75rem, 7.6vw, 2.2rem);
+    max-width: none;
+  }
+
+  body.booking-page .booking-hero .hero__lead {
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  body.booking-page .booking-hero__points {
+    gap: 0.35rem;
+    margin-top: 0.6rem;
+  }
+
+  body.booking-page .booking-hero__points span {
+    min-height: 1.7rem;
+    padding: 0 0.6rem;
+    font-size: 0.8rem;
+    box-shadow: none;
+  }
+
+  body.booking-page .booking-section {
+    padding-top: 0.3rem;
+  }
+
+  body.booking-page .booking-card .section-heading {
+    gap: 0.3rem;
+    margin-bottom: 0.85rem;
+  }
+
+  body.booking-page .booking-card h2 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  body.booking-page .booking-card__assurance {
+    font-size: 0.82rem;
+  }
+
+  body.booking-page .booking-seo-section {
+    padding-top: 1.75rem;
+  }
+}
