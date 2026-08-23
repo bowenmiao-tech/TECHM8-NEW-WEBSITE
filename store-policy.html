@@ -20,7 +20,10 @@
         "url": "https://www.techm8australia.com/",
         "identifier": {"@type":"PropertyValue","propertyID":"ABN","value":"12 645 861 463"},
         "hasMerchantReturnPolicy": {"@id":"https://www.techm8australia.com/store-policy.html#return-policy"},
-        "hasShippingService": {"@id":"https://www.techm8australia.com/store-policy.html#qld-standard-shipping"}
+        "hasShippingService": [
+          {"@id":"https://www.techm8australia.com/store-policy.html#standard-shipping"},
+          {"@id":"https://www.techm8australia.com/store-policy.html#express-shipping"}
+        ]
       },
       {
         "@type": "MerchantReturnPolicy",
@@ -30,14 +33,18 @@
         "merchantReturnDays": 7,
         "merchantReturnLink": "https://www.techm8australia.com/store-policy.html#returns",
         "returnMethod": ["https://schema.org/ReturnByMail", "https://schema.org/ReturnInStore"],
-        "returnFees": "https://schema.org/FreeReturn",
+        "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+        "customerRemorseReturnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+        "itemDefectReturnFees": "https://schema.org/FreeReturn",
+        "refundType": ["https://schema.org/FullRefund", "https://schema.org/StoreCreditRefund"],
+        "returnPolicyCountry": "AU",
         "itemCondition": "https://schema.org/NewCondition"
       },
       {
         "@type": "ShippingService",
-        "@id": "https://www.techm8australia.com/store-policy.html#qld-standard-shipping",
-        "name": "TECHM8 Queensland standard shipping",
-        "description": "AU$9.50 standard shipping for orders under AU$80 and free standard shipping for orders of AU$80 or more within Queensland.",
+        "@id": "https://www.techm8australia.com/store-policy.html#standard-shipping",
+        "name": "TECHM8 Australia Post standard shipping",
+        "description": "AUD 15 standard shipping within Australia, or free standard shipping when the merchandise subtotal is AUD 399 or more.",
         "fulfillmentType": "https://schema.org/FulfillmentTypeDelivery",
         "handlingTime": {
           "@type": "ServicePeriod",
@@ -47,17 +54,45 @@
         "shippingConditions": [
           {
             "@type": "ShippingConditions",
-            "shippingDestination": {"@type":"DefinedRegion","addressCountry":"AU","addressRegion":"QLD"},
-            "orderValue": {"@type":"MonetaryAmount","minValue":0,"maxValue":79.99,"currency":"AUD"},
-            "shippingRate": {"@type":"MonetaryAmount","value":9.50,"currency":"AUD"},
-            "transitTime": {"@type":"ServicePeriod","duration":{"@type":"QuantitativeValue","minValue":1,"maxValue":7,"unitCode":"DAY"}}
+            "shippingDestination": {"@type":"DefinedRegion","addressCountry":"AU"},
+            "orderValue": {"@type":"MonetaryAmount","minValue":0,"maxValue":398.99,"currency":"AUD"},
+            "shippingRate": {"@type":"MonetaryAmount","value":15,"currency":"AUD"},
+            "transitTime": {"@type":"ServicePeriod","duration":{"@type":"QuantitativeValue","minValue":3,"maxValue":5,"unitCode":"DAY"}}
           },
           {
             "@type": "ShippingConditions",
-            "shippingDestination": {"@type":"DefinedRegion","addressCountry":"AU","addressRegion":"QLD"},
-            "orderValue": {"@type":"MonetaryAmount","minValue":80,"currency":"AUD"},
+            "shippingDestination": {"@type":"DefinedRegion","addressCountry":"AU"},
+            "orderValue": {"@type":"MonetaryAmount","minValue":399,"currency":"AUD"},
             "shippingRate": {"@type":"MonetaryAmount","value":0,"currency":"AUD"},
-            "transitTime": {"@type":"ServicePeriod","duration":{"@type":"QuantitativeValue","minValue":1,"maxValue":7,"unitCode":"DAY"}}
+            "transitTime": {"@type":"ServicePeriod","duration":{"@type":"QuantitativeValue","minValue":3,"maxValue":5,"unitCode":"DAY"}}
+          }
+        ]
+      },
+      {
+        "@type": "ShippingService",
+        "@id": "https://www.techm8australia.com/store-policy.html#express-shipping",
+        "name": "TECHM8 Australia Post express shipping",
+        "description": "AUD 18 express shipping within Australia, or free express shipping when the merchandise subtotal is AUD 599 or more.",
+        "fulfillmentType": "https://schema.org/FulfillmentTypeDelivery",
+        "handlingTime": {
+          "@type": "ServicePeriod",
+          "duration": {"@type":"QuantitativeValue","minValue":0,"maxValue":1,"unitCode":"DAY"},
+          "businessDays": ["https://schema.org/Monday","https://schema.org/Tuesday","https://schema.org/Wednesday","https://schema.org/Thursday","https://schema.org/Friday"]
+        },
+        "shippingConditions": [
+          {
+            "@type": "ShippingConditions",
+            "shippingDestination": {"@type":"DefinedRegion","addressCountry":"AU"},
+            "orderValue": {"@type":"MonetaryAmount","minValue":0,"maxValue":598.99,"currency":"AUD"},
+            "shippingRate": {"@type":"MonetaryAmount","value":18,"currency":"AUD"},
+            "transitTime": {"@type":"ServicePeriod","duration":{"@type":"QuantitativeValue","minValue":1,"maxValue":3,"unitCode":"DAY"}}
+          },
+          {
+            "@type": "ShippingConditions",
+            "shippingDestination": {"@type":"DefinedRegion","addressCountry":"AU"},
+            "orderValue": {"@type":"MonetaryAmount","minValue":599,"currency":"AUD"},
+            "shippingRate": {"@type":"MonetaryAmount","value":0,"currency":"AUD"},
+            "transitTime": {"@type":"ServicePeriod","duration":{"@type":"QuantitativeValue","minValue":1,"maxValue":3,"unitCode":"DAY"}}
           }
         ]
       },
@@ -67,10 +102,11 @@
         "url": "https://www.techm8australia.com/store-policy.html",
         "name": "TECHM8 shipping, returns and warranty policy",
         "inLanguage": "en-AU",
-        "dateModified": "2026-08-14",
+        "dateModified": "2026-08-24",
         "about": [
           {"@id":"https://www.techm8australia.com/store-policy.html#return-policy"},
-          {"@id":"https://www.techm8australia.com/store-policy.html#qld-standard-shipping"}
+          {"@id":"https://www.techm8australia.com/store-policy.html#standard-shipping"},
+          {"@id":"https://www.techm8australia.com/store-policy.html#express-shipping"}
         ]
       }
     ]
@@ -472,7 +508,7 @@
     <section class="container inner-page__hero">
       <p class="eyebrow">Store Policy</p>
       <h1>Shipping, returns and warranty policy.</h1>
-      <p>This page is based on the current policy information published by Tech M8 and is presented in a clearer layout for your website.</p>
+      <p>Shipping, returns and warranty information for TECHM8 online orders. All prices and order thresholds on this page are in Australian dollars (AUD).</p>
     </section>
 
     <section class="section section--tight">
@@ -493,18 +529,18 @@
           <section class="policy-highlights" aria-label="Policy summary">
             <article class="policy-highlight">
               <p class="policy-highlight__eyebrow">Delivery</p>
-              <strong>AU$9.50 standard shipping</strong>
-              <span>Applies to orders under AU$80. Free standard shipping is available on orders over AU$80.</span>
+              <strong>Australia-wide shipping</strong>
+              <span>Standard shipping is AUD 15 or free from AUD 399. Express shipping is AUD 18 or free from AUD 599.</span>
             </article>
             <article class="policy-highlight">
               <p class="policy-highlight__eyebrow">Returns window</p>
-              <strong>7 day return request period</strong>
-              <span>Eligible online purchases can be reviewed for change-of-mind return requests within 7 days.</span>
+              <strong>7-day change-of-mind request period</strong>
+              <span>Eligible unopened online purchases may be submitted for review within 7 days after delivery.</span>
             </article>
             <article class="policy-highlight">
               <p class="policy-highlight__eyebrow">Warranty cover</p>
-              <strong>6 month return-to-base warranty</strong>
-              <span>Products supplied through the online store include standard TECHM8 warranty support.</span>
+              <strong>Consumer guarantees plus warranty support</strong>
+              <span>TECHM8's 6-month voluntary return-to-base warranty is additional to rights under Australian Consumer Law.</span>
             </article>
           </section>
 
@@ -521,45 +557,49 @@
               <div>
                 <p class="policy-section__eyebrow">Delivery & postage</p>
                 <h2>Shipping policy</h2>
-                <p class="policy-section__intro">Clear delivery thresholds and realistic shipping estimates for Queensland online orders.</p>
+                <p class="policy-section__intro">Australia Post standard and express delivery options are available for online orders within Australia.</p>
               </div>
             </div>
             <div class="policy-grid-cards">
               <div class="policy-mini-card">
-                <p class="policy-mini-card__label">Orders under AU$80</p>
-                <strong>AU$9.50 shipping</strong>
-                <span>Standard shipping fee for smaller online orders.</span>
+                <p class="policy-mini-card__label">Standard Australia Post</p>
+                <strong>AUD 15</strong>
+                <span>Free when the merchandise subtotal is AUD 399 or more.</span>
               </div>
               <div class="policy-mini-card">
-                <p class="policy-mini-card__label">Orders over AU$80</p>
-                <strong>Free standard shipping</strong>
-                <span>Applied automatically at checkout once the threshold is met.</span>
+                <p class="policy-mini-card__label">Express Australia Post</p>
+                <strong>AUD 18</strong>
+                <span>Free when the merchandise subtotal is AUD 599 or more.</span>
               </div>
             </div>
             <table class="policy-table">
               <thead>
                 <tr>
-                  <th>Region</th>
-                  <th>Estimated delivery</th>
+                  <th>Service</th>
+                  <th>Estimated carrier time after dispatch</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>QLD metro</td>
-                  <td>Up to 3 business days</td>
+                  <td>Standard Australia Post</td>
+                  <td>3–5 business days</td>
                 </tr>
                 <tr>
-                  <td>QLD country</td>
-                  <td>Up to 7 business days</td>
+                  <td>Express Australia Post</td>
+                  <td>1–3 business days</td>
                 </tr>
               </tbody>
             </table>
+            <div class="policy-copy">
+              <p>The applicable rate and any free-shipping threshold are calculated automatically from the merchandise subtotal at checkout. Store pickup does not incur a shipping fee.</p>
+              <p>Delivery is currently available to Australian addresses only. A complete delivery address and online payment are required for shipped orders.</p>
+            </div>
             <div class="policy-note policy-note--cool">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="9"></circle>
                 <path d="M12 8v5l3 2"></path>
               </svg>
-              <p>Delivery timeframes are in addition to TECHM8 processing time. Online orders are generally processed within 1 business day before dispatch.</p>
+              <p>Delivery estimates begin after dispatch and are not guaranteed. Most orders are prepared within 1 business day, but stock checks, weekends, public holidays and carrier delays can extend the timeframe. Tracking is provided when available.</p>
             </div>
           </article>
 
@@ -574,12 +614,12 @@
               <div>
                 <p class="policy-section__eyebrow">Online orders only</p>
                 <h2>Returns policy</h2>
-                <p class="policy-section__intro">Online purchases can be reviewed for return within 7 days, subject to eligibility and item condition.</p>
+                <p class="policy-section__intro">Change-of-mind returns and returns for faulty, damaged-in-transit or incorrectly supplied products are handled under different rules.</p>
               </div>
             </div>
             <div class="policy-copy">
-              <p>TECHM8 offers a 7 day change-of-mind returns policy for eligible online purchases.</p>
-              <p>If you want to return a purchase, you need to follow the return instructions within 7 days to organise a return and receive either store credit or a refund of the product purchase price, excluding the original delivery and handling fees.</p>
+              <p>For an eligible change-of-mind return, contact TECHM8 within 7 days after delivery. If approved, TECHM8 may provide a refund of the product purchase price or store credit. Original delivery charges and change-of-mind return postage are not refundable.</p>
+              <p>The 7-day change-of-mind period and factory-sealed condition do not limit your rights where a product is faulty, arrives damaged, is unsafe, is incorrectly supplied or does not match its description. Those claims are assessed under Australian Consumer Law.</p>
             </div>
             <div class="policy-note">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -587,7 +627,7 @@
                 <path d="M12 17h.01"></path>
                 <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path>
               </svg>
-              <p>Return approval is not automatic. The product condition and the reason for return will still be reviewed against policy before a refund or store credit is issued.</p>
+              <p>Contact TECHM8 before sending an item back so the team can confirm the return location and instructions. Keep your proof of purchase and any postage receipts.</p>
             </div>
           </article>
 
@@ -606,9 +646,9 @@
               </div>
             </div>
             <div class="policy-copy">
-              <p>Under Australian Consumer Law, businesses are not required to accept change-of-mind returns. TECHM8 may accept a change-of-mind return in limited circumstances for online orders.</p>
-              <p>Only products that are still factory sealed are accepted for a change-of-mind return. Any product that has been opened, including broken shrinkwrap, broken seals or removed labels, cannot be returned as a change-of-mind item.</p>
-              <p>This also includes cases where an item does not fit your requirements, unless a TECHM8 team member or the website explicitly advised that the product would be suitable.</p>
+              <p>Australian Consumer Law does not require a business to accept a return simply because a customer changed their mind. TECHM8 may approve a change-of-mind return for an eligible online order under this additional policy.</p>
+              <p>The product must be unused, factory sealed and in fully resalable condition, with all packaging, labels, accessories and included items intact. Opened products, broken seals, removed labels and damaged packaging are not eligible for change-of-mind return.</p>
+              <p>Choosing an incompatible item is generally treated as a change of mind unless TECHM8 or the product description specifically confirmed that the item would suit the purpose you disclosed before purchase.</p>
             </div>
           </article>
 
@@ -623,14 +663,14 @@
               <div>
                 <p class="policy-section__eyebrow">After-sales support</p>
                 <h2>Warranty policy</h2>
-                <p class="policy-section__intro">Products sold through the online store come with standard TECHM8 return-to-base warranty support.</p>
+                <p class="policy-section__intro">TECHM8's voluntary warranty support sits alongside the automatic consumer guarantees that apply under Australian Consumer Law.</p>
               </div>
             </div>
             <div class="policy-grid-cards">
               <div class="policy-mini-card">
                 <p class="policy-mini-card__label">Coverage term</p>
                 <strong>6 months</strong>
-                <span>Return-to-base warranty for products supplied through TECHM8 online shopping.</span>
+                <span>Voluntary return-to-base warranty for products supplied through the TECHM8 online store.</span>
               </div>
               <div class="policy-mini-card">
                 <p class="policy-mini-card__label">First step</p>
@@ -639,9 +679,9 @@
               </div>
             </div>
             <div class="policy-copy">
-              <p>If the product needs assessment, return the item with original packaging and contents where possible, together with proof of purchase, to any TECHM8 store.</p>
-              <p>For delivery orders, contact TECHM8 with your order number and a return can be arranged free of charge together with a return form.</p>
-              <p>Once the item is received, the product condition is assessed off-site and a repair, replacement or credit outcome will be provided.</p>
+              <p>Australian Consumer Law rights are not limited to 6 months and may continue for a reasonable time depending on the product, its price and expected durability. Nothing in this policy excludes or restricts those rights.</p>
+              <p>If the product needs assessment, bring it to a TECHM8 store or contact TECHM8 before posting it. Include proof of purchase and, where possible, the original packaging, accessories and contents. Original packaging is not required for a claim about a faulty product.</p>
+              <p>For a product that can be posted or easily returned, the customer may initially need to arrange return postage. If the product is confirmed to have a problem covered by consumer guarantees, TECHM8 will reimburse reasonable return costs. TECHM8 will arrange collection or shipping for large, heavy or hard-to-return faulty products.</p>
             </div>
           </article>
 
@@ -655,12 +695,13 @@
               <div>
                 <p class="policy-section__eyebrow">Assessment outcomes</p>
                 <h2>Repair or replacement process</h2>
-                <p class="policy-section__intro">Warranty claims may be resolved by repair, replacement or credit depending on the product assessment outcome.</p>
+                <p class="policy-section__intro">The available remedy depends on whether the assessed problem is minor or major under Australian Consumer Law.</p>
               </div>
             </div>
             <div class="policy-copy">
-              <p>Goods presented for repair may be replaced by refurbished goods of the same type instead of being repaired. Refurbished parts may also be used to repair the goods.</p>
-              <p>Customers may also contact the original manufacturer directly to arrange repair, replacement or credit. This can sometimes result in a faster turnaround, but TECHM8 can still process the warranty claim if you prefer.</p>
+              <p>For a minor problem, TECHM8 may choose to repair the product free of charge within a reasonable time. For a major problem, the customer may choose a refund or replacement. Other remedies may apply according to Australian Consumer Law.</p>
+              <p>Goods presented for repair may be replaced by refurbished goods of the same type instead of being repaired, and refurbished parts may be used. TECHM8 will tell you if this may apply before the repair proceeds.</p>
+              <p>You may contact the manufacturer directly if you prefer, but TECHM8 will handle a valid claim for a product it sold and will not require you to deal with the manufacturer.</p>
             </div>
           </article>
 
@@ -680,7 +721,8 @@
               </div>
             </div>
             <div class="policy-copy">
-              <p>Items showing physical damage may require further external assessment and may fall outside normal warranty coverage.</p>
+              <p>Items showing physical damage may require further assessment. A claim may be declined where misuse, impact, liquid exposure or unauthorised modification caused the problem.</p>
+              <p>Physical damage does not remove consumer guarantee rights for a separate product failure that was not caused by that damage.</p>
               <p>All store policy information listed on this page is intended for online shopping orders placed through TECHM8.</p>
             </div>
           </article>
@@ -723,7 +765,7 @@
     </div>
     <div class="container footer footer--bottom">
       <p>&copy; 2026 TECHM8. All rights reserved.</p>
-      <a href="store-policy.html">Repair Terms & Conditions</a><a href="dualsense-tester.html">DualSense Tester</a>
+      <a href="store-policy.html">Repair Terms & Conditions</a>
     </div>
   </footer>
 
