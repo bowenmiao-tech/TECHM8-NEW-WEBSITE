@@ -4,6 +4,9 @@
     <loc>https://www.techm8australia.com/sitemap-pages.xml</loc>
   </sitemap>
   <sitemap>
+    <loc>https://www.techm8australia.com/sitemap-categories.xml</loc>
+  </sitemap>
+  <sitemap>
     <loc>https://www.techm8australia.com/sitemap-products.xml</loc>
   </sitemap>
 </sitemapindex>

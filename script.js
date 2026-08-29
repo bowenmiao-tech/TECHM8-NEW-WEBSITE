@@ -4424,9 +4424,18 @@ function initStorefront() {
   };
 
   if (searchField instanceof HTMLInputElement) {
+    let searchEventTimer = null;
     searchField.addEventListener("input", () => {
       state.query = searchField.value || "";
       renderProducts();
+
+      // Report the settled query rather than every keystroke.
+      window.clearTimeout(searchEventTimer);
+      searchEventTimer = window.setTimeout(() => {
+        const term = state.query.trim();
+        if (term.length < 2) return;
+        trackGa4Event("search", { search_term: term.toLowerCase() });
+      }, 900);
     });
   }
 
@@ -5241,7 +5250,7 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
     <section class="storefront-pdp">
       <div class="storefront-pdp__gallery">
         <div class="storefront-pdp__gallery-main">
-          ${mainImage ? `<img src="${escapeHtml(mainImage.image_url)}" alt="${escapeHtml(mainImage.alt_text || product.name)}" data-pdp-main-image loading="eager" decoding="async" fetchpriority="high">` : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`}
+          ${mainImage ? `<img src="${escapeHtml(mainImage.image_url)}" alt="${escapeHtml(mainImage.alt_text || product.name)}" width="900" height="900" data-pdp-main-image loading="eager" decoding="async" fetchpriority="high">` : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`}
         </div>
         ${
           galleryImages.length > 1
@@ -5570,7 +5579,7 @@ function createCatalogCard(product, index = Number.POSITIVE_INFINITY) {
   const eagerImage = Number.isFinite(index) && index < 2;
   const highPriorityImage = Number.isFinite(index) && index === 0;
   const imageMarkup = product.display_image
-    ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" loading="${eagerImage ? "eager" : "lazy"}" decoding="async" ${highPriorityImage ? 'fetchpriority="high"' : ""} sizes="(max-width: 380px) 92vw, (max-width: 720px) 44vw, (max-width: 1200px) 30vw, 18vw">`
+    ? `<img class="storefront-card__image" src="${escapeHtml(product.display_image)}" alt="${escapeHtml(productName)}" width="640" height="640" loading="${eagerImage ? "eager" : "lazy"}" decoding="async" ${highPriorityImage ? 'fetchpriority="high"' : ""} sizes="(max-width: 380px) 92vw, (max-width: 720px) 44vw, (max-width: 1200px) 30vw, 18vw">`
     : `<div class="storefront-card__image storefront-card__image--placeholder" aria-hidden="true">TECHM8</div>`;
   const stockClass = "is-in-stock";
 
@@ -8658,6 +8667,12 @@ function initCheckoutPage() {
     storeField.addEventListener("change", () => {
       if (checkoutStep === "payment") {
         checkoutStep = "delivery";
+      }
+      if (storeField.value) {
+        trackGa4Event("select_store", {
+          store_slug: storeField.value,
+          context: "checkout",
+        });
       }
       render();
     });

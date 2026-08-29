@@ -1,4 +1,4 @@
-import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, readdir, rm } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import vm from "node:vm";
@@ -16,6 +16,11 @@ const PUBLIC_SITEMAP_INDEX = join(ROOT, "public", "sitemap.xml");
 const PAGE_SITEMAP = join(ROOT, "sitemap-pages.xml");
 const PUBLIC_PAGE_SITEMAP = join(ROOT, "public", "sitemap-pages.xml");
 const MERCHANT_FEED = join(ROOT, "merchant-products.xml");
+const SHOP_PAGE = join(ROOT, "shop.html");
+const SLUG_REDIRECT_TABLE = join(ROOT, "scripts", "product-slug-redirects.json");
+const CATEGORY_DIR = join(ROOT, "category");
+const CATEGORY_SITEMAP = join(ROOT, "sitemap-categories.xml");
+const PUBLIC_CATEGORY_SITEMAP = join(ROOT, "public", "sitemap-categories.xml");
 const LLMS_TXT = join(ROOT, "llms.txt");
 const PUBLIC_LLMS_TXT = join(ROOT, "public", "llms.txt");
 const PUBLIC_MERCHANT_FEED = join(ROOT, "public", "merchant-products.xml");
@@ -493,7 +498,7 @@ function productJsonLd(product) {
             "@type": "ListItem",
             position: 3,
             name: product.category_name,
-            item: `${SITE_URL}/category.html?slug=${encodeURIComponent(product.category_slug)}`,
+            item: `${SITE_URL}/category/${encodeURIComponent(product.category_slug)}`,
           },
           {
             "@type": "ListItem",
@@ -567,7 +572,7 @@ ${quality.indexable ? `  <script type="application/ld+json">${productJsonLd(prod
   </div></header>
   <main class="storefront-page storefront-page--detail" data-product-page data-product-slug="${escapeHtml(product.slug)}" data-content-quality="${quality.indexable ? "indexable" : "limited"}">
     <section class="section"><div class="container" data-product-shell>
-      <div class="storefront-breadcrumbs"><a href="/">Home</a><span>/</span><a href="/shop.html">Online Store</a><span>/</span><a href="/category.html?slug=${encodeURIComponent(product.category_slug)}">${escapeHtml(product.category_name)}</a><span>/</span><span>${escapeHtml(product.name)}</span></div>
+      <div class="storefront-breadcrumbs"><a href="/">Home</a><span>/</span><a href="/shop.html">Online Store</a><span>/</span><a href="/category/${encodeURIComponent(product.category_slug)}/">${escapeHtml(product.category_name)}</a><span>/</span><span>${escapeHtml(product.name)}</span></div>
       <section class="storefront-pdp">
         <div class="storefront-pdp__gallery"><div class="storefront-pdp__gallery-main">${image ? `<img src="${escapeHtml(image.image_url)}" alt="${escapeHtml(image.alt_text || product.name)}" loading="eager" decoding="async" fetchpriority="high">` : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`}</div></div>
         <div class="storefront-pdp__summary">
@@ -1044,6 +1049,41 @@ async function writeLegacyProductRedirects(products) {
   }
 }
 
+// Renamed products keep their old URL alive as a canonical + meta-refresh stub.
+// Without this, cleaning a slug throws away every ranking and backlink the old URL
+// earned, and the retired-product writer would leave a dead end there instead.
+async function writeSlugRedirects(products) {
+  let table;
+  try {
+    table = JSON.parse(await readFile(SLUG_REDIRECT_TABLE, "utf8"));
+  } catch {
+    return 0;
+  }
+
+  const redirects = table?.redirects || {};
+  const bySlug = new Map(products.map((product) => [product.slug, product]));
+  let written = 0;
+
+  for (const [oldSlug, newSlug] of Object.entries(redirects)) {
+    if (!safeSlug(oldSlug) || !safeSlug(newSlug)) continue;
+    if (oldSlug === newSlug) continue;
+    // Only redirect once the destination actually exists, otherwise the old page
+    // would point at a 404.
+    const target = bySlug.get(newSlug);
+    if (!target) continue;
+
+    const html = renderLegacyProductRedirect(target);
+    for (const directory of [PRODUCTS_DIR, ...LEGACY_PRODUCT_DIRS]) {
+      const folder = join(directory, oldSlug);
+      await mkdir(folder, { recursive: true });
+      await writeFile(join(folder, "index.html"), html, "utf8");
+    }
+    written += 1;
+  }
+
+  return written;
+}
+
 async function writeProducts(products) {
   const activeSlugs = products.map((product) => product.slug);
   const previousSlugs = await loadPreviousManifest();
@@ -1064,6 +1104,7 @@ async function writeProducts(products) {
     await writeFile(join(folder, "index.html"), renderProductPage(product), "utf8");
   }
   await writeLegacyProductRedirects(allProducts);
+  const slugRedirects = await writeSlugRedirects(products);
 
   await writeFile(
     PRODUCT_MANIFEST,
@@ -1165,6 +1206,7 @@ ${validGtin ? `      <g:gtin>${validGtin}</g:gtin>` : ""}
   await writeFile(PUBLIC_MERCHANT_FEED, merchantFeed, "utf8");
 
   return {
+    slugRedirects,
     totalProducts: allProducts.length,
     limitedProducts: allProducts.length - indexableProducts.length,
     retiredProducts: retiredProducts.length,
@@ -1203,6 +1245,9 @@ async function writeSitemapIndex() {
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>${SITE_URL}/sitemap-pages.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>${SITE_URL}/sitemap-categories.xml</loc>
   </sitemap>
   <sitemap>
     <loc>${SITE_URL}/sitemap-products.xml</loc>
@@ -1257,6 +1302,14 @@ const LLMS_STORES = [
 // llms.txt gives answer engines a single, unambiguous summary of who TECHM8 is,
 // which pages carry the authoritative facts, and what the catalogue covers.
 // It is generated from the same catalogue snapshot as the sitemaps so it cannot drift.
+async function syncPublicRuntimeScripts() {
+  for (const file of ["ga4.js", "https-redirect.js", "repair-page.js"]) {
+    const source = join(ROOT, file);
+    if (!existsSync(source)) continue;
+    await writeFile(join(ROOT, "public", file), await readFile(source, "utf8"), "utf8");
+  }
+}
+
 async function writeLlmsTxt(indexableProducts = []) {
   const categories = new Map();
   for (const product of indexableProducts) {
@@ -1271,7 +1324,7 @@ async function writeLlmsTxt(indexableProducts = []) {
     .sort((left, right) => right.count - left.count || left.name.localeCompare(right.name))
     .map(
       (category) =>
-        `- [${category.name}](${SITE_URL}/category.html?slug=${category.slug}): ${category.count} product${category.count === 1 ? "" : "s"} listed online.`,
+        `- [${category.name}](${SITE_URL}/category/${category.slug}/): ${category.count} product${category.count === 1 ? "" : "s"} listed online.`,
     )
     .join("\n");
 
@@ -1343,6 +1396,294 @@ ${categoryLines || "- Catalogue categories are listed on the online store page."
   await writeFile(PUBLIC_LLMS_TXT, content, "utf8");
 }
 
+// ---------------------------------------------------------------------------
+// Category pages
+// ---------------------------------------------------------------------------
+// category.html is a noindex client-side shell, so the catalogue had no
+// crawlable category level at all. These generated pages give each category a
+// real URL with server-rendered product cards, so category-intent searches
+// ("usb c wall charger brisbane") and answer engines have something to land on.
+
+const categorySlug = (value = "") => {
+  const slug = String(value).trim().toLowerCase();
+  return /^[a-z0-9]+(?:-+[a-z0-9]+)*$/.test(slug) ? slug : "";
+};
+
+function categoryCanonical(slug) {
+  return `${SITE_URL}/category/${slug}/`;
+}
+
+function groupProductsByCategory(products) {
+  const categories = new Map();
+
+  for (const product of products) {
+    const slug = categorySlug(product.category_slug) || "other-products";
+    const entry = categories.get(slug) || {
+      slug,
+      name: product.category_name || "Other Products",
+      description: product.category_description || "",
+      products: [],
+    };
+    entry.products.push(product);
+    categories.set(slug, entry);
+  }
+
+  for (const entry of categories.values()) {
+    entry.products.sort(
+      (left, right) =>
+        (Number(left.retail_price) || 0) - (Number(right.retail_price) || 0),
+    );
+    entry.indexable = entry.products.filter(
+      (product) => assessProductQuality(product).indexable,
+    );
+  }
+
+  return [...categories.values()].sort((left, right) =>
+    left.name.localeCompare(right.name),
+  );
+}
+
+function categoryProductCard(product) {
+  const href = `/products/${product.slug}/`;
+  const image = product.display_image || "";
+  const compare =
+    product.compare_at_price > product.retail_price
+      ? `<span class="storefront-card__compare">${escapeHtml(money(product.compare_at_price))}</span>`
+      : "";
+
+  return `<article class="storefront-card"><a class="storefront-card__link" href="${href}">${
+    image
+      ? `<img class="storefront-card__image" src="${escapeHtml(image)}" alt="${escapeHtml(product.name)}" width="640" height="640" loading="lazy" decoding="async" sizes="(max-width: 380px) 92vw, (max-width: 720px) 44vw, (max-width: 1200px) 30vw, 18vw">`
+      : `<div class="storefront-card__image storefront-card__image--placeholder">TECHM8</div>`
+  }<div class="storefront-card__body"><p class="storefront-card__brand">${escapeHtml(product.brand || "TECHM8")}</p><h3 class="storefront-card__title">${escapeHtml(product.name)}</h3><div class="storefront-card__price-row">${compare}<strong class="storefront-card__price">${escapeHtml(money(product.retail_price))}</strong></div></div></a></article>`;
+}
+
+function categoryJsonLd(category) {
+  const canonical = categoryCanonical(category.slug);
+
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@id": `${SITE_URL}/#organization` },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${canonical}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Online Store",
+            item: `${SITE_URL}/shop.html`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: category.name,
+            item: canonical,
+          },
+        ],
+      },
+      {
+        "@type": "CollectionPage",
+        "@id": `${canonical}#webpage`,
+        url: canonical,
+        name: `${category.name} | TECHM8 Online Store`,
+        description: categoryDescription(category),
+        inLanguage: "en-AU",
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        publisher: { "@id": `${SITE_URL}/#organization` },
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${canonical}#products`,
+        name: category.name,
+        numberOfItems: category.indexable.length,
+        itemListElement: category.indexable.map((product, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          url: `${SITE_URL}/products/${product.slug}/`,
+          name: product.name,
+        })),
+      },
+    ],
+  }).replaceAll("<", "\\u003c");
+}
+
+function categoryDescription(category) {
+  const count = category.indexable.length;
+  const priced = category.indexable
+    .map((product) => Number(product.retail_price) || 0)
+    .filter((price) => price > 0);
+  const from = priced.length ? money(Math.min(...priced)) : "";
+  const brands = [
+    ...new Set(
+      category.indexable.map((product) => product.brand).filter(Boolean),
+    ),
+  ].slice(0, 4);
+
+  const parts = [
+    `Shop ${count} ${category.name.toLowerCase()} at TECHM8${from ? ` from ${from}` : ""}.`,
+  ];
+  if (brands.length) parts.push(`Brands include ${brands.join(", ")}.`);
+  parts.push(
+    "Australia-wide delivery or free click and collect at our Park Ridge, Fairfield, Toowong, North Lakes and Brassall stores.",
+  );
+
+  return truncate(parts.join(" "), 300);
+}
+
+function renderCategoryPage(category, allCategories) {
+  const canonical = categoryCanonical(category.slug);
+  const indexable = category.indexable.length > 0;
+  const description = truncate(categoryDescription(category), 160);
+  const title = `${category.name} | TECHM8 Online Store`;
+  const cards = category.products.map(categoryProductCard).join("");
+  const siblings = allCategories
+    .filter((item) => item.indexable.length > 0)
+    .map(
+      (item) =>
+        `<a class="storefront-category-link ${item.slug === category.slug ? "is-active" : ""}" href="/category/${item.slug}/">${escapeHtml(item.name)}</a>`,
+    )
+    .join("");
+  const intro = category.description
+    ? stripHtml(category.description)
+    : categoryDescription(category);
+
+  return `<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}">
+  <meta name="robots" content="${indexable ? "index, follow, max-snippet:-1, max-image-preview:large" : "noindex, follow"}">
+  <link rel="canonical" href="${canonical}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="TECHM8">
+  <meta property="og:locale" content="en_AU">
+  <meta property="og:url" content="${canonical}">
+  <meta property="og:title" content="${escapeHtml(title)}">
+  <meta property="og:description" content="${escapeHtml(description)}">
+  <meta property="og:image" content="${escapeHtml(category.indexable[0]?.display_image || `${SITE_URL}/assets/logo-techm8.png`)}">
+  <meta name="twitter:card" content="summary_large_image">
+${indexable ? `  <script type="application/ld+json">${categoryJsonLd(category)}</script>` : ""}
+  <link rel="stylesheet" href="/styles.css">
+  <script defer src="/ga4.js"></script>
+</head>
+<body>
+  <!-- GENERATED: TECHM8 category prerender. Supabase remains the source of truth. -->
+  <div class="promo-banner"><div class="container promo-banner__inner"><span>TECHM8 online store category</span><a href="/shop.html">Back to online store</a></div></div>
+  <header class="site-header"><div class="container nav">
+    <a class="brand" href="/" aria-label="TECHM8 home"><img class="brand__logo" src="/assets/logo-techm8.png" srcset="/assets/logo-techm8-512.webp 512w, /assets/logo-techm8.png 2285w" sizes="(max-width: 420px) 200px, (max-width: 720px) 240px, 305px" alt="TECHM8 logo" width="2285" height="527" decoding="async"></a>
+    <nav class="nav__menu"><a href="/repairs.html">Repairs</a><a href="/blog.html">Tech Insights</a><a href="/stores.html">Store Locator</a><a href="/business-services.html">Business Services</a><a class="nav__cart-link" href="/cart.html">Cart <span class="nav__cart-count" data-cart-count>0</span></a><a class="nav__shop-link" href="/shop.html">Online Store</a></nav>
+  </div></header>
+  <main class="storefront-page storefront-page--category">
+    <section class="section storefront-category-hero"><div class="container">
+      <div class="storefront-breadcrumbs"><a href="/">Home</a><span>/</span><a href="/shop.html">Online Store</a><span>/</span><span>${escapeHtml(category.name)}</span></div>
+      <p class="eyebrow">Category</p>
+      <h1>${escapeHtml(category.name)}</h1>
+      <p>${escapeHtml(intro)}</p>
+      <div class="storefront-category-links">${siblings}</div>
+    </div></section>
+    <section class="section"><div class="container storefront-category-toolbar"><p>${category.products.length} product${category.products.length === 1 ? "" : "s"} in ${escapeHtml(category.name)}</p></div>
+      <div class="container storefront-grid storefront-grid--dense">${cards}</div>
+    </section>
+    <section class="section section--muted"><div class="container">
+      <div class="section-heading"><p class="eyebrow">Buying from TECHM8</p><h2>Delivery, pickup and returns</h2></div>
+      <div class="storefront-rich-content">
+        <p>All prices are in Australian dollars and include GST. Australia Post standard delivery is AU$15.00 and free on orders over AU$399.00. Express delivery is AU$18.00 and free over AU$599.00.</p>
+        <p>Click &amp; collect is free at <a href="/stores/park-ridge.html">Park Ridge</a>, <a href="/stores/fairfield.html">Fairfield</a>, <a href="/stores/toowong.html">Toowong</a>, <a href="/stores/north-lakes.html">North Lakes</a> and <a href="/stores/brassall.html">Brassall</a>.</p>
+        <p><a href="/store-policy.html">Read the shipping, returns and warranty policy</a>.</p>
+      </div>
+    </div></section>
+  </main>
+  <footer class="site-footer"><div class="container footer footer--bottom"><p>&copy; 2026 TECHM8. All rights reserved.</p><a href="/store-policy.html">Repair Terms &amp; Conditions</a></div></footer>
+  <script type="module" src="/script.js"></script>
+</body>
+</html>
+`;
+}
+
+// The shop drawer is populated by JavaScript, so crawlers and answer engines saw no
+// category links at all. This injects a static list between markers so it can be
+// regenerated on every prerender without duplicating.
+const SHOP_CATEGORY_START = "<!-- GENERATED-CATEGORY-LINKS:START -->";
+const SHOP_CATEGORY_END = "<!-- GENERATED-CATEGORY-LINKS:END -->";
+
+async function injectShopCategoryLinks(categories) {
+  const indexed = categories.filter((category) => category.indexable.length > 0);
+  if (!indexed.length) return;
+
+  const links = indexed
+    .map(
+      (category) =>
+        `<li><a href="/category/${category.slug}/">${escapeHtml(category.name)} <span>(${category.indexable.length})</span></a></li>`,
+    )
+    .join("");
+
+  const block = `${SHOP_CATEGORY_START}
+    <section class="section section--muted" aria-labelledby="shop-category-index">
+      <div class="container">
+        <div class="section-heading"><p class="eyebrow">Browse</p><h2 id="shop-category-index">Shop by category</h2></div>
+        <ul class="storefront-category-index">${links}</ul>
+      </div>
+    </section>
+    ${SHOP_CATEGORY_END}`;
+
+  let html = await readFile(SHOP_PAGE, "utf8");
+  const start = html.indexOf(SHOP_CATEGORY_START);
+  const end = html.indexOf(SHOP_CATEGORY_END);
+
+  if (start !== -1 && end !== -1) {
+    html = html.slice(0, start) + block + html.slice(end + SHOP_CATEGORY_END.length);
+  } else {
+    html = html.replace(/(\r?\n)(\s*<\/main>)/, `$1    ${block}$1$2`);
+  }
+
+  await writeFile(SHOP_PAGE, html, "utf8");
+}
+
+async function writeCategoryPages(products) {
+  const categories = groupProductsByCategory(products);
+  await mkdir(CATEGORY_DIR, { recursive: true });
+
+  const current = new Set(categories.map((category) => category.slug));
+  for (const entry of await readdir(CATEGORY_DIR, { withFileTypes: true })) {
+    if (entry.isDirectory() && !current.has(entry.name)) {
+      await rm(join(CATEGORY_DIR, entry.name), { recursive: true, force: true });
+    }
+  }
+
+  for (const category of categories) {
+    const folder = join(CATEGORY_DIR, category.slug);
+    await mkdir(folder, { recursive: true });
+    await writeFile(
+      join(folder, "index.html"),
+      renderCategoryPage(category, categories),
+      "utf8",
+    );
+  }
+
+  await injectShopCategoryLinks(categories);
+
+  const indexed = categories.filter((category) => category.indexable.length > 0);
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${indexed
+  .map(
+    (category) =>
+      `  <url>\n    <loc>${categoryCanonical(category.slug)}</loc>\n    <lastmod>${new Date().toISOString().slice(0, 10)}</lastmod>\n  </url>`,
+  )
+  .join("\n")}
+</urlset>
+`;
+  await writeFile(CATEGORY_SITEMAP, sitemap, "utf8");
+  await writeFile(PUBLIC_CATEGORY_SITEMAP, sitemap, "utf8");
+
+  return { total: categories.length, indexed: indexed.length };
+}
+
 async function normalizeAustralianHtmlLanguage(directory = ROOT) {
   const excludedDirectories = new Set([".git", "dist", "node_modules", "public"]);
   const entries = await readdir(directory, { withFileTypes: true });
@@ -1383,11 +1724,13 @@ async function main() {
     throw new Error("Supabase returned no products; generated pages were left unchanged.");
   }
   const result = await writeProducts(products);
+  const categoryResult = await writeCategoryPages(products);
   await writeSitemapIndex();
   await writeLlmsTxt(result.indexableProducts);
+  await syncPublicRuntimeScripts();
   await normalizeAustralianHtmlLanguage();
   console.log(
-    `Prerendered ${result.totalProducts} product pages (${result.limitedProducts} noindex, including ${result.retiredProducts} retired) and ${BUSINESS_FILES.length} business pages.`,
+    `Prerendered ${result.totalProducts} product pages (${result.limitedProducts} noindex, including ${result.retiredProducts} retired), ${categoryResult.total} category pages (${categoryResult.indexed} indexable)${result.slugRedirects ? `, ${result.slugRedirects} slug redirects` : ""} and ${BUSINESS_FILES.length} business pages.`,
   );
 }
 

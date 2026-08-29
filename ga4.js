@@ -9,7 +9,9 @@ window.gtag = window.gtag || function gtag() {
 
 let analyticsLoadPromise = null;
 
-function readAnalyticsConsent() {
+// Returns true when the visitor accepted analytics, false when they declined, and
+// null when they have not answered the banner yet.
+function readStoredConsent() {
   try {
     const stored = window.localStorage.getItem(TECHM8_CONSENT_KEY);
     const consent = stored ? JSON.parse(stored) : null;
@@ -23,22 +25,42 @@ function readAnalyticsConsent() {
       .split(";")
       .map((value) => value.trim())
       .find((value) => value.startsWith(`${TECHM8_CONSENT_COOKIE}=`));
-    if (!item) return false;
+    if (!item) return null;
     const consent = JSON.parse(
       decodeURIComponent(item.split("=").slice(1).join("=")),
     );
-    return consent?.version === 1 && Boolean(consent.analytics);
+    if (consent?.version === 1) return Boolean(consent.analytics);
+    return null;
   } catch (_error) {
-    return false;
+    return null;
   }
 }
 
+// Australian privacy law uses an opt-out model for analytics cookies, so measurement
+// runs until the visitor declines. Declining is honoured immediately through Google
+// Consent Mode v2 rather than by refusing to load the tag, which keeps consent
+// signals flowing and lets GA4 model the declined sessions.
+function analyticsAllowed() {
+  return readStoredConsent() !== false;
+}
+
+function consentState(granted) {
+  return {
+    analytics_storage: granted ? "granted" : "denied",
+    // TECHM8 does not run advertising or remarketing through this property.
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+  };
+}
+
+window.gtag("consent", "default", consentState(analyticsAllowed()));
+
 function loadGoogleAnalytics() {
-  if (!readAnalyticsConsent()) return Promise.resolve(false);
   if (analyticsLoadPromise) return analyticsLoadPromise;
 
   window.gtag("js", new Date());
-  window.gtag("config", TECHM8_GA4_ID);
+  window.gtag("config", TECHM8_GA4_ID, { anonymize_ip: true });
 
   analyticsLoadPromise = new Promise((resolve) => {
     const script = document.createElement("script");
@@ -67,14 +89,16 @@ function scheduleAnalyticsLoad() {
 }
 
 window.addEventListener("techm8:cookie-consent-updated", (event) => {
-  if (event.detail?.consent?.analytics) loadGoogleAnalytics();
+  const granted = Boolean(event.detail?.consent?.analytics);
+  window.gtag("consent", "update", consentState(granted));
+  if (granted) loadGoogleAnalytics();
 });
 
 window.trackTechM8Event = function trackTechM8Event(name, params) {
-  if (!name || !readAnalyticsConsent()) return false;
+  if (!name) return false;
   loadGoogleAnalytics();
   window.gtag("event", name, params || {});
   return true;
 };
 
-if (readAnalyticsConsent()) scheduleAnalyticsLoad();
+scheduleAnalyticsLoad();

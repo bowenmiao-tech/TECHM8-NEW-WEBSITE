@@ -45,18 +45,18 @@
 
 ## Product categories
 
-- [Power Banks](https://www.techm8australia.com/category.html?slug=charging-and-power--power-banks): 18 products listed online.
-- [Other Products](https://www.techm8australia.com/category.html?slug=other-products): 16 products listed online.
-- [Charging & Data Cables](https://www.techm8australia.com/category.html?slug=cables-and-adapters--charging-and-data-cables): 13 products listed online.
-- [Laptop Chargers](https://www.techm8australia.com/category.html?slug=charging-and-power--laptop-chargers): 9 products listed online.
-- [Wireless Chargers](https://www.techm8australia.com/category.html?slug=charging-and-power--wireless-chargers): 8 products listed online.
-- [Speakers](https://www.techm8australia.com/category.html?slug=audio--speakers): 7 products listed online.
-- [Wireless Earbuds & Headphones](https://www.techm8australia.com/category.html?slug=audio--wireless-earbuds-and-headphones): 6 products listed online.
-- [Consoles & Controllers](https://www.techm8australia.com/category.html?slug=computer-and-gaming--consoles-and-controllers): 5 products listed online.
-- [Wall Chargers](https://www.techm8australia.com/category.html?slug=charging-and-power--wall-chargers): 5 products listed online.
-- [Car Chargers](https://www.techm8australia.com/category.html?slug=charging-and-power--car-chargers): 3 products listed online.
-- [Car Connectivity](https://www.techm8australia.com/category.html?slug=cables-and-adapters--car-connectivity): 3 products listed online.
-- [PC Components](https://www.techm8australia.com/category.html?slug=computer-and-gaming--pc-components): 2 products listed online.
+- [Power Banks](https://www.techm8australia.com/category/charging-and-power--power-banks/): 18 products listed online.
+- [Other Products](https://www.techm8australia.com/category/other-products/): 16 products listed online.
+- [Charging & Data Cables](https://www.techm8australia.com/category/cables-and-adapters--charging-and-data-cables/): 13 products listed online.
+- [Laptop Chargers](https://www.techm8australia.com/category/charging-and-power--laptop-chargers/): 9 products listed online.
+- [Wireless Chargers](https://www.techm8australia.com/category/charging-and-power--wireless-chargers/): 8 products listed online.
+- [Speakers](https://www.techm8australia.com/category/audio--speakers/): 7 products listed online.
+- [Wireless Earbuds & Headphones](https://www.techm8australia.com/category/audio--wireless-earbuds-and-headphones/): 6 products listed online.
+- [Consoles & Controllers](https://www.techm8australia.com/category/computer-and-gaming--consoles-and-controllers/): 5 products listed online.
+- [Wall Chargers](https://www.techm8australia.com/category/charging-and-power--wall-chargers/): 5 products listed online.
+- [Car Chargers](https://www.techm8australia.com/category/charging-and-power--car-chargers/): 3 products listed online.
+- [Car Connectivity](https://www.techm8australia.com/category/cables-and-adapters--car-connectivity/): 3 products listed online.
+- [PC Components](https://www.techm8australia.com/category/computer-and-gaming--pc-components/): 2 products listed online.
 
 ## Machine-readable sources
 
