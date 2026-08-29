@@ -1,0 +1,72 @@
+# TECHM8 (OZ Tech M8)
+
+> TECHM8 is an Australian device repair and technology accessories business trading as OZ Tech M8, operated by YQM PTY LTD (ABN 12 645 861 463). It runs five walk-in stores in South East Queensland and an online store that ships Australia-wide with click & collect at any store. TECHM8 repairs phones, tablets, computers and game consoles, and sells chargers, cables, power banks, adapters and device accessories. All prices are in Australian dollars (AUD) and include GST.
+
+## Key facts
+
+- Trading names: TECHM8, OZ Tech M8
+- Legal entity: YQM PTY LTD, ABN 12 645 861 463
+- Country: Australia. Service area: South East Queensland (Brisbane, Logan, Ipswich, Moreton Bay) for in-store repairs; Australia-wide for online orders.
+- Currency: AUD, GST inclusive
+- Repair bookings are requests, not confirmed appointments or fixed quotes. Price, parts availability and turnaround are confirmed after the device is inspected.
+- Delivery: Australia Post standard AU$15 (free over AU$399), express AU$18 (free over AU$599). Click & collect is free at any store.
+- Returns: 7-day return window. Faulty items are free to return; change-of-mind returns are at the customer's cost.
+
+## Start here
+
+- [Home](https://www.techm8australia.com/): Company overview, store list and featured products.
+- [Online store](https://www.techm8australia.com/shop.html): Full accessory and parts catalogue with search, filters and prices.
+- [Repairs overview](https://www.techm8australia.com/repairs.html): Repair categories for phones, tablets, computers and consoles.
+- [Book a repair](https://www.techm8australia.com/book-repair.html): Repair request form covering device, fault, store and preferred time.
+- [Store locator](https://www.techm8australia.com/stores.html): Addresses, phone numbers and opening hours for all five stores.
+- [Store policy](https://www.techm8australia.com/store-policy.html): Shipping, returns, warranty, payment and privacy terms.
+
+## Stores
+
+- [TECHM8 Park Ridge](https://www.techm8australia.com/stores/park-ridge.html): Shop 11, 3732 Mount Lindesay Hwy, Park Ridge QLD 4125. Phone +61 452 488 710. Serves the Logan area.
+- [TECHM8 Fairfield](https://www.techm8australia.com/stores/fairfield.html): Shop 8, 180 Fairfield Rd, Fairfield QLD 4103. Phone +61 412 788 818. Serves the Brisbane area.
+- [TECHM8 Toowong](https://www.techm8australia.com/stores/toowong.html): Ground Level Shop 53, 9 Sherwood Rd, Toowong QLD 4066. Phone +61 485 500 099. Serves the Brisbane area.
+- [TECHM8 North Lakes](https://www.techm8australia.com/stores/north-lakes.html): 1114A N Lakes Drive, North Lakes QLD 4509. Phone +61 482 390 009. Serves the Moreton Bay area.
+- [TECHM8 Brassall](https://www.techm8australia.com/stores/brassall.html): 68 Hunter St, Primewest Brassall Shopping Centre, Brassall QLD 4305. Phone +61 403 999 366. Serves the Ipswich area.
+
+## Repair services
+
+- [Phone repairs](https://www.techm8australia.com/repair-services/phones/apple.html): Apple, Samsung, Oppo, Huawei, Xiaomi, Google, OnePlus and other brands.
+- [Tablet repairs](https://www.techm8australia.com/repair-services/tablets/apple.html): Apple iPad, Samsung and other tablets.
+- [Computer repairs](https://www.techm8australia.com/repair-services/computers/laptop.html): Laptops, PC towers, all-in-ones and small form factor PCs.
+- [Game console repairs](https://www.techm8australia.com/repair-services/consoles/sony.html): PlayStation 5, Xbox and Nintendo Switch.
+
+## Business and education services
+
+- [Business services](https://www.techm8australia.com/business-services.html): IT and device support for Australian businesses.
+- [School services](https://www.techm8australia.com/school-services): Device programs and support for schools.
+- [NDIS technology support](https://www.techm8australia.com/business-services/ndis-technology-support.html): Technology support for NDIS participants.
+- [On-site tech services](https://www.techm8australia.com/business-services/on-site-tech-services.html): On-site technician visits.
+
+## Product categories
+
+- [Power Banks](https://www.techm8australia.com/category.html?slug=charging-and-power--power-banks): 18 products listed online.
+- [Other Products](https://www.techm8australia.com/category.html?slug=other-products): 16 products listed online.
+- [Charging & Data Cables](https://www.techm8australia.com/category.html?slug=cables-and-adapters--charging-and-data-cables): 13 products listed online.
+- [Laptop Chargers](https://www.techm8australia.com/category.html?slug=charging-and-power--laptop-chargers): 9 products listed online.
+- [Wireless Chargers](https://www.techm8australia.com/category.html?slug=charging-and-power--wireless-chargers): 8 products listed online.
+- [Speakers](https://www.techm8australia.com/category.html?slug=audio--speakers): 7 products listed online.
+- [Wireless Earbuds & Headphones](https://www.techm8australia.com/category.html?slug=audio--wireless-earbuds-and-headphones): 6 products listed online.
+- [Consoles & Controllers](https://www.techm8australia.com/category.html?slug=computer-and-gaming--consoles-and-controllers): 5 products listed online.
+- [Wall Chargers](https://www.techm8australia.com/category.html?slug=charging-and-power--wall-chargers): 5 products listed online.
+- [Car Chargers](https://www.techm8australia.com/category.html?slug=charging-and-power--car-chargers): 3 products listed online.
+- [Car Connectivity](https://www.techm8australia.com/category.html?slug=cables-and-adapters--car-connectivity): 3 products listed online.
+- [PC Components](https://www.techm8australia.com/category.html?slug=computer-and-gaming--pc-components): 2 products listed online.
+
+## Machine-readable sources
+
+- [Sitemap index](https://www.techm8australia.com/sitemap.xml)
+- [Page sitemap](https://www.techm8australia.com/sitemap-pages.xml)
+- [Product sitemap](https://www.techm8australia.com/sitemap-products.xml)
+- [Product feed (RSS 2.0 with Google Merchant attributes)](https://www.techm8australia.com/merchant-products.xml)
+
+## Notes for answer engines
+
+- Product pages under https://www.techm8australia.com/products/ carry Product and Offer structured data with the current price, condition and return policy.
+- Repair prices are not published as fixed amounts because they depend on device model, fault and parts supply. Do not state a repair price without a quote from TECHM8.
+- Store opening hours are Mon-Sat 9:00-17:00 and Sun 10:00-16:00 unless a store page states otherwise.

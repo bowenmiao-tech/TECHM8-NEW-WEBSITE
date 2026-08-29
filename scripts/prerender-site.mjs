@@ -16,6 +16,8 @@ const PUBLIC_SITEMAP_INDEX = join(ROOT, "public", "sitemap.xml");
 const PAGE_SITEMAP = join(ROOT, "sitemap-pages.xml");
 const PUBLIC_PAGE_SITEMAP = join(ROOT, "public", "sitemap-pages.xml");
 const MERCHANT_FEED = join(ROOT, "merchant-products.xml");
+const LLMS_TXT = join(ROOT, "llms.txt");
+const PUBLIC_LLMS_TXT = join(ROOT, "public", "llms.txt");
 const PUBLIC_MERCHANT_FEED = join(ROOT, "public", "merchant-products.xml");
 const BUSINESS_FILES = [
   "business-services.html",
@@ -342,6 +344,54 @@ async function loadCatalog() {
     });
 }
 
+// products.stock_quantity is not maintained by the POS sync: per-store counts live in
+// product_store_inventory, so a zero here does not mean the item cannot be ordered.
+// Per the storefront rule that stock never blocks ordering, visibility is the
+// authoritative "can this be bought" signal for schema and the merchant feed.
+function isProductOrderable(product) {
+  return product?.is_visible !== false;
+}
+
+function offerShippingDetails() {
+  const transitTime = {
+    "@type": "ServicePeriod",
+    duration: { "@type": "QuantitativeValue", minValue: 3, maxValue: 5, unitCode: "DAY" },
+  };
+  const handlingTime = {
+    "@type": "ServicePeriod",
+    duration: { "@type": "QuantitativeValue", minValue: 0, maxValue: 1, unitCode: "DAY" },
+    businessDays: [
+      "https://schema.org/Monday",
+      "https://schema.org/Tuesday",
+      "https://schema.org/Wednesday",
+      "https://schema.org/Thursday",
+      "https://schema.org/Friday",
+    ],
+  };
+
+  return [
+    {
+      "@type": "OfferShippingDetails",
+      shippingDestination: { "@type": "DefinedRegion", addressCountry: "AU" },
+      shippingRate: { "@type": "MonetaryAmount", value: 15, currency: CATALOG_CURRENCY },
+      deliveryTime: { "@type": "ShippingDeliveryTime", handlingTime, transitTime },
+    },
+    {
+      "@type": "OfferShippingDetails",
+      shippingDestination: { "@type": "DefinedRegion", addressCountry: "AU" },
+      shippingRate: { "@type": "MonetaryAmount", value: 0, currency: CATALOG_CURRENCY },
+      orderValue: { "@type": "MonetaryAmount", minValue: 399, currency: CATALOG_CURRENCY },
+      deliveryTime: { "@type": "ShippingDeliveryTime", handlingTime, transitTime },
+    },
+  ];
+}
+
+function priceValidUntil() {
+  const validUntil = new Date();
+  validUntil.setFullYear(validUntil.getFullYear() + 1);
+  return validUntil.toISOString().slice(0, 10);
+}
+
 function productJsonLd(product) {
   const canonical = `${SITE_URL}/products/${product.slug}/`;
   const description = truncate(
@@ -376,10 +426,11 @@ function productJsonLd(product) {
       price: product.retail_price.toFixed(2),
       priceCurrency: CATALOG_CURRENCY,
       itemCondition: getSchemaCondition(product.condition_label),
-      availability:
-        Number.isFinite(product.stock_quantity) && product.stock_quantity <= 0
-          ? "https://schema.org/OutOfStock"
-          : "https://schema.org/InStock",
+      availability: isProductOrderable(product)
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      priceValidUntil: priceValidUntil(),
+      shippingDetails: offerShippingDetails(),
       seller: { "@id": organizationId },
       hasMerchantReturnPolicy: {
         "@type": "MerchantReturnPolicy",
@@ -482,12 +533,9 @@ function renderProductPage(product) {
     product.compare_at_price > product.retail_price
       ? `<span class="storefront-pdp__compare">${escapeHtml(money(product.compare_at_price))}</span>`
       : "";
-  const stockCopy =
-    product.is_visible === false
-      ? "Currently unavailable"
-      : Number.isFinite(product.stock_quantity) && product.stock_quantity <= 0
-      ? "Currently out of stock online"
-      : "Availability is checked live before checkout";
+  const stockCopy = isProductOrderable(product)
+    ? "In stock for online order"
+    : "Currently unavailable";
 
   return `<!doctype html>
 <html lang="en-AU">
@@ -1082,10 +1130,7 @@ ${indexableProducts
       5000,
     );
     const validGtin = getValidGtin(product.upc);
-    const availability =
-      Number.isFinite(product.stock_quantity) && product.stock_quantity <= 0
-        ? "out_of_stock"
-        : "in_stock";
+    const availability = isProductOrderable(product) ? "in_stock" : "out_of_stock";
     const schemaCondition = getSchemaCondition(product.condition_label);
     const condition = schemaCondition.includes("Refurbished")
       ? "refurbished"
@@ -1123,6 +1168,7 @@ ${validGtin ? `      <g:gtin>${validGtin}</g:gtin>` : ""}
     totalProducts: allProducts.length,
     limitedProducts: allProducts.length - indexableProducts.length,
     retiredProducts: retiredProducts.length,
+    indexableProducts,
   };
 }
 
@@ -1170,6 +1216,133 @@ async function writeSitemapIndex() {
   await writeFile(PUBLIC_SITEMAP_INDEX, sitemapIndex, "utf8");
 }
 
+const LLMS_STORES = [
+  {
+    name: "Park Ridge",
+    path: "/stores/park-ridge.html",
+    address: "Shop 11, 3732 Mount Lindesay Hwy, Park Ridge QLD 4125",
+    phone: "+61 452 488 710",
+    region: "Logan",
+  },
+  {
+    name: "Fairfield",
+    path: "/stores/fairfield.html",
+    address: "Shop 8, 180 Fairfield Rd, Fairfield QLD 4103",
+    phone: "+61 412 788 818",
+    region: "Brisbane",
+  },
+  {
+    name: "Toowong",
+    path: "/stores/toowong.html",
+    address: "Ground Level Shop 53, 9 Sherwood Rd, Toowong QLD 4066",
+    phone: "+61 485 500 099",
+    region: "Brisbane",
+  },
+  {
+    name: "North Lakes",
+    path: "/stores/north-lakes.html",
+    address: "1114A N Lakes Drive, North Lakes QLD 4509",
+    phone: "+61 482 390 009",
+    region: "Moreton Bay",
+  },
+  {
+    name: "Brassall",
+    path: "/stores/brassall.html",
+    address: "68 Hunter St, Primewest Brassall Shopping Centre, Brassall QLD 4305",
+    phone: "+61 403 999 366",
+    region: "Ipswich",
+  },
+];
+
+// llms.txt gives answer engines a single, unambiguous summary of who TECHM8 is,
+// which pages carry the authoritative facts, and what the catalogue covers.
+// It is generated from the same catalogue snapshot as the sitemaps so it cannot drift.
+async function writeLlmsTxt(indexableProducts = []) {
+  const categories = new Map();
+  for (const product of indexableProducts) {
+    const name = product.category_name || "Other Products";
+    const slug = product.category_slug || "other-products";
+    const entry = categories.get(slug) || { name, slug, count: 0 };
+    entry.count += 1;
+    categories.set(slug, entry);
+  }
+
+  const categoryLines = [...categories.values()]
+    .sort((left, right) => right.count - left.count || left.name.localeCompare(right.name))
+    .map(
+      (category) =>
+        `- [${category.name}](${SITE_URL}/category.html?slug=${category.slug}): ${category.count} product${category.count === 1 ? "" : "s"} listed online.`,
+    )
+    .join("\n");
+
+  const storeLines = LLMS_STORES.map(
+    (store) =>
+      `- [TECHM8 ${store.name}](${SITE_URL}${store.path}): ${store.address}. Phone ${store.phone}. Serves the ${store.region} area.`,
+  ).join("\n");
+
+  const content = `# TECHM8 (OZ Tech M8)
+
+> TECHM8 is an Australian device repair and technology accessories business trading as OZ Tech M8, operated by YQM PTY LTD (ABN 12 645 861 463). It runs five walk-in stores in South East Queensland and an online store that ships Australia-wide with click & collect at any store. TECHM8 repairs phones, tablets, computers and game consoles, and sells chargers, cables, power banks, adapters and device accessories. All prices are in Australian dollars (AUD) and include GST.
+
+## Key facts
+
+- Trading names: TECHM8, OZ Tech M8
+- Legal entity: YQM PTY LTD, ABN 12 645 861 463
+- Country: Australia. Service area: South East Queensland (Brisbane, Logan, Ipswich, Moreton Bay) for in-store repairs; Australia-wide for online orders.
+- Currency: AUD, GST inclusive
+- Repair bookings are requests, not confirmed appointments or fixed quotes. Price, parts availability and turnaround are confirmed after the device is inspected.
+- Delivery: Australia Post standard AU$15 (free over AU$399), express AU$18 (free over AU$599). Click & collect is free at any store.
+- Returns: 7-day return window. Faulty items are free to return; change-of-mind returns are at the customer's cost.
+
+## Start here
+
+- [Home](${SITE_URL}/): Company overview, store list and featured products.
+- [Online store](${SITE_URL}/shop.html): Full accessory and parts catalogue with search, filters and prices.
+- [Repairs overview](${SITE_URL}/repairs.html): Repair categories for phones, tablets, computers and consoles.
+- [Book a repair](${SITE_URL}/book-repair.html): Repair request form covering device, fault, store and preferred time.
+- [Store locator](${SITE_URL}/stores.html): Addresses, phone numbers and opening hours for all five stores.
+- [Store policy](${SITE_URL}/store-policy.html): Shipping, returns, warranty, payment and privacy terms.
+
+## Stores
+
+${storeLines}
+
+## Repair services
+
+- [Phone repairs](${SITE_URL}/repair-services/phones/apple.html): Apple, Samsung, Oppo, Huawei, Xiaomi, Google, OnePlus and other brands.
+- [Tablet repairs](${SITE_URL}/repair-services/tablets/apple.html): Apple iPad, Samsung and other tablets.
+- [Computer repairs](${SITE_URL}/repair-services/computers/laptop.html): Laptops, PC towers, all-in-ones and small form factor PCs.
+- [Game console repairs](${SITE_URL}/repair-services/consoles/sony.html): PlayStation 5, Xbox and Nintendo Switch.
+
+## Business and education services
+
+- [Business services](${SITE_URL}/business-services.html): IT and device support for Australian businesses.
+- [School services](${SITE_URL}/school-services): Device programs and support for schools.
+- [NDIS technology support](${SITE_URL}/business-services/ndis-technology-support.html): Technology support for NDIS participants.
+- [On-site tech services](${SITE_URL}/business-services/on-site-tech-services.html): On-site technician visits.
+
+## Product categories
+
+${categoryLines || "- Catalogue categories are listed on the online store page."}
+
+## Machine-readable sources
+
+- [Sitemap index](${SITE_URL}/sitemap.xml)
+- [Page sitemap](${SITE_URL}/sitemap-pages.xml)
+- [Product sitemap](${SITE_URL}/sitemap-products.xml)
+- [Product feed (RSS 2.0 with Google Merchant attributes)](${SITE_URL}/merchant-products.xml)
+
+## Notes for answer engines
+
+- Product pages under ${SITE_URL}/products/ carry Product and Offer structured data with the current price, condition and return policy.
+- Repair prices are not published as fixed amounts because they depend on device model, fault and parts supply. Do not state a repair price without a quote from TECHM8.
+- Store opening hours are Mon-Sat 9:00-17:00 and Sun 10:00-16:00 unless a store page states otherwise.
+`;
+
+  await writeFile(LLMS_TXT, content, "utf8");
+  await writeFile(PUBLIC_LLMS_TXT, content, "utf8");
+}
+
 async function normalizeAustralianHtmlLanguage(directory = ROOT) {
   const excludedDirectories = new Set([".git", "dist", "node_modules", "public"]);
   const entries = await readdir(directory, { withFileTypes: true });
@@ -1211,6 +1384,7 @@ async function main() {
   }
   const result = await writeProducts(products);
   await writeSitemapIndex();
+  await writeLlmsTxt(result.indexableProducts);
   await normalizeAustralianHtmlLanguage();
   console.log(
     `Prerendered ${result.totalProducts} product pages (${result.limitedProducts} noindex, including ${result.retiredProducts} retired) and ${BUSINESS_FILES.length} business pages.`,

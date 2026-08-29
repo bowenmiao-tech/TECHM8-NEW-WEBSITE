@@ -1,4 +1,52 @@
+# TECHM8 Australia - https://www.techm8australia.com/
+
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# AI answer engines and assistant crawlers are welcome on the public site.
+# Listed explicitly so store, repair and product information can be cited.
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /admin/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /admin/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
 
 Sitemap: https://www.techm8australia.com/sitemap.xml
+Sitemap: https://www.techm8australia.com/sitemap-pages.xml
+Sitemap: https://www.techm8australia.com/sitemap-products.xml
