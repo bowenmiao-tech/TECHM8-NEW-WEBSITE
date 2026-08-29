@@ -8,7 +8,8 @@
     "prerender": "node scripts/prerender-site.mjs",
     "validate:pricing": "node scripts/validate-product-pricing.mjs",
     "build": "npm run prerender && npm run validate:pricing && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:assets": "node scripts/build-assets.mjs"
   },
   "devDependencies": {
     "vite": "^7.0.0"

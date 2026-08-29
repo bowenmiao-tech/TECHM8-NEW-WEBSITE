@@ -1,4 +1,6 @@
 import { readFile, writeFile, mkdir, readdir, rm } from "node:fs/promises";
+import { buildAssets } from "./build-assets.mjs";
+import { buildCriticalCss } from "./build-critical-css.mjs";
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import vm from "node:vm";
@@ -560,7 +562,7 @@ function renderProductPage(product) {
   <meta property="product:price:currency" content="${CATALOG_CURRENCY}">
 ${quality.indexable ? `  <script type="application/ld+json">${productJsonLd(product).replaceAll("<", "\\u003c")}</script>` : ""}
   <script type="application/json" data-prerendered-product>${embeddedProduct}</script>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.min.css">
   <script defer src="/ga4.js"></script>
 </head>
 <body>
@@ -592,7 +594,7 @@ ${quality.indexable ? `  <script type="application/ld+json">${productJsonLd(prod
     </div></section>
   </main>
   <footer class="site-footer"><div class="container footer footer--bottom"><p>&copy; 2026 TECHM8. All rights reserved.</p><a href="/store-policy.html">Repair Terms &amp; Conditions</a></div></footer>
-  <script type="module" src="/script.js"></script>
+  <script type="module" src="/script.min.js"></script>
 </body>
 </html>
 `;
@@ -909,7 +911,7 @@ function renderGenericRepairPage(data, file, assignment) {
   <meta property="og:image" content="${SITE_URL}/assets/logo-techm8.png">
   <script type="application/ld+json">${renderGenericRepairJsonLd(data, file).replaceAll("<", "\\u003c")}</script>
   <script data-repair-page-data>${assignmentScript}</script>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.min.css">
   <script defer src="/ga4.js"></script>
 </head>
 <body class="repair-page" data-generic-repair-prerendered>
@@ -928,7 +930,7 @@ function renderGenericRepairPage(data, file, assignment) {
     <section class="section"><div class="container"><div class="booking-card"><p class="eyebrow">Provider details</p><h2>Who provides this repair service?</h2><p>TECHM8 is the trading name of YQM PTY LTD (ABN 12 645 861 463), an Australian device repair and technology retailer with stores in Park Ridge, Fairfield, Toowong, North Lakes and Brassall.</p><p><a href="/stores.html">View store addresses, opening hours and contact details</a>.</p></div></div></section>
   </main>
   <footer class="site-footer"><div class="container footer footer--bottom"><p>&copy; 2026 TECHM8. All rights reserved.</p><a href="/store-policy.html">Repair Terms &amp; Conditions</a></div></footer>
-  <script type="module" src="/script.js"></script>
+  <script type="module" src="/script.min.js"></script>
 </body>
 </html>
 `;
@@ -1568,7 +1570,7 @@ function renderCategoryPage(category, allCategories) {
   <meta property="og:image" content="${escapeHtml(category.indexable[0]?.display_image || `${SITE_URL}/assets/logo-techm8.png`)}">
   <meta name="twitter:card" content="summary_large_image">
 ${indexable ? `  <script type="application/ld+json">${categoryJsonLd(category)}</script>` : ""}
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.min.css">
   <script defer src="/ga4.js"></script>
 </head>
 <body>
@@ -1599,7 +1601,7 @@ ${indexable ? `  <script type="application/ld+json">${categoryJsonLd(category)}<
     </div></section>
   </main>
   <footer class="site-footer"><div class="container footer footer--bottom"><p>&copy; 2026 TECHM8. All rights reserved.</p><a href="/store-policy.html">Repair Terms &amp; Conditions</a></div></footer>
-  <script type="module" src="/script.js"></script>
+  <script type="module" src="/script.min.js"></script>
 </body>
 </html>
 `;
@@ -1709,6 +1711,7 @@ async function normalizeAustralianHtmlLanguage(directory = ROOT) {
 }
 
 async function main() {
+  await buildAssets();
   await prerenderBusinessPages();
   await prerenderGenericRepairPages();
 
@@ -1728,6 +1731,7 @@ async function main() {
   await writeSitemapIndex();
   await writeLlmsTxt(result.indexableProducts);
   await syncPublicRuntimeScripts();
+  await buildCriticalCss();
   await normalizeAustralianHtmlLanguage();
   console.log(
     `Prerendered ${result.totalProducts} product pages (${result.limitedProducts} noindex, including ${result.retiredProducts} retired), ${categoryResult.total} category pages (${categoryResult.indexed} indexable)${result.slugRedirects ? `, ${result.slugRedirects} slug redirects` : ""} and ${BUSINESS_FILES.length} business pages.`,
