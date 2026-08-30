@@ -1,9 +1,363 @@
 {
-  "catalog_updated_at": "2026-08-19T10:23:12.714422+00:00",
+  "catalog_updated_at": "2026-08-30T05:24:40.440585+00:00",
   "total_products": 149,
   "indexable_products": 95,
   "limited_products": 54,
   "products": [
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M ULTRA TOUGH TYPE C TO TYPE C CABLE",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 94,
+      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123i U-Lighting Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 75,
+      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
+      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 76,
+      "slug": "wekome-wireless-charger-wp-u172",
+      "name": "WEKOME Wireless Charger WP-U172",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 74,
+      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
+      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 25,
+      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-white",
+      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- White",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 26,
+      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 21,
+      "slug": "remax-rpp-623-power-bank-20000-mah",
+      "name": "REMAX RPP-623 Power Bank 20000 mAh",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 27,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 28,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 15,
+      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+      "name": "87W USB-C MacBook Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 22,
+      "slug": "remax-rpp-622-10000mah-power-bank",
+      "name": "Remax RPP-622 10000MAH power bank",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 42,
+      "slug": "wekome-wp-101-10000mah-power-bank",
+      "name": "WEKOME WP-101 10000mAh Power Bank",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 23,
+      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 24,
+      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 19,
+      "slug": "60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont",
+      "name": "60W MagSafe 2 Power Adapter for MacBook Air and MacBook Pro",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 18,
+      "slug": "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
+      "name": "85W MagSafe 2 Power Adapter for MacBook Pro with Retina Display",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 12,
+      "slug": "brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty",
+      "name": "85W MagSafe 1 Power Adapter for MacBook Pro",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 13,
+      "slug": "brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro",
+      "name": "60W MagSafe 1 Power Adapter for MacBook Air and MacBook Pro",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 14,
+      "slug": "copy-of-brand-new-45w-magsafe-1-power-adapter-for-macbook-air-six-months-warranty",
+      "name": "45W MagSafe 1 Power Adapter for MacBook Air",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "copy-style-slug-review-needed"
+      ]
+    },
+    {
+      "id": 106,
+      "slug": "msi-mag-coreliquid-a13-240-liquid-cooler-copy",
+      "name": "MSI MAG CORELIQUID A13 360 Liquid Cooler",
+      "indexable": true,
+      "score": 84,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters",
+        "copy-style-slug-review-needed"
+      ]
+    },
+    {
+      "id": 2145,
+      "slug": "repairdesk-misc-10888-magsafe-stand-wallet-black",
+      "name": "MagSafe Stand Wallet - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2152,
+      "slug": "repairdesk-misc-10851-magsafe-multi-wallet-grey",
+      "name": "MagSafe Multi-Wallet - Grey",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2150,
+      "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
+      "name": "MagSafe Multi-Wallet - Brown",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2151,
+      "slug": "repairdesk-misc-10852-magsafe-multi-wallet-black",
+      "name": "MagSafe Multi-Wallet - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 82,
+      "slug": "wk-v04-wireless-earbuds",
+      "name": "WK V04 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "dualsense-wireless-controller-gray-camouflage",
+      "name": "DualSense Wireless Controller - Gray Camouflage",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "dualsense-wireless-controller-playstation-5-white",
+      "name": "DualSense Wireless Controller - PlayStation 5 - White",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 105,
+      "slug": "msi-mag-coreliquid-a13-240-liquid-cooler",
+      "name": "MSI MAG CORELIQUID A13 240 Liquid Cooler",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2148,
+      "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
+      "name": "MagSafe Silicone Phone Grip - Sky Blue",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2146,
+      "slug": "repairdesk-misc-10857-magsafe-silicone-phone-grip-purple",
+      "name": "MagSafe Silicone Phone Grip - Purple",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2147,
+      "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
+      "name": "MagSafe Silicone Phone Grip - Pink",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2149,
+      "slug": "repairdesk-misc-10854-magsafe-silicone-phone-grip-black",
+      "name": "MagSafe Silicone Phone Grip - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 2158,
       "slug": "repairdesk-misc-8483-drone-map",
@@ -234,17 +588,6 @@
       "warnings": []
     },
     {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M ULTRA TOUGH TYPE C TO TYPE C CABLE",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 98,
       "slug": "wekome-wdc-50-240w-charging-cable",
       "name": "WEKOME WDC-50 240W Charging Cable",
@@ -277,24 +620,6 @@
       "id": 95,
       "slug": "wekome-wdc-61-lighting-to-typec-charging-data-cable",
       "name": "WEKOME WDC-61 Lighting to TypeC Charging Data Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 94,
-      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123i U-Lighting Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -376,17 +701,6 @@
       ]
     },
     {
-      "id": 82,
-      "slug": "wk-v04-wireless-earbuds",
-      "name": "WK V04 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 79,
       "slug": "ds15-2-in-1wireless-charger",
       "name": "DS15 2 IN 1Wireless Charger",
@@ -419,35 +733,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 76,
-      "slug": "wekome-wireless-charger-wp-u172",
-      "name": "WEKOME Wireless Charger WP-U172",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 75,
-      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
-      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 74,
-      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
-      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 73,
@@ -609,17 +894,6 @@
       ]
     },
     {
-      "id": 42,
-      "slug": "wekome-wp-101-10000mah-power-bank",
-      "name": "WEKOME WP-101 10000mAh Power Bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 39,
       "slug": "wekome-wp-59-10000-mah-power-bank-22-5w-super-fast-charging",
       "name": "WEKOME WP-59 10000 mAh Power Bank 22.5W super fast charging",
@@ -665,82 +939,6 @@
       "warnings": []
     },
     {
-      "id": 28,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 27,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 26,
-      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 25,
-      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-white",
-      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 24,
-      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 23,
-      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 22,
-      "slug": "remax-rpp-622-10000mah-power-bank",
-      "name": "Remax RPP-622 10000MAH power bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 21,
-      "slug": "remax-rpp-623-power-bank-20000-mah",
-      "name": "REMAX RPP-623 Power Bank 20000 mAh",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 2166,
       "slug": "repairdesk-misc-8038-magsafe-card-wallet-green",
       "name": "MagSafe Card Wallet - Green",
@@ -766,94 +964,6 @@
       "id": 2163,
       "slug": "repairdesk-misc-8041-magsafe-card-wallet-navy",
       "name": "MagSafe Card Wallet - Navy",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2152,
-      "slug": "repairdesk-misc-10851-magsafe-multi-wallet-grey",
-      "name": "MagSafe Multi-Wallet - Grey",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2151,
-      "slug": "repairdesk-misc-10852-magsafe-multi-wallet-black",
-      "name": "MagSafe Multi-Wallet - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2150,
-      "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
-      "name": "MagSafe Multi-Wallet - Brown",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2149,
-      "slug": "repairdesk-misc-10854-magsafe-silicone-phone-grip-black",
-      "name": "MagSafe Silicone Phone Grip - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2148,
-      "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
-      "name": "MagSafe Silicone Phone Grip - Sky Blue",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2147,
-      "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
-      "name": "MagSafe Silicone Phone Grip - Pink",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2146,
-      "slug": "repairdesk-misc-10857-magsafe-silicone-phone-grip-purple",
-      "name": "MagSafe Silicone Phone Grip - Purple",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2145,
-      "slug": "repairdesk-misc-10888-magsafe-stand-wallet-black",
-      "name": "MagSafe Stand Wallet - Black",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -1190,38 +1300,6 @@
       ]
     },
     {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 106,
-      "slug": "msi-mag-coreliquid-a13-240-liquid-cooler-copy",
-      "name": "MSI MAG CORELIQUID A13 360 Liquid Cooler",
-      "indexable": true,
-      "score": 84,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters",
-        "copy-style-slug-review-needed"
-      ]
-    },
-    {
-      "id": 105,
-      "slug": "msi-mag-coreliquid-a13-240-liquid-cooler",
-      "name": "MSI MAG CORELIQUID A13 240 Liquid Cooler",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 89,
       "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
       "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
@@ -1305,24 +1383,6 @@
       "warnings": []
     },
     {
-      "id": 19,
-      "slug": "60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont",
-      "name": "60W MagSafe 2 Power Adapter for MacBook Air and MacBook Pro",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 18,
-      "slug": "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
-      "name": "85W MagSafe 2 Power Adapter for MacBook Pro with Retina Display",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 17,
       "slug": "new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
       "name": "30W USB-C MacBook Charger with Cable",
@@ -1341,55 +1401,6 @@
       "warnings": []
     },
     {
-      "id": 15,
-      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
-      "name": "87W USB-C MacBook Charger with Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 14,
-      "slug": "copy-of-brand-new-45w-magsafe-1-power-adapter-for-macbook-air-six-months-warranty",
-      "name": "45W MagSafe 1 Power Adapter for MacBook Air",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "copy-style-slug-review-needed"
-      ]
-    },
-    {
-      "id": 13,
-      "slug": "brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro",
-      "name": "60W MagSafe 1 Power Adapter for MacBook Air and MacBook Pro",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 12,
-      "slug": "brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty",
-      "name": "85W MagSafe 1 Power Adapter for MacBook Pro",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 5,
-      "slug": "dualsense-wireless-controller-playstation-5-white",
-      "name": "DualSense Wireless Controller - PlayStation 5 - White",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 4,
       "slug": "copy-of-dualsense-wireless-controller-playstation-5-black",
       "name": "DualSense Wireless Controller - PlayStation 5 - Black",
@@ -1399,17 +1410,6 @@
       "warnings": [
         "description-under-90-characters",
         "copy-style-slug-review-needed"
-      ]
-    },
-    {
-      "id": 3,
-      "slug": "dualsense-wireless-controller-gray-camouflage",
-      "name": "DualSense Wireless Controller - Gray Camouflage",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
       ]
     },
     {
