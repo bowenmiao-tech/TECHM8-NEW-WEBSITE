@@ -1,9 +1,125 @@
 {
-  "catalog_updated_at": "2026-08-30T05:49:33.34169+00:00",
-  "total_products": 149,
-  "indexable_products": 95,
+  "catalog_updated_at": "2026-08-30T15:37:51.24531+00:00",
+  "total_products": 145,
+  "indexable_products": 91,
   "limited_products": 54,
   "products": [
+    {
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 101,
+      "slug": "3-in-1-cabin-crew-charging-cable",
+      "name": "3 in 1 Cabin Crew Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 98,
+      "slug": "wekome-wdc-50-240w-charging-cable",
+      "name": "WEKOME WDC-50 240W Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 94,
+      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 97,
+      "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
+      "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 96,
+      "slug": "wekome-wdc-60-type-c-c-charging-data-cable",
+      "name": "WEKOME WDC-60 Type-C-C Charging Data Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 95,
+      "slug": "wekome-wdc-61-lighting-to-typec-charging-data-cable",
+      "name": "WEKOME WDC-61 Lighting to TypeC Charging Data Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 78,
       "slug": "ca69-ca112-apple-watch-magnetic-charger",
@@ -57,64 +173,6 @@
       "blockers": [
         "description-under-40-characters"
       ],
-      "warnings": []
-    },
-    {
-      "id": 96,
-      "slug": "wekome-wdc-60-type-c-c-charging-data-cable",
-      "name": "WEKOME WDC-60 Type-C-C Charging Data Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 98,
-      "slug": "wekome-wdc-50-240w-charging-cable",
-      "name": "WEKOME WDC-50 240W Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M ULTRA TOUGH TYPE C TO TYPE C CABLE",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 94,
-      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123i U-Lighting Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
@@ -277,29 +335,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 14,
-      "slug": "copy-of-brand-new-45w-magsafe-1-power-adapter-for-macbook-air-six-months-warranty",
-      "name": "45W MagSafe 1 Power Adapter for MacBook Air",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "copy-style-slug-review-needed"
-      ]
-    },
-    {
-      "id": 106,
-      "slug": "msi-mag-coreliquid-a13-240-liquid-cooler-copy",
-      "name": "MSI MAG CORELIQUID A13 360 Liquid Cooler",
-      "indexable": true,
-      "score": 84,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters",
-        "copy-style-slug-review-needed"
-      ]
     },
     {
       "id": 2145,
@@ -586,55 +621,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M ULTRA TOUGH LIGHTING CABLE",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 101,
-      "slug": "3-in-1-cabin-crew-charging-cable",
-      "name": "3 in 1 Cabin Crew Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough Type c to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 97,
-      "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
-      "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 95,
-      "slug": "wekome-wdc-61-lighting-to-typec-charging-data-cable",
-      "name": "WEKOME WDC-61 Lighting to TypeC Charging Data Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 92,
@@ -1280,26 +1266,6 @@
       "warnings": []
     },
     {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 109,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable-copy",
-      "name": "WEKOME WDC-C33 2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "copy-style-slug-review-needed"
-      ]
-    },
-    {
       "id": 89,
       "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
       "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
@@ -1399,18 +1365,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 4,
-      "slug": "copy-of-dualsense-wireless-controller-playstation-5-black",
-      "name": "DualSense Wireless Controller - PlayStation 5 - Black",
-      "indexable": true,
-      "score": 84,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters",
-        "copy-style-slug-review-needed"
-      ]
     },
     {
       "id": 2,

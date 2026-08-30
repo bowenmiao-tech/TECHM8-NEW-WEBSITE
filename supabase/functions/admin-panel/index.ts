@@ -261,6 +261,14 @@ async function ensureUniqueProductSku(
   return `${baseSku}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`
 }
 
+function looksLikeCloneSku(value: unknown) {
+  return /-COPY(?:-\d+)?$/i.test(String(value ?? '').trim())
+}
+
+function defaultProductSku(name: string, model: string | null) {
+  return `TM8-${slugifyProductValue(model ?? name, 'product').toUpperCase()}`
+}
+
 async function resolveSupplierIdByBrand(
   supabaseAdmin: ReturnType<typeof createClient>,
   brand: string | null,
@@ -2175,7 +2183,7 @@ async function cloneProduct(supabaseAdmin: ReturnType<typeof createClient>, cont
     min_order_quantity: source.min_order_quantity ?? 1,
     is_featured: false,
     is_visible: false,
-    is_pos_visible: source.is_pos_visible !== false,
+    is_pos_visible: false,
     seo_title: buildProductSeoTitle(cloneName),
     seo_description: buildProductSeoDescription(source.short_description ?? null, cloneName),
     detail_html: detailHtml.value,
@@ -2546,6 +2554,31 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
   if (!name) {
     return jsonResponse({ ok: false, error: 'Product name is required.' }, 422)
   }
+  const model = normalizeNullableString(body.model)
+  const { data: existingProduct, error: existingProductError } = await supabaseAdmin
+    .from('products')
+    .select('id, sku, slug')
+    .eq('id', productId)
+    .maybeSingle()
+
+  if (existingProductError) {
+    return jsonResponse({ ok: false, error: 'Product could not be loaded before saving.' }, 500)
+  }
+  if (!existingProduct) {
+    return jsonResponse({ ok: false, error: 'Product was not found.' }, 404)
+  }
+
+  const submittedSku = normalizeNullableString(body.sku)
+  const existingSku = normalizeNullableString((existingProduct as { sku?: string }).sku)
+  const desiredSku = looksLikeCloneSku(submittedSku ?? existingSku)
+    ? defaultProductSku(name, model)
+    : (submittedSku ?? existingSku ?? defaultProductSku(name, model))
+  const sku = await ensureUniqueProductSku(supabaseAdmin, desiredSku, productId)
+  const slug = await ensureUniqueProductSlug(
+    supabaseAdmin,
+    normalizeNullableString(body.slug) ?? name,
+    productId,
+  )
 
   const stockQuantity = normalizeNumber(body.stock_quantity)
   if (stockQuantity === null) {
@@ -2575,9 +2608,11 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
   }
 
   const patch: JsonRecord = {
+    sku,
+    slug,
     name,
     brand: normalizeNullableString(body.brand),
-    model: normalizeNullableString(body.model),
+    model,
     pos_category_id: posCategoryId,
     short_description: body.short_description === '' ? null : normalizeNullableString(body.short_description),
     compatibility: body.compatibility === '' ? null : normalizeNullableString(body.compatibility),

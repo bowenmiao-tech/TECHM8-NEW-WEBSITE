@@ -3824,6 +3824,7 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
         <form class="admin-editor__form" data-product-editor-form>
           <div class="admin-editor__grid">
             <label><span>Name</span><input type="text" name="name" value="${escapeHtml(row.name || "")}" ${state.canEdit ? "" : "disabled"}></label>
+            <label><span>SKU</span><input type="text" name="sku" value="${escapeHtml(row.sku || "")}" ${state.canEdit ? "" : "disabled"}></label>
             <label><span>Brand</span><input type="text" name="brand" value="${escapeHtml(row.brand || "")}" ${state.canEdit ? "" : "disabled"}></label>
             <label><span>Model</span><input type="text" name="model" value="${escapeHtml(row.model || "")}" ${state.canEdit ? "" : "disabled"}></label>
             <label><span>POS product category</span>
@@ -3919,6 +3920,7 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
         await callAdminApi("product_update", {
           id: row.id,
           name: formData.get("name"),
+          sku: formData.get("sku"),
           brand: formData.get("brand"),
           model: formData.get("model"),
           pos_category_id: formData.get("pos_category_id"),
@@ -4160,6 +4162,9 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
     const gallery = normalizeProductGallery(row);
     const heroImage = gallery.find((image) => image.image_url)?.image_url || row.image_url || "";
     const storefrontUrl = `../products/${encodeURIComponent(row.slug || "")}/`;
+    const storefrontLink = row.is_visible
+      ? `<a class="button button--ghost" href="${escapeHtml(storefrontUrl)}" target="_blank" rel="noreferrer">View product page</a>`
+      : "";
 
     editorTarget.innerHTML = `
       <div class="admin-editor admin-product-editor">
@@ -4170,7 +4175,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
             <h3>${escapeHtml(row.name || "Untitled product")}</h3>
             <p>${escapeHtml(row.sku || "No SKU")} / ${escapeHtml(row.slug || "No slug")}</p>
             <div class="admin-button-row">
-              <a class="button button--ghost" href="${escapeHtml(storefrontUrl)}" target="_blank" rel="noreferrer">View product page</a>
+              ${storefrontLink}
               ${state.canEdit ? `<button class="button button--ghost" type="button" data-product-clone>Clone product</button>` : ""}
               ${state.canEdit ? `<button class="button button--danger" type="button" data-product-delete>Delete product</button>` : ""}
               ${state.canEdit ? `<button class="button button--primary" type="submit" form="admin-product-editor-form">Save product</button>` : ""}
@@ -4190,6 +4195,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
             </div>
             <div class="admin-editor__grid">
               <label><span>Name</span><input type="text" name="name" value="${escapeHtml(row.name || "")}" ${state.canEdit ? "" : "disabled"}></label>
+              <label><span>SKU</span><input type="text" name="sku" value="${escapeHtml(row.sku || "")}" ${state.canEdit ? "" : "disabled"}></label>
               <label><span>Brand</span><input type="text" name="brand" value="${escapeHtml(row.brand || "")}" ${state.canEdit ? "" : "disabled"}></label>
               <label><span>Model</span><input type="text" name="model" value="${escapeHtml(row.model || "")}" ${state.canEdit ? "" : "disabled"}></label>
               <div class="admin-editor__field-group">
@@ -4485,6 +4491,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
         const result = await callAdminApi("product_update", {
           id: row.id,
           name: formData.get("name"),
+          sku: formData.get("sku"),
           brand: formData.get("brand"),
           model: formData.get("model"),
           pos_category_id: formData.get("pos_category_id"),

@@ -79,6 +79,17 @@ const stripHtml = (value = "") =>
     .replace(/\s+/g, " ")
     .trim();
 
+function looksLikeCloneProduct(product) {
+  const slug = String(product?.slug || "").trim();
+  const sku = String(product?.sku || "").trim();
+  const name = String(product?.name || "").trim();
+  return (
+    /(?:^|-)copy(?:-of)?(?:-|$)|(?:^|-)copy$/i.test(slug) ||
+    /-COPY(?:-\d+)?$/i.test(sku) ||
+    /\s+\(copy\)$/i.test(name)
+  );
+}
+
 const truncate = (value, maxLength) => {
   const text = stripHtml(value);
   if (text.length <= maxLength) return text;
@@ -311,6 +322,8 @@ async function loadCatalog() {
 
   return products
     .filter((product) => safeSlug(product.slug))
+    .filter((product) => product.is_visible === true)
+    .filter((product) => !looksLikeCloneProduct(product))
     .map((product) => {
       const category = categoryById.get(product.pos_category_id) || null;
       const gallery = (imagesByProduct.get(product.id) || [])
@@ -961,6 +974,7 @@ async function loadRetiredProducts(previousSlugs, currentSlugs) {
 
   for (const slug of previousSlugs) {
     if (currentSet.has(slug)) continue;
+    if (looksLikeCloneProduct({ slug })) continue;
     const pagePath = join(PRODUCTS_DIR, slug, "index.html");
     if (!existsSync(pagePath)) continue;
 
@@ -973,6 +987,7 @@ async function loadRetiredProducts(previousSlugs, currentSlugs) {
 
       const product = JSON.parse(embeddedProduct);
       if (safeSlug(product?.slug) !== slug) continue;
+      if (looksLikeCloneProduct(product)) continue;
 
       retiredProducts.push({
         ...product,
@@ -985,6 +1000,14 @@ async function loadRetiredProducts(previousSlugs, currentSlugs) {
   }
 
   return retiredProducts;
+}
+
+async function removeObsoleteCloneProductPages(previousSlugs, currentSlugs) {
+  const currentSet = new Set(currentSlugs);
+  for (const slug of previousSlugs) {
+    if (currentSet.has(slug) || !looksLikeCloneProduct({ slug })) continue;
+    await rm(join(PRODUCTS_DIR, slug), { recursive: true, force: true });
+  }
 }
 
 function renderLegacyProductRedirect(product) {
@@ -1092,6 +1115,7 @@ async function writeProducts(products) {
   const retiredProducts = await loadRetiredProducts(previousSlugs, activeSlugs);
   const allProducts = [...products, ...retiredProducts];
   const currentSlugs = allProducts.map((product) => product.slug);
+  await removeObsoleteCloneProductPages(previousSlugs, currentSlugs);
   const qualityResults = allProducts.map((product) => ({
     product,
     quality: assessProductQuality(product),

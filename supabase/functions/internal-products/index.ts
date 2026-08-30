@@ -80,6 +80,17 @@ function normalizeNumber(value: unknown) {
   return Number.isFinite(numberValue) ? numberValue : null
 }
 
+function looksLikeCloneProduct(product: Pick<ProductRow, 'sku' | 'slug' | 'name'>) {
+  const slug = String(product.slug ?? '').trim()
+  const sku = String(product.sku ?? '').trim()
+  const name = String(product.name ?? '').trim()
+  return (
+    /(?:^|-)copy(?:-of)?(?:-|$)|(?:^|-)copy$/i.test(slug) ||
+    /-COPY(?:-\d+)?$/i.test(sku) ||
+    /\s+\(copy\)$/i.test(name)
+  )
+}
+
 async function readRequestInput(req: Request) {
   const url = new URL(req.url)
   const input: JsonRecord = {}
@@ -199,7 +210,7 @@ Deno.serve(async (req) => {
       return jsonResponse({ ok: false, error: 'Products could not be loaded.' }, 500)
     }
 
-    const productRows = (products ?? []) as ProductRow[]
+    const productRows = ((products ?? []) as ProductRow[]).filter((product) => !looksLikeCloneProduct(product))
     const productIds = productRows.map((product) => product.id)
 
     const [{ data: images, error: imagesError }, { data: inventory, error: inventoryError }] = await Promise.all([
