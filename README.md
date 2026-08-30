@@ -38,6 +38,7 @@ Do not revert this project back to Hostinger MySQL logic. The current system use
 
 - `products`
 - `categories`
+- `pos_category_taxonomy`
 - `product_images`
 - `product_store_inventory`
 - `orders`
@@ -64,11 +65,13 @@ The admin product page must support these workflows:
 - Clone existing product
 - Delete product
 - Import products from fixed-format Excel
-- Add category
+- Select the same active main/subcategory taxonomy used by the staff POS
 - Upload product images
 - Drag to reorder product images
 - First image is the storefront thumbnail / main image
 - Edit rich product description
+
+Product create, edit, clone, filter, and Excel import use `products.pos_category_id` and `pos_category_taxonomy`. The legacy website `categories` field is retained for existing storefront URLs, but it is not cleared or used as the product-admin classification source.
 
 ### Product image rules
 
@@ -83,6 +86,7 @@ The admin product page must support these workflows:
 - Product cards do **not** show short description text
 - `Add to cart` should be the main CTA and should be visually wider
 - Stock data is stored, but stock should **not** block ordering on the storefront
+- POS sales may reduce one store's `product_store_inventory.quantity` below zero. Negative store inventory records a real stocktake discrepancy and must not be clamped back to zero.
 - Products with `product_group_id` are displayed as one product card using the group's name and main image
 - Sellable colours remain separate product rows with independent SKU, barcode, price, and stock
 - A grouped product detail page shows colour links, and choosing a colour opens that exact sellable variant

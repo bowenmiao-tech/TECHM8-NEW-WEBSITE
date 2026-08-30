@@ -496,7 +496,7 @@ async function getAdminContext(supabaseAdmin: ReturnType<typeof createClient>, r
 }
 
 async function getSharedLists(supabaseAdmin: ReturnType<typeof createClient>) {
-  const [{ data: stores }, { data: categories }] = await Promise.all([
+  const [{ data: stores }, { data: categories }, { data: posCategories }] = await Promise.all([
     supabaseAdmin
       .from('stores')
       .select('id, slug, name, is_active, address_line_1, address_line_2, suburb, state, postcode, phone, email, opening_hours')
@@ -506,11 +506,24 @@ async function getSharedLists(supabaseAdmin: ReturnType<typeof createClient>) {
       .select('id, slug, name')
       .order('sort_order', { ascending: true })
       .order('name', { ascending: true }),
+    supabaseAdmin
+      .from('pos_category_taxonomy')
+      .select('id, category_name, subcategory_name, category_sort, subcategory_sort')
+      .eq('active', true)
+      .order('category_sort', { ascending: true })
+      .order('subcategory_sort', { ascending: true }),
   ])
 
   return {
     stores: normalizeStoreOrder((stores ?? []) as Array<{ id: number; slug: string; name: string; is_active: boolean }>),
     categories: (categories ?? []) as Array<{ id: number; slug: string; name: string }>,
+    pos_categories: (posCategories ?? []) as Array<{
+      id: number
+      category_name: string
+      subcategory_name: string
+      category_sort: number
+      subcategory_sort: number
+    }>,
   }
 }
 
@@ -1764,12 +1777,12 @@ async function listProducts(supabaseAdmin: ReturnType<typeof createClient>, cont
 
   let query = supabaseAdmin
     .from('products')
-    .select('id, sku, slug, name, brand, category_id, retail_price, stock_quantity, is_visible, is_pos_visible, image_url, updated_at', { count: 'exact' })
+    .select('id, sku, slug, name, brand, category_id, pos_category_id, retail_price, stock_quantity, is_visible, is_pos_visible, image_url, updated_at', { count: 'exact' })
     .order('updated_at', { ascending: false })
     .range(from, to)
 
-  const categoryId = normalizeNumber(filters.category_id)
-  if (categoryId !== null) query = query.eq('category_id', categoryId)
+  const posCategoryId = normalizeNumber(filters.pos_category_id)
+  if (posCategoryId !== null) query = query.eq('pos_category_id', posCategoryId)
 
   const visibility = normalizeNullableString(filters.visibility)
   if (visibility === 'visible') query = query.eq('is_visible', true)
@@ -1807,7 +1820,7 @@ async function getProductDetail(supabaseAdmin: ReturnType<typeof createClient>, 
 
   const { data, error } = await supabaseAdmin
     .from('products')
-    .select('id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at')
+    .select('id, sku, slug, name, brand, model, category_id, pos_category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at')
     .eq('id', productId)
     .maybeSingle()
 
@@ -2019,6 +2032,10 @@ async function createProduct(supabaseAdmin: ReturnType<typeof createClient>, con
   if (!name) {
     return jsonResponse({ ok: false, error: 'Product name is required.' }, 422)
   }
+  const posCategoryId = normalizeNumber(productInput.pos_category_id)
+  if (posCategoryId === null) {
+    return jsonResponse({ ok: false, error: 'Choose a POS product category.' }, 422)
+  }
 
   const brand = normalizeNullableString(productInput.brand)
   const model = normalizeNullableString(productInput.model)
@@ -2050,6 +2067,7 @@ async function createProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     model,
     upc: normalizeNullableString(productInput.upc),
     category_id: normalizeNumber(productInput.category_id),
+    pos_category_id: posCategoryId,
     supplier_id: supplierId,
     short_description: shortDescription,
     description: normalizeNullableString(productInput.description) ?? shortDescription,
@@ -2076,7 +2094,7 @@ async function createProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     .from('products')
     .insert(insertPayload)
     .select(
-      'id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at',
+      'id, sku, slug, name, brand, model, category_id, pos_category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at',
     )
     .single()
 
@@ -2141,6 +2159,7 @@ async function cloneProduct(supabaseAdmin: ReturnType<typeof createClient>, cont
     model: source.model ?? null,
     upc: source.upc ?? null,
     category_id: source.category_id ?? null,
+    pos_category_id: source.pos_category_id ?? null,
     supplier_id: source.supplier_id ?? null,
     short_description: source.short_description ?? null,
     description: source.description ?? null,
@@ -2166,7 +2185,7 @@ async function cloneProduct(supabaseAdmin: ReturnType<typeof createClient>, cont
     .from('products')
     .insert(clonePayload)
     .select(
-      'id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at',
+      'id, sku, slug, name, brand, model, category_id, pos_category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at',
     )
     .single()
 
@@ -2326,7 +2345,7 @@ async function importProductsFromRows(
     return jsonResponse({ ok: false, error: 'No product rows were provided.' }, 422)
   }
 
-  const fallbackCategoryId = normalizeNumber(body.category_id)
+  const fallbackPosCategoryId = normalizeNumber(body.pos_category_id)
   const results: Array<{ sku: string; name: string; action: 'created' | 'updated' }> = []
   let createdCount = 0
   let updatedCount = 0
@@ -2383,8 +2402,8 @@ async function importProductsFromRows(
       if (brand && brand !== 'UNASSIGNED') patch.brand = brand
       setStringPatch(patch, 'model', row.model)
       setStringPatch(patch, 'upc', row.upc)
-      const categoryId = normalizeNumber(row.category_id) ?? fallbackCategoryId
-      if (categoryId !== null) patch.category_id = categoryId
+      const posCategoryId = normalizeNumber(row.pos_category_id) ?? fallbackPosCategoryId
+      if (posCategoryId !== null) patch.pos_category_id = posCategoryId
       if (supplierId !== null) patch.supplier_id = supplierId
       if (importedShortDescription !== null) patch.short_description = importedShortDescription
       if (importedDescription !== null) patch.description = importedDescription
@@ -2447,6 +2466,10 @@ async function importProductsFromRows(
     if (detailHtml.error) {
       return jsonResponse({ ok: false, error: `${uniqueSku}: ${detailHtml.error}` }, 422)
     }
+    const posCategoryId = normalizeNumber(row.pos_category_id) ?? fallbackPosCategoryId
+    if (posCategoryId === null) {
+      return jsonResponse({ ok: false, error: `${uniqueSku}: choose a POS product category.` }, 422)
+    }
 
     const insertPayload = {
       sku: uniqueSku,
@@ -2455,7 +2478,8 @@ async function importProductsFromRows(
       brand,
       model,
       upc: normalizeNullableString(row.upc),
-      category_id: normalizeNumber(row.category_id) ?? fallbackCategoryId,
+      category_id: normalizeNumber(row.category_id),
+      pos_category_id: posCategoryId,
       supplier_id: supplierId,
       short_description: shortDescription,
       description: normalizeNullableString(row.description) ?? shortDescription,
@@ -2527,6 +2551,10 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
   if (stockQuantity === null) {
     return jsonResponse({ ok: false, error: 'Total stock is required.' }, 422)
   }
+  const posCategoryId = normalizeNumber(body.pos_category_id)
+  if (posCategoryId === null) {
+    return jsonResponse({ ok: false, error: 'Choose a POS product category.' }, 422)
+  }
 
   const imagesInput = Array.isArray(body.images) ? body.images : null
   const normalizedImages = imagesInput
@@ -2546,11 +2574,11 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     return jsonResponse({ ok: false, error: detailHtml.error }, 422)
   }
 
-  const patch = {
+  const patch: JsonRecord = {
     name,
     brand: normalizeNullableString(body.brand),
     model: normalizeNullableString(body.model),
-    category_id: normalizeNumber(body.category_id),
+    pos_category_id: posCategoryId,
     short_description: body.short_description === '' ? null : normalizeNullableString(body.short_description),
     compatibility: body.compatibility === '' ? null : normalizeNullableString(body.compatibility),
     retail_price: normalizeNumber(body.retail_price),
@@ -2563,18 +2591,21 @@ async function updateProduct(supabaseAdmin: ReturnType<typeof createClient>, con
     image_url: heroImageUrl,
     detail_html: detailHtml.value,
   }
+  if (Object.prototype.hasOwnProperty.call(body, 'category_id')) {
+    patch.category_id = normalizeNumber(body.category_id)
+  }
 
   const cleanPatch = Object.fromEntries(Object.entries(patch).filter(([, value]) => value !== undefined))
   const { data, error } = await supabaseAdmin
     .from('products')
     .update(cleanPatch)
     .eq('id', productId)
-    .select('id, sku, slug, name, brand, model, category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at')
+    .select('id, sku, slug, name, brand, model, category_id, pos_category_id, short_description, detail_html, retail_price, compare_at_price, cost_price, stock_quantity, is_visible, is_pos_visible, is_featured, image_url, compatibility, updated_at, created_at')
     .single()
 
   if (error) {
     if (error.code === '23503') {
-      return jsonResponse({ ok: false, error: 'Selected category does not exist.' }, 422)
+      return jsonResponse({ ok: false, error: 'Selected POS category does not exist.' }, 422)
     }
     return jsonResponse({ ok: false, error: `Product could not be updated: ${error.message}` }, 500)
   }

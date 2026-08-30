@@ -1116,7 +1116,7 @@ function normalizeImportWorkbookRows(rows, fallbackCategoryId = "") {
       appendImportNumber(normalized, "compare_at_price", compareAtPrice);
       appendImportNumber(normalized, "stock_quantity", stockQuantity);
       appendImportValue(normalized, "condition_label", getImportField(lookup, ["Condition"]));
-      appendImportValue(normalized, "category_id", fallbackCategoryId);
+      appendImportValue(normalized, "pos_category_id", fallbackCategoryId);
       appendImportValue(normalized, "shelf_location", getImportField(lookup, [
         "Physical Location",
         "Shelf Location",
@@ -1161,10 +1161,10 @@ function openCreateProductModal({ bootstrap, session, alertTarget, onCreated }) 
           <label><span>Brand</span><input type="text" name="brand"></label>
           <label><span>Model</span><input type="text" name="model"></label>
           <label><span>SKU</span><input type="text" name="sku" placeholder="Optional"></label>
-          <label><span>Category</span>
-            <select name="category_id">
-              <option value="">Unassigned</option>
-              ${(bootstrap.categories || []).map((category) => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("")}
+          <label><span>POS product category</span>
+            <select name="pos_category_id" required>
+              <option value="">Choose a POS category</option>
+              ${(bootstrap.pos_categories || []).map((category) => `<option value="${category.id}">${escapeHtml(posCategoryLabel(category))}</option>`).join("")}
             </select>
           </label>
           <label><span>Retail price</span><input type="number" step="0.01" name="retail_price" value="0"></label>
@@ -1190,7 +1190,7 @@ function openCreateProductModal({ bootstrap, session, alertTarget, onCreated }) 
           brand: formData.get("brand"),
           model: formData.get("model"),
           sku: formData.get("sku"),
-          category_id: formData.get("category_id"),
+          pos_category_id: formData.get("pos_category_id"),
           retail_price: formData.get("retail_price"),
           cost_price: formData.get("cost_price"),
           stock_quantity: formData.get("stock_quantity"),
@@ -1213,10 +1213,10 @@ function openImportProductsModal({ bootstrap, session, alertTarget, onImported }
     content: `
       <form class="admin-modal-form" data-admin-import-products-form>
         <div class="admin-editor__grid">
-          <label><span>Default category</span>
-            <select name="category_id">
-              <option value="">Keep unassigned</option>
-              ${(bootstrap.categories || []).map((category) => `<option value="${category.id}">${escapeHtml(category.name)}</option>`).join("")}
+          <label><span>Default POS category</span>
+            <select name="pos_category_id" required>
+              <option value="">Choose a POS category</option>
+              ${(bootstrap.pos_categories || []).map((category) => `<option value="${category.id}">${escapeHtml(posCategoryLabel(category))}</option>`).join("")}
             </select>
           </label>
           <label class="admin-editor__wide"><span>Excel file</span><input type="file" name="workbook" accept=".xlsx,.xls,.csv" required></label>
@@ -1237,7 +1237,7 @@ function openImportProductsModal({ bootstrap, session, alertTarget, onImported }
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const file = formData.get("workbook");
-    const categoryId = String(formData.get("category_id") || "").trim();
+    const categoryId = String(formData.get("pos_category_id") || "").trim();
     try {
       const workbookRows = await readWorkbookRowsFromFile(file);
       const normalizedRows = normalizeImportWorkbookRows(workbookRows, categoryId);
@@ -1251,7 +1251,7 @@ function openImportProductsModal({ bootstrap, session, alertTarget, onImported }
         });
       }
       const result = await callAdminApi("products_import_excel_rows", {
-        category_id: categoryId || null,
+        pos_category_id: categoryId || null,
         rows: normalizedRows,
       }, session);
       closeAdminModal();
@@ -1829,8 +1829,6 @@ function getViewTemplate(view) {
               </div>
               <div class="admin-button-row">
                 <button class="button button--primary" type="button" data-products-new>New product</button>
-                <button class="button button--ghost" type="button" data-products-category-new>Add category</button>
-                <button class="button button--ghost" type="button" data-products-category-edit>Edit category</button>
                 <button class="button button--ghost" type="button" data-products-import>Import Excel</button>
                 <button class="button button--ghost" type="button" data-products-refresh>Refresh</button>
               </div>
@@ -1841,8 +1839,8 @@ function getViewTemplate(view) {
                 <input type="search" name="search" placeholder="Product name, SKU, slug or brand">
               </label>
               <label class="admin-filter">
-                <span>Category</span>
-                <select name="category_id" data-products-category-filter></select>
+                <span>POS product category</span>
+                <select name="pos_category_id" data-products-category-filter></select>
               </label>
               <label class="admin-filter">
                 <span>Website</span>
@@ -1950,11 +1948,17 @@ function fillStoreOptions(select, stores, allowAll = true) {
   select.innerHTML = options.join("");
 }
 
+function posCategoryLabel(category) {
+  const main = String(category?.category_name || "").trim();
+  const sub = String(category?.subcategory_name || "").trim();
+  return [main, sub].filter(Boolean).join(" > ") || String(category?.name || "Unassigned");
+}
+
 function fillCategoryOptions(select, categories) {
   if (!(select instanceof HTMLSelectElement)) return;
   const options = ['<option value="">All categories</option>'];
   categories.forEach((category) => {
-    options.push(`<option value="${escapeHtml(category.id)}">${escapeHtml(category.name)}</option>`);
+    options.push(`<option value="${escapeHtml(category.id)}">${escapeHtml(posCategoryLabel(category))}</option>`);
   });
   select.innerHTML = options.join("");
 }
@@ -1965,7 +1969,7 @@ function renderCategorySelectOptions(categories, selectedId = "") {
   categories.forEach((category) => {
     const optionValue = String(category.id ?? "").trim();
     options.push(
-      `<option value="${escapeHtml(optionValue)}" ${optionValue === selectedValue ? "selected" : ""}>${escapeHtml(category.name)}</option>`,
+      `<option value="${escapeHtml(optionValue)}" ${optionValue === selectedValue ? "selected" : ""}>${escapeHtml(posCategoryLabel(category))}</option>`,
     );
   });
   return options.join("");
@@ -3760,7 +3764,7 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
   const categoryFilter = root.querySelector("[data-products-category-filter]");
   const refreshButton = root.querySelector("[data-products-refresh]");
 
-  fillCategoryOptions(categoryFilter, bootstrap.categories || []);
+  fillCategoryOptions(categoryFilter, bootstrap.pos_categories || []);
 
   const state = { page: 1, selectedId: null, rows: [], meta: null, canEdit: false, saveFlash: null, detailRequests: new Map() };
 
@@ -3822,10 +3826,9 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
             <label><span>Name</span><input type="text" name="name" value="${escapeHtml(row.name || "")}" ${state.canEdit ? "" : "disabled"}></label>
             <label><span>Brand</span><input type="text" name="brand" value="${escapeHtml(row.brand || "")}" ${state.canEdit ? "" : "disabled"}></label>
             <label><span>Model</span><input type="text" name="model" value="${escapeHtml(row.model || "")}" ${state.canEdit ? "" : "disabled"}></label>
-            <label><span>Category</span>
-              <select name="category_id" ${state.canEdit ? "" : "disabled"}>
-                <option value="">Unassigned</option>
-                ${(bootstrap.categories || []).map((category) => `<option value="${category.id}" ${Number(row.category_id) === Number(category.id) ? "selected" : ""}>${escapeHtml(category.name)}</option>`).join("")}
+            <label><span>POS product category</span>
+              <select name="pos_category_id" ${state.canEdit ? "" : "disabled"}>
+                ${renderCategorySelectOptions(bootstrap.pos_categories || [], row.pos_category_id)}
               </select>
             </label>
             <label><span>Retail price</span><input type="number" step="0.01" name="retail_price" value="${escapeHtml(row.retail_price ?? "")}" ${state.canEdit ? "" : "disabled"}></label>
@@ -3918,7 +3921,7 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
           name: formData.get("name"),
           brand: formData.get("brand"),
           model: formData.get("model"),
-          category_id: formData.get("category_id"),
+          pos_category_id: formData.get("pos_category_id"),
           retail_price: formData.get("retail_price"),
           compare_at_price: formData.get("compare_at_price"),
           cost_price: formData.get("cost_price"),
@@ -4006,7 +4009,7 @@ function renderProductsPage(root, bootstrap, session, alertTarget) {
         page: state.page,
         page_size: 20,
         search: formData.get("search"),
-        category_id: formData.get("category_id"),
+        pos_category_id: formData.get("pos_category_id"),
         visibility: formData.get("visibility"),
       },
     }, session);
@@ -4055,7 +4058,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
   const bulkActions = root.querySelector("[data-products-bulk-actions]");
   const selectedCountTarget = root.querySelector("[data-products-selected-count]");
 
-  fillCategoryOptions(categoryFilter, bootstrap.categories || []);
+  fillCategoryOptions(categoryFilter, bootstrap.pos_categories || []);
 
   const state = {
     page: 1,
@@ -4190,17 +4193,11 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
               <label><span>Brand</span><input type="text" name="brand" value="${escapeHtml(row.brand || "")}" ${state.canEdit ? "" : "disabled"}></label>
               <label><span>Model</span><input type="text" name="model" value="${escapeHtml(row.model || "")}" ${state.canEdit ? "" : "disabled"}></label>
               <div class="admin-editor__field-group">
-                <label><span>Category</span>
-                  <select name="category_id" data-product-category-select ${state.canEdit ? "" : "disabled"}>
-                    ${renderCategorySelectOptions(bootstrap.categories || [], row.category_id)}
+                <label><span>POS product category</span>
+                  <select name="pos_category_id" data-product-category-select ${state.canEdit ? "required" : "disabled"}>
+                    ${renderCategorySelectOptions(bootstrap.pos_categories || [], row.pos_category_id)}
                   </select>
                 </label>
-                ${state.canEdit ? `
-                  <div class="admin-button-row">
-                    <button class="button button--ghost button--small" type="button" data-product-category-add>Add category</button>
-                    <button class="button button--ghost button--small" type="button" data-product-category-edit>Edit category</button>
-                  </div>
-                ` : ""}
               </div>
               <label class="admin-editor__wide"><span>Short description</span><textarea name="short_description" ${state.canEdit ? "" : "disabled"}>${escapeHtml(row.short_description || "")}</textarea></label>
             </div>
@@ -4490,7 +4487,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
           name: formData.get("name"),
           brand: formData.get("brand"),
           model: formData.get("model"),
-          category_id: formData.get("category_id"),
+          pos_category_id: formData.get("pos_category_id"),
           retail_price: formData.get("retail_price"),
           compare_at_price: formData.get("compare_at_price"),
           cost_price: formData.get("cost_price"),
@@ -4706,7 +4703,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
           page: state.page,
           page_size: 50,
           search: formData.get("search"),
-          category_id: formData.get("category_id"),
+          pos_category_id: formData.get("pos_category_id"),
           visibility: formData.get("visibility"),
           pos_visibility: formData.get("pos_visibility"),
         },
@@ -4742,7 +4739,7 @@ function renderProductsPageV2(root, bootstrap, session, alertTarget) {
       load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be loaded.", "error"));
     }, 300);
   });
-  filterForm.querySelectorAll('select[name="category_id"], select[name="visibility"], select[name="pos_visibility"]').forEach((select) => {
+  filterForm.querySelectorAll('select[name="pos_category_id"], select[name="visibility"], select[name="pos_visibility"]').forEach((select) => {
     select.addEventListener("change", () => {
       state.page = 1;
       load().catch((error) => setAlert(alertTarget, error instanceof Error ? error.message : "Products could not be loaded.", "error"));
