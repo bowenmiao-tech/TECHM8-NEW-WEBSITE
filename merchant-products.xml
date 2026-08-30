@@ -5,6 +5,47 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>697105026670</g:id>
+      <title>CA69/CA112 Apple Watch Magnetic Charger</title>
+      <description>CA69/CA112 Apple Watch Magnetic Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/ca69-ca112-apple-watch-magnetic-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940038631-058a55f6.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940058013-b8edf5c5.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>39.00 AUD</g:price>
+      <g:condition>new</g:condition>
+
+      <g:gtin>6971050266705</g:gtin>
+    </item>
+    <item>
+      <g:id>1026141</g:id>
+      <title>WEKOME WDC-60 Type-C-C Charging Data Cable</title>
+      <description>WEKOME WDC-60 Type-C-C Charging Data Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wdc-60-type-c-c-charging-data-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-60-type-c-c-charging-data-cable/1779757900970-2b6d6d0b.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-60-type-c-c-charging-data-cable/1779757899694-df031ad5.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>36.59 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027651360</g:gtin>
+    </item>
+    <item>
+      <g:id>694102765160</g:id>
+      <title>WEKOME WDC-50 240W Charging Cable</title>
+      <description>A-C: 65W Max; A-L: 2W Max; C-C: 240W Max; C-L: 30W Max</description>
+      <link>https://www.techm8australia.com/products/wekome-wdc-50-240w-charging-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-50-240w-charging-cable/1779757589619-6f682b8e.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-50-240w-charging-cable/1779757587969-897e1c38.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-50-240w-charging-cable/1779757590859-cae93571.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-50-240w-charging-cable/1779757595946-c781b498.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>39.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027651605</g:gtin>
+    </item>
+    <item>
       <g:id>8830389</g:id>
       <title>1M ULTRA TOUGH TYPE C TO TYPE C CABLE</title>
       <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
@@ -518,21 +559,6 @@
 
     </item>
     <item>
-      <g:id>694102765160</g:id>
-      <title>WEKOME WDC-50 240W Charging Cable</title>
-      <description>A-C: 65W Max; A-L: 2W Max; C-C: 240W Max; C-L: 30W Max</description>
-      <link>https://www.techm8australia.com/products/wekome-wdc-50-240w-charging-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-50-240w-charging-cable/1779757589619-6f682b8e.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-50-240w-charging-cable/1779757587969-897e1c38.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-50-240w-charging-cable/1779757590859-cae93571.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-50-240w-charging-cable/1779757595946-c781b498.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>39.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027651605</g:gtin>
-    </item>
-    <item>
       <g:id>1025940</g:id>
       <title>WEKOME 66W WDC-59a Type-C-USB Charging Data Cable</title>
       <description>WEKOME 66W WDC-59a Type-C-USB Charging Data Cable available for online order and warehouse dispatch.</description>
@@ -544,19 +570,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651346</g:gtin>
-    </item>
-    <item>
-      <g:id>1026141</g:id>
-      <title>WEKOME WDC-60 Type-C-C Charging Data Cable</title>
-      <description>WEKOME WDC-60 Type-C-C Charging Data Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wdc-60-type-c-c-charging-data-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-60-type-c-c-charging-data-cable/1779757900970-2b6d6d0b.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-60-type-c-c-charging-data-cable/1779757899694-df031ad5.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>36.59 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027651360</g:gtin>
     </item>
     <item>
       <g:id>103841038</g:id>
@@ -678,19 +691,6 @@
       <g:condition>new</g:condition>
 
 
-    </item>
-    <item>
-      <g:id>697105026670</g:id>
-      <title>CA69/CA112 Apple Watch Magnetic Charger</title>
-      <description>CA69/CA112 Apple Watch Magnetic Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/ca69-ca112-apple-watch-magnetic-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940038631-058a55f6.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940058013-b8edf5c5.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>39.00 AUD</g:price>
-      <g:condition>new</g:condition>
-
-      <g:gtin>6971050266705</g:gtin>
     </item>
     <item>
       <g:id>10276711</g:id>

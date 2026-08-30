@@ -1,9 +1,84 @@
 {
-  "catalog_updated_at": "2026-08-30T05:24:40.440585+00:00",
+  "catalog_updated_at": "2026-08-30T05:49:33.34169+00:00",
   "total_products": 149,
   "indexable_products": 95,
   "limited_products": 54,
   "products": [
+    {
+      "id": 78,
+      "slug": "ca69-ca112-apple-watch-magnetic-charger",
+      "name": "CA69/CA112 Apple Watch Magnetic Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "missing-brand"
+      ]
+    },
+    {
+      "id": 2044,
+      "slug": "repairdesk-accessory-10383-wekome-yb06-wired-earphone-aux-in-ear",
+      "name": "WEKOME YB06 Wired Earphone Aux IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2045,
+      "slug": "repairdesk-accessory-10382-wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2043,
+      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
+      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2042,
+      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
+      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 96,
+      "slug": "wekome-wdc-60-type-c-c-charging-data-cable",
+      "name": "WEKOME WDC-60 Type-C-C Charging Data Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 98,
+      "slug": "wekome-wdc-50-240w-charging-cable",
+      "name": "WEKOME WDC-50 240W Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
@@ -480,50 +555,6 @@
       "warnings": []
     },
     {
-      "id": 2045,
-      "slug": "repairdesk-accessory-10382-wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2044,
-      "slug": "repairdesk-accessory-10383-wekome-yb06-wired-earphone-aux-in-ear",
-      "name": "WEKOME YB06 Wired Earphone Aux IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2043,
-      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
-      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2042,
-      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
-      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2036,
       "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
       "name": "USB-C WEKOME YB03 Wired Earphone",
@@ -588,29 +619,9 @@
       "warnings": []
     },
     {
-      "id": 98,
-      "slug": "wekome-wdc-50-240w-charging-cable",
-      "name": "WEKOME WDC-50 240W Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 97,
       "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
       "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 96,
-      "slug": "wekome-wdc-60-type-c-c-charging-data-cable",
-      "name": "WEKOME WDC-60 Type-C-C Charging Data Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -709,17 +720,6 @@
       "blockers": [],
       "warnings": [
         "description-under-90-characters",
-        "missing-brand"
-      ]
-    },
-    {
-      "id": 78,
-      "slug": "ca69-ca112-apple-watch-magnetic-charger",
-      "name": "CA69/CA112 Apple Watch Magnetic Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
         "missing-brand"
       ]
     },
