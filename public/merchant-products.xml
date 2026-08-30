@@ -5,6 +5,42 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>59065</g:id>
+      <title>1M Ultra Tough Lightning Cable</title>
+      <description>1M ULTRA TOUGH MICRO-USB CABLE available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-micro-usb-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-micro-usb-cable/1784437577400-dbfd3a8d.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>29.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>8822381</g:id>
+      <title>1M Ultra Tough USB-C to Lightning Cable</title>
+      <description>1M Ultra Tough Type c to Lightning Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-lightning-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-lightning-cable/1784437643393-879d59ec.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>8830389</g:id>
+      <title>1M Ultra Tough USB-C to USB-C Cable</title>
+      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
       <g:id>6941027651469</g:id>
       <title>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable</title>
       <description>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable available for online order and warehouse dispatch.</description>
@@ -19,15 +55,17 @@
 
     </item>
     <item>
-      <g:id>59065</g:id>
-      <title>1M Ultra Tough Lightning Cable</title>
-      <description>1M ULTRA TOUGH MICRO-USB CABLE available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-micro-usb-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-micro-usb-cable/1784437577400-dbfd3a8d.webp</g:image_link>
+      <g:id>6941027660096</g:id>
+      <title>WEKOME WDC-C33 1.2m USB-C to Lightning Cable</title>
+      <description>WEKOME WDC-C33 1.2m USB-C to Lightning Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437020130-8003f0a6.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437023910-a4f3b8d1.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437048549-9db56012.webp</g:additional_image_link>
       <g:availability>in_stock</g:availability>
-      <g:price>29.00 AUD</g:price>
+      <g:price>35.99 AUD</g:price>
       <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
+      <g:brand>WEKOME</g:brand>
 
     </item>
     <item>
@@ -56,57 +94,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651605</g:gtin>
-    </item>
-    <item>
-      <g:id>110671637</g:id>
-      <title>WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable</title>
-      <description>WEKOME WDC-123i U-Lighting Kinkong Raycor Fast Charging Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable/1779757734215-029de1dc.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable/1779757735498-5c442436.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027656937</g:gtin>
-    </item>
-    <item>
-      <g:id>6941027660096</g:id>
-      <title>WEKOME WDC-C33 1.2m USB-C to Lightning Cable</title>
-      <description>WEKOME WDC-C33 1.2m USB-C to Lightning Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437020130-8003f0a6.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437023910-a4f3b8d1.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437048549-9db56012.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.99 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-
-    </item>
-    <item>
-      <g:id>8822381</g:id>
-      <title>1M Ultra Tough USB-C to Lightning Cable</title>
-      <description>1M Ultra Tough Type c to Lightning Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-lightning-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-lightning-cable/1784437643393-879d59ec.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
-    </item>
-    <item>
-      <g:id>8830389</g:id>
-      <title>1M Ultra Tough USB-C to USB-C Cable</title>
-      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
     </item>
     <item>
       <g:id>1025940</g:id>
@@ -146,6 +133,19 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651384</g:gtin>
+    </item>
+    <item>
+      <g:id>110671637</g:id>
+      <title>WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable</title>
+      <description>WEKOME WDC-123i U-Lighting Kinkong Raycor Fast Charging Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable/1779757734215-029de1dc.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable/1779757735498-5c442436.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027656937</g:gtin>
     </item>
     <item>
       <g:id>110681638</g:id>

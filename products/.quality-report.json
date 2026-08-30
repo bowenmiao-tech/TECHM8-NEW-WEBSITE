@@ -1,18 +1,9 @@
 {
-  "catalog_updated_at": "2026-08-30T15:37:51.24531+00:00",
+  "catalog_updated_at": "2026-08-30T15:48:50.196314+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
-    {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
     {
       "id": 102,
       "slug": "1m-ultra-tough-micro-usb-cable",
@@ -23,6 +14,44 @@
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
     },
     {
       "id": 101,
@@ -39,44 +68,6 @@
       "id": 98,
       "slug": "wekome-wdc-50-240w-charging-cable",
       "name": "WEKOME WDC-50 240W Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 94,
-      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -106,6 +97,15 @@
       "id": 95,
       "slug": "wekome-wdc-61-lighting-to-typec-charging-data-cable",
       "name": "WEKOME WDC-61 Lighting to TypeC Charging Data Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 94,
+      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
