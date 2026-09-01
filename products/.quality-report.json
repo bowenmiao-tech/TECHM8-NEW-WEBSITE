@@ -1,9 +1,29 @@
 {
-  "catalog_updated_at": "2026-09-01T00:06:34.948095+00:00",
+  "catalog_updated_at": "2026-09-01T05:44:45.801771+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 71,
+      "slug": "45w-dual-type-c-fast-wall-charger",
+      "name": "30W Type c & Usb Wall Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 42,
       "slug": "wekome-wp-101-10000mah-power-bank",
@@ -94,15 +114,6 @@
       "id": 110,
       "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
       "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -768,17 +779,6 @@
       "id": 72,
       "slug": "100w-wall-charger",
       "name": "100W Wall Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 71,
-      "slug": "45w-dual-type-c-fast-wall-charger",
-      "name": "30W Type c & Usb Wall Charger",
       "indexable": true,
       "score": 92,
       "blockers": [],
