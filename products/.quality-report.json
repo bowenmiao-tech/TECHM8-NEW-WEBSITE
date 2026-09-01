@@ -1,9 +1,64 @@
 {
-  "catalog_updated_at": "2026-08-30T15:48:50.196314+00:00",
+  "catalog_updated_at": "2026-09-01T00:06:34.948095+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
+    {
+      "id": 42,
+      "slug": "wekome-wp-101-10000mah-power-bank",
+      "name": "WEKOME WP-101 10000mAh Power Bank",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2042,
+      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
+      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2065,
+      "slug": "repairdesk-accessory-10264-remax-rm-c60-phone-stand",
+      "name": "Remax RM-C60 Phone Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2069,
+      "slug": "repairdesk-accessory-6031-stander",
+      "name": "Stander",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2068,
+      "slug": "repairdesk-accessory-6181-remax-alien-series-phone-holder-green",
+      "name": "Remax Alien Series Phone Holder Green",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 102,
       "slug": "1m-ultra-tough-micro-usb-cable",
@@ -165,17 +220,6 @@
       "warnings": []
     },
     {
-      "id": 2042,
-      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
-      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 75,
       "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
       "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
@@ -264,17 +308,6 @@
       "id": 22,
       "slug": "remax-rpp-622-10000mah-power-bank",
       "name": "Remax RPP-622 10000MAH power bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 42,
-      "slug": "wekome-wp-101-10000mah-power-bank",
-      "name": "WEKOME WP-101 10000mAh Power Bank",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -991,28 +1024,6 @@
       "warnings": []
     },
     {
-      "id": 2069,
-      "slug": "repairdesk-accessory-6031-stander",
-      "name": "Stander",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2068,
-      "slug": "repairdesk-accessory-6181-remax-alien-series-phone-holder-green",
-      "name": "Remax Alien Series Phone Holder Green",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2067,
       "slug": "repairdesk-accessory-6553-remax-p12-multifunctional-selfie-stick",
       "name": "Remax P12 Multifunctional Selfie Stick",
@@ -1027,17 +1038,6 @@
       "id": 2066,
       "slug": "repairdesk-accessory-8867-2m-stand-8809",
       "name": "2M Stand 8809",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2065,
-      "slug": "repairdesk-accessory-10264-remax-rm-c60-phone-stand",
-      "name": "Remax RM-C60 Phone Stand",
       "indexable": false,
       "score": 65,
       "blockers": [
