@@ -5,6 +5,19 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>697105026670</g:id>
+      <title>CA69/CA112 Apple Watch Magnetic Charger</title>
+      <description>CA69/CA112 Apple Watch Magnetic Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/ca69-ca112-apple-watch-magnetic-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940038631-058a55f6.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940058013-b8edf5c5.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>39.00 AUD</g:price>
+      <g:condition>new</g:condition>
+
+      <g:gtin>6971050266705</g:gtin>
+    </item>
+    <item>
       <g:id>6941027660096</g:id>
       <title>WEKOME WDC-C33 1.2m USB-C to Lightning Cable</title>
       <description>WEKOME WDC-C33 1.2m USB-C to Lightning Cable available for online order and warehouse dispatch.</description>
@@ -194,19 +207,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027656044</g:gtin>
-    </item>
-    <item>
-      <g:id>697105026670</g:id>
-      <title>CA69/CA112 Apple Watch Magnetic Charger</title>
-      <description>CA69/CA112 Apple Watch Magnetic Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/ca69-ca112-apple-watch-magnetic-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940038631-058a55f6.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940058013-b8edf5c5.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>39.00 AUD</g:price>
-      <g:condition>new</g:condition>
-
-      <g:gtin>6971050266705</g:gtin>
     </item>
     <item>
       <g:id>109041519</g:id>

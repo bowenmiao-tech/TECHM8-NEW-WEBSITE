@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-09-01T05:44:45.801771+00:00",
+  "catalog_updated_at": "2026-09-02T03:52:32.286817+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
+    {
+      "id": 78,
+      "slug": "ca69-ca112-apple-watch-magnetic-charger",
+      "name": "CA69/CA112 Apple Watch Magnetic Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "missing-brand"
+      ]
+    },
     {
       "id": 108,
       "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
@@ -185,17 +196,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 78,
-      "slug": "ca69-ca112-apple-watch-magnetic-charger",
-      "name": "CA69/CA112 Apple Watch Magnetic Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "missing-brand"
-      ]
     },
     {
       "id": 2044,
