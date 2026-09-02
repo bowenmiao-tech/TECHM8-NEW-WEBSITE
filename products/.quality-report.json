@@ -1,9 +1,315 @@
 {
-  "catalog_updated_at": "2026-09-02T03:52:32.286817+00:00",
+  "catalog_updated_at": "2026-09-02T07:12:34.216515+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
+    {
+      "id": 62,
+      "slug": "wekome-wk-wd-03-mini-karaoke-speaker-b",
+      "name": "Wekome WK WD-03 Mini Karaoke Speaker B",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 59,
+      "slug": "wekome-wk-wd-03-mini-karaoke-speaker-w",
+      "name": "Wekome WK WD-03 Mini Karaoke Speaker W",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 63,
+      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-w",
+      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 60,
+      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
+      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 64,
+      "slug": "remax-rb-m62-speaker",
+      "name": "Remax RB-M62 Speaker Blue",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 65,
+      "slug": "remax-rb-m8-wireless-speaker",
+      "name": "Remax RB-M8 Wireless Speaker",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1732,
+      "slug": "repairdesk-computer-11064-t-wold-s3-speaker",
+      "name": "T-Wold S3 Speaker",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 75,
+      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
+      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 74,
+      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
+      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 87,
+      "slug": "remax-rp-w87-22-5w-4-in-1-multifunctional-night-lamp-and-folding-holder-wireless-charger",
+      "name": "Remax RP-W87 22.5w 4 in 1 multifunctional night lamp & folding holder wireless charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 88,
+      "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
+      "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 77,
+      "slug": "wekome-wp-u99-magsafe-wirless-charger",
+      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 76,
+      "slug": "wekome-wireless-charger-wp-u172",
+      "name": "WEKOME Wireless Charger WP-U172",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 79,
+      "slug": "ds15-2-in-1wireless-charger",
+      "name": "DS15 2 IN 1Wireless Charger",
+      "indexable": true,
+      "score": 84,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters",
+        "missing-brand"
+      ]
+    },
+    {
+      "id": 2035,
+      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
+      "name": "AUX WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2061,
+      "slug": "repairdesk-accessory-10924-remax-p10-multifunctional-selfie-stick",
+      "name": "Remax P10 Multifunctional Selfie Stick",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2081,
+      "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
+      "name": "2M Stand Selfie Live Stream Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2066,
+      "slug": "repairdesk-accessory-8867-2m-stand-8809",
+      "name": "2M Stand 8809",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1715,
+      "slug": "tm8-cch-7151",
+      "name": "45W Dual USB-C Car Charger - Black",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1716,
+      "slug": "tm8-cch-7150",
+      "name": "45W Dual USB-C Car Charger - White",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1712,
+      "slug": "tm8-cch-9322",
+      "name": "K28 USB-A + USB-C Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1713,
+      "slug": "tm8-cch-7588",
+      "name": "35W USB-C + Dual USB-A Car Charger - White",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1717,
+      "slug": "tm8-cch-6575",
+      "name": "35W USB-C + Dual USB-A Car Charger - Black",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2044,
+      "slug": "repairdesk-accessory-10383-wekome-yb06-wired-earphone-aux-in-ear",
+      "name": "WEKOME YB06 Wired Earphone Aux IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2042,
+      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
+      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2043,
+      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
+      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2036,
+      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
+      "name": "USB-C WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2045,
+      "slug": "repairdesk-accessory-10382-wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 78,
       "slug": "ca69-ca112-apple-watch-magnetic-charger",
@@ -45,17 +351,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2042,
-      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
-      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 2065,
@@ -183,77 +478,6 @@
       "id": 94,
       "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
       "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2044,
-      "slug": "repairdesk-accessory-10383-wekome-yb06-wired-earphone-aux-in-ear",
-      "name": "WEKOME YB06 Wired Earphone Aux IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2045,
-      "slug": "repairdesk-accessory-10382-wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2043,
-      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
-      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 75,
-      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
-      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 76,
-      "slug": "wekome-wireless-charger-wp-u172",
-      "name": "WEKOME Wireless Charger WP-U172",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 74,
-      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
-      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -557,28 +781,6 @@
       "warnings": []
     },
     {
-      "id": 1717,
-      "slug": "tm8-cch-6575",
-      "name": "35W USB-C + Dual USB-A Car Charger - Black",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1713,
-      "slug": "tm8-cch-7588",
-      "name": "35W USB-C + Dual USB-A Car Charger - White",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 1714,
       "slug": "tm8-cch-7152",
       "name": "Dual Socket + USB Car Charger",
@@ -588,72 +790,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 1716,
-      "slug": "tm8-cch-7150",
-      "name": "45W Dual USB-C Car Charger - White",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1712,
-      "slug": "tm8-cch-9322",
-      "name": "K28 USB-A + USB-C Car Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1715,
-      "slug": "tm8-cch-7151",
-      "name": "45W Dual USB-C Car Charger - Black",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1732,
-      "slug": "repairdesk-computer-11064-t-wold-s3-speaker",
-      "name": "T-Wold S3 Speaker",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2036,
-      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
-      "name": "USB-C WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2035,
-      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
-      "name": "AUX WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 1,
@@ -742,29 +878,6 @@
       ]
     },
     {
-      "id": 79,
-      "slug": "ds15-2-in-1wireless-charger",
-      "name": "DS15 2 IN 1Wireless Charger",
-      "indexable": true,
-      "score": 84,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters",
-        "missing-brand"
-      ]
-    },
-    {
-      "id": 77,
-      "slug": "wekome-wp-u99-magsafe-wirless-charger",
-      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 73,
       "slug": "3-usb-wall-charger",
       "name": "3 USB WALL CHARGER",
@@ -829,48 +942,6 @@
       ]
     },
     {
-      "id": 65,
-      "slug": "remax-rb-m8-wireless-speaker",
-      "name": "Remax RB-M8 Wireless Speaker",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 64,
-      "slug": "remax-rb-m62-speaker",
-      "name": "Remax RB-M62 Speaker Blue",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 63,
-      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-w",
-      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 62,
-      "slug": "wekome-wk-wd-03-mini-karaoke-speaker-b",
-      "name": "Wekome WK WD-03 Mini Karaoke Speaker B",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 61,
       "slug": "wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black",
       "name": "WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black)",
@@ -878,26 +949,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 60,
-      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
-      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 59,
-      "slug": "wekome-wk-wd-03-mini-karaoke-speaker-w",
-      "name": "Wekome WK WD-03 Mini Karaoke Speaker W",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 47,
@@ -1013,42 +1064,9 @@
       "warnings": []
     },
     {
-      "id": 2081,
-      "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
-      "name": "2M Stand Selfie Live Stream Stand",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2067,
       "slug": "repairdesk-accessory-6553-remax-p12-multifunctional-selfie-stick",
       "name": "Remax P12 Multifunctional Selfie Stick",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2066,
-      "slug": "repairdesk-accessory-8867-2m-stand-8809",
-      "name": "2M Stand 8809",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2061,
-      "slug": "repairdesk-accessory-10924-remax-p10-multifunctional-selfie-stick",
-      "name": "Remax P10 Multifunctional Selfie Stick",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -1269,24 +1287,6 @@
       "id": 89,
       "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
       "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 88,
-      "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
-      "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 87,
-      "slug": "remax-rp-w87-22-5w-4-in-1-multifunctional-night-lamp-and-folding-holder-wireless-charger",
-      "name": "Remax RP-W87 22.5w 4 in 1 multifunctional night lamp & folding holder wireless charger",
       "indexable": true,
       "score": 100,
       "blockers": [],
