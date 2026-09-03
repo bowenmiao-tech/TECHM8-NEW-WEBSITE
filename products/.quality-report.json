@@ -1,9 +1,365 @@
 {
-  "catalog_updated_at": "2026-09-02T07:12:34.216515+00:00",
+  "catalog_updated_at": "2026-09-03T08:25:16.803656+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
+    {
+      "id": 91,
+      "slug": "c34-fm-transmitter",
+      "name": "C34 FM Transmitter",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 92,
+      "slug": "c28-fm-transmitter",
+      "name": "C28 FM Transmitter",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 90,
+      "slug": "wireless-dongle-for-carplay-or-android-auto-m29",
+      "name": "Wireless Dongle for CarPlay or Android Auto M29",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 32,
+      "slug": "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white",
+      "name": "REMAX FCP-2 20000mAh Power Bank 20W PD 22.5W QC Fast Charging Built-in Cables White",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 25,
+      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-white",
+      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- White",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 28,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 27,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2058,
+      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
+      "name": "WEKOME Desktop Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 21,
+      "slug": "remax-rpp-623-power-bank-20000-mah",
+      "name": "REMAX RPP-623 Power Bank 20000 mAh",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 22,
+      "slug": "remax-rpp-622-10000mah-power-bank",
+      "name": "Remax RPP-622 10000MAH power bank",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 23,
+      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 24,
+      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 42,
+      "slug": "wekome-wp-101-10000mah-power-bank",
+      "name": "WEKOME WP-101 10000mAh Power Bank",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 78,
+      "slug": "ca69-ca112-apple-watch-magnetic-charger",
+      "name": "CA69/CA112 Apple Watch Magnetic Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "missing-brand"
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "dualsense-wireless-controller-playstation-5-white",
+      "name": "DualSense Wireless Controller - PlayStation 5 - White",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1590,
+      "slug": "tm8-car-6034",
+      "name": "Replacement Metal Plate for Magnetic Phone Holders",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1585,
+      "slug": "tm8-car-6606",
+      "name": "WEKOME WP-U203 Car Phone Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1581,
+      "slug": "tm8-car-6989",
+      "name": "Car Phone Holder 2",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1582,
+      "slug": "tm8-car-6671",
+      "name": "Car Back Seat Phone Mount",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1572,
+      "slug": "tm8-car-10362",
+      "name": "Bike Phone Holder Z02 + MT01",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1571,
+      "slug": "tm8-car-10742",
+      "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1583,
+      "slug": "tm8-car-6660",
+      "name": "Magnetic Dashboard and Air Vent Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1568,
+      "slug": "tm8-car-11126",
+      "name": "Remax RM-C42 Pro Magnetic Rotating Zinc Alloy Car Mount",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1573,
+      "slug": "tm8-car-9977",
+      "name": "Magnetic Stick-On Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1574,
+      "slug": "tm8-car-9976",
+      "name": "Magnetic Air Vent Hook Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1578,
+      "slug": "tm8-car-8154",
+      "name": "MagSafe Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1588,
+      "slug": "tm8-car-6580",
+      "name": "Car Phone Holder 5",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1589,
+      "slug": "tm8-car-6576",
+      "name": "Car Phone Holder 3",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 60,
+      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
+      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 85,
+      "slug": "remax-pd-bt533n-pro-wireless-earbuds",
+      "name": "Remax PD-BT533N PRO Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 84,
+      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
+      "name": "Remax PD BT230/BT260 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 83,
+      "slug": "remax-g6-wireless-gamebubs",
+      "name": "Remax G6  Wireless GameBubs",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 81,
+      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
+      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 71,
+      "slug": "45w-dual-type-c-fast-wall-charger",
+      "name": "30W Type c & Usb Wall Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 62,
       "slug": "wekome-wk-wd-03-mini-karaoke-speaker-b",
@@ -30,15 +386,6 @@
       "id": 63,
       "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-w",
       "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 60,
-      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
-      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -311,17 +658,6 @@
       "warnings": []
     },
     {
-      "id": 78,
-      "slug": "ca69-ca112-apple-watch-magnetic-charger",
-      "name": "CA69/CA112 Apple Watch Magnetic Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "missing-brand"
-      ]
-    },
-    {
       "id": 108,
       "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
       "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
@@ -329,28 +665,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 71,
-      "slug": "45w-dual-type-c-fast-wall-charger",
-      "name": "30W Type c & Usb Wall Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 42,
-      "slug": "wekome-wp-101-10000mah-power-bank",
-      "name": "WEKOME WP-101 10000mAh Power Bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 2065,
@@ -484,15 +798,6 @@
       "warnings": []
     },
     {
-      "id": 25,
-      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-white",
-      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 26,
       "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-black",
       "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black",
@@ -502,67 +807,9 @@
       "warnings": []
     },
     {
-      "id": 21,
-      "slug": "remax-rpp-623-power-bank-20000-mah",
-      "name": "REMAX RPP-623 Power Bank 20000 mAh",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 27,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 28,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 15,
       "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
       "name": "87W USB-C MacBook Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 22,
-      "slug": "remax-rpp-622-10000mah-power-bank",
-      "name": "Remax RPP-622 10000MAH power bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 23,
-      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 24,
-      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -663,17 +910,6 @@
       "id": 3,
       "slug": "dualsense-wireless-controller-gray-camouflage",
       "name": "DualSense Wireless Controller - Gray Camouflage",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 5,
-      "slug": "dualsense-wireless-controller-playstation-5-white",
-      "name": "DualSense Wireless Controller - PlayStation 5 - White",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -803,73 +1039,9 @@
       ]
     },
     {
-      "id": 92,
-      "slug": "c28-fm-transmitter",
-      "name": "C28 FM Transmitter",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 91,
-      "slug": "c34-fm-transmitter",
-      "name": "C34 FM Transmitter",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 90,
-      "slug": "wireless-dongle-for-carplay-or-android-auto-m29",
-      "name": "Wireless Dongle for CarPlay or Android Auto M29",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 86,
       "slug": "remax-tws-43-wireless-earbuds",
       "name": "Remax TWS-43 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 85,
-      "slug": "remax-pd-bt533n-pro-wireless-earbuds",
-      "name": "Remax PD-BT533N PRO Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 84,
-      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
-      "name": "Remax PD BT230/BT260 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 83,
-      "slug": "remax-g6-wireless-gamebubs",
-      "name": "Remax G6  Wireless GameBubs",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -991,15 +1163,6 @@
       "warnings": []
     },
     {
-      "id": 32,
-      "slug": "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white",
-      "name": "REMAX FCP-2 20000mAh Power Bank 20W PD 22.5W QC Fast Charging Built-in Cables White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 29,
       "slug": "remax-fcp-1-22-5w-power-bank-10000mah-fast-charging-10000-mah-powerbank-with-cable-white",
       "name": "Remax FCP-1 22.5W Power Bank 10000mAh Fast Charging 10000 MAh PowerBank with Cable White",
@@ -1097,61 +1260,6 @@
       "warnings": []
     },
     {
-      "id": 2058,
-      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
-      "name": "WEKOME Desktop Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 1590,
-      "slug": "tm8-car-6034",
-      "name": "Replacement Metal Plate for Magnetic Phone Holders",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1589,
-      "slug": "tm8-car-6576",
-      "name": "Car Phone Holder 3",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1588,
-      "slug": "tm8-car-6580",
-      "name": "Car Phone Holder 5",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1585,
-      "slug": "tm8-car-6606",
-      "name": "WEKOME WP-U203 Car Phone Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 1584,
       "slug": "tm8-car-6659",
       "name": "Metal Motorcycle Phone Holder",
@@ -1163,97 +1271,9 @@
       ]
     },
     {
-      "id": 1583,
-      "slug": "tm8-car-6660",
-      "name": "Magnetic Dashboard and Air Vent Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 1582,
-      "slug": "tm8-car-6671",
-      "name": "Car Back Seat Phone Mount",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1581,
-      "slug": "tm8-car-6989",
-      "name": "Car Phone Holder 2",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1578,
-      "slug": "tm8-car-8154",
-      "name": "MagSafe Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 1577,
       "slug": "tm8-car-8866",
       "name": "Tesla Model 3/Y Mobile Phone Holder Adapter",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1574,
-      "slug": "tm8-car-9976",
-      "name": "Magnetic Air Vent Hook Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 1573,
-      "slug": "tm8-car-9977",
-      "name": "Magnetic Stick-On Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 1572,
-      "slug": "tm8-car-10362",
-      "name": "Bike Phone Holder Z02 + MT01",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 1571,
-      "slug": "tm8-car-10742",
-      "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -1271,17 +1291,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 1568,
-      "slug": "tm8-car-11126",
-      "name": "Remax RM-C42 Pro Magnetic Rotating Zinc Alloy Car Mount",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 89,
@@ -1376,15 +1385,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 81,
-      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
-      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 2180,
