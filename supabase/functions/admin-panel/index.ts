@@ -2949,6 +2949,7 @@ Deno.serve(async (req) => {
         },
         stores: sharedLists.stores,
         categories: sharedLists.categories,
+        pos_categories: sharedLists.pos_categories,
       })
     }
 
