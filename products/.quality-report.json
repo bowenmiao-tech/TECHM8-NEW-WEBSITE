@@ -1,9 +1,87 @@
 {
-  "catalog_updated_at": "2026-09-03T08:25:16.803656+00:00",
+  "catalog_updated_at": "2026-09-04T04:38:34.742956+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2060,
+      "slug": "repairdesk-accessory-10989-c141-desktop-mobile-phone-holder",
+      "name": "C141 Desktop Mobile Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 18,
+      "slug": "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
+      "name": "85W MagSafe 2 Power Adapter for MacBook Pro with Retina Display",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 12,
+      "slug": "brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty",
+      "name": "85W MagSafe 1 Power Adapter for MacBook Pro",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 19,
+      "slug": "60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont",
+      "name": "60W MagSafe 2 Power Adapter for MacBook Air and MacBook Pro",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 13,
+      "slug": "brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro",
+      "name": "60W MagSafe 1 Power Adapter for MacBook Air and MacBook Pro",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2059,
+      "slug": "repairdesk-accessory-11139-remax-selfie-stick-holder-with-lights-p60",
+      "name": "Remax Selfie Stick Holder with Lights P60",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 91,
       "slug": "c34-fm-transmitter",
@@ -658,15 +736,6 @@
       "warnings": []
     },
     {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 2065,
       "slug": "repairdesk-accessory-10264-remax-rm-c60-phone-stand",
       "name": "Remax RM-C60 Phone Stand",
@@ -698,17 +767,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 100,
@@ -810,42 +868,6 @@
       "id": 15,
       "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
       "name": "87W USB-C MacBook Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 19,
-      "slug": "60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont",
-      "name": "60W MagSafe 2 Power Adapter for MacBook Air and MacBook Pro",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 18,
-      "slug": "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
-      "name": "85W MagSafe 2 Power Adapter for MacBook Pro with Retina Display",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 12,
-      "slug": "brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty",
-      "name": "85W MagSafe 1 Power Adapter for MacBook Pro",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 13,
-      "slug": "brand-new-60w-magsafe-1-power-adapter-for-macbook-air-and-macbook-pro",
-      "name": "60W MagSafe 1 Power Adapter for MacBook Air and MacBook Pro",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -1230,28 +1252,6 @@
       "id": 2067,
       "slug": "repairdesk-accessory-6553-remax-p12-multifunctional-selfie-stick",
       "name": "Remax P12 Multifunctional Selfie Stick",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2060,
-      "slug": "repairdesk-accessory-10989-c141-desktop-mobile-phone-holder",
-      "name": "C141 Desktop Mobile Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2059,
-      "slug": "repairdesk-accessory-11139-remax-selfie-stick-holder-with-lights-p60",
-      "name": "Remax Selfie Stick Holder with Lights P60",
       "indexable": false,
       "score": 65,
       "blockers": [
