@@ -1,9 +1,148 @@
 {
-  "catalog_updated_at": "2026-09-04T04:50:44.828728+00:00",
+  "catalog_updated_at": "2026-09-05T04:21:51.533036+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2150,
+      "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
+      "name": "MagSafe Multi-Wallet - Brown",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 75,
+      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
+      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2045,
+      "slug": "repairdesk-accessory-10382-wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 91,
+      "slug": "c34-fm-transmitter",
+      "name": "C34 FM Transmitter",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 92,
+      "slug": "c28-fm-transmitter",
+      "name": "C28 FM Transmitter",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 90,
+      "slug": "wireless-dongle-for-carplay-or-android-auto-m29",
+      "name": "Wireless Dongle for CarPlay or Android Auto M29",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 64,
+      "slug": "remax-rb-m62-speaker",
+      "name": "Remax RB-M62 Speaker Blue",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2058,
+      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
+      "name": "WEKOME Desktop Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2060,
+      "slug": "repairdesk-accessory-10989-c141-desktop-mobile-phone-holder",
+      "name": "C141 Desktop Mobile Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2065,
+      "slug": "repairdesk-accessory-10264-remax-rm-c60-phone-stand",
+      "name": "Remax RM-C60 Phone Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2063,
+      "slug": "repairdesk-accessory-10266-remax-portable-mini-handheld-fan-f34",
+      "name": "Remax Portable Mini Handheld Fan F34",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2064,
+      "slug": "repairdesk-accessory-10265-remax-f37-usb-fan",
+      "name": "Remax F37 USB Fan",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2062,
+      "slug": "repairdesk-accessory-10267-remax-f23-icying-series-bladeless-neckband-fan-white",
+      "name": "Remax F23 Icying Series Bladeless Neckband Fan White",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 17,
       "slug": "new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
@@ -87,17 +226,6 @@
       "warnings": []
     },
     {
-      "id": 2060,
-      "slug": "repairdesk-accessory-10989-c141-desktop-mobile-phone-holder",
-      "name": "C141 Desktop Mobile Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 18,
       "slug": "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
       "name": "85W MagSafe 2 Power Adapter for MacBook Pro with Retina Display",
@@ -165,37 +293,6 @@
       "warnings": []
     },
     {
-      "id": 91,
-      "slug": "c34-fm-transmitter",
-      "name": "C34 FM Transmitter",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 92,
-      "slug": "c28-fm-transmitter",
-      "name": "C28 FM Transmitter",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 90,
-      "slug": "wireless-dongle-for-carplay-or-android-auto-m29",
-      "name": "Wireless Dongle for CarPlay or Android Auto M29",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 32,
       "slug": "remax-fcp-2-20000mah-power-bank-20w-pd-22-5w-qc-fast-charging-built-in-cables-white",
       "name": "REMAX FCP-2 20000mAh Power Bank 20W PD 22.5W QC Fast Charging Built-in Cables White",
@@ -229,17 +326,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2058,
-      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
-      "name": "WEKOME Desktop Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
@@ -541,17 +627,6 @@
       "warnings": []
     },
     {
-      "id": 64,
-      "slug": "remax-rb-m62-speaker",
-      "name": "Remax RB-M62 Speaker Blue",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 65,
       "slug": "remax-rb-m8-wireless-speaker",
       "name": "Remax RB-M8 Wireless Speaker",
@@ -571,15 +646,6 @@
       "blockers": [
         "description-under-40-characters"
       ],
-      "warnings": []
-    },
-    {
-      "id": 75,
-      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
-      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
@@ -796,28 +862,6 @@
       "warnings": []
     },
     {
-      "id": 2045,
-      "slug": "repairdesk-accessory-10382-wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2065,
-      "slug": "repairdesk-accessory-10264-remax-rm-c60-phone-stand",
-      "name": "Remax RM-C60 Phone Stand",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2069,
       "slug": "repairdesk-accessory-6031-stander",
       "name": "Stander",
@@ -947,17 +991,6 @@
       "warnings": []
     },
     {
-      "id": 2150,
-      "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
-      "name": "MagSafe Multi-Wallet - Brown",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2151,
       "slug": "repairdesk-misc-10852-magsafe-multi-wallet-black",
       "name": "MagSafe Multi-Wallet - Black",
@@ -1049,39 +1082,6 @@
       "id": 2158,
       "slug": "repairdesk-misc-8483-drone-map",
       "name": "Drone Map",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2062,
-      "slug": "repairdesk-accessory-10267-remax-f23-icying-series-bladeless-neckband-fan-white",
-      "name": "Remax F23 Icying Series Bladeless Neckband Fan White",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2063,
-      "slug": "repairdesk-accessory-10266-remax-portable-mini-handheld-fan-f34",
-      "name": "Remax Portable Mini Handheld Fan F34",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2064,
-      "slug": "repairdesk-accessory-10265-remax-f37-usb-fan",
-      "name": "Remax F37 USB Fan",
       "indexable": false,
       "score": 65,
       "blockers": [
