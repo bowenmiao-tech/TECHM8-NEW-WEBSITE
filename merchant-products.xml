@@ -5,6 +5,46 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>107041247</g:id>
+      <title>WEKOME Wireless Charger WP-U172</title>
+      <description>WEKOME Wireless Charger WP-U172 available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wireless-charger-wp-u172/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wireless-charger-wp-u172/1778597027244-abff4c8b.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wireless-charger-wp-u172/1778597032984-b321448d.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>99.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027648049</g:gtin>
+    </item>
+    <item>
+      <g:id>6941027660096</g:id>
+      <title>WEKOME WDC-C33 1.2m USB-C to Lightning Cable</title>
+      <description>WEKOME WDC-C33 1.2m USB-C to Lightning Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437020130-8003f0a6.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437023910-a4f3b8d1.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437048549-9db56012.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.99 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+
+    </item>
+    <item>
+      <g:id>103841038</g:id>
+      <title>WEKOME WDC-61 Lighting to TypeC Charging Data Cable</title>
+      <description>WEKOME WDC-61 Lighting to TypeC Charging Data Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wdc-61-lighting-to-typec-charging-data-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-61-lighting-to-typec-charging-data-cable/1779757858531-b4e92ab9.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-61-lighting-to-typec-charging-data-cable/1779757856696-2a5b9ce5.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>36.59 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027651384</g:gtin>
+    </item>
+    <item>
       <g:id>109041519</g:id>
       <title>REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05</title>
       <description>REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05 available for online order and warehouse dispatch.</description>
@@ -210,20 +250,6 @@
       <g:price>29.00 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>OZTECHM8</g:brand>
-
-    </item>
-    <item>
-      <g:id>6941027660096</g:id>
-      <title>WEKOME WDC-C33 1.2m USB-C to Lightning Cable</title>
-      <description>WEKOME WDC-C33 1.2m USB-C to Lightning Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437020130-8003f0a6.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437023910-a4f3b8d1.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437048549-9db56012.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.99 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
 
     </item>
     <item>
@@ -668,19 +694,6 @@
       <g:gtin>6941027640081</g:gtin>
     </item>
     <item>
-      <g:id>107041247</g:id>
-      <title>WEKOME Wireless Charger WP-U172</title>
-      <description>WEKOME Wireless Charger WP-U172 available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wireless-charger-wp-u172/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wireless-charger-wp-u172/1778597027244-abff4c8b.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wireless-charger-wp-u172/1778597032984-b321448d.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>99.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027648049</g:gtin>
-    </item>
-    <item>
       <g:id>9018630</g:id>
       <title>DS15 2 IN 1Wireless Charger</title>
       <description>DS15 2 IN 1Wireless Charger available for online order and warehouse dispatch.</description>
@@ -856,19 +869,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651360</g:gtin>
-    </item>
-    <item>
-      <g:id>103841038</g:id>
-      <title>WEKOME WDC-61 Lighting to TypeC Charging Data Cable</title>
-      <description>WEKOME WDC-61 Lighting to TypeC Charging Data Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wdc-61-lighting-to-typec-charging-data-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-61-lighting-to-typec-charging-data-cable/1779757858531-b4e92ab9.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-61-lighting-to-typec-charging-data-cable/1779757856696-2a5b9ce5.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>36.59 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027651384</g:gtin>
     </item>
     <item>
       <g:id>110671637</g:id>
