@@ -1,9 +1,49 @@
 {
-  "catalog_updated_at": "2026-09-06T03:17:09.517078+00:00",
+  "catalog_updated_at": "2026-09-07T00:46:18.679317+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 101,
+      "slug": "3-in-1-cabin-crew-charging-cable",
+      "name": "3 in 1 Cabin Crew Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 84,
+      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
+      "name": "Remax PD BT230/BT260 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 76,
       "slug": "wekome-wireless-charger-wp-u172",
@@ -585,17 +625,6 @@
       ]
     },
     {
-      "id": 84,
-      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
-      "name": "Remax PD BT230/BT260 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 83,
       "slug": "remax-g6-wireless-gamebubs",
       "name": "Remax G6  Wireless GameBubs",
@@ -818,15 +847,6 @@
       ]
     },
     {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 2044,
       "slug": "repairdesk-accessory-10383-wekome-yb06-wired-earphone-aux-in-ear",
       "name": "WEKOME YB06 Wired Earphone Aux IN EAR",
@@ -882,15 +902,6 @@
       "warnings": []
     },
     {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
       "name": "1M Ultra Tough USB-C to USB-C Cable",
@@ -909,17 +920,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 101,
-      "slug": "3-in-1-cabin-crew-charging-cable",
-      "name": "3 in 1 Cabin Crew Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 98,
