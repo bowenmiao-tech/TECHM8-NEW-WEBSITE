@@ -1,8 +1,8 @@
 {
   "catalog_updated_at": "2026-09-10T07:56:15.135047+00:00",
-  "total_products": 146,
+  "total_products": 145,
   "indexable_products": 91,
-  "limited_products": 55,
+  "limited_products": 54,
   "products": [
     {
       "id": 2036,
@@ -1385,18 +1385,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2045,
-      "slug": "repairdesk-accessory-10382-wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
-      "indexable": false,
-      "score": 30,
-      "blockers": [
-        "hidden-product",
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 2180,
