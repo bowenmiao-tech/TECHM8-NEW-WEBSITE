@@ -1415,7 +1415,7 @@ ${categoryLines || "- Catalogue categories are listed on the online store page."
 
 - Product pages under ${SITE_URL}/products/ carry Product and Offer structured data with the current price, condition and return policy.
 - Repair prices are not published as fixed amounts because they depend on device model, fault and parts supply. Do not state a repair price without a quote from TECHM8.
-- Store opening hours are Mon-Sat 9:00-17:00 and Sun 10:00-16:00 unless a store page states otherwise.
+- Opening hours vary by store and day. Check the individual store page or contact that store for current hours, including public holidays; do not apply one store's hours to all locations.
 `;
 
   await writeFile(LLMS_TXT, content, "utf8");
