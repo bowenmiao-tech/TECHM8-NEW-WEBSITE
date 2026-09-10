@@ -4,6 +4,10 @@ import { join, resolve } from "node:path";
 const ROOT = resolve(import.meta.dirname, "..");
 const CURRENCY = "AUD";
 const PRODUCTS_DIR = join(ROOT, "products");
+const SITE_URL = "https://www.techm8australia.com";
+const { redirects = {} } = JSON.parse(
+  await readFile(join(ROOT, "scripts", "product-slug-redirects.json"), "utf8"),
+);
 
 const manifest = JSON.parse(
   await readFile(join(PRODUCTS_DIR, ".generated-manifest.json"), "utf8"),
@@ -58,6 +62,8 @@ const indexableSlugs = new Set(
     .filter((product) => product.indexable)
     .map((product) => product.slug),
 );
+const generatedSlugs = new Set(manifest.slugs);
+let redirectCount = 0;
 
 for (const slug of manifest.slugs) {
   const html = await readFile(join(PRODUCTS_DIR, slug, "index.html"), "utf8");
@@ -69,6 +75,26 @@ for (const slug of manifest.slugs) {
   );
 
   if (!embeddedMatch) {
+    // A retired slug can be replaced by a redirect after product generation.
+    // Accept only a declared, non-indexable redirect to a generated product;
+    // the destination still undergoes every price check in this same loop.
+    const targetSlug = redirects[slug];
+    const destination = `${SITE_URL}/products/${targetSlug}/`;
+    if (
+      targetSlug &&
+      targetSlug !== slug &&
+      generatedSlugs.has(targetSlug) &&
+      !indexableSlugs.has(slug) &&
+      html.includes('<meta name="robots" content="noindex, follow">') &&
+      html.includes(`<link rel="canonical" href="${destination}">`) &&
+      html.includes(`<meta http-equiv="refresh" content="0; url=${destination}">`)
+    ) {
+      const targetHtml = await readFile(join(PRODUCTS_DIR, targetSlug, "index.html"), "utf8");
+      if (targetHtml.includes('<script type="application/json" data-prerendered-product>')) {
+        redirectCount += 1;
+        continue;
+      }
+    }
     errors.push(`${slug}: missing embedded product data.`);
     continue;
   }
@@ -154,6 +180,6 @@ if (errors.length) {
   process.exitCode = 1;
 } else {
   console.log(
-    `Validated ${manifest.slugs.length} product pages and ${feedItems.size} AUD Merchant Center items.`,
+    `Validated ${manifest.slugs.length - redirectCount} product pages, ${redirectCount} declared slug redirects and ${feedItems.size} AUD Merchant Center items.`,
   );
 }
