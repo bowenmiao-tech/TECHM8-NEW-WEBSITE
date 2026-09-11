@@ -11799,7 +11799,7 @@ function initCareersForm() {
   };
 
   const resumeUpload = createUpload("resume", "resume");
-  const coverLetterUpload = createUpload("cover_letter", "cover letter");
+  const cvUpload = createUpload("cv", "CV");
 
   const getField = (name) => {
     const field = form.elements.namedItem(name);
@@ -11903,7 +11903,7 @@ function initCareersForm() {
     }
 
     if (!resumeUpload?.get()) {
-      errors.push("Please attach your resume or CV.");
+      errors.push("Please attach your resume.");
       resumeUpload?.root.classList.add("is-invalid");
     }
 
@@ -11990,11 +11990,9 @@ function initCareersForm() {
     try {
       const formData = new FormData(form);
       const resumeFile = resumeUpload.get();
-      const coverLetterFile = coverLetterUpload?.get() ?? null;
+      const cvFile = cvUpload?.get() ?? null;
       const resumeData = await readCareersFileAsBase64(resumeFile.file);
-      const coverLetterData = coverLetterFile
-        ? await readCareersFileAsBase64(coverLetterFile.file)
-        : "";
+      const cvData = cvFile ? await readCareersFileAsBase64(cvFile.file) : "";
 
       const payload = {
         store_slugs: formData.getAll("store_slug").map(String),
@@ -12022,12 +12020,12 @@ function initCareersForm() {
           mime_type: resumeFile.mimeType,
           data: resumeData,
         },
-        ...(coverLetterFile
+        ...(cvFile
           ? {
-              cover_letter: {
-                filename: coverLetterFile.file.name,
-                mime_type: coverLetterFile.mimeType,
-                data: coverLetterData,
+              cv: {
+                filename: cvFile.file.name,
+                mime_type: cvFile.mimeType,
+                data: cvData,
               },
             }
           : {}),

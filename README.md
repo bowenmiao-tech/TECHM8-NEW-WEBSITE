@@ -212,8 +212,7 @@ vacancy listing and must not be turned into one without a separate decision.
 - Resume / CV attachment
 - Privacy consent
 
-An optional second upload (cover letter or other document) is offered but never
-required.
+An optional second upload (CV) is offered but never required.
 
 ### Store selection rules
 
@@ -248,12 +247,12 @@ The allowed values are duplicated in three places and must stay in sync:
 
 The form takes two uploads, handled by the same control and the same checks:
 
-- `resume` is required and labelled "Resume / CV". Australian applicants use
-  both words for the same document, so do not split them into separate fields
-- `cover_letter` is optional and covers cover letters, certificates and
-  references
+- `resume` is required
+- `cv` is optional. Note that Australian applicants generally treat "resume"
+  and "CV" as the same document; keeping both boxes is a deliberate choice, so
+  do not merge them without asking
 - PDF, Word, RTF and plain text only, 5 MB maximum each
-- Both are uploaded to the private `job-applications` storage bucket before the row is written, foldered by month (`YYYY-MM/`) because an application can span several stores. The optional document takes a `-cover-letter` filename suffix
+- Both are uploaded to the private `job-applications` storage bucket before the row is written, foldered by month (`YYYY-MM/`) because an application can span several stores. The optional CV takes a `-cv` filename suffix
 - If either upload or the database insert fails, every object already uploaded for that application is removed, so no orphan files accumulate
 - `job_applications` has RLS enabled with no anon or authenticated policy. Applicant data is only reachable with the service role
 

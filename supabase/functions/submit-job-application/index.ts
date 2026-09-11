@@ -127,7 +127,7 @@ type ApplicationPayload = {
   earliestStart: string
   experienceSummary: string
   resumeFilename: string
-  coverLetterFilename: string
+  cvFilename: string
   source: string
 }
 
@@ -352,9 +352,9 @@ function buildApplicationRows(payload: ApplicationPayload): ApplicationRow[] {
     rows.push({ label: 'About the applicant', value: payload.experienceSummary })
   }
 
-  rows.push({ label: 'Resume / CV', value: payload.resumeFilename || 'Not attached' })
-  if (payload.coverLetterFilename) {
-    rows.push({ label: 'Cover letter', value: payload.coverLetterFilename })
+  rows.push({ label: 'Resume', value: payload.resumeFilename || 'Not attached' })
+  if (payload.cvFilename) {
+    rows.push({ label: 'CV', value: payload.cvFilename })
   }
   if (payload.source) rows.push({ label: 'Applied via', value: payload.source })
 
@@ -444,7 +444,7 @@ async function sendInternalApplicationEmail(
     resumeUrl: string
   },
 ) {
-  const attachmentWord = payload.coverLetterFilename ? 'documents are' : 'resume is'
+  const attachmentWord = payload.cvFilename ? 'documents are' : 'resume is'
   const resumeBlock = payload.resumeUrl
     ? `<p style="margin:18px 0 0;color:#4f6b74">The ${attachmentWord} attached and also stored securely. <a href="${escapeHtml(payload.resumeUrl)}" style="color:#008f83;font-weight:700;text-decoration:underline">Open the stored resume</a> (link valid for 7 days).</p>`
     : `<p style="margin:18px 0 0;color:#4f6b74">The ${attachmentWord} attached to this email.</p>`
@@ -576,20 +576,20 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'Please confirm the privacy consent before submitting.' }, { status: 422, headers: corsHeaders })
     }
 
-    const { document: resume, error: resumeError } = parseDocument(body.resume, 'resume or CV', 'resume')
+    const { document: resume, error: resumeError } = parseDocument(body.resume, 'resume', 'resume')
     if (!resume) {
-      return Response.json({ ok: false, error: resumeError ?? 'Please attach your resume or CV.' }, { status: 422, headers: corsHeaders })
+      return Response.json({ ok: false, error: resumeError ?? 'Please attach your resume.' }, { status: 422, headers: corsHeaders })
     }
 
     // The supporting document is optional, but must pass the same checks when
     // one is attached.
-    let coverLetter: DocumentInput | undefined
-    if (body.cover_letter) {
-      const parsed = parseDocument(body.cover_letter, 'cover letter', 'cover-letter')
+    let cv: DocumentInput | undefined
+    if (body.cv) {
+      const parsed = parseDocument(body.cv, 'CV', 'cv')
       if (!parsed.document) {
-        return Response.json({ ok: false, error: parsed.error ?? 'Your cover letter could not be read.' }, { status: 422, headers: corsHeaders })
+        return Response.json({ ok: false, error: parsed.error ?? 'Your CV could not be read.' }, { status: 422, headers: corsHeaders })
       }
-      coverLetter = parsed.document
+      cv = parsed.document
     }
 
     const referenceCode = `TM8-JOB-${new Date().toISOString().slice(0, 10).replaceAll('-', '')}-${crypto.randomUUID().slice(0, 6).toUpperCase()}`
@@ -622,12 +622,12 @@ Deno.serve(async (req) => {
     }
 
     let resumePath = ''
-    let coverLetterPath = ''
+    let cvPath = ''
 
     try {
       resumePath = await uploadDocument(resume, '')
-      if (coverLetter) {
-        coverLetterPath = await uploadDocument(coverLetter, '-cover-letter')
+      if (cv) {
+        cvPath = await uploadDocument(cv, '-cv')
       }
     } catch (uploadError) {
       console.error(uploadError)
@@ -665,10 +665,10 @@ Deno.serve(async (req) => {
       resume_filename: resume.filename,
       resume_mime_type: resume.mimeType,
       resume_size_bytes: resume.bytes.length,
-      cover_letter_path: coverLetterPath || null,
-      cover_letter_filename: coverLetter?.filename ?? null,
-      cover_letter_mime_type: coverLetter?.mimeType ?? null,
-      cover_letter_size_bytes: coverLetter?.bytes.length ?? null,
+      cv_path: cvPath || null,
+      cv_filename: cv?.filename ?? null,
+      cv_mime_type: cv?.mimeType ?? null,
+      cv_size_bytes: cv?.bytes.length ?? null,
       source: source || null,
       ip_address: forwardedFor,
       user_agent: userAgent,
@@ -703,7 +703,7 @@ Deno.serve(async (req) => {
       earliestStart,
       experienceSummary,
       resumeFilename: resume.filename,
-      coverLetterFilename: coverLetter?.filename ?? '',
+      cvFilename: cv?.filename ?? '',
       source,
     }
 
@@ -728,9 +728,7 @@ Deno.serve(async (req) => {
         resumeUrl: signedUrl?.signedUrl ?? '',
         attachments: [
           { filename: resume.filename, content: resume.base64 },
-          ...(coverLetter
-            ? [{ filename: coverLetter.filename, content: coverLetter.base64 }]
-            : []),
+          ...(cv ? [{ filename: cv.filename, content: cv.base64 }] : []),
         ],
       })
 
