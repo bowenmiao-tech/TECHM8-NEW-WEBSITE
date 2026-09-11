@@ -11577,13 +11577,6 @@ function initCareersForm() {
   const sponsorshipNote = form.querySelector("[data-careers-sponsorship-note]");
   const consentLabel = form.querySelector(".careers-consent");
 
-  const uploadRoot = form.querySelector("[data-careers-upload]");
-  const fileInput = form.querySelector("[data-careers-file]");
-  const filePreview = form.querySelector("[data-careers-file-preview]");
-  const fileNameTarget = form.querySelector("[data-careers-file-name]");
-  const fileSizeTarget = form.querySelector("[data-careers-file-size]");
-  const fileRemoveButton = form.querySelector("[data-careers-file-remove]");
-  const dropzone = form.querySelector("[data-careers-dropzone]");
 
   const modal = document.querySelector("[data-careers-modal]");
   const modalType = modal?.querySelector("[data-careers-modal-type]");
@@ -11591,7 +11584,6 @@ function initCareersForm() {
   const modalText = modal?.querySelector("[data-careers-modal-text]");
   const modalCloseButtons = modal?.querySelectorAll("[data-careers-modal-close]");
 
-  let attachedResume = null;
 
   const setMessage = (type, text) => {
     if (!(messageBox instanceof HTMLElement)) return;
@@ -11715,67 +11707,83 @@ function initCareersForm() {
   workRightsField?.addEventListener("change", syncVisaPanel);
   syncVisaPanel();
 
-  const clearAttachedResume = () => {
-    attachedResume = null;
-    if (fileInput instanceof HTMLInputElement) fileInput.value = "";
-    if (filePreview instanceof HTMLElement) filePreview.hidden = true;
-    if (dropzone instanceof HTMLElement) dropzone.hidden = false;
-  };
+  // One control per upload slot: the required resume, and an optional
+  // supporting document such as a cover letter.
+  const createUpload = (slot, label) => {
+    const root = form.querySelector(`[data-careers-upload="${slot}"]`);
+    if (!(root instanceof HTMLElement)) return null;
 
-  const applyResumeFile = (file) => {
-    if (!file) return;
+    const fileInput = root.querySelector("[data-careers-file]");
+    const filePreview = root.querySelector("[data-careers-file-preview]");
+    const fileNameTarget = root.querySelector("[data-careers-file-name]");
+    const fileSizeTarget = root.querySelector("[data-careers-file-size]");
+    const fileRemoveButton = root.querySelector("[data-careers-file-remove]");
+    const dropzone = root.querySelector("[data-careers-dropzone]");
 
-    const mimeType = getCareersResumeMimeType(file);
-    if (!mimeType) {
-      clearAttachedResume();
-      setMessage("error", "Your resume must be a PDF, Word, RTF or plain text document.");
-      return;
-    }
+    let attached = null;
 
-    if (file.size > CAREERS_MAX_RESUME_BYTES) {
-      clearAttachedResume();
-      setMessage("error", "Your resume must be 5 MB or smaller.");
-      return;
-    }
+    const clear = () => {
+      attached = null;
+      if (fileInput instanceof HTMLInputElement) fileInput.value = "";
+      if (filePreview instanceof HTMLElement) filePreview.hidden = true;
+      if (dropzone instanceof HTMLElement) dropzone.hidden = false;
+      root.classList.remove("is-invalid");
+    };
 
-    attachedResume = { file, mimeType };
-    setMessage("", "");
+    const apply = (file) => {
+      if (!file) return;
 
-    if (fileNameTarget instanceof HTMLElement) fileNameTarget.textContent = file.name;
-    if (fileSizeTarget instanceof HTMLElement) {
-      fileSizeTarget.textContent = formatCareersFileSize(file.size);
-    }
-    if (filePreview instanceof HTMLElement) filePreview.hidden = false;
-    if (dropzone instanceof HTMLElement) dropzone.hidden = true;
-  };
+      const mimeType = getCareersResumeMimeType(file);
+      if (!mimeType) {
+        clear();
+        setMessage("error", `Your ${label} must be a PDF, Word, RTF or plain text document.`);
+        return;
+      }
 
-  fileInput?.addEventListener("change", () => {
-    if (!(fileInput instanceof HTMLInputElement)) return;
-    applyResumeFile(fileInput.files?.[0] ?? null);
-  });
+      if (file.size > CAREERS_MAX_RESUME_BYTES) {
+        clear();
+        setMessage("error", `Your ${label} must be 5 MB or smaller.`);
+        return;
+      }
 
-  fileRemoveButton?.addEventListener("click", () => {
-    clearAttachedResume();
-    setMessage("", "");
-  });
+      attached = { file, mimeType };
+      setMessage("", "");
+      root.classList.remove("is-invalid");
 
-  if (uploadRoot instanceof HTMLElement) {
+      if (fileNameTarget instanceof HTMLElement) fileNameTarget.textContent = file.name;
+      if (fileSizeTarget instanceof HTMLElement) {
+        fileSizeTarget.textContent = formatCareersFileSize(file.size);
+      }
+      if (filePreview instanceof HTMLElement) filePreview.hidden = false;
+      if (dropzone instanceof HTMLElement) dropzone.hidden = true;
+    };
+
+    fileInput?.addEventListener("change", () => {
+      if (!(fileInput instanceof HTMLInputElement)) return;
+      apply(fileInput.files?.[0] ?? null);
+    });
+
+    fileRemoveButton?.addEventListener("click", () => {
+      clear();
+      setMessage("", "");
+    });
+
     ["dragenter", "dragover"].forEach((eventName) => {
-      uploadRoot.addEventListener(eventName, (event) => {
+      root.addEventListener(eventName, (event) => {
         event.preventDefault();
-        uploadRoot.classList.add("is-dragover");
+        root.classList.add("is-dragover");
       });
     });
 
     ["dragleave", "dragend"].forEach((eventName) => {
-      uploadRoot.addEventListener(eventName, () => {
-        uploadRoot.classList.remove("is-dragover");
+      root.addEventListener(eventName, () => {
+        root.classList.remove("is-dragover");
       });
     });
 
-    uploadRoot.addEventListener("drop", (event) => {
+    root.addEventListener("drop", (event) => {
       event.preventDefault();
-      uploadRoot.classList.remove("is-dragover");
+      root.classList.remove("is-dragover");
 
       const file = event.dataTransfer?.files?.[0];
       if (!file) return;
@@ -11784,9 +11792,14 @@ function initCareersForm() {
       if (fileInput instanceof HTMLInputElement && event.dataTransfer?.files) {
         fileInput.files = event.dataTransfer.files;
       }
-      applyResumeFile(file);
+      apply(file);
     });
-  }
+
+    return { root, get: () => attached };
+  };
+
+  const resumeUpload = createUpload("resume", "resume");
+  const coverLetterUpload = createUpload("cover_letter", "cover letter");
 
   const getField = (name) => {
     const field = form.elements.namedItem(name);
@@ -11889,9 +11902,9 @@ function initCareersForm() {
         ?.classList.add("is-invalid");
     }
 
-    if (!attachedResume) {
-      errors.push("Please attach your resume.");
-      form.querySelector(".careers-upload")?.classList.add("is-invalid");
+    if (!resumeUpload?.get()) {
+      errors.push("Please attach your resume or CV.");
+      resumeUpload?.root.classList.add("is-invalid");
     }
 
     const consentField = getField("privacy_consent");
@@ -11976,7 +11989,12 @@ function initCareersForm() {
 
     try {
       const formData = new FormData(form);
-      const resumeData = await readCareersFileAsBase64(attachedResume.file);
+      const resumeFile = resumeUpload.get();
+      const coverLetterFile = coverLetterUpload?.get() ?? null;
+      const resumeData = await readCareersFileAsBase64(resumeFile.file);
+      const coverLetterData = coverLetterFile
+        ? await readCareersFileAsBase64(coverLetterFile.file)
+        : "";
 
       const payload = {
         store_slugs: formData.getAll("store_slug").map(String),
@@ -12000,10 +12018,19 @@ function initCareersForm() {
         source: String(formData.get("source") || "Website"),
         privacy_consent: formData.get("privacy_consent") === "yes",
         resume: {
-          filename: attachedResume.file.name,
-          mime_type: attachedResume.mimeType,
+          filename: resumeFile.file.name,
+          mime_type: resumeFile.mimeType,
           data: resumeData,
         },
+        ...(coverLetterFile
+          ? {
+              cover_letter: {
+                filename: coverLetterFile.file.name,
+                mime_type: coverLetterFile.mimeType,
+                data: coverLetterData,
+              },
+            }
+          : {}),
       };
 
       const response = await fetch(careersEndpoint, {

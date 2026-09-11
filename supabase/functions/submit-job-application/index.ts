@@ -127,6 +127,7 @@ type ApplicationPayload = {
   earliestStart: string
   experienceSummary: string
   resumeFilename: string
+  coverLetterFilename: string
   source: string
 }
 
@@ -239,7 +240,7 @@ function base64ToBytes(base64: string) {
   return bytes
 }
 
-type ResumeInput = {
+type DocumentInput = {
   base64: string
   bytes: Uint8Array
   filename: string
@@ -247,9 +248,15 @@ type ResumeInput = {
   extension: string
 }
 
-function parseResume(raw: unknown): { resume?: ResumeInput; error?: string } {
+// Shared by the required resume and the optional supporting document, so both
+// get the same type, size and decoding checks.
+function parseDocument(
+  raw: unknown,
+  label: string,
+  fallbackName: string,
+): { document?: DocumentInput; error?: string } {
   if (!raw || typeof raw !== 'object') {
-    return { error: 'Please attach your resume.' }
+    return { error: `Please attach your ${label}.` }
   }
 
   const record = raw as Record<string, unknown>
@@ -257,33 +264,34 @@ function parseResume(raw: unknown): { resume?: ResumeInput; error?: string } {
   const extension = allowedResumeTypes[mimeType]
 
   if (!extension) {
-    return { error: 'Resume must be a PDF, Word, RTF or plain text document.' }
+    return { error: `Your ${label} must be a PDF, Word, RTF or plain text document.` }
   }
 
   // The browser sends a data URL; strip the prefix before decoding.
   const base64 = String(record.data ?? '').replace(/^data:[^;]*;base64,/, '').trim()
   if (!base64) {
-    return { error: 'Resume file could not be read. Please try attaching it again.' }
+    return { error: `Your ${label} could not be read. Please try attaching it again.` }
   }
 
   let bytes: Uint8Array
   try {
     bytes = base64ToBytes(base64)
   } catch {
-    return { error: 'Resume file could not be read. Please try attaching it again.' }
+    return { error: `Your ${label} could not be read. Please try attaching it again.` }
   }
 
   if (!bytes.length) {
-    return { error: 'Resume file is empty. Please attach a different file.' }
+    return { error: `Your ${label} is empty. Please attach a different file.` }
   }
 
   if (bytes.length > maxResumeBytes) {
-    return { error: 'Resume must be 5 MB or smaller.' }
+    return { error: `Your ${label} must be 5 MB or smaller.` }
   }
 
-  const filename = String(record.filename ?? '').trim().slice(0, 160) || `resume.${extension}`
+  const filename =
+    String(record.filename ?? '').trim().slice(0, 160) || `${fallbackName}.${extension}`
 
-  return { resume: { base64, bytes, filename, mimeType, extension } }
+  return { document: { base64, bytes, filename, mimeType, extension } }
 }
 
 type ApplicationRow = {
@@ -344,7 +352,10 @@ function buildApplicationRows(payload: ApplicationPayload): ApplicationRow[] {
     rows.push({ label: 'About the applicant', value: payload.experienceSummary })
   }
 
-  rows.push({ label: 'Resume', value: payload.resumeFilename || 'Not attached' })
+  rows.push({ label: 'Resume / CV', value: payload.resumeFilename || 'Not attached' })
+  if (payload.coverLetterFilename) {
+    rows.push({ label: 'Cover letter', value: payload.coverLetterFilename })
+  }
   if (payload.source) rows.push({ label: 'Applied via', value: payload.source })
 
   return rows
@@ -433,9 +444,10 @@ async function sendInternalApplicationEmail(
     resumeUrl: string
   },
 ) {
+  const attachmentWord = payload.coverLetterFilename ? 'documents are' : 'resume is'
   const resumeBlock = payload.resumeUrl
-    ? `<p style="margin:18px 0 0;color:#4f6b74">The resume is attached and also stored securely. <a href="${escapeHtml(payload.resumeUrl)}" style="color:#008f83;font-weight:700;text-decoration:underline">Open the stored copy</a> (link valid for 7 days).</p>`
-    : '<p style="margin:18px 0 0;color:#4f6b74">The resume is attached to this email.</p>'
+    ? `<p style="margin:18px 0 0;color:#4f6b74">The ${attachmentWord} attached and also stored securely. <a href="${escapeHtml(payload.resumeUrl)}" style="color:#008f83;font-weight:700;text-decoration:underline">Open the stored resume</a> (link valid for 7 days).</p>`
+    : `<p style="margin:18px 0 0;color:#4f6b74">The ${attachmentWord} attached to this email.</p>`
 
   const html = renderEmailShell(
     'New job application',
@@ -564,9 +576,20 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'Please confirm the privacy consent before submitting.' }, { status: 422, headers: corsHeaders })
     }
 
-    const { resume, error: resumeError } = parseResume(body.resume)
+    const { document: resume, error: resumeError } = parseDocument(body.resume, 'resume or CV', 'resume')
     if (!resume) {
-      return Response.json({ ok: false, error: resumeError ?? 'Please attach your resume.' }, { status: 422, headers: corsHeaders })
+      return Response.json({ ok: false, error: resumeError ?? 'Please attach your resume or CV.' }, { status: 422, headers: corsHeaders })
+    }
+
+    // The supporting document is optional, but must pass the same checks when
+    // one is attached.
+    let coverLetter: DocumentInput | undefined
+    if (body.cover_letter) {
+      const parsed = parseDocument(body.cover_letter, 'cover letter', 'cover-letter')
+      if (!parsed.document) {
+        return Response.json({ ok: false, error: parsed.error ?? 'Your cover letter could not be read.' }, { status: 422, headers: corsHeaders })
+      }
+      coverLetter = parsed.document
     }
 
     const referenceCode = `TM8-JOB-${new Date().toISOString().slice(0, 10).replaceAll('-', '')}-${crypto.randomUUID().slice(0, 6).toUpperCase()}`
@@ -581,17 +604,38 @@ Deno.serve(async (req) => {
     // points at a missing object. Applications can span several stores, so the
     // objects are foldered by month rather than by store.
     const resumeFolder = new Date().toISOString().slice(0, 7)
-    const resumePath = `${resumeFolder}/${referenceCode}-${slugifyForFilename(fullName)}.${resume.extension}`
-    const { error: uploadError } = await supabaseAdmin.storage
-      .from(resumeBucket)
-      .upload(resumePath, resume.bytes, {
-        contentType: resume.mimeType,
-        upsert: false,
-      })
+    const applicantSlug = slugifyForFilename(fullName)
+    const uploadedPaths: string[] = []
 
-    if (uploadError) {
+    const uploadDocument = async (document: DocumentInput, suffix: string) => {
+      const objectPath = `${resumeFolder}/${referenceCode}-${applicantSlug}${suffix}.${document.extension}`
+      const { error } = await supabaseAdmin.storage
+        .from(resumeBucket)
+        .upload(objectPath, document.bytes, {
+          contentType: document.mimeType,
+          upsert: false,
+        })
+
+      if (error) throw error
+      uploadedPaths.push(objectPath)
+      return objectPath
+    }
+
+    let resumePath = ''
+    let coverLetterPath = ''
+
+    try {
+      resumePath = await uploadDocument(resume, '')
+      if (coverLetter) {
+        coverLetterPath = await uploadDocument(coverLetter, '-cover-letter')
+      }
+    } catch (uploadError) {
       console.error(uploadError)
-      return Response.json({ ok: false, error: 'Your resume could not be uploaded. Please try again.' }, { status: 500, headers: corsHeaders })
+      // Never leave a half-uploaded application behind.
+      if (uploadedPaths.length) {
+        await supabaseAdmin.storage.from(resumeBucket).remove(uploadedPaths)
+      }
+      return Response.json({ ok: false, error: 'Your documents could not be uploaded. Please try again.' }, { status: 500, headers: corsHeaders })
     }
 
     const forwardedFor = req.headers.get('x-forwarded-for')
@@ -621,6 +665,10 @@ Deno.serve(async (req) => {
       resume_filename: resume.filename,
       resume_mime_type: resume.mimeType,
       resume_size_bytes: resume.bytes.length,
+      cover_letter_path: coverLetterPath || null,
+      cover_letter_filename: coverLetter?.filename ?? null,
+      cover_letter_mime_type: coverLetter?.mimeType ?? null,
+      cover_letter_size_bytes: coverLetter?.bytes.length ?? null,
       source: source || null,
       ip_address: forwardedFor,
       user_agent: userAgent,
@@ -628,7 +676,7 @@ Deno.serve(async (req) => {
 
     if (insertError) {
       console.error(insertError)
-      await supabaseAdmin.storage.from(resumeBucket).remove([resumePath])
+      await supabaseAdmin.storage.from(resumeBucket).remove(uploadedPaths)
       return Response.json({ ok: false, error: 'Your application could not be saved. Please try again.' }, { status: 500, headers: corsHeaders })
     }
 
@@ -655,6 +703,7 @@ Deno.serve(async (req) => {
       earliestStart,
       experienceSummary,
       resumeFilename: resume.filename,
+      coverLetterFilename: coverLetter?.filename ?? '',
       source,
     }
 
@@ -677,7 +726,12 @@ Deno.serve(async (req) => {
         ...emailPayload,
         recipients,
         resumeUrl: signedUrl?.signedUrl ?? '',
-        attachments: [{ filename: resume.filename, content: resume.base64 }],
+        attachments: [
+          { filename: resume.filename, content: resume.base64 },
+          ...(coverLetter
+            ? [{ filename: coverLetter.filename, content: coverLetter.base64 }]
+            : []),
+        ],
       })
 
       internalEmailSent = Boolean(internalResult.sent)

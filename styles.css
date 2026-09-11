@@ -11798,6 +11798,7 @@ body.booking-page .booking-seo-section {
    between them lives on the following element rather than on each block. */
 .careers-chips + .careers-label,
 .careers-grid + .careers-label,
+.careers-upload + .careers-label,
 .careers-chips + .careers-grid,
 .careers-upload + .careers-grid {
   margin-top: 1.4rem;
@@ -12062,6 +12063,11 @@ body.booking-page .booking-seo-section {
   text-align: center;
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+/* The optional second document sits lower in the hierarchy than the resume. */
+.careers-upload__drop--compact {
+  padding-block: 1.3rem;
 }
 
 .careers-upload__drop:hover,

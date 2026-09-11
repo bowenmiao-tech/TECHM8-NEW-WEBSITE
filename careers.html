@@ -389,10 +389,11 @@
           <fieldset class="careers-fieldset">
             <legend class="careers-fieldset__legend">
               <span class="careers-fieldset__num">06</span>
-              <span><strong>Your resume</strong></span>
+              <span><strong>Your documents</strong></span>
             </legend>
 
-            <div class="careers-upload" data-careers-upload>
+            <p class="careers-label">Resume / CV *</p>
+            <div class="careers-upload" data-careers-upload="resume">
               <input type="file" id="careers-resume" name="resume_file" accept=".pdf,.doc,.docx,.rtf,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/rtf,text/plain" required data-careers-file>
               <label class="careers-upload__drop" for="careers-resume" data-careers-dropzone>
                 <span class="careers-upload__icon" aria-hidden="true"></span>
@@ -403,6 +404,21 @@
                 <span class="careers-upload__filename" data-careers-file-name></span>
                 <span class="careers-upload__filesize" data-careers-file-size></span>
                 <button class="careers-upload__remove" type="button" data-careers-file-remove aria-label="Remove attached resume">Remove</button>
+              </div>
+            </div>
+
+            <p class="careers-label">Cover letter or other document</p>
+            <div class="careers-upload" data-careers-upload="cover_letter">
+              <input type="file" id="careers-cover-letter" name="cover_letter_file" accept=".pdf,.doc,.docx,.rtf,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/rtf,text/plain" data-careers-file>
+              <label class="careers-upload__drop careers-upload__drop--compact" for="careers-cover-letter" data-careers-dropzone>
+                <span class="careers-upload__icon" aria-hidden="true"></span>
+                <span class="careers-upload__prompt"><strong>Choose a file</strong> or drag it here</span>
+                <span class="careers-upload__hint">Optional &middot; cover letter, certificates or references &middot; up to 5 MB</span>
+              </label>
+              <div class="careers-upload__file" data-careers-file-preview hidden>
+                <span class="careers-upload__filename" data-careers-file-name></span>
+                <span class="careers-upload__filesize" data-careers-file-size></span>
+                <button class="careers-upload__remove" type="button" data-careers-file-remove aria-label="Remove attached document">Remove</button>
               </div>
             </div>
 
