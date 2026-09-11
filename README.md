@@ -197,12 +197,13 @@ The careers page at `/careers.html` is a standing application form. It is not a
 vacancy listing and must not be turned into one without a separate decision.
 
 - Applications are accepted at any time, with or without an open role
-- One application covers all five stores
 - No account or login is required to apply
+- The page is hero + form + FAQ only. Keep marketing sections off it: its single
+  job is to get an application submitted quickly
 
 ### Required application fields
 
-- Preferred store (five stores plus `any`)
+- Preferred stores, multi-select, at least one required
 - First name, last name, email, Australian mobile
 - Working rights status
 - Own transport and driver licence
@@ -210,6 +211,20 @@ vacancy listing and must not be turned into one without a separate decision.
 - Employment type
 - Resume attachment
 - Privacy consent
+
+### Store selection rules
+
+Store choice is a multi-select stored in `job_applications.store_slugs` (`text[]`).
+
+- There is no "any store" option. Someone who can travel ticks several real
+  stores, which tells the store managers more than a catch-all would
+- Every store the applicant ticked receives the notification email
+- Do not reintroduce a single-store radio: the column is an array
+
+### Role rules
+
+Only two roles are offered: `retail_sales` and `repair_technician`. Roles are
+deliberately limited, so do not add options back without being asked.
 
 ### Working rights rules
 
@@ -229,7 +244,7 @@ The allowed values are duplicated in three places and must stay in sync:
 ### Resume rules
 
 - PDF, Word, RTF and plain text only, 5 MB maximum
-- Resumes are uploaded to the private `job-applications` storage bucket before the row is written
+- Resumes are uploaded to the private `job-applications` storage bucket before the row is written, foldered by month (`YYYY-MM/`) because an application can span several stores
 - If the database insert fails, the uploaded object is removed so no orphan files accumulate
 - `job_applications` has RLS enabled with no anon or authenticated policy. Applicant data is only reachable with the service role
 
@@ -248,7 +263,7 @@ Reference codes use the format `TM8-JOB-YYYYMMDD-XXXXXX`.
 
 Store posters link to `/careers?store=<slug>&src=<label>`.
 
-- `store` preselects the store card
+- `store` preselects the store card, and accepts a comma-separated list
 - `src` is recorded on the application and shown in the internal email as "Applied via", so each poster can be attributed
 - GitHub Pages resolves `/careers` to `careers.html` automatically; the `.htaccess` rule only matters if the site moves to Apache
 
