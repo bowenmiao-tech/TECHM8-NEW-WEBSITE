@@ -1,5 +1,5 @@
 {
-  "catalog_updated_at": "2026-09-10T07:56:15.135047+00:00",
+  "catalog_updated_at": "2026-09-11T02:25:47.450514+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
@@ -8,6 +8,17 @@
       "id": 2036,
       "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
       "name": "USB-C WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2066,
+      "slug": "repairdesk-accessory-8867-2m-stand-8809",
+      "name": "2M Stand 8809",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -227,17 +238,6 @@
       "id": 2148,
       "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
       "name": "MagSafe Silicone Phone Grip - Sky Blue",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2066,
-      "slug": "repairdesk-accessory-8867-2m-stand-8809",
-      "name": "2M Stand 8809",
       "indexable": false,
       "score": 65,
       "blockers": [
