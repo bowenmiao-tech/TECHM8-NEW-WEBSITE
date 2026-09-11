@@ -4,6 +4,8 @@ window.TECHM8_CONFIG = window.TECHM8_CONFIG || {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3bHJvbnZtZ3F6a2xlb2ZyaWlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTIwMTYsImV4cCI6MjA5MTU2ODAxNn0.f_WFZmR8MlM49yXhnBMwKyqDDpT4EOZLGgg-TPbdrNY",
   bookingEndpoint:
     "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/book-repair",
+  careersEndpoint:
+    "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/submit-job-application",
   orderEndpoint:
     "https://fwlronvmgqzkleofriis.supabase.co/functions/v1/submit-order",
   checkoutSessionEndpoint:
@@ -11491,6 +11493,556 @@ async function initMyRepairsPage() {
   }
 }
 
+const CAREERS_MAX_RESUME_BYTES = 5 * 1024 * 1024;
+
+const CAREERS_RESUME_MIME_TYPES = new Set([
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/rtf",
+  "text/plain",
+]);
+
+// Browsers disagree on the MIME type they report for .doc/.docx/.rtf, so the
+// extension is the fallback check and decides what we tell the Edge Function.
+const CAREERS_RESUME_EXTENSIONS = {
+  pdf: "application/pdf",
+  doc: "application/msword",
+  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  rtf: "application/rtf",
+  txt: "text/plain",
+};
+
+// Work rights statuses that need a visa subclass and expiry from the applicant.
+const CAREERS_TEMPORARY_VISA_STATUSES = new Set([
+  "student_500",
+  "working_holiday_417_462",
+  "graduate_485",
+  "skills_in_demand_482",
+  "partner_visa",
+  "bridging_visa",
+  "other_visa",
+]);
+
+const CAREERS_STORE_SLUGS = new Set([
+  "park-ridge",
+  "fairfield",
+  "toowong",
+  "north-lakes",
+  "brassall",
+  "any",
+]);
+
+function formatCareersFileSize(bytes) {
+  const size = Number(bytes) || 0;
+  if (size < 1024) return `${size} B`;
+  if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`;
+  return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function getCareersResumeMimeType(file) {
+  const reported = String(file?.type || "").toLowerCase();
+  if (CAREERS_RESUME_MIME_TYPES.has(reported)) return reported;
+
+  const extension = String(file?.name || "").split(".").pop()?.toLowerCase() || "";
+  return CAREERS_RESUME_EXTENSIONS[extension] || "";
+}
+
+function readCareersFileAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      const result = String(reader.result || "");
+      resolve(result.replace(/^data:[^;]*;base64,/, ""));
+    });
+    reader.addEventListener("error", () => {
+      reject(new Error("Your resume could not be read. Please try attaching it again."));
+    });
+    reader.readAsDataURL(file);
+  });
+}
+
+function initCareersForm() {
+  const form = document.querySelector("[data-careers-form]");
+  if (!(form instanceof HTMLFormElement)) return;
+
+  const supabaseAnonKey = window.TECHM8_CONFIG?.supabaseAnonKey || "";
+  const careersEndpoint = window.TECHM8_CONFIG?.careersEndpoint || "";
+
+  const submitButton = form.querySelector("[data-careers-submit]");
+  const messageBox = form.querySelector("[data-careers-message]");
+  const sourceField = form.querySelector("[data-careers-source]");
+  const workRightsField = form.querySelector("[data-careers-work-rights]");
+  const visaPanel = form.querySelector("[data-careers-visa-panel]");
+  const visaSubclassField = form.querySelector("[data-careers-visa-subclass]");
+  const sponsorshipNote = form.querySelector("[data-careers-sponsorship-note]");
+  const consentLabel = form.querySelector(".careers-consent");
+
+  const uploadRoot = form.querySelector("[data-careers-upload]");
+  const fileInput = form.querySelector("[data-careers-file]");
+  const filePreview = form.querySelector("[data-careers-file-preview]");
+  const fileNameTarget = form.querySelector("[data-careers-file-name]");
+  const fileSizeTarget = form.querySelector("[data-careers-file-size]");
+  const fileRemoveButton = form.querySelector("[data-careers-file-remove]");
+  const dropzone = form.querySelector("[data-careers-dropzone]");
+
+  const modal = document.querySelector("[data-careers-modal]");
+  const modalType = modal?.querySelector("[data-careers-modal-type]");
+  const modalTitle = modal?.querySelector("[data-careers-modal-title]");
+  const modalText = modal?.querySelector("[data-careers-modal-text]");
+  const modalCloseButtons = modal?.querySelectorAll("[data-careers-modal-close]");
+
+  let attachedResume = null;
+
+  const setMessage = (type, text) => {
+    if (!(messageBox instanceof HTMLElement)) return;
+
+    if (!text) {
+      messageBox.hidden = true;
+      messageBox.textContent = "";
+      return;
+    }
+
+    messageBox.hidden = false;
+    messageBox.className = "careers-message";
+    if (type) messageBox.classList.add(`is-${type}`);
+    messageBox.textContent = text;
+  };
+
+  const openModal = (type, title, text) => {
+    if (!(modal instanceof HTMLElement)) {
+      window.alert(text);
+      return;
+    }
+
+    modal.hidden = false;
+    modal.className = "booking-modal";
+    modal.classList.add(`is-${type}`);
+
+    if (modalType instanceof HTMLElement) {
+      modalType.textContent =
+        type === "success" ? "Application submitted" : "Submission failed";
+    }
+    if (modalTitle instanceof HTMLElement) modalTitle.textContent = title;
+    if (modalText instanceof HTMLElement) modalText.textContent = text;
+
+    document.body.classList.add("has-booking-modal");
+  };
+
+  const closeModal = () => {
+    if (!(modal instanceof HTMLElement)) return;
+    modal.hidden = true;
+    modal.className = "booking-modal";
+    document.body.classList.remove("has-booking-modal");
+  };
+
+  modalCloseButtons?.forEach((button) => {
+    button.addEventListener("click", closeModal);
+  });
+
+  // Poster QR codes link to /careers.html?store=<slug>&src=<label>, so the store
+  // arrives preselected and the internal email records which poster was scanned.
+  const params = new URLSearchParams(window.location.search);
+  const storeParam = String(params.get("store") || "").trim().toLowerCase();
+  const sourceParam = String(params.get("src") || params.get("utm_source") || "").trim();
+
+  if (CAREERS_STORE_SLUGS.has(storeParam)) {
+    const storeOption = form.querySelector(
+      `input[name="store_slug"][value="${storeParam}"]`,
+    );
+    if (storeOption instanceof HTMLInputElement) storeOption.checked = true;
+  }
+
+  if (sourceField instanceof HTMLInputElement) {
+    sourceField.value = sourceParam ? sourceParam.slice(0, 120) : "Website";
+  }
+
+  const clearFieldError = (field) => {
+    if (!(field instanceof HTMLElement)) return;
+    field.classList.remove("is-invalid");
+    const wrapper = field.closest(".careers-field");
+    wrapper?.querySelector(".careers-field__error")?.remove();
+  };
+
+  const setFieldError = (field, text) => {
+    if (!(field instanceof HTMLElement)) return;
+    clearFieldError(field);
+    field.classList.add("is-invalid");
+
+    const wrapper = field.closest(".careers-field");
+    if (!wrapper) return;
+
+    const error = document.createElement("small");
+    error.className = "careers-field__error";
+    error.textContent = text;
+    wrapper.append(error);
+  };
+
+  form.addEventListener("input", (event) => {
+    if (event.target instanceof HTMLElement) clearFieldError(event.target);
+  });
+
+  form.addEventListener("change", (event) => {
+    if (event.target instanceof HTMLElement) clearFieldError(event.target);
+  });
+
+  // Visa detail fields only apply to temporary visa holders.
+  const syncVisaPanel = () => {
+    const value = workRightsField instanceof HTMLSelectElement ? workRightsField.value : "";
+    const needsVisaDetails = CAREERS_TEMPORARY_VISA_STATUSES.has(value);
+
+    if (visaPanel instanceof HTMLElement) {
+      visaPanel.hidden = !needsVisaDetails;
+
+      if (!needsVisaDetails) {
+        visaPanel.querySelectorAll("input").forEach((input) => {
+          if (input instanceof HTMLInputElement) {
+            input.value = "";
+            clearFieldError(input);
+          }
+        });
+      }
+    }
+
+    if (sponsorshipNote instanceof HTMLElement) {
+      sponsorshipNote.hidden = value !== "needs_sponsorship";
+    }
+  };
+
+  workRightsField?.addEventListener("change", syncVisaPanel);
+  syncVisaPanel();
+
+  const clearAttachedResume = () => {
+    attachedResume = null;
+    if (fileInput instanceof HTMLInputElement) fileInput.value = "";
+    if (filePreview instanceof HTMLElement) filePreview.hidden = true;
+    if (dropzone instanceof HTMLElement) dropzone.hidden = false;
+  };
+
+  const applyResumeFile = (file) => {
+    if (!file) return;
+
+    const mimeType = getCareersResumeMimeType(file);
+    if (!mimeType) {
+      clearAttachedResume();
+      setMessage("error", "Your resume must be a PDF, Word, RTF or plain text document.");
+      return;
+    }
+
+    if (file.size > CAREERS_MAX_RESUME_BYTES) {
+      clearAttachedResume();
+      setMessage("error", "Your resume must be 5 MB or smaller.");
+      return;
+    }
+
+    attachedResume = { file, mimeType };
+    setMessage("", "");
+
+    if (fileNameTarget instanceof HTMLElement) fileNameTarget.textContent = file.name;
+    if (fileSizeTarget instanceof HTMLElement) {
+      fileSizeTarget.textContent = formatCareersFileSize(file.size);
+    }
+    if (filePreview instanceof HTMLElement) filePreview.hidden = false;
+    if (dropzone instanceof HTMLElement) dropzone.hidden = true;
+  };
+
+  fileInput?.addEventListener("change", () => {
+    if (!(fileInput instanceof HTMLInputElement)) return;
+    applyResumeFile(fileInput.files?.[0] ?? null);
+  });
+
+  fileRemoveButton?.addEventListener("click", () => {
+    clearAttachedResume();
+    setMessage("", "");
+  });
+
+  if (uploadRoot instanceof HTMLElement) {
+    ["dragenter", "dragover"].forEach((eventName) => {
+      uploadRoot.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        uploadRoot.classList.add("is-dragover");
+      });
+    });
+
+    ["dragleave", "dragend"].forEach((eventName) => {
+      uploadRoot.addEventListener(eventName, () => {
+        uploadRoot.classList.remove("is-dragover");
+      });
+    });
+
+    uploadRoot.addEventListener("drop", (event) => {
+      event.preventDefault();
+      uploadRoot.classList.remove("is-dragover");
+
+      const file = event.dataTransfer?.files?.[0];
+      if (!file) return;
+
+      // Keep the native input in sync so the file survives a form reset.
+      if (fileInput instanceof HTMLInputElement && event.dataTransfer?.files) {
+        fileInput.files = event.dataTransfer.files;
+      }
+      applyResumeFile(file);
+    });
+  }
+
+  const getField = (name) => {
+    const field = form.elements.namedItem(name);
+    return field instanceof HTMLInputElement ||
+      field instanceof HTMLSelectElement ||
+      field instanceof HTMLTextAreaElement
+      ? field
+      : null;
+  };
+
+  const validate = () => {
+    const errors = [];
+    const focusTargets = [];
+
+    // Reset any error state from a previous attempt so fields the applicant has
+    // since corrected do not stay flagged.
+    form.querySelectorAll(".is-invalid").forEach((field) => {
+      field.classList.remove("is-invalid");
+    });
+    form.querySelectorAll(".careers-field__error").forEach((error) => {
+      error.remove();
+    });
+
+    const requireText = (name, message) => {
+      const field = getField(name);
+      if (!field || !String(field.value || "").trim()) {
+        errors.push(message);
+        if (field) {
+          setFieldError(field, message);
+          focusTargets.push(field);
+        }
+      }
+      return field;
+    };
+
+    if (!form.querySelector('input[name="store_slug"]:checked')) {
+      errors.push("Please choose where you would like to work.");
+    }
+
+    requireText("first_name", "Please enter your first name.");
+    requireText("last_name", "Please enter your last name.");
+
+    const emailField = getField("email");
+    const email = String(emailField?.value || "").trim();
+    if (!email || !isValidEmailAddress(email)) {
+      const message = "Please enter a valid email address.";
+      errors.push(message);
+      if (emailField) {
+        setFieldError(emailField, message);
+        focusTargets.push(emailField);
+      }
+    }
+
+    const phoneField = getField("phone");
+    const phone = String(phoneField?.value || "").trim();
+    if (!phone || !isValidAustralianPhone(phone)) {
+      const message = "Please enter a valid Australian mobile number.";
+      errors.push(message);
+      if (phoneField) {
+        setFieldError(phoneField, message);
+        focusTargets.push(phoneField);
+      }
+    }
+
+    const workRights = String(workRightsField?.value || "").trim();
+    if (!workRights) {
+      const message = "Please select your right to work in Australia.";
+      errors.push(message);
+      if (workRightsField) {
+        setFieldError(workRightsField, message);
+        focusTargets.push(workRightsField);
+      }
+    } else if (
+      CAREERS_TEMPORARY_VISA_STATUSES.has(workRights) &&
+      !String(visaSubclassField?.value || "").trim()
+    ) {
+      const message = "Please enter your visa subclass number.";
+      errors.push(message);
+      if (visaSubclassField) {
+        setFieldError(visaSubclassField, message);
+        focusTargets.push(visaSubclassField);
+      }
+    }
+
+    requireText("own_transport", "Please tell us how you will get to work.");
+    requireText("drivers_licence", "Please select your driver licence status.");
+    requireText("employment_type", "Please select the type of work you are looking for.");
+
+    if (!form.querySelectorAll('input[name="role_interest"]:checked').length) {
+      errors.push("Please choose at least one role you are interested in.");
+    }
+
+    if (!attachedResume) {
+      errors.push("Please attach your resume.");
+    }
+
+    const consentField = getField("privacy_consent");
+    if (!(consentField instanceof HTMLInputElement) || !consentField.checked) {
+      errors.push("Please confirm the consent checkbox before submitting.");
+      consentLabel?.classList.add("is-invalid");
+    } else {
+      consentLabel?.classList.remove("is-invalid");
+    }
+
+    return { errors, focusTarget: focusTargets[0] ?? null };
+  };
+
+  const renderSuccess = (referenceCode, emailSent) => {
+    const panel = document.createElement("div");
+    panel.className = "careers-success";
+
+    const tick = document.createElement("span");
+    tick.className = "careers-success__tick";
+    tick.setAttribute("aria-hidden", "true");
+    tick.textContent = "✓";
+
+    const heading = document.createElement("h3");
+    heading.textContent = "Application received";
+
+    const intro = document.createElement("p");
+    intro.textContent = emailSent
+      ? "Thanks for applying to TECHM8. A confirmation email is on its way, and your application is now with the store team."
+      : "Thanks for applying to TECHM8. Your application is now with the store team.";
+
+    const reference = document.createElement("p");
+    reference.className = "careers-success__reference";
+    reference.textContent = referenceCode;
+
+    const note = document.createElement("p");
+    note.textContent = "Keep this reference number in case you contact us about your application.";
+
+    const actions = document.createElement("div");
+    actions.className = "careers-success__actions";
+
+    const storesLink = document.createElement("a");
+    storesLink.className = "button button--primary";
+    storesLink.href = buildSiteRelativeHref("stores.html");
+    storesLink.textContent = "Find your nearest store";
+
+    const homeLink = document.createElement("a");
+    homeLink.className = "button button--secondary";
+    homeLink.href = buildSiteRelativeHref("index.html");
+    homeLink.textContent = "Back to home";
+
+    actions.append(storesLink, homeLink);
+    panel.append(tick, heading, intro, reference, note, actions);
+
+    form.replaceWith(panel);
+    panel.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!careersEndpoint) {
+      setMessage(
+        "error",
+        "Applications are temporarily unavailable online. Please drop your resume into your nearest TECHM8 store.",
+      );
+      return;
+    }
+
+    const { errors, focusTarget } = validate();
+    if (errors.length) {
+      setMessage("error", errors[0]);
+      focusTarget?.focus();
+      messageBox?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      return;
+    }
+
+    if (submitButton instanceof HTMLButtonElement) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending your application...";
+    }
+    setMessage("", "");
+
+    try {
+      const formData = new FormData(form);
+      const resumeData = await readCareersFileAsBase64(attachedResume.file);
+
+      const payload = {
+        store_slug: String(formData.get("store_slug") || ""),
+        first_name: String(formData.get("first_name") || "").trim(),
+        last_name: String(formData.get("last_name") || "").trim(),
+        email: String(formData.get("email") || "").trim().toLowerCase(),
+        phone: normalizeAustralianPhone(String(formData.get("phone") || "")),
+        suburb: String(formData.get("suburb") || "").trim(),
+        postcode: String(formData.get("postcode") || "").trim(),
+        work_rights: String(formData.get("work_rights") || ""),
+        visa_subclass: String(formData.get("visa_subclass") || "").trim(),
+        visa_expiry: String(formData.get("visa_expiry") || "").trim(),
+        work_hours_limit: String(formData.get("work_hours_limit") || "").trim(),
+        own_transport: String(formData.get("own_transport") || ""),
+        drivers_licence: String(formData.get("drivers_licence") || ""),
+        employment_type: String(formData.get("employment_type") || ""),
+        role_interest: formData.getAll("role_interest").map(String),
+        availability: formData.getAll("availability").map(String),
+        earliest_start: String(formData.get("earliest_start") || "").trim(),
+        experience_summary: String(formData.get("experience_summary") || "").trim(),
+        source: String(formData.get("source") || "Website"),
+        privacy_consent: formData.get("privacy_consent") === "yes",
+        resume: {
+          filename: attachedResume.file.name,
+          mime_type: attachedResume.mimeType,
+          data: resumeData,
+        },
+      };
+
+      const response = await fetch(careersEndpoint, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${supabaseAnonKey}`,
+          apikey: supabaseAnonKey,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const raw = await response.text();
+      let result;
+
+      try {
+        result = JSON.parse(raw);
+      } catch {
+        throw new Error("The server returned an invalid response. Please try again.");
+      }
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error || "Your application could not be submitted.");
+      }
+
+      trackGa4Event("job_application_submitted", {
+        reference_code: String(result.reference_code || ""),
+        store_slug: String(payload.store_slug || ""),
+        employment_type: String(payload.employment_type || ""),
+      });
+
+      renderSuccess(
+        String(result.reference_code || ""),
+        Boolean(result.applicant_email_sent),
+      );
+    } catch (error) {
+      const errorText =
+        error instanceof Error
+          ? error.message
+          : "Your application could not be submitted.";
+      setMessage("error", errorText);
+      openModal("error", "Application not submitted", errorText);
+      messageBox?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit application";
+      }
+    }
+  });
+}
+
 function initPage() {
   initCookieConsentBanner();
   initGa4LinkTracking();
@@ -11514,6 +12066,7 @@ function initPage() {
   initCheckoutSuccessPage();
   initBookingForm();
   initBookingStoreFinder();
+  initCareersForm();
   initAccountPage();
   initAccountDashboardPage();
   initAccountSidebarSignOut();

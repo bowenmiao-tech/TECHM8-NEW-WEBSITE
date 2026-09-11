@@ -1381,6 +1381,7 @@ async function writeLlmsTxt(indexableProducts = []) {
 - [Book a repair](${SITE_URL}/book-repair.html): Repair request form covering device, fault, store and preferred time.
 - [Store locator](${SITE_URL}/stores.html): Addresses, phone numbers and opening hours for all five stores.
 - [Store policy](${SITE_URL}/store-policy.html): Shipping, returns, warranty, payment and privacy terms.
+- [Careers](${SITE_URL}/careers.html): Job application form for retail, repair technician and support roles at all five stores.
 
 ## Stores
 

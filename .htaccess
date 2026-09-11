@@ -43,6 +43,11 @@ RewriteCond %{THE_REQUEST} \s/+school-services\.html[?\s] [NC]
 RewriteRule ^school-services\.html$ /school-services [R=301,L,NC]
 RewriteRule ^school-services/?$ /school-services.html [L,NC]
 
+# Careers page. GitHub Pages resolves /careers on its own; this keeps the
+# same clean URL working if the site is ever served from Apache.
+RewriteRule ^careers/?$ /careers.html [L,NC]
+RewriteRule ^jobs/?$ /careers.html [L,NC]
+
 # Common legacy store aliases
 RewriteRule ^park-ridge/?$ /stores/park-ridge.html [R=301,L,NC]
 RewriteRule ^fairfield/?$ /stores/fairfield.html [R=301,L,NC]

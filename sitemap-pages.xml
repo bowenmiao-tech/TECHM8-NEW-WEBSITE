@@ -156,4 +156,10 @@
     <loc>https://www.techm8australia.com/repair-services/tablets/samsung.html</loc>
     <lastmod>2026-08-01</lastmod>
   </url>
+  <url>
+    <loc>https://www.techm8australia.com/careers.html</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>

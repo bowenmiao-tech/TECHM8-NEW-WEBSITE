@@ -24,6 +24,7 @@ This README is the project memory file. It records the current architecture, bus
 - Product listing: `/products.html`
 - Product detail: `/product.html`
 - Repair booking: `/book-repair.html`
+- Careers / job application: `/careers.html` (also served at `/careers`)
 - Checkout: `/checkout.html`
 - Stores overview: `/stores.html`
 - Repairs overview: `/repairs.html`
@@ -44,6 +45,7 @@ Do not revert this project back to Hostinger MySQL logic. The current system use
 - `orders`
 - `order_items`
 - `repair_bookings`
+- `job_applications`
 - `profiles`
 - `stores`
 - `payment_fee_profiles`
@@ -51,6 +53,7 @@ Do not revert this project back to Hostinger MySQL logic. The current system use
 ### Edge Functions in active use
 
 - `book-repair`
+- `submit-job-application`
 - `submit-order`
 - `create-checkout-session`
 - `stripe-webhook`
@@ -187,6 +190,67 @@ When a customer submits a repair booking and provides email:
   - repair details
 
 Resend is used through Supabase function secrets for this workflow.
+
+## Careers / Job Application Rules
+
+The careers page at `/careers.html` is a standing application form. It is not a
+vacancy listing and must not be turned into one without a separate decision.
+
+- Applications are accepted at any time, with or without an open role
+- One application covers all five stores
+- No account or login is required to apply
+
+### Required application fields
+
+- Preferred store (five stores plus `any`)
+- First name, last name, email, Australian mobile
+- Working rights status
+- Own transport and driver licence
+- At least one role of interest
+- Employment type
+- Resume attachment
+- Privacy consent
+
+### Working rights rules
+
+Working rights follow Australian Home Affairs subclass naming. The options are
+citizen, permanent resident, New Zealand citizen (444), student (500), working
+holiday (417/462), graduate (485), skills in demand (482), partner, bridging,
+other visa with work rights, and no current work rights.
+
+- Temporary visa statuses must ask for a visa subclass number, expiry and any limit on hours
+- The visa panel is hidden and cleared when the applicant is a citizen, permanent resident or New Zealand citizen, so stale visa data is never submitted
+- `needs_sponsorship` shows a note that sponsorship is not currently available but still accepts the application
+
+The allowed values are duplicated in three places and must stay in sync:
+`careers.html`, `initCareersForm` in `script.js`, and the
+`submit-job-application` Edge Function.
+
+### Resume rules
+
+- PDF, Word, RTF and plain text only, 5 MB maximum
+- Resumes are uploaded to the private `job-applications` storage bucket before the row is written
+- If the database insert fails, the uploaded object is removed so no orphan files accumulate
+- `job_applications` has RLS enabled with no anon or authenticated policy. Applicant data is only reachable with the service role
+
+### Careers email rules
+
+When an application is submitted:
+
+- Send a confirmation to the applicant with their reference code
+- Send a notification to `techm8contact@gmail.com` plus the selected store inbox
+- The internal email carries the resume as an attachment and a 7-day signed link to the stored copy
+- `reply_to` on the internal email is the applicant, so store staff can reply directly
+
+Reference codes use the format `TM8-JOB-YYYYMMDD-XXXXXX`.
+
+### Poster / QR code rules
+
+Store posters link to `/careers?store=<slug>&src=<label>`.
+
+- `store` preselects the store card
+- `src` is recorded on the application and shown in the internal email as "Applied via", so each poster can be attributed
+- GitHub Pages resolves `/careers` to `careers.html` automatically; the `.htaccess` rule only matters if the site moves to Apache
 
 ## Auth / Account Rules
 

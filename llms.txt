@@ -20,6 +20,7 @@
 - [Book a repair](https://www.techm8australia.com/book-repair.html): Repair request form covering device, fault, store and preferred time.
 - [Store locator](https://www.techm8australia.com/stores.html): Addresses, phone numbers and opening hours for all five stores.
 - [Store policy](https://www.techm8australia.com/store-policy.html): Shipping, returns, warranty, payment and privacy terms.
+- [Careers](https://www.techm8australia.com/careers.html): Job application form for retail, repair technician and support roles at all five stores.
 
 ## Stores
 
