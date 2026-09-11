@@ -16,7 +16,6 @@ const storeLabels: Record<string, string> = {
   toowong: 'Toowong',
   'north-lakes': 'North Lakes',
   brassall: 'Brassall',
-  any: 'Any store / flexible',
 }
 
 const storeNotificationEmails: Record<string, string> = {
@@ -80,10 +79,6 @@ const employmentTypeLabels: Record<string, string> = {
 const roleLabels: Record<string, string> = {
   retail_sales: 'Retail Sales & Customer Service',
   repair_technician: 'Repair Technician',
-  computer_it: 'Computer & IT Support',
-  warehouse_logistics: 'Warehouse & Logistics',
-  store_management: 'Store Management',
-  admin_office: 'Admin & Support Office',
 }
 
 const availabilityLabels: Record<string, string> = {
@@ -111,7 +106,7 @@ type EmailAttachment = {
 
 type ApplicationPayload = {
   referenceCode: string
-  storeSlug: string
+  storeSlugs: string[]
   storeLabel: string
   firstName: string
   lastName: string
@@ -299,7 +294,10 @@ type ApplicationRow = {
 function buildApplicationRows(payload: ApplicationPayload): ApplicationRow[] {
   const rows: ApplicationRow[] = [
     { label: 'Reference', value: payload.referenceCode },
-    { label: 'Preferred store', value: payload.storeLabel },
+    {
+      label: payload.storeSlugs.length > 1 ? 'Preferred stores' : 'Preferred store',
+      value: payload.storeLabel,
+    },
     { label: 'Applicant', value: payload.fullName },
     { label: 'Email', value: payload.email },
     { label: 'Phone', value: payload.phone },
@@ -494,7 +492,9 @@ Deno.serve(async (req) => {
   try {
     const body = await req.json()
 
-    const storeSlug = String(body.store_slug ?? '').trim()
+    // Accepts the multi-select array, and a single store_slug from any older
+    // cached copy of the page.
+    const storeSlugs = toStringArray(body.store_slugs ?? body.store_slug, storeLabels)
     const firstName = String(body.first_name ?? '').trim().slice(0, 80)
     const lastName = String(body.last_name ?? '').trim().slice(0, 80)
     const email = String(body.email ?? '').trim().toLowerCase()
@@ -516,8 +516,8 @@ Deno.serve(async (req) => {
     const roleInterest = toStringArray(body.role_interest, roleLabels)
     const availability = toStringArray(body.availability, availabilityLabels)
 
-    if (!Object.hasOwn(storeLabels, storeSlug)) {
-      return Response.json({ ok: false, error: 'Please choose where you would like to work.' }, { status: 422, headers: corsHeaders })
+    if (!storeSlugs.length) {
+      return Response.json({ ok: false, error: 'Please tick at least one store you could work at.' }, { status: 422, headers: corsHeaders })
     }
 
     if (!firstName || !lastName) {
@@ -578,8 +578,10 @@ Deno.serve(async (req) => {
     )
 
     // Store the resume before the row is written so a saved application never
-    // points at a missing object.
-    const resumePath = `${storeSlug}/${referenceCode}-${slugifyForFilename(fullName)}.${resume.extension}`
+    // points at a missing object. Applications can span several stores, so the
+    // objects are foldered by month rather than by store.
+    const resumeFolder = new Date().toISOString().slice(0, 7)
+    const resumePath = `${resumeFolder}/${referenceCode}-${slugifyForFilename(fullName)}.${resume.extension}`
     const { error: uploadError } = await supabaseAdmin.storage
       .from(resumeBucket)
       .upload(resumePath, resume.bytes, {
@@ -597,7 +599,7 @@ Deno.serve(async (req) => {
 
     const { error: insertError } = await supabaseAdmin.from('job_applications').insert({
       reference_code: referenceCode,
-      store_slug: storeSlug,
+      store_slugs: storeSlugs,
       role_interest: roleInterest,
       employment_type: employmentType,
       availability,
@@ -632,8 +634,8 @@ Deno.serve(async (req) => {
 
     const emailPayload: ApplicationPayload = {
       referenceCode,
-      storeSlug,
-      storeLabel: storeLabels[storeSlug],
+      storeSlugs,
+      storeLabel: labelList(storeSlugs, storeLabels),
       firstName,
       lastName,
       fullName,
@@ -664,10 +666,11 @@ Deno.serve(async (req) => {
         .from(resumeBucket)
         .createSignedUrl(resumePath, 60 * 60 * 24 * 7)
 
+      // Every store the applicant ticked hears about it, not just one.
       const recipients = normalizeEmailRecipients([
         centralCareersNotificationEmail,
         String(Deno.env.get('CAREERS_NOTIFICATION_EMAIL') ?? ''),
-        storeSlug === 'any' ? '' : String(storeNotificationEmails[storeSlug] ?? ''),
+        ...storeSlugs.map((slug) => String(storeNotificationEmails[slug] ?? '')),
       ])
 
       const internalResult = await sendInternalApplicationEmail({

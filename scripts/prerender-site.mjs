@@ -805,13 +805,20 @@ function extractRepairPageData(html, file) {
   return { assignment: match[1], data: sandbox.window.REPAIR_PAGE_DATA };
 }
 
+function genericRepairDirectAnswer(data) {
+  return (
+    data.directAnswer ||
+    `TECHM8 assesses ${String(data.title || "device repairs").toLowerCase()} at stores in Park Ridge, Fairfield, Toowong, North Lakes and Brassall, Queensland. Repair availability, parts, turnaround time and price are confirmed after the device and fault are identified.`
+  );
+}
+
 function renderGenericRepairJsonLd(data, file) {
   const canonical = `${SITE_URL}/${file}`;
   const organizationId = `${SITE_URL}/#organization`;
-  const directAnswer = `TECHM8 assesses ${String(data.title || "device repairs").toLowerCase()} at stores in Park Ridge, Fairfield, Toowong, North Lakes and Brassall, Queensland. Repair availability, parts, turnaround time and price are confirmed after the device and fault are identified.`;
+  const directAnswer = genericRepairDirectAnswer(data);
   const faqs = [
     {
-      question: `Does TECHM8 repair ${data.title || "this type of device"}?`,
+      question: data.faqRepairQuestion || `Does TECHM8 repair ${data.title || "this type of device"}?`,
       answer: directAnswer,
     },
     {
@@ -851,7 +858,7 @@ function renderGenericRepairJsonLd(data, file) {
         name: data.title,
         description: data.intro,
         inLanguage: "en-AU",
-        dateModified: CONTENT_REVIEW_DATE,
+        dateModified: data.reviewDate || CONTENT_REVIEW_DATE,
         author: { "@id": organizationId },
         reviewedBy: { "@id": organizationId },
       },
@@ -887,12 +894,17 @@ function renderGenericRepairJsonLd(data, file) {
 
 function renderGenericRepairPage(data, file, assignment) {
   const canonical = `${SITE_URL}/${file}`;
-  const title = `${data.title} Brisbane & Queensland | TECHM8`;
+  const title = data.metaTitle || `${data.title} Brisbane & Queensland | TECHM8`;
   const description = truncate(
-    `TECHM8 provides ${String(data.title || "device repair").toLowerCase()} assessment at Park Ridge, Fairfield, Toowong, North Lakes and Brassall stores in Queensland.`,
+    data.metaDescription ||
+      `TECHM8 provides ${String(data.title || "device repair").toLowerCase()} assessment at Park Ridge, Fairfield, Toowong, North Lakes and Brassall stores in Queensland.`,
     160,
   );
-  const directAnswer = `TECHM8 assesses ${String(data.title || "device repairs").toLowerCase()} at stores in Park Ridge, Fairfield, Toowong, North Lakes and Brassall, Queensland. Repair availability, parts, turnaround time and price are confirmed after the device and fault are identified.`;
+  const directAnswer = genericRepairDirectAnswer(data);
+  const directAnswerHeading =
+    data.directAnswerHeading ||
+    `Does TECHM8 provide ${String(data.title || "device repairs").toLowerCase()}?`;
+  const reviewLabel = data.reviewLabel || "1 August 2026";
   const issues = (data.issues || [])
     .map(
       (item) =>
@@ -905,7 +917,20 @@ function renderGenericRepairPage(data, file, assignment) {
         `<article class="info-card"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></article>`,
     )
     .join("");
+  const modelGroups = (data.modelGroups?.items || [])
+    .map((item) => {
+      const models = (item.models || []).filter(Boolean).map(String).join(", ");
+      if (!models) return "";
+      return `<article class="info-card"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(models)}.</p></article>`;
+    })
+    .join("");
+  const modelGroupsSection = modelGroups
+    ? `<section class="section"><div class="container"><div class="section-heading"><p class="eyebrow">${escapeHtml(data.modelGroups?.label || "Supported models")}</p><h2>${escapeHtml(data.modelGroups?.heading || `${data.title} models we can assess`)}</h2>${data.modelGroups?.text ? `<p>${escapeHtml(data.modelGroups.text)}</p>` : ""}</div><div class="repair-content-grid">${modelGroups}</div></div></section>`
+    : "";
   const assignmentScript = assignment.replaceAll("<", "\\u003c");
+  const keywordsTag = data.metaKeywords
+    ? `\n  <meta name="keywords" content="${escapeHtml(data.metaKeywords)}">`
+    : "";
 
   return `<!doctype html>
 <html lang="en-AU">
@@ -913,7 +938,7 @@ function renderGenericRepairPage(data, file, assignment) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title)}</title>
-  <meta name="description" content="${escapeHtml(description)}">
+  <meta name="description" content="${escapeHtml(description)}">${keywordsTag}
   <meta name="author" content="TECHM8 Australia">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
   <link rel="canonical" href="${canonical}">
@@ -935,8 +960,9 @@ function renderGenericRepairPage(data, file, assignment) {
   </div></header>
   <main>
     <section class="hero hero--service"><div class="container repair-detail-hero"><div><p class="eyebrow">${escapeHtml(data.category || "Device repairs")}</p><h1>${escapeHtml(data.title)}</h1><p class="hero__lead">${escapeHtml(data.intro || description)}</p><div class="hero__actions"><a class="button button--primary" href="/book-repair.html">Book a repair</a><a class="button button--secondary" href="/stores.html">Find a Queensland store</a></div></div><div class="repair-detail-panel"><div class="repair-detail-panel__icon ${escapeHtml(data.vectorClass || "vector-phone")}" aria-hidden="true"></div></div></div></section>
-    <section class="section repair-seo-section"><div class="container repair-seo-layout"><div class="repair-seo-main"><p class="eyebrow">Direct answer</p><h2>Does TECHM8 provide ${escapeHtml(String(data.title || "device repairs").toLowerCase())}?</h2><p>${escapeHtml(directAnswer)}</p><p><strong>Content reviewed by:</strong> TECHM8 repair team &middot; <strong>Last updated:</strong> 1 August 2026</p></div><aside class="repair-seo-aside" aria-label="Provider details"><div class="repair-seo-highlight"><strong>Australian business</strong><span>YQM PTY LTD, ABN 12 645 861 463</span></div><div class="repair-seo-highlight"><strong>Currency</strong><span>Quotes and prices are in Australian dollars.</span></div></aside></div></section>
+    <section class="section repair-seo-section"><div class="container repair-seo-layout"><div class="repair-seo-main"><p class="eyebrow">Direct answer</p><h2>${escapeHtml(directAnswerHeading)}</h2><p>${escapeHtml(directAnswer)}</p><p><strong>Content reviewed by:</strong> TECHM8 repair team &middot; <strong>Last updated:</strong> ${escapeHtml(reviewLabel)}</p></div><aside class="repair-seo-aside" aria-label="Provider details"><div class="repair-seo-highlight"><strong>Australian business</strong><span>YQM PTY LTD, ABN 12 645 861 463</span></div><div class="repair-seo-highlight"><strong>Currency</strong><span>Quotes and prices are in Australian dollars.</span></div></aside></div></section>
     <section class="section"><div class="container"><div class="section-heading"><p class="eyebrow">Common faults</p><h2>${escapeHtml(data.issueHeading || `Common ${data.title} requests`)}</h2></div><div class="repair-content-grid">${issues}</div></div></section>
+    ${modelGroupsSection}
     ${extras ? `<section class="section section--muted"><div class="container"><div class="section-heading"><p class="eyebrow">What to expect</p><h2>${escapeHtml(data.extraHeading || "Repair assessment information")}</h2></div><div class="repair-content-grid">${extras}</div></div></section>` : ""}
     <section class="section"><div class="container"><div class="section-heading"><p class="eyebrow">Local service locations</p><h2>Choose a TECHM8 store in South East Queensland</h2><p>Repair capability and parts availability vary by device model. Contact or book with the nearest store before travelling.</p></div><div class="repair-content-grid"><article class="info-card"><h3>Brisbane</h3><p><a href="/stores/fairfield.html">Fairfield</a> and <a href="/stores/toowong.html">Toowong</a></p></article><article class="info-card"><h3>Logan</h3><p><a href="/stores/park-ridge.html">Park Ridge</a></p></article><article class="info-card"><h3>Moreton Bay</h3><p><a href="/stores/north-lakes.html">North Lakes</a></p></article><article class="info-card"><h3>Ipswich</h3><p><a href="/stores/brassall.html">Brassall</a></p></article></div></div></section>
     <section class="section section--muted"><div class="container"><div class="section-heading"><p class="eyebrow">Repair process</p><h2>Assessment before approved work begins</h2></div><div class="repair-content-grid"><article class="info-card"><h3>1. Identify the device</h3><p>Provide the brand, model and fault symptoms when booking.</p></article><article class="info-card"><h3>2. Confirm the repair path</h3><p>The store checks likely parts, availability, timing and price.</p></article><article class="info-card"><h3>3. Approve the work</h3><p>Repairs begin after the proposed scope and price are accepted.</p></article></div></div></section>

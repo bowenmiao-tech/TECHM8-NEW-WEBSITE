@@ -11530,7 +11530,6 @@ const CAREERS_STORE_SLUGS = new Set([
   "toowong",
   "north-lakes",
   "brassall",
-  "any",
 ]);
 
 function formatCareersFileSize(bytes) {
@@ -11646,12 +11645,16 @@ function initCareersForm() {
   const storeParam = String(params.get("store") || "").trim().toLowerCase();
   const sourceParam = String(params.get("src") || params.get("utm_source") || "").trim();
 
-  if (CAREERS_STORE_SLUGS.has(storeParam)) {
-    const storeOption = form.querySelector(
-      `input[name="store_slug"][value="${storeParam}"]`,
-    );
-    if (storeOption instanceof HTMLInputElement) storeOption.checked = true;
-  }
+  storeParam
+    .split(",")
+    .map((slug) => slug.trim())
+    .filter((slug) => CAREERS_STORE_SLUGS.has(slug))
+    .forEach((slug) => {
+      const storeOption = form.querySelector(
+        `input[name="store_slug"][value="${slug}"]`,
+      );
+      if (storeOption instanceof HTMLInputElement) storeOption.checked = true;
+    });
 
   if (sourceField instanceof HTMLInputElement) {
     sourceField.value = sourceParam ? sourceParam.slice(0, 120) : "Website";
@@ -11806,6 +11809,11 @@ function initCareersForm() {
     form.querySelectorAll(".careers-field__error").forEach((error) => {
       error.remove();
     });
+    form
+      .querySelectorAll(".careers-stores, .careers-chips, .careers-upload")
+      .forEach((group) => {
+        group.classList.remove("is-invalid");
+      });
 
     const requireText = (name, message) => {
       const field = getField(name);
@@ -11820,7 +11828,8 @@ function initCareersForm() {
     };
 
     if (!form.querySelector('input[name="store_slug"]:checked')) {
-      errors.push("Please choose where you would like to work.");
+      errors.push("Please tick at least one store you could work at.");
+      form.querySelector(".careers-stores")?.classList.add("is-invalid");
     }
 
     requireText("first_name", "Please enter your first name.");
@@ -11874,10 +11883,15 @@ function initCareersForm() {
 
     if (!form.querySelectorAll('input[name="role_interest"]:checked').length) {
       errors.push("Please choose at least one role you are interested in.");
+      form
+        .querySelector('input[name="role_interest"]')
+        ?.closest(".careers-chips")
+        ?.classList.add("is-invalid");
     }
 
     if (!attachedResume) {
       errors.push("Please attach your resume.");
+      form.querySelector(".careers-upload")?.classList.add("is-invalid");
     }
 
     const consentField = getField("privacy_consent");
@@ -11965,7 +11979,7 @@ function initCareersForm() {
       const resumeData = await readCareersFileAsBase64(attachedResume.file);
 
       const payload = {
-        store_slug: String(formData.get("store_slug") || ""),
+        store_slugs: formData.getAll("store_slug").map(String),
         first_name: String(formData.get("first_name") || "").trim(),
         last_name: String(formData.get("last_name") || "").trim(),
         email: String(formData.get("email") || "").trim().toLowerCase(),
@@ -12018,7 +12032,7 @@ function initCareersForm() {
 
       trackGa4Event("job_application_submitted", {
         reference_code: String(result.reference_code || ""),
-        store_slug: String(payload.store_slug || ""),
+        store_slugs: payload.store_slugs.join(","),
         employment_type: String(payload.employment_type || ""),
       });
 
