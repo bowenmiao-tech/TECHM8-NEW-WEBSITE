@@ -1,13 +1,181 @@
 {
-  "catalog_updated_at": "2026-09-07T06:51:05.796297+00:00",
+  "catalog_updated_at": "2026-09-11T02:25:47.450514+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
     {
-      "id": 2158,
-      "slug": "repairdesk-misc-8483-drone-map",
-      "name": "Drone Map",
+      "id": 2036,
+      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
+      "name": "USB-C WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2066,
+      "slug": "repairdesk-accessory-8867-2m-stand-8809",
+      "name": "2M Stand 8809",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2045,
+      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 21,
+      "slug": "remax-rpp-623-power-bank-20000-mah",
+      "name": "REMAX RPP-623 Power Bank 20000 mAh",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1589,
+      "slug": "tm8-car-6576",
+      "name": "Car Phone Holder 3",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2043,
+      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
+      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2042,
+      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
+      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1573,
+      "slug": "tm8-car-9977",
+      "name": "Magnetic Stick-On Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 68,
+      "slug": "wekome-wp-c54-car-charger",
+      "name": "WEKOME WP-C54 Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 23,
+      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 12,
+      "slug": "brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty",
+      "name": "85W MagSafe 1 Power Adapter for MacBook Pro",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2068,
+      "slug": "repairdesk-accessory-6181-remax-alien-series-phone-holder-green",
+      "name": "Remax Alien Series Phone Holder Green",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -19,6 +187,77 @@
       "id": 2081,
       "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
       "name": "2M Stand Selfie Live Stream Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 83,
+      "slug": "remax-g6-wireless-gamebubs",
+      "name": "Remax G6  Wireless GameBubs",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 74,
+      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
+      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 77,
+      "slug": "wekome-wp-u99-magsafe-wirless-charger",
+      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 89,
+      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
+      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2148,
+      "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
+      "name": "MagSafe Silicone Phone Grip - Sky Blue",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 90,
+      "slug": "wireless-dongle-for-carplay-or-android-auto-m29",
+      "name": "Wireless Dongle for CarPlay or Android Auto M29",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2158,
+      "slug": "repairdesk-misc-8483-drone-map",
+      "name": "Drone Map",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -71,31 +310,9 @@
       "warnings": []
     },
     {
-      "id": 1589,
-      "slug": "tm8-car-6576",
-      "name": "Car Phone Holder 3",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 1574,
       "slug": "tm8-car-9976",
       "name": "Magnetic Air Vent Hook Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 1573,
-      "slug": "tm8-car-9977",
-      "name": "Magnetic Stick-On Car Phone Holder",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -203,48 +420,6 @@
       ]
     },
     {
-      "id": 68,
-      "slug": "wekome-wp-c54-car-charger",
-      "name": "WEKOME WP-C54 Car Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 77,
-      "slug": "wekome-wp-u99-magsafe-wirless-charger",
-      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 89,
-      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
-      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 69,
       "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
       "name": "55W 4 Port Wall Charger",
@@ -307,15 +482,6 @@
       ]
     },
     {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 84,
       "slug": "remax-pd-bt230-bt260-wireless-earbuds",
       "name": "Remax PD BT230/BT260 Wireless Earbuds",
@@ -336,15 +502,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 95,
@@ -376,17 +533,6 @@
       "warnings": []
     },
     {
-      "id": 2045,
-      "slug": "repairdesk-accessory-10382-wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 91,
       "slug": "c34-fm-transmitter",
       "name": "C34 FM Transmitter",
@@ -407,15 +553,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 90,
-      "slug": "wireless-dongle-for-carplay-or-android-auto-m29",
-      "name": "Wireless Dongle for CarPlay or Android Auto M29",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 64,
@@ -502,29 +639,9 @@
       "warnings": []
     },
     {
-      "id": 2068,
-      "slug": "repairdesk-accessory-6181-remax-alien-series-phone-holder-green",
-      "name": "Remax Alien Series Phone Holder Green",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 18,
       "slug": "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
       "name": "85W MagSafe 2 Power Adapter for MacBook Pro with Retina Display",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 12,
-      "slug": "brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty",
-      "name": "85W MagSafe 1 Power Adapter for MacBook Pro",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -547,17 +664,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 32,
@@ -596,17 +702,6 @@
       "warnings": []
     },
     {
-      "id": 21,
-      "slug": "remax-rpp-623-power-bank-20000-mah",
-      "name": "REMAX RPP-623 Power Bank 20000 mAh",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 22,
       "slug": "remax-rpp-622-10000mah-power-bank",
       "name": "Remax RPP-622 10000MAH power bank",
@@ -616,15 +711,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 23,
-      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 24,
@@ -733,17 +819,6 @@
       ]
     },
     {
-      "id": 83,
-      "slug": "remax-g6-wireless-gamebubs",
-      "name": "Remax G6  Wireless GameBubs",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 81,
       "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
       "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
@@ -806,15 +881,6 @@
       "warnings": []
     },
     {
-      "id": 74,
-      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
-      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 87,
       "slug": "remax-rp-w87-22-5w-4-in-1-multifunctional-night-lamp-and-folding-holder-wireless-charger",
       "name": "Remax RP-W87 22.5w 4 in 1 multifunctional night lamp & folding holder wireless charger",
@@ -848,17 +914,6 @@
       "id": 2035,
       "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
       "name": "AUX WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2066,
-      "slug": "repairdesk-accessory-8867-2m-stand-8809",
-      "name": "2M Stand 8809",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -933,39 +988,6 @@
       "warnings": []
     },
     {
-      "id": 2042,
-      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
-      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2043,
-      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
-      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2036,
-      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
-      "name": "USB-C WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2069,
       "slug": "repairdesk-accessory-6031-stander",
       "name": "Stander",
@@ -975,17 +997,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 110,
@@ -1108,17 +1119,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2148,
-      "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
-      "name": "MagSafe Silicone Phone Grip - Sky Blue",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 2146,

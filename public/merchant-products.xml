@@ -5,6 +5,33 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>8822381</g:id>
+      <title>1M Ultra Tough USB-C to Lightning Cable</title>
+      <description>1M Ultra Tough Type c to Lightning Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-lightning-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-lightning-cable/1784437643393-879d59ec.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>110631633</g:id>
+      <title>REMAX RPP-623 Power Bank 20000 mAh</title>
+      <description>REMAX RPP-623 Power Bank 20000 mAh available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-rpp-623-power-bank-20000-mah/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/01-image-1.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/02-image-2.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/03-image-3.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/04-image-4.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>79.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+      <g:gtin>695485122607</g:gtin>
+    </item>
+    <item>
       <g:id>TM8-CAR-6576</g:id>
       <title>Car Phone Holder 3</title>
       <description>Car Phone Holder. Universal smartphones.</description>
@@ -15,6 +42,170 @@
       <g:condition>new</g:condition>
       <g:brand>Generic</g:brand>
       <g:gtin>2988000065763</g:gtin>
+    </item>
+    <item>
+      <g:id>8830389</g:id>
+      <title>1M Ultra Tough USB-C to USB-C Cable</title>
+      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>492967793802</g:id>
+      <title>3 USB WALL CHARGER</title>
+      <description>3 USB WALL CHARGER available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/3-usb-wall-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/3-usb-wall-charger/1778596612524-7af58249.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>29.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>6941027660096</g:id>
+      <title>WEKOME WDC-C33 1.2m USB-C to Lightning Cable</title>
+      <description>WEKOME WDC-C33 1.2m USB-C to Lightning Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437020130-8003f0a6.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437023910-a4f3b8d1.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437048549-9db56012.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.99 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+
+    </item>
+    <item>
+      <g:id>59065</g:id>
+      <title>1M Ultra Tough Lightning Cable</title>
+      <description>1M ULTRA TOUGH MICRO-USB CABLE available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-micro-usb-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-micro-usb-cable/1784437577400-dbfd3a8d.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>29.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>110531618</g:id>
+      <title>WEKOME WP-C54 Car Charger</title>
+      <description>WEKOME WP-C54 Car Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wp-c54-car-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-c54-car-charger/1778507927402-067e27f5.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-c54-car-charger/1778507975225-663e877c.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-c54-car-charger/1778507978057-1a6b63e4.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>39.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027651735</g:gtin>
+    </item>
+    <item>
+      <g:id>110521611</g:id>
+      <title>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank</title>
+      <description>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04-wp-70-3.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01-wp-70-112.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02-1.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05-wp-70-01.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/06-wp-70-02.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/07-wp-70-03.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/08-wp-70-04.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/09-wp-70-05.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/10-wp-70-06.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/11-wp-70-07.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/12-wp-70-08.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>79.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027655016</g:gtin>
+    </item>
+    <item>
+      <g:id>TM8-MAC-M1-85W</g:id>
+      <title>85W MagSafe 1 Power Adapter for MacBook Pro</title>
+      <description>Buy a replacement 85W MagSafe 1 power adapter for compatible MacBook Pro models from TECHM8.</description>
+      <link>https://www.techm8australia.com/products/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty-00.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty-01.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>45.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Apple Compatible</g:brand>
+
+    </item>
+    <item>
+      <g:id>6972174155067</g:id>
+      <title>Remax G6  Wireless GameBubs</title>
+      <description>Remax G6 Wireless GameBubs available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-g6-wireless-gamebubs/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-g6-wireless-gamebubs/1779116676372-2f97f69d.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-g6-wireless-gamebubs/1779116677900-7b59e535.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>129.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+
+    </item>
+    <item>
+      <g:id>110711642</g:id>
+      <title>CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger</title>
+      <description>CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger/1778597085669-87d99504.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger/1778942017591-2adfa4c2.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>119.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+      <g:gtin>6954851256243</g:gtin>
+    </item>
+    <item>
+      <g:id>10276711</g:id>
+      <title>WEKOME WP-U99 Magsafe Wirless Charger</title>
+      <description>WEKOME WP-U99 Magsafe Wirless Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wp-u99-magsafe-wirless-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939501474-605c1d8d.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939514097-2581510f.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>69.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027640081</g:gtin>
+    </item>
+    <item>
+      <g:id>7732445-2</g:id>
+      <title>Remax 2.4A Universal Travel Adaptor RP-U23</title>
+      <description>Remax 2.4A Universal Travel Adaptor RP-U23 available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-2-4a-universal-travel-adaptor-rp-u23/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-2-4a-universal-travel-adaptor-rp-u23/1778942280621-3d099262.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-2-4a-universal-travel-adaptor-rp-u23/1778942281982-c580ea58.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>59.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+
+    </item>
+    <item>
+      <g:id>105671116</g:id>
+      <title>Wireless Dongle for CarPlay or Android Auto M29</title>
+      <description>Wireless Dongle for CarPlay or Android Auto M29 available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wireless-dongle-for-carplay-or-android-auto-m29/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wireless-dongle-for-carplay-or-android-auto-m29/1779116457944-8c9f3218.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wireless-dongle-for-carplay-or-android-auto-m29/1779116461714-e3174ede.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>59.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>KWD</g:brand>
+
     </item>
     <item>
       <g:id>TM8-CAR-6659</g:id>
@@ -104,58 +295,6 @@
       <g:gtin>6941027655641</g:gtin>
     </item>
     <item>
-      <g:id>110531618</g:id>
-      <title>WEKOME WP-C54 Car Charger</title>
-      <description>WEKOME WP-C54 Car Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wp-c54-car-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-c54-car-charger/1778507927402-067e27f5.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-c54-car-charger/1778507975225-663e877c.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-c54-car-charger/1778507978057-1a6b63e4.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>39.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027651735</g:gtin>
-    </item>
-    <item>
-      <g:id>10276711</g:id>
-      <title>WEKOME WP-U99 Magsafe Wirless Charger</title>
-      <description>WEKOME WP-U99 Magsafe Wirless Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wp-u99-magsafe-wirless-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939501474-605c1d8d.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939514097-2581510f.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>69.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027640081</g:gtin>
-    </item>
-    <item>
-      <g:id>7732445-2</g:id>
-      <title>Remax 2.4A Universal Travel Adaptor RP-U23</title>
-      <description>Remax 2.4A Universal Travel Adaptor RP-U23 available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-2-4a-universal-travel-adaptor-rp-u23/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-2-4a-universal-travel-adaptor-rp-u23/1778942280621-3d099262.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-2-4a-universal-travel-adaptor-rp-u23/1778942281982-c580ea58.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>59.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-
-    </item>
-    <item>
-      <g:id>492967793802</g:id>
-      <title>3 USB WALL CHARGER</title>
-      <description>3 USB WALL CHARGER available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/3-usb-wall-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/3-usb-wall-charger/1778596612524-7af58249.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>29.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
-    </item>
-    <item>
       <g:id>7732445</g:id>
       <title>100W Wall Charger</title>
       <description>100W Wall Charger available for online order and warehouse dispatch.</description>
@@ -222,18 +361,6 @@
 
     </item>
     <item>
-      <g:id>8822381</g:id>
-      <title>1M Ultra Tough USB-C to Lightning Cable</title>
-      <description>1M Ultra Tough Type c to Lightning Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-lightning-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-lightning-cable/1784437643393-879d59ec.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
-    </item>
-    <item>
       <g:id>6971278727808</g:id>
       <title>Remax PD BT230/BT260 Wireless Earbuds</title>
       <description>Remax PD BT230/BT260 Wireless Earbuds available for online order and warehouse dispatch.</description>
@@ -259,20 +386,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027648049</g:gtin>
-    </item>
-    <item>
-      <g:id>6941027660096</g:id>
-      <title>WEKOME WDC-C33 1.2m USB-C to Lightning Cable</title>
-      <description>WEKOME WDC-C33 1.2m USB-C to Lightning Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437020130-8003f0a6.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437023910-a4f3b8d1.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-c33-1-2m-usb-c-to-lightning-cable/1784437048549-9db56012.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.99 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-
     </item>
     <item>
       <g:id>103841038</g:id>
@@ -329,19 +442,6 @@
 
     </item>
     <item>
-      <g:id>105671116</g:id>
-      <title>Wireless Dongle for CarPlay or Android Auto M29</title>
-      <description>Wireless Dongle for CarPlay or Android Auto M29 available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wireless-dongle-for-carplay-or-android-auto-m29/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wireless-dongle-for-carplay-or-android-auto-m29/1779116457944-8c9f3218.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wireless-dongle-for-carplay-or-android-auto-m29/1779116461714-e3174ede.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>59.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>KWD</g:brand>
-
-    </item>
-    <item>
       <g:id>TM8-remax-rb-m62-speaker</g:id>
       <title>Remax RB-M62 Speaker Blue</title>
       <description>Remax RB-M62 Speaker available for online and warehouse dispatch.</description>
@@ -393,19 +493,6 @@
 
     </item>
     <item>
-      <g:id>TM8-MAC-M1-85W</g:id>
-      <title>85W MagSafe 1 Power Adapter for MacBook Pro</title>
-      <description>Buy a replacement 85W MagSafe 1 power adapter for compatible MacBook Pro models from TECHM8.</description>
-      <link>https://www.techm8australia.com/products/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty-00.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty/brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty-01.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>45.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Apple Compatible</g:brand>
-
-    </item>
-    <item>
       <g:id>TM8-MAC-M2-60W</g:id>
       <title>60W MagSafe 2 Power Adapter for MacBook Air and MacBook Pro</title>
       <description>Buy a replacement 60W MagSafe 2 power adapter for MacBook Air and MacBook Pro from TECHM8.</description>
@@ -429,18 +516,6 @@
       <g:price>45.00 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>Apple Compatible</g:brand>
-
-    </item>
-    <item>
-      <g:id>59065</g:id>
-      <title>1M Ultra Tough Lightning Cable</title>
-      <description>1M ULTRA TOUGH MICRO-USB CABLE available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-micro-usb-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-micro-usb-cable/1784437577400-dbfd3a8d.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>29.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
 
     </item>
     <item>
@@ -510,21 +585,6 @@
       <g:gtin>69548512215677</g:gtin>
     </item>
     <item>
-      <g:id>110631633</g:id>
-      <title>REMAX RPP-623 Power Bank 20000 mAh</title>
-      <description>REMAX RPP-623 Power Bank 20000 mAh available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-rpp-623-power-bank-20000-mah/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/01-image-1.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/02-image-2.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/03-image-3.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/04-image-4.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>79.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-      <g:gtin>695485122607</g:gtin>
-    </item>
-    <item>
       <g:id>110621632</g:id>
       <title>Remax RPP-622 10000MAH power bank</title>
       <description>Remax RPP-622 10000MAH power bank available for online and warehouse dispatch.</description>
@@ -538,28 +598,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>6954851212553</g:gtin>
-    </item>
-    <item>
-      <g:id>110521611</g:id>
-      <title>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank</title>
-      <description>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04-wp-70-3.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01-wp-70-112.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02-1.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05-wp-70-01.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/06-wp-70-02.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/07-wp-70-03.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/08-wp-70-04.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/09-wp-70-05.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/10-wp-70-06.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/11-wp-70-07.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/12-wp-70-08.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>79.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027655016</g:gtin>
     </item>
     <item>
       <g:id>110511610</g:id>
@@ -694,19 +732,6 @@
 
     </item>
     <item>
-      <g:id>6972174155067</g:id>
-      <title>Remax G6  Wireless GameBubs</title>
-      <description>Remax G6 Wireless GameBubs available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-g6-wireless-gamebubs/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-g6-wireless-gamebubs/1779116676372-2f97f69d.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-g6-wireless-gamebubs/1779116677900-7b59e535.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>129.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-
-    </item>
-    <item>
       <g:id>110721643</g:id>
       <title>REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black</title>
       <description>REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black available for online order and warehouse dispatch.</description>
@@ -769,19 +794,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>6954851211730</g:gtin>
-    </item>
-    <item>
-      <g:id>110711642</g:id>
-      <title>CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger</title>
-      <description>CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger/1778597085669-87d99504.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger/1778942017591-2adfa4c2.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>119.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-      <g:gtin>6954851256243</g:gtin>
     </item>
     <item>
       <g:id>TM8-REMAX-RP-W87-22-5W-4-IN-1-MULTIFUNCTIONAL-NIGHT-LAMP-AND-FOLDING-HOLDER-WIRELESS-CHARGER</g:id>
@@ -881,18 +893,6 @@
       <g:condition>new</g:condition>
       <g:brand>Generic</g:brand>
       <g:gtin>2986000065752</g:gtin>
-    </item>
-    <item>
-      <g:id>8830389</g:id>
-      <title>1M Ultra Tough USB-C to USB-C Cable</title>
-      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
     </item>
     <item>
       <g:id>6941027651469</g:id>
