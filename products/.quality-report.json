@@ -1,9 +1,64 @@
 {
-  "catalog_updated_at": "2026-09-11T02:25:47.450514+00:00",
+  "catalog_updated_at": "2026-09-12T04:13:19.739078+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2045,
+      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 98,
+      "slug": "wekome-wdc-50-240w-charging-cable",
+      "name": "WEKOME WDC-50 240W Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2058,
+      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
+      "name": "WEKOME Desktop Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2060,
+      "slug": "repairdesk-accessory-10989-c141-desktop-mobile-phone-holder",
+      "name": "C141 Desktop Mobile Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 2036,
       "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
@@ -19,17 +74,6 @@
       "id": 2066,
       "slug": "repairdesk-accessory-8867-2m-stand-8809",
       "name": "2M Stand 8809",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2045,
-      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -131,17 +175,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 68,
@@ -280,17 +313,6 @@
       "id": 2059,
       "slug": "repairdesk-accessory-11139-remax-selfie-stick-holder-with-lights-p60",
       "name": "Remax Selfie Stick Holder with Lights P60",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2058,
-      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
-      "name": "WEKOME Desktop Phone Holder",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -564,17 +586,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2060,
-      "slug": "repairdesk-accessory-10989-c141-desktop-mobile-phone-holder",
-      "name": "C141 Desktop Mobile Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 2065,
@@ -1006,17 +1017,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 98,
-      "slug": "wekome-wdc-50-240w-charging-cable",
-      "name": "WEKOME WDC-50 240W Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 97,
