@@ -1,13 +1,35 @@
 {
-  "catalog_updated_at": "2026-09-12T04:13:19.739078+00:00",
+  "catalog_updated_at": "2026-09-12T07:09:26.525758+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
     {
+      "id": 77,
+      "slug": "wekome-wp-u99-magsafe-wirless-charger",
+      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
       "id": 102,
       "slug": "1m-ultra-tough-micro-usb-cable",
       "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 98,
+      "slug": "wekome-wdc-50-240w-charging-cable",
+      "name": "WEKOME WDC-50 240W Charging Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -25,17 +47,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 98,
-      "slug": "wekome-wdc-50-240w-charging-cable",
-      "name": "WEKOME WDC-50 240W Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 2058,
@@ -246,17 +257,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 77,
-      "slug": "wekome-wp-u99-magsafe-wirless-charger",
-      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 89,
