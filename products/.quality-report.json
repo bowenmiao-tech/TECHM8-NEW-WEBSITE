@@ -1,18 +1,9 @@
 {
-  "catalog_updated_at": "2026-09-13T02:20:12.302938+00:00",
+  "catalog_updated_at": "2026-09-13T05:15:08.765482+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
-    {
-      "id": 81,
-      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
-      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
     {
       "id": 77,
       "slug": "wekome-wp-u99-magsafe-wirless-charger",
@@ -23,6 +14,15 @@
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 81,
+      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
+      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
     },
     {
       "id": 102,

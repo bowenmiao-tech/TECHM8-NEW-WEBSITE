@@ -5,19 +5,6 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
-      <g:id>110721643</g:id>
-      <title>REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black</title>
-      <description>REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black/1779116625647-b41e67db.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black/1779116634227-e7d59afe.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>99.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-      <g:gtin>6954851235415</g:gtin>
-    </item>
-    <item>
       <g:id>10276711</g:id>
       <title>WEKOME WP-U99 Magsafe Wirless Charger</title>
       <description>WEKOME WP-U99 Magsafe Wirless Charger available for online order and warehouse dispatch.</description>
@@ -29,6 +16,19 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027640081</g:gtin>
+    </item>
+    <item>
+      <g:id>110721643</g:id>
+      <title>REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black</title>
+      <description>REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black/1779116625647-b41e67db.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black/1779116634227-e7d59afe.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>99.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+      <g:gtin>6954851235415</g:gtin>
     </item>
     <item>
       <g:id>59065</g:id>
