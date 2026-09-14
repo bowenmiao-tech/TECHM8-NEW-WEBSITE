@@ -1,5 +1,6 @@
 import { readFile, writeFile, mkdir, readdir, rm } from "node:fs/promises";
 import { formatCom1Details } from './com1-product-content.mjs';
+import { com1ProductSeo } from './com1-product-seo.mjs';
 import { buildAssets } from "./build-assets.mjs";
 import { buildCriticalCss } from "./build-critical-css.mjs";
 import { existsSync } from "node:fs";
@@ -414,10 +415,11 @@ function priceValidUntil() {
   return validUntil.toISOString().slice(0, 10);
 }
 
-function productJsonLd(product) {
+function productJsonLd(product, seo = null) {
   const canonical = `${SITE_URL}/products/${product.slug}/`;
   const description = truncate(
     product.seo_description ||
+      seo?.summary ||
       product.short_description ||
       product.description ||
       `${product.name} available from the TECHM8 online store.`,
@@ -425,6 +427,7 @@ function productJsonLd(product) {
   );
   const organizationId = `${SITE_URL}/#organization`;
   const validGtin = getValidGtin(product.upc);
+  const isPickupOnly = String(product.sku || "").startsWith("COM1-MON-");
   const productData = {
     "@type": "Product",
     "@id": `${canonical}#product`,
@@ -439,6 +442,7 @@ function productJsonLd(product) {
       ? { "@type": "Brand", name: product.brand }
       : undefined,
     model: product.model || undefined,
+    additionalProperty: seo?.additionalProperty,
   };
 
   if (product.retail_price > 0) {
@@ -452,7 +456,8 @@ function productJsonLd(product) {
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       priceValidUntil: priceValidUntil(),
-      shippingDetails: String(product.sku || '').startsWith('COM1-MON-') ? undefined : offerShippingDetails(),
+      shippingDetails: isPickupOnly ? undefined : offerShippingDetails(),
+      availableDeliveryMethod: isPickupOnly ? "https://schema.org/OnSitePickup" : undefined,
       seller: { "@id": organizationId },
       hasMerchantReturnPolicy: {
         "@type": "MerchantReturnPolicy",
@@ -515,7 +520,7 @@ function productJsonLd(product) {
             "@type": "ListItem",
             position: 3,
             name: product.category_name,
-            item: `${SITE_URL}/category/${encodeURIComponent(product.category_slug)}`,
+            item: `${SITE_URL}/category/${encodeURIComponent(product.category_slug)}/`,
           },
           {
             "@type": "ListItem",
@@ -526,6 +531,19 @@ function productJsonLd(product) {
         ],
       },
       productData,
+      ...(seo?.faq.length
+        ? [
+            {
+              "@type": "FAQPage",
+              "@id": `${canonical}#faq`,
+              mainEntity: seo.faq.map(({ question, answer }) => ({
+                "@type": "Question",
+                name: question,
+                acceptedAnswer: { "@type": "Answer", text: answer },
+              })),
+            },
+          ]
+        : []),
     ],
   };
 
@@ -556,6 +574,13 @@ function renderProductPage(product) {
       ? `<span class="storefront-pdp__compare">${escapeHtml(money(product.compare_at_price))}</span>`
       : "";
   const isCom1Monitor = String(product.sku || "").startsWith("COM1-MON-");
+  const seo = isCom1Monitor
+    ? com1ProductSeo(product, {
+        priceText: money(product.retail_price),
+        pickupStores: LLMS_STORES.map((store) => store.name),
+      })
+    : null;
+  const metaDescription = truncate(product.seo_description || seo?.metaDescription || description, 160);
   const productFacts = [
     ["Model", product.model],
     ["SKU", product.sku],
@@ -572,18 +597,18 @@ function renderProductPage(product) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(product.name)} | TECHM8 Online Store</title>
-  <meta name="description" content="${escapeHtml(description)}">
+  <title${seo ? ` data-product-seo-title="${escapeHtml(product.slug)}"` : ""}>${escapeHtml(seo ? seo.title : `${product.name} | TECHM8 Online Store`)}</title>
+  <meta name="description" content="${escapeHtml(metaDescription)}">
   <meta name="robots" content="${quality.indexable ? "index, follow, max-snippet:-1, max-image-preview:large" : "noindex, follow"}">
   <link rel="canonical" href="${canonical}">
   <meta property="og:type" content="product">
-  <meta property="og:title" content="${escapeHtml(product.name)} | TECHM8">
-  <meta property="og:description" content="${escapeHtml(description)}">
+  <meta property="og:title" content="${escapeHtml(seo ? seo.title : `${product.name} | TECHM8`)}">
+  <meta property="og:description" content="${escapeHtml(metaDescription)}">
   <meta property="og:url" content="${canonical}">
   ${image ? `<meta property="og:image" content="${escapeHtml(image.image_url)}">` : ""}
   <meta property="product:price:amount" content="${product.retail_price.toFixed(2)}">
   <meta property="product:price:currency" content="${CATALOG_CURRENCY}">
-${quality.indexable ? `  <script type="application/ld+json">${productJsonLd(product).replaceAll("<", "\\u003c")}</script>` : ""}
+${quality.indexable ? `  <script type="application/ld+json">${productJsonLd(product, seo).replaceAll("<", "\\u003c")}</script>` : ""}
   <script type="application/json" data-prerendered-product>${embeddedProduct}</script>
   <link rel="stylesheet" href="/styles.min.css">
   <script defer src="/ga4.js"></script>
@@ -611,7 +636,8 @@ ${quality.indexable ? `  <script type="application/ld+json">${productJsonLd(prod
         </div>
       </section>
       <section class="storefront-pdp__detail-stack">
-        <article class="storefront-pdp__panel"><div class="section-heading"><div><p class="eyebrow">Product details</p><h2>Description</h2></div></div><div class="storefront-rich-content">${isCom1Monitor ? formatCom1Details(product.detail_html, visibleDescription, productFacts) : `<p>${escapeHtml(visibleDescription)}</p>`}${product.compatibility ? `<h3>Compatibility</h3><p>${escapeHtml(stripHtml(product.compatibility))}</p>` : ""}${isCom1Monitor ? "" : productFacts.map(([label, value]) => `<p><strong>${label}:</strong> ${escapeHtml(value)}</p>`).join("")}</div></article>
+        <article class="storefront-pdp__panel"><div class="section-heading"><div><p class="eyebrow">Product details</p><h2>Description</h2></div></div><div class="storefront-rich-content">${isCom1Monitor ? `${seo.summaryHtml}${formatCom1Details(product.detail_html, visibleDescription, productFacts)}` : `<p>${escapeHtml(visibleDescription)}</p>`}${product.compatibility ? `<h3>Compatibility</h3><p>${escapeHtml(stripHtml(product.compatibility))}</p>` : ""}${isCom1Monitor ? "" : productFacts.map(([label, value]) => `<p><strong>${label}:</strong> ${escapeHtml(value)}</p>`).join("")}</div></article>${seo ? `
+        ${seo.faqHtml}` : ""}
         <article class="storefront-pdp__panel"><div class="section-heading"><div><p class="eyebrow">Buying from TECHM8</p><h2>Price, availability and returns</h2></div></div><div class="storefront-rich-content"><p>Prices are shown in Australian dollars. Online stock and pickup availability are checked again before checkout or collection.</p><p><a href="/store-policy.html">Read the shipping, returns and warranty policy</a>.</p></div></article>
       </section>
     </div></section>
@@ -1395,6 +1421,16 @@ async function writeLlmsTxt(indexableProducts = []) {
       `- [TECHM8 ${store.name}](${SITE_URL}${store.path}): ${store.address}. Phone ${store.phone}. Serves the ${store.region} area.`,
   ).join("\n");
 
+  // Monitors are the one pickup-only range, so each gets a line answer engines can cite.
+  const monitorLines = indexableProducts
+    .filter((product) => String(product.sku || "").startsWith("COM1-MON-"))
+    .sort((left, right) => left.name.localeCompare(right.name))
+    .map((product) => {
+      const seo = com1ProductSeo(product);
+      return `- [${seo.title.replace(/ \| TECHM8$/, "")}](${SITE_URL}/products/${product.slug}/): ${seo.llmsFacts}. ${money(product.retail_price)}.`;
+    })
+    .join("\n");
+
   const content = `# TECHM8 (OZ Tech M8)
 
 > TECHM8 is an Australian device repair and technology accessories business trading as OZ Tech M8, operated by YQM PTY LTD (ABN 12 645 861 463). It runs five walk-in stores in South East Queensland and an online store that ships Australia-wide with click & collect at any store. TECHM8 repairs phones, tablets, computers and game consoles, and sells chargers, cables, power banks, adapters and device accessories. All prices are in Australian dollars (AUD) and include GST.
@@ -1406,7 +1442,8 @@ async function writeLlmsTxt(indexableProducts = []) {
 - Country: Australia. Service area: South East Queensland (Brisbane, Logan, Ipswich, Moreton Bay) for in-store repairs; Australia-wide for online orders.
 - Currency: AUD, GST inclusive
 - Repair bookings are requests, not confirmed appointments or fixed quotes. Price, parts availability and turnaround are confirmed after the device is inspected.
-- Delivery: Australia Post standard AU$15 (free over AU$399), express AU$18 (free over AU$599). Click & collect is free at any store.
+- Delivery: Australia Post standard AU$15 (free over AU$399), express AU$18 (free over AU$599). Click & collect is free at any store.${monitorLines ? `
+- Monitors are store pickup only: they cannot be delivered, and customers should wait for the ready-to-collect notification before visiting the store.` : ""}
 - Returns: 7-day return window. Faulty items are free to return; change-of-mind returns are at the customer's cost.
 
 ## Start here
@@ -1441,7 +1478,13 @@ ${storeLines}
 
 ${categoryLines || "- Catalogue categories are listed on the online store page."}
 
-## Machine-readable sources
+${monitorLines ? `## Monitors (store pickup only)
+
+Choose Click & Collect and a pickup store at checkout; monitors cannot be delivered. Specifications come from the manufacturer specification on each product page. Prices are in AUD and include GST.
+
+${monitorLines}
+
+` : ""}## Machine-readable sources
 
 - [Sitemap index](${SITE_URL}/sitemap.xml)
 - [Page sitemap](${SITE_URL}/sitemap-pages.xml)
@@ -1453,7 +1496,7 @@ ${categoryLines || "- Catalogue categories are listed on the online store page."
 - Product pages under ${SITE_URL}/products/ carry Product and Offer structured data with the current price, condition and return policy.
 - Repair prices are not published as fixed amounts because they depend on device model, fault and parts supply. Do not state a repair price without a quote from TECHM8.
 - Opening hours vary by store and day. Check the individual store page or contact that store for current hours, including public holidays; do not apply one store's hours to all locations.
-`;
+${monitorLines ? "- Monitors are store pickup only. Do not describe them as available for delivery or shipping.\n" : ""}`;
 
   await writeFile(LLMS_TXT, content, "utf8");
   await writeFile(PUBLIC_LLMS_TXT, content, "utf8");
@@ -1590,10 +1633,20 @@ function categoryDescription(category) {
   ];
   if (brands.length) parts.push(`Brands include ${brands.join(", ")}.`);
   parts.push(
-    "Australia-wide delivery or free click and collect at our Park Ridge, Fairfield, Toowong, North Lakes and Brassall stores.",
+    isPickupOnlyCategory(category)
+      ? "Store pickup only (no delivery) at Park Ridge, Fairfield, Toowong, North Lakes and Brassall."
+      : "Australia-wide delivery or free click and collect at our Park Ridge, Fairfield, Toowong, North Lakes and Brassall stores.",
   );
 
   return truncate(parts.join(" "), 300);
+}
+
+// Categories made up only of COM1 monitors cannot be delivered, so their copy must not offer delivery.
+function isPickupOnlyCategory(category) {
+  return (
+    category.indexable.length > 0 &&
+    category.indexable.every((product) => String(product.sku || "").startsWith("COM1-MON-"))
+  );
 }
 
 function renderCategoryPage(category, allCategories) {
@@ -1653,9 +1706,9 @@ ${indexable ? `  <script type="application/ld+json">${categoryJsonLd(category)}<
       <div class="container storefront-grid storefront-grid--dense">${cards}</div>
     </section>
     <section class="section section--muted"><div class="container">
-      <div class="section-heading"><p class="eyebrow">Buying from TECHM8</p><h2>Delivery, pickup and returns</h2></div>
+      <div class="section-heading"><p class="eyebrow">Buying from TECHM8</p><h2>${isPickupOnlyCategory(category) ? "Store pickup and returns" : "Delivery, pickup and returns"}</h2></div>
       <div class="storefront-rich-content">
-        <p>All prices are in Australian dollars and include GST. Australia Post standard delivery is AU$15.00 and free on orders over AU$399.00. Express delivery is AU$18.00 and free over AU$599.00.</p>
+        <p>All prices are in Australian dollars and include GST. ${isPickupOnlyCategory(category) ? "These products are store pickup only, so delivery is not available. Please wait for our ready-to-collect notification before visiting the store." : "Australia Post standard delivery is AU$15.00 and free on orders over AU$399.00. Express delivery is AU$18.00 and free over AU$599.00."}</p>
         <p>Click &amp; collect is free at <a href="/stores/park-ridge.html">Park Ridge</a>, <a href="/stores/fairfield.html">Fairfield</a>, <a href="/stores/toowong.html">Toowong</a>, <a href="/stores/north-lakes.html">North Lakes</a> and <a href="/stores/brassall.html">Brassall</a>.</p>
         <p><a href="/store-policy.html">Read the shipping, returns and warranty policy</a>.</p>
       </div>

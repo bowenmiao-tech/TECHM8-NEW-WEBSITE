@@ -407,6 +407,7 @@ npm run build
 - Supabase remains the source of truth for products, categories, prices, stock and images.
 - `npm run prerender` reads only publicly visible catalog rows through the existing publishable/anon key and generates crawlable pages at `/products/<slug>/`.
 - Generated pages include initial product HTML, canonical metadata and `Product`/`Offer` JSON-LD. The browser then refreshes the product from Supabase so customers receive current catalog data.
+- COM1 pickup-only monitor pages build their title, meta description, summary paragraph, FAQ, spec `additionalProperty` and `FAQPage` structured data from the supplier specification (`scripts/com1-product-seo.mjs`). Facts missing from the specification are left out, never guessed. A Supabase `seo_description` still overrides the generated meta description, and the browser keeps the prerendered title, summary and FAQ when it refreshes the product. `llms.txt` lists each monitor as pickup-only.
 - `npm run build` runs prerendering before Vite.
 - `.github/workflows/refresh-catalog-pages.yml` checks Supabase every 30 minutes and commits only when generated output changed. It can also be run manually or triggered with the `catalog-updated` repository dispatch event.
 - `sitemap-products.xml` is generated automatically in both the repository root and `public/`, so it is available whether the site is served directly or from Vite's `dist/` output. It is advertised alongside the main sitemap in `robots.txt`.

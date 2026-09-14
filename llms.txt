@@ -10,6 +10,7 @@
 - Currency: AUD, GST inclusive
 - Repair bookings are requests, not confirmed appointments or fixed quotes. Price, parts availability and turnaround are confirmed after the device is inspected.
 - Delivery: Australia Post standard AU$15 (free over AU$399), express AU$18 (free over AU$599). Click & collect is free at any store.
+- Monitors are store pickup only: they cannot be delivered, and customers should wait for the ready-to-collect notification before visiting the store.
 - Returns: 7-day return window. Faulty items are free to return; change-of-mind returns are at the customer's cost.
 
 ## Start here
@@ -61,6 +62,49 @@
 - [Car Connectivity](https://www.techm8australia.com/category/cables-and-adapters--car-connectivity/): 3 products listed online.
 - [PC Components](https://www.techm8australia.com/category/computer-and-gaming--pc-components/): 1 product listed online.
 
+## Monitors (store pickup only)
+
+Choose Click & Collect and a pickup store at checkout; monitors cannot be delivered. Specifications come from the manufacturer specification on each product page. Prices are in AUD and include GST.
+
+- [MSI PRO MP165 E6 15.6" FHD 60Hz Portable Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mp165e6/): 15.6-inch IPS portable monitor; 1920 × 1080 at 60Hz; 4ms GtG; 1 × HDMI 2.0b, 2 × USB-C (DP Alt Mode, 15W PD). AU$249.00.
+- [MSI PRO MP242 E14A 24" FHD 144Hz Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mp242-e14a/): 24-inch IPS monitor; 1920 × 1080 at 144Hz; 1ms MPRT; 1 × HDMI 2.0b, 1 × DisplayPort 1.2a, 1 × VGA. AU$119.00.
+- [MSI MAG 255F X24 25" FHD 240Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag255f-x24/): 25-inch Rapid IPS gaming monitor; 1920 × 1080 at 240Hz; 0.5ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.2a. AU$169.00.
+- [MSI MAG 255XF 25" FHD 300Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-g255xf/): 25-inch Rapid IPS gaming monitor; 1920 × 1080 at 300Hz; 0.5ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.4a. AU$209.00.
+- [MSI Oculux NXG253R 25" FHD 360Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-nxg253r/): 25-inch Rapid IPS gaming monitor; 1920 × 1080 at 360Hz; 1ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.4. AU$759.00.
+- [MSI PRO MP251 E14L 25" FHD 144Hz Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mp251e14l/): 25-inch IPS monitor; 1920 × 1080 at 144Hz; 1ms; 1 × HDMI, 1 × VGA. AU$109.00.
+- [MSI PRO MP273Q E7 27" WQHD 75Hz Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mp273q-e7/): 27-inch IPS monitor; 2560 × 1440 at 75Hz; 1ms MPRT; 2 × HDMI 2.0, 1 × DisplayPort 1.2a. AU$159.00.
+- [MSI PRO MP275Q E14 27" WQHD 144Hz Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mp275q-e14/): 27-inch IPS monitor; 2560 × 1440 at 144Hz; 1ms MPRT; 2 × HDMI 2.0b, 1 × DisplayPort 1.2a. AU$219.00.
+- [LG 27MS500-B 27" FHD 100Hz Monitor](https://www.techm8australia.com/products/com1-monitor-lg-i27ms500-b/): 27-inch IPS monitor; 1920 × 1080 at 100Hz; 5ms; 2 × HDMI. AU$219.00.
+- [MSI MAG 271KPD7 27" 5K Dual Mode Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag271kpd7/): 27-inch Rapid IPS gaming monitor; 5120 × 2880 at 75Hz (Dual Mode 2560 × 1440 at 300Hz); 0.5ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 1.4a, 1 × USB-C (DP Alt Mode, 15W PD). AU$899.00.
+- [MSI MAG 272QPW QD-OLED X28 27" WQHD 280Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag272qpwqd-oled/): 27-inch QD-OLED gaming monitor; 2560 × 1440 at 280Hz; 0.03ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 1.4a, 1 × USB-C (DP Alt Mode, 15W PD). AU$799.00.
+- [MSI MAG 274QP QD-OLED X24 27" WQHD 240Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag274qpqd-oledx24/): 27-inch QD-OLED gaming monitor; 2560 × 1440 at 240Hz; 0.03ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 1.4a. AU$649.00.
+- [MSI MAG 274QPF E20 27" WQHD 200Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag274qpf-e20/): 27-inch Rapid IPS gaming monitor; 2560 × 1440 at 200Hz; 0.5ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.4a, 1 × USB-C (DP Alt Mode, 15W PD). AU$299.00.
+- [MSI MAG 274QPF X30MV 27" WQHD 300Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag274qpfx30mv/): 27-inch Rapid VA with Mini-LED (1152 Zones) gaming monitor; 2560 × 1440 at 300Hz; 0.5ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 1.4a. AU$499.00.
+- [MSI MAG 274QPF X32 27" WQHD 320Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag274qpf-x32/): 27-inch Rapid IPS gaming monitor; 2560 × 1440 at 320Hz; 0.5ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 1.4a. AU$399.00.
+- [MSI MAG 274QRFW X32 27" WQHD 320Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag274qrfw-x32/): 27-inch Rapid IPS gaming monitor; 2560 × 1440 at 320Hz; 0.5ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 1.4a. AU$399.00.
+- [MSI MAG 275CF X24 27" FHD 240Hz Curved Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag275cf-x24/): 27-inch Rapid VA gaming monitor; 1920 × 1080 at 240Hz; 0.5ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.2a. AU$209.00.
+- [MSI MAG 275CQF E18 27" WQHD 180Hz Curved Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag275cqf/): 27-inch Rapid VA gaming monitor; 2560 × 1440 at 180Hz; 0.5ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.4a. AU$219.00.
+- [MSI MAG 275F E20 27" FHD 200Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag275fe20/): 27-inch Rapid IPS gaming monitor; 1920 × 1080 at 200Hz; 1ms MPRT; 2 × HDMI 2.0b, 1 × DisplayPort 1.2a. AU$189.00.
+- [MSI MAG 275UPD E14 27" 4K Dual Mode Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag275upd-e14/): 27-inch IPS gaming monitor; 3840 × 2160 at 144Hz (Dual Mode 1920 × 1080 at 288Hz); 1ms MPRT; 2 × HDMI 2.1, 1 × DisplayPort 1.4a. AU$429.00.
+- [MSI MAG 275QF E20 27" WQHD 200Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag275qfe20/): 27-inch Rapid IPS gaming monitor; 2560 × 1440 at 200Hz; 0.5ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.4a. AU$249.00.
+- [MSI MPG 272QRF X36 27" WQHD 360Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mpg272qrfx36/): 27-inch Rapid IPS gaming monitor; 2560 × 1440 at 360Hz; 0.5ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 1.4a. AU$999.00.
+- [MSI MPG 274URDFW E16M 27" 4K Dual Mode Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mpg274urdfwe16m/): 27-inch Rapid IPS with Mini-LED (1152 Zones) gaming monitor; 3840 × 2160 at 160Hz (Dual Mode 1920 × 1080 at 320Hz); 0.5ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 1.4a, 1 × USB-C (DP Alt Mode, 98W PD). AU$799.00.
+- [MSI PRO MP271 E14A 27" FHD 144Hz Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mp271e14a/): 27-inch IPS monitor; 1920 × 1080 at 144Hz; 1ms MPRT; 1 × HDMI 2.0, 1 × DisplayPort 1.2a, 1 × VGA. AU$159.00.
+- [MSI PRO MP273U 27" 4K UHD 60Hz Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mp273u/): 27-inch IPS monitor; 3840 × 2160 at 60Hz; 4ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.4a. AU$299.00.
+- [MSI PRO MP275QPDG 27" WQHD 100Hz Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mp275qpdg/): 27-inch IPS monitor; 2560 × 1440 at 100Hz; 1ms MPRT; 2 × HDMI 2.0b, 1 × DisplayPort 1.2a, 1 × USB-C (DP Alt Mode, 98W PD). AU$499.00.
+- [MSI MAG 321CQF E18 32" WQHD 180Hz Curved Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag321cqfe18/): 32-inch Rapid VA gaming monitor; 2560 × 1440 at 180Hz; 0.5ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.4a. AU$309.00.
+- [MSI MAG 321UPD E14 32" 4K Dual Mode Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag321upde14/): 32-inch IPS gaming monitor; 3840 × 2160 at 144Hz (Dual Mode 1920 × 1080 at 288Hz); 1ms MPRT; 2 × HDMI 2.1, 1 × DisplayPort 1.4a. AU$549.00.
+- [MSI MPG 321URX QD-OLED 32" 4K UHD 240Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mpg321urx-qd-oled/): 32-inch QD-OLED gaming monitor; 3840 × 2160 at 240Hz; 0.03ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 1.4a, 1 × USB-C (DP Alt Mode, 90W PD). AU$1,249.00.
+- [MSI MPG 321URXW QD-OLED 32" 4K UHD 240Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mpg321urxwqd-oled/): 32-inch QD-OLED gaming monitor; 3840 × 2160 at 240Hz; 0.03ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 1.4a, 1 × USB-C (DP Alt Mode, 90W PD). AU$1,399.00.
+- [MSI MPG 322UR QD-OLED X24 32" 4K UHD 240Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mpg322ur-qd-oled-x24/): 32-inch QD-OLED gaming monitor; 3840 × 2160 at 240Hz; 0.03ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 2.1a, 1 × USB-C (DP Alt Mode, 98W PD). AU$1,799.00.
+- [MSI MAG 325QF E18V 32" WQHD 180Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag325qf-e18v/): 32-inch Rapid VA gaming monitor; 2560 × 1440 at 180Hz; 0.5ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.4a. AU$329.00.
+- [MSI MAG 342CQRF E20 34" UWQHD 200Hz Curved Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag342cqrf-e20/): 34-inch Rapid VA gaming monitor; 3440 × 1440 at 200Hz; 0.5ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.4a. AU$429.00.
+- [MSI MPG 341CQR QD-OLED X36 34" UWQHD 360Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mpg341cqr-qd-oled-x36/): 34-inch QD-OLED gaming monitor; 3440 × 1440 at 360Hz; 0.03ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 2.1a, 1 × USB-C (DP Alt Mode, 98W PD). AU$1,899.00.
+- [MSI PRO MP341CQ 34" UWQHD 100Hz Curved Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mp341cq/): 34-inch VA monitor; 3440 × 1440 at 100Hz; 4ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.2a. AU$349.00.
+- [MSI PRO MP341CQW 34" UWQHD 100Hz Curved Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mp341cqw/): 34-inch VA monitor; 3440 × 1440 at 100Hz; 4ms GtG; 2 × HDMI 2.0b, 1 × DisplayPort 1.2a. AU$349.00.
+- [MSI MAG401QR 40" UWQHD 155Hz Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-mag401qr/): 40-inch IPS gaming monitor; 3440 × 1440 at 155Hz; 1ms MPRT; 2 × HDMI, 1 × DisplayPort, 1 × USB-C (DP Alt Mode, 65W PD). AU$699.00.
+- [MSI MPG 491CQP QD-OLED 49" DQHD 144Hz Curved Gaming Monitor](https://www.techm8australia.com/products/com1-monitor-msi-491cqp-qd-oled/): 49-inch QD-OLED gaming monitor; 5120 × 1440 at 144Hz; 0.03ms GtG; 2 × HDMI 2.1, 1 × DisplayPort 1.4a, 1 × USB-C (DP Alt Mode, 90W PD). AU$1,499.00.
+
 ## Machine-readable sources
 
 - [Sitemap index](https://www.techm8australia.com/sitemap.xml)
@@ -73,3 +117,4 @@
 - Product pages under https://www.techm8australia.com/products/ carry Product and Offer structured data with the current price, condition and return policy.
 - Repair prices are not published as fixed amounts because they depend on device model, fault and parts supply. Do not state a repair price without a quote from TECHM8.
 - Opening hours vary by store and day. Check the individual store page or contact that store for current hours, including public holidays; do not apply one store's hours to all locations.
+- Monitors are store pickup only. Do not describe them as available for delivery or shipping.

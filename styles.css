@@ -8682,6 +8682,17 @@ html:has(body.repair-page--console-hero) {
   line-height: 1.7;
   margin-bottom: 1.5rem;
 }
+.storefront-rich-content .com1-overview {
+  font-size: 1.02rem;
+  margin-bottom: 1.25rem;
+}
+.storefront-rich-content.com1-faq h3 {
+  margin: 1.4rem 0 0.4rem;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+.storefront-rich-content.com1-faq h3:first-child { margin-top: 0; }
+.storefront-rich-content.com1-faq p { margin-bottom: 0; }
 .storefront-rich-content .com1-specifications table { table-layout: fixed; }
 .storefront-rich-content .com1-specifications caption {
   text-align: left;

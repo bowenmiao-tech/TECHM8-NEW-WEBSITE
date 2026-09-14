@@ -5288,7 +5288,20 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
     `
     : "";
 
-  document.title = `${productName} | TECHM8 Online Store`;
+  // Generated catalog pages can ship build-time SEO content for this product (summary,
+  // FAQ and title). Carry it through client re-renders so crawlers that run JavaScript see it.
+  const prerenderedSeoHtml = (attribute) => {
+    const node = shell.querySelector(`[${attribute}]`);
+    return node?.getAttribute(attribute) === product.slug ? node.outerHTML : "";
+  };
+  const seoSummaryHtml = prerenderedSeoHtml("data-product-seo-summary");
+  const seoFaqHtml = prerenderedSeoHtml("data-product-seo-faq");
+  if (
+    document.querySelector("title[data-product-seo-title]")?.getAttribute("data-product-seo-title") !==
+    product.slug
+  ) {
+    document.title = `${productName} | TECHM8 Online Store`;
+  }
   shell.innerHTML = `
     <div class="storefront-breadcrumbs">
       <a href="/">Home</a>
@@ -5387,9 +5400,11 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
           </div>
         </div>
         <div class="storefront-rich-content">
+          ${seoSummaryHtml}
           ${appendProductFactsHtml(product, detailHtml)}
         </div>
       </article>
+      ${seoFaqHtml}
       <article class="storefront-pdp__panel">
         <div class="section-heading section-heading--split">
           <div>
