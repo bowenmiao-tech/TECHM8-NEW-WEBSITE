@@ -3087,6 +3087,50 @@ function formatProductDetailHtml(product) {
     .join("");
 }
 
+// Model, SKU and condition follow the description. Pickup-only monitors ship a spec
+// table, so the facts join it as rows (skipping values it already lists, such as a
+// Product Name equal to the model) instead of trailing as loose lines.
+function appendProductFactsHtml(product, detailHtml) {
+  const facts = [
+    ["Model", product?.model],
+    ["SKU", product?.sku],
+    ["Condition", product?.condition_label],
+  ].filter(([, value]) => value);
+
+  if (isPickupOnlyProduct(product)) {
+    const template = document.createElement("template");
+    template.innerHTML = detailHtml;
+    const specBody = template.content.querySelector(".com1-specifications tbody");
+    if (specBody) {
+      const comparable = (value) =>
+        String(value).replace(/\s+/g, " ").trim().toLowerCase();
+      const listed = new Set(
+        Array.from(specBody.querySelectorAll("td"), (cell) =>
+          comparable(cell.textContent),
+        ),
+      );
+      facts
+        .filter(([, value]) => !listed.has(comparable(value)))
+        .forEach(([label, value]) => {
+          const row = specBody.insertRow();
+          const heading = document.createElement("th");
+          heading.scope = "row";
+          heading.textContent = label;
+          row.append(heading);
+          row.insertCell().textContent = value;
+        });
+      return template.innerHTML;
+    }
+  }
+
+  return (
+    detailHtml +
+    facts
+      .map(([label, value]) => `<p><strong>${label}:</strong> ${escapeHtml(value)}</p>`)
+      .join("")
+  );
+}
+
 function createRailProductCard(product) {
   const detailUrl = getProductPageHref(product.slug);
   const retailPrice = Number(product.retail_price) || 0;
@@ -5294,7 +5338,7 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
           <span class="storefront-pdp__stock">${escapeHtml(stockText)}</span>
         </div>
         <h1>${escapeHtml(productName)}</h1>
-        <p class="storefront-pdp__intro">${escapeHtml(product.description || product.short_description || "Retail catalog product.")}</p>
+        ${isPickupOnlyProduct(product) ? '' : `<p class="storefront-pdp__intro">${escapeHtml(product.description || product.short_description || "Retail catalog product.")}</p>`}
 
         <div class="storefront-pdp__price-card" data-product-price="${escapeHtml(retailPrice.toFixed(2))}" data-price-currency="AUD">
           <div class="storefront-pdp__price-top">
@@ -5343,10 +5387,7 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
           </div>
         </div>
         <div class="storefront-rich-content">
-          ${detailHtml}
-          ${product.model ? `<p><strong>Model:</strong> ${escapeHtml(product.model)}</p>` : ""}
-          ${product.sku ? `<p><strong>SKU:</strong> ${escapeHtml(product.sku)}</p>` : ""}
-          ${product.condition_label ? `<p><strong>Condition:</strong> ${escapeHtml(product.condition_label)}</p>` : ""}
+          ${appendProductFactsHtml(product, detailHtml)}
         </div>
       </article>
       <article class="storefront-pdp__panel">

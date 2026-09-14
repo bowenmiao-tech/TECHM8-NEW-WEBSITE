@@ -1,4 +1,5 @@
 import { readFile, writeFile, mkdir, readdir, rm } from "node:fs/promises";
+import { formatCom1Details } from './com1-product-content.mjs';
 import { buildAssets } from "./build-assets.mjs";
 import { buildCriticalCss } from "./build-critical-css.mjs";
 import { existsSync } from "node:fs";
@@ -256,6 +257,7 @@ async function loadCatalog() {
     "model",
     "short_description",
     "description",
+    "detail_html",
     "condition_label",
     "compatibility",
     "stock_quantity",
@@ -553,7 +555,13 @@ function renderProductPage(product) {
     product.compare_at_price > product.retail_price
       ? `<span class="storefront-pdp__compare">${escapeHtml(money(product.compare_at_price))}</span>`
       : "";
-  const stockCopy = String(product.sku || '').startsWith('COM1-MON-')
+  const isCom1Monitor = String(product.sku || "").startsWith("COM1-MON-");
+  const productFacts = [
+    ["Model", product.model],
+    ["SKU", product.sku],
+    ["Condition", product.condition_label],
+  ].filter(([, value]) => value);
+  const stockCopy = isCom1Monitor
     ? "Store pickup only. Please wait for our ready-to-collect notification before visiting."
     : isProductOrderable(product)
     ? "In stock for online order"
@@ -596,14 +604,14 @@ ${quality.indexable ? `  <script type="application/ld+json">${productJsonLd(prod
           <p class="eyebrow">Online store item</p>
           <div class="storefront-pdp__brand-row"><span class="storefront-pdp__brand">${escapeHtml(product.brand || "TECHM8")}</span><span class="storefront-pdp__stock">${escapeHtml(stockCopy)}</span></div>
           <h1>${escapeHtml(product.name)}</h1>
-          <p class="storefront-pdp__intro">${escapeHtml(visibleDescription)}</p>
+          ${isCom1Monitor ? "" : `<p class="storefront-pdp__intro">${escapeHtml(visibleDescription)}</p>`}
           <div class="storefront-pdp__price-card" data-product-price="${product.retail_price.toFixed(2)}" data-price-currency="${CATALOG_CURRENCY}"><div class="storefront-pdp__price-top">${comparePrice}</div><div class="storefront-pdp__price-main">${escapeHtml(money(product.retail_price))}</div></div>
           <div class="zip-widget-slot" data-zip-product-widget data-zip-price="${escapeHtml(String(product.retail_price))}" hidden></div>
           <div class="storefront-pdp__highlights"><div class="storefront-pdp__highlight"><strong>Brand</strong><span>${escapeHtml(product.brand || "TECHM8")}</span></div><div class="storefront-pdp__highlight"><strong>Category</strong><span>${escapeHtml(product.category_name)}</span></div></div>
         </div>
       </section>
       <section class="storefront-pdp__detail-stack">
-        <article class="storefront-pdp__panel"><div class="section-heading"><div><p class="eyebrow">Product details</p><h2>Product information</h2></div></div><div class="storefront-rich-content"><p>${escapeHtml(visibleDescription)}</p>${product.compatibility ? `<h3>Compatibility</h3><p>${escapeHtml(stripHtml(product.compatibility))}</p>` : ""}${product.model ? `<p><strong>Model:</strong> ${escapeHtml(product.model)}</p>` : ""}${product.sku ? `<p><strong>SKU:</strong> ${escapeHtml(product.sku)}</p>` : ""}${product.condition_label ? `<p><strong>Condition:</strong> ${escapeHtml(product.condition_label)}</p>` : ""}</div></article>
+        <article class="storefront-pdp__panel"><div class="section-heading"><div><p class="eyebrow">Product details</p><h2>Description</h2></div></div><div class="storefront-rich-content">${isCom1Monitor ? formatCom1Details(product.detail_html, visibleDescription, productFacts) : `<p>${escapeHtml(visibleDescription)}</p>`}${product.compatibility ? `<h3>Compatibility</h3><p>${escapeHtml(stripHtml(product.compatibility))}</p>` : ""}${isCom1Monitor ? "" : productFacts.map(([label, value]) => `<p><strong>${label}:</strong> ${escapeHtml(value)}</p>`).join("")}</div></article>
         <article class="storefront-pdp__panel"><div class="section-heading"><div><p class="eyebrow">Buying from TECHM8</p><h2>Price, availability and returns</h2></div></div><div class="storefront-rich-content"><p>Prices are shown in Australian dollars. Online stock and pickup availability are checked again before checkout or collection.</p><p><a href="/store-policy.html">Read the shipping, returns and warranty policy</a>.</p></div></article>
       </section>
     </div></section>
@@ -1795,3 +1803,4 @@ main().catch((error) => {
   console.error(error instanceof Error ? error.message : error);
   process.exitCode = 1;
 });
+

@@ -8674,6 +8674,39 @@ html:has(body.repair-page--console-hero) {
   text-align: left;
 }
 
+.storefront-rich-content .com1-pickup-note {
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--accent, #009da8);
+  background: #eef8f8;
+  border-radius: 0.5rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+.storefront-rich-content .com1-specifications table { table-layout: fixed; }
+.storefront-rich-content .com1-specifications caption {
+  text-align: left;
+  font-size: 1.15rem;
+  font-weight: 700;
+  padding: 0 0 1rem;
+}
+.storefront-rich-content .com1-specifications th {
+  width: 34%;
+  background: #f2f7f7;
+  font-weight: 600;
+}
+.storefront-rich-content .com1-specifications th,
+.storefront-rich-content .com1-specifications td {
+  vertical-align: top;
+  overflow-wrap: anywhere;
+  line-height: 1.65;
+}
+.storefront-rich-content .com1-specifications tr:nth-child(even) td { background: #fafcfc; }
+@media (max-width: 600px) {
+  .storefront-rich-content .com1-specifications th,
+  .storefront-rich-content .com1-specifications td { padding: 0.7rem 0.6rem; font-size: 0.85rem; }
+  .storefront-rich-content .com1-specifications th { width: 38%; }
+}
+
 .storefront-product-rail {
   padding-top: 0;
 }
