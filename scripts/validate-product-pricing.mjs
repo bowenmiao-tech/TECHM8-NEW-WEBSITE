@@ -155,6 +155,10 @@ for (const slug of manifest.slugs) {
 
     const feedId = String(embedded.sku || `techm8-${embedded.id}`);
     const feedPrice = feedItems.get(feedId);
+    if (feedId.startsWith('COM1-MON-')) {
+      if (feedPrice) errors.push(`${slug}: pickup-only monitor must not appear in the shipping Merchant feed.`);
+      continue;
+    }
     if (!feedPrice) {
       errors.push(`${slug}: missing from Merchant Center feed.`);
     } else {

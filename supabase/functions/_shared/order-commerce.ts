@@ -587,6 +587,10 @@ function emailCopy(event: OrderEmailEvent, bundle: OrderBundle, role: 'customer'
       break
   }
 
+  if (!internal && order.fulfillment_method === 'pickup' && ['order_submitted', 'payment_confirmed'].includes(event)) {
+    detail += ' Please wait for our ready-to-collect notification before visiting the store. Order or payment confirmation does not mean your items are ready for pickup.'
+  }
+
   const html = renderEmailShell(title, `
     <p style="margin:0;color:#4f6b74">${escapeHtml(intro)}</p>
     ${renderOrderTable(bundle)}

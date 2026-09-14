@@ -450,7 +450,7 @@ function productJsonLd(product) {
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       priceValidUntil: priceValidUntil(),
-      shippingDetails: offerShippingDetails(),
+      shippingDetails: String(product.sku || '').startsWith('COM1-MON-') ? undefined : offerShippingDetails(),
       seller: { "@id": organizationId },
       hasMerchantReturnPolicy: {
         "@type": "MerchantReturnPolicy",
@@ -553,7 +553,9 @@ function renderProductPage(product) {
     product.compare_at_price > product.retail_price
       ? `<span class="storefront-pdp__compare">${escapeHtml(money(product.compare_at_price))}</span>`
       : "";
-  const stockCopy = isProductOrderable(product)
+  const stockCopy = String(product.sku || '').startsWith('COM1-MON-')
+    ? "Store pickup only. Please wait for our ready-to-collect notification before visiting."
+    : isProductOrderable(product)
     ? "In stock for online order"
     : "Currently unavailable";
 
@@ -1195,7 +1197,7 @@ async function writeProducts(products) {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${indexableProducts
+${indexableProducts.filter((product) => !String(product.sku || '').startsWith('COM1-MON-'))
   .map((product) => {
     const modified = String(product.updated_at || product.created_at || "").slice(0, 10);
     return `  <url>\n    <loc>${SITE_URL}/products/${product.slug}/</loc>${modified ? `\n    <lastmod>${escapeHtml(modified)}</lastmod>` : ""}\n  </url>`;

@@ -244,6 +244,9 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'Products could not be validated.' }, { status: 422, headers: corsHeaders })
     }
 
+    if (fulfillmentMethod !== 'pickup' && products.some((product) => String(product.sku).startsWith('COM1-MON-') || String(product.slug).startsWith('com1-monitor-'))) {
+      return Response.json({ ok: false, error: 'Monitors are available for store pickup only. Please wait for our ready-to-collect notification before visiting.' }, { status: 422, headers: corsHeaders })
+    }
     const productsBySlug = new Map(products.map((product) => [product.slug, product]))
     const missing = requestedSlugs.filter((slug) => !productsBySlug.has(slug))
     if (missing.length) {

@@ -145,6 +145,10 @@ Checkout is a multi-step process and must keep this logic:
 
 ### Delivery / pickup rules
 
+- COM1 monitors use SKU prefix `COM1-MON-` and slug prefix `com1-monitor-`. These products are website-only (`is_pos_visible=false`), priced at supplier RRP, and require store pickup. A mixed cart containing a COM1 monitor must also use pickup; both order endpoints enforce this rule.
+- Customers must wait for the ready-to-collect notification before visiting. Order/payment confirmation is not a pickup-ready notice.
+- COM1 supplier quantities are retained in `source_metadata`, never added to store inventory. Products missing a positive RRP stay hidden drafts. Pickup-only monitors are excluded from the shipping Merchant feed.
+
 - Customer chooses either:
   - Click & Collect
   - Delivery

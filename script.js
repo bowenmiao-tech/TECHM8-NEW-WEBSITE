@@ -3472,6 +3472,11 @@ function getRecentlyViewedProducts(products, currentSlug, limit = 6) {
   return items.slice(0, limit);
 }
 
+function isPickupOnlyProduct(product) {
+  return String(product?.sku || "").startsWith("COM1-MON-") ||
+    String(product?.slug || "").startsWith("com1-monitor-");
+}
+
 function loadCart() {
   try {
     const raw = window.localStorage.getItem(CART_STORAGE_KEY);
@@ -5163,7 +5168,9 @@ function renderProductDetailShell(shell, product, relatedProducts = null) {
   const isCatalogVisible = product.is_visible !== false;
   const savings =
     compareAtPrice > retailPrice ? compareAtPrice - retailPrice : 0;
-  const stockText = isCatalogVisible
+  const stockText = isPickupOnlyProduct(product)
+    ? "Store pickup only. Please wait for our ready-to-collect notification before visiting."
+    : isCatalogVisible
     ? "Available for online order or store pickup"
     : "Currently unavailable";
   const productName = getProductDisplayName(product) || product.name;
@@ -6866,6 +6873,17 @@ function initCheckoutPage() {
   };
 
   const syncFulfillmentState = () => {
+    const pickupOnly = loadCart().some(isPickupOnlyProduct);
+    fulfillmentFields.forEach((field) => {
+      if (!(field instanceof HTMLInputElement)) return;
+      if (field.value === "delivery") {
+        field.disabled = pickupOnly;
+        if (pickupOnly) field.checked = false;
+      }
+      if (pickupOnly && field.value === "pickup") field.checked = true;
+    });
+    const pickupNotice = root.querySelector("[data-pickup-only-notice]");
+    if (pickupNotice instanceof HTMLElement) pickupNotice.hidden = !pickupOnly;
     selectedFulfillment =
       fulfillmentFields.find(
         (field) => field instanceof HTMLInputElement && field.checked,
@@ -7476,6 +7494,7 @@ function initCheckoutPage() {
             <article class="storefront-success">
               <p class="eyebrow">Order submitted</p>
               <h1>Order request submitted successfully</h1>
+              ${!successShippingOption ? '<p>Please wait for our ready-to-collect notification before visiting the store.</p>' : ''}
               <p class="storefront-success__lead">Reference: ${escapeHtml(payload.order_code)}</p>
               <div class="storefront-success__grid">
                 <div class="storefront-success__item">
