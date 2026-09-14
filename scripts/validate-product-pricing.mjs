@@ -64,6 +64,7 @@ const indexableSlugs = new Set(
 );
 const generatedSlugs = new Set(manifest.slugs);
 let redirectCount = 0;
+let pickupOnlyCount = 0;
 
 for (const slug of manifest.slugs) {
   const html = await readFile(join(PRODUCTS_DIR, slug, "index.html"), "utf8");
@@ -156,6 +157,7 @@ for (const slug of manifest.slugs) {
     const feedId = String(embedded.sku || `techm8-${embedded.id}`);
     const feedPrice = feedItems.get(feedId);
     if (feedId.startsWith('COM1-MON-')) {
+      pickupOnlyCount += 1;
       if (feedPrice) errors.push(`${slug}: pickup-only monitor must not appear in the shipping Merchant feed.`);
       continue;
     }
@@ -172,9 +174,9 @@ for (const slug of manifest.slugs) {
   }
 }
 
-if (feedItems.size !== indexableSlugs.size) {
+if (feedItems.size !== indexableSlugs.size - pickupOnlyCount) {
   errors.push(
-    `Merchant Center feed has ${feedItems.size} items; expected ${indexableSlugs.size}.`,
+    `Merchant Center feed has ${feedItems.size} items; expected ${indexableSlugs.size - pickupOnlyCount}.`,
   );
 }
 

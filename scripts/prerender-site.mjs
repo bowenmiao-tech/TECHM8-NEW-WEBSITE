@@ -1197,7 +1197,7 @@ async function writeProducts(products) {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${indexableProducts.filter((product) => !String(product.sku || '').startsWith('COM1-MON-'))
+${indexableProducts
   .map((product) => {
     const modified = String(product.updated_at || product.created_at || "").slice(0, 10);
     return `  <url>\n    <loc>${SITE_URL}/products/${product.slug}/</loc>${modified ? `\n    <lastmod>${escapeHtml(modified)}</lastmod>` : ""}\n  </url>`;
@@ -1214,7 +1214,7 @@ ${indexableProducts.filter((product) => !String(product.sku || '').startsWith('C
     <title>TECHM8 Online Store</title>
     <link>${SITE_URL}/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
-${indexableProducts
+${indexableProducts.filter((product) => !String(product.sku || '').startsWith('COM1-MON-'))
   .map((product) => {
     const canonical = `${SITE_URL}/products/${product.slug}/`;
     const description = truncate(
