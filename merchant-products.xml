@@ -5,6 +5,33 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>TM8-MAC-USBC-87W</g:id>
+      <title>87W USB-C MacBook Charger</title>
+      <description>Buy a replacement 87W USB-C MacBook charger with cable from TECHM8.</description>
+      <link>https://www.techm8australia.com/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/1788066026476-726335b8.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>49.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Apple Compatible</g:brand>
+
+    </item>
+    <item>
+      <g:id>110621632</g:id>
+      <title>Remax RPP-622 10000MAH power bank</title>
+      <description>Remax RPP-622 10000MAH power bank available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-rpp-622-10000mah-power-bank/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/01-image-1.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/02-image-2.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/03-image-3.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/04-image-4.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>69.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+      <g:gtin>6954851212553</g:gtin>
+    </item>
+    <item>
       <g:id>10276711</g:id>
       <title>WEKOME WP-U99 Magsafe Wirless Charger</title>
       <description>WEKOME WP-U99 Magsafe Wirless Charger available for online order and warehouse dispatch.</description>
@@ -496,18 +523,6 @@
 
     </item>
     <item>
-      <g:id>TM8-MAC-USBC-87W</g:id>
-      <title>87W USB-C MacBook Charger</title>
-      <description>Buy a replacement 87W USB-C MacBook charger with cable from TECHM8.</description>
-      <link>https://www.techm8australia.com/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/1788066026476-726335b8.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>49.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Apple Compatible</g:brand>
-
-    </item>
-    <item>
       <g:id>TM8-MAC-M2-85W</g:id>
       <title>85W MagSafe 2 Power Adapter for MacBook Pro with Retina Display</title>
       <description>Buy a replacement 85W MagSafe 2 power adapter for Retina MacBook Pro from TECHM8.</description>
@@ -611,21 +626,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>69548512215677</g:gtin>
-    </item>
-    <item>
-      <g:id>110621632</g:id>
-      <title>Remax RPP-622 10000MAH power bank</title>
-      <description>Remax RPP-622 10000MAH power bank available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-rpp-622-10000mah-power-bank/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/01-image-1.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/02-image-2.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/03-image-3.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/04-image-4.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>69.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-      <g:gtin>6954851212553</g:gtin>
     </item>
     <item>
       <g:id>110511610</g:id>
