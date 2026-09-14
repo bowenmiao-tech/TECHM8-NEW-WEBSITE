@@ -1,9 +1,69 @@
 {
-  "catalog_updated_at": "2026-09-14T01:18:35.550904+00:00",
+  "catalog_updated_at": "2026-09-14T07:39:51.629553+00:00",
   "total_products": 145,
   "indexable_products": 91,
   "limited_products": 54,
   "products": [
+    {
+      "id": 78,
+      "slug": "ca69-ca112-apple-watch-magnetic-charger",
+      "name": "CA69/CA112 Apple Watch Magnetic Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "missing-brand"
+      ]
+    },
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+      "name": "87W USB-C MacBook Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 2036,
       "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
@@ -24,15 +84,6 @@
       "blockers": [
         "description-under-40-characters"
       ],
-      "warnings": []
-    },
-    {
-      "id": 15,
-      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
-      "name": "87W USB-C MacBook Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
@@ -65,17 +116,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 98,
@@ -133,15 +173,6 @@
       "warnings": []
     },
     {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 21,
       "slug": "remax-rpp-623-power-bank-20000-mah",
       "name": "REMAX RPP-623 Power Bank 20000 mAh",
@@ -156,17 +187,6 @@
       "id": 1589,
       "slug": "tm8-car-6576",
       "name": "Car Phone Holder 3",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -205,15 +225,6 @@
       "blockers": [
         "description-under-40-characters"
       ],
-      "warnings": []
-    },
-    {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
@@ -750,17 +761,6 @@
       "blockers": [],
       "warnings": [
         "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 78,
-      "slug": "ca69-ca112-apple-watch-magnetic-charger",
-      "name": "CA69/CA112 Apple Watch Magnetic Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "missing-brand"
       ]
     },
     {
