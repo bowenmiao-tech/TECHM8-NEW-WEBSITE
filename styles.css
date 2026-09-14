@@ -10549,7 +10549,7 @@ html:has(body.repair-page--console-hero) {
 
 .home-banner__slides {
   min-height: auto;
-  aspect-ratio: 1672 / 941;
+  aspect-ratio: 2048 / 768;
   border-radius: 1rem;
 }
 
@@ -10619,7 +10619,7 @@ html:has(body.repair-page--console-hero) {
   }
 
   .home-banner__slides {
-    aspect-ratio: 1672 / 941;
+    aspect-ratio: 2048 / 768;
     border-radius: 0.85rem;
   }
 
