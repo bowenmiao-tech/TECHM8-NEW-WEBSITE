@@ -10551,6 +10551,7 @@ html:has(body.repair-page--console-hero) {
   min-height: auto;
   aspect-ratio: 2048 / 768;
   border-radius: 1rem;
+  overflow: hidden;
 }
 
 .home-banner__flat-link {
@@ -10564,8 +10565,86 @@ html:has(body.repair-page--console-hero) {
 .home-banner__flat-link img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
+}
+
+.home-banner__campaign {
+  position: relative;
+  color: #fff;
+  background: #031d20;
+}
+
+.home-banner__campaign img.home-banner__campaign-art {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 60%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-banner__campaign-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 59%;
+  height: 100%;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: linear-gradient(90deg, #031d20 65%, transparent);
+}
+
+.home-banner__campaign-kicker {
+  color: #7ff5ec;
+  font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.home-banner__campaign h1 {
+  margin: 0.7rem 0 0;
+  font-size: clamp(1.5rem, 5vw, 4rem);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+.home-banner__campaign h1 span {
+  display: block;
+  margin-top: 0.25em;
+  color: #7ff5ec;
+  font-size: 0.58em;
+  letter-spacing: -0.025em;
+}
+
+.home-banner__campaign p {
+  margin: 1rem 0 1.4rem;
+  color: #d3e8e6;
+  font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+}
+
+.home-banner__campaign-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1.25rem;
+  border-radius: 999px;
+  background: #7ff5ec;
+  color: #031d20;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.home-banner__flat-link:focus-visible {
+  outline: 3px solid #7ff5ec;
+  outline-offset: -4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-banner__slide { transition: none; transform: none; }
 }
 
 .home-banner__controls {
@@ -10622,6 +10701,16 @@ html:has(body.repair-page--console-hero) {
     aspect-ratio: 2048 / 768;
     border-radius: 0.85rem;
   }
+
+  .home-banner__campaign-copy { padding: 0.75rem; width: 63%; }
+  .home-banner__campaign-kicker { display: none; }
+  .home-banner__campaign h1 { margin: 0; font-size: clamp(1.4rem, 5.4vw, 2.4rem); }
+  .home-banner__campaign h1 span { font-size: 0.61em; }
+  .home-banner__campaign p { display: none; }
+  .home-banner__campaign-cta { margin-top: 0.75rem; padding: 0.4rem 0.65rem; gap: 0.4rem; font-size: 0.7rem; }
+
+  .home-banner__counter { display: none; }
+  .home-banner__dots { position: static; transform: none; }
 
   .home-banner__flat-link {
     border-radius: 0.85rem;

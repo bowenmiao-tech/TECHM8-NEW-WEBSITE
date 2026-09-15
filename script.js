@@ -1160,9 +1160,9 @@ function initHomeBanner() {
     if (!(slide instanceof HTMLElement)) return;
     const image = slide.querySelector("img[data-src]");
     if (!(image instanceof HTMLImageElement)) return;
-    image.src = image.dataset.src || "";
-    if (image.dataset.srcset) image.srcset = image.dataset.srcset;
     if (image.dataset.sizes) image.sizes = image.dataset.sizes;
+    if (image.dataset.srcset) image.srcset = image.dataset.srcset;
+    image.src = image.dataset.src || "";
     delete image.dataset.src;
     delete image.dataset.srcset;
     delete image.dataset.sizes;
@@ -1173,9 +1173,12 @@ function initHomeBanner() {
     hydrateSlideImage(slides[current]);
     slides.forEach((slide, slideIndex) => {
       slide.classList.toggle("is-active", slideIndex === current);
+      slide.inert = slideIndex !== current;
+      slide.setAttribute("aria-hidden", String(slideIndex !== current));
     });
     dots.forEach((dot, dotIndex) => {
       dot.classList.toggle("is-active", dotIndex === current);
+      dot.setAttribute("aria-current", String(dotIndex === current));
     });
     if (currentCount instanceof HTMLElement) {
       currentCount.textContent = String(current + 1);
@@ -1184,6 +1187,8 @@ function initHomeBanner() {
 
   const restart = (delay = 5000) => {
     window.clearTimeout(timer);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+        banner.matches(":hover") || banner.contains(document.activeElement)) return;
     timer = window.setTimeout(() => {
       render(current + 1);
       restart();
@@ -1214,6 +1219,9 @@ function initHomeBanner() {
   banner.addEventListener("mouseleave", () => {
     restart();
   });
+
+  banner.addEventListener("focusin", () => window.clearTimeout(timer));
+  banner.addEventListener("focusout", () => window.setTimeout(() => restart(), 0));
 
   banner.addEventListener(
     "touchstart",
