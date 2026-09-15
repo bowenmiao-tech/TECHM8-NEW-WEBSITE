@@ -1,9 +1,95 @@
 {
-  "catalog_updated_at": "2026-09-14T13:50:40.621212+00:00",
+  "catalog_updated_at": "2026-09-15T03:18:49.518308+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 81,
+      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
+      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2148,
+      "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
+      "name": "MagSafe Silicone Phone Grip - Sky Blue",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2146,
+      "slug": "repairdesk-misc-10857-magsafe-silicone-phone-grip-purple",
+      "name": "MagSafe Silicone Phone Grip - Purple",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2149,
+      "slug": "repairdesk-misc-10854-magsafe-silicone-phone-grip-black",
+      "name": "MagSafe Silicone Phone Grip - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2150,
+      "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
+      "name": "MagSafe Multi-Wallet - Brown",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2152,
+      "slug": "repairdesk-misc-10851-magsafe-multi-wallet-grey",
+      "name": "MagSafe Multi-Wallet - Grey",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2145,
+      "slug": "repairdesk-misc-10888-magsafe-stand-wallet-black",
+      "name": "MagSafe Stand Wallet - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 78,
+      "slug": "ca69-ca112-apple-watch-magnetic-charger",
+      "name": "CA69/CA112 Apple Watch Magnetic Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "missing-brand"
+      ]
+    },
     {
       "id": 4339,
       "slug": "com1-monitor-msi-mag271kpd7",
@@ -351,17 +437,6 @@
       "warnings": []
     },
     {
-      "id": 78,
-      "slug": "ca69-ca112-apple-watch-magnetic-charger",
-      "name": "CA69/CA112 Apple Watch Magnetic Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "missing-brand"
-      ]
-    },
-    {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
       "name": "1M Ultra Tough USB-C to USB-C Cable",
@@ -453,15 +528,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 81,
-      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
-      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 98,
@@ -651,17 +717,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2148,
-      "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
-      "name": "MagSafe Silicone Phone Grip - Sky Blue",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
@@ -918,17 +973,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2150,
-      "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
-      "name": "MagSafe Multi-Wallet - Brown",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
@@ -1401,28 +1445,6 @@
       "warnings": []
     },
     {
-      "id": 2145,
-      "slug": "repairdesk-misc-10888-magsafe-stand-wallet-black",
-      "name": "MagSafe Stand Wallet - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2152,
-      "slug": "repairdesk-misc-10851-magsafe-multi-wallet-grey",
-      "name": "MagSafe Multi-Wallet - Grey",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2151,
       "slug": "repairdesk-misc-10852-magsafe-multi-wallet-black",
       "name": "MagSafe Multi-Wallet - Black",
@@ -1467,31 +1489,9 @@
       ]
     },
     {
-      "id": 2146,
-      "slug": "repairdesk-misc-10857-magsafe-silicone-phone-grip-purple",
-      "name": "MagSafe Silicone Phone Grip - Purple",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2147,
       "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
       "name": "MagSafe Silicone Phone Grip - Pink",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2149,
-      "slug": "repairdesk-misc-10854-magsafe-silicone-phone-grip-black",
-      "name": "MagSafe Silicone Phone Grip - Black",
       "indexable": false,
       "score": 65,
       "blockers": [
