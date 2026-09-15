@@ -1,0 +1,22 @@
+import { chromium } from 'file:///C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({headless:true,channel:'chrome'});
+const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+await page.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
+await page.locator('[data-cookie-essential]').click();
+await page.locator('[data-banner-next]').click();
+assert.equal(await page.locator('[data-banner-current]').textContent(),'2');
+await page.locator('[data-banner-prev]').click();
+assert.equal(await page.locator('[data-banner-current]').textContent(),'1');
+await page.locator('[data-banner-prev]').click();
+assert.equal(await page.locator('[data-banner-current]').textContent(),'3');
+const active=await page.locator('[data-banner-slide]').evaluateAll(slides=>slides.filter(s=>!s.inert).length);
+assert.equal(active,1);
+await page.locator('[data-banner-dot]').first().click();
+await page.waitForTimeout(5500);
+assert.equal(await page.locator('[data-banner-current]').textContent(),'1');
+await page.locator('.home-banner__campaign').click();
+await page.waitForURL('**/shop.html');
+console.log('PASS: next, previous, wraparound, hidden-slide focus, reduced motion, campaign shop link at mobile 2x.');
+await browser.close();
+
