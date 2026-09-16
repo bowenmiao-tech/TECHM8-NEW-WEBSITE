@@ -5,6 +5,18 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>8830389</g:id>
+      <title>1M Ultra Tough USB-C to USB-C Cable</title>
+      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
       <g:id>109041519</g:id>
       <title>REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05</title>
       <description>REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05 available for online order and warehouse dispatch.</description>
@@ -53,18 +65,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>6954851235415</g:gtin>
-    </item>
-    <item>
-      <g:id>8830389</g:id>
-      <title>1M Ultra Tough USB-C to USB-C Cable</title>
-      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
     </item>
     <item>
       <g:id>694102765273</g:id>
