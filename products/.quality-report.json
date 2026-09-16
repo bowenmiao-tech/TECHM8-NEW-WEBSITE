@@ -1,9 +1,58 @@
 {
-  "catalog_updated_at": "2026-09-15T06:25:37.076453+00:00",
+  "catalog_updated_at": "2026-09-16T04:14:58.940624+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 75,
+      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
+      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 77,
+      "slug": "wekome-wp-u99-magsafe-wirless-charger",
+      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+      "name": "87W USB-C MacBook Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 81,
+      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
+      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 69,
       "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
@@ -25,15 +74,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 81,
-      "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
-      "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 2148,
@@ -459,17 +499,6 @@
       "warnings": []
     },
     {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 100,
       "slug": "1m-ultra-tough-type-c-to-lightning-cable",
       "name": "1M Ultra Tough USB-C to Lightning Cable",
@@ -499,15 +528,6 @@
       ]
     },
     {
-      "id": 15,
-      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
-      "name": "87W USB-C MacBook Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 2036,
       "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
       "name": "USB-C WEKOME YB03 Wired Earphone",
@@ -533,17 +553,6 @@
       "id": 22,
       "slug": "remax-rpp-622-10000mah-power-bank",
       "name": "Remax RPP-622 10000MAH power bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 77,
-      "slug": "wekome-wp-u99-magsafe-wirless-charger",
-      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -981,15 +990,6 @@
       "id": 95,
       "slug": "wekome-wdc-61-lighting-to-typec-charging-data-cable",
       "name": "WEKOME WDC-61 Lighting to TypeC Charging Data Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 75,
-      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
-      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
       "indexable": true,
       "score": 100,
       "blockers": [],
