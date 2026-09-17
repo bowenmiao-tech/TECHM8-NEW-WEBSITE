@@ -5,6 +5,68 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>TM8-MAC-USBC-87W</g:id>
+      <title>87W USB-C MacBook Charger</title>
+      <description>Buy a replacement 87W USB-C MacBook charger with cable from TECHM8.</description>
+      <link>https://www.techm8australia.com/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/1788066026476-726335b8.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>49.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Apple Compatible</g:brand>
+
+    </item>
+    <item>
+      <g:id>697105026670</g:id>
+      <title>CA69/CA112 Apple Watch Magnetic Charger</title>
+      <description>CA69/CA112 Apple Watch Magnetic Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/ca69-ca112-apple-watch-magnetic-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940038631-058a55f6.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940058013-b8edf5c5.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>39.00 AUD</g:price>
+      <g:condition>new</g:condition>
+
+      <g:gtin>6971050266705</g:gtin>
+    </item>
+    <item>
+      <g:id>10276711</g:id>
+      <title>WEKOME WP-U99 Magsafe Wirless Charger</title>
+      <description>WEKOME WP-U99 Magsafe Wirless Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wp-u99-magsafe-wirless-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939501474-605c1d8d.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939514097-2581510f.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>69.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027640081</g:gtin>
+    </item>
+    <item>
+      <g:id>TM8-CCH-7150</g:id>
+      <title>45W Dual USB-C Car Charger - White</title>
+      <description>45W Dual USB-C Car Charger. For standard 12V/24V vehicle power sockets.</description>
+      <link>https://www.techm8australia.com/products/tm8-cch-7150/</link>
+      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/1663976176.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Generic</g:brand>
+      <g:gtin>2986000071500</g:gtin>
+    </item>
+    <item>
+      <g:id>8830389</g:id>
+      <title>1M Ultra Tough USB-C to USB-C Cable</title>
+      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
       <g:id>7732445</g:id>
       <title>100W Wall Charger</title>
       <description>100W Wall Charger available for online order and warehouse dispatch.</description>
@@ -30,18 +92,6 @@
       <g:gtin>6941027651360</g:gtin>
     </item>
     <item>
-      <g:id>8830389</g:id>
-      <title>1M Ultra Tough USB-C to USB-C Cable</title>
-      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
-    </item>
-    <item>
       <g:id>109041519</g:id>
       <title>REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05</title>
       <description>REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05 available for online order and warehouse dispatch.</description>
@@ -52,31 +102,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>6954851260271</g:gtin>
-    </item>
-    <item>
-      <g:id>10276711</g:id>
-      <title>WEKOME WP-U99 Magsafe Wirless Charger</title>
-      <description>WEKOME WP-U99 Magsafe Wirless Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wp-u99-magsafe-wirless-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939501474-605c1d8d.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939514097-2581510f.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>69.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027640081</g:gtin>
-    </item>
-    <item>
-      <g:id>TM8-MAC-USBC-87W</g:id>
-      <title>87W USB-C MacBook Charger</title>
-      <description>Buy a replacement 87W USB-C MacBook charger with cable from TECHM8.</description>
-      <link>https://www.techm8australia.com/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/1788066026476-726335b8.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>49.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Apple Compatible</g:brand>
-
     </item>
     <item>
       <g:id>110721643</g:id>
@@ -110,19 +135,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
 
-    </item>
-    <item>
-      <g:id>697105026670</g:id>
-      <title>CA69/CA112 Apple Watch Magnetic Charger</title>
-      <description>CA69/CA112 Apple Watch Magnetic Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/ca69-ca112-apple-watch-magnetic-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940038631-058a55f6.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ca69-ca112-apple-watch-magnetic-charger/1778940058013-b8edf5c5.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>39.00 AUD</g:price>
-      <g:condition>new</g:condition>
-
-      <g:gtin>6971050266705</g:gtin>
     </item>
     <item>
       <g:id>8822381</g:id>
@@ -873,18 +885,6 @@
       <g:condition>new</g:condition>
       <g:brand>Generic</g:brand>
       <g:gtin>2986000071517</g:gtin>
-    </item>
-    <item>
-      <g:id>TM8-CCH-7150</g:id>
-      <title>45W Dual USB-C Car Charger - White</title>
-      <description>45W Dual USB-C Car Charger. For standard 12V/24V vehicle power sockets.</description>
-      <link>https://www.techm8australia.com/products/tm8-cch-7150/</link>
-      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/1663976176.jpg</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Generic</g:brand>
-      <g:gtin>2986000071500</g:gtin>
     </item>
     <item>
       <g:id>TM8-CCH-9322</g:id>
