@@ -5,6 +5,31 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>7732445</g:id>
+      <title>100W Wall Charger</title>
+      <description>100W Wall Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/100w-wall-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/100w-wall-charger/1778596208957-4240ebd0.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>99.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>1026141</g:id>
+      <title>WEKOME WDC-60 Type-C-C Charging Data Cable</title>
+      <description>WEKOME WDC-60 Type-C-C Charging Data Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wdc-60-type-c-c-charging-data-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-60-type-c-c-charging-data-cable/1779757900970-2b6d6d0b.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-60-type-c-c-charging-data-cable/1779757899694-df031ad5.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>36.59 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027651360</g:gtin>
+    </item>
+    <item>
       <g:id>8830389</g:id>
       <title>1M Ultra Tough USB-C to USB-C Cable</title>
       <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
@@ -393,18 +418,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027655641</g:gtin>
-    </item>
-    <item>
-      <g:id>7732445</g:id>
-      <title>100W Wall Charger</title>
-      <description>100W Wall Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/100w-wall-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/100w-wall-charger/1778596208957-4240ebd0.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>99.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
     </item>
     <item>
       <g:id>108231386</g:id>
@@ -935,19 +948,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651346</g:gtin>
-    </item>
-    <item>
-      <g:id>1026141</g:id>
-      <title>WEKOME WDC-60 Type-C-C Charging Data Cable</title>
-      <description>WEKOME WDC-60 Type-C-C Charging Data Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wdc-60-type-c-c-charging-data-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-60-type-c-c-charging-data-cable/1779757900970-2b6d6d0b.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-60-type-c-c-charging-data-cable/1779757899694-df031ad5.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>36.59 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027651360</g:gtin>
     </item>
     <item>
       <g:id>110671637</g:id>

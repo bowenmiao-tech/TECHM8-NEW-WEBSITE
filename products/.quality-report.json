@@ -1,9 +1,40 @@
 {
-  "catalog_updated_at": "2026-09-16T06:56:08.197802+00:00",
+  "catalog_updated_at": "2026-09-17T04:41:22.495428+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2081,
+      "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
+      "name": "2M Stand Selfie Live Stream Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 72,
+      "slug": "100w-wall-charger",
+      "name": "100W Wall Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 96,
+      "slug": "wekome-wdc-60-type-c-c-charging-data-cable",
+      "name": "WEKOME WDC-60 Type-C-C Charging Data Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
@@ -711,17 +742,6 @@
       "warnings": []
     },
     {
-      "id": 2081,
-      "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
-      "name": "2M Stand Selfie Live Stream Stand",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 83,
       "slug": "remax-g6-wireless-gamebubs",
       "name": "Remax G6  Wireless GameBubs",
@@ -906,17 +926,6 @@
       "id": 66,
       "slug": "wekome-wp-c64-car-charger",
       "name": "WEKOME WP-C64 Car Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 72,
-      "slug": "100w-wall-charger",
-      "name": "100W Wall Charger",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -1412,15 +1421,6 @@
       "id": 97,
       "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
       "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 96,
-      "slug": "wekome-wdc-60-type-c-c-charging-data-cable",
-      "name": "WEKOME WDC-60 Type-C-C Charging Data Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
