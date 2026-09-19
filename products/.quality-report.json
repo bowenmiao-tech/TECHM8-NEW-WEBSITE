@@ -1,5 +1,5 @@
 {
-  "catalog_updated_at": "2026-09-19T04:05:54.163805+00:00",
+  "catalog_updated_at": "2026-09-19T06:26:54.262413+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
@@ -14,6 +14,26 @@
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 2036,
+      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
+      "name": "USB-C WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 23,
+      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
     },
     {
       "id": 100,
@@ -51,17 +71,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2036,
-      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
-      "name": "USB-C WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
@@ -742,15 +751,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 23,
-      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 12,
