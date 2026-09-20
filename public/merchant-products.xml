@@ -5,11 +5,77 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>TM8-CAR-6576</g:id>
+      <title>Car Phone Holder 3</title>
+      <description>Car Phone Holder. Universal smartphones.</description>
+      <link>https://www.techm8australia.com/products/tm8-car-6576/</link>
+      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/165076220342456287.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Generic</g:brand>
+      <g:gtin>2988000065763</g:gtin>
+    </item>
+    <item>
+      <g:id>7732445-2</g:id>
+      <title>Remax 2.4A Universal Travel Adaptor RP-U23</title>
+      <description>Remax 2.4A Universal Travel Adaptor RP-U23 available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-2-4a-universal-travel-adaptor-rp-u23/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-2-4a-universal-travel-adaptor-rp-u23/1778942280621-3d099262.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-2-4a-universal-travel-adaptor-rp-u23/1778942281982-c580ea58.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>59.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+
+    </item>
+    <item>
       <g:id>8830389</g:id>
       <title>1M Ultra Tough USB-C to USB-C Cable</title>
       <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
       <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
       <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>425222609228</g:id>
+      <title>30W Type c &amp; Usb Wall Charger</title>
+      <description>Type c &amp; Usb Wall Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/45w-dual-type-c-fast-wall-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596281566-9423c68b.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596276865-f281f7d0.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596278429-b0cb353e.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596280017-8e7a5146.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>6971278727808</g:id>
+      <title>Remax PD BT230/BT260 Wireless Earbuds</title>
+      <description>Remax PD BT230/BT260 Wireless Earbuds available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-pd-bt230-bt260-wireless-earbuds/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-pd-bt230-bt260-wireless-earbuds/1779116824800-985becc2.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-pd-bt230-bt260-wireless-earbuds/1779116830714-39deb4dd.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-pd-bt230-bt260-wireless-earbuds/1779116836166-8eb3a591.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>89.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+
+    </item>
+    <item>
+      <g:id>8822381</g:id>
+      <title>1M Ultra Tough USB-C to Lightning Cable</title>
+      <description>1M Ultra Tough Type c to Lightning Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-lightning-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-lightning-cable/1784437643393-879d59ec.webp</g:image_link>
       <g:availability>in_stock</g:availability>
       <g:price>35.00 AUD</g:price>
       <g:condition>new</g:condition>
@@ -37,33 +103,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027655016</g:gtin>
-    </item>
-    <item>
-      <g:id>8822381</g:id>
-      <title>1M Ultra Tough USB-C to Lightning Cable</title>
-      <description>1M Ultra Tough Type c to Lightning Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-lightning-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-lightning-cable/1784437643393-879d59ec.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
-    </item>
-    <item>
-      <g:id>425222609228</g:id>
-      <title>30W Type c &amp; Usb Wall Charger</title>
-      <description>Type c &amp; Usb Wall Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/45w-dual-type-c-fast-wall-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596281566-9423c68b.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596276865-f281f7d0.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596278429-b0cb353e.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596280017-8e7a5146.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
     </item>
     <item>
       <g:id>110501609</g:id>
@@ -273,18 +312,6 @@
       <g:gtin>695485122607</g:gtin>
     </item>
     <item>
-      <g:id>TM8-CAR-6576</g:id>
-      <title>Car Phone Holder 3</title>
-      <description>Car Phone Holder. Universal smartphones.</description>
-      <link>https://www.techm8australia.com/products/tm8-car-6576/</link>
-      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/165076220342456287.jpg</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Generic</g:brand>
-      <g:gtin>2988000065763</g:gtin>
-    </item>
-    <item>
       <g:id>492967793802</g:id>
       <title>3 USB WALL CHARGER</title>
       <description>3 USB WALL CHARGER available for online order and warehouse dispatch.</description>
@@ -348,19 +375,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>6954851256243</g:gtin>
-    </item>
-    <item>
-      <g:id>7732445-2</g:id>
-      <title>Remax 2.4A Universal Travel Adaptor RP-U23</title>
-      <description>Remax 2.4A Universal Travel Adaptor RP-U23 available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-2-4a-universal-travel-adaptor-rp-u23/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-2-4a-universal-travel-adaptor-rp-u23/1778942280621-3d099262.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-2-4a-universal-travel-adaptor-rp-u23/1778942281982-c580ea58.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>59.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-
     </item>
     <item>
       <g:id>105671116</g:id>
@@ -499,20 +513,6 @@
       <g:price>25.00 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>OZTECHM8</g:brand>
-
-    </item>
-    <item>
-      <g:id>6971278727808</g:id>
-      <title>Remax PD BT230/BT260 Wireless Earbuds</title>
-      <description>Remax PD BT230/BT260 Wireless Earbuds available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-pd-bt230-bt260-wireless-earbuds/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-pd-bt230-bt260-wireless-earbuds/1779116824800-985becc2.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-pd-bt230-bt260-wireless-earbuds/1779116830714-39deb4dd.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-pd-bt230-bt260-wireless-earbuds/1779116836166-8eb3a591.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>89.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
 
     </item>
     <item>

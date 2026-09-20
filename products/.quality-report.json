@@ -1,13 +1,66 @@
 {
-  "catalog_updated_at": "2026-09-19T06:26:54.262413+00:00",
+  "catalog_updated_at": "2026-09-20T03:59:33.882645+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
     {
+      "id": 1589,
+      "slug": "tm8-car-6576",
+      "name": "Car Phone Holder 3",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 89,
+      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
+      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 1568,
+      "slug": "tm8-car-11126",
+      "name": "Remax RM-C42 Pro Magnetic Rotating Zinc Alloy Car Mount",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
       "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 71,
+      "slug": "45w-dual-type-c-fast-wall-charger",
+      "name": "30W Type c & Usb Wall Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 84,
+      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
+      "name": "Remax PD BT230/BT260 Wireless Earbuds",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -27,15 +80,6 @@
       "warnings": []
     },
     {
-      "id": 23,
-      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 100,
       "slug": "1m-ultra-tough-type-c-to-lightning-cable",
       "name": "1M Ultra Tough USB-C to Lightning Cable",
@@ -45,15 +89,13 @@
       "warnings": []
     },
     {
-      "id": 71,
-      "slug": "45w-dual-type-c-fast-wall-charger",
-      "name": "30W Type c & Usb Wall Charger",
+      "id": 23,
+      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
       "indexable": true,
-      "score": 92,
+      "score": 100,
       "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
+      "warnings": []
     },
     {
       "id": 25,
@@ -709,17 +751,6 @@
       ]
     },
     {
-      "id": 1589,
-      "slug": "tm8-car-6576",
-      "name": "Car Phone Holder 3",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 73,
       "slug": "3-usb-wall-charger",
       "name": "3 USB WALL CHARGER",
@@ -787,15 +818,6 @@
       "id": 74,
       "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
       "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 89,
-      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
-      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -888,17 +910,6 @@
       ]
     },
     {
-      "id": 1568,
-      "slug": "tm8-car-11126",
-      "name": "Remax RM-C42 Pro Magnetic Rotating Zinc Alloy Car Mount",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 1569,
       "slug": "tm8-car-10834",
       "name": "Remax RM-C36 Rotatable Car Phone Holder",
@@ -986,17 +997,6 @@
       "id": 101,
       "slug": "3-in-1-cabin-crew-charging-cable",
       "name": "3 in 1 Cabin Crew Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 84,
-      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
-      "name": "Remax PD BT230/BT260 Wireless Earbuds",
       "indexable": true,
       "score": 92,
       "blockers": [],
