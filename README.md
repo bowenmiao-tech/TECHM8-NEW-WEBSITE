@@ -31,6 +31,23 @@ This README is the project memory file. It records the current architecture, bus
 - Account: `/account.html`
 - Admin product page: `/admin/products.html`
 
+## Used Phones and Devices
+
+- List: `/used-devices.html` (`?category=used-phones` by default; one tab per category, plus All)
+- Device page: `/used-device.html?d=<slug>`
+- Code: `used-devices.js` and `used-devices.css`, loaded alongside the normal `styles.min.css` and
+  `script.min.js`. They need no build step and are not part of the prerender.
+- Both pages read the public `get_used_device_listings` / `get_used_device_listing` functions on every
+  visit. Devices are published from the staff POS the moment they go on sale and withdrawn the moment
+  they sell, so these pages must stay live rather than prerendered.
+- A device page for a sold or unknown slug shows "This device has been sold" with a link back to the list.
+- Battery health is shown as a number only from 85% up; below that the page says "Good battery". The POS
+  already sends it that way; the page applies the same rule again.
+- Used devices are bought in store: the page shows the store it is in, a call button and the store page.
+  They are not in `products` and do not go through the cart or checkout.
+- The contract with the POS is `USED_DEVICE_WEBSITE_API.md` in the staff POS repository.
+- `/shop.html` links to the list from a banner above the catalogue, outside the prerendered category block.
+
 ## Backend / Supabase Reality
 
 Do not revert this project back to Hostinger MySQL logic. The current system uses Supabase.

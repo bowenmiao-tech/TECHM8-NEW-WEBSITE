@@ -1,0 +1,204 @@
+/* Second-hand devices: the category list and the device page. Uses the site's
+   own tokens from styles.css, so it sits alongside the rest of the store. */
+
+.used-hero { padding-bottom: 0.5rem; }
+.used-hero h1 { margin: 0.35rem 0 0.5rem; }
+.used-hero p { max-width: 46rem; color: var(--muted); }
+
+.used-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+.used-trust li::before { content: "\2713"; margin-right: 0.4rem; color: var(--brand-dark); }
+
+.used-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0.75rem;
+}
+.used-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.6rem;
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-strong);
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+}
+.used-tab span {
+  min-width: 1.5rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(17, 141, 149, 0.1);
+  color: var(--accent);
+  font-size: 0.8rem;
+  text-align: center;
+}
+.used-tab.is-active { border-color: var(--accent); background: var(--accent); color: #fff; }
+.used-tab.is-active span { background: rgba(255, 255, 255, 0.22); color: #fff; }
+
+.used-count { margin: 0 0 1rem; color: var(--muted); font-weight: 700; }
+
+.used-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.used-card__media { aspect-ratio: 1 / 1; }
+/* The whole photo, not a crop: it is the actual device being sold. */
+.used-card__image { object-fit: contain; border-radius: 0.75rem; }
+.used-card__store { color: var(--muted); font-size: 0.82rem; font-weight: 700; }
+.used-card__cta { justify-content: center; width: 100%; }
+
+.used-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.used-chips li {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(7, 39, 45, 0.06);
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.used-condition { background: rgba(22, 200, 186, 0.14); color: var(--brand-dark); }
+
+.used-empty {
+  grid-column: 1 / -1;
+  padding: 3rem 1.5rem;
+  border: 1px dashed var(--line);
+  border-radius: 1rem;
+  background: var(--surface-strong);
+  color: var(--muted);
+  text-align: center;
+}
+.used-empty h1, .used-empty h3 { color: var(--text); }
+
+/* The device page */
+.used-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.used-gallery__main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: var(--surface-strong);
+}
+.used-gallery__main img { width: 100%; height: 100%; object-fit: contain; }
+.used-gallery__main--empty { color: var(--muted); font-weight: 700; }
+
+.used-gallery__thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.used-gallery__thumb {
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  background: var(--surface-strong);
+  cursor: pointer;
+}
+.used-gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.used-gallery__thumb.is-active { border-color: var(--accent); }
+
+.used-detail__title { margin: 0.6rem 0 0.35rem; font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1.15; }
+.used-detail__price {
+  margin: 0 0 1rem;
+  color: var(--accent);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.used-specs {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.25rem;
+  font-size: 0.98rem;
+}
+.used-specs th,
+.used-specs td { padding: 0.7rem 0; border-bottom: 1px solid var(--line); text-align: left; }
+.used-specs th { width: 38%; color: var(--muted); font-weight: 700; }
+.used-specs td { font-weight: 700; }
+
+.used-store {
+  padding: 1.1rem 1.2rem;
+  border: 1px solid rgba(17, 141, 149, 0.22);
+  border-radius: 1rem;
+  background: rgba(22, 200, 186, 0.07);
+}
+.used-store p { margin: 0 0 0.6rem; }
+.used-store__label { font-size: 1.02rem; }
+.used-store__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
+
+.used-detail__more {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.used-panel {
+  padding: 1.25rem 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--surface-strong);
+}
+.used-panel h2 { margin: 0 0 0.75rem; font-size: 1.2rem; }
+.used-panel p { margin: 0 0 0.75rem; color: var(--text); line-height: 1.6; }
+.used-highlights { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
+.used-highlights li { display: flex; gap: 0.55rem; font-weight: 700; }
+.used-highlights li::before { content: "\2713"; color: var(--brand-dark); }
+
+/* The store page's pointer to this catalogue */
+.used-promo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(17, 141, 149, 0.22);
+  border-radius: 1.25rem;
+  background: linear-gradient(120deg, rgba(22, 200, 186, 0.12), rgba(255, 255, 255, 0.9));
+}
+.used-promo h2 { margin: 0.2rem 0 0.3rem; }
+.used-promo p { margin: 0; color: var(--muted); }
+
+@media (max-width: 1100px) {
+  .used-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 860px) {
+  .used-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .used-detail,
+  .used-detail__more { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .used-grid { grid-template-columns: minmax(0, 1fr); }
+  .used-store__actions .button { flex: 1 1 100%; justify-content: center; }
+}
