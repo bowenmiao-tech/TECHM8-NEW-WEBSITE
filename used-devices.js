@@ -5,6 +5,9 @@
 // every visit instead of being prerendered with the product pages. Nothing here
 // needs a build step: a device appears on the next page load after publishing.
 //
+// Each device is also a product in the shop (Second Hand Devices), so it goes
+// in the normal cart. It is one of a kind: the cart only ever holds one.
+//
 //   used-devices.html            the category list (?category=used-phones)
 //   used-device.html?d=<slug>    one device
 
@@ -14,14 +17,17 @@ const SUPABASE_KEY = CONFIG.supabaseAnonKey ||
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3bHJvbnZtZ3F6a2xlb2ZyaWlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTIwMTYsImV4cCI6MjA5MTU2ODAxNn0.f_WFZmR8MlM49yXhnBMwKyqDDpT4EOZLGgg-TPbdrNY";
 const DEFAULT_CATEGORY = "used-phones";
 const GOOD_BATTERY_FROM = 85;
+// The shop's taxonomy puts every used device under this parent category.
+const SHOP_PARENT_SLUG = "second-hand-devices";
 
-// Where each store is, so a device can say who to call about it.
+// Where each store is, so a device can say where it is. The POS store code is
+// the key; the name match is for listings published before it was sent.
 const STORES = [
-  { match: /park ridge/i, name: "Park Ridge", page: "stores/park-ridge.html", phone: "0452488710" },
-  { match: /fairfield/i, name: "Fairfield", page: "stores/fairfield.html", phone: "0412788818" },
-  { match: /toowong/i, name: "Toowong", page: "stores/toowong.html", phone: "0485500099" },
-  { match: /north lakes/i, name: "North Lakes", page: "stores/north-lakes.html", phone: "0482390009" },
-  { match: /brassall/i, name: "Brassall", page: "stores/brassall.html", phone: "0403999366" },
+  { code: "parkridge", match: /park ridge/i, name: "Park Ridge", page: "stores/park-ridge.html" },
+  { code: "fairfield", match: /fairfield/i, name: "Fairfield", page: "stores/fairfield.html" },
+  { code: "toowong", match: /toowong/i, name: "Toowong", page: "stores/toowong.html" },
+  { code: "northlakes", match: /north lakes/i, name: "North Lakes", page: "stores/north-lakes.html" },
+  { code: "brassall", match: /brassall/i, name: "Brassall", page: "stores/brassall.html" },
 ];
 
 const escapeHtml = (value) =>
@@ -31,6 +37,9 @@ const escapeHtml = (value) =>
 
 const money = (value) =>
   new Intl.NumberFormat("en-AU", { style: "currency", currency: "AUD" }).format(Number(value) || 0);
+
+const slugify = (value) =>
+  String(value || "").trim().toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
 async function rpc(name, body) {
   const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`, {
@@ -65,16 +74,18 @@ function cleanHighlights(listing) {
       const match = /^battery health (\d+)%$/i.exec(String(line));
       return match && Number(match[1]) < GOOD_BATTERY_FROM ? "Good battery" : String(line);
     })
-    // The store gets its own panel on the detail page.
-    .filter((line) => !/^in stock at /i.test(line));
+    // The store is the device location, and the inspection count is not
+    // something the page shows, whatever an older listing still carries.
+    .filter((line) => !/^in stock at /i.test(line) && !/inspection checks passed/i.test(line));
 }
 
 function storeFor(listing) {
-  const line = (Array.isArray(listing.highlights) ? listing.highlights : [])
-    .find((entry) => /^in stock at /i.test(String(entry)));
-  const label = line ? String(line).replace(/^in stock at /i, "") : "";
-  const known = STORES.find((store) => store.match.test(label));
-  return { label, ...(known || {}) };
+  const legacy = (Array.isArray(listing.highlights) ? listing.highlights : [])
+    .map(String).find((line) => /^in stock at /i.test(line));
+  const label = String(listing.store_name || "").trim() || (legacy ? legacy.replace(/^in stock at /i, "") : "");
+  const known = STORES.find((store) => store.code === listing.store_code) ||
+    STORES.find((store) => label && store.match.test(label));
+  return { label: label || (known ? known.name : ""), ...(known || {}) };
 }
 
 function imagesOf(listing) {
@@ -85,6 +96,11 @@ function imagesOf(listing) {
 
 function detailUrl(listing) {
   return `used-device.html?d=${encodeURIComponent(listing.slug)}`;
+}
+
+// The shop's category for this device, e.g. second-hand-devices--used-phones.
+function shopCategorySlug(listing) {
+  return `${SHOP_PARENT_SLUG}--${slugify(listing.category_name || "Other Used Devices")}`;
 }
 
 // ---------------------------------------------------------------- list page
@@ -195,14 +211,41 @@ function renderGallery(listing) {
 const makerOf = (listing) => String(listing.brand || "").trim().split(/\s+/)[0] || "";
 
 function specRows(listing) {
+  const store = storeFor(listing);
+  const location = store.label
+    ? store.page
+      ? `<a href="${escapeHtml(store.page)}">${escapeHtml(store.label)}</a>`
+      : escapeHtml(store.label)
+    : "";
   return [
-    ["Brand", makerOf(listing)],
-    ["Model", listing.model],
-    ["Storage", listing.storage],
-    ["Colour", listing.color],
-    ["Condition", listing.condition_grade],
-    ["Battery", batteryText(listing)],
+    ["Brand", escapeHtml(makerOf(listing))],
+    ["Model", escapeHtml(listing.model)],
+    ["Storage", escapeHtml(listing.storage)],
+    ["Colour", escapeHtml(listing.color)],
+    ["Condition", escapeHtml(listing.condition_grade)],
+    ["Battery", escapeHtml(batteryText(listing))],
+    ["Device location", location],
   ].filter(([, value]) => value);
+}
+
+// What the cart needs, in the shape of a shop product.
+function cartProduct(listing) {
+  const image = imagesOf(listing)[0];
+  return {
+    id: listing.product_id,
+    slug: listing.slug,
+    sku: listing.sku || "",
+    name: listing.title,
+    brand: makerOf(listing),
+    retail_price: Number(listing.price) || 0,
+    compare_at_price: null,
+    image_url: image ? image.url : "",
+    display_image: image ? image.url : "",
+    category_name: listing.category_name || "Second Hand Devices",
+    category_slug: shopCategorySlug(listing),
+    compatibility: "Second hand",
+    short_description: listing.condition_summary || "",
+  };
 }
 
 function productSchema(listing) {
@@ -218,11 +261,23 @@ function productSchema(listing) {
       "@type": "Offer",
       price: Number(listing.price).toFixed(2),
       priceCurrency: "AUD",
-      availability: "https://schema.org/InStoreOnly",
+      availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/UsedCondition",
       url: window.location.href,
     },
   };
+}
+
+function renderBuy(listing) {
+  const cart = window.TECHM8_CART;
+  if (cart && cart.has(listing.slug)) {
+    return `
+      <p class="used-buy__added">This device is in your cart.</p>
+      <a class="button button--primary used-buy__button" href="cart.html">View cart</a>`;
+  }
+  return `
+    <button class="button button--primary used-buy__button" type="button" data-used-add-cart>Add to cart</button>
+    <p class="used-buy__note">One of a kind: there is only one of this device.</p>`;
 }
 
 async function renderDetailPage(root) {
@@ -244,15 +299,14 @@ async function renderDetailPage(root) {
     document.title = "No longer available | TECHM8";
     shell.innerHTML = `
       <div class="used-empty used-empty--sold">
-        <h1>This device has been sold</h1>
-        <p>Every second-hand device we sell is one of a kind. Have a look at what else is in stock.</p>
+        <h1>This device is no longer available</h1>
+        <p>Every second-hand device we sell is one of a kind, and this one has been sold. Have a look at what else is in stock.</p>
         <a class="button button--primary" href="used-devices.html">See devices in stock</a>
       </div>`;
     return;
   }
 
   const listing = data.listing;
-  const store = storeFor(listing);
   const highlights = cleanHighlights(listing);
   const paragraphs = String(listing.description || "").split(/\n{2,}/).map((part) => part.trim()).filter(Boolean);
 
@@ -266,8 +320,8 @@ async function renderDetailPage(root) {
   if (breadcrumb) {
     breadcrumb.innerHTML = [
       '<a href="index.html">Home</a>',
-      '<a href="used-devices.html?category=all">Used phones and devices</a>',
-      `<a href="used-devices.html?category=${encodeURIComponent(listing.category_slug || DEFAULT_CATEGORY)}">${escapeHtml(listing.category_name || "Used devices")}</a>`,
+      '<a href="shop.html">Online Store</a>',
+      `<a href="category.html?slug=${encodeURIComponent(shopCategorySlug(listing))}">${escapeHtml(listing.category_name || "Second Hand Devices")}</a>`,
       `<span>${escapeHtml(listing.title)}</span>`,
     ].join("<span>/</span>");
   }
@@ -281,17 +335,10 @@ async function renderDetailPage(root) {
         <p class="used-detail__price">${money(listing.price)}</p>
         <table class="used-specs">
           <tbody>
-            ${specRows(listing).map(([label, value]) => `<tr><th scope="row">${escapeHtml(label)}</th><td>${escapeHtml(value)}</td></tr>`).join("")}
+            ${specRows(listing).map(([label, value]) => `<tr><th scope="row">${escapeHtml(label)}</th><td>${value}</td></tr>`).join("")}
           </tbody>
         </table>
-        <div class="used-store">
-          <p class="used-store__label">${store.label ? `In stock at <strong>${escapeHtml(store.label)}</strong>` : "In stock in store"}</p>
-          <p>This is a one-of-a-kind device. Call the store to hold it, or come in to see it and buy it.</p>
-          <div class="used-store__actions">
-            ${store.phone ? `<a class="button button--primary" href="tel:${escapeHtml(store.phone)}">Call ${escapeHtml(store.name)}</a>` : ""}
-            <a class="button button--secondary" href="${escapeHtml(store.page || "stores.html")}">${store.page ? "Store details" : "Find a store"}</a>
-          </div>
-        </div>
+        <div class="used-buy" data-used-buy>${renderBuy(listing)}</div>
       </div>
     </div>
     <div class="used-detail__more">
@@ -313,12 +360,24 @@ async function renderDetailPage(root) {
   schema.textContent = JSON.stringify(productSchema(listing));
   document.head.appendChild(schema);
 
+  const buy = shell.querySelector("[data-used-buy]");
   shell.addEventListener("click", (event) => {
+    const add = event.target.closest("[data-used-add-cart]");
+    if (add) {
+      if (!window.TECHM8_CART) return;
+      window.TECHM8_CART.add(cartProduct(listing));
+      if (buy) buy.innerHTML = renderBuy(listing);
+      return;
+    }
     const thumb = event.target.closest("[data-used-thumb]");
     if (!thumb) return;
     const main = shell.querySelector("[data-used-main-image]");
     if (main) main.src = thumb.dataset.usedThumb;
     shell.querySelectorAll("[data-used-thumb]").forEach((button) => button.classList.toggle("is-active", button === thumb));
+  });
+  // Removing it in another tab, or in the cart, puts the button back.
+  window.addEventListener("techm8:cart-updated", () => {
+    if (buy) buy.innerHTML = renderBuy(listing);
   });
 }
 

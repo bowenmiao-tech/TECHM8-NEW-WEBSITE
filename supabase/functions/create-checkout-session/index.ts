@@ -11,6 +11,12 @@ import {
   snapshotStore,
 } from '../_shared/order-commerce.ts'
 import {
+  claimUsedDevicesForOrder,
+  releaseUsedDevicesForOrder,
+  UsedDeviceOrderError,
+  type UsedDeviceClaim,
+} from '../_shared/used-device-orders.ts'
+import {
   loadStripePaymentConfiguration,
   STRIPE_CHECKOUT_PROFILE_CODES,
   stripeCheckoutPaymentMethodOptions,
@@ -424,6 +430,25 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'Order items could not be saved.' }, { status: 500, headers: corsHeaders })
     }
 
+    // A second-hand device is reserved for this order before the customer pays.
+    let usedDeviceClaim: UsedDeviceClaim | null = null
+    try {
+      usedDeviceClaim = await claimUsedDevicesForOrder(supabaseAdmin, {
+        id: insertedOrder.id,
+        orderCode,
+        customerName,
+        fulfillmentMethod,
+        storeSlug: resolvedStore.slug,
+      })
+    } catch (claimError) {
+      await supabaseAdmin.from('orders').delete().eq('id', insertedOrder.id)
+      if (claimError instanceof UsedDeviceOrderError) {
+        return Response.json({ ok: false, error: claimError.message }, { status: 409, headers: corsHeaders })
+      }
+      console.error(claimError)
+      return Response.json({ ok: false, error: 'The second-hand device in your cart could not be reserved. Please try again.' }, { status: 500, headers: corsHeaders })
+    }
+
     try {
       await recordOrderEvent(supabaseAdmin, insertedOrder.id, {
         eventKey: 'order_submitted',
@@ -532,6 +557,9 @@ Deno.serve(async (req) => {
         customer: stripeCustomer.id,
         locale: 'en',
         client_reference_id: orderCode,
+        // A reserved second-hand device is held for a short checkout only; the
+        // reservation itself lapses 45 minutes after the order.
+        ...(usedDeviceClaim ? { expires_at: Math.floor(Date.now() / 1000) + 31 * 60 } : {}),
         billing_address_collection: 'auto',
         success_url: `${siteUrl}/checkout-success.html?session_id={CHECKOUT_SESSION_ID}&order_code=${encodeURIComponent(orderCode)}`,
         cancel_url: `${siteUrl}/checkout.html?payment=cancelled&order_code=${encodeURIComponent(orderCode)}`,
@@ -588,6 +616,7 @@ Deno.serve(async (req) => {
     } catch (stripeError) {
       console.error(stripeError)
       await supabaseAdmin.from('orders').delete().eq('id', insertedOrder.id)
+      if (usedDeviceClaim) await releaseUsedDevicesForOrder(orderCode)
       return Response.json({ ok: false, error: 'Stripe Checkout session could not be created.' }, { status: 500, headers: corsHeaders })
     }
   } catch (error) {

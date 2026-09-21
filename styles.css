@@ -9097,6 +9097,16 @@ html:has(body.repair-page--console-hero) {
   font-weight: 600;
 }
 
+/* A second-hand device: always one, so no quantity box. */
+.storefront-cart__one-off {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
 .storefront-cart__remove {
   border: 0;
   background: transparent;

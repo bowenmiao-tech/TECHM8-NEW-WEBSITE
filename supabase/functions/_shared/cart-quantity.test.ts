@@ -38,6 +38,13 @@ Deno.test('allows only TECHM8 Everyday Accessory up to 9999', () => {
   )
 })
 
+Deno.test('allows exactly one of a second-hand device', () => {
+  const item = { slug: 'used-apple-iphone-15-128gb-black-a1b2c3', qty: 1 }
+  assert(getMaxCartQuantity(item) === 1, 'a used device should be limited to one')
+  assert(isValidCartQuantity(item), 'one should be accepted')
+  assert(!isValidCartQuantity({ ...item, qty: 2 }), 'two of one device must be rejected')
+})
+
 Deno.test('requires positive whole-number quantities', () => {
   assert(
     !isValidCartQuantity({ slug: 'techm8-everyday-accessory', qty: 1.5 }),

@@ -326,6 +326,10 @@ async function loadCatalog() {
   return products
     .filter((product) => safeSlug(product.slug))
     .filter((product) => product.is_visible === true)
+    // Second-hand devices ("used-" slugs) sell out in minutes and have their own
+    // live page (used-device.html), so they get no static page, sitemap entry
+    // or Merchant Center listing.
+    .filter((product) => !String(product.slug).startsWith("used-"))
     .filter((product) => !looksLikeCloneProduct(product))
     .map((product) => {
       const category = categoryById.get(product.pos_category_id) || null;

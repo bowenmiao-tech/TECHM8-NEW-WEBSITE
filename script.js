@@ -1928,8 +1928,20 @@ function getConfiguredSiteBaseUrl() {
   return window.location.origin;
 }
 
+// A second-hand device is one of a kind: its slug starts with "used-", only one
+// can go in the cart, and it has its own page (used-device.html) instead of
+// the product page.
+function isUsedDeviceSlug(slug) {
+  return String(slug || "").trim().toLowerCase().startsWith("used-");
+}
+
+function getUsedDevicePageHref(slug) {
+  return `/used-device.html?d=${encodeURIComponent(String(slug || "").trim())}`;
+}
+
 function getProductPageHref(slug) {
   const safeSlug = String(slug || "").trim();
+  if (isUsedDeviceSlug(safeSlug)) return getUsedDevicePageHref(safeSlug);
   return safeSlug
     ? `/product.html?slug=${encodeURIComponent(safeSlug)}`
     : "/shop.html";
@@ -1937,6 +1949,7 @@ function getProductPageHref(slug) {
 
 function getProductCanonicalHref(slug) {
   const safeSlug = String(slug || "").trim();
+  if (isUsedDeviceSlug(safeSlug)) return getUsedDevicePageHref(safeSlug);
   return safeSlug ? `/products/${encodeURIComponent(safeSlug)}/` : "/shop.html";
 }
 
@@ -3655,6 +3668,7 @@ const CART_ITEM_MAX_QUANTITY_BY_SLUG = Object.freeze({
 });
 
 function getCartItemMaxQuantity(slug) {
+  if (isUsedDeviceSlug(slug)) return 1;
   return (
     CART_ITEM_MAX_QUANTITY_BY_SLUG[String(slug || "").trim().toLowerCase()] ||
     DEFAULT_CART_ITEM_MAX_QUANTITY
@@ -3816,6 +3830,12 @@ function clearCart() {
   saveCart([]);
   updateCartIndicators([]);
 }
+
+// The second-hand device pages (used-devices.js) add to this same cart.
+window.TECHM8_CART = {
+  add: (product) => addItemToCart(product, 1),
+  has: (slug) => loadCart().some((item) => item.slug === slug),
+};
 
 function makeOrderCode() {
   const stamp = new Date()
@@ -5647,7 +5667,7 @@ function createCatalogCard(product, index = Number.POSITIVE_INFINITY) {
     savingsAmount > 0
       ? `<span class="storefront-card__saving">Save ${escapeHtml(formatMoney(savingsAmount))}</span>`
       : "";
-  const stockLabel = "Available to order";
+  const stockLabel = isUsedDeviceSlug(product.slug) ? "One available" : "Available to order";
   const navigationCache = buildProductNavigationCache(product);
   const eagerImage = Number.isFinite(index) && index < 2;
   const highPriorityImage = Number.isFinite(index) && index === 0;
@@ -5987,6 +6007,10 @@ function initProductDetailPage() {
 
   const params = new URLSearchParams(window.location.search);
   const slug = root.dataset.productSlug || params.get("slug") || "";
+  if (isUsedDeviceSlug(slug)) {
+    window.location.replace(getUsedDevicePageHref(slug));
+    return;
+  }
   if (slug) {
     const canonicalUrl = `${getConfiguredSiteBaseUrl()}${getProductCanonicalHref(slug)}`;
     let canonical = document.querySelector('link[rel="canonical"]');
@@ -6114,10 +6138,12 @@ function renderCartLineItems(target, items) {
           </div>
           <p class="storefront-cart__meta">${escapeHtml(item.brand || "TECHM8")} ${item.compatibility ? `· ${escapeHtml(item.compatibility)}` : ""}</p>
           <div class="storefront-cart__controls">
-            <label>
+            ${isUsedDeviceSlug(item.slug)
+              ? `<span class="storefront-cart__one-off">Qty 1 · one of a kind</span>`
+              : `<label>
               <span>Qty</span>
               <input type="number" min="1" max="${escapeHtml(String(getCartItemMaxQuantity(item.slug)))}" value="${escapeHtml(String(item.qty))}" data-cart-qty="${escapeHtml(item.slug)}">
-            </label>
+            </label>`}
             <span class="storefront-cart__price">${escapeHtml(formatMoney(item.price))} each</span>
             <button class="storefront-cart__remove" type="button" data-cart-remove="${escapeHtml(item.slug)}">Remove</button>
           </div>

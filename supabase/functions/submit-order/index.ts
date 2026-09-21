@@ -11,6 +11,13 @@ import {
   snapshotStore,
 } from '../_shared/order-commerce.ts'
 import {
+  claimUsedDevicesForOrder,
+  isUsedDeviceSlug,
+  releaseUsedDevicesForOrder,
+  UsedDeviceOrderError,
+  type UsedDeviceClaim,
+} from '../_shared/used-device-orders.ts'
+import {
   getZipEnvironment,
   getZipReturnUrl,
   requireZipCheckoutUri,
@@ -297,6 +304,11 @@ Deno.serve(async (req) => {
     if (missing.length) {
       return Response.json({ ok: false, error: 'Some cart items are no longer available.' }, { status: 422, headers: corsHeaders })
     }
+    // A second-hand device is reserved the moment it is ordered, which only the
+    // Stripe checkout and pay in store know how to hold and release.
+    if (resolvedFeeProfile.provider !== 'manual' && products.some((product) => isUsedDeviceSlug(product.slug))) {
+      return Response.json({ ok: false, error: 'Second-hand devices can be paid by card, Afterpay, Klarna, Zip or in store.' }, { status: 422, headers: corsHeaders })
+    }
 
     const categoryIds = Array.from(new Set(products.map((product) => product.category_id).filter(Boolean)))
     const { data: categories } = categoryIds.length
@@ -479,6 +491,26 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'Order items could not be saved.' }, { status: 500, headers: corsHeaders })
     }
 
+    // A second-hand device ordered to pay in store is reserved until the order
+    // is paid or cancelled in the admin portal.
+    let usedDeviceClaim: UsedDeviceClaim | null = null
+    try {
+      usedDeviceClaim = await claimUsedDevicesForOrder(supabaseAdmin, {
+        id: insertedOrder.id,
+        orderCode,
+        customerName,
+        fulfillmentMethod,
+        storeSlug: resolvedStore.slug,
+      })
+    } catch (claimError) {
+      await supabaseAdmin.from('orders').delete().eq('id', insertedOrder.id)
+      if (claimError instanceof UsedDeviceOrderError) {
+        return Response.json({ ok: false, error: claimError.message }, { status: 409, headers: corsHeaders })
+      }
+      console.error(claimError)
+      return Response.json({ ok: false, error: 'The second-hand device in your cart could not be reserved. Please try again.' }, { status: 500, headers: corsHeaders })
+    }
+
     if (resolvedFeeProfile.provider === 'zip' && resolvedFeeProfile.code === 'zip') {
       try {
         const checkout = await zipRequest<{ id?: unknown; uri?: unknown }>('/checkouts', {
@@ -594,6 +626,7 @@ Deno.serve(async (req) => {
       } catch (zipError) {
         console.error('Zip checkout could not be started.', zipError)
         await supabaseAdmin.from('orders').delete().eq('id', insertedOrder.id)
+        if (usedDeviceClaim) await releaseUsedDevicesForOrder(orderCode)
         return Response.json(
           { ok: false, error: 'Zip payment could not be started. Please try again or choose another payment method.' },
           { status: 502, headers: corsHeaders },
@@ -695,6 +728,7 @@ Deno.serve(async (req) => {
       } catch (paypalError) {
         console.error('PayPal checkout could not be started.', paypalError)
         await supabaseAdmin.from('orders').delete().eq('id', insertedOrder.id)
+        if (usedDeviceClaim) await releaseUsedDevicesForOrder(orderCode)
         return Response.json(
           { ok: false, error: 'PayPal checkout could not be started. Please try again or choose another payment method.' },
           { status: 502, headers: corsHeaders },
