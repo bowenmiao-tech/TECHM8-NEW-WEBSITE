@@ -1,9 +1,31 @@
 {
-  "catalog_updated_at": "2026-09-20T05:27:28.160306+00:00",
+  "catalog_updated_at": "2026-09-21T02:04:22.670992+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1571,
+      "slug": "tm8-car-10742",
+      "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
@@ -652,17 +674,6 @@
       "warnings": []
     },
     {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 2043,
       "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
       "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
@@ -935,17 +946,6 @@
       "id": 1585,
       "slug": "tm8-car-6606",
       "name": "WEKOME WP-U203 Car Phone Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1571,
-      "slug": "tm8-car-10742",
-      "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
       "indexable": true,
       "score": 92,
       "blockers": [],
