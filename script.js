@@ -1555,7 +1555,18 @@ const STORE_CHECKOUT_DETAILS = {
     address:
       "68 Hunter St, Primewest Brassall Shopping Centre, Brassall QLD 4305",
     phone: "0403 999 366",
-    hours: "Mon-Sat 9:00 AM - 5:00 PM, Sun 10:00 AM - 4:00 PM",
+    hours: "Mon 9:00 AM - 5:00 PM, Tue-Fri 9:00 AM - 5:30 PM, Sat 9:00 AM - 4:30 PM, Sun Closed",
+    // Trading hours by weekday (0 = Sunday, null = closed). Repair bookings for this
+    // store are limited to these hours.
+    openingHours: [
+      null,
+      ["09:00", "17:00"],
+      ["09:00", "17:30"],
+      ["09:00", "17:30"],
+      ["09:00", "17:30"],
+      ["09:00", "17:30"],
+      ["09:00", "16:30"],
+    ],
     mapUrl: "https://maps.app.goo.gl/ViJetRb1zEiMhGyZ7",
     pageUrl: "stores/brassall.html",
     coordinates: { latitude: -27.5969, longitude: 152.7471 },
@@ -9234,11 +9245,79 @@ function initBookingForm() {
     privacyConsent: getBookingField("privacy_consent"),
   };
 
-  const bookingTimeValues = new Set([
-    "Morning time (9:00 AM - 12:00 PM)",
-    "Lunch time (12:00 PM - 2:00 PM)",
-    "Afternoon time (2:00 PM - 5:00 PM)",
-  ]);
+  // Repair booking windows. A store with openingHours only offers windows inside the
+  // chosen day's trading hours (the afternoon window ends at closing time) and cannot be
+  // booked on days it is closed. Keep in sync with supabase/functions/book-repair/booking-hours.ts.
+  const bookingWindows = [
+    { label: "Morning time", start: 9 * 60, end: 12 * 60 },
+    { label: "Lunch time", start: 12 * 60, end: 14 * 60 },
+    { label: "Afternoon time", start: 14 * 60, end: 17 * 60 },
+  ];
+  const bookingWeekdays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const bookingClockMinutes = (clock) => {
+    const [hours, minutes] = clock.split(":").map(Number);
+    return hours * 60 + minutes;
+  };
+  const formatBookingClock = (minutes) =>
+    `${Math.floor(minutes / 60) % 12 || 12}:${String(minutes % 60).padStart(2, "0")} ${minutes < 12 * 60 ? "AM" : "PM"}`;
+  const toBookingWindowValue = ({ label, start, end }) =>
+    `${label} (${formatBookingClock(start)} - ${formatBookingClock(end)})`;
+
+  // The selected store's hours on the selected day, or null when the store has no
+  // specific hours or no date is chosen yet. open and close are null on closed days.
+  const getBookingDay = (storeSlug, isoDate) => {
+    const store = STORE_CHECKOUT_DETAILS[storeSlug];
+    const match = String(isoDate || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!store?.openingHours || !match) return null;
+    const weekday = new Date(
+      Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])),
+    ).getUTCDay();
+    const hours = store.openingHours[weekday];
+    return {
+      store,
+      weekday: bookingWeekdays[weekday],
+      open: hours ? bookingClockMinutes(hours[0]) : null,
+      close: hours ? bookingClockMinutes(hours[1]) : null,
+    };
+  };
+
+  const describeBookingDay = (day) =>
+    `${day.store.title} is open ${formatBookingClock(day.open)} - ${formatBookingClock(day.close)} on ${day.weekday}s.`;
+
+  const getBookingWindows = (storeSlug, isoDate) => {
+    const day = getBookingDay(storeSlug, isoDate);
+    if (day?.open === null) return [];
+    return bookingWindows
+      .map((window, index) =>
+        day
+          ? {
+              label: window.label,
+              start: Math.max(window.start, day.open),
+              end:
+                index === bookingWindows.length - 1
+                  ? day.close
+                  : Math.min(window.end, day.close),
+            }
+          : window,
+      )
+      .filter((window) => window.start < window.end)
+      .map((window) => ({ ...window, value: toBookingWindowValue(window) }));
+  };
+
+  const getBookingClosedMessage = (storeSlug, isoDate) => {
+    const day = getBookingDay(storeSlug, isoDate);
+    return day?.open === null
+      ? `${day.store.title} is closed on ${day.weekday}s. Please choose another day.`
+      : "";
+  };
 
   const toBookingInput = (field) =>
     field instanceof HTMLInputElement ||
@@ -9374,24 +9453,45 @@ function initBookingForm() {
       [bookingFields.preferredContactMethod, "Preferred contact method is required."],
     ];
 
+    const preferredDate = String(dateField?.value || "").trim();
+    const storeSlug = String(
+      toBookingInput(bookingFields.storeSlug)?.value || "",
+    ).trim();
+    const closedMessage = getBookingClosedMessage(storeSlug, preferredDate);
+
     for (const [field, message] of requiredFields) {
+      // On a closed day the date error already explains why no time can be chosen.
+      if (closedMessage && field === bookingFields.preferredTime) continue;
       const input = toBookingInput(field);
       if (!input || !String(input.value || "").trim()) {
         addError(input, message);
       }
     }
 
-    const preferredDate = String(dateField?.value || "").trim();
     if (preferredDate && !isValidIsoBookingDate(preferredDate)) {
       addError(dateField, "Preferred date must be selected from the calendar.");
     } else if (preferredDate && isPastBookingDate(preferredDate)) {
       addError(dateField, "Preferred date cannot be in the past.");
+    } else if (closedMessage) {
+      addError(dateField, closedMessage);
     }
 
     const timeField = toBookingInput(bookingFields.preferredTime);
     const preferredTime = String(timeField?.value || "");
-    if (preferredTime && !bookingTimeValues.has(preferredTime)) {
-      addError(timeField, "Preferred time must be Morning time, Lunch time, or Afternoon time.");
+    if (
+      preferredTime &&
+      !closedMessage &&
+      !getBookingWindows(storeSlug, preferredDate).some(
+        (window) => window.value === preferredTime,
+      )
+    ) {
+      const day = getBookingDay(storeSlug, preferredDate);
+      addError(
+        timeField,
+        day
+          ? `${describeBookingDay(day)} Please choose one of the listed times.`
+          : "Preferred time must be Morning time, Lunch time, or Afternoon time.",
+      );
     }
 
     const emailField = toBookingInput(bookingFields.email);
@@ -9447,6 +9547,62 @@ function initBookingForm() {
     }
   });
 
+  const timeSelect =
+    bookingFields.preferredTime instanceof HTMLSelectElement
+      ? bookingFields.preferredTime
+      : null;
+  const timeHelp = form.querySelector("[data-booking-time-help]");
+  let closedDayError = "";
+
+  // Rebuild the time choices for the selected store and day, keeping the same window
+  // (morning, lunch or afternoon) selected while it is still available.
+  const syncBookingTimes = () => {
+    if (!timeSelect) return;
+    const storeSlug = String(toBookingInput(bookingFields.storeSlug)?.value || "");
+    const isoDate = String(dateField?.value || "");
+    const windows = getBookingWindows(storeSlug, isoDate);
+    const selectedLabel = bookingWindows.find((window) =>
+      timeSelect.value.startsWith(window.label),
+    )?.label;
+
+    timeSelect.replaceChildren(
+      new Option(windows.length ? "Select preferred time" : "Closed on this day", ""),
+      ...windows.map((window) => {
+        const standard = bookingWindows.find((item) => item.label === window.label);
+        const isStandard =
+          standard?.start === window.start && standard?.end === window.end;
+        return new Option(
+          isStandard
+            ? window.label
+            : `${window.label} (${formatBookingClock(window.start)} - ${formatBookingClock(window.end)})`,
+          window.value,
+        );
+      }),
+    );
+    timeSelect.value =
+      windows.find((window) => window.label === selectedLabel)?.value || "";
+    timeSelect.disabled = !windows.length;
+
+    const closedMessage = getBookingClosedMessage(storeSlug, isoDate);
+    if (closedMessage) {
+      setBookingFieldError(dateField, closedMessage);
+    } else if (closedDayError && dateField?.validationMessage === closedDayError) {
+      clearBookingFieldError(dateField);
+    }
+    closedDayError = closedMessage;
+
+    if (timeHelp instanceof HTMLElement) {
+      const store = STORE_CHECKOUT_DETAILS[storeSlug];
+      const day = getBookingDay(storeSlug, isoDate);
+      timeHelp.hidden = !store?.openingHours;
+      timeHelp.textContent = !store?.openingHours
+        ? ""
+        : day && day.open !== null
+          ? describeBookingDay(day)
+          : `${store.title} hours: ${store.hours}.`;
+    }
+  };
+
   form.addEventListener("change", (event) => {
     const target = event.target;
     if (
@@ -9455,6 +9611,9 @@ function initBookingForm() {
       target instanceof HTMLTextAreaElement
     ) {
       clearBookingFieldError(target);
+    }
+    if (target === storeField || target === dateField) {
+      syncBookingTimes();
     }
   });
 
@@ -9469,9 +9628,11 @@ function initBookingForm() {
   if (storeField instanceof HTMLSelectElement && storeParam) {
     storeField.value = storeParam;
   }
+  syncBookingTimes();
 
   prefillCustomerContactForm(form, { includeStore: true }).then((authState) => {
     activeAuthState = authState;
+    syncBookingTimes();
   });
 
   form.addEventListener("submit", async (event) => {

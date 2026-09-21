@@ -1,4 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
+import { getBookingTimeRules } from './booking-hours.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -10,11 +11,6 @@ const allowedCategories = new Set(['phone', 'computer', 'tablet', 'gaming_consol
 const allowedStores = new Set(['park-ridge', 'fairfield', 'north-lakes', 'toowong', 'brassall'])
 const allowedContactMethods = new Set(['phone', 'email', 'sms'])
 const centralRepairNotificationEmail = 'techm8contact@gmail.com'
-const allowedPreferredTimes = new Set([
-  'Morning time (9:00 AM - 12:00 PM)',
-  'Lunch time (12:00 PM - 2:00 PM)',
-  'Afternoon time (2:00 PM - 5:00 PM)',
-])
 
 const storeNotificationEmails: Record<string, string> = {
   'park-ridge': 'techm8.parkridge@gmail.com',
@@ -526,8 +522,13 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'Please enter a valid preferred date.' }, { status: 422, headers: corsHeaders })
     }
 
-    if (!allowedPreferredTimes.has(preferredTime)) {
-      return Response.json({ ok: false, error: 'Please choose a valid preferred time.' }, { status: 422, headers: corsHeaders })
+    const bookingTimeRules = getBookingTimeRules(storeSlug, preferredDate)
+    if (bookingTimeRules.closedMessage) {
+      return Response.json({ ok: false, error: bookingTimeRules.closedMessage }, { status: 422, headers: corsHeaders })
+    }
+
+    if (!bookingTimeRules.allowed.has(preferredTime)) {
+      return Response.json({ ok: false, error: bookingTimeRules.invalidMessage }, { status: 422, headers: corsHeaders })
     }
 
     if (!isValidAustralianPhone(phone)) {
