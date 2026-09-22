@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-09-22T01:23:57.823813+00:00",
+  "catalog_updated_at": "2026-09-22T07:54:19.561257+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2043,
+      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
+      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 69,
       "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
@@ -671,17 +682,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2043,
-      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
-      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
