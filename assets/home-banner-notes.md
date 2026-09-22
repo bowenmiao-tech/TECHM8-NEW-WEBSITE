@@ -1,5 +1,11 @@
 # Homepage banners
 
+## Current colour revision — 2026-09-22
+
+Current assets: `banner-home-iphone18-pro-v3-{480,720,1200,1536}.webp`, mirrored in `public/assets/`. The smaller Pro is Burgundy and the larger Pro Max is Glacier blue, matching the user's supplied reference screenshot. Edited with built-in ImageGen; layout and accessories preserved.
+
+Prompt: Edit Image 1 (the existing dark teal accessories banner). Image 2 is ONLY a color reference from the user. Change ONLY the metallic body and camera plateau color of the larger RIGHT phone from silver/gray to the clearly pale icy BLUE Glacier color seen on the left Pro Max in Image 2. It must visibly read as ice blue, not neutral silver, with realistic satin blue metal under studio light. Keep the smaller LEFT phone burgundy, matching the Burgundy Pro in Image 2. Preserve the exact device geometry, lenses and positions, transparent cases, white magnetic rings, USB-C cable, podium, dark teal backdrop, negative space, composition and dimensions of Image 1. Do not add phones, front screens, labels, plugs, chargers or any text. This is a precise color correction only.
+
 Created with the built-in ImageGen tool on 2026-09-15. Optimized WebP files are mirrored in `public/assets/`.
 
 - Corrected iPhone campaign artwork: `banner-home-iphone18-pro-v2-{480,720,1200,1536}.webp`. Pro and Pro Max device geometry is based on Apple official reference photos. The artwork shows clear cases and a USB-C cable; no mains charger or plug. The heading and link are real HTML in `index.html` so they scale clearly on mobile. CTA opens the existing online shop. Earlier generic artwork is superseded.
