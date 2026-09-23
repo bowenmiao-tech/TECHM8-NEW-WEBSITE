@@ -1,9 +1,49 @@
 {
-  "catalog_updated_at": "2026-09-22T07:54:19.561257+00:00",
+  "catalog_updated_at": "2026-09-23T00:30:25.5289+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 74,
+      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
+      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 21,
+      "slug": "remax-rpp-623-power-bank-20000-mah",
+      "name": "REMAX RPP-623 Power Bank 20000 mAh",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 89,
+      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
+      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 2043,
       "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
@@ -58,15 +98,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 89,
-      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
-      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 1589,
@@ -751,28 +782,6 @@
       "warnings": []
     },
     {
-      "id": 21,
-      "slug": "remax-rpp-623-power-bank-20000-mah",
-      "name": "REMAX RPP-623 Power Bank 20000 mAh",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 1573,
       "slug": "tm8-car-9977",
       "name": "Magnetic Stick-On Car Phone Holder",
@@ -824,15 +833,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 74,
-      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
-      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 90,
