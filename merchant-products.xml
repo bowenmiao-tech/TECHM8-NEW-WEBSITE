@@ -5,6 +5,18 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>TM8-CAR-6034</g:id>
+      <title>Replacement Metal Plate for Magnetic Phone Holders</title>
+      <description>Mount Accessory. Magnetic phone holders.</description>
+      <link>https://www.techm8australia.com/products/tm8-car-6034/</link>
+      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/163269828142455744.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>5.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Generic</g:brand>
+      <g:gtin>2988000060348</g:gtin>
+    </item>
+    <item>
       <g:id>7732445-2</g:id>
       <title>Remax 2.4A Universal Travel Adaptor RP-U23</title>
       <description>Remax 2.4A Universal Travel Adaptor RP-U23 available for online order and warehouse dispatch.</description>
@@ -424,18 +436,6 @@
       <g:condition>new</g:condition>
       <g:brand>Remax</g:brand>
       <g:gtin>2988000108347</g:gtin>
-    </item>
-    <item>
-      <g:id>TM8-CAR-6034</g:id>
-      <title>Replacement Metal Plate for Magnetic Phone Holders</title>
-      <description>Mount Accessory. Magnetic phone holders.</description>
-      <link>https://www.techm8australia.com/products/tm8-car-6034/</link>
-      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/163269828142455744.jpg</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>5.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Generic</g:brand>
-      <g:gtin>2988000060348</g:gtin>
     </item>
     <item>
       <g:id>TM8-CAR-6606</g:id>
