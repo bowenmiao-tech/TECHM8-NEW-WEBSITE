@@ -35,7 +35,10 @@
 
 - [Phone repairs](https://www.techm8australia.com/repair-services/phones/apple.html): Apple, Samsung, Oppo, Huawei, Xiaomi, Google, OnePlus and other brands.
 - [Tablet repairs](https://www.techm8australia.com/repair-services/tablets/apple.html): Apple iPad, Samsung and other tablets.
-- [Computer repairs](https://www.techm8australia.com/repair-services/computers/laptop.html): Laptops, PC towers, all-in-ones and small form factor PCs.
+- [Laptop repairs](https://www.techm8australia.com/repair-services/computers/laptop.html): Screen, battery, keyboard, charging and overheating assessments; SSD and RAM upgrades.
+- [Desktop computer repairs](https://www.techm8australia.com/repair-services/computers/pc-tower.html): PC tower power, storage, cooling and component diagnostics.
+- [All-in-one computer repairs](https://www.techm8australia.com/repair-services/computers/all-in-one.html): Integrated desktop display, startup, storage and cooling assessments.
+- [Mini PC repairs](https://www.techm8australia.com/repair-services/computers/small-pc.html): Small form factor computer power, cooling, storage and memory assessments.
 - [Game console repairs](https://www.techm8australia.com/repair-services/consoles/sony.html): PlayStation 5, Xbox and Nintendo Switch.
 
 ## Business and education services

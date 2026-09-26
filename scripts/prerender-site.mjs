@@ -932,11 +932,33 @@ function renderGenericRepairJsonLd(data, file) {
   });
 }
 
+const COMPUTER_REPAIR_METADATA = {
+  "laptop": {
+    title: "Laptop Repairs Brisbane | Screen, Battery & Charging | TECHM8",
+    description: "Laptop screen, battery, keyboard and charging repairs at TECHM8. Book an assessment in Park Ridge, Fairfield, Toowong, North Lakes or Brassall.",
+  },
+  "pc-tower": {
+    title: "Desktop Computer Repairs Brisbane | PC Repairs | TECHM8",
+    description: "Desktop PC power, storage and overheating diagnostics, plus SSD and RAM upgrades. Book at TECHM8 in Brisbane, Logan, North Lakes or Brassall.",
+  },
+  "all-in-one": {
+    title: "All-in-One Computer Repairs Brisbane | TECHM8",
+    description: "All-in-one computer screen, startup, storage and cooling fault assessments. Find TECHM8 stores in Brisbane, Logan, North Lakes and Brassall.",
+  },
+  "small-pc": {
+    title: "Mini PC & Small Form Factor Computer Repairs | TECHM8",
+    description: "Mini PC and small form factor computer power, cooling, storage and RAM assessments at TECHM8 in Brisbane, Logan, North Lakes and Brassall.",
+  },
+};
+
 function renderGenericRepairPage(data, file, assignment) {
   const canonical = `${SITE_URL}/${file}`;
-  const title = data.metaTitle || `${data.title} Brisbane & Queensland | TECHM8`;
+  const computerMetadata = file.startsWith("repair-services/computers/")
+    ? COMPUTER_REPAIR_METADATA[file.split("/").pop().replace(/\.html$/, "")]
+    : undefined;
+  const title = data.metaTitle || computerMetadata?.title || `${data.title} Brisbane & Queensland | TECHM8`;
   const description = truncate(
-    data.metaDescription ||
+    data.metaDescription || computerMetadata?.description ||
       `TECHM8 provides ${String(data.title || "device repair").toLowerCase()} assessment at Park Ridge, Fairfield, Toowong, North Lakes and Brassall stores in Queensland.`,
     160,
   );
@@ -1468,7 +1490,10 @@ ${storeLines}
 
 - [Phone repairs](${SITE_URL}/repair-services/phones/apple.html): Apple, Samsung, Oppo, Huawei, Xiaomi, Google, OnePlus and other brands.
 - [Tablet repairs](${SITE_URL}/repair-services/tablets/apple.html): Apple iPad, Samsung and other tablets.
-- [Computer repairs](${SITE_URL}/repair-services/computers/laptop.html): Laptops, PC towers, all-in-ones and small form factor PCs.
+- [Laptop repairs](${SITE_URL}/repair-services/computers/laptop.html): Screen, battery, keyboard, charging and overheating assessments; SSD and RAM upgrades.
+- [Desktop computer repairs](${SITE_URL}/repair-services/computers/pc-tower.html): PC tower power, storage, cooling and component diagnostics.
+- [All-in-one computer repairs](${SITE_URL}/repair-services/computers/all-in-one.html): Integrated desktop display, startup, storage and cooling assessments.
+- [Mini PC repairs](${SITE_URL}/repair-services/computers/small-pc.html): Small form factor computer power, cooling, storage and memory assessments.
 - [Game console repairs](${SITE_URL}/repair-services/consoles/sony.html): PlayStation 5, Xbox and Nintendo Switch.
 
 ## Business and education services
@@ -1860,4 +1885,3 @@ main().catch((error) => {
   console.error(error instanceof Error ? error.message : error);
   process.exitCode = 1;
 });
-
