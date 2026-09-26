@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-09-25T00:37:07.845536+00:00",
+  "catalog_updated_at": "2026-09-25T23:45:52.878938+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 89,
       "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
@@ -109,17 +120,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 1571,
