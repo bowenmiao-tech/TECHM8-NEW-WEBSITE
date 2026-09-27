@@ -1,9 +1,18 @@
 {
-  "catalog_updated_at": "2026-09-25T23:45:52.878938+00:00",
+  "catalog_updated_at": "2026-09-27T04:18:03.000726+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 88,
+      "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
+      "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 102,
       "slug": "1m-ultra-tough-micro-usb-cable",
@@ -1316,15 +1325,6 @@
       "id": 87,
       "slug": "remax-rp-w87-22-5w-4-in-1-multifunctional-night-lamp-and-folding-holder-wireless-charger",
       "name": "Remax RP-W87 22.5w 4 in 1 multifunctional night lamp & folding holder wireless charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 88,
-      "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
-      "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
       "indexable": true,
       "score": 100,
       "blockers": [],
