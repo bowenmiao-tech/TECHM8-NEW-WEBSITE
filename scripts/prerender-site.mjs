@@ -1490,7 +1490,7 @@ ${storeLines}
 
 - [Phone repairs](${SITE_URL}/repair-services/phones/apple.html): Apple, Samsung, Oppo, Huawei, Xiaomi, Google, OnePlus and other brands.
 - [Tablet repairs](${SITE_URL}/repair-services/tablets/apple.html): Apple iPad, Samsung and other tablets.
-- [Laptop repairs](${SITE_URL}/repair-services/computers/laptop.html): Screen, battery, keyboard, charging and overheating assessments; SSD and RAM upgrades.
+- [Laptop repairs](${SITE_URL}/repair-services/computers/laptop.html): Windows laptop and MacBook repair enquiries for screen, battery, keyboard, charging and overheating faults. Parts and upgrade options depend on the model.
 - [Desktop computer repairs](${SITE_URL}/repair-services/computers/pc-tower.html): PC tower power, storage, cooling and component diagnostics.
 - [All-in-one computer repairs](${SITE_URL}/repair-services/computers/all-in-one.html): Integrated desktop display, startup, storage and cooling assessments.
 - [Mini PC repairs](${SITE_URL}/repair-services/computers/small-pc.html): Small form factor computer power, cooling, storage and memory assessments.
