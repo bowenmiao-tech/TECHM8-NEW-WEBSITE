@@ -105,8 +105,8 @@ for (const slug of manifest.slugs) {
   const expectedDisplay = formatAud(amount);
   const expectedAmount = amount.toFixed(2);
 
-  if (!(amount > 0)) {
-    errors.push(`${slug}: retail_price must be greater than zero.`);
+  if (!Number.isFinite(amount) || amount < 0) {
+    errors.push(`${slug}: retail_price must be zero or greater.`);
   }
   if (!html.includes(`lang="en-AU"`)) {
     errors.push(`${slug}: page language is not en-AU.`);

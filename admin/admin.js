@@ -111,7 +111,7 @@ function buildDefaultProductDetailBlocks(row) {
     image_url: String(row.image_url || "").trim(),
     image_alt: String(row.name || "").trim(),
     specs: [
-      row.retail_price ? `Current selling price|${formatMoney(row.retail_price)}` : "",
+      row.retail_price != null ? `Current selling price|${formatMoney(row.retail_price)}` : "",
       comparePrice ? `Original / compare price|${comparePrice}` : "",
       row.brand ? `Brand|${row.brand}` : "",
       row.model ? `Model|${row.model}` : "",

@@ -144,7 +144,7 @@ function assessProductQuality(product) {
   } else if (description.length < 90) {
     warnings.push("description-under-90-characters");
   }
-  if (!(Number(product.retail_price) > 0)) {
+  if (product.retail_price == null || !Number.isFinite(Number(product.retail_price)) || Number(product.retail_price) < 0) {
     blockers.push("missing-valid-price");
   }
   if (!product.display_image) {
@@ -449,7 +449,7 @@ function productJsonLd(product, seo = null) {
     additionalProperty: seo?.additionalProperty,
   };
 
-  if (product.retail_price > 0) {
+  if (product.retail_price >= 0) {
     productData.offers = {
       "@type": "Offer",
       url: canonical,
@@ -1649,7 +1649,7 @@ function categoryDescription(category) {
   const count = category.indexable.length;
   const priced = category.indexable
     .map((product) => Number(product.retail_price) || 0)
-    .filter((price) => price > 0);
+    .filter((price) => price >= 0);
   const from = priced.length ? money(Math.min(...priced)) : "";
   const brands = [
     ...new Set(
