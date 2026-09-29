@@ -152,6 +152,21 @@ for (const slug of manifest.slugs) {
       if (product.offers.priceCurrency !== CURRENCY) {
         errors.push(`${slug}: JSON-LD priceCurrency is not AUD.`);
       }
+      for (const shipping of product.offers.shippingDetails || []) {
+        for (const field of ["handlingTime", "transitTime"]) {
+          const duration = shipping.deliveryTime?.[field];
+          if (
+            duration?.["@type"] !== "QuantitativeValue" ||
+            duration.unitCode !== "DAY" ||
+            !Number.isFinite(duration.minValue) ||
+            !Number.isFinite(duration.maxValue) ||
+            duration.minValue < 0 ||
+            duration.maxValue < duration.minValue
+          ) {
+            errors.push(`${slug}: shipping ${field} must be a QuantitativeValue day range.`);
+          }
+        }
+      }
     }
 
     const feedId = String(embedded.sku || `techm8-${embedded.id}`);

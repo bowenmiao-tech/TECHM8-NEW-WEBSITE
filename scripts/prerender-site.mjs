@@ -381,19 +381,10 @@ function isProductOrderable(product) {
 
 function offerShippingDetails() {
   const transitTime = {
-    "@type": "ServicePeriod",
-    duration: { "@type": "QuantitativeValue", minValue: 3, maxValue: 5, unitCode: "DAY" },
+    "@type": "QuantitativeValue", minValue: 3, maxValue: 5, unitCode: "DAY",
   };
   const handlingTime = {
-    "@type": "ServicePeriod",
-    duration: { "@type": "QuantitativeValue", minValue: 0, maxValue: 1, unitCode: "DAY" },
-    businessDays: [
-      "https://schema.org/Monday",
-      "https://schema.org/Tuesday",
-      "https://schema.org/Wednesday",
-      "https://schema.org/Thursday",
-      "https://schema.org/Friday",
-    ],
+    "@type": "QuantitativeValue", minValue: 0, maxValue: 1, unitCode: "DAY",
   };
 
   return [
