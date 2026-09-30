@@ -1,9 +1,29 @@
 {
-  "catalog_updated_at": "2026-09-29T05:42:10.018791+00:00",
+  "catalog_updated_at": "2026-09-30T02:38:54.059553+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 94,
+      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 1573,
+      "slug": "tm8-car-9977",
+      "name": "Magnetic Stick-On Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 2145,
       "slug": "repairdesk-misc-10888-magsafe-stand-wallet-black",
@@ -824,17 +844,6 @@
       "warnings": []
     },
     {
-      "id": 1573,
-      "slug": "tm8-car-9977",
-      "name": "Magnetic Stick-On Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 68,
       "slug": "wekome-wp-c54-car-charger",
       "name": "WEKOME WP-C54 Car Charger",
@@ -1421,15 +1430,6 @@
       "id": 97,
       "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
       "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 94,
-      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
