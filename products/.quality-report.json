@@ -1,9 +1,47 @@
 {
-  "catalog_updated_at": "2026-10-01T05:12:36.343582+00:00",
+  "catalog_updated_at": "2026-10-01T09:10:25.682852+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2043,
+      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
+      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 94,
+      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 2045,
       "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
@@ -42,15 +80,6 @@
       "blockers": [
         "description-under-40-characters"
       ],
-      "warnings": []
-    },
-    {
-      "id": 94,
-      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
@@ -107,15 +136,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 69,
@@ -220,17 +240,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2043,
-      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
-      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 1589,
@@ -1017,15 +1026,6 @@
       "id": 70,
       "slug": "155w-gan-usb-c-wall-charger-quick-6-ports-type-c-pd-fast-charging",
       "name": "155W GaN USB C wall Charger Quick 6 Ports Type C PD Fast Charging",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
