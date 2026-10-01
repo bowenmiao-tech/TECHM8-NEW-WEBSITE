@@ -5,6 +5,35 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>110481607</g:id>
+      <title>REMAX RPP-23 10000mAh Fast Charging Power Bank- Black</title>
+      <description>REMAX RPP-23 10000mAh Fast Charging Power Bank- Black available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-rpp-23-10000mah-fast-charging-power-bank-black/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/05-image-5.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/01-2.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/02-4.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/03-5.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/04-6.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/06-image-6.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>59.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+      <g:gtin>69548512215677</g:gtin>
+    </item>
+    <item>
+      <g:id>109041519</g:id>
+      <title>REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05</title>
+      <description>REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05 available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05/1778597138815-e5c71903.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>119.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+      <g:gtin>6954851260271</g:gtin>
+    </item>
+    <item>
       <g:id>110671637</g:id>
       <title>WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable</title>
       <description>WEKOME WDC-123i U-Lighting Kinkong Raycor Fast Charging Cable available for online order and warehouse dispatch.</description>
@@ -336,18 +365,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651360</g:gtin>
-    </item>
-    <item>
-      <g:id>109041519</g:id>
-      <title>REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05</title>
-      <description>REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05 available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05/1778597138815-e5c71903.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>119.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-      <g:gtin>6954851260271</g:gtin>
     </item>
     <item>
       <g:id>694102765273</g:id>
@@ -693,23 +710,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>6954851215684</g:gtin>
-    </item>
-    <item>
-      <g:id>110481607</g:id>
-      <title>REMAX RPP-23 10000mAh Fast Charging Power Bank- Black</title>
-      <description>REMAX RPP-23 10000mAh Fast Charging Power Bank- Black available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-rpp-23-10000mah-fast-charging-power-bank-black/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/05-image-5.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/01-2.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/02-4.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/03-5.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/04-6.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-23-10000mah-fast-charging-power-bank-black/06-image-6.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>59.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-      <g:gtin>69548512215677</g:gtin>
     </item>
     <item>
       <g:id>110511610</g:id>
