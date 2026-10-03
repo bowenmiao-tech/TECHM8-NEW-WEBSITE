@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
         supabaseAdmin
           .from("payment_fee_profiles")
           .select(
-            "code,label,provider,fee_type,percentage,fixed_amount,sort_order,notes",
+            "code,label,provider,fee_type,percentage,fixed_amount,is_enabled,sort_order,notes",
           )
           .in("code", requestedCodes)
           .order("sort_order", { ascending: true }),
@@ -51,12 +51,19 @@ Deno.serve(async (req) => {
       ]);
     if (profilesError) throw profilesError;
 
+    // Profiles switched off in the database are still returned (is_enabled: false)
+    // so the storefront can show them as temporarily unavailable.
     const availableProfiles = (profiles ?? []).filter((profile) => {
-      if (profile.code === "pay_in_store") return profile.provider === "manual";
-      return profile.provider === "stripe" &&
-        STRIPE_CHECKOUT_PROFILE_CODES.includes(profile.code) &&
+      if (profile.code === "pay_in_store") {
+        return profile.provider === "manual" && profile.is_enabled === true;
+      }
+      if (
+        profile.provider !== "stripe" ||
+        !STRIPE_CHECKOUT_PROFILE_CODES.includes(profile.code)
+      ) return false;
+      return profile.is_enabled !== true ||
         isStripeProfileAvailable(stripeConfiguration, profile.code);
-    }).map((profile) => ({ ...profile, is_enabled: true }));
+    }).map((profile) => ({ ...profile, is_enabled: profile.is_enabled === true }));
 
     return Response.json({
       ok: true,

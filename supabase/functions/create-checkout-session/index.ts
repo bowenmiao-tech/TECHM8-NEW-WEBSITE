@@ -209,7 +209,7 @@ Deno.serve(async (req) => {
       return Response.json({ ok: false, error: 'The selected store contact or pickup address is incomplete.' }, { status: 500, headers: corsHeaders })
     }
 
-    if (feeProfileError || !feeProfile || feeProfile.provider !== 'stripe') {
+    if (feeProfileError || !feeProfile || feeProfile.provider !== 'stripe' || !feeProfile.is_enabled) {
       return Response.json({ ok: false, error: 'Selected payment method is not available for online payment.' }, { status: 422, headers: corsHeaders })
     }
 
@@ -530,7 +530,7 @@ Deno.serve(async (req) => {
             currency: 'aud',
             unit_amount: moneyToCents(paymentFeeAmount),
             product_data: {
-              name: `${feeProfile.label} processing fee`,
+              name: `${feeProfile.label} process fee`,
             },
           },
         })

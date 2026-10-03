@@ -9962,6 +9962,35 @@ html:has(body.repair-page--console-hero) {
   box-shadow: 0 12px 28px rgba(22, 200, 186, 0.12);
 }
 
+.storefront-payment-option.is-unavailable {
+  cursor: not-allowed;
+  background: rgba(244, 246, 247, 0.9);
+}
+
+.storefront-payment-option.is-unavailable:hover {
+  border-color: var(--line);
+  box-shadow: none;
+}
+
+.storefront-payment-option.is-unavailable .storefront-payment-option__radio,
+.storefront-payment-option.is-unavailable .storefront-payment-option__title,
+.storefront-payment-option.is-unavailable .storefront-payment-option__fee,
+.storefront-payment-option.is-unavailable .storefront-payment-option__meta {
+  opacity: 0.45;
+}
+
+.storefront-payment-option__status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: 0 0.6rem;
+  border-radius: 999px;
+  background: rgba(7, 39, 45, 0.08);
+  color: var(--brand-dark);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
 .storefront-payment-option__radio {
   width: 1.15rem;
   height: 1.15rem;

@@ -3930,10 +3930,10 @@ async function loadPaymentFeeProfiles() {
             code: "card",
             label: "Card & wallets",
             provider: "stripe",
-            fee_type: "combined",
-            percentage: 1.7,
-            fixed_amount: 0.3,
-            is_enabled: true,
+            fee_type: "none",
+            percentage: 0,
+            fixed_amount: 0,
+            is_enabled: false,
             sort_order: 20,
           },
         ];
@@ -3952,10 +3952,10 @@ async function loadPaymentFeeProfiles() {
         code: "card",
         label: "Card & wallets",
         provider: "stripe",
-        fee_type: "combined",
-        percentage: 1.7,
-        fixed_amount: 0.3,
-        is_enabled: true,
+        fee_type: "none",
+        percentage: 0,
+        fixed_amount: 0,
+        is_enabled: false,
         sort_order: 20,
       },
     ];
@@ -6208,7 +6208,7 @@ function renderCartSummary(target, items, options = {}) {
       <strong>${escapeHtml(shippingValue)}</strong>
     </div>
     <div class="storefront-summary__row storefront-summary__row--muted">
-      <span>Payment fee</span>
+      <span>Process fee</span>
       <strong>${escapeHtml(formatMoney(paymentFee))}</strong>
     </div>
     <div class="storefront-summary__row storefront-summary__row--total">
@@ -6563,6 +6563,8 @@ function initCheckoutPage() {
     return;
   const submitButton = form.querySelector('button[type="submit"]');
   const paymentProfiles = [];
+  // Methods switched off in payment_fee_profiles: shown greyed out, never selectable.
+  const unavailablePaymentProfiles = [];
   const checkoutParams = new URLSearchParams(window.location.search);
   const paymentReturnState = String(
     checkoutParams.get("payment") || "",
@@ -7408,19 +7410,19 @@ function initCheckoutPage() {
 
   const formatFeeRule = (profile) => {
     if (!profile) return "";
-    if (profile.code === "paypal") return "No surcharge";
+    if (profile.code === "paypal") return "No process fee";
     const percentage = Number(profile.percentage) || 0;
     const fixedAmount = Number(profile.fixed_amount) || 0;
 
     switch (profile.fee_type) {
       case "fixed":
-        return `Fee ${formatMoney(fixedAmount)}`;
+        return `Process fee ${formatMoney(fixedAmount)}`;
       case "percent":
-        return `Fee ${percentage.toFixed(1)}%`;
+        return `Process fee ${percentage.toFixed(1)}%`;
       case "combined":
-        return `Fee ${percentage.toFixed(1)}% + ${formatMoney(fixedAmount)}`;
+        return `Process fee ${percentage.toFixed(1)}% + ${formatMoney(fixedAmount)}`;
       default:
-        return "No extra fee";
+        return "No process fee";
     }
   };
 
@@ -7513,27 +7515,40 @@ function initCheckoutPage() {
       paymentMethodField.value = fallbackProfile ? fallbackProfile.code : "";
     }
 
-    paymentOptionsTarget.innerHTML = visibleProfiles
+    const listedProfiles = [...visibleProfiles, ...unavailablePaymentProfiles]
+      .map((profile, index) => ({ profile, index }))
+      .sort(
+        (a, b) =>
+          (Number(a.profile.sort_order) || 0) -
+            (Number(b.profile.sort_order) || 0) || a.index - b.index,
+      )
+      .map(({ profile }) => profile);
+
+    paymentOptionsTarget.innerHTML = listedProfiles
       .map((profile) => {
         const badges = getPaymentBadges(profile)
           .map((badge) => {
             return `<span class="storefront-payment-option__badge ${badge.className}">${escapeHtml(badge.label)}</span>`;
           })
           .join("");
-        const isSelected = getSelectedPaymentProfile()?.code === profile.code;
+        const isUnavailable = unavailablePaymentProfiles.includes(profile);
+        const isSelected =
+          !isUnavailable && getSelectedPaymentProfile()?.code === profile.code;
 
         return `
         <button
-          class="storefront-payment-option ${isSelected ? "is-selected" : ""}"
+          class="storefront-payment-option ${isSelected ? "is-selected" : ""} ${isUnavailable ? "is-unavailable" : ""}"
           type="button"
           data-payment-option="${escapeHtml(profile.code)}"
           aria-pressed="${isSelected ? "true" : "false"}"
+          ${isUnavailable ? 'aria-disabled="true" disabled' : ""}
         >
           <span class="storefront-payment-option__radio" aria-hidden="true"></span>
           <span class="storefront-payment-option__body">
             <span class="storefront-payment-option__top">
               <strong class="storefront-payment-option__title">${escapeHtml(profile.label)}</strong>
               <span class="storefront-payment-option__fee">${escapeHtml(formatFeeRule(profile))}</span>
+              ${isUnavailable ? '<span class="storefront-payment-option__status">Temporarily unavailable</span>' : ""}
             </span>
             <span class="storefront-payment-option__meta">${badges}</span>
           </span>
@@ -7619,7 +7634,7 @@ function initCheckoutPage() {
                   <span>${escapeHtml(payload.payment_method_label || "Pay in store")}</span>
                 </div>
                 <div class="storefront-success__item">
-                  <strong>Payment fee</strong>
+                  <strong>Process fee</strong>
                   <span>${escapeHtml(formatMoney(payload.payment_fee_amount || 0))}</span>
                 </div>
                 <div class="storefront-success__item">
@@ -8758,6 +8773,7 @@ function initCheckoutPage() {
       if (!(target instanceof HTMLElement)) return;
       const option = target.closest("[data-payment-option]");
       if (!(option instanceof HTMLElement)) return;
+      if (option.getAttribute("aria-disabled") === "true") return;
       const code = String(
         option.getAttribute("data-payment-option") || "",
       ).trim();
@@ -8813,9 +8829,8 @@ function initCheckoutPage() {
 
   loadPaymentFeeProfiles()
     .then((profiles) => {
-      const supportedProfiles = profiles.filter((profile) => {
-        if (!profile || !profile.code || profile.is_enabled === false)
-          return false;
+      const isSupportedProfile = (profile) => {
+        if (!profile || !profile.code) return false;
         if (profile.provider === "manual") return true;
         if (profile.provider === "stripe") {
           return ["card", "afterpay_clearpay", "klarna", "zip", "wechat_pay"].includes(
@@ -8823,7 +8838,21 @@ function initCheckoutPage() {
           );
         }
         return false;
-      });
+      };
+      const supportedProfiles = profiles.filter(
+        (profile) => isSupportedProfile(profile) && profile.is_enabled !== false,
+      );
+
+      unavailablePaymentProfiles.splice(
+        0,
+        unavailablePaymentProfiles.length,
+        ...profiles.filter(
+          (profile) =>
+            isSupportedProfile(profile) &&
+            profile.provider !== "manual" &&
+            profile.is_enabled === false,
+        ),
+      );
 
       paymentProfiles.splice(
         0,
