@@ -277,7 +277,36 @@ function renderBuy(listing) {
   }
   return `
     <button class="button button--primary used-buy__button" type="button" data-used-add-cart>Add to cart</button>
-    <p class="used-buy__note">One of a kind: there is only one of this device.</p>`;
+    <p class="used-buy__note">One of a kind: there is only one of this device.</p>
+    <p class="used-buy__warranty">Includes a 3-month TECHM8 warranty</p>`;
+}
+
+// The same store warranty applies to every second-hand device we sell.
+function renderWarranty() {
+  return `
+    <section class="used-panel used-warranty" id="warranty">
+      <h2>3-month warranty included</h2>
+      <p>Every second-hand device comes with a 3-month TECHM8 store warranty, starting from the day you buy it. If a fault shows up during normal use, bring the device and your receipt to any TECHM8 store. We will check it and repair it free of charge, or replace it if a repair isn't possible.</p>
+      <div class="used-warranty__cols">
+        <div>
+          <h3>What's covered</h3>
+          <ul class="used-highlights">
+            <li>Hardware faults that appear during normal use</li>
+            <li>Battery and charging faults</li>
+            <li>Screen, touch, speaker, microphone and camera faults not caused by damage</li>
+            <li>Buttons, Face ID / Touch ID, Wi-Fi and mobile signal</li>
+          </ul>
+        </div>
+        <div>
+          <h3>What's not covered</h3>
+          <ul class="used-highlights used-highlights--excluded">
+            <li>Physical damage, such as drops, cracked or broken screens, cracked back glass, and bent or dented frames</li>
+            <li>Water and liquid damage of any kind, whatever the device's water resistance rating</li>
+          </ul>
+        </div>
+      </div>
+      <p class="used-warranty__fine">Keep your receipt, as it is your proof of purchase. This warranty is in addition to your rights under the Australian Consumer Law.</p>
+    </section>`;
 }
 
 async function renderDetailPage(root) {
@@ -352,6 +381,7 @@ async function renderDetailPage(root) {
           <h2>About this device</h2>
           ${paragraphs.map((part) => `<p>${escapeHtml(part)}</p>`).join("")}
         </section>` : ""}
+      ${renderWarranty()}
     </div>
   `;
 
