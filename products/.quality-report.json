@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-10-02T07:47:44.611003+00:00",
+  "catalog_updated_at": "2026-10-03T03:47:06.776179+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 1590,
+      "slug": "tm8-car-6034",
+      "name": "Replacement Metal Plate for Magnetic Phone Holders",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 102,
       "slug": "1m-ultra-tough-micro-usb-cable",
@@ -25,6 +36,17 @@
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
     },
     {
       "id": 100,
@@ -180,17 +202,6 @@
       ]
     },
     {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
-      "warnings": []
-    },
-    {
       "id": 1571,
       "slug": "tm8-car-10742",
       "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
@@ -238,17 +249,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 1590,
-      "slug": "tm8-car-6034",
-      "name": "Replacement Metal Plate for Magnetic Phone Holders",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 2035,
