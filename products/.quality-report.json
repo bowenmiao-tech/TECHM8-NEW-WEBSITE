@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-10-03T06:48:35.49696+00:00",
+  "catalog_updated_at": "2026-10-04T01:35:49.087221+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2045,
+      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 2036,
       "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
@@ -13,6 +24,15 @@
       "blockers": [
         "description-under-40-characters"
       ],
+      "warnings": []
+    },
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
       "warnings": []
     },
     {
@@ -91,17 +111,6 @@
       ]
     },
     {
-      "id": 2045,
-      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2166,
       "slug": "repairdesk-misc-8038-magsafe-card-wallet-green",
       "name": "MagSafe Card Wallet - Green",
@@ -136,15 +145,6 @@
       "id": 94,
       "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
       "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
