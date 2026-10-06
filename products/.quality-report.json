@@ -1,9 +1,42 @@
 {
-  "catalog_updated_at": "2026-10-04T01:35:49.087221+00:00",
+  "catalog_updated_at": "2026-10-06T02:58:18.295579+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2043,
+      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
+      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1716,
+      "slug": "tm8-cch-7150",
+      "name": "45W Dual USB-C Car Charger - White",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1715,
+      "slug": "tm8-cch-7151",
+      "name": "45W Dual USB-C Car Charger - Black",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 2045,
       "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
@@ -114,17 +147,6 @@
       "id": 2166,
       "slug": "repairdesk-misc-8038-magsafe-card-wallet-green",
       "name": "MagSafe Card Wallet - Green",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2043,
-      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
-      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -367,17 +389,6 @@
       "id": 77,
       "slug": "wekome-wp-u99-magsafe-wirless-charger",
       "name": "WEKOME WP-U99 Magsafe Wirless Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1716,
-      "slug": "tm8-cch-7150",
-      "name": "45W Dual USB-C Car Charger - White",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -1360,17 +1371,6 @@
       "warnings": [
         "description-under-90-characters",
         "missing-brand"
-      ]
-    },
-    {
-      "id": 1715,
-      "slug": "tm8-cch-7151",
-      "name": "45W Dual USB-C Car Charger - Black",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
       ]
     },
     {

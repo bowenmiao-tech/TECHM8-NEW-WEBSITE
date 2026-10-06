@@ -5,6 +5,30 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>TM8-CCH-7150</g:id>
+      <title>45W Dual USB-C Car Charger - White</title>
+      <description>45W Dual USB-C Car Charger. For standard 12V/24V vehicle power sockets.</description>
+      <link>https://www.techm8australia.com/products/tm8-cch-7150/</link>
+      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/1663976176.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Generic</g:brand>
+      <g:gtin>2986000071500</g:gtin>
+    </item>
+    <item>
+      <g:id>TM8-CCH-7151</g:id>
+      <title>45W Dual USB-C Car Charger - Black</title>
+      <description>45W Dual USB-C Car Charger. For standard 12V/24V vehicle power sockets.</description>
+      <link>https://www.techm8australia.com/products/tm8-cch-7151/</link>
+      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/1663976196.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Generic</g:brand>
+      <g:gtin>2986000071517</g:gtin>
+    </item>
+    <item>
       <g:id>110681638</g:id>
       <title>WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable</title>
       <description>WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable available for online order and warehouse dispatch.</description>
@@ -354,18 +378,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027640081</g:gtin>
-    </item>
-    <item>
-      <g:id>TM8-CCH-7150</g:id>
-      <title>45W Dual USB-C Car Charger - White</title>
-      <description>45W Dual USB-C Car Charger. For standard 12V/24V vehicle power sockets.</description>
-      <link>https://www.techm8australia.com/products/tm8-cch-7150/</link>
-      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/1663976176.jpg</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Generic</g:brand>
-      <g:gtin>2986000071500</g:gtin>
     </item>
     <item>
       <g:id>7732445</g:id>
@@ -886,18 +898,6 @@
       <g:condition>new</g:condition>
 
 
-    </item>
-    <item>
-      <g:id>TM8-CCH-7151</g:id>
-      <title>45W Dual USB-C Car Charger - Black</title>
-      <description>45W Dual USB-C Car Charger. For standard 12V/24V vehicle power sockets.</description>
-      <link>https://www.techm8australia.com/products/tm8-cch-7151/</link>
-      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/1663976196.jpg</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Generic</g:brand>
-      <g:gtin>2986000071517</g:gtin>
     </item>
     <item>
       <g:id>TM8-CCH-9322</g:id>
