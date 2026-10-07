@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "prerender": "node scripts/prerender-site.mjs",
+    "prerender:repairs": "node scripts/prerender-site.mjs --repairs-only",
+    "validate:repair-seo": "node scripts/validate-repair-seo.mjs",
     "validate:pricing": "node scripts/validate-product-pricing.mjs",
-    "build": "npm run prerender && npm run validate:pricing && vite build",
+    "build": "npm run prerender && npm run validate:pricing && npm run validate:repair-seo && vite build",
     "preview": "vite preview",
     "build:assets": "node scripts/build-assets.mjs"
   },

@@ -843,24 +843,19 @@ function genericRepairDirectAnswer(data) {
   );
 }
 
+function genericRepairAnswerHeading(data) {
+  return data.directAnswerHeading ||
+    `Does TECHM8 provide ${String(data.title || "device repairs").toLowerCase()}?`;
+}
+
 function renderGenericRepairJsonLd(data, file) {
   const canonical = `${SITE_URL}/${file}`;
   const organizationId = `${SITE_URL}/#organization`;
   const directAnswer = genericRepairDirectAnswer(data);
   const faqs = [
     {
-      question: data.faqRepairQuestion || `Does TECHM8 repair ${data.title || "this type of device"}?`,
+      question: genericRepairAnswerHeading(data),
       answer: directAnswer,
-    },
-    {
-      question: "Do I need to book before visiting a TECHM8 store?",
-      answer:
-        "Walk-in enquiries are welcome, but booking first helps the store confirm the device model, fault and likely parts requirement before the visit.",
-    },
-    {
-      question: "Is the repair price confirmed before work begins?",
-      answer:
-        "Yes. TECHM8 confirms the proposed repair scope and price before approved work begins. Final availability depends on inspection and parts supply.",
     },
   ];
 
@@ -892,6 +887,7 @@ function renderGenericRepairJsonLd(data, file) {
         dateModified: data.reviewDate || CONTENT_REVIEW_DATE,
         author: { "@id": organizationId },
         reviewedBy: { "@id": organizationId },
+        mainEntity: { "@id": `${canonical}#service` },
       },
       {
         "@type": "Service",
@@ -954,9 +950,7 @@ function renderGenericRepairPage(data, file, assignment) {
     160,
   );
   const directAnswer = genericRepairDirectAnswer(data);
-  const directAnswerHeading =
-    data.directAnswerHeading ||
-    `Does TECHM8 provide ${String(data.title || "device repairs").toLowerCase()}?`;
+  const directAnswerHeading = genericRepairAnswerHeading(data);
   const reviewLabel = data.reviewLabel || "1 August 2026";
   const issues = (data.issues || [])
     .map(
@@ -1845,6 +1839,11 @@ async function normalizeAustralianHtmlLanguage(directory = ROOT) {
 }
 
 async function main() {
+  if (process.argv.includes("--repairs-only")) {
+    await prerenderGenericRepairPages();
+    console.log(`Prerendered ${GENERIC_REPAIR_FILES.length} repair pages only.`);
+    return;
+  }
   await buildAssets();
   await prerenderBusinessPages();
   await prerenderGenericRepairPages();
