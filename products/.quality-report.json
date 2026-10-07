@@ -1,9 +1,40 @@
 {
-  "catalog_updated_at": "2026-10-07T05:07:11.04575+00:00",
+  "catalog_updated_at": "2026-10-07T06:46:12.53714+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2045,
+      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 42,
+      "slug": "wekome-wp-101-10000mah-power-bank",
+      "name": "WEKOME WP-101 10000mAh Power Bank",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 89,
+      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
+      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 93,
       "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
@@ -78,26 +109,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 89,
-      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
-      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 42,
-      "slug": "wekome-wp-101-10000mah-power-bank",
-      "name": "WEKOME WP-101 10000mAh Power Bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 24,
@@ -257,17 +268,6 @@
       "id": 2036,
       "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
       "name": "USB-C WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2045,
-      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
       "indexable": false,
       "score": 65,
       "blockers": [
