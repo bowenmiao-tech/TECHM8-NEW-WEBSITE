@@ -1,9 +1,503 @@
 {
-  "catalog_updated_at": "2026-10-06T07:52:27.877113+00:00",
+  "catalog_updated_at": "2026-10-07T05:07:11.04575+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2059,
+      "slug": "repairdesk-accessory-11139-remax-selfie-stick-holder-with-lights-p60",
+      "name": "Remax Selfie Stick Holder with Lights P60",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1583,
+      "slug": "tm8-car-6660",
+      "name": "Magnetic Dashboard and Air Vent Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1573,
+      "slug": "tm8-car-9977",
+      "name": "Magnetic Stick-On Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1574,
+      "slug": "tm8-car-9976",
+      "name": "Magnetic Air Vent Hook Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2060,
+      "slug": "repairdesk-accessory-10989-c141-desktop-mobile-phone-holder",
+      "name": "C141 Desktop Mobile Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1572,
+      "slug": "tm8-car-10362",
+      "name": "Bike Phone Holder Z02 + MT01",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 89,
+      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
+      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 42,
+      "slug": "wekome-wp-101-10000mah-power-bank",
+      "name": "WEKOME WP-101 10000mAh Power Bank",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 24,
+      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 28,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 25,
+      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-white",
+      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- White",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 26,
+      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 27,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 22,
+      "slug": "remax-rpp-622-10000mah-power-bank",
+      "name": "Remax RPP-622 10000MAH power bank",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 21,
+      "slug": "remax-rpp-623-power-bank-20000-mah",
+      "name": "REMAX RPP-623 Power Bank 20000 mAh",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 92,
+      "slug": "c28-fm-transmitter",
+      "name": "C28 FM Transmitter",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 68,
+      "slug": "wekome-wp-c54-car-charger",
+      "name": "WEKOME WP-C54 Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 66,
+      "slug": "wekome-wp-c64-car-charger",
+      "name": "WEKOME WP-C64 Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1714,
+      "slug": "tm8-cch-7152",
+      "name": "Dual Socket + USB Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 88,
+      "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
+      "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 77,
+      "slug": "wekome-wp-u99-magsafe-wirless-charger",
+      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 79,
+      "slug": "ds15-2-in-1wireless-charger",
+      "name": "DS15 2 IN 1Wireless Charger",
+      "indexable": true,
+      "score": 84,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters",
+        "missing-brand"
+      ]
+    },
+    {
+      "id": 76,
+      "slug": "wekome-wireless-charger-wp-u172",
+      "name": "WEKOME Wireless Charger WP-U172",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2036,
+      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
+      "name": "USB-C WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2045,
+      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2042,
+      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
+      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2043,
+      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
+      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2035,
+      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
+      "name": "AUX WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 90,
+      "slug": "wireless-dongle-for-carplay-or-android-auto-m29",
+      "name": "Wireless Dongle for CarPlay or Android Auto M29",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 1582,
+      "slug": "tm8-car-6671",
+      "name": "Car Back Seat Phone Mount",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1577,
+      "slug": "tm8-car-8866",
+      "name": "Tesla Model 3/Y Mobile Phone Holder Adapter",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1578,
+      "slug": "tm8-car-8154",
+      "name": "MagSafe Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1589,
+      "slug": "tm8-car-6576",
+      "name": "Car Phone Holder 3",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 98,
+      "slug": "wekome-wdc-50-240w-charging-cable",
+      "name": "WEKOME WDC-50 240W Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1585,
+      "slug": "tm8-car-6606",
+      "name": "WEKOME WP-U203 Car Phone Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2058,
+      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
+      "name": "WEKOME Desktop Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 63,
+      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-w",
+      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 60,
+      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
+      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 62,
+      "slug": "wekome-wk-wd-03-mini-karaoke-speaker-b",
+      "name": "Wekome WK WD-03 Mini Karaoke Speaker B",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 64,
+      "slug": "remax-rb-m62-speaker",
+      "name": "Remax RB-M62 Speaker Blue",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 61,
+      "slug": "wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black",
+      "name": "WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black)",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 86,
+      "slug": "remax-tws-43-wireless-earbuds",
+      "name": "Remax TWS-43 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2064,
+      "slug": "repairdesk-accessory-10265-remax-f37-usb-fan",
+      "name": "Remax F37 USB Fan",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2063,
+      "slug": "repairdesk-accessory-10266-remax-portable-mini-handheld-fan-f34",
+      "name": "Remax Portable Mini Handheld Fan F34",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1732,
+      "slug": "repairdesk-computer-11064-t-wold-s3-speaker",
+      "name": "T-Wold S3 Speaker",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 105,
+      "slug": "msi-mag-coreliquid-a13-240-liquid-cooler",
+      "name": "MSI MAG CORELIQUID A13 240 Liquid Cooler",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 1716,
       "slug": "tm8-cch-7150",
@@ -25,68 +519,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2043,
-      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
-      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 27,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2045,
-      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2036,
-      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
-      "name": "USB-C WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 1578,
-      "slug": "tm8-car-8154",
-      "name": "MagSafe Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 1590,
@@ -142,17 +574,6 @@
       "warnings": []
     },
     {
-      "id": 64,
-      "slug": "remax-rb-m62-speaker",
-      "name": "Remax RB-M62 Speaker Blue",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 2166,
       "slug": "repairdesk-misc-8038-magsafe-card-wallet-green",
       "name": "MagSafe Card Wallet - Green",
@@ -188,17 +609,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 1573,
-      "slug": "tm8-car-9977",
-      "name": "Magnetic Stick-On Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
@@ -246,26 +656,6 @@
       ]
     },
     {
-      "id": 21,
-      "slug": "remax-rpp-623-power-bank-20000-mah",
-      "name": "REMAX RPP-623 Power Bank 20000 mAh",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 89,
-      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
-      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 74,
       "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
       "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
@@ -275,40 +665,9 @@
       "warnings": []
     },
     {
-      "id": 88,
-      "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
-      "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2035,
-      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
-      "name": "AUX WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 73,
       "slug": "3-usb-wall-charger",
       "name": "3 USB WALL CHARGER",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1589,
-      "slug": "tm8-car-6576",
-      "name": "Car Phone Holder 3",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -348,15 +707,6 @@
       "warnings": []
     },
     {
-      "id": 25,
-      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-white",
-      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 81,
       "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
       "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
@@ -384,28 +734,6 @@
       "warnings": [
         "missing-brand"
       ]
-    },
-    {
-      "id": 77,
-      "slug": "wekome-wp-u99-magsafe-wirless-charger",
-      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 2042,
-      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
-      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 2081,
@@ -437,17 +765,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 42,
-      "slug": "wekome-wp-101-10000mah-power-bank",
-      "name": "WEKOME WP-101 10000mAh Power Bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 2148,
@@ -851,50 +1168,6 @@
       "warnings": []
     },
     {
-      "id": 22,
-      "slug": "remax-rpp-622-10000mah-power-bank",
-      "name": "Remax RPP-622 10000MAH power bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 98,
-      "slug": "wekome-wdc-50-240w-charging-cable",
-      "name": "WEKOME WDC-50 240W Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 2058,
-      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
-      "name": "WEKOME Desktop Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2060,
-      "slug": "repairdesk-accessory-10989-c141-desktop-mobile-phone-holder",
-      "name": "C141 Desktop Mobile Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2066,
       "slug": "repairdesk-accessory-8867-2m-stand-8809",
       "name": "2M Stand 8809",
@@ -904,17 +1177,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 68,
-      "slug": "wekome-wp-c54-car-charger",
-      "name": "WEKOME WP-C54 Car Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 12,
@@ -937,15 +1199,6 @@
       "warnings": []
     },
     {
-      "id": 90,
-      "slug": "wireless-dongle-for-carplay-or-android-auto-m29",
-      "name": "Wireless Dongle for CarPlay or Android Auto M29",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 2158,
       "slug": "repairdesk-misc-8483-drone-map",
       "name": "Drone Map",
@@ -960,39 +1213,6 @@
       "id": 2061,
       "slug": "repairdesk-accessory-10924-remax-p10-multifunctional-selfie-stick",
       "name": "Remax P10 Multifunctional Selfie Stick",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2059,
-      "slug": "repairdesk-accessory-11139-remax-selfie-stick-holder-with-lights-p60",
-      "name": "Remax Selfie Stick Holder with Lights P60",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 1572,
-      "slug": "tm8-car-10362",
-      "name": "Bike Phone Holder Z02 + MT01",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 1574,
-      "slug": "tm8-car-9976",
-      "name": "Magnetic Air Vent Hook Car Phone Holder",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -1023,31 +1243,9 @@
       ]
     },
     {
-      "id": 1585,
-      "slug": "tm8-car-6606",
-      "name": "WEKOME WP-U203 Car Phone Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 67,
       "slug": "wekome-wp-c53-car-charger",
       "name": "WEKOME WP-C53 Car Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 66,
-      "slug": "wekome-wp-c64-car-charger",
-      "name": "WEKOME WP-C64 Car Charger",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -1076,17 +1274,6 @@
       ]
     },
     {
-      "id": 76,
-      "slug": "wekome-wireless-charger-wp-u172",
-      "name": "WEKOME Wireless Charger WP-U172",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 95,
       "slug": "wekome-wdc-61-lighting-to-typec-charging-data-cable",
       "name": "WEKOME WDC-61 Lighting to TypeC Charging Data Cable",
@@ -1107,42 +1294,9 @@
       ]
     },
     {
-      "id": 92,
-      "slug": "c28-fm-transmitter",
-      "name": "C28 FM Transmitter",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 2065,
       "slug": "repairdesk-accessory-10264-remax-rm-c60-phone-stand",
       "name": "Remax RM-C60 Phone Stand",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2063,
-      "slug": "repairdesk-accessory-10266-remax-portable-mini-handheld-fan-f34",
-      "name": "Remax Portable Mini Handheld Fan F34",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2064,
-      "slug": "repairdesk-accessory-10265-remax-f37-usb-fan",
-      "name": "Remax F37 USB Fan",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -1207,24 +1361,6 @@
       "warnings": []
     },
     {
-      "id": 28,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 24,
-      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 5,
       "slug": "dualsense-wireless-controller-playstation-5-white",
       "name": "DualSense Wireless Controller - PlayStation 5 - White",
@@ -1247,28 +1383,6 @@
       ]
     },
     {
-      "id": 1582,
-      "slug": "tm8-car-6671",
-      "name": "Car Back Seat Phone Mount",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1583,
-      "slug": "tm8-car-6660",
-      "name": "Magnetic Dashboard and Air Vent Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 1588,
       "slug": "tm8-car-6580",
       "name": "Car Phone Holder 5",
@@ -1280,29 +1394,9 @@
       ]
     },
     {
-      "id": 60,
-      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
-      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 85,
       "slug": "remax-pd-bt533n-pro-wireless-earbuds",
       "name": "Remax PD-BT533N PRO Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 62,
-      "slug": "wekome-wk-wd-03-mini-karaoke-speaker-b",
-      "name": "Wekome WK WD-03 Mini Karaoke Speaker B",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -1322,15 +1416,6 @@
       ]
     },
     {
-      "id": 63,
-      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-w",
-      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 65,
       "slug": "remax-rb-m8-wireless-speaker",
       "name": "Remax RB-M8 Wireless Speaker",
@@ -1342,17 +1427,6 @@
       ]
     },
     {
-      "id": 1732,
-      "slug": "repairdesk-computer-11064-t-wold-s3-speaker",
-      "name": "T-Wold S3 Speaker",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 87,
       "slug": "remax-rp-w87-22-5w-4-in-1-multifunctional-night-lamp-and-folding-holder-wireless-charger",
       "name": "Remax RP-W87 22.5w 4 in 1 multifunctional night lamp & folding holder wireless charger",
@@ -1360,18 +1434,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 79,
-      "slug": "ds15-2-in-1wireless-charger",
-      "name": "DS15 2 IN 1Wireless Charger",
-      "indexable": true,
-      "score": 84,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters",
-        "missing-brand"
-      ]
     },
     {
       "id": 1712,
@@ -1447,15 +1509,6 @@
       "warnings": []
     },
     {
-      "id": 26,
-      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 2151,
       "slug": "repairdesk-misc-10852-magsafe-multi-wallet-black",
       "name": "MagSafe Multi-Wallet - Black",
@@ -1489,17 +1542,6 @@
       ]
     },
     {
-      "id": 105,
-      "slug": "msi-mag-coreliquid-a13-240-liquid-cooler",
-      "name": "MSI MAG CORELIQUID A13 240 Liquid Cooler",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 2147,
       "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
       "name": "MagSafe Silicone Phone Grip - Pink",
@@ -1511,17 +1553,6 @@
       "warnings": []
     },
     {
-      "id": 1714,
-      "slug": "tm8-cch-7152",
-      "name": "Dual Socket + USB Car Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 1,
       "slug": "dualsense-wireless-controller-sterling-silver-playstation-5",
       "name": "DualSense Wireless Controller - Sterling Silver - PlayStation 5",
@@ -1531,26 +1562,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 86,
-      "slug": "remax-tws-43-wireless-earbuds",
-      "name": "Remax TWS-43 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 61,
-      "slug": "wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black",
-      "name": "WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black)",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 47,
@@ -1655,17 +1666,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 1577,
-      "slug": "tm8-car-8866",
-      "name": "Tesla Model 3/Y Mobile Phone Holder Adapter",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 37,
