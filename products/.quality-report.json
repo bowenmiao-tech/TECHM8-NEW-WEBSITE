@@ -1,9 +1,31 @@
 {
-  "catalog_updated_at": "2026-10-07T06:46:12.53714+00:00",
+  "catalog_updated_at": "2026-10-08T03:10:54.735902+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2036,
+      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
+      "name": "USB-C WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1578,
+      "slug": "tm8-car-8154",
+      "name": "MagSafe Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 2045,
       "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
@@ -265,17 +287,6 @@
       ]
     },
     {
-      "id": 2036,
-      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
-      "name": "USB-C WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2042,
       "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
       "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
@@ -338,17 +349,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 1578,
-      "slug": "tm8-car-8154",
-      "name": "MagSafe Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 1589,
