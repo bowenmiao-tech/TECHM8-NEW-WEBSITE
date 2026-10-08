@@ -1,9 +1,27 @@
 {
-  "catalog_updated_at": "2026-10-08T03:10:54.735902+00:00",
+  "catalog_updated_at": "2026-10-08T09:29:01.387143+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 88,
+      "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
+      "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 24,
+      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 2036,
       "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
@@ -133,15 +151,6 @@
       "warnings": []
     },
     {
-      "id": 24,
-      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 28,
       "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
       "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
@@ -242,15 +251,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 88,
-      "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
-      "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 77,
