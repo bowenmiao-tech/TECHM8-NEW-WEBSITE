@@ -1,20 +1,9 @@
 {
-  "catalog_updated_at": "2026-10-09T03:02:47.619124+00:00",
+  "catalog_updated_at": "2026-10-09T07:24:18.460053+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
-    {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
-      "warnings": []
-    },
     {
       "id": 102,
       "slug": "1m-ultra-tough-micro-usb-cable",
@@ -25,6 +14,17 @@
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
     },
     {
       "id": 98,
