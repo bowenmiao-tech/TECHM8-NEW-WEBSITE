@@ -1,9 +1,51 @@
 {
-  "catalog_updated_at": "2026-10-08T09:29:01.387143+00:00",
+  "catalog_updated_at": "2026-10-09T03:02:47.619124+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 98,
+      "slug": "wekome-wdc-50-240w-charging-cable",
+      "name": "WEKOME WDC-50 240W Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 27,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 88,
       "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
@@ -172,15 +214,6 @@
       "id": 26,
       "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-black",
       "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 27,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -362,17 +395,6 @@
       ]
     },
     {
-      "id": 98,
-      "slug": "wekome-wdc-50-240w-charging-cable",
-      "name": "WEKOME WDC-50 240W Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 1585,
       "slug": "tm8-car-6606",
       "name": "WEKOME WP-U203 Car Phone Holder",
@@ -532,17 +554,6 @@
       ]
     },
     {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 71,
       "slug": "45w-dual-type-c-fast-wall-charger",
       "name": "30W Type c & Usb Wall Charger",
@@ -552,17 +563,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
-      "warnings": []
     },
     {
       "id": 100,
