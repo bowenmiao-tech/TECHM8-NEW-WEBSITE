@@ -3933,7 +3933,7 @@ async function loadPaymentFeeProfiles() {
             fee_type: "none",
             percentage: 0,
             fixed_amount: 0,
-            is_enabled: false,
+            is_enabled: true,
             sort_order: 20,
           },
         ];
@@ -3955,7 +3955,7 @@ async function loadPaymentFeeProfiles() {
         fee_type: "none",
         percentage: 0,
         fixed_amount: 0,
-        is_enabled: false,
+        is_enabled: true,
         sort_order: 20,
       },
     ];
