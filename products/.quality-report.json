@@ -1,9 +1,58 @@
 {
-  "catalog_updated_at": "2026-10-10T06:42:00.237713+00:00",
+  "catalog_updated_at": "2026-10-11T05:14:25.282028+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2035,
+      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
+      "name": "AUX WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 89,
+      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
+      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 27,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 82,
+      "slug": "wk-v04-wireless-earbuds",
+      "name": "WK V04 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 2043,
       "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
@@ -60,15 +109,6 @@
       ]
     },
     {
-      "id": 27,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 88,
       "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
       "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
@@ -118,24 +158,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 89,
-      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
-      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 2059,
@@ -334,17 +356,6 @@
       "id": 2042,
       "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
       "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2035,
-      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
-      "name": "AUX WEKOME YB03 Wired Earphone",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -1518,17 +1529,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 82,
-      "slug": "wk-v04-wireless-earbuds",
-      "name": "WK V04 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 3,
