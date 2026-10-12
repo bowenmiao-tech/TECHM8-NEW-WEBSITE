@@ -1,9 +1,49 @@
 {
-  "catalog_updated_at": "2026-10-12T05:36:56.266077+00:00",
+  "catalog_updated_at": "2026-10-12T07:12:51.35368+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2147,
+      "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
+      "name": "MagSafe Silicone Phone Grip - Pink",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 60,
+      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
+      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 98,
+      "slug": "wekome-wdc-50-240w-charging-cable",
+      "name": "WEKOME WDC-50 240W Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 94,
       "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
@@ -17,35 +57,6 @@
       "id": 28,
       "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
       "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2147,
-      "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
-      "name": "MagSafe Silicone Phone Grip - Pink",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 60,
-      "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
-      "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -148,17 +159,6 @@
       "id": 102,
       "slug": "1m-ultra-tough-micro-usb-cable",
       "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 98,
-      "slug": "wekome-wdc-50-240w-charging-cable",
-      "name": "WEKOME WDC-50 240W Charging Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
