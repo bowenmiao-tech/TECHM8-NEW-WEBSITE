@@ -1,19 +1,107 @@
 {
-  "catalog_updated_at": "2026-10-13T00:19:24.690709+00:00",
+  "catalog_updated_at": "2026-10-13T06:18:59.184399+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
     {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "id": 2061,
+      "slug": "repairdesk-accessory-10924-remax-p10-multifunctional-selfie-stick",
+      "name": "Remax P10 Multifunctional Selfie Stick",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 2152,
+      "slug": "repairdesk-misc-10851-magsafe-multi-wallet-grey",
+      "name": "MagSafe Multi-Wallet - Grey",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2150,
+      "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
+      "name": "MagSafe Multi-Wallet - Brown",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2151,
+      "slug": "repairdesk-misc-10852-magsafe-multi-wallet-black",
+      "name": "MagSafe Multi-Wallet - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2145,
+      "slug": "repairdesk-misc-10888-magsafe-stand-wallet-black",
+      "name": "MagSafe Stand Wallet - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2149,
+      "slug": "repairdesk-misc-10854-magsafe-silicone-phone-grip-black",
+      "name": "MagSafe Silicone Phone Grip - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2148,
+      "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
+      "name": "MagSafe Silicone Phone Grip - Sky Blue",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2146,
+      "slug": "repairdesk-misc-10857-magsafe-silicone-phone-grip-purple",
+      "name": "MagSafe Silicone Phone Grip - Purple",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
     },
     {
       "id": 2147,
@@ -25,6 +113,92 @@
         "description-under-40-characters"
       ],
       "warnings": []
+    },
+    {
+      "id": 2066,
+      "slug": "repairdesk-accessory-8867-2m-stand-8809",
+      "name": "2M Stand 8809",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2083,
+      "slug": "repairdesk-accessory-6770-silver-aluminium-adjustable-laptop-stand",
+      "name": "Silver Aluminium Adjustable Laptop Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 98,
+      "slug": "wekome-wdc-50-240w-charging-cable",
+      "name": "WEKOME WDC-50 240W Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 74,
+      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
+      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 72,
+      "slug": "100w-wall-charger",
+      "name": "100W Wall Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
     },
     {
       "id": 60,
@@ -43,17 +217,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 98,
-      "slug": "wekome-wdc-50-240w-charging-cable",
-      "name": "WEKOME WDC-50 240W Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 94,
@@ -145,17 +308,6 @@
       "warnings": []
     },
     {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2045,
       "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
       "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
@@ -165,17 +317,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 88,
@@ -645,17 +786,6 @@
       "warnings": []
     },
     {
-      "id": 2145,
-      "slug": "repairdesk-misc-10888-magsafe-stand-wallet-black",
-      "name": "MagSafe Stand Wallet - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 83,
       "slug": "remax-g6-wireless-gamebubs",
       "name": "Remax G6  Wireless GameBubs",
@@ -670,26 +800,6 @@
       "id": 1571,
       "slug": "tm8-car-10742",
       "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 74,
-      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
-      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -769,78 +879,12 @@
       "warnings": []
     },
     {
-      "id": 72,
-      "slug": "100w-wall-charger",
-      "name": "100W Wall Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 96,
       "slug": "wekome-wdc-60-type-c-c-charging-data-cable",
       "name": "WEKOME WDC-60 Type-C-C Charging Data Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2148,
-      "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
-      "name": "MagSafe Silicone Phone Grip - Sky Blue",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2146,
-      "slug": "repairdesk-misc-10857-magsafe-silicone-phone-grip-purple",
-      "name": "MagSafe Silicone Phone Grip - Purple",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2149,
-      "slug": "repairdesk-misc-10854-magsafe-silicone-phone-grip-black",
-      "name": "MagSafe Silicone Phone Grip - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2150,
-      "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
-      "name": "MagSafe Multi-Wallet - Brown",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2152,
-      "slug": "repairdesk-misc-10851-magsafe-multi-wallet-grey",
-      "name": "MagSafe Multi-Wallet - Grey",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
@@ -1190,17 +1234,6 @@
       "warnings": []
     },
     {
-      "id": 2066,
-      "slug": "repairdesk-accessory-8867-2m-stand-8809",
-      "name": "2M Stand 8809",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 12,
       "slug": "brand-new-85w-magsafe-1-power-adapter-for-macbook-pro-six-months-warranty",
       "name": "85W MagSafe 1 Power Adapter for MacBook Pro",
@@ -1224,17 +1257,6 @@
       "id": 2158,
       "slug": "repairdesk-misc-8483-drone-map",
       "name": "Drone Map",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2061,
-      "slug": "repairdesk-accessory-10924-remax-p10-multifunctional-selfie-stick",
-      "name": "Remax P10 Multifunctional Selfie Stick",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -1531,17 +1553,6 @@
       "warnings": []
     },
     {
-      "id": 2151,
-      "slug": "repairdesk-misc-10852-magsafe-multi-wallet-black",
-      "name": "MagSafe Multi-Wallet - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 3,
       "slug": "dualsense-wireless-controller-gray-camouflage",
       "name": "DualSense Wireless Controller - Gray Camouflage",
@@ -1627,17 +1638,6 @@
       "id": 2163,
       "slug": "repairdesk-misc-8041-magsafe-card-wallet-navy",
       "name": "MagSafe Card Wallet - Navy",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2083,
-      "slug": "repairdesk-accessory-6770-silver-aluminium-adjustable-laptop-stand",
-      "name": "Silver Aluminium Adjustable Laptop Stand",
       "indexable": false,
       "score": 65,
       "blockers": [
