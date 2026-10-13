@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-10-12T07:12:51.35368+00:00",
+  "catalog_updated_at": "2026-10-13T00:19:24.690709+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 2147,
       "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
@@ -648,17 +659,6 @@
       "id": 83,
       "slug": "remax-g6-wireless-gamebubs",
       "name": "Remax G6  Wireless GameBubs",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
