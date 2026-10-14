@@ -1,19 +1,30 @@
 {
-  "catalog_updated_at": "2026-10-14T03:25:39.2782+00:00",
+  "catalog_updated_at": "2026-10-14T07:41:42.854069+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
     {
-      "id": 2081,
-      "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
-      "name": "2M Stand Selfie Live Stream Stand",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 98,
+      "slug": "wekome-wdc-50-240w-charging-cable",
+      "name": "WEKOME WDC-50 240W Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
     },
     {
       "id": 1590,
@@ -25,6 +36,59 @@
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 1572,
+      "slug": "tm8-car-10362",
+      "name": "Bike Phone Holder Z02 + MT01",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 92,
+      "slug": "c28-fm-transmitter",
+      "name": "C28 FM Transmitter",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 74,
+      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
+      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2081,
+      "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
+      "name": "2M Stand Selfie Live Stream Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
     },
     {
       "id": 1578,
@@ -98,17 +162,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 2152,
@@ -221,26 +274,6 @@
       "warnings": []
     },
     {
-      "id": 98,
-      "slug": "wekome-wdc-50-240w-charging-cable",
-      "name": "WEKOME WDC-50 240W Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 74,
-      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
-      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 72,
       "slug": "100w-wall-charger",
       "name": "100W Wall Charger",
@@ -255,17 +288,6 @@
       "id": 73,
       "slug": "3-usb-wall-charger",
       "name": "3 USB WALL CHARGER",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -447,17 +469,6 @@
       "warnings": []
     },
     {
-      "id": 1572,
-      "slug": "tm8-car-10362",
-      "name": "Bike Phone Holder Z02 + MT01",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 25,
       "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-white",
       "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- White",
@@ -490,17 +501,6 @@
       "id": 21,
       "slug": "remax-rpp-623-power-bank-20000-mah",
       "name": "REMAX RPP-623 Power Bank 20000 mAh",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 92,
-      "slug": "c28-fm-transmitter",
-      "name": "C28 FM Transmitter",
       "indexable": true,
       "score": 92,
       "blockers": [],
