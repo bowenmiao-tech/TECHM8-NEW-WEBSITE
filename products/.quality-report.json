@@ -1,9 +1,18 @@
 {
-  "catalog_updated_at": "2026-10-14T07:41:42.854069+00:00",
-  "total_products": 183,
-  "indexable_products": 129,
+  "catalog_updated_at": "2026-10-14T12:25:13.371008+00:00",
+  "total_products": 184,
+  "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 4426,
+      "slug": "wekome-wdc-125-kinkong-raycor-series-braided-fast-charging-cable-35w-c-l",
+      "name": "WEKOME WDC-125 Kinkong Raycor Series Braided Fast Charging Cable 35W(C-L)",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
