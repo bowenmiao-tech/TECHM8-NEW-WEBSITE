@@ -1,9 +1,93 @@
 {
-  "catalog_updated_at": "2026-10-13T06:18:59.184399+00:00",
+  "catalog_updated_at": "2026-10-14T03:25:39.2782+00:00",
   "total_products": 183,
   "indexable_products": 129,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2081,
+      "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
+      "name": "2M Stand Selfie Live Stream Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1590,
+      "slug": "tm8-car-6034",
+      "name": "Replacement Metal Plate for Magnetic Phone Holders",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1578,
+      "slug": "tm8-car-8154",
+      "name": "MagSafe Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 24,
+      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2045,
+      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 28,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 1577,
+      "slug": "tm8-car-8866",
+      "name": "Tesla Model 3/Y Mobile Phone Holder Adapter",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 2061,
       "slug": "repairdesk-accessory-10924-remax-p10-multifunctional-selfie-stick",
@@ -179,17 +263,6 @@
       ]
     },
     {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
-      "warnings": []
-    },
-    {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
       "name": "1M Ultra Tough USB-C to USB-C Cable",
@@ -225,26 +298,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 28,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 1578,
-      "slug": "tm8-car-8154",
-      "name": "MagSafe Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
@@ -308,29 +361,9 @@
       "warnings": []
     },
     {
-      "id": 2045,
-      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 88,
       "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
       "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 24,
-      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -574,17 +607,6 @@
       ]
     },
     {
-      "id": 1577,
-      "slug": "tm8-car-8866",
-      "name": "Tesla Model 3/Y Mobile Phone Holder Adapter",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 1589,
       "slug": "tm8-car-6576",
       "name": "Car Phone Holder 3",
@@ -735,17 +757,6 @@
       ]
     },
     {
-      "id": 1590,
-      "slug": "tm8-car-6034",
-      "name": "Replacement Metal Plate for Magnetic Phone Holders",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 71,
       "slug": "45w-dual-type-c-fast-wall-charger",
       "name": "30W Type c & Usb Wall Charger",
@@ -866,17 +877,6 @@
       "warnings": [
         "missing-brand"
       ]
-    },
-    {
-      "id": 2081,
-      "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
-      "name": "2M Stand Selfie Live Stream Stand",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 96,
