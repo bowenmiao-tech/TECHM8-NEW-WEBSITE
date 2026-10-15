@@ -1,18 +1,38 @@
 {
-  "catalog_updated_at": "2026-10-15T04:28:05.675885+00:00",
+  "catalog_updated_at": "2026-10-15T08:52:34.220974+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
     {
-      "id": 2147,
-      "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
-      "name": "MagSafe Silicone Phone Grip - Pink",
+      "id": 2058,
+      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
+      "name": "WEKOME Desktop Phone Holder",
       "indexable": false,
       "score": 65,
       "blockers": [
         "description-under-40-characters"
       ],
+      "warnings": []
+    },
+    {
+      "id": 2149,
+      "slug": "repairdesk-misc-10854-magsafe-silicone-phone-grip-black",
+      "name": "MagSafe Silicone Phone Grip - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 88,
+      "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
+      "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
       "warnings": []
     },
     {
@@ -25,13 +45,46 @@
       "warnings": []
     },
     {
-      "id": 4426,
-      "slug": "wekome-wdc-125-kinkong-raycor-series-braided-fast-charging-cable-35w-c-l",
-      "name": "WEKOME WDC-125 Kinkong Raycor Series Braided Fast Charging Cable 35W(C-L)",
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 83,
+      "slug": "remax-g6-wireless-gamebubs",
+      "name": "Remax G6  Wireless GameBubs",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
       "warnings": []
+    },
+    {
+      "id": 98,
+      "slug": "wekome-wdc-50-240w-charging-cable",
+      "name": "WEKOME WDC-50 240W Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
     },
     {
       "id": 99,
@@ -45,15 +98,24 @@
       ]
     },
     {
-      "id": 98,
-      "slug": "wekome-wdc-50-240w-charging-cable",
-      "name": "WEKOME WDC-50 240W Charging Cable",
+      "id": 2147,
+      "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
+      "name": "MagSafe Silicone Phone Grip - Pink",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 4426,
+      "slug": "wekome-wdc-125-kinkong-raycor-series-braided-fast-charging-cable-35w-c-l",
+      "name": "WEKOME WDC-125 Kinkong Raycor Series Braided Fast Charging Cable 35W(C-L)",
       "indexable": true,
-      "score": 92,
+      "score": 100,
       "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
+      "warnings": []
     },
     {
       "id": 1590,
@@ -151,17 +213,6 @@
       "warnings": []
     },
     {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
-      "warnings": []
-    },
-    {
       "id": 28,
       "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
       "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
@@ -229,17 +280,6 @@
       "id": 2145,
       "slug": "repairdesk-misc-10888-magsafe-stand-wallet-black",
       "name": "MagSafe Stand Wallet - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2149,
-      "slug": "repairdesk-misc-10854-magsafe-silicone-phone-grip-black",
-      "name": "MagSafe Silicone Phone Grip - Black",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -323,15 +363,6 @@
       "warnings": []
     },
     {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 94,
       "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
       "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
@@ -398,15 +429,6 @@
       "blockers": [
         "description-under-40-characters"
       ],
-      "warnings": []
-    },
-    {
-      "id": 88,
-      "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
-      "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
@@ -647,17 +669,6 @@
       ]
     },
     {
-      "id": 2058,
-      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
-      "name": "WEKOME Desktop Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 63,
       "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-w",
       "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W",
@@ -813,17 +824,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 83,
-      "slug": "remax-g6-wireless-gamebubs",
-      "name": "Remax G6  Wireless GameBubs",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 1571,
