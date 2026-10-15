@@ -1,9 +1,29 @@
 {
-  "catalog_updated_at": "2026-10-14T12:25:13.371008+00:00",
+  "catalog_updated_at": "2026-10-15T04:28:05.675885+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2147,
+      "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
+      "name": "MagSafe Silicone Phone Grip - Pink",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 15,
+      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+      "name": "87W USB-C MacBook Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 4426,
       "slug": "wekome-wdc-125-kinkong-raycor-series-braided-fast-charging-cable-35w-c-l",
@@ -242,17 +262,6 @@
       "id": 2146,
       "slug": "repairdesk-misc-10857-magsafe-silicone-phone-grip-purple",
       "name": "MagSafe Silicone Phone Grip - Purple",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2147,
-      "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
-      "name": "MagSafe Silicone Phone Grip - Pink",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -862,15 +871,6 @@
       "id": 81,
       "slug": "remax-cozybuds-w29-clip-on-bluetooth-wireless-earbuds-black",
       "name": "REMAX - Cozybuds W29 Clip-On Bluetooth Wireless Earbuds - Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 15,
-      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
-      "name": "87W USB-C MacBook Charger",
       "indexable": true,
       "score": 100,
       "blockers": [],
