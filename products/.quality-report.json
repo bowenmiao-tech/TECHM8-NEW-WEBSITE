@@ -1,9 +1,31 @@
 {
-  "catalog_updated_at": "2026-10-16T04:00:25.427247+00:00",
+  "catalog_updated_at": "2026-10-16T06:59:13.567928+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2058,
+      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
+      "name": "WEKOME Desktop Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 1715,
       "slug": "tm8-cch-7151",
@@ -47,17 +69,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2058,
-      "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
-      "name": "WEKOME Desktop Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 2149,
@@ -112,17 +123,6 @@
       "id": 98,
       "slug": "wekome-wdc-50-240w-charging-cable",
       "name": "WEKOME WDC-50 240W Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
