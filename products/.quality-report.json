@@ -1,9 +1,53 @@
 {
-  "catalog_updated_at": "2026-10-15T08:52:34.220974+00:00",
+  "catalog_updated_at": "2026-10-16T04:00:25.427247+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 1715,
+      "slug": "tm8-cch-7151",
+      "name": "45W Dual USB-C Car Charger - Black",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1585,
+      "slug": "tm8-car-6606",
+      "name": "WEKOME WP-U203 Car Phone Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 2058,
       "slug": "repairdesk-accessory-11201-wekome-desktop-phone-holder",
@@ -42,17 +86,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
       "warnings": []
     },
     {
@@ -335,17 +368,6 @@
       "id": 72,
       "slug": "100w-wall-charger",
       "name": "100W Wall Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -658,17 +680,6 @@
       ]
     },
     {
-      "id": 1585,
-      "slug": "tm8-car-6606",
-      "name": "WEKOME WP-U203 Car Phone Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 63,
       "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-w",
       "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-W",
@@ -767,17 +778,6 @@
       "id": 1716,
       "slug": "tm8-cch-7150",
       "name": "45W Dual USB-C Car Charger - White",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1715,
-      "slug": "tm8-cch-7151",
-      "name": "45W Dual USB-C Car Charger - Black",
       "indexable": true,
       "score": 92,
       "blockers": [],
