@@ -1,9 +1,53 @@
 {
-  "catalog_updated_at": "2026-10-16T06:59:13.567928+00:00",
+  "catalog_updated_at": "2026-10-17T02:59:30.836859+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2065,
+      "slug": "repairdesk-accessory-10264-remax-rm-c60-phone-stand",
+      "name": "Remax RM-C60 Phone Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1715,
+      "slug": "tm8-cch-7151",
+      "name": "45W Dual USB-C Car Charger - Black",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
+    },
     {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
@@ -27,42 +71,9 @@
       "warnings": []
     },
     {
-      "id": 1715,
-      "slug": "tm8-cch-7151",
-      "name": "45W Dual USB-C Car Charger - Black",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 1585,
       "slug": "tm8-car-6606",
       "name": "WEKOME WP-U203 Car Phone Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -1345,17 +1356,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2065,
-      "slug": "repairdesk-accessory-10264-remax-rm-c60-phone-stand",
-      "name": "Remax RM-C60 Phone Stand",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 2062,
