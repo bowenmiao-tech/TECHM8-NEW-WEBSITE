@@ -1,9 +1,40 @@
 {
-  "catalog_updated_at": "2026-10-17T02:59:30.836859+00:00",
+  "catalog_updated_at": "2026-10-17T05:04:19.233031+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2042,
+      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
+      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2067,
+      "slug": "repairdesk-accessory-6553-remax-p12-multifunctional-selfie-stick",
+      "name": "Remax P12 Multifunctional Selfie Stick",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 73,
       "slug": "3-usb-wall-charger",
@@ -416,15 +447,6 @@
       "warnings": []
     },
     {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 89,
       "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
       "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
@@ -647,17 +669,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2042,
-      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
-      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 90,
@@ -1658,17 +1669,6 @@
       "id": 2082,
       "slug": "repairdesk-accessory-6771-black-aluminium-adjustable-laptop-stand",
       "name": "Black Aluminium Adjustable Laptop Stand",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2067,
-      "slug": "repairdesk-accessory-6553-remax-p12-multifunctional-selfie-stick",
-      "name": "Remax P12 Multifunctional Selfie Stick",
       "indexable": false,
       "score": 65,
       "blockers": [
