@@ -1,13 +1,24 @@
 {
-  "catalog_updated_at": "2026-10-17T05:04:19.233031+00:00",
+  "catalog_updated_at": "2026-10-18T00:44:07.523467+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
     {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "id": 1578,
+      "slug": "tm8-car-8154",
+      "name": "MagSafe Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 15,
+      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+      "name": "87W USB-C MacBook Charger",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -22,6 +33,24 @@
       "blockers": [
         "description-under-40-characters"
       ],
+      "warnings": []
+    },
+    {
+      "id": 18,
+      "slug": "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
+      "name": "85W MagSafe 2 Power Adapter for MacBook Pro with Retina Display",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
       "warnings": []
     },
     {
@@ -127,15 +156,6 @@
       "id": 88,
       "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
       "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 15,
-      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
-      "name": "87W USB-C MacBook Charger",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -249,17 +269,6 @@
       "id": 2081,
       "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
       "name": "2M Stand Selfie Live Stream Stand",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 1578,
-      "slug": "tm8-car-8154",
-      "name": "MagSafe Car Phone Holder",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -1383,15 +1392,6 @@
       "id": 17,
       "slug": "new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
       "name": "30W USB-C MacBook Charger with Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 18,
-      "slug": "85w-magsafe-2-power-adapter-for-macbook-pro-with-retina-display-six-months-wa",
-      "name": "85W MagSafe 2 Power Adapter for MacBook Pro with Retina Display",
       "indexable": true,
       "score": 100,
       "blockers": [],
