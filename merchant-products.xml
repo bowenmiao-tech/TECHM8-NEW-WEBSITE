@@ -5,6 +5,22 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>110491608</g:id>
+      <title>REMAX RPP-26 20000mAh Fast Charging Power Bank- Black</title>
+      <description>REMAX RPP-26 20000mAh Fast Charging Power Bank- Black available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-rpp-26-20000mah-fast-charging-power-bank-black/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/04-image-4.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/01-2.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/02-4.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/03-5.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/05-image-5.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>69.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+      <g:gtin>69548512215738</g:gtin>
+    </item>
+    <item>
       <g:id>TM8-MAC-USBC-87W</g:id>
       <title>87W USB-C MacBook Charger</title>
       <description>Buy a replacement 87W USB-C MacBook charger with cable from TECHM8.</description>
@@ -377,22 +393,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>69548512215745</g:gtin>
-    </item>
-    <item>
-      <g:id>110491608</g:id>
-      <title>REMAX RPP-26 20000mAh Fast Charging Power Bank- Black</title>
-      <description>REMAX RPP-26 20000mAh Fast Charging Power Bank- Black available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-rpp-26-20000mah-fast-charging-power-bank-black/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/04-image-4.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/01-2.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/02-4.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/03-5.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-26-20000mah-fast-charging-power-bank-black/05-image-5.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>69.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-      <g:gtin>69548512215738</g:gtin>
     </item>
     <item>
       <g:id>110621632</g:id>

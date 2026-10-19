@@ -1,9 +1,18 @@
 {
-  "catalog_updated_at": "2026-10-18T00:44:07.523467+00:00",
+  "catalog_updated_at": "2026-10-18T23:47:24.767543+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 26,
+      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 1578,
       "slug": "tm8-car-8154",
@@ -576,15 +585,6 @@
       "id": 25,
       "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-white",
       "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 26,
-      "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-26 20000mAh Fast Charging Power Bank- Black",
       "indexable": true,
       "score": 100,
       "blockers": [],
