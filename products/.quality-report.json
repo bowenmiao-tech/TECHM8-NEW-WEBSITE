@@ -1,9 +1,40 @@
 {
-  "catalog_updated_at": "2026-10-18T23:47:24.767543+00:00",
+  "catalog_updated_at": "2026-10-19T04:55:45.941308+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 94,
+      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1584,
+      "slug": "tm8-car-6659",
+      "name": "Metal Motorcycle Phone Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 26,
       "slug": "remax-rpp-26-20000mah-fast-charging-power-bank-black",
@@ -72,17 +103,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 2065,
@@ -439,15 +459,6 @@
       "id": 60,
       "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
       "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 94,
-      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -1303,17 +1314,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 1584,
-      "slug": "tm8-car-6659",
-      "name": "Metal Motorcycle Phone Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 1569,
