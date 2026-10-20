@@ -1,9 +1,40 @@
 {
-  "catalog_updated_at": "2026-10-19T04:55:45.941308+00:00",
+  "catalog_updated_at": "2026-10-20T04:44:52.831781+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 21,
+      "slug": "remax-rpp-623-power-bank-20000-mah",
+      "name": "REMAX RPP-623 Power Bank 20000 mAh",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 97,
+      "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
+      "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2045,
+      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 94,
       "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
@@ -315,17 +346,6 @@
       "warnings": []
     },
     {
-      "id": 2045,
-      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 28,
       "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
       "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
@@ -605,17 +625,6 @@
       "id": 22,
       "slug": "remax-rpp-622-10000mah-power-bank",
       "name": "Remax RPP-622 10000MAH power bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 21,
-      "slug": "remax-rpp-623-power-bank-20000-mah",
-      "name": "REMAX RPP-623 Power Bank 20000 mAh",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -1558,15 +1567,6 @@
       "id": 110,
       "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
       "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 97,
-      "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
-      "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
