@@ -1,9 +1,18 @@
 {
-  "catalog_updated_at": "2026-10-20T04:44:52.831781+00:00",
+  "catalog_updated_at": "2026-10-20T07:25:26.76968+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 97,
+      "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
+      "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 21,
       "slug": "remax-rpp-623-power-bank-20000-mah",
@@ -14,15 +23,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 97,
-      "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
-      "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 2045,

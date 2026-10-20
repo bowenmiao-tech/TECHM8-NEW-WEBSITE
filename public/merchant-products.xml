@@ -5,6 +5,19 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>1025940</g:id>
+      <title>WEKOME 66W WDC-59a Type-C-USB Charging Data Cable</title>
+      <description>WEKOME 66W WDC-59a Type-C-USB Charging Data Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/1779757925225-105f135e.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/1779757926380-dacdd26b.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>31.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027651346</g:gtin>
+    </item>
+    <item>
       <g:id>110631633</g:id>
       <title>REMAX RPP-623 Power Bank 20000 mAh</title>
       <description>REMAX RPP-623 Power Bank 20000 mAh available for online and warehouse dispatch.</description>
@@ -18,19 +31,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>695485122607</g:gtin>
-    </item>
-    <item>
-      <g:id>1025940</g:id>
-      <title>WEKOME 66W WDC-59a Type-C-USB Charging Data Cable</title>
-      <description>WEKOME 66W WDC-59a Type-C-USB Charging Data Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/1779757925225-105f135e.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/1779757926380-dacdd26b.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>31.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027651346</g:gtin>
     </item>
     <item>
       <g:id>110671637</g:id>
