@@ -1,9 +1,49 @@
 {
-  "catalog_updated_at": "2026-10-20T07:25:26.76968+00:00",
+  "catalog_updated_at": "2026-10-21T04:41:43.620893+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 4426,
+      "slug": "wekome-wdc-125-kinkong-raycor-series-braided-fast-charging-cable-35w-c-l",
+      "name": "WEKOME WDC-125 Kinkong Raycor Series Braided Fast Charging Cable 35W(C-L)",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 1571,
+      "slug": "tm8-car-10742",
+      "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
+    },
     {
       "id": 97,
       "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
@@ -116,15 +156,6 @@
       "warnings": []
     },
     {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 2067,
       "slug": "repairdesk-accessory-6553-remax-p12-multifunctional-selfie-stick",
       "name": "Remax P12 Multifunctional Selfie Stick",
@@ -156,17 +187,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
-      "warnings": []
     },
     {
       "id": 99,
@@ -261,15 +281,6 @@
       "blockers": [
         "description-under-40-characters"
       ],
-      "warnings": []
-    },
-    {
-      "id": 4426,
-      "slug": "wekome-wdc-125-kinkong-raycor-series-braided-fast-charging-cable-35w-c-l",
-      "name": "WEKOME WDC-125 Kinkong Raycor Series Braided Fast Charging Cable 35W(C-L)",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
@@ -875,17 +886,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 1571,
-      "slug": "tm8-car-10742",
-      "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 1568,
