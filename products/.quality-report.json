@@ -1,9 +1,38 @@
 {
-  "catalog_updated_at": "2026-10-21T04:41:43.620893+00:00",
+  "catalog_updated_at": "2026-10-21T06:59:55.414036+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 101,
+      "slug": "3-in-1-cabin-crew-charging-cable",
+      "name": "3 in 1 Cabin Crew Charging Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 4426,
       "slug": "wekome-wdc-125-kinkong-raycor-series-braided-fast-charging-cable-35w-c-l",
@@ -23,15 +52,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 69,
@@ -859,15 +879,6 @@
       ]
     },
     {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 2166,
       "slug": "repairdesk-misc-8038-magsafe-card-wallet-green",
       "name": "MagSafe Card Wallet - Green",
@@ -1354,17 +1365,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 101,
-      "slug": "3-in-1-cabin-crew-charging-cable",
-      "name": "3 in 1 Cabin Crew Charging Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 95,
