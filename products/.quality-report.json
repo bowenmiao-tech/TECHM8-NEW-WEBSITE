@@ -1,9 +1,62 @@
 {
-  "catalog_updated_at": "2026-10-21T06:59:55.414036+00:00",
+  "catalog_updated_at": "2026-10-22T04:22:02.46473+00:00",
   "total_products": 184,
   "indexable_products": 130,
   "limited_products": 54,
   "products": [
+    {
+      "id": 2145,
+      "slug": "repairdesk-misc-10888-magsafe-stand-wallet-black",
+      "name": "MagSafe Stand Wallet - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2036,
+      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
+      "name": "USB-C WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 76,
+      "slug": "wekome-wireless-charger-wp-u172",
+      "name": "WEKOME Wireless Charger WP-U172",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 101,
       "slug": "3-in-1-cabin-crew-charging-cable",
@@ -103,17 +156,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 1584,
@@ -271,15 +313,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 98,
@@ -441,17 +474,6 @@
       "warnings": []
     },
     {
-      "id": 2145,
-      "slug": "repairdesk-misc-10888-magsafe-stand-wallet-black",
-      "name": "MagSafe Stand Wallet - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2148,
       "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
       "name": "MagSafe Silicone Phone Grip - Sky Blue",
@@ -559,17 +581,6 @@
       "id": 2043,
       "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
       "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2036,
-      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
-      "name": "USB-C WEKOME YB03 Wired Earphone",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -717,17 +728,6 @@
       "warnings": [
         "description-under-90-characters",
         "missing-brand"
-      ]
-    },
-    {
-      "id": 76,
-      "slug": "wekome-wireless-charger-wp-u172",
-      "name": "WEKOME Wireless Charger WP-U172",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
       ]
     },
     {
