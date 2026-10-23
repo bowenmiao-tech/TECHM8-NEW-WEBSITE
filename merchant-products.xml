@@ -5,6 +5,20 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>6941027651469</g:id>
+      <title>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable</title>
+      <description>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437328331-3cb711d0.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437377122-fcabacb1.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437370250-b3475340.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>39.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+
+    </item>
+    <item>
       <g:id>492967793802</g:id>
       <title>3 USB WALL CHARGER</title>
       <description>3 USB WALL CHARGER available for online order and warehouse dispatch.</description>
@@ -1053,20 +1067,6 @@
       <g:condition>new</g:condition>
       <g:brand>Generic</g:brand>
       <g:gtin>2986000065752</g:gtin>
-    </item>
-    <item>
-      <g:id>6941027651469</g:id>
-      <title>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable</title>
-      <description>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437328331-3cb711d0.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437377122-fcabacb1.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437370250-b3475340.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>39.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-
     </item>
     <item>
       <g:id>TM8-PS5-DS-GRAY-CAMO</g:id>
