@@ -1,22 +1,22 @@
 {
-  "catalog_updated_at": "2026-10-23T10:35:14.119788+00:00",
-  "total_products": 185,
+  "catalog_updated_at": "2026-10-23T14:10:12.166215+00:00",
+  "total_products": 186,
   "indexable_products": 131,
-  "limited_products": 54,
+  "limited_products": 55,
   "products": [
     {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
+      "id": 4441,
+      "slug": "wekome-wdc-195-1m-3-5mm-aux-audio-cable",
+      "name": "WEKOME WDC-195 1m 3.5mm AUX Audio Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
       "warnings": []
     },
     {
-      "id": 4441,
-      "slug": "wekome-wdc-195-1m-35mm-aux-audio-cable",
-      "name": "WEKOME WDC-195 1m 3.5mm AUX Audio Cable",
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -1749,6 +1749,17 @@
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 4441,
+      "slug": "wekome-wdc-195-1m-35mm-aux-audio-cable",
+      "name": "WEKOME WDC-195 1m 3.5mm AUX Audio Cable",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "hidden-product"
+      ],
+      "warnings": []
     },
     {
       "id": 2180,

@@ -5,6 +5,19 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>TM8-WEKOME-WDC-195</g:id>
+      <title>WEKOME WDC-195 1m 3.5mm AUX Audio Cable</title>
+      <description>Shop the WEKOME WDC-195 1m 3.5mm AUX audio cable with aluminium connector shells at TechM8.</description>
+      <link>https://www.techm8australia.com/products/wekome-wdc-195-1m-3-5mm-aux-audio-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-195-1m-35mm-aux-audio-cable/1792764556703-d1964afe.webp</g:image_link>
+      <g:additional_image_link>https://oztechm8.com.au/assets/products/accessories/wekome-wdc-195-aux-cable.jpg</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>16.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+
+    </item>
+    <item>
       <g:id>6941027651469</g:id>
       <title>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable</title>
       <description>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable available for online order and warehouse dispatch.</description>
@@ -16,18 +29,6 @@
       <g:price>39.95 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
-
-    </item>
-    <item>
-      <g:id>TM8-WEKOME-WDC-195</g:id>
-      <title>WEKOME WDC-195 1m 3.5mm AUX Audio Cable</title>
-      <description>Shop the WEKOME WDC-195 1m 3.5mm AUX audio cable at TechM8 for $16.95.</description>
-      <link>https://www.techm8australia.com/products/wekome-wdc-195-1m-35mm-aux-audio-cable/</link>
-      <g:image_link>https://www.wekome.hk/uploads/20240709/f3262a81ab269a40ca7b0c0fa7d85766.jpg</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>16.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
 
     </item>
     <item>
