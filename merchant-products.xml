@@ -19,15 +19,58 @@
 
     </item>
     <item>
-      <g:id>492967793802</g:id>
-      <title>3 USB WALL CHARGER</title>
-      <description>3 USB WALL CHARGER available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/3-usb-wall-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/3-usb-wall-charger/1778596612524-7af58249.webp</g:image_link>
+      <g:id>TM8-WEKOME-WDC-195</g:id>
+      <title>WEKOME WDC-195 1m 3.5mm AUX Audio Cable</title>
+      <description>Shop the WEKOME WDC-195 1m 3.5mm AUX audio cable at TechM8 for $16.95.</description>
+      <link>https://www.techm8australia.com/products/wekome-wdc-195-1m-35mm-aux-audio-cable/</link>
+      <g:image_link>https://www.wekome.hk/uploads/20240709/f3262a81ab269a40ca7b0c0fa7d85766.jpg</g:image_link>
       <g:availability>in_stock</g:availability>
-      <g:price>29.00 AUD</g:price>
+      <g:price>16.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+
+    </item>
+    <item>
+      <g:id>8822381</g:id>
+      <title>1M Ultra Tough USB-C to Lightning Cable</title>
+      <description>1M Ultra Tough Type c to Lightning Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-lightning-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-lightning-cable/1784437643393-879d59ec.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>110631633</g:id>
+      <title>REMAX RPP-623 Power Bank 20000 mAh</title>
+      <description>REMAX RPP-623 Power Bank 20000 mAh available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-rpp-623-power-bank-20000-mah/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/01-image-1.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/02-image-2.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/03-image-3.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/04-image-4.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>79.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+      <g:gtin>695485122607</g:gtin>
+    </item>
+    <item>
+      <g:id>TM8-PS5-DS-WHITE</g:id>
+      <title>DualSense Wireless Controller - PlayStation 5 - White</title>
+      <description>Buy the PlayStation 5 DualSense Wireless Controller in White from TECHM8.</description>
+      <link>https://www.techm8australia.com/products/dualsense-wireless-controller-playstation-5-white/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-00.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-01.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-02.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-03.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-04.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>109.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Sony</g:brand>
 
     </item>
     <item>
@@ -42,6 +85,30 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027648049</g:gtin>
+    </item>
+    <item>
+      <g:id>8830389</g:id>
+      <title>1M Ultra Tough USB-C to USB-C Cable</title>
+      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>492967793802</g:id>
+      <title>3 USB WALL CHARGER</title>
+      <description>3 USB WALL CHARGER available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/3-usb-wall-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/3-usb-wall-charger/1778596612524-7af58249.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>29.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
     </item>
     <item>
       <g:id>6941027660096</g:id>
@@ -65,18 +132,6 @@
       <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/3-in-1-cabin-crew-charging-cable/1784437615884-f3386886.webp</g:image_link>
       <g:availability>in_stock</g:availability>
       <g:price>25.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
-    </item>
-    <item>
-      <g:id>8822381</g:id>
-      <title>1M Ultra Tough USB-C to Lightning Cable</title>
-      <description>1M Ultra Tough Type c to Lightning Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-lightning-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-lightning-cable/1784437643393-879d59ec.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>OZTECHM8</g:brand>
 
@@ -131,21 +186,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651346</g:gtin>
-    </item>
-    <item>
-      <g:id>110631633</g:id>
-      <title>REMAX RPP-623 Power Bank 20000 mAh</title>
-      <description>REMAX RPP-623 Power Bank 20000 mAh available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-rpp-623-power-bank-20000-mah/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/01-image-1.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/02-image-2.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/03-image-3.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-623-power-bank-20000-mah/04-image-4.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>79.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-      <g:gtin>695485122607</g:gtin>
     </item>
     <item>
       <g:id>110671637</g:id>
@@ -224,18 +264,6 @@
       <g:condition>new</g:condition>
       <g:brand>Generic</g:brand>
       <g:gtin>2986000071517</g:gtin>
-    </item>
-    <item>
-      <g:id>8830389</g:id>
-      <title>1M Ultra Tough USB-C to USB-C Cable</title>
-      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
     </item>
     <item>
       <g:id>TM8-CAR-6606</g:id>
@@ -939,22 +967,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>6954851247012</g:gtin>
-    </item>
-    <item>
-      <g:id>TM8-PS5-DS-WHITE</g:id>
-      <title>DualSense Wireless Controller - PlayStation 5 - White</title>
-      <description>Buy the PlayStation 5 DualSense Wireless Controller in White from TECHM8.</description>
-      <link>https://www.techm8australia.com/products/dualsense-wireless-controller-playstation-5-white/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-00.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-01.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-02.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-03.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-playstation-5-white/dualsense-wireless-controller-playstation-5-white-04.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>109.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Sony</g:brand>
-
     </item>
     <item>
       <g:id>TM8-CAR-6989</g:id>

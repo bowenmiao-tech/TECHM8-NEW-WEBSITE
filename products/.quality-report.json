@@ -1,7 +1,7 @@
 {
-  "catalog_updated_at": "2026-10-23T04:37:30.895937+00:00",
-  "total_products": 184,
-  "indexable_products": 130,
+  "catalog_updated_at": "2026-10-23T10:35:14.119788+00:00",
+  "total_products": 185,
+  "indexable_products": 131,
   "limited_products": 54,
   "products": [
     {
@@ -12,6 +12,79 @@
       "score": 100,
       "blockers": [],
       "warnings": []
+    },
+    {
+      "id": 4441,
+      "slug": "wekome-wdc-195-1m-35mm-aux-audio-cable",
+      "name": "WEKOME WDC-195 1m 3.5mm AUX Audio Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 21,
+      "slug": "remax-rpp-623-power-bank-20000-mah",
+      "name": "REMAX RPP-623 Power Bank 20000 mAh",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1578,
+      "slug": "tm8-car-8154",
+      "name": "MagSafe Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 5,
+      "slug": "dualsense-wireless-controller-playstation-5-white",
+      "name": "DualSense Wireless Controller - PlayStation 5 - White",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 76,
+      "slug": "wekome-wireless-charger-wp-u172",
+      "name": "WEKOME Wireless Charger WP-U172",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
     },
     {
       "id": 2145,
@@ -47,17 +120,6 @@
       "warnings": []
     },
     {
-      "id": 76,
-      "slug": "wekome-wireless-charger-wp-u172",
-      "name": "WEKOME Wireless Charger WP-U172",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 108,
       "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
       "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
@@ -76,15 +138,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 93,
@@ -136,17 +189,6 @@
       "warnings": []
     },
     {
-      "id": 21,
-      "slug": "remax-rpp-623-power-bank-20000-mah",
-      "name": "REMAX RPP-623 Power Bank 20000 mAh",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 2045,
       "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
       "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
@@ -184,17 +226,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 1578,
-      "slug": "tm8-car-8154",
-      "name": "MagSafe Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
@@ -252,17 +283,6 @@
       "id": 1715,
       "slug": "tm8-cch-7151",
       "name": "45W Dual USB-C Car Charger - Black",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -1441,17 +1461,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 5,
-      "slug": "dualsense-wireless-controller-playstation-5-white",
-      "name": "DualSense Wireless Controller - PlayStation 5 - White",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 1581,
