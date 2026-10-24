@@ -1,9 +1,29 @@
 {
-  "catalog_updated_at": "2026-10-24T00:24:30.078097+00:00",
+  "catalog_updated_at": "2026-10-24T06:58:07.661769+00:00",
   "total_products": 186,
   "indexable_products": 131,
   "limited_products": 55,
   "products": [
+    {
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 68,
+      "slug": "wekome-wp-c54-car-charger",
+      "name": "WEKOME WP-C54 Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
@@ -30,15 +50,6 @@
       "id": 4441,
       "slug": "wekome-wdc-195-1m-3-5mm-aux-audio-cable",
       "name": "WEKOME WDC-195 1m 3.5mm AUX Audio Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -696,17 +707,6 @@
       "id": 22,
       "slug": "remax-rpp-622-10000mah-power-bank",
       "name": "Remax RPP-622 10000MAH power bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 68,
-      "slug": "wekome-wp-c54-car-charger",
-      "name": "WEKOME WP-C54 Car Charger",
       "indexable": true,
       "score": 92,
       "blockers": [],
