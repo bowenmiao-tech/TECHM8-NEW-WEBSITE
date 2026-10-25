@@ -5,6 +5,18 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>TM8-MAC-USBC-87W</g:id>
+      <title>87W USB-C MacBook Charger</title>
+      <description>Buy a replacement 87W USB-C MacBook charger with cable from TECHM8.</description>
+      <link>https://www.techm8australia.com/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/1788066026476-726335b8.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>49.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Apple Compatible</g:brand>
+
+    </item>
+    <item>
       <g:id>TM8-CAR-6034</g:id>
       <title>Replacement Metal Plate for Magnetic Phone Holders</title>
       <description>Mount Accessory. Magnetic phone holders.</description>
@@ -28,18 +40,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651346</g:gtin>
-    </item>
-    <item>
-      <g:id>TM8-MAC-USBC-87W</g:id>
-      <title>87W USB-C MacBook Charger</title>
-      <description>Buy a replacement 87W USB-C MacBook charger with cable from TECHM8.</description>
-      <link>https://www.techm8australia.com/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/1788066026476-726335b8.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>49.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Apple Compatible</g:brand>
-
     </item>
     <item>
       <g:id>6941027651469</g:id>
