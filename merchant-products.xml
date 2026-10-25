@@ -5,6 +5,43 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>TM8-CAR-6034</g:id>
+      <title>Replacement Metal Plate for Magnetic Phone Holders</title>
+      <description>Mount Accessory. Magnetic phone holders.</description>
+      <link>https://www.techm8australia.com/products/tm8-car-6034/</link>
+      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/163269828142455744.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>5.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Generic</g:brand>
+      <g:gtin>2988000060348</g:gtin>
+    </item>
+    <item>
+      <g:id>1025940</g:id>
+      <title>WEKOME 66W WDC-59a Type-C-USB Charging Data Cable</title>
+      <description>WEKOME 66W WDC-59a Type-C-USB Charging Data Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/1779757925225-105f135e.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/1779757926380-dacdd26b.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>31.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027651346</g:gtin>
+    </item>
+    <item>
+      <g:id>TM8-MAC-USBC-87W</g:id>
+      <title>87W USB-C MacBook Charger</title>
+      <description>Buy a replacement 87W USB-C MacBook charger with cable from TECHM8.</description>
+      <link>https://www.techm8australia.com/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/1788066026476-726335b8.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>49.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Apple Compatible</g:brand>
+
+    </item>
+    <item>
       <g:id>6941027651469</g:id>
       <title>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable</title>
       <description>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable available for online order and warehouse dispatch.</description>
@@ -190,19 +227,6 @@
       <g:gtin>2988000107425</g:gtin>
     </item>
     <item>
-      <g:id>1025940</g:id>
-      <title>WEKOME 66W WDC-59a Type-C-USB Charging Data Cable</title>
-      <description>WEKOME 66W WDC-59a Type-C-USB Charging Data Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/1779757925225-105f135e.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-66w-wdc-59a-type-c-usb-charging-data-cable/1779757926380-dacdd26b.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>31.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027651346</g:gtin>
-    </item>
-    <item>
       <g:id>110671637</g:id>
       <title>WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable</title>
       <description>WEKOME WDC-123i U-Lighting Kinkong Raycor Fast Charging Cable available for online order and warehouse dispatch.</description>
@@ -242,18 +266,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>69548512215738</g:gtin>
-    </item>
-    <item>
-      <g:id>TM8-MAC-USBC-87W</g:id>
-      <title>87W USB-C MacBook Charger</title>
-      <description>Buy a replacement 87W USB-C MacBook charger with cable from TECHM8.</description>
-      <link>https://www.techm8australia.com/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/1788066026476-726335b8.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>49.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Apple Compatible</g:brand>
-
     </item>
     <item>
       <g:id>TM8-MAC-M2-85W</g:id>
@@ -332,18 +344,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651605</g:gtin>
-    </item>
-    <item>
-      <g:id>TM8-CAR-6034</g:id>
-      <title>Replacement Metal Plate for Magnetic Phone Holders</title>
-      <description>Mount Accessory. Magnetic phone holders.</description>
-      <link>https://www.techm8australia.com/products/tm8-car-6034/</link>
-      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/163269828142455744.jpg</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>5.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Generic</g:brand>
-      <g:gtin>2988000060348</g:gtin>
     </item>
     <item>
       <g:id>7160003188</g:id>
