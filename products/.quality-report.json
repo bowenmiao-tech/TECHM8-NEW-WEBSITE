@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-10-25T05:55:15.344063+00:00",
+  "catalog_updated_at": "2026-10-26T00:32:12.472661+00:00",
   "total_products": 186,
   "indexable_products": 131,
   "limited_products": 55,
   "products": [
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 15,
       "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
@@ -57,17 +68,6 @@
       "id": 68,
       "slug": "wekome-wp-c54-car-charger",
       "name": "WEKOME WP-C54 Car Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
