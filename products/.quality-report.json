@@ -1,9 +1,54 @@
 {
-  "catalog_updated_at": "2026-10-26T00:32:12.472661+00:00",
+  "catalog_updated_at": "2026-10-26T07:22:05.379917+00:00",
   "total_products": 186,
   "indexable_products": 131,
   "limited_products": 55,
   "products": [
+    {
+      "id": 1578,
+      "slug": "tm8-car-8154",
+      "name": "MagSafe Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2043,
+      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
+      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 3,
+      "slug": "dualsense-wireless-controller-gray-camouflage",
+      "name": "DualSense Wireless Controller - Gray Camouflage",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 79,
+      "slug": "ds15-2-in-1wireless-charger",
+      "name": "DS15 2 IN 1Wireless Charger",
+      "indexable": true,
+      "score": 84,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters",
+        "missing-brand"
+      ]
+    },
     {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
@@ -114,17 +159,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 1578,
-      "slug": "tm8-car-8154",
-      "name": "MagSafe Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 5,
@@ -618,17 +652,6 @@
       ]
     },
     {
-      "id": 2043,
-      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
-      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 42,
       "slug": "wekome-wp-101-10000mah-power-bank",
       "name": "WEKOME WP-101 10000mAh Power Bank",
@@ -745,18 +768,6 @@
       "blockers": [],
       "warnings": [
         "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 79,
-      "slug": "ds15-2-in-1wireless-charger",
-      "name": "DS15 2 IN 1Wireless Charger",
-      "indexable": true,
-      "score": 84,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters",
-        "missing-brand"
       ]
     },
     {
@@ -1580,17 +1591,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 3,
-      "slug": "dualsense-wireless-controller-gray-camouflage",
-      "name": "DualSense Wireless Controller - Gray Camouflage",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 1,

@@ -5,6 +5,34 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>TM8-PS5-DS-GRAY-CAMO</g:id>
+      <title>DualSense Wireless Controller - Gray Camouflage</title>
+      <description>Buy the PlayStation 5 DualSense Wireless Controller in Gray Camouflage from TECHM8.</description>
+      <link>https://www.techm8australia.com/products/dualsense-wireless-controller-gray-camouflage/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-00.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-01.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-02.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-03.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>109.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Sony</g:brand>
+
+    </item>
+    <item>
+      <g:id>9018630</g:id>
+      <title>DS15 2 IN 1Wireless Charger</title>
+      <description>DS15 2 IN 1Wireless Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/ds15-2-in-1wireless-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ds15-2-in-1wireless-charger/1778940145605-8a00e1ee.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ds15-2-in-1wireless-charger/1778940155885-b9a62e34.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>69.00 AUD</g:price>
+      <g:condition>new</g:condition>
+
+
+    </item>
+    <item>
       <g:id>8830389</g:id>
       <title>1M Ultra Tough USB-C to USB-C Cable</title>
       <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
@@ -595,19 +623,6 @@
       <g:gtin>6941027640081</g:gtin>
     </item>
     <item>
-      <g:id>9018630</g:id>
-      <title>DS15 2 IN 1Wireless Charger</title>
-      <description>DS15 2 IN 1Wireless Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/ds15-2-in-1wireless-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ds15-2-in-1wireless-charger/1778940145605-8a00e1ee.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/ds15-2-in-1wireless-charger/1778940155885-b9a62e34.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>69.00 AUD</g:price>
-      <g:condition>new</g:condition>
-
-
-    </item>
-    <item>
       <g:id>105671116</g:id>
       <title>Wireless Dongle for CarPlay or Android Auto M29</title>
       <description>Wireless Dongle for CarPlay or Android Auto M29 available for online order and warehouse dispatch.</description>
@@ -1080,21 +1095,6 @@
       <g:condition>new</g:condition>
       <g:brand>Generic</g:brand>
       <g:gtin>2986000065752</g:gtin>
-    </item>
-    <item>
-      <g:id>TM8-PS5-DS-GRAY-CAMO</g:id>
-      <title>DualSense Wireless Controller - Gray Camouflage</title>
-      <description>Buy the PlayStation 5 DualSense Wireless Controller in Gray Camouflage from TECHM8.</description>
-      <link>https://www.techm8australia.com/products/dualsense-wireless-controller-gray-camouflage/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-00.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-01.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-02.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/dualsense-wireless-controller-gray-camouflage/dualsense-wireless-controller-gray-camouflage-03.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>109.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Sony</g:brand>
-
     </item>
     <item>
       <g:id>TM8-PS5-DS-STERLING-SILVER</g:id>
