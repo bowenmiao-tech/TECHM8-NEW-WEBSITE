@@ -1,9 +1,38 @@
 {
-  "catalog_updated_at": "2026-10-27T04:47:12.760442+00:00",
+  "catalog_updated_at": "2026-10-27T12:04:56.181571+00:00",
   "total_products": 186,
   "indexable_products": 131,
   "limited_products": 55,
   "products": [
+    {
+      "id": 97,
+      "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
+      "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2036,
+      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
+      "name": "USB-C WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 108,
       "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
@@ -119,15 +148,6 @@
       "warnings": []
     },
     {
-      "id": 97,
-      "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
-      "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 69,
       "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
       "name": "55W 4 Port Wall Charger",
@@ -136,15 +156,6 @@
       "blockers": [
         "template-placeholder-content"
       ],
-      "warnings": []
-    },
-    {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
@@ -232,17 +243,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2036,
-      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
-      "name": "USB-C WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 101,
