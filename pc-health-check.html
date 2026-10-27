@@ -4,10 +4,10 @@
     <script defer src="/ga4.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PC Health Check &amp; Stress Test | TECHM8</title>
+    <title>PC Health Check &amp; Stress Test Download | TECHM8</title>
     <meta
       name="description"
-      content="TECHM8 PC Health Check: view hardware details, live CPU and GPU temperatures, battery health and Windows error logs, run a CPU/GPU stress test and download a report."
+      content="Free Windows diagnostic tool from TECHM8: CPU and GPU stress test with live temperatures, battery health, drive health, crash and error logs, and a printable report."
     />
     <link rel="canonical" href="https://www.techm8australia.com/pc-health-check.html" />
     <link rel="stylesheet" href="styles.min.css" />
@@ -101,161 +101,84 @@
           <p class="eyebrow">Windows PC &amp; laptop diagnostics</p>
           <h1>PC Health Check</h1>
           <p>
-            See what is inside the computer, watch CPU and GPU temperatures live while a stress
-            test runs, check battery wear and pull up recent crashes and hardware errors. Finish
-            with a downloadable report.
+            One small program that shows what is inside the computer, runs a CPU and GPU stress test
+            with live temperatures, checks battery wear and drive health, lists recent crashes and
+            hardware errors, and saves a report you can print.
           </p>
         </div>
       </section>
 
       <section class="tool-page">
         <div class="container">
-          <!-- Agent connection -->
-          <div class="tool-card" id="agent-card">
-            <h2>Step 1 &middot; Start the TECHM8 agent <span class="tool-pill" id="agent-status">Not connected</span></h2>
-            <p>
-              Browsers are not allowed to read temperatures, battery wear or Windows error logs. A small
-              read-only PowerShell script reads them and passes them to this page. It installs nothing,
-              changes nothing and stops when its window is closed.
-            </p>
-            <ol class="tool-steps">
-              <li>Right-click the Start button and choose <strong>Terminal (Admin)</strong> or <strong>Windows PowerShell (Admin)</strong>.</li>
-              <li>Paste this command and press Enter:</li>
+          <div class="tool-card dl-card">
+            <div>
+              <h2>TECHM8 Diagnostics for Windows</h2>
+              <p>Windows 10 and 11 (64-bit) &middot; version 1.0.0 &middot; 3.0 MB &middot; nothing to install</p>
+              <div class="tool-toolbar" style="margin: 0">
+                <a class="tool-btn tool-btn--primary dl-button" href="downloads/TECHM8-Diagnostics.exe" download>Download TECHM8-Diagnostics.exe</a>
+              </div>
+            </div>
+            <ol class="tool-steps dl-steps">
+              <li>Open the downloaded file. If Windows shows <strong>&ldquo;Windows protected your PC&rdquo;</strong>, choose <strong>More info &rsaquo; Run anyway</strong>.</li>
+              <li>Choose <strong>Yes</strong> when Windows asks to allow changes. The program needs administrator rights to read sensors and logs.</li>
+              <li>For CPU temperatures, click <strong>Install CPU sensor driver</strong> at the top. It installs PawnIO, the signed open-source driver used by LibreHardwareMonitor, and offers to remove it again when you close the program.</li>
+              <li>Open the <strong>Stress test</strong> tab, pick a duration and press <strong>Start</strong>. Save the report from the <strong>Report</strong> tab when you are done.</li>
             </ol>
-            <div class="tool-code">
-              <code id="agent-command">irm https://www.techm8australia.com/tools/techm8-agent.ps1 | iex</code>
-              <button class="tool-btn tool-btn--primary" type="button" id="copy-command">Copy</button>
-            </div>
-            <ol class="tool-steps" start="3">
-              <li>Leave the blue window open, then press <button class="tool-btn" type="button" id="agent-connect" style="min-height: 2rem; padding: 0.2rem 0.8rem">Connect</button></li>
-              <li>If Chrome or Edge asks to let this site access apps on this device, choose <strong>Allow</strong>.</li>
-            </ol>
-            <p class="tool-note" style="margin: 0">
-              Prefer a file? <a href="tools/techm8-agent.ps1" download>Download techm8-agent.ps1</a>, then
-              right-click it and choose <em>Run with PowerShell</em>. For accurate CPU temperatures and fan
-              speeds, also run <a href="https://github.com/LibreHardwareMonitor/LibreHardwareMonitor" rel="noopener" target="_blank">LibreHardwareMonitor</a>
-              as administrator; the agent picks up its sensors automatically. Without the agent you can still
-              run the stress test and see basic browser-level details.
-            </p>
-          </div>
-
-          <!-- Overview -->
-          <div class="tool-card">
-            <h2>Hardware overview <span class="tool-pill" id="overview-source">Browser only</span></h2>
-            <div class="hc-specs" id="overview"></div>
-          </div>
-
-          <!-- Stress test + live sensors -->
-          <div class="tool-card" id="stress-card">
-            <h2>Live temperatures &amp; stress test <span class="tool-pill" id="stress-status">Idle</span></h2>
-            <div class="tool-toolbar">
-              <label class="tool-note" style="margin: 0">
-                Duration
-                <select class="tool-select" id="stress-duration">
-                  <option value="60">1 minute</option>
-                  <option value="300">5 minutes</option>
-                  <option value="600" selected>10 minutes</option>
-                  <option value="900">15 minutes</option>
-                  <option value="1800">30 minutes</option>
-                  <option value="0">Until stopped</option>
-                </select>
-              </label>
-              <label class="tool-note" style="margin: 0"><input type="checkbox" id="stress-cpu" checked /> CPU</label>
-              <label class="tool-note" style="margin: 0"><input type="checkbox" id="stress-gpu" checked /> GPU</label>
-              <button class="tool-btn tool-btn--primary" type="button" id="stress-start">Start stress test</button>
-              <button class="tool-btn tool-btn--danger" type="button" id="stress-stop" disabled>Stop</button>
-            </div>
-
-            <div class="tool-stats">
-              <div class="tool-stat" id="st-cputemp"><span>CPU temp</span><strong>&ndash;</strong><small>max &ndash;</small></div>
-              <div class="tool-stat" id="st-gputemp"><span>GPU temp</span><strong>&ndash;</strong><small>max &ndash;</small></div>
-              <div class="tool-stat" id="st-load"><span>CPU load</span><strong>&ndash;</strong><small>&nbsp;</small></div>
-              <div class="tool-stat" id="st-clock"><span>CPU clock</span><strong>&ndash;</strong><small>&nbsp;</small></div>
-              <div class="tool-stat" id="st-score"><span>CPU score</span><strong>&ndash;</strong><small>Mops/s</small></div>
-              <div class="tool-stat" id="st-throttle"><span>Throttling</span><strong>&ndash;</strong><small>vs first 30 s</small></div>
-              <div class="tool-stat" id="st-fps"><span>GPU FPS</span><strong>&ndash;</strong><small>&nbsp;</small></div>
-              <div class="tool-stat" id="st-time"><span>Elapsed</span><strong>0:00</strong><small>&nbsp;</small></div>
-            </div>
-
-            <p class="tool-note" id="stress-result" hidden></p>
-
-            <div class="hc-chart">
-              <div class="hc-legend">
-                <span><i style="background: #e4572e"></i>CPU &deg;C</span>
-                <span><i style="background: #7b61ff"></i>GPU &deg;C</span>
-              </div>
-              <canvas id="chart-temp" aria-label="Temperature history"></canvas>
-            </div>
-            <div class="hc-chart">
-              <div class="hc-legend">
-                <span><i style="background: #16c8ba"></i>CPU load %</span>
-                <span><i style="background: #0f6fd1"></i>CPU clock (% of max seen)</span>
-                <span><i style="background: #e69614"></i>CPU score (% of baseline)</span>
-              </div>
-              <canvas id="chart-load" aria-label="Load history"></canvas>
-            </div>
-
-            <div class="tool-grid">
-              <div>
-                <h3 style="margin: 0 0 0.6rem">All sensors</h3>
-                <div id="sensor-table"><div class="tool-empty">Start the agent to see sensors.</div></div>
-              </div>
-              <div>
-                <h3 style="margin: 0 0 0.6rem">GPU load</h3>
-                <canvas class="hc-gpu-canvas" id="gpu-canvas" width="1280" height="720"></canvas>
-                <p class="tool-note" style="margin-top: 0.6rem">
-                  On laptops with two graphics chips, set the browser to "High performance" in
-                  Windows Settings &rsaquo; System &rsaquo; Display &rsaquo; Graphics so this loads the dedicated GPU.
-                </p>
-              </div>
-            </div>
           </div>
 
           <div class="tool-grid">
-            <!-- Battery -->
+            <div class="tool-card">
+              <h2>Stress test &amp; temperatures</h2>
+              <p>
+                Loads every CPU thread and the graphics card at the same time, with live CPU and GPU
+                temperatures, clock speed, package power and fan speeds. The program measures CPU
+                performance over the first 30 seconds and flags overheating or a drop in speed
+                (thermal throttling).
+              </p>
+            </div>
             <div class="tool-card">
               <h2>Battery health</h2>
-              <div id="battery"><div class="tool-empty">Checking&hellip;</div></div>
+              <p>
+                Compares the battery's current full-charge capacity with its design capacity, shows
+                the cycle count, and opens the full Windows battery report with one click.
+              </p>
             </div>
-
-            <!-- Storage -->
             <div class="tool-card">
-              <h2>Storage health</h2>
-              <div id="storage"><div class="tool-empty">Start the agent to see drive health.</div></div>
+              <h2>Crashes &amp; error logs</h2>
+              <p>
+                Reads the Windows event logs and sorts them into blue screens, unexpected shutdowns,
+                WHEA hardware errors, disk errors and graphics driver resets, and lists any crash
+                dump files.
+              </p>
+            </div>
+            <div class="tool-card">
+              <h2>Hardware &amp; drives</h2>
+              <p>
+                Model and serial number, CPU, graphics, every memory module with its speed, drive
+                health, temperature, wear and power-on hours, plus free space on every drive.
+              </p>
             </div>
           </div>
 
-          <!-- Errors -->
-          <div class="tool-card" id="errors-card">
-            <h2>Crashes &amp; error logs <span class="tool-pill" id="stability-pill" hidden></span></h2>
-            <div class="tool-toolbar">
-              <label class="tool-note" style="margin: 0">
-                Look back
-                <select class="tool-select" id="errors-days">
-                  <option value="7">7 days</option>
-                  <option value="30" selected>30 days</option>
-                  <option value="90">90 days</option>
-                </select>
-              </label>
-              <button class="tool-btn" type="button" id="errors-refresh" disabled>Reload logs</button>
-              <button class="tool-btn" type="button" id="open-reliability" disabled>Open Reliability Monitor</button>
-            </div>
-            <div class="hc-chips" id="error-chips"></div>
-            <div id="errors"><div class="tool-empty">Start the agent to read the Windows event logs.</div></div>
-          </div>
-
-          <!-- Report -->
           <div class="tool-card">
-            <h2>Report</h2>
-            <div class="hc-report-fields">
-              <label>Job / ticket number<input class="tool-input" id="report-job" autocomplete="off" /></label>
-              <label>Customer name<input class="tool-input" id="report-customer" autocomplete="off" /></label>
-              <label>Technician notes<textarea class="tool-input" id="report-notes" rows="2"></textarea></label>
-            </div>
-            <div class="tool-toolbar" style="margin: 0">
-              <button class="tool-btn tool-btn--primary" type="button" id="report-download">Download report (HTML)</button>
-              <button class="tool-btn" type="button" id="battery-report" disabled>Open Windows battery report</button>
-            </div>
+            <h2>Privacy &amp; safety</h2>
+            <p style="margin: 0">
+              Everything runs on the computer itself. The program sends nothing to TECHM8 or anyone
+              else and changes no settings. Its only download is the optional sensor driver, fetched
+              from PawnIO's official release when you ask for it. Reports are saved only where you
+              choose. Sensor readings come from the open-source
+              <a href="https://github.com/LibreHardwareMonitor/LibreHardwareMonitor" rel="noopener" target="_blank">LibreHardwareMonitor</a>
+              library (MPL 2.0).
+            </p>
+          </div>
+
+          <div class="tool-card">
+            <h2>Want us to take a look?</h2>
+            <p style="margin: 0">
+              Bring the computer into any TECHM8 store and we will run the full check for you and
+              explain the results. <a href="stores.html">Find your nearest store</a> or
+              <a href="book-repair.html">book a repair</a>.
+            </p>
           </div>
         </div>
       </section>
@@ -305,6 +228,5 @@
       </div>
     </footer>
     <script type="module" src="script.min.js"></script>
-    <script defer src="tools/pc-health-check.js"></script>
   </body>
 </html>

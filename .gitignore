@@ -3,3 +3,5 @@ dist
 api/config.php
 supabase/.temp
 database/generated/legacy-contacts-import.sql
+diagnostics-app/bin
+diagnostics-app/obj

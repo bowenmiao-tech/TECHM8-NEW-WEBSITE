@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    TECHM8 Diagnostics: the downloadable PC health / stress test tool offered on
+    pc-health-check.html. Targets .NET Framework 4.8 because it ships with every
+    Windows 10/11 PC, so customers' machines need no extra runtime. NuGet
+    dependencies are embedded as resources and loaded by Program.cs, so the
+    download is a single .exe.
+
+    Build:   dotnet build -c Release
+    Output:  ../downloads/TECHM8-Diagnostics.exe (copied after a Release build)
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>TECHM8-Diagnostics</AssemblyName>
+    <RootNamespace>Techm8.Diagnostics</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- dotnet build -p:SelfTest=true builds a copy that runs without UAC, for unattended testing. -->
+    <ApplicationManifest Condition="'$(SelfTest)' == 'true'">app.selftest.manifest</ApplicationManifest>
+    <OutputPath Condition="'$(SelfTest)' == 'true'">bin\selftest\</OutputPath>
+    <!-- Separate obj folder, or an incremental Release build can reuse the no-UAC manifest. -->
+    <IntermediateOutputPath Condition="'$(SelfTest)' == 'true'">obj\selftest\</IntermediateOutputPath>
+    <ApplicationIcon>techm8.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <Company>TECHM8</Company>
+    <Product>TECHM8 Diagnostics</Product>
+    <Copyright>© 2026 TECHM8</Copyright>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+
+  <!-- Embed every referenced DLL so the exe runs on its own. -->
+  <Target Name="EmbedReferencedAssemblies" AfterTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <EmbeddedResource Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.Extension)' == '.dll'">
+        <LogicalName>embedded.%(ReferenceCopyLocalPaths.Filename)%(ReferenceCopyLocalPaths.Extension)</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CopyToDownloads" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' And '$(SelfTest)' != 'true'">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(MSBuildProjectDirectory)\..\downloads" />
+  </Target>
+
+</Project>

@@ -35,13 +35,20 @@ This README is the project memory file. It records the current architecture, bus
 
 - `/keyboard-tester.html` (`tools/keyboard-tester.js`): key-by-key test, chatter and rollover
   detection, mouse buttons. Browser only.
-- `/pc-health-check.html` (`tools/pc-health-check.js`): specs, live temperatures, CPU/GPU stress
-  test, battery wear, storage health, Windows error logs and a downloadable HTML report.
-- Browsers cannot read temperatures, battery wear or event logs, so the page talks to
-  `tools/techm8-agent.ps1`, a read-only PowerShell script the technician runs on the customer's PC
-  (`irm https://www.techm8australia.com/tools/techm8-agent.ps1 | iex`). It serves JSON on
-  `http://localhost:8765` and only answers pages whose origin is in `$TM8AllowedOrigins`.
-  If the site domain or dev port changes, update that list or the page cannot connect.
+- `/pc-health-check.html`: download page for `downloads/TECHM8-Diagnostics.exe`, a Windows app
+  (source in `diagnostics-app/`) with specs, live CPU/GPU temperatures, CPU+GPU stress test with
+  throttling detection, battery wear, drive health, Windows error logs and an HTML report.
+  - .NET Framework 4.8 WinForms (built into Windows 10/11, so no runtime install). Sensors come
+    from LibreHardwareMonitorLib; NuGet DLLs are embedded so the download is one exe.
+  - CPU temperature needs the PawnIO driver. The app installs it only when the technician clicks
+    "Install CPU sensor driver" and offers to remove it on exit.
+  - Build: `cd diagnostics-app && dotnet build -c Release` (needs the .NET 8 SDK). This copies the
+    exe to `downloads/`; commit that file so GitHub Pages serves the new version. Update the
+    version/size text on `pc-health-check.html` when it changes.
+  - Unattended check: `dotnet build -c Release -p:SelfTest=true`, then run
+    `bin\selftest\net48\win-x64\TECHM8-Diagnostics.exe --selftest <folder>` (no UAC; saves
+    screenshots, a log and a report, then exits).
+  - The exe is unsigned, so Windows SmartScreen warns on first run until it is code-signed.
 - Shared styles for both tools live in `tools/tools.css`, not `styles.css`.
 
 ## Used Phones and Devices
