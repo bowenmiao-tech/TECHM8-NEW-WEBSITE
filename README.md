@@ -31,6 +31,19 @@ This README is the project memory file. It records the current architecture, bus
 - Account: `/account.html`
 - Admin product page: `/admin/products.html`
 
+## Diagnostic Tools
+
+- `/keyboard-tester.html` (`tools/keyboard-tester.js`): key-by-key test, chatter and rollover
+  detection, mouse buttons. Browser only.
+- `/pc-health-check.html` (`tools/pc-health-check.js`): specs, live temperatures, CPU/GPU stress
+  test, battery wear, storage health, Windows error logs and a downloadable HTML report.
+- Browsers cannot read temperatures, battery wear or event logs, so the page talks to
+  `tools/techm8-agent.ps1`, a read-only PowerShell script the technician runs on the customer's PC
+  (`irm https://www.techm8australia.com/tools/techm8-agent.ps1 | iex`). It serves JSON on
+  `http://localhost:8765` and only answers pages whose origin is in `$TM8AllowedOrigins`.
+  If the site domain or dev port changes, update that list or the page cannot connect.
+- Shared styles for both tools live in `tools/tools.css`, not `styles.css`.
+
 ## Used Phones and Devices
 
 - In the shop: category Second Hand Devices (Used Phones, Used Tablets, ...). Each device is a product

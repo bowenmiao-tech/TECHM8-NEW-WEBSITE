@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <script defer src="/ga4.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Keyboard Tester | TECHM8</title>
+    <meta
+      name="description"
+      content="Free online keyboard tester from TECHM8. Check every key, detect key chatter and rollover limits, and test mouse buttons and scrolling in your browser."
+    />
+    <link rel="canonical" href="https://www.techm8australia.com/keyboard-tester.html" />
+    <link rel="stylesheet" href="styles.min.css" />
+    <link rel="stylesheet" href="tools/tools.css" />
+  </head>
+  <body class="keyboard-tester-page">
+    <div class="promo-banner">
+      <div class="container promo-banner__inner">
+        <span>Keyboard not responding properly? Test every key before you book a repair.</span>
+        <a href="repair-services/computers/laptop.html">Laptop repairs</a>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <div class="container nav">
+        <a class="brand" href="index.html" aria-label="TECHM8 home">
+          <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo" />
+        </a>
+        <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle" />
+        <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </label>
+        <nav class="nav__menu" id="primary-menu">
+          <div class="nav__dropdown">
+            <button
+              class="nav__dropdown-toggle"
+              type="button"
+              data-href="repairs.html"
+              aria-expanded="false"
+              onclick="return toggleMainDropdown(this, event);"
+            >
+              Repairs
+            </button>
+            <div class="nav__dropdown-menu">
+              <div class="store-switcher store-switcher--repairs">
+                <div class="store-switcher__top"><strong>Repairs</strong></div>
+                <div class="store-switcher__grid store-switcher__grid--repairs">
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Phones</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/phones/apple.html">Apple</a>
+                      <a href="repair-services/phones/samsung.html">Samsung</a>
+                      <a href="repair-services/phones/oppo.html">Oppo</a>
+                      <a href="repair-services/phones/huawei.html">Huawei</a>
+                      <a href="repair-services/phones/xiaomi.html">Xiaomi</a>
+                      <a href="repair-services/phones/google.html">Google</a>
+                      <a href="repair-services/phones/oneplus.html">OnePlus</a>
+                      <a href="repair-services/phones/others.html">Others</a>
+                    </div>
+                  </div>
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Tablets</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/tablets/apple.html">Apple</a>
+                      <a href="repair-services/tablets/samsung.html">Samsung</a>
+                      <a href="repair-services/tablets/other.html">Other Tablets</a>
+                    </div>
+                  </div>
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Computers</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/computers/pc-tower.html">PC Tower</a>
+                      <a href="repair-services/computers/all-in-one.html">All in One</a>
+                      <a href="repair-services/computers/laptop.html">Laptop</a>
+                      <a href="repair-services/computers/small-pc.html">Small PC</a>
+                    </div>
+                  </div>
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Game Consoles</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/consoles/sony.html">Sony - PlayStation 5</a>
+                      <a href="repair-services/consoles/xbox.html">Microsoft - Xbox</a>
+                      <a href="repair-services/consoles/nintendo.html">Nintendo - Switch</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a href="blog.html">Tech Insights</a>
+          <a href="stores.html">Store Locator</a>
+          <a href="business-services.html">Business Services</a>
+          <a class="nav__shop-link" href="shop.html">Online Store</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="tool-hero">
+        <div class="container">
+          <p class="eyebrow">Browser keyboard diagnostics</p>
+          <h1>Keyboard Tester</h1>
+          <p>
+            Press every key. Keys turn green once they register. The tester also flags
+            key chatter (one press registering twice), counts how many keys register at
+            once, and checks mouse buttons and scrolling.
+          </p>
+        </div>
+      </section>
+
+      <section class="tool-page">
+        <div class="container">
+          <div class="tool-card">
+            <div class="tool-toolbar">
+              <label class="tool-note" style="margin: 0">
+                Layout
+                <select class="tool-select" id="kb-layout">
+                  <option value="full">Full size (with numpad)</option>
+                  <option value="tkl">Tenkeyless (no numpad)</option>
+                  <option value="compact" selected>Laptop / compact</option>
+                </select>
+              </label>
+              <button class="tool-btn" type="button" id="kb-reset">Reset</button>
+              <button class="tool-btn" type="button" id="kb-fullscreen">Full screen (captures Esc &amp; system keys)</button>
+            </div>
+
+            <div class="tool-stats">
+              <div class="tool-stat"><span>Keys tested</span><strong id="kb-count">0 / 0</strong></div>
+              <div class="tool-stat"><span>Held now</span><strong id="kb-held">0</strong><small>Max at once: <b id="kb-max">0</b></small></div>
+              <div class="tool-stat" id="kb-chatter-stat"><span>Chatter detected</span><strong id="kb-chatter">0</strong><small>Double hits under 40 ms</small></div>
+              <div class="tool-stat"><span>Last key</span><strong id="kb-last">&ndash;</strong><small id="kb-last-detail">Press any key</small></div>
+              <div class="tool-stat"><span>Lock keys</span><strong id="kb-locks" style="font-size: 1rem">&ndash;</strong></div>
+            </div>
+
+            <div class="kb-board" id="kb-board" aria-label="Keyboard layout"></div>
+
+            <p class="tool-note" style="margin-top: 1rem">
+              Keys pressed that are not on the drawn layout (media keys, ISO key, keys hidden by the
+              layout choice) appear here:
+            </p>
+            <div class="kb-extras" id="kb-extras"></div>
+            <p class="tool-note" style="margin: 0.8rem 0 0">
+              Windows keeps a few keys for itself: the Fn key never reaches a web page, Print Screen only
+              registers on release, and Alt+Tab / Ctrl+Alt+Del cannot be blocked. A key with an orange
+              outline registered twice for one press, which usually means a worn switch or a dirty contact.
+            </p>
+          </div>
+
+          <div class="tool-grid">
+            <div class="tool-card">
+              <h2>Mouse &amp; touchpad</h2>
+              <div class="mouse-pad" id="mouse-pad">
+                Click, right-click, middle-click, use the side buttons and scroll inside this box.
+              </div>
+              <div class="mouse-buttons">
+                <div class="tool-stat" data-mouse="0"><span>Left</span><strong>0</strong></div>
+                <div class="tool-stat" data-mouse="1"><span>Middle</span><strong>0</strong></div>
+                <div class="tool-stat" data-mouse="2"><span>Right</span><strong>0</strong></div>
+                <div class="tool-stat" data-mouse="3"><span>Back</span><strong>0</strong></div>
+                <div class="tool-stat" data-mouse="4"><span>Forward</span><strong>0</strong></div>
+                <div class="tool-stat" data-mouse="up"><span>Scroll up</span><strong>0</strong></div>
+                <div class="tool-stat" data-mouse="down"><span>Scroll down</span><strong>0</strong></div>
+                <div class="tool-stat" data-mouse="dbl"><span>Double clicks</span><strong>0</strong></div>
+              </div>
+              <p class="tool-note" style="margin: 0.8rem 0 0">
+                Unwanted double clicks on a single press point to a failing mouse switch.
+              </p>
+            </div>
+
+            <div class="tool-card">
+              <h2>Event log</h2>
+              <ul class="kb-log" id="kb-log"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer footer--rich">
+        <div class="footer-brand">
+          <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo" />
+          <p>
+            TECHM8 repairs phones, tablets, computers, laptops and game consoles,
+            and also supplies parts, accessories and everyday tech products.
+          </p>
+        </div>
+        <div>
+          <h4>Services</h4>
+          <a href="repair-services/phones/apple.html">Phone Repairs</a>
+          <a href="repair-services/tablets/apple.html">Tablet Repairs</a>
+          <a href="repair-services/computers/laptop.html">Laptop Repairs</a>
+          <a href="repair-services/consoles/xbox.html">Console Repairs</a>
+          <a href="business-services/ndis-technology-support.html">NDIS Technology Support &amp; Device Repairs Brisbane</a>
+          <a href="/school-services">School Device Repair Program Brisbane</a>
+          <a href="business-services/on-site-tech-services.html">On-site Tech Services</a>
+          <a href="business-services/business-it-device-support.html">Business IT &amp; Device Support Brisbane</a>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <a href="repairs.html">Repairs Overview</a>
+          <a href="blog.html">Tech Insights</a>
+          <a href="stores.html">Store Locator</a>
+          <a href="dualsense-tester.html">DualSense Tester</a>
+          <a href="keyboard-tester.html">Keyboard Tester</a>
+          <a href="pc-health-check.html">PC Health Check</a>
+          <a href="shop.html">Online Store</a>
+          <a href="careers.html">Careers</a>
+        </div>
+        <div>
+          <h4>Need Help?</h4>
+          <p>Choose your nearest store for repairs, product advice and walk-in support.</p>
+          <a href="stores.html">Find your nearest store</a>
+          <a href="repairs.html">View repair categories</a>
+        </div>
+      </div>
+      <div class="container footer footer--bottom">
+        <p>&copy; 2026 TECHM8. All rights reserved.</p>
+        <a href="store-policy.html">Repair Terms &amp; Conditions</a>
+      </div>
+    </footer>
+    <script type="module" src="script.min.js"></script>
+    <script defer src="tools/keyboard-tester.js"></script>
+  </body>
+</html>

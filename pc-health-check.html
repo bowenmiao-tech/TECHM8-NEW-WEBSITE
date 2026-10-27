@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <script defer src="/ga4.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PC Health Check &amp; Stress Test | TECHM8</title>
+    <meta
+      name="description"
+      content="TECHM8 PC Health Check: view hardware details, live CPU and GPU temperatures, battery health and Windows error logs, run a CPU/GPU stress test and download a report."
+    />
+    <link rel="canonical" href="https://www.techm8australia.com/pc-health-check.html" />
+    <link rel="stylesheet" href="styles.min.css" />
+    <link rel="stylesheet" href="tools/tools.css" />
+  </head>
+  <body class="pc-health-check-page">
+    <div class="promo-banner">
+      <div class="container promo-banner__inner">
+        <span>Running hot, crashing or losing battery fast? Check it here, then let us fix it.</span>
+        <a href="book-repair.html">Book a repair</a>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <div class="container nav">
+        <a class="brand" href="index.html" aria-label="TECHM8 home">
+          <img class="brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo" />
+        </a>
+        <input class="nav__mobile-input" type="checkbox" id="primary-menu-toggle" />
+        <label class="nav__toggle" for="primary-menu-toggle" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </label>
+        <nav class="nav__menu" id="primary-menu">
+          <div class="nav__dropdown">
+            <button
+              class="nav__dropdown-toggle"
+              type="button"
+              data-href="repairs.html"
+              aria-expanded="false"
+              onclick="return toggleMainDropdown(this, event);"
+            >
+              Repairs
+            </button>
+            <div class="nav__dropdown-menu">
+              <div class="store-switcher store-switcher--repairs">
+                <div class="store-switcher__top"><strong>Repairs</strong></div>
+                <div class="store-switcher__grid store-switcher__grid--repairs">
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Phones</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/phones/apple.html">Apple</a>
+                      <a href="repair-services/phones/samsung.html">Samsung</a>
+                      <a href="repair-services/phones/oppo.html">Oppo</a>
+                      <a href="repair-services/phones/huawei.html">Huawei</a>
+                      <a href="repair-services/phones/xiaomi.html">Xiaomi</a>
+                      <a href="repair-services/phones/google.html">Google</a>
+                      <a href="repair-services/phones/oneplus.html">OnePlus</a>
+                      <a href="repair-services/phones/others.html">Others</a>
+                    </div>
+                  </div>
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Tablets</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/tablets/apple.html">Apple</a>
+                      <a href="repair-services/tablets/samsung.html">Samsung</a>
+                      <a href="repair-services/tablets/other.html">Other Tablets</a>
+                    </div>
+                  </div>
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Computers</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/computers/pc-tower.html">PC Tower</a>
+                      <a href="repair-services/computers/all-in-one.html">All in One</a>
+                      <a href="repair-services/computers/laptop.html">Laptop</a>
+                      <a href="repair-services/computers/small-pc.html">Small PC</a>
+                    </div>
+                  </div>
+                  <div class="nav__dropdown-group">
+                    <button class="nav__submenu-toggle" type="button" aria-expanded="false" onclick="return toggleNavSubmenu(this, event);">Game Consoles</button>
+                    <div class="nav__submenu-panel">
+                      <a href="repair-services/consoles/sony.html">Sony - PlayStation 5</a>
+                      <a href="repair-services/consoles/xbox.html">Microsoft - Xbox</a>
+                      <a href="repair-services/consoles/nintendo.html">Nintendo - Switch</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a href="blog.html">Tech Insights</a>
+          <a href="stores.html">Store Locator</a>
+          <a href="business-services.html">Business Services</a>
+          <a class="nav__shop-link" href="shop.html">Online Store</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="tool-hero">
+        <div class="container">
+          <p class="eyebrow">Windows PC &amp; laptop diagnostics</p>
+          <h1>PC Health Check</h1>
+          <p>
+            See what is inside the computer, watch CPU and GPU temperatures live while a stress
+            test runs, check battery wear and pull up recent crashes and hardware errors. Finish
+            with a downloadable report.
+          </p>
+        </div>
+      </section>
+
+      <section class="tool-page">
+        <div class="container">
+          <!-- Agent connection -->
+          <div class="tool-card" id="agent-card">
+            <h2>Step 1 &middot; Start the TECHM8 agent <span class="tool-pill" id="agent-status">Not connected</span></h2>
+            <p>
+              Browsers are not allowed to read temperatures, battery wear or Windows error logs. A small
+              read-only PowerShell script reads them and passes them to this page. It installs nothing,
+              changes nothing and stops when its window is closed.
+            </p>
+            <ol class="tool-steps">
+              <li>Right-click the Start button and choose <strong>Terminal (Admin)</strong> or <strong>Windows PowerShell (Admin)</strong>.</li>
+              <li>Paste this command and press Enter:</li>
+            </ol>
+            <div class="tool-code">
+              <code id="agent-command">irm https://www.techm8australia.com/tools/techm8-agent.ps1 | iex</code>
+              <button class="tool-btn tool-btn--primary" type="button" id="copy-command">Copy</button>
+            </div>
+            <ol class="tool-steps" start="3">
+              <li>Leave the blue window open, then press <button class="tool-btn" type="button" id="agent-connect" style="min-height: 2rem; padding: 0.2rem 0.8rem">Connect</button></li>
+              <li>If Chrome or Edge asks to let this site access apps on this device, choose <strong>Allow</strong>.</li>
+            </ol>
+            <p class="tool-note" style="margin: 0">
+              Prefer a file? <a href="tools/techm8-agent.ps1" download>Download techm8-agent.ps1</a>, then
+              right-click it and choose <em>Run with PowerShell</em>. For accurate CPU temperatures and fan
+              speeds, also run <a href="https://github.com/LibreHardwareMonitor/LibreHardwareMonitor" rel="noopener" target="_blank">LibreHardwareMonitor</a>
+              as administrator; the agent picks up its sensors automatically. Without the agent you can still
+              run the stress test and see basic browser-level details.
+            </p>
+          </div>
+
+          <!-- Overview -->
+          <div class="tool-card">
+            <h2>Hardware overview <span class="tool-pill" id="overview-source">Browser only</span></h2>
+            <div class="hc-specs" id="overview"></div>
+          </div>
+
+          <!-- Stress test + live sensors -->
+          <div class="tool-card" id="stress-card">
+            <h2>Live temperatures &amp; stress test <span class="tool-pill" id="stress-status">Idle</span></h2>
+            <div class="tool-toolbar">
+              <label class="tool-note" style="margin: 0">
+                Duration
+                <select class="tool-select" id="stress-duration">
+                  <option value="60">1 minute</option>
+                  <option value="300">5 minutes</option>
+                  <option value="600" selected>10 minutes</option>
+                  <option value="900">15 minutes</option>
+                  <option value="1800">30 minutes</option>
+                  <option value="0">Until stopped</option>
+                </select>
+              </label>
+              <label class="tool-note" style="margin: 0"><input type="checkbox" id="stress-cpu" checked /> CPU</label>
+              <label class="tool-note" style="margin: 0"><input type="checkbox" id="stress-gpu" checked /> GPU</label>
+              <button class="tool-btn tool-btn--primary" type="button" id="stress-start">Start stress test</button>
+              <button class="tool-btn tool-btn--danger" type="button" id="stress-stop" disabled>Stop</button>
+            </div>
+
+            <div class="tool-stats">
+              <div class="tool-stat" id="st-cputemp"><span>CPU temp</span><strong>&ndash;</strong><small>max &ndash;</small></div>
+              <div class="tool-stat" id="st-gputemp"><span>GPU temp</span><strong>&ndash;</strong><small>max &ndash;</small></div>
+              <div class="tool-stat" id="st-load"><span>CPU load</span><strong>&ndash;</strong><small>&nbsp;</small></div>
+              <div class="tool-stat" id="st-clock"><span>CPU clock</span><strong>&ndash;</strong><small>&nbsp;</small></div>
+              <div class="tool-stat" id="st-score"><span>CPU score</span><strong>&ndash;</strong><small>Mops/s</small></div>
+              <div class="tool-stat" id="st-throttle"><span>Throttling</span><strong>&ndash;</strong><small>vs first 30 s</small></div>
+              <div class="tool-stat" id="st-fps"><span>GPU FPS</span><strong>&ndash;</strong><small>&nbsp;</small></div>
+              <div class="tool-stat" id="st-time"><span>Elapsed</span><strong>0:00</strong><small>&nbsp;</small></div>
+            </div>
+
+            <p class="tool-note" id="stress-result" hidden></p>
+
+            <div class="hc-chart">
+              <div class="hc-legend">
+                <span><i style="background: #e4572e"></i>CPU &deg;C</span>
+                <span><i style="background: #7b61ff"></i>GPU &deg;C</span>
+              </div>
+              <canvas id="chart-temp" aria-label="Temperature history"></canvas>
+            </div>
+            <div class="hc-chart">
+              <div class="hc-legend">
+                <span><i style="background: #16c8ba"></i>CPU load %</span>
+                <span><i style="background: #0f6fd1"></i>CPU clock (% of max seen)</span>
+                <span><i style="background: #e69614"></i>CPU score (% of baseline)</span>
+              </div>
+              <canvas id="chart-load" aria-label="Load history"></canvas>
+            </div>
+
+            <div class="tool-grid">
+              <div>
+                <h3 style="margin: 0 0 0.6rem">All sensors</h3>
+                <div id="sensor-table"><div class="tool-empty">Start the agent to see sensors.</div></div>
+              </div>
+              <div>
+                <h3 style="margin: 0 0 0.6rem">GPU load</h3>
+                <canvas class="hc-gpu-canvas" id="gpu-canvas" width="1280" height="720"></canvas>
+                <p class="tool-note" style="margin-top: 0.6rem">
+                  On laptops with two graphics chips, set the browser to "High performance" in
+                  Windows Settings &rsaquo; System &rsaquo; Display &rsaquo; Graphics so this loads the dedicated GPU.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="tool-grid">
+            <!-- Battery -->
+            <div class="tool-card">
+              <h2>Battery health</h2>
+              <div id="battery"><div class="tool-empty">Checking&hellip;</div></div>
+            </div>
+
+            <!-- Storage -->
+            <div class="tool-card">
+              <h2>Storage health</h2>
+              <div id="storage"><div class="tool-empty">Start the agent to see drive health.</div></div>
+            </div>
+          </div>
+
+          <!-- Errors -->
+          <div class="tool-card" id="errors-card">
+            <h2>Crashes &amp; error logs <span class="tool-pill" id="stability-pill" hidden></span></h2>
+            <div class="tool-toolbar">
+              <label class="tool-note" style="margin: 0">
+                Look back
+                <select class="tool-select" id="errors-days">
+                  <option value="7">7 days</option>
+                  <option value="30" selected>30 days</option>
+                  <option value="90">90 days</option>
+                </select>
+              </label>
+              <button class="tool-btn" type="button" id="errors-refresh" disabled>Reload logs</button>
+              <button class="tool-btn" type="button" id="open-reliability" disabled>Open Reliability Monitor</button>
+            </div>
+            <div class="hc-chips" id="error-chips"></div>
+            <div id="errors"><div class="tool-empty">Start the agent to read the Windows event logs.</div></div>
+          </div>
+
+          <!-- Report -->
+          <div class="tool-card">
+            <h2>Report</h2>
+            <div class="hc-report-fields">
+              <label>Job / ticket number<input class="tool-input" id="report-job" autocomplete="off" /></label>
+              <label>Customer name<input class="tool-input" id="report-customer" autocomplete="off" /></label>
+              <label>Technician notes<textarea class="tool-input" id="report-notes" rows="2"></textarea></label>
+            </div>
+            <div class="tool-toolbar" style="margin: 0">
+              <button class="tool-btn tool-btn--primary" type="button" id="report-download">Download report (HTML)</button>
+              <button class="tool-btn" type="button" id="battery-report" disabled>Open Windows battery report</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer footer--rich">
+        <div class="footer-brand">
+          <img class="footer-brand__logo" src="assets/logo-techm8.png" alt="TECHM8 logo" />
+          <p>
+            TECHM8 repairs phones, tablets, computers, laptops and game consoles,
+            and also supplies parts, accessories and everyday tech products.
+          </p>
+        </div>
+        <div>
+          <h4>Services</h4>
+          <a href="repair-services/phones/apple.html">Phone Repairs</a>
+          <a href="repair-services/tablets/apple.html">Tablet Repairs</a>
+          <a href="repair-services/computers/laptop.html">Laptop Repairs</a>
+          <a href="repair-services/consoles/xbox.html">Console Repairs</a>
+          <a href="business-services/ndis-technology-support.html">NDIS Technology Support &amp; Device Repairs Brisbane</a>
+          <a href="/school-services">School Device Repair Program Brisbane</a>
+          <a href="business-services/on-site-tech-services.html">On-site Tech Services</a>
+          <a href="business-services/business-it-device-support.html">Business IT &amp; Device Support Brisbane</a>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <a href="repairs.html">Repairs Overview</a>
+          <a href="blog.html">Tech Insights</a>
+          <a href="stores.html">Store Locator</a>
+          <a href="dualsense-tester.html">DualSense Tester</a>
+          <a href="keyboard-tester.html">Keyboard Tester</a>
+          <a href="pc-health-check.html">PC Health Check</a>
+          <a href="shop.html">Online Store</a>
+          <a href="careers.html">Careers</a>
+        </div>
+        <div>
+          <h4>Need Help?</h4>
+          <p>Choose your nearest store for repairs, product advice and walk-in support.</p>
+          <a href="stores.html">Find your nearest store</a>
+          <a href="repairs.html">View repair categories</a>
+        </div>
+      </div>
+      <div class="container footer footer--bottom">
+        <p>&copy; 2026 TECHM8. All rights reserved.</p>
+        <a href="store-policy.html">Repair Terms &amp; Conditions</a>
+      </div>
+    </footer>
+    <script type="module" src="script.min.js"></script>
+    <script defer src="tools/pc-health-check.js"></script>
+  </body>
+</html>
