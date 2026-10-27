@@ -284,6 +284,56 @@ async function syncRefund(supabaseAdmin: SupabaseAdmin, refund: Stripe.Refund) {
   }
 }
 
+// Payment links sent from the POS till (see pos-payment-link) share this
+// Stripe account. They belong to a POS invoice, not a website order, so they
+// are handed to pos-payment-link instead of being matched to `orders`.
+const POS_PAYMENT_LINK_SOURCE = 'techm8_pos_payment_link'
+
+async function forwardPosPaymentLinkEvent(type: string, sessionId: string) {
+  const response = await fetch(`${Deno.env.get('SUPABASE_URL') ?? ''}/functions/v1/pos-payment-link`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-publish-secret': Deno.env.get('USED_DEVICE_PUBLISH_SECRET') ?? '',
+    },
+    body: JSON.stringify({ action: 'stripe-event', type, session_id: sessionId }),
+  })
+  const data = await response.json().catch(() => ({}))
+  if (!response.ok || data?.ok === false) {
+    throw new Error(`POS payment link event failed: ${text(data?.message) || response.status}`)
+  }
+}
+
+async function isPosPaymentLinkIntent(
+  stripe: Stripe,
+  supabaseAdmin: SupabaseAdmin,
+  paymentIntent: string | Stripe.PaymentIntent | null | undefined,
+) {
+  const paymentIntentId = typeof paymentIntent === 'string' ? paymentIntent : paymentIntent?.id ?? ''
+  if (!paymentIntentId || await findOrderByPaymentIntent(supabaseAdmin, paymentIntentId)) return false
+  const intent = await stripe.paymentIntents.retrieve(paymentIntentId)
+  return intent.metadata?.source === POS_PAYMENT_LINK_SOURCE
+}
+
+// True when the event was a POS payment link and has been dealt with.
+async function handlePosPaymentLinkEvent(stripe: Stripe, supabaseAdmin: SupabaseAdmin, event: Stripe.Event) {
+  const type = String(event.type)
+  if (type.startsWith('checkout.session.')) {
+    const session = event.data.object as Stripe.Checkout.Session
+    if (session.metadata?.source !== POS_PAYMENT_LINK_SOURCE) return false
+    await forwardPosPaymentLinkEvent(type, session.id)
+    return true
+  }
+  // Refunds of a POS link are recorded in the POS; nothing to do here.
+  if (type.startsWith('refund.')) {
+    return isPosPaymentLinkIntent(stripe, supabaseAdmin, (event.data.object as Stripe.Refund).payment_intent)
+  }
+  if (type === 'charge.refunded') {
+    return isPosPaymentLinkIntent(stripe, supabaseAdmin, (event.data.object as Stripe.Charge).payment_intent)
+  }
+  return false
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
   if (req.method !== 'POST') {
@@ -311,6 +361,11 @@ Deno.serve(async (req) => {
     const shouldProcess = await beginWebhookEvent(supabaseAdmin, event)
     if (!shouldProcess) {
       return Response.json({ received: true, duplicate: true }, { status: 200, headers: corsHeaders })
+    }
+
+    if (await handlePosPaymentLinkEvent(stripe, supabaseAdmin, event)) {
+      await finishWebhookEvent(supabaseAdmin, event.id, 'processed')
+      return Response.json({ received: true, pos_payment_link: true }, { status: 200, headers: corsHeaders })
     }
 
     switch (String(event.type)) {
