@@ -1,9 +1,29 @@
 {
-  "catalog_updated_at": "2026-10-27T12:04:56.181571+00:00",
+  "catalog_updated_at": "2026-10-27T13:13:27.431567+00:00",
   "total_products": 186,
   "indexable_products": 131,
   "limited_products": 55,
   "products": [
+    {
+      "id": 21,
+      "slug": "remax-rpp-623-power-bank-20000-mah",
+      "name": "REMAX RPP-623 Power Bank 20000 mAh",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 27,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 97,
       "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
@@ -188,17 +208,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 21,
-      "slug": "remax-rpp-623-power-bank-20000-mah",
-      "name": "REMAX RPP-623 Power Bank 20000 mAh",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 5,
@@ -626,15 +635,6 @@
       "id": 89,
       "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
       "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 27,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
       "indexable": true,
       "score": 100,
       "blockers": [],
