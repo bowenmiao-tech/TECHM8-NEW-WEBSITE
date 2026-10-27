@@ -1,9 +1,38 @@
 {
-  "catalog_updated_at": "2026-10-26T07:22:05.379917+00:00",
+  "catalog_updated_at": "2026-10-27T04:47:12.760442+00:00",
   "total_products": 186,
   "indexable_products": 131,
   "limited_products": 55,
   "products": [
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 1590,
+      "slug": "tm8-car-6034",
+      "name": "Replacement Metal Plate for Magnetic Phone Holders",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 1578,
       "slug": "tm8-car-8154",
@@ -13,6 +42,26 @@
       "blockers": [
         "description-under-40-characters"
       ],
+      "warnings": []
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
       "warnings": []
     },
     {
@@ -70,17 +119,6 @@
       "warnings": []
     },
     {
-      "id": 1590,
-      "slug": "tm8-car-6034",
-      "name": "Replacement Metal Plate for Magnetic Phone Holders",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 97,
       "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
       "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
@@ -135,15 +173,6 @@
       "id": 4441,
       "slug": "wekome-wdc-195-1m-3-5mm-aux-audio-cable",
       "name": "WEKOME WDC-195 1m 3.5mm AUX Audio Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough USB-C to Lightning Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -216,15 +245,6 @@
       "warnings": []
     },
     {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 101,
       "slug": "3-in-1-cabin-crew-charging-cable",
       "name": "3 in 1 Cabin Crew Charging Cable",
@@ -234,15 +254,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 4426,
@@ -436,17 +447,6 @@
       "id": 92,
       "slug": "c28-fm-transmitter",
       "name": "C28 FM Transmitter",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
