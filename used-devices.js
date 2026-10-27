@@ -263,7 +263,7 @@ function productSchema(listing) {
       priceCurrency: "AUD",
       availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/UsedCondition",
-      url: window.location.href,
+      url: `https://www.techm8australia.com/${detailUrl(listing)}`,
     },
   };
 }
@@ -326,6 +326,7 @@ async function renderDetailPage(root) {
   // A device that sold is the usual reason a link stops working, not a fault.
   if (!data.ok || !data.listing) {
     document.title = "No longer available | TECHM8";
+    document.querySelector('meta[name="robots"]')?.setAttribute("content", "noindex, follow");
     shell.innerHTML = `
       <div class="used-empty used-empty--sold">
         <h1>This device is no longer available</h1>
