@@ -1,9 +1,84 @@
 {
-  "catalog_updated_at": "2026-10-27T13:13:27.431567+00:00",
+  "catalog_updated_at": "2026-10-28T03:20:10.530521+00:00",
   "total_products": 186,
   "indexable_products": 131,
   "limited_products": 55,
   "products": [
+    {
+      "id": 2035,
+      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
+      "name": "AUX WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 82,
+      "slug": "wk-v04-wireless-earbuds",
+      "name": "WK V04 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 61,
+      "slug": "wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black",
+      "name": "WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black)",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 1571,
+      "slug": "tm8-car-10742",
+      "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 77,
+      "slug": "wekome-wp-u99-magsafe-wirless-charger",
+      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 21,
       "slug": "remax-rpp-623-power-bank-20000-mah",
@@ -94,17 +169,6 @@
       "warnings": []
     },
     {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 100,
       "slug": "1m-ultra-tough-type-c-to-lightning-cable",
       "name": "1M Ultra Tough USB-C to Lightning Cable",
@@ -165,17 +229,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
       "warnings": []
     },
     {
@@ -272,17 +325,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 1571,
-      "slug": "tm8-car-10742",
-      "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 2045,
@@ -621,17 +663,6 @@
       "warnings": []
     },
     {
-      "id": 2035,
-      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
-      "name": "AUX WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 89,
       "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
       "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
@@ -639,17 +670,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 82,
-      "slug": "wk-v04-wireless-earbuds",
-      "name": "WK V04 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 42,
@@ -760,17 +780,6 @@
       ]
     },
     {
-      "id": 77,
-      "slug": "wekome-wp-u99-magsafe-wirless-charger",
-      "name": "WEKOME WP-U99 Magsafe Wirless Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 90,
       "slug": "wireless-dongle-for-carplay-or-android-auto-m29",
       "name": "Wireless Dongle for CarPlay or Android Auto M29",
@@ -831,15 +840,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 61,
-      "slug": "wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black",
-      "name": "WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black)",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 86,

@@ -5,6 +5,70 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>10251174</g:id>
+      <title>WK V04 Wireless Earbuds</title>
+      <description>WK V04 Wireless Earbuds available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wk-v04-wireless-earbuds/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wk-v04-wireless-earbuds/1779116878140-43cddbcb.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wk-v04-wireless-earbuds/1779116885894-9570beca.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>129.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6971278727809</g:gtin>
+    </item>
+    <item>
+      <g:id>TM8-wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black</g:id>
+      <title>WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black)</title>
+      <description>WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black) available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black/1778326592007-42005c11.jpg</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black/1778326594738-7a809975.jpg</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black/1778326597340-2a69b864.jpg</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>89.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKON</g:brand>
+      <g:gtin>6941027649855</g:gtin>
+    </item>
+    <item>
+      <g:id>59065</g:id>
+      <title>1M Ultra Tough Lightning Cable</title>
+      <description>1M ULTRA TOUGH MICRO-USB CABLE available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-micro-usb-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-micro-usb-cable/1784437577400-dbfd3a8d.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>29.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>TM8-CAR-10742</g:id>
+      <title>WEKOME WP-U209 MagSafe Wireless Charging Car Holder</title>
+      <description>Wireless Charging Mount. Universal smartphones.</description>
+      <link>https://www.techm8australia.com/products/tm8-car-10742/</link>
+      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/0.64344700%201759038294.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>65.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>2988000107425</g:gtin>
+    </item>
+    <item>
+      <g:id>10276711</g:id>
+      <title>WEKOME WP-U99 Magsafe Wirless Charger</title>
+      <description>WEKOME WP-U99 Magsafe Wirless Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wp-u99-magsafe-wirless-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939501474-605c1d8d.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939514097-2581510f.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>69.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027640081</g:gtin>
+    </item>
+    <item>
       <g:id>110631633</g:id>
       <title>REMAX RPP-623 Power Bank 20000 mAh</title>
       <description>REMAX RPP-623 Power Bank 20000 mAh available for online and warehouse dispatch.</description>
@@ -101,18 +165,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027656044</g:gtin>
-    </item>
-    <item>
-      <g:id>59065</g:id>
-      <title>1M Ultra Tough Lightning Cable</title>
-      <description>1M ULTRA TOUGH MICRO-USB CABLE available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-micro-usb-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-micro-usb-cable/1784437577400-dbfd3a8d.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>29.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
     </item>
     <item>
       <g:id>8822381</g:id>
@@ -270,18 +322,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
 
-    </item>
-    <item>
-      <g:id>TM8-CAR-10742</g:id>
-      <title>WEKOME WP-U209 MagSafe Wireless Charging Car Holder</title>
-      <description>Wireless Charging Mount. Universal smartphones.</description>
-      <link>https://www.techm8australia.com/products/tm8-car-10742/</link>
-      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/0.64344700%201759038294.jpg</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>65.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>2988000107425</g:gtin>
     </item>
     <item>
       <g:id>110671637</g:id>
@@ -520,19 +560,6 @@
 
     </item>
     <item>
-      <g:id>10251174</g:id>
-      <title>WK V04 Wireless Earbuds</title>
-      <description>WK V04 Wireless Earbuds available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wk-v04-wireless-earbuds/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wk-v04-wireless-earbuds/1779116878140-43cddbcb.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wk-v04-wireless-earbuds/1779116885894-9570beca.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>129.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6971278727809</g:gtin>
-    </item>
-    <item>
       <g:id>694102765273</g:id>
       <title>WEKOME WP-101 10000mAh Power Bank</title>
       <description>WEKOME WP-101 10000mAh Power Bank available for online and warehouse dispatch.</description>
@@ -610,19 +637,6 @@
       <g:gtin>2986000071524</g:gtin>
     </item>
     <item>
-      <g:id>10276711</g:id>
-      <title>WEKOME WP-U99 Magsafe Wirless Charger</title>
-      <description>WEKOME WP-U99 Magsafe Wirless Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wp-u99-magsafe-wirless-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939501474-605c1d8d.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wp-u99-magsafe-wirless-charger/1778939514097-2581510f.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>69.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027640081</g:gtin>
-    </item>
-    <item>
       <g:id>105671116</g:id>
       <title>Wireless Dongle for CarPlay or Android Auto M29</title>
       <description>Wireless Dongle for CarPlay or Android Auto M29 available for online order and warehouse dispatch.</description>
@@ -696,20 +710,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>6954851206453</g:gtin>
-    </item>
-    <item>
-      <g:id>TM8-wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black</g:id>
-      <title>WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black)</title>
-      <description>WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black) available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black/1778326592007-42005c11.jpg</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black/1778326594738-7a809975.jpg</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black/1778326597340-2a69b864.jpg</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>89.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKON</g:brand>
-      <g:gtin>6941027649855</g:gtin>
     </item>
     <item>
       <g:id>6954851256618</g:id>
