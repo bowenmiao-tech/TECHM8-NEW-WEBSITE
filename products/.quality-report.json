@@ -1,20 +1,9 @@
 {
-  "catalog_updated_at": "2026-10-28T03:20:10.530521+00:00",
-  "total_products": 186,
+  "catalog_updated_at": "2026-10-28T07:54:28.687838+00:00",
+  "total_products": 187,
   "indexable_products": 131,
-  "limited_products": 55,
+  "limited_products": 56,
   "products": [
-    {
-      "id": 2035,
-      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
-      "name": "AUX WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
     {
       "id": 82,
       "slug": "wk-v04-wireless-earbuds",
@@ -25,6 +14,37 @@
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 2081,
+      "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
+      "name": "2M Stand Selfie Live Stream Stand",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 17,
+      "slug": "30w-usb-c-macbook-charger",
+      "name": "30W USB-C MacBook Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2035,
+      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
+      "name": "AUX WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
     },
     {
       "id": 61,
@@ -512,17 +532,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2081,
-      "slug": "repairdesk-accessory-9368-2m-stand-selfie-live-stream-stand",
-      "name": "2M Stand Selfie Live Stream Stand",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
@@ -1438,15 +1447,6 @@
       "warnings": []
     },
     {
-      "id": 17,
-      "slug": "new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
-      "name": "30W USB-C MacBook Charger with Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 19,
       "slug": "60w-magsafe-2-power-adapter-macbook-pro-with-13-inch-retina-display-six-mont",
       "name": "60W MagSafe 2 Power Adapter for MacBook Air and MacBook Pro",
@@ -1749,6 +1749,17 @@
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 17,
+      "slug": "new-30w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+      "name": "30W USB-C MacBook Charger with Cable",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "hidden-product"
+      ],
+      "warnings": []
     },
     {
       "id": 4441,
