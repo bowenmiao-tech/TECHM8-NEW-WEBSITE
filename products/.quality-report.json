@@ -1,9 +1,38 @@
 {
-  "catalog_updated_at": "2026-10-29T04:39:18.372694+00:00",
+  "catalog_updated_at": "2026-10-29T09:06:10.713725+00:00",
   "total_products": 187,
   "indexable_products": 131,
   "limited_products": 56,
   "products": [
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 1571,
+      "slug": "tm8-car-10742",
+      "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 102,
       "slug": "1m-ultra-tough-micro-usb-cable",
@@ -19,15 +48,6 @@
       "id": 75,
       "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
       "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -129,17 +149,6 @@
       "warnings": []
     },
     {
-      "id": 1571,
-      "slug": "tm8-car-10742",
-      "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 69,
       "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
       "name": "55W 4 Port Wall Charger",
@@ -220,15 +229,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 1578,

@@ -5,6 +5,45 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>110681638</g:id>
+      <title>WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable</title>
+      <description>WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable/1779757683334-f93b610d.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable/1779757684459-314c9766.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027656044</g:gtin>
+    </item>
+    <item>
+      <g:id>TM8-CAR-10742</g:id>
+      <title>WEKOME WP-U209 MagSafe Wireless Charging Car Holder</title>
+      <description>Wireless Charging Mount. Universal smartphones.</description>
+      <link>https://www.techm8australia.com/products/tm8-car-10742/</link>
+      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/0.64344700%201759038294.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>65.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>2988000107425</g:gtin>
+    </item>
+    <item>
+      <g:id>6941027651469</g:id>
+      <title>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable</title>
+      <description>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437328331-3cb711d0.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437377122-fcabacb1.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437370250-b3475340.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>39.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+
+    </item>
+    <item>
       <g:id>59065</g:id>
       <title>1M Ultra Tough Lightning Cable</title>
       <description>1M ULTRA TOUGH MICRO-USB CABLE available for online order and warehouse dispatch.</description>
@@ -27,20 +66,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>6954851260271</g:gtin>
-    </item>
-    <item>
-      <g:id>6941027651469</g:id>
-      <title>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable</title>
-      <description>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437328331-3cb711d0.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437377122-fcabacb1.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437370250-b3475340.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>39.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-
     </item>
     <item>
       <g:id>492967793802</g:id>
@@ -135,18 +160,6 @@
       <g:gtin>6941027649855</g:gtin>
     </item>
     <item>
-      <g:id>TM8-CAR-10742</g:id>
-      <title>WEKOME WP-U209 MagSafe Wireless Charging Car Holder</title>
-      <description>Wireless Charging Mount. Universal smartphones.</description>
-      <link>https://www.techm8australia.com/products/tm8-car-10742/</link>
-      <g:image_link>https://dghyt15qon7us.cloudfront.net/images/productTheme/Inventory/small/0.64344700%201759038294.jpg</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>65.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>2988000107425</g:gtin>
-    </item>
-    <item>
       <g:id>10276711</g:id>
       <title>WEKOME WP-U99 Magsafe Wirless Charger</title>
       <description>WEKOME WP-U99 Magsafe Wirless Charger available for online order and warehouse dispatch.</description>
@@ -229,19 +242,6 @@
       <g:condition>new</g:condition>
       <g:brand>Generic</g:brand>
       <g:gtin>2988000060348</g:gtin>
-    </item>
-    <item>
-      <g:id>110681638</g:id>
-      <title>WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable</title>
-      <description>WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable/1779757683334-f93b610d.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable/1779757684459-314c9766.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027656044</g:gtin>
     </item>
     <item>
       <g:id>8822381</g:id>
