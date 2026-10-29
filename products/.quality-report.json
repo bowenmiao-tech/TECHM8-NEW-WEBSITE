@@ -1,9 +1,82 @@
 {
-  "catalog_updated_at": "2026-10-28T07:54:28.687838+00:00",
+  "catalog_updated_at": "2026-10-29T04:39:18.372694+00:00",
   "total_products": 187,
   "indexable_products": 131,
   "limited_products": 56,
   "products": [
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 75,
+      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
+      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 68,
+      "slug": "wekome-wp-c54-car-charger",
+      "name": "WEKOME WP-C54 Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 67,
+      "slug": "wekome-wp-c53-car-charger",
+      "name": "WEKOME WP-C53 Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 66,
+      "slug": "wekome-wp-c64-car-charger",
+      "name": "WEKOME WP-C64 Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 82,
       "slug": "wk-v04-wireless-earbuds",
@@ -54,17 +127,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 1571,
@@ -123,15 +185,6 @@
       "id": 97,
       "slug": "wekome-66w-wdc-59a-type-c-usb-charging-data-cable",
       "name": "WEKOME 66W WDC-59a Type-C-USB Charging Data Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -252,17 +305,6 @@
       "warnings": []
     },
     {
-      "id": 68,
-      "slug": "wekome-wp-c54-car-charger",
-      "name": "WEKOME WP-C54 Car Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 2042,
       "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
       "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
@@ -314,17 +356,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 101,
@@ -767,17 +798,6 @@
       ]
     },
     {
-      "id": 66,
-      "slug": "wekome-wp-c64-car-charger",
-      "name": "WEKOME WP-C64 Car Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 1714,
       "slug": "tm8-cch-7152",
       "name": "Dual Socket + USB Car Charger",
@@ -936,15 +956,6 @@
       "blockers": [
         "description-under-40-characters"
       ],
-      "warnings": []
-    },
-    {
-      "id": 75,
-      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
-      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
@@ -1388,17 +1399,6 @@
       "id": 1569,
       "slug": "tm8-car-10834",
       "name": "Remax RM-C36 Rotatable Car Phone Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 67,
-      "slug": "wekome-wp-c53-car-charger",
-      "name": "WEKOME WP-C53 Car Charger",
       "indexable": true,
       "score": 92,
       "blockers": [],
