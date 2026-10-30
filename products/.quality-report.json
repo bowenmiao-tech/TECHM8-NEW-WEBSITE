@@ -1,9 +1,91 @@
 {
-  "catalog_updated_at": "2026-10-29T09:06:10.713725+00:00",
+  "catalog_updated_at": "2026-10-30T05:38:36.716158+00:00",
   "total_products": 187,
   "indexable_products": 131,
   "limited_products": 56,
   "products": [
+    {
+      "id": 74,
+      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
+      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2035,
+      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
+      "name": "AUX WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "dualsense-wireless-controller-playstation-5-white",
+      "name": "DualSense Wireless Controller - PlayStation 5 - White",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "dualsense-wireless-controller-gray-camouflage",
+      "name": "DualSense Wireless Controller - Gray Camouflage",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 75,
+      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
+      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 93,
       "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
@@ -28,26 +110,6 @@
       "id": 110,
       "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
       "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 75,
-      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
-      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -129,17 +191,6 @@
       "warnings": []
     },
     {
-      "id": 2035,
-      "slug": "repairdesk-accessory-11070-aux-wekome-yb03-wired-earphone",
-      "name": "AUX WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 61,
       "slug": "wk-beluga-d13-outdoor-waterproof-portable-bluetooth-speaker-black",
       "name": "WK Beluga D13 Outdoor Waterproof Portable Bluetooth Speaker(Black)",
@@ -211,15 +262,6 @@
       "warnings": []
     },
     {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 1590,
       "slug": "tm8-car-6034",
       "name": "Replacement Metal Plate for Magnetic Phone Holders",
@@ -262,17 +304,6 @@
       "warnings": []
     },
     {
-      "id": 3,
-      "slug": "dualsense-wireless-controller-gray-camouflage",
-      "name": "DualSense Wireless Controller - Gray Camouflage",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 79,
       "slug": "ds15-2-in-1wireless-charger",
       "name": "DS15 2 IN 1Wireless Charger",
@@ -282,17 +313,6 @@
       "warnings": [
         "description-under-90-characters",
         "missing-brand"
-      ]
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
       ]
     },
     {
@@ -323,17 +343,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 5,
-      "slug": "dualsense-wireless-controller-playstation-5-white",
-      "name": "DualSense Wireless Controller - PlayStation 5 - White",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 76,
@@ -555,15 +564,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 74,
-      "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
-      "name": "CW01 20.5W Desktop Magnetic 3-in-1 Wireless Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 24,
