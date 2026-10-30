@@ -1,9 +1,29 @@
 {
-  "catalog_updated_at": "2026-10-30T05:38:36.716158+00:00",
+  "catalog_updated_at": "2026-10-30T07:59:59.873021+00:00",
   "total_products": 187,
   "indexable_products": 131,
   "limited_products": 56,
   "products": [
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 75,
+      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
+      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 74,
       "slug": "cw01-20-5w-desktop-magnetic-3-in-1-wireless-charger",
@@ -65,26 +85,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 75,
-      "slug": "remax-20-5w-metal-foldable-rotatable-magnetic-3-in-1-wireless-charger-cw05",
-      "name": "REMAX 20.5W metal foldable rotatable magnetic 3 in 1 wireless charger CW05",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 93,
