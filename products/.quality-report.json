@@ -1,9 +1,31 @@
 {
-  "catalog_updated_at": "2026-10-31T05:37:10.824576+00:00",
+  "catalog_updated_at": "2026-10-31T06:12:20.399611+00:00",
   "total_products": 187,
   "indexable_products": 131,
   "limited_products": 56,
   "products": [
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 22,
       "slug": "remax-rpp-622-10000mah-power-bank",
@@ -23,17 +45,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 110,
@@ -217,17 +228,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
       "warnings": []
     },
     {
