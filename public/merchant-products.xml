@@ -5,6 +5,59 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>110621632</g:id>
+      <title>Remax RPP-622 10000MAH power bank</title>
+      <description>Remax RPP-622 10000MAH power bank available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-rpp-622-10000mah-power-bank/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/01-image-1.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/02-image-2.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/03-image-3.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/04-image-4.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>69.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+      <g:gtin>6954851212553</g:gtin>
+    </item>
+    <item>
+      <g:id>TM8-MAC-USBC-87W</g:id>
+      <title>87W USB-C MacBook Charger</title>
+      <description>Buy a replacement 87W USB-C MacBook charger with cable from TECHM8.</description>
+      <link>https://www.techm8australia.com/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/1788066026476-726335b8.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>49.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>Apple Compatible</g:brand>
+
+    </item>
+    <item>
+      <g:id>8830389</g:id>
+      <title>1M Ultra Tough USB-C to USB-C Cable</title>
+      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>6941027651469</g:id>
+      <title>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable</title>
+      <description>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437328331-3cb711d0.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437377122-fcabacb1.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437370250-b3475340.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>39.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+
+    </item>
+    <item>
       <g:id>59065</g:id>
       <title>1M Ultra Tough Lightning Cable</title>
       <description>1M ULTRA TOUGH MICRO-USB CABLE available for online order and warehouse dispatch.</description>
@@ -53,18 +106,6 @@
       <g:price>35.99 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
-
-    </item>
-    <item>
-      <g:id>8830389</g:id>
-      <title>1M Ultra Tough USB-C to USB-C Cable</title>
-      <description>1M ULTRA TOUGH TYPE C TO TYPE C CABLE available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-type-c-to-type-c-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-type-c-to-type-c-cable/1784437660210-503b3b04.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
 
     </item>
     <item>
@@ -122,20 +163,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>2988000107425</g:gtin>
-    </item>
-    <item>
-      <g:id>6941027651469</g:id>
-      <title>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable</title>
-      <description>WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437328331-3cb711d0.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437377122-fcabacb1.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable/1784437370250-b3475340.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>39.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-
     </item>
     <item>
       <g:id>492967793802</g:id>
@@ -322,18 +349,6 @@
       <g:price>69.00 AUD</g:price>
       <g:condition>new</g:condition>
 
-
-    </item>
-    <item>
-      <g:id>TM8-MAC-USBC-87W</g:id>
-      <title>87W USB-C MacBook Charger</title>
-      <description>Buy a replacement 87W USB-C MacBook charger with cable from TECHM8.</description>
-      <link>https://www.techm8australia.com/products/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty/1788066026476-726335b8.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>49.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>Apple Compatible</g:brand>
 
     </item>
     <item>
@@ -645,21 +660,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>69548512215745</g:gtin>
-    </item>
-    <item>
-      <g:id>110621632</g:id>
-      <title>Remax RPP-622 10000MAH power bank</title>
-      <description>Remax RPP-622 10000MAH power bank available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-rpp-622-10000mah-power-bank/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/01-image-1.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/02-image-2.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/03-image-3.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/remax-rpp-622-10000mah-power-bank/04-image-4.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>69.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
-      <g:gtin>6954851212553</g:gtin>
     </item>
     <item>
       <g:id>TM8-CCH-7152</g:id>

@@ -1,9 +1,49 @@
 {
-  "catalog_updated_at": "2026-10-30T07:59:59.873021+00:00",
+  "catalog_updated_at": "2026-10-31T05:37:10.824576+00:00",
   "total_products": 187,
   "indexable_products": 131,
   "limited_products": 56,
   "products": [
+    {
+      "id": 22,
+      "slug": "remax-rpp-622-10000mah-power-bank",
+      "name": "Remax RPP-622 10000MAH power bank",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
+      "name": "87W USB-C MacBook Charger",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 102,
       "slug": "1m-ultra-tough-micro-usb-cable",
@@ -54,17 +94,6 @@
       "warnings": []
     },
     {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 5,
       "slug": "dualsense-wireless-controller-playstation-5-white",
       "name": "DualSense Wireless Controller - PlayStation 5 - White",
@@ -105,15 +134,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 73,
@@ -314,15 +334,6 @@
         "description-under-90-characters",
         "missing-brand"
       ]
-    },
-    {
-      "id": 15,
-      "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
-      "name": "87W USB-C MacBook Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 2042,
@@ -785,17 +796,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 22,
-      "slug": "remax-rpp-622-10000mah-power-bank",
-      "name": "Remax RPP-622 10000MAH power bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 1714,
