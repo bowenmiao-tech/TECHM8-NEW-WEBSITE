@@ -1,9 +1,27 @@
 {
-  "catalog_updated_at": "2026-11-01T03:14:33.551882+00:00",
+  "catalog_updated_at": "2026-11-02T03:50:27.000694+00:00",
   "total_products": 187,
   "indexable_products": 131,
   "limited_products": 56,
   "products": [
+    {
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 89,
+      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
+      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 1585,
       "slug": "tm8-car-6606",
@@ -72,15 +90,6 @@
       "id": 15,
       "slug": "new-87w-usb-c-macbook-charger-iphone-charger-with-cable-six-months-warranty",
       "name": "87W USB-C MacBook Charger",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -708,15 +717,6 @@
       "id": 60,
       "slug": "wk-d45-10w-dual-speaker-transparent-mecha-bluetooth-speaker-b",
       "name": "WK D45 10W Dual Speaker Transparent Mecha Bluetooth Speaker-B",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 89,
-      "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
-      "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
       "indexable": true,
       "score": 100,
       "blockers": [],
