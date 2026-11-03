@@ -1,9 +1,40 @@
 {
-  "catalog_updated_at": "2026-11-02T23:57:00.715058+00:00",
+  "catalog_updated_at": "2026-11-03T05:37:39.820858+00:00",
   "total_products": 187,
   "indexable_products": 131,
   "limited_products": 56,
   "products": [
+    {
+      "id": 99,
+      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
+      "name": "1M Ultra Tough USB-C to USB-C Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 89,
       "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
@@ -43,17 +74,6 @@
       "warnings": []
     },
     {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 69,
       "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
       "name": "55W 4 Port Wall Charger",
@@ -63,17 +83,6 @@
         "template-placeholder-content"
       ],
       "warnings": []
-    },
-    {
-      "id": 99,
-      "slug": "1m-ultra-tough-type-c-to-type-c-cable",
-      "name": "1M Ultra Tough USB-C to USB-C Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 22,
@@ -321,15 +330,6 @@
       "blockers": [
         "description-under-40-characters"
       ],
-      "warnings": []
-    },
-    {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
