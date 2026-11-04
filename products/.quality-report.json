@@ -1,9 +1,67 @@
 {
-  "catalog_updated_at": "2026-11-03T05:37:39.820858+00:00",
-  "total_products": 187,
-  "indexable_products": 131,
+  "catalog_updated_at": "2026-11-04T04:01:39.0233+00:00",
+  "total_products": 189,
+  "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 2042,
+      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
+      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 4485,
+      "slug": "remax-cw10-22-5w-3-in-1-magnetic-wireless-charger",
+      "name": "REMAX CW10 22.5W 3-in-1 Foldable Magnetic Wireless Charger with Night Light",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 4484,
+      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank-pink",
+      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank - Pink",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 23,
+      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 94,
+      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 4426,
+      "slug": "wekome-wdc-125-kinkong-raycor-series-braided-fast-charging-cable-35w-c-l",
+      "name": "WEKOME WDC-125 Kinkong Raycor Series Braided Fast Charging Cable 35W(C-L)",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 99,
       "slug": "1m-ultra-tough-type-c-to-type-c-cable",
@@ -27,18 +85,38 @@
       ]
     },
     {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
       "warnings": []
     },
     {
+      "id": 2044,
+      "slug": "repairdesk-accessory-10383-wekome-yb06-wired-earphone-aux-in-ear",
+      "name": "WEKOME YB06 Wired Earphone Aux IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
       "id": 89,
       "slug": "remax-2-4a-universal-travel-adaptor-rp-u23",
       "name": "Remax 2.4A Universal Travel Adaptor RP-U23",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -154,15 +232,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 1571,
@@ -356,17 +425,6 @@
       ]
     },
     {
-      "id": 2042,
-      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
-      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 4441,
       "slug": "wekome-wdc-195-1m-3-5mm-aux-audio-cable",
       "name": "WEKOME WDC-195 1m 3.5mm AUX Audio Cable",
@@ -409,15 +467,6 @@
       ]
     },
     {
-      "id": 4426,
-      "slug": "wekome-wdc-125-kinkong-raycor-series-braided-fast-charging-cable-35w-c-l",
-      "name": "WEKOME WDC-125 Kinkong Raycor Series Braided Fast Charging Cable 35W(C-L)",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 2045,
       "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
       "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
@@ -426,15 +475,6 @@
       "blockers": [
         "description-under-40-characters"
       ],
-      "warnings": []
-    },
-    {
-      "id": 94,
-      "slug": "wekome-wdc-123i-u-lighting-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123i U-Lightning Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
@@ -979,15 +1019,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 23,
-      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 81,
@@ -1569,17 +1600,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2044,
-      "slug": "repairdesk-accessory-10383-wekome-yb06-wired-earphone-aux-in-ear",
-      "name": "WEKOME YB06 Wired Earphone Aux IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 2069,
