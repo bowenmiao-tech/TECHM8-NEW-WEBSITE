@@ -1,9 +1,36 @@
 {
-  "catalog_updated_at": "2026-11-05T01:27:22.059603+00:00",
+  "catalog_updated_at": "2026-11-05T12:30:31.211312+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 22,
       "slug": "remax-rpp-622-10000mah-power-bank",
@@ -125,24 +152,6 @@
       "warnings": []
     },
     {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 1585,
       "slug": "tm8-car-6606",
       "name": "WEKOME WP-U203 Car Phone Holder",
@@ -152,15 +161,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 69,
