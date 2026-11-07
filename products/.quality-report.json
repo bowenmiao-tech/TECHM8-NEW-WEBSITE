@@ -1,9 +1,31 @@
 {
-  "catalog_updated_at": "2026-11-07T04:04:31.148566+00:00",
+  "catalog_updated_at": "2026-11-07T06:35:48.156966+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 4484,
+      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank-pink",
+      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank - Pink",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 1571,
       "slug": "tm8-car-10742",
@@ -19,17 +41,6 @@
       "id": 1584,
       "slug": "tm8-car-6659",
       "name": "Metal Motorcycle Phone Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -132,17 +143,6 @@
       "id": 67,
       "slug": "wekome-wp-c53-car-charger",
       "name": "WEKOME WP-C53 Car Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 4484,
-      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank-pink",
-      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank - Pink",
       "indexable": true,
       "score": 92,
       "blockers": [],
