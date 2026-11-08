@@ -1465,7 +1465,7 @@ async function writeLlmsTxt(indexableProducts = []) {
 - [Book a repair](${SITE_URL}/book-repair.html): Repair request form covering device, fault, store and preferred time.
 - [Store locator](${SITE_URL}/stores.html): Addresses, phone numbers and opening hours for all five stores.
 - [Store policy](${SITE_URL}/store-policy.html): Shipping, returns, warranty, payment and privacy terms.
-- [Careers](${SITE_URL}/careers.html): Job application form for retail, repair technician and support roles at all five stores.
+- [Careers](${SITE_URL}/careers.html): Standing application form for retail sales and repair technician roles at all five stores. Applications are accepted with or without an open role; this is not a current vacancy listing.
 
 ## Stores
 
@@ -1473,13 +1473,20 @@ ${storeLines}
 
 ## Repair services
 
-- [Phone repairs](${SITE_URL}/repair-services/phones/apple.html): Apple, Samsung, Oppo, Huawei, Xiaomi, Google, OnePlus and other brands.
-- [Tablet repairs](${SITE_URL}/repair-services/tablets/apple.html): Apple iPad, Samsung and other tablets.
+- [Phone repairs overview](${SITE_URL}/repairs.html): Choose a phone brand to check repair enquiries and device support.
+- [iPhone repairs](${SITE_URL}/repair-services/phones/apple.html): Apple iPhone repair enquiries.
+- [Samsung phone repairs](${SITE_URL}/repair-services/phones/samsung.html): Samsung phone repair enquiries.
+- [Google phone repairs](${SITE_URL}/repair-services/phones/google.html): Google Pixel repair enquiries.
+- [iPad repairs](${SITE_URL}/repair-services/tablets/apple.html): Apple iPad repair enquiries.
+- [Samsung tablet repairs](${SITE_URL}/repair-services/tablets/samsung.html): Samsung tablet repair enquiries.
+- [Other tablet repairs](${SITE_URL}/repair-services/tablets/other.html): Other tablet brands, subject to model and parts availability.
 - [Laptop repairs](${SITE_URL}/repair-services/computers/laptop.html): Windows laptop and MacBook repair enquiries for screen, battery, keyboard, charging and overheating faults. Parts and upgrade options depend on the model.
 - [Desktop computer repairs](${SITE_URL}/repair-services/computers/pc-tower.html): PC tower power, storage, cooling and component diagnostics.
 - [All-in-one computer repairs](${SITE_URL}/repair-services/computers/all-in-one.html): Integrated desktop display, startup, storage and cooling assessments.
 - [Mini PC repairs](${SITE_URL}/repair-services/computers/small-pc.html): Small form factor computer power, cooling, storage and memory assessments.
-- [Game console repairs](${SITE_URL}/repair-services/consoles/sony.html): PlayStation 5, Xbox and Nintendo Switch.
+- [PlayStation repairs](${SITE_URL}/repair-services/consoles/sony.html): Sony PlayStation repair enquiries.
+- [Xbox repairs](${SITE_URL}/repair-services/consoles/xbox.html): Microsoft Xbox repair enquiries.
+- [Nintendo repairs](${SITE_URL}/repair-services/consoles/nintendo.html): Nintendo Switch repair enquiries.
 
 ## Business and education services
 
@@ -1755,7 +1762,9 @@ async function injectShopCategoryLinks(categories) {
   const block = `${SHOP_CATEGORY_START}
     <section class="section section--muted" aria-labelledby="shop-category-index">
       <div class="container">
-        <div class="section-heading"><p class="eyebrow">Browse</p><h2 id="shop-category-index">Shop by category</h2></div>
+        <div class="section-heading"><p class="eyebrow">Online store</p><h1 id="shop-category-index">Shop by category</h1></div>
+        <p>Shop chargers, cables, power banks, monitors and technology accessories from TECHM8. Choose free Click &amp; Collect at our five South East Queensland stores, or Australia-wide delivery on eligible products. Monitors are store pickup only. Check each product page for current price, availability and compatibility.</p>
+        <p><a href="/stores.html">Find a pickup store</a> · <a href="/store-policy.html">Read delivery, returns and warranty information</a></p>
         <ul class="storefront-category-index">${links}</ul>
       </div>
     </section>
@@ -1803,7 +1812,7 @@ async function writeCategoryPages(products) {
 ${indexed
   .map(
     (category) =>
-      `  <url>\n    <loc>${categoryCanonical(category.slug)}</loc>\n    <lastmod>${new Date().toISOString().slice(0, 10)}</lastmod>\n  </url>`,
+      `  <url>\n    <loc>${categoryCanonical(category.slug)}</loc>\n  </url>`,
   )
   .join("\n")}
 </urlset>

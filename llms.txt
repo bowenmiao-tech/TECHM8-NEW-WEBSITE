@@ -21,7 +21,7 @@
 - [Book a repair](https://www.techm8australia.com/book-repair.html): Repair request form covering device, fault, store and preferred time.
 - [Store locator](https://www.techm8australia.com/stores.html): Addresses, phone numbers and opening hours for all five stores.
 - [Store policy](https://www.techm8australia.com/store-policy.html): Shipping, returns, warranty, payment and privacy terms.
-- [Careers](https://www.techm8australia.com/careers.html): Job application form for retail, repair technician and support roles at all five stores.
+- [Careers](https://www.techm8australia.com/careers.html): Standing application form for retail sales and repair technician roles at all five stores. Applications are accepted with or without an open role; this is not a current vacancy listing.
 
 ## Stores
 
@@ -33,13 +33,20 @@
 
 ## Repair services
 
-- [Phone repairs](https://www.techm8australia.com/repair-services/phones/apple.html): Apple, Samsung, Oppo, Huawei, Xiaomi, Google, OnePlus and other brands.
-- [Tablet repairs](https://www.techm8australia.com/repair-services/tablets/apple.html): Apple iPad, Samsung and other tablets.
+- [Phone repairs overview](https://www.techm8australia.com/repairs.html): Choose a phone brand to check repair enquiries and device support.
+- [iPhone repairs](https://www.techm8australia.com/repair-services/phones/apple.html): Apple iPhone repair enquiries.
+- [Samsung phone repairs](https://www.techm8australia.com/repair-services/phones/samsung.html): Samsung phone repair enquiries.
+- [Google phone repairs](https://www.techm8australia.com/repair-services/phones/google.html): Google Pixel repair enquiries.
+- [iPad repairs](https://www.techm8australia.com/repair-services/tablets/apple.html): Apple iPad repair enquiries.
+- [Samsung tablet repairs](https://www.techm8australia.com/repair-services/tablets/samsung.html): Samsung tablet repair enquiries.
+- [Other tablet repairs](https://www.techm8australia.com/repair-services/tablets/other.html): Other tablet brands, subject to model and parts availability.
 - [Laptop repairs](https://www.techm8australia.com/repair-services/computers/laptop.html): Windows laptop and MacBook repair enquiries for screen, battery, keyboard, charging and overheating faults. Parts and upgrade options depend on the model.
 - [Desktop computer repairs](https://www.techm8australia.com/repair-services/computers/pc-tower.html): PC tower power, storage, cooling and component diagnostics.
 - [All-in-one computer repairs](https://www.techm8australia.com/repair-services/computers/all-in-one.html): Integrated desktop display, startup, storage and cooling assessments.
 - [Mini PC repairs](https://www.techm8australia.com/repair-services/computers/small-pc.html): Small form factor computer power, cooling, storage and memory assessments.
-- [Game console repairs](https://www.techm8australia.com/repair-services/consoles/sony.html): PlayStation 5, Xbox and Nintendo Switch.
+- [PlayStation repairs](https://www.techm8australia.com/repair-services/consoles/sony.html): Sony PlayStation repair enquiries.
+- [Xbox repairs](https://www.techm8australia.com/repair-services/consoles/xbox.html): Microsoft Xbox repair enquiries.
+- [Nintendo repairs](https://www.techm8australia.com/repair-services/consoles/nintendo.html): Nintendo Switch repair enquiries.
 
 ## Business and education services
 

@@ -1854,6 +1854,11 @@ h2 {
   align-items: end;
 }
 
+.storefront-page--shop #shop-category-index {
+  font-size: clamp(2rem, 4vw, 3rem);
+  max-width: 18ch;
+}
+
 .category-grid,
 .product-grid,
 .store-grid,

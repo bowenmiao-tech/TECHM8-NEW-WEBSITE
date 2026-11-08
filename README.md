@@ -390,6 +390,15 @@ Local SEO store pages are important and should follow the same pattern for each 
 
 ## Search Console / Crawl Rules
 
+### SEO and GEO maintenance (9 November 2026)
+
+- `npm run validate:search` checks every page in the three sitemaps for a matching canonical, one title, one description, one static H1, indexability and parseable JSON-LD. It also checks discovery-file copies and local links in `llms.txt`. Both builds and scheduled catalogue refreshes run this check.
+- Account, order history, password, cart and checkout pages use `noindex, follow`. Keep them crawlable so search engines can read that directive; it is not an access-control mechanism.
+- Category sitemaps omit `lastmod` until a reliable content modification timestamp is available. Never use the build date as a substitute.
+- The shop's static category section provides its H1, a purchase summary and links to pickup locations and policy details. Its heading retains the previous visual size.
+- Generate `llms.txt` through `scripts/prerender-site.mjs`. Link each repair brand to its corresponding page, and describe careers as standing applications for retail sales and repair technician roles, rather than current vacancies.
+- GEO work follows the same crawlability, visible-content and factual-consistency principles as SEO. `llms.txt` is supplemental; it does not guarantee inclusion in AI answers. Reference: https://developers.google.com/search/docs/appearance/ai-features
+
 Root files must exist and remain accessible:
 
 - `/sitemap.xml`
