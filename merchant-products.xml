@@ -5,16 +5,20 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
-      <g:id>TM8-WEKOME-WP70-PINK</g:id>
-      <title>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank - Pink</title>
-      <description>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank-pink/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/20261104/wekome-wp70-pink.webp</g:image_link>
+      <g:id>110511610</g:id>
+      <title>WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank</title>
+      <description>WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/03.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05.webp</g:additional_image_link>
       <g:availability>in_stock</g:availability>
-      <g:price>79.95 AUD</g:price>
+      <g:price>69.95 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
-
+      <g:gtin>6941027655030</g:gtin>
     </item>
     <item>
       <g:id>492967793802</g:id>
@@ -26,6 +30,18 @@
       <g:price>29.00 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
+      <g:id>TM8-WEKOME-WP70-PINK</g:id>
+      <title>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank - Pink</title>
+      <description>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank-pink/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/20261104/wekome-wp70-pink.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>79.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
 
     </item>
     <item>
@@ -196,22 +212,6 @@
       <g:condition>new</g:condition>
       <g:brand>REMAX</g:brand>
       <g:gtin>69548512215677</g:gtin>
-    </item>
-    <item>
-      <g:id>110511610</g:id>
-      <title>WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank</title>
-      <description>WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/03.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/power-banks/wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>69.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027655030</g:gtin>
     </item>
     <item>
       <g:id>110521611</g:id>
