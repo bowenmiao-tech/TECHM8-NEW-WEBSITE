@@ -1471,7 +1471,7 @@ async function writeLlmsTxt(indexableProducts = []) {
 
 - [LCD vs OLED phone screens](${SITE_URL}/blog/lcd-vs-oled-phone-screens.html): Illustrated comparison of LCD backlights and self-emissive OLED pixels, black levels, brightness, battery use, burn-in and model-specific screen replacement questions. Technology explainer, not a measured panel comparison or a promise of replacement-part availability.
 - [Phone battery drain](${SITE_URL}/blog/why-phone-battery-drains-fast.html): Common battery-drain causes and checks before a repair enquiry.
-- [App Store sign out](${SITE_URL}/blog/how-to-sign-out-app-store-ios-26.html): Sign out of Media & Purchases separately from iCloud.
+- [App Store sign out](${SITE_URL}/blog/how-to-sign-out-app-store-ios-26.html): Updated iOS 26 and iOS 27 guide to signing out of Media & Purchases separately from iCloud, with iOS 26 screenshots and account restriction checks.
 
 ## Stores
 

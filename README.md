@@ -390,6 +390,13 @@ Local SEO store pages are important and should follow the same pattern for each 
 
 ## Search Console / Crawl Rules
 
+### App Store guide refresh (11 November 2026)
+
+- The existing `/blog/how-to-sign-out-app-store-ios-26.html` URL is retained to preserve incoming links, and the article now covers iOS 26 and iOS 27 using Apple's current Media & Purchases support instructions.
+- Keep the original 1 August publication date and the 11 November modification date distinct. Existing screenshots are iOS 26 captures, not verified iOS 27 screenshots.
+- Visible FAQs and FAQPage JSON-LD share the same wording. The article covers signing in again, downloaded media and account restrictions, and uses Apple support sources.
+- The Facebook/Instagram poster, caption and generation prompt are saved in `assets/social/ios26-ios27-app-store-sign-out-post.md`.
+
 ### Illustrated screen guide (11 November 2026)
 
 - `/blog/lcd-vs-oled-phone-screens.html` is a phone-focused LCD vs OLED explainer with a comparison table, repair questions, six visible FAQs, Article/WebPage/BreadcrumbList/FAQPage JSON-LD and primary-source links.
