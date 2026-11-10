@@ -1467,6 +1467,12 @@ async function writeLlmsTxt(indexableProducts = []) {
 - [Store policy](${SITE_URL}/store-policy.html): Shipping, returns, warranty, payment and privacy terms.
 - [Careers](${SITE_URL}/careers.html): Standing application form for retail sales and repair technician roles at all five stores. Applications are accepted with or without an open role; this is not a current vacancy listing.
 
+## Practical technology guides
+
+- [LCD vs OLED phone screens](${SITE_URL}/blog/lcd-vs-oled-phone-screens.html): Illustrated comparison of LCD backlights and self-emissive OLED pixels, black levels, brightness, battery use, burn-in and model-specific screen replacement questions. Technology explainer, not a measured panel comparison or a promise of replacement-part availability.
+- [Phone battery drain](${SITE_URL}/blog/why-phone-battery-drains-fast.html): Common battery-drain causes and checks before a repair enquiry.
+- [App Store sign out](${SITE_URL}/blog/how-to-sign-out-app-store-ios-26.html): Sign out of Media & Purchases separately from iCloud.
+
 ## Stores
 
 ${storeLines}

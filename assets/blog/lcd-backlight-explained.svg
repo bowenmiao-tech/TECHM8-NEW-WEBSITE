@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">LCD: light comes from a separate backlight</title>
+  <desc id="desc">A simplified front view of light travelling from an LED backlight, through liquid crystals and colour filters, to the viewer. Optical and touch layers are omitted.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0 0 10 5 0 10" fill="none" stroke="#08786f" stroke-width="2"/></marker></defs>
+  <rect width="800" height="500" rx="24" fill="#eaf6f2"/>
+  <g font-family="Arial, sans-serif" text-anchor="middle" fill="#082f35">
+    <text x="400" y="51" font-size="30" font-weight="700">LCD · separate backlight</text>
+    <text x="400" y="98" font-size="25">Light reaches the viewer</text>
+    <path d="M210 157V124 M400 157V124 M590 157V124" stroke="#08786f" stroke-width="4" marker-end="url(#arrow)"/>
+    <rect x="70" y="178" width="660" height="86" rx="14" fill="#c9e8e1" stroke="#08786f" stroke-width="2"/>
+    <text x="400" y="214" font-size="26" font-weight="700">Liquid crystals + colour filters</text>
+    <text x="400" y="247" font-size="23">Control the light that passes through</text>
+    <path d="M210 327V290 M400 327V290 M590 327V290" stroke="#08786f" stroke-width="4" marker-end="url(#arrow)"/>
+    <rect x="70" y="349" width="660" height="74" rx="14" fill="#ffdf9b" stroke="#a77b25" stroke-width="2"/>
+    <text x="400" y="395" font-size="28" font-weight="700">LED backlight · light source</text>
+    <text x="400" y="467" font-size="22">Simplified principle · not a physical layer stack</text>
+  </g>
+</svg>

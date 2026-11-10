@@ -23,6 +23,12 @@
 - [Store policy](https://www.techm8australia.com/store-policy.html): Shipping, returns, warranty, payment and privacy terms.
 - [Careers](https://www.techm8australia.com/careers.html): Standing application form for retail sales and repair technician roles at all five stores. Applications are accepted with or without an open role; this is not a current vacancy listing.
 
+## Practical technology guides
+
+- [LCD vs OLED phone screens](https://www.techm8australia.com/blog/lcd-vs-oled-phone-screens.html): Illustrated comparison of LCD backlights and self-emissive OLED pixels, black levels, brightness, battery use, burn-in and model-specific screen replacement questions. Technology explainer, not a measured panel comparison or a promise of replacement-part availability.
+- [Phone battery drain](https://www.techm8australia.com/blog/why-phone-battery-drains-fast.html): Common battery-drain causes and checks before a repair enquiry.
+- [App Store sign out](https://www.techm8australia.com/blog/how-to-sign-out-app-store-ios-26.html): Sign out of Media & Purchases separately from iCloud.
+
 ## Stores
 
 - [TECHM8 Park Ridge](https://www.techm8australia.com/stores/park-ridge.html): Shop 11, 3732 Mount Lindesay Hwy, Park Ridge QLD 4125. Phone +61 452 488 710. Serves the Logan area.

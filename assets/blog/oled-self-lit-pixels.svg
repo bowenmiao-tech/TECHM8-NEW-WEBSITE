@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">OLED: pixels produce their own light</title>
+  <desc id="desc">Three illustrative lit subpixels emit red, green and blue light while a black pixel remains off. OLED has no separate backlight. The arrangement is not a real panel layout.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0 0 10 5 0 10" fill="none" stroke="#a4e8d8" stroke-width="2"/></marker></defs>
+  <rect width="800" height="500" rx="24" fill="#082f35"/>
+  <g font-family="Arial, sans-serif" text-anchor="middle" fill="#effaf7">
+    <text x="400" y="51" font-size="30" font-weight="700">OLED · self-emissive pixels</text>
+    <text x="400" y="98" font-size="25">Light reaches the viewer</text>
+    <path d="M150 208V143 M315 208V143 M480 208V143" stroke="#a4e8d8" stroke-width="4" marker-end="url(#arrow)"/>
+    <rect x="90" y="234" width="120" height="94" rx="15" fill="#eb746f"/>
+    <rect x="255" y="234" width="120" height="94" rx="15" fill="#65d9a6"/>
+    <rect x="420" y="234" width="120" height="94" rx="15" fill="#77bafa"/>
+    <rect x="585" y="234" width="120" height="94" rx="15" fill="#010809" stroke="#a4e8d8" stroke-width="2"/>
+    <text x="315" y="373" font-size="26">Lit subpixels</text>
+    <text x="645" y="373" font-size="26">Off / black</text>
+    <text x="400" y="421" font-size="27" font-weight="700">No separate backlight</text>
+    <text x="400" y="467" font-size="22">Illustrative colours · not an actual subpixel layout</text>
+  </g>
+</svg>

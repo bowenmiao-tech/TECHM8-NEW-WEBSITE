@@ -390,6 +390,13 @@ Local SEO store pages are important and should follow the same pattern for each 
 
 ## Search Console / Crawl Rules
 
+### Illustrated screen guide (11 November 2026)
+
+- `/blog/lcd-vs-oled-phone-screens.html` is a phone-focused LCD vs OLED explainer with a comparison table, repair questions, six visible FAQs, Article/WebPage/BreadcrumbList/FAQPage JSON-LD and primary-source links.
+- Its cover is AI-generated conceptual artwork, not a real display comparison. The two SVGs explain light production and omit physical layers; retain those captions when reusing the images. The prompt and asset provenance are in `assets/blog/lcd-vs-oled-image-notes.md`.
+- Discovery links live in `blog.html`, the battery-drain article, both page sitemaps, and the generated technology-guide section of `llms.txt` in `scripts/prerender-site.mjs`.
+- Keep repair copy model-specific. Do not promise LCD/OLED interchangeability, original feature parity, fixed prices or part availability from the panel label alone.
+
 ### SEO and GEO maintenance (9 November 2026)
 
 - `npm run validate:search` checks every page in the three sitemaps for a matching canonical, one title, one description, one static H1, indexability and parseable JSON-LD. It also checks discovery-file copies and local links in `llms.txt`. Both builds and scheduled catalogue refreshes run this check.
