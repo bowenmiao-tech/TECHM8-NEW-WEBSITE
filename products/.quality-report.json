@@ -1,9 +1,115 @@
 {
-  "catalog_updated_at": "2026-11-09T02:16:42.101359+00:00",
+  "catalog_updated_at": "2026-11-10T06:35:43.112678+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 2150,
+      "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
+      "name": "MagSafe Multi-Wallet - Brown",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 27,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2066,
+      "slug": "repairdesk-accessory-8867-2m-stand-8809",
+      "name": "2M Stand 8809",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 93,
+      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
+      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 2149,
+      "slug": "repairdesk-misc-10854-magsafe-silicone-phone-grip-black",
+      "name": "MagSafe Silicone Phone Grip - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2147,
+      "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
+      "name": "MagSafe Silicone Phone Grip - Pink",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2148,
+      "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
+      "name": "MagSafe Silicone Phone Grip - Sky Blue",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2146,
+      "slug": "repairdesk-misc-10857-magsafe-silicone-phone-grip-purple",
+      "name": "MagSafe Silicone Phone Grip - Purple",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 68,
+      "slug": "wekome-wp-c54-car-charger",
+      "name": "WEKOME WP-C54 Car Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 110,
       "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
@@ -193,15 +299,6 @@
       ]
     },
     {
-      "id": 27,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 23,
       "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
       "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
@@ -271,26 +368,6 @@
       "warnings": []
     },
     {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 93,
-      "slug": "wekome-wdc-123a-u-type-c-kinkong-raycor-fast-charging-cable",
-      "name": "WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 2044,
       "slug": "repairdesk-accessory-10383-wekome-yb06-wired-earphone-aux-in-ear",
       "name": "WEKOME YB06 Wired Earphone Aux IN EAR",
@@ -354,17 +431,6 @@
       "id": 3,
       "slug": "dualsense-wireless-controller-gray-camouflage",
       "name": "DualSense Wireless Controller - Gray Camouflage",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 68,
-      "slug": "wekome-wp-c54-car-charger",
-      "name": "WEKOME WP-C54 Car Charger",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -604,17 +670,6 @@
       "warnings": []
     },
     {
-      "id": 2149,
-      "slug": "repairdesk-misc-10854-magsafe-silicone-phone-grip-black",
-      "name": "MagSafe Silicone Phone Grip - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 88,
       "slug": "remax-rp-w85-wch-zunya-series-20-5w-aluminum-alloy-3-in-1-magnetic-holder-and-wireless-charger",
       "name": "Remax RP-W85-WCH Zunya Series 20.5W Aluminum Alloy 3-in-1 Magnetic Holder and Wireless Charger",
@@ -633,17 +688,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 2147,
-      "slug": "repairdesk-misc-10856-magsafe-silicone-phone-grip-pink",
-      "name": "MagSafe Silicone Phone Grip - Pink",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
     },
     {
       "id": 1572,
@@ -710,53 +754,9 @@
       "warnings": []
     },
     {
-      "id": 2150,
-      "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
-      "name": "MagSafe Multi-Wallet - Brown",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2151,
       "slug": "repairdesk-misc-10852-magsafe-multi-wallet-black",
       "name": "MagSafe Multi-Wallet - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2148,
-      "slug": "repairdesk-misc-10855-magsafe-silicone-phone-grip-sky-blue",
-      "name": "MagSafe Silicone Phone Grip - Sky Blue",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2146,
-      "slug": "repairdesk-misc-10857-magsafe-silicone-phone-grip-purple",
-      "name": "MagSafe Silicone Phone Grip - Purple",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2066,
-      "slug": "repairdesk-accessory-8867-2m-stand-8809",
-      "name": "2M Stand 8809",
       "indexable": false,
       "score": 65,
       "blockers": [
