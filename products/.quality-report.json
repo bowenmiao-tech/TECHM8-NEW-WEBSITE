@@ -1,9 +1,29 @@
 {
-  "catalog_updated_at": "2026-11-10T08:06:05.808598+00:00",
+  "catalog_updated_at": "2026-11-11T01:20:06.592414+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 2036,
+      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
+      "name": "USB-C WEKOME YB03 Wired Earphone",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 110,
+      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
+      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
     {
       "id": 27,
       "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
@@ -109,15 +129,6 @@
       "warnings": [
         "description-under-90-characters"
       ]
-    },
-    {
-      "id": 110,
-      "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
-      "name": "WEKOME Gray WDC-51 240W 4-in-1 Fast Charging Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
     },
     {
       "id": 100,
@@ -518,17 +529,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2036,
-      "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
-      "name": "USB-C WEKOME YB03 Wired Earphone",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
