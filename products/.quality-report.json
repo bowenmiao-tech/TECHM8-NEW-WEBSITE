@@ -1,9 +1,84 @@
 {
-  "catalog_updated_at": "2026-11-11T01:20:06.592414+00:00",
+  "catalog_updated_at": "2026-11-12T06:39:25.640846+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 78,
+      "slug": "ca69-ca112-apple-watch-magnetic-charger",
+      "name": "CA69/CA112 Apple Watch Magnetic Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "missing-brand"
+      ]
+    },
+    {
+      "id": 22,
+      "slug": "remax-rpp-622-10000mah-power-bank",
+      "name": "Remax RPP-622 10000MAH power bank",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 84,
+      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
+      "name": "Remax PD BT230/BT260 Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2045,
+      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
+      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 108,
+      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
+      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 42,
+      "slug": "wekome-wp-101-10000mah-power-bank",
+      "name": "WEKOME WP-101 10000mAh Power Bank",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 2036,
       "slug": "repairdesk-accessory-11069-usb-c-wekome-yb03-wired-earphone",
@@ -182,28 +257,6 @@
       "warnings": []
     },
     {
-      "id": 2045,
-      "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
-      "name": "WEKOME YB06 Wired Earphone USB-C in EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 4484,
       "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank-pink",
       "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank - Pink",
@@ -245,17 +298,6 @@
       "blockers": [],
       "warnings": [
         "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 78,
-      "slug": "ca69-ca112-apple-watch-magnetic-charger",
-      "name": "CA69/CA112 Apple Watch Magnetic Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "missing-brand"
       ]
     },
     {
@@ -322,26 +364,6 @@
       "id": 1585,
       "slug": "tm8-car-6606",
       "name": "WEKOME WP-U203 Car Phone Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 108,
-      "slug": "wekome-wdc-c33-1-2m-usb-c-to-lightning-cable",
-      "name": "WEKOME WDC-C33 1.2m USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 22,
-      "slug": "remax-rpp-622-10000mah-power-bank",
-      "name": "Remax RPP-622 10000MAH power bank",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -796,17 +818,6 @@
       "warnings": []
     },
     {
-      "id": 42,
-      "slug": "wekome-wp-101-10000mah-power-bank",
-      "name": "WEKOME WP-101 10000mAh Power Bank",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 2059,
       "slug": "repairdesk-accessory-11139-remax-selfie-stick-holder-with-lights-p60",
       "name": "Remax Selfie Stick Holder with Lights P60",
@@ -1019,17 +1030,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 84,
-      "slug": "remax-pd-bt230-bt260-wireless-earbuds",
-      "name": "Remax PD BT230/BT260 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 81,
