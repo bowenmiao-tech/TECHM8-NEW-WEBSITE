@@ -1,18 +1,9 @@
 {
-  "catalog_updated_at": "2026-11-12T09:00:22.913626+00:00",
+  "catalog_updated_at": "2026-11-13T05:59:44.563901+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
-    {
-      "id": 28,
-      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
-      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
     {
       "id": 102,
       "slug": "1m-ultra-tough-micro-usb-cable",
@@ -23,6 +14,37 @@
       "warnings": [
         "description-under-90-characters"
       ]
+    },
+    {
+      "id": 85,
+      "slug": "remax-pd-bt533n-pro-wireless-earbuds",
+      "name": "Remax PD-BT533N PRO Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 73,
+      "slug": "3-usb-wall-charger",
+      "name": "3 USB WALL CHARGER",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 28,
+      "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-white",
+      "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- White",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
     },
     {
       "id": 78,
@@ -50,17 +72,6 @@
       "id": 84,
       "slug": "remax-pd-bt230-bt260-wireless-earbuds",
       "name": "Remax PD BT230/BT260 Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 73,
-      "slug": "3-usb-wall-charger",
-      "name": "3 USB WALL CHARGER",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -1519,17 +1530,6 @@
       "id": 1588,
       "slug": "tm8-car-6580",
       "name": "Car Phone Holder 5",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 85,
-      "slug": "remax-pd-bt533n-pro-wireless-earbuds",
-      "name": "Remax PD-BT533N PRO Wireless Earbuds",
       "indexable": true,
       "score": 92,
       "blockers": [],
