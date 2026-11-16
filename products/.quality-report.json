@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-11-16T01:13:25.445634+00:00",
+  "catalog_updated_at": "2026-11-16T08:08:49.672529+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 85,
+      "slug": "remax-pd-bt533n-pro-wireless-earbuds",
+      "name": "Remax PD-BT533N PRO Wireless Earbuds",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 69,
       "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
@@ -142,17 +153,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 85,
-      "slug": "remax-pd-bt533n-pro-wireless-earbuds",
-      "name": "Remax PD-BT533N PRO Wireless Earbuds",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 28,

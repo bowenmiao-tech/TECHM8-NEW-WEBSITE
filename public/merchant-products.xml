@@ -5,6 +5,19 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>6971278727807</g:id>
+      <title>Remax PD-BT533N PRO Wireless Earbuds</title>
+      <description>Remax PD-BT533N PRO Wireless Earbuds available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/remax-pd-bt533n-pro-wireless-earbuds/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-pd-bt533n-pro-wireless-earbuds/1779116755629-07744262.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-pd-bt533n-pro-wireless-earbuds/1779116756744-5df05403.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>199.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>REMAX</g:brand>
+
+    </item>
+    <item>
       <g:id>492967793802</g:id>
       <title>3 USB WALL CHARGER</title>
       <description>3 USB WALL CHARGER available for online order and warehouse dispatch.</description>
@@ -71,19 +84,6 @@
       <g:price>35.00 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>OZTECHM8</g:brand>
-
-    </item>
-    <item>
-      <g:id>6971278727807</g:id>
-      <title>Remax PD-BT533N PRO Wireless Earbuds</title>
-      <description>Remax PD-BT533N PRO Wireless Earbuds available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/remax-pd-bt533n-pro-wireless-earbuds/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-pd-bt533n-pro-wireless-earbuds/1779116755629-07744262.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/remax-pd-bt533n-pro-wireless-earbuds/1779116756744-5df05403.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>199.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>REMAX</g:brand>
 
     </item>
     <item>
