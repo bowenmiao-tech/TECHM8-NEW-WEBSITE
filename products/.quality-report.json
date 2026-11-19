@@ -1,5 +1,5 @@
 {
-  "catalog_updated_at": "2026-11-18T06:00:29.000285+00:00",
+  "catalog_updated_at": "2026-11-19T06:25:55.786249+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
@@ -13,6 +13,26 @@
       "blockers": [
         "description-under-40-characters"
       ],
+      "warnings": []
+    },
+    {
+      "id": 2043,
+      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
+      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 100,
+      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
+      "name": "1M Ultra Tough USB-C to Lightning Cable",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
       "warnings": []
     },
     {
@@ -212,15 +232,6 @@
       "blockers": [
         "description-under-40-characters"
       ],
-      "warnings": []
-    },
-    {
-      "id": 100,
-      "slug": "1m-ultra-tough-type-c-to-lightning-cable",
-      "name": "1M Ultra Tough USB-C to Lightning Cable",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
       "warnings": []
     },
     {
@@ -632,17 +643,6 @@
       "id": 1578,
       "slug": "tm8-car-8154",
       "name": "MagSafe Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
-      "id": 2043,
-      "slug": "repairdesk-accessory-10743-wekome-yb10-wired-earphone-lighting-in-ear",
-      "name": "WEKOME YB10 Wired Earphone Lighting IN EAR",
       "indexable": false,
       "score": 65,
       "blockers": [
