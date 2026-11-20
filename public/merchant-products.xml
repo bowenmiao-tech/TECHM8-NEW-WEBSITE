@@ -5,6 +5,34 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>TM8-WEKOME-WP70-PINK</g:id>
+      <title>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank - Pink</title>
+      <description>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank-pink/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/20261104/wekome-wp70-pink.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>79.95 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>WEKOME</g:brand>
+
+    </item>
+    <item>
+      <g:id>7160003188</g:id>
+      <title>C28 FM Transmitter</title>
+      <description>C28 FM Transmitter available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/c28-fm-transmitter/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946281745-756b4189.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946280298-882f62c7.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946283322-6e4b6f71.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946284508-5aa68470.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946285808-88d86af8.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>39.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>KWD</g:brand>
+
+    </item>
+    <item>
       <g:id>110681638</g:id>
       <title>WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable</title>
       <description>WEKOME WDC-123a U-Type C Kinkong Raycor Fast Charging Cable available for online order and warehouse dispatch.</description>
@@ -256,18 +284,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651735</g:gtin>
-    </item>
-    <item>
-      <g:id>TM8-WEKOME-WP70-PINK</g:id>
-      <title>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank - Pink</title>
-      <description>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank-pink/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/20261104/wekome-wp70-pink.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>79.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-
     </item>
     <item>
       <g:id>TM8-CAR-10742</g:id>
@@ -684,22 +700,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651605</g:gtin>
-    </item>
-    <item>
-      <g:id>7160003188</g:id>
-      <title>C28 FM Transmitter</title>
-      <description>C28 FM Transmitter available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/c28-fm-transmitter/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946281745-756b4189.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946280298-882f62c7.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946283322-6e4b6f71.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946284508-5aa68470.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946285808-88d86af8.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>39.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>KWD</g:brand>
-
     </item>
     <item>
       <g:id>TM8-CAR-8866</g:id>

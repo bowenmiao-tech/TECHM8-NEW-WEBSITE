@@ -1,9 +1,53 @@
 {
-  "catalog_updated_at": "2026-11-19T09:02:09.408283+00:00",
+  "catalog_updated_at": "2026-11-20T04:50:39.579194+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 4484,
+      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank-pink",
+      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank - Pink",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2151,
+      "slug": "repairdesk-misc-10852-magsafe-multi-wallet-black",
+      "name": "MagSafe Multi-Wallet - Black",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1578,
+      "slug": "tm8-car-8154",
+      "name": "MagSafe Car Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 92,
+      "slug": "c28-fm-transmitter",
+      "name": "C28 FM Transmitter",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 2045,
       "slug": "wekome-yb06-wired-earphone-usb-c-in-ear",
@@ -202,17 +246,6 @@
       "warnings": []
     },
     {
-      "id": 2151,
-      "slug": "repairdesk-misc-10852-magsafe-multi-wallet-black",
-      "name": "MagSafe Multi-Wallet - Black",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 2150,
       "slug": "repairdesk-misc-10853-magsafe-multi-wallet-brown",
       "name": "MagSafe Multi-Wallet - Brown",
@@ -381,17 +414,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 4484,
-      "slug": "wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank-pink",
-      "name": "WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank - Pink",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 1571,
@@ -640,17 +662,6 @@
       ]
     },
     {
-      "id": 1578,
-      "slug": "tm8-car-8154",
-      "name": "MagSafe Car Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 79,
       "slug": "ds15-2-in-1wireless-charger",
       "name": "DS15 2 IN 1Wireless Charger",
@@ -774,17 +785,6 @@
         "description-under-40-characters"
       ],
       "warnings": []
-    },
-    {
-      "id": 92,
-      "slug": "c28-fm-transmitter",
-      "name": "C28 FM Transmitter",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 1577,
