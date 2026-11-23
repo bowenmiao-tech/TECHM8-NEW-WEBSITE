@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-11-23T05:08:13.372646+00:00",
+  "catalog_updated_at": "2026-11-23T07:52:44.626831+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 1590,
+      "slug": "tm8-car-6034",
+      "name": "Replacement Metal Plate for Magnetic Phone Holders",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 2059,
       "slug": "repairdesk-accessory-11139-remax-selfie-stick-holder-with-lights-p60",
@@ -671,17 +682,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 1590,
-      "slug": "tm8-car-6034",
-      "name": "Replacement Metal Plate for Magnetic Phone Holders",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 79,
