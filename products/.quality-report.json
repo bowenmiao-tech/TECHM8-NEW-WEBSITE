@@ -1,13 +1,24 @@
 {
-  "catalog_updated_at": "2026-11-22T05:40:38.186651+00:00",
+  "catalog_updated_at": "2026-11-23T05:08:13.372646+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
     {
-      "id": 1578,
-      "slug": "tm8-car-8154",
-      "name": "MagSafe Car Phone Holder",
+      "id": 2059,
+      "slug": "repairdesk-accessory-11139-remax-selfie-stick-holder-with-lights-p60",
+      "name": "Remax Selfie Stick Holder with Lights P60",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 2042,
+      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
+      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -27,9 +38,20 @@
       ]
     },
     {
-      "id": 2042,
-      "slug": "repairdesk-accessory-10744-wekome-yb09-wired-earphone-lighting-on-ear",
-      "name": "WEKOME YB09 Wired Earphone Lighting ON EAR",
+      "id": 2060,
+      "slug": "repairdesk-accessory-10989-c141-desktop-mobile-phone-holder",
+      "name": "C141 Desktop Mobile Phone Holder",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 1578,
+      "slug": "tm8-car-8154",
+      "name": "MagSafe Car Phone Holder",
       "indexable": false,
       "score": 65,
       "blockers": [
@@ -181,17 +203,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2060,
-      "slug": "repairdesk-accessory-10989-c141-desktop-mobile-phone-holder",
-      "name": "C141 Desktop Mobile Phone Holder",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
@@ -848,17 +859,6 @@
       "indexable": true,
       "score": 100,
       "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 2059,
-      "slug": "repairdesk-accessory-11139-remax-selfie-stick-holder-with-lights-p60",
-      "name": "Remax Selfie Stick Holder with Lights P60",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
       "warnings": []
     },
     {
