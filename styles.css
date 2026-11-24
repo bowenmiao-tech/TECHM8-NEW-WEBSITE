@@ -10648,7 +10648,7 @@ html:has(body.repair-page--console-hero) {
   letter-spacing: 0.18em;
 }
 
-.home-banner__campaign h1 {
+.home-banner__campaign .home-banner__campaign-title {
   margin: 0.7rem 0 0;
   font-size: clamp(1.5rem, 5vw, 4rem);
   line-height: 1.04;
@@ -10656,7 +10656,7 @@ html:has(body.repair-page--console-hero) {
   color: #fff;
 }
 
-.home-banner__campaign h1 span {
+.home-banner__campaign .home-banner__campaign-title span {
   display: block;
   margin-top: 0.25em;
   color: #7ff5ec;
@@ -10664,7 +10664,7 @@ html:has(body.repair-page--console-hero) {
   letter-spacing: -0.025em;
 }
 
-.home-banner__campaign h1 .home-banner__campaign-models {
+.home-banner__campaign .home-banner__campaign-title .home-banner__campaign-models {
   color: #fff;
   font-size: 0.65em;
 }
@@ -10753,8 +10753,8 @@ html:has(body.repair-page--console-hero) {
 
   .home-banner__campaign-copy { padding: 0.5rem 0.75rem; width: 63%; }
   .home-banner__campaign-kicker { display: none; }
-  .home-banner__campaign h1 { margin: 0; font-size: clamp(1.4rem, 5.4vw, 2.4rem); }
-  .home-banner__campaign h1 span { font-size: 0.61em; }
+  .home-banner__campaign .home-banner__campaign-title { margin: 0; font-size: clamp(1.4rem, 5.4vw, 2.4rem); }
+  .home-banner__campaign .home-banner__campaign-title span { font-size: 0.61em; }
   .home-banner__campaign p { display: none; }
   .home-banner__campaign-cta { margin-top: 0.4rem; padding: 0.4rem 0.65rem; gap: 0.4rem; font-size: 0.7rem; }
 
