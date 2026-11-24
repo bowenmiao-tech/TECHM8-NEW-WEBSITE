@@ -1469,6 +1469,9 @@ async function writeLlmsTxt(indexableProducts = []) {
 
 ## Practical technology guides
 
+- [Used phones and devices](${SITE_URL}/used-devices.html): Browse tested second-hand devices by store. Check the listing and contact the store for current availability.
+- [PS5 DualSense controller tester](${SITE_URL}/dualsense-tester.html): Browser-based input checks for DualSense, DualSense Edge and DualShock 4 with a compatible browser.
+
 - [LCD vs OLED phone screens](${SITE_URL}/blog/lcd-vs-oled-phone-screens.html): Illustrated comparison of LCD backlights and self-emissive OLED pixels, black levels, brightness, battery use, burn-in and model-specific screen replacement questions. Technology explainer, not a measured panel comparison or a promise of replacement-part availability.
 - [Phone battery drain](${SITE_URL}/blog/why-phone-battery-drains-fast.html): Common battery-drain causes and checks before a repair enquiry.
 - [App Store sign out](${SITE_URL}/blog/how-to-sign-out-app-store-ios-26.html): Updated iOS 26 and iOS 27 guide to signing out of Media & Purchases separately from iCloud, with iOS 26 screenshots and account restriction checks.
@@ -1770,7 +1773,7 @@ async function injectShopCategoryLinks(categories) {
       <div class="container">
         <div class="section-heading"><p class="eyebrow">Online store</p><h1 id="shop-category-index">Shop by category</h1></div>
         <p>Shop chargers, cables, power banks, monitors and technology accessories from TECHM8. Choose free Click &amp; Collect at our five South East Queensland stores, or Australia-wide delivery on eligible products. Monitors are store pickup only. Check each product page for current price, availability and compatibility.</p>
-        <p><a href="/stores.html">Find a pickup store</a> · <a href="/store-policy.html">Read delivery, returns and warranty information</a></p>
+        <p><a href="/used-devices.html">Browse second-hand phones and devices</a> · <a href="/stores.html">Find a pickup store</a> · <a href="/store-policy.html">Read delivery, returns and warranty information</a></p>
         <ul class="storefront-category-index">${links}</ul>
       </div>
     </section>

@@ -16,6 +16,7 @@ const utilityPages = [
   "checkout.html", "checkout-success.html", "completed-orders.html", "delivery-address.html",
   "forgot-password.html", "my-orders.html", "my-repairs.html", "pending-orders.html",
   "register.html", "repair-bookings.html", "reset-password.html",
+  "warranty-returns.html", "dualsense-tester/index.html",
 ];
 const seen = new Set();
 let checked = 0;
