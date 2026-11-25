@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-11-24T04:48:33.503722+00:00",
+  "catalog_updated_at": "2026-11-25T06:43:50.611537+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 1584,
+      "slug": "tm8-car-6659",
+      "name": "Metal Motorcycle Phone Holder",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 110,
       "slug": "wekome-gray-wdc-51-240w-4-in-1-fast-charging-cable",
@@ -12,6 +23,48 @@
       "score": 100,
       "blockers": [],
       "warnings": []
+    },
+    {
+      "id": 71,
+      "slug": "45w-dual-type-c-fast-wall-charger",
+      "name": "30W Type c & Usb Wall Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 69,
+      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
+      "name": "55W 4 Port Wall Charger",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "template-placeholder-content"
+      ],
+      "warnings": []
+    },
+    {
+      "id": 24,
+      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
+      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 62,
+      "slug": "wekome-wk-wd-03-mini-karaoke-speaker-b",
+      "name": "Wekome WK WD-03 Mini Karaoke Speaker B",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
     },
     {
       "id": 1573,
@@ -39,15 +92,6 @@
       "id": 27,
       "slug": "remax-rpp-23-10000mah-fast-charging-power-bank-black",
       "name": "REMAX RPP-23 10000mAh Fast Charging Power Bank- Black",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
-      "id": 24,
-      "slug": "wp-112-5000mah-3-in-1-magnetic-wireless-fast-charging-power-bank",
-      "name": "WP-112 5000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank",
       "indexable": true,
       "score": 100,
       "blockers": [],
@@ -277,17 +321,6 @@
       ]
     },
     {
-      "id": 69,
-      "slug": "this-is-the-name-of-your-product-your-product-name-can-include-letters-numbers-and-symbols",
-      "name": "55W 4 Port Wall Charger",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "template-placeholder-content"
-      ],
-      "warnings": []
-    },
-    {
       "id": 42,
       "slug": "wekome-wp-101-10000mah-power-bank",
       "name": "WEKOME WP-101 10000mAh Power Bank",
@@ -463,17 +496,6 @@
       "id": 1571,
       "slug": "tm8-car-10742",
       "name": "WEKOME WP-U209 MagSafe Wireless Charging Car Holder",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 1584,
-      "slug": "tm8-car-6659",
-      "name": "Metal Motorcycle Phone Holder",
       "indexable": true,
       "score": 92,
       "blockers": [],
@@ -944,17 +966,6 @@
       "warnings": []
     },
     {
-      "id": 62,
-      "slug": "wekome-wk-wd-03-mini-karaoke-speaker-b",
-      "name": "Wekome WK WD-03 Mini Karaoke Speaker B",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
       "id": 64,
       "slug": "remax-rb-m62-speaker",
       "name": "Remax RB-M62 Speaker Blue",
@@ -1024,17 +1035,6 @@
       "id": 1716,
       "slug": "tm8-cch-7150",
       "name": "45W Dual USB-C Car Charger - White",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 71,
-      "slug": "45w-dual-type-c-fast-wall-charger",
-      "name": "30W Type c & Usb Wall Charger",
       "indexable": true,
       "score": 92,
       "blockers": [],
