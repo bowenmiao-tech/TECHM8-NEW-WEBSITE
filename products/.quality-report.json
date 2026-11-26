@@ -1,9 +1,51 @@
 {
-  "catalog_updated_at": "2026-11-25T06:43:50.611537+00:00",
+  "catalog_updated_at": "2026-11-26T05:34:53.623214+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 21,
+      "slug": "remax-rpp-623-power-bank-20000-mah",
+      "name": "REMAX RPP-623 Power Bank 20000 mAh",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 4426,
+      "slug": "wekome-wdc-125-kinkong-raycor-series-braided-fast-charging-cable-35w-c-l",
+      "name": "WEKOME WDC-125 Kinkong Raycor Series Braided Fast Charging Cable 35W(C-L)",
+      "indexable": true,
+      "score": 100,
+      "blockers": [],
+      "warnings": []
+    },
+    {
+      "id": 71,
+      "slug": "45w-dual-type-c-fast-wall-charger",
+      "name": "30W Type c & Usb Wall Charger",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
+    {
+      "id": 2044,
+      "slug": "repairdesk-accessory-10383-wekome-yb06-wired-earphone-aux-in-ear",
+      "name": "WEKOME YB06 Wired Earphone Aux IN EAR",
+      "indexable": false,
+      "score": 65,
+      "blockers": [
+        "description-under-40-characters"
+      ],
+      "warnings": []
+    },
     {
       "id": 1584,
       "slug": "tm8-car-6659",
@@ -23,17 +65,6 @@
       "score": 100,
       "blockers": [],
       "warnings": []
-    },
-    {
-      "id": 71,
-      "slug": "45w-dual-type-c-fast-wall-charger",
-      "name": "30W Type c & Usb Wall Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
     },
     {
       "id": 69,
@@ -299,17 +330,6 @@
       "warnings": []
     },
     {
-      "id": 2044,
-      "slug": "repairdesk-accessory-10383-wekome-yb06-wired-earphone-aux-in-ear",
-      "name": "WEKOME YB06 Wired Earphone Aux IN EAR",
-      "indexable": false,
-      "score": 65,
-      "blockers": [
-        "description-under-40-characters"
-      ],
-      "warnings": []
-    },
-    {
       "id": 85,
       "slug": "remax-pd-bt533n-pro-wireless-earbuds",
       "name": "Remax PD-BT533N PRO Wireless Earbuds",
@@ -546,15 +566,6 @@
       "warnings": []
     },
     {
-      "id": 4426,
-      "slug": "wekome-wdc-125-kinkong-raycor-series-braided-fast-charging-cable-35w-c-l",
-      "name": "WEKOME WDC-125 Kinkong Raycor Series Braided Fast Charging Cable 35W(C-L)",
-      "indexable": true,
-      "score": 100,
-      "blockers": [],
-      "warnings": []
-    },
-    {
       "id": 67,
       "slug": "wekome-wp-c53-car-charger",
       "name": "WEKOME WP-C53 Car Charger",
@@ -689,17 +700,6 @@
       "id": 77,
       "slug": "wekome-wp-u99-magsafe-wirless-charger",
       "name": "WEKOME WP-U99 Magsafe Wirless Charger",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 21,
-      "slug": "remax-rpp-623-power-bank-20000-mah",
-      "name": "REMAX RPP-623 Power Bank 20000 mAh",
       "indexable": true,
       "score": 92,
       "blockers": [],
