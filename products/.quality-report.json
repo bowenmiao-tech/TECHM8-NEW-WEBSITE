@@ -1,9 +1,20 @@
 {
-  "catalog_updated_at": "2026-11-26T05:34:53.623214+00:00",
+  "catalog_updated_at": "2026-11-26T08:53:04.20238+00:00",
   "total_products": 189,
   "indexable_products": 133,
   "limited_products": 56,
   "products": [
+    {
+      "id": 102,
+      "slug": "1m-ultra-tough-micro-usb-cable",
+      "name": "1M Ultra Tough Lightning Cable",
+      "indexable": true,
+      "score": 92,
+      "blockers": [],
+      "warnings": [
+        "description-under-90-characters"
+      ]
+    },
     {
       "id": 21,
       "slug": "remax-rpp-623-power-bank-20000-mah",
@@ -198,17 +209,6 @@
       "id": 1717,
       "slug": "tm8-cch-6575",
       "name": "35W USB-C + Dual USB-A Car Charger - Black",
-      "indexable": true,
-      "score": 92,
-      "blockers": [],
-      "warnings": [
-        "description-under-90-characters"
-      ]
-    },
-    {
-      "id": 102,
-      "slug": "1m-ultra-tough-micro-usb-cable",
-      "name": "1M Ultra Tough Lightning Cable",
       "indexable": true,
       "score": 92,
       "blockers": [],
