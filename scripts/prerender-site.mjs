@@ -1472,6 +1472,7 @@ async function writeLlmsTxt(indexableProducts = []) {
 - [Used phones and devices](${SITE_URL}/used-devices.html): Browse tested second-hand devices by store. Check the listing and contact the store for current availability.
 - [PS5 DualSense controller tester](${SITE_URL}/dualsense-tester.html): Browser-based input checks for DualSense, DualSense Edge and DualShock 4 with a compatible browser.
 
+- [Why choose TECHM8 for device repair](${SITE_URL}/blog/why-choose-techm8-for-device-repair.html): How TECHM8 selects compatible replacement parts, explains repair options and supports customers at five South East Queensland stores.
 - [LCD vs OLED phone screens](${SITE_URL}/blog/lcd-vs-oled-phone-screens.html): Illustrated comparison of LCD backlights and self-emissive OLED pixels, black levels, brightness, battery use, burn-in and model-specific screen replacement questions. Technology explainer, not a measured panel comparison or a promise of replacement-part availability.
 - [Phone battery drain](${SITE_URL}/blog/why-phone-battery-drains-fast.html): Common battery-drain causes and checks before a repair enquiry.
 - [App Store sign out](${SITE_URL}/blog/how-to-sign-out-app-store-ios-26.html): Updated iOS 26 and iOS 27 guide to signing out of Media & Purchases separately from iCloud, with iOS 26 screenshots and account restriction checks.
