@@ -5,6 +5,18 @@
     <link>https://www.techm8australia.com/shop.html</link>
     <description>TECHM8 products priced in Australian dollars.</description>
     <item>
+      <g:id>59065</g:id>
+      <title>1M Ultra Tough Lightning Cable</title>
+      <description>1M ULTRA TOUGH MICRO-USB CABLE available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/1m-ultra-tough-micro-usb-cable/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-micro-usb-cable/1784437577400-dbfd3a8d.webp</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>29.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
+
+    </item>
+    <item>
       <g:id>6941027656068</g:id>
       <title>WEKOME WDC-125 Kinkong Raycor Series Braided Fast Charging Cable 35W(C-L)</title>
       <description>WEKOME WDC-125 Kinkong Raycor Series Braided Fast Charging Cable 35W(C-L) available for online order and warehouse dispatch.</description>
@@ -15,6 +27,37 @@
       <g:price>35.95 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
+
+    </item>
+    <item>
+      <g:id>7160003188</g:id>
+      <title>C28 FM Transmitter</title>
+      <description>C28 FM Transmitter available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/c28-fm-transmitter/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946281745-756b4189.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946280298-882f62c7.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946283322-6e4b6f71.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946284508-5aa68470.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946285808-88d86af8.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>39.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>KWD</g:brand>
+
+    </item>
+    <item>
+      <g:id>425222609228</g:id>
+      <title>30W Type c &amp; Usb Wall Charger</title>
+      <description>Type c &amp; Usb Wall Charger available for online order and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/45w-dual-type-c-fast-wall-charger/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596281566-9423c68b.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596276865-f281f7d0.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596278429-b0cb353e.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596280017-8e7a5146.webp</g:additional_image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>35.00 AUD</g:price>
+      <g:condition>new</g:condition>
+      <g:brand>OZTECHM8</g:brand>
 
     </item>
     <item>
@@ -34,31 +77,26 @@
       <g:gtin>6941027655030</g:gtin>
     </item>
     <item>
-      <g:id>425222609228</g:id>
-      <title>30W Type c &amp; Usb Wall Charger</title>
-      <description>Type c &amp; Usb Wall Charger available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/45w-dual-type-c-fast-wall-charger/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596281566-9423c68b.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596276865-f281f7d0.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596278429-b0cb353e.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/45w-dual-type-c-fast-wall-charger/1778596280017-8e7a5146.webp</g:additional_image_link>
+      <g:id>110521611</g:id>
+      <title>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank</title>
+      <description>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.</description>
+      <link>https://www.techm8australia.com/products/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/</link>
+      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04-wp-70-3.webp</g:image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01-wp-70-112.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02-1.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05-wp-70-01.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/06-wp-70-02.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/07-wp-70-03.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/08-wp-70-04.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/09-wp-70-05.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/10-wp-70-06.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/11-wp-70-07.webp</g:additional_image_link>
+      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/12-wp-70-08.webp</g:additional_image_link>
       <g:availability>in_stock</g:availability>
-      <g:price>35.00 AUD</g:price>
+      <g:price>79.95 AUD</g:price>
       <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
-    </item>
-    <item>
-      <g:id>59065</g:id>
-      <title>1M Ultra Tough Lightning Cable</title>
-      <description>1M ULTRA TOUGH MICRO-USB CABLE available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/1m-ultra-tough-micro-usb-cable/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/1m-ultra-tough-micro-usb-cable/1784437577400-dbfd3a8d.webp</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>29.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>OZTECHM8</g:brand>
-
+      <g:brand>WEKOME</g:brand>
+      <g:gtin>6941027655016</g:gtin>
     </item>
     <item>
       <g:id>110631633</g:id>
@@ -202,22 +240,6 @@
       <g:price>79.95 AUD</g:price>
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
-
-    </item>
-    <item>
-      <g:id>7160003188</g:id>
-      <title>C28 FM Transmitter</title>
-      <description>C28 FM Transmitter available for online order and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/c28-fm-transmitter/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946281745-756b4189.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946280298-882f62c7.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946283322-6e4b6f71.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946284508-5aa68470.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/product-details/c28-fm-transmitter/1778946285808-88d86af8.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>39.00 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>KWD</g:brand>
 
     </item>
     <item>
@@ -452,28 +474,6 @@
       <g:condition>new</g:condition>
       <g:brand>WEKOME</g:brand>
       <g:gtin>6941027651551</g:gtin>
-    </item>
-    <item>
-      <g:id>110521611</g:id>
-      <title>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank</title>
-      <description>WP-70 10000mAh 3-in-1 Magnetic Wireless Fast Charging Power Bank available for online and warehouse dispatch.</description>
-      <link>https://www.techm8australia.com/products/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/</link>
-      <g:image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/04-wp-70-3.webp</g:image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/01-wp-70-112.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/02-1.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/05-wp-70-01.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/06-wp-70-02.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/07-wp-70-03.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/08-wp-70-04.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/09-wp-70-05.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/10-wp-70-06.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/11-wp-70-07.webp</g:additional_image_link>
-      <g:additional_image_link>https://fwlronvmgqzkleofriis.supabase.co/storage/v1/object/public/product-images/products/missing-catalog-images/wp-70-10000mah-3-in-1-magnetic-wireless-fast-charging-power-bank/12-wp-70-08.webp</g:additional_image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>79.95 AUD</g:price>
-      <g:condition>new</g:condition>
-      <g:brand>WEKOME</g:brand>
-      <g:gtin>6941027655016</g:gtin>
     </item>
     <item>
       <g:id>TM8-CAR-6606</g:id>
